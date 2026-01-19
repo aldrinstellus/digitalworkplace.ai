@@ -60,8 +60,12 @@ src/
 ### Authentication
 - `src/proxy.ts` - Clerk auth proxy (server-side route protection)
 - `src/app/layout.tsx` - ClerkProvider wrapper
-- `src/app/sign-in/[[...sign-in]]/page.tsx` - Google OAuth login
+- `src/app/sign-in/[[...sign-in]]/page.tsx` - Google OAuth login ("Continue with Google")
 - `src/app/sso-callback/page.tsx` - OAuth redirect handler
+
+### Branding
+- `src/app/icon.tsx` - Dynamic favicon (32x32 PNG) - "d." with green dot
+- `src/app/apple-icon.tsx` - Apple touch icon (180x180 PNG)
 
 ### Dashboard
 - `src/app/dashboard/page.tsx` - Main dashboard with:

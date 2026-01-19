@@ -4,6 +4,75 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.4.2] - 2026-01-19
+
+### Favicon & Auth Improvements
+
+#### Added
+- **Custom Favicon** (`src/app/icon.tsx`)
+  - Dynamic PNG generation using Next.js ImageResponse API
+  - "d." branding with white "d" and green dot
+  - Dark background (#0f0f1a) matching brand theme
+  - 32x32 size for browser tabs
+
+- **Apple Touch Icon** (`src/app/apple-icon.tsx`)
+  - 180x180 size for iOS devices
+  - Same "d." branding design
+  - Rounded corners for iOS home screen
+
+#### Changed
+- **Sign-In Button Text**
+  - Changed from "Sign in with Google" to "Continue with Google"
+  - Loading state changed from "Signing in..." to "Connecting..."
+  - Industry-standard neutral language for all users
+
+- **Google OAuth Flow**
+  - Configured Clerk with custom Google OAuth credentials
+  - Enabled "Always show account selector prompt" in Clerk Dashboard
+  - Account picker now always shows on sign-in (uses `prompt=select_account`)
+
+- **Auth Proxy** (`src/proxy.ts`)
+  - Added `/icon(.*)` and `/apple-icon(.*)` to public routes
+  - Prevents auth redirect for favicon requests
+
+#### Removed
+- Old Vercel favicon.ico (replaced with dynamic icon.tsx)
+
+#### Verified
+- Full bulletproof auth testing completed (8/8 tests passed):
+  1. Button shows "Continue with Google"
+  2. Already signed-in user redirects to dashboard
+  3. Sign out clears session properly
+  4. Returning user sees "Continue with Google"
+  5. Account picker shows existing accounts
+  6. "Use another account" works
+  7. Protected routes redirect to sign-in
+  8. Brand new user flow works
+
+---
+
+## [0.4.1] - 2026-01-19
+
+### Auth Optimization
+
+#### Changed
+- **Clerk Middleware** (`src/proxy.ts`)
+  - Server-side route protection (no client-side redirect flash)
+  - Public routes: `/`, `/sign-in`, `/sign-up`, `/sso-callback`
+  - All other routes require authentication
+
+#### Fixed
+- **Next.js 16 Middleware Deprecation**
+  - Removed `middleware.ts` in favor of `proxy.ts`
+  - Fixed "Both middleware and proxy file detected" error
+
+#### Performance
+- Removed redundant loading states
+- Background Supabase sync (non-blocking)
+- Faster perceived auth experience
+
+---
+
 ## [0.4.0] - 2026-01-19
 
 ### Dashboard & Product Cards Release

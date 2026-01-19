@@ -16,9 +16,18 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
 
 ### Authentication
 - **Clerk** handles all authentication flows:
-  - Google OAuth (primary method)
+  - Google OAuth (primary method) with "Continue with Google" button
+  - Custom credentials with account picker always shown (`prompt=select_account`)
   - SSO support
   - Session management
+  - Server-side route protection via `proxy.ts`
+
+### Branding
+- **Favicon** (`icon.tsx`): Dynamic 32x32 PNG with "d." design
+  - Dark background (#0f0f1a)
+  - White "d" letter
+  - Green dot (#4ade80) representing ".ai"
+- **Apple Touch Icon** (`apple-icon.tsx`): 180x180 PNG for iOS
 
 ### Backend
 - **Supabase** for:

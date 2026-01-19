@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 16:05 UTC
-**Version**: 0.4.1
-**Session Status**: Complete - Auth optimization deployed
+**Last Updated**: 2026-01-19 16:35 UTC
+**Version**: 0.4.2
+**Session Status**: Complete - Favicon & Auth improvements deployed
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -96,7 +96,10 @@
 ### What's Working
 - [x] Next.js 16 project initialized and running
 - [x] Clerk authentication fully integrated (Google OAuth)
-- [x] **Clerk middleware for route protection** (fast server-side auth)
+- [x] **Clerk proxy for route protection** (fast server-side auth)
+- [x] **Custom favicon "d." branding** (dynamic PNG generation)
+- [x] **Google OAuth with account picker** (always shows accounts)
+- [x] **"Continue with Google" button** (industry standard)
 - [x] Full-screen world map login design
 - [x] Dark grey theme (#0f0f1a, #1a1a2e, #16213e)
 - [x] 24 floating avatars with GSAP animations
@@ -148,11 +151,12 @@ npm run dev
 
 ### Latest Commit
 ```
-d306e7c perf: optimize Clerk auth with middleware and non-blocking sync
+(pending) feat: custom favicon and auth improvements (v0.4.2)
 ```
 
 ### Commit History (Recent)
 ```
+(pending) feat: custom favicon and auth improvements (v0.4.2)
 d306e7c perf: optimize Clerk auth with middleware and non-blocking sync
 7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
 ```
@@ -334,6 +338,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session ended at: 2026-01-19 ~16:05 UTC*
+*Last session ended at: 2026-01-19 ~16:35 UTC*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Latest commit: d306e7c - Auth optimization with middleware*
+*Latest commit: (pending) - Favicon & Auth improvements v0.4.2*

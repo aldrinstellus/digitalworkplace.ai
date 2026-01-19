@@ -17,7 +17,12 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // No auto-redirect - sign-in page is the permanent landing page
+  // Auto-redirect to dashboard if already signed in
+  useEffect(() => {
+    if (userLoaded && isSignedIn) {
+      router.replace("/dashboard");
+    }
+  }, [userLoaded, isSignedIn, router]);
 
   const handleGoogleSignIn = async () => {
     if (!isLoaded || !signIn) {
@@ -31,7 +36,7 @@ export default function SignInPage() {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/sign-in",
+        redirectUrlComplete: "/dashboard",
       });
     } catch (err: any) {
       console.error("Sign in error:", err);

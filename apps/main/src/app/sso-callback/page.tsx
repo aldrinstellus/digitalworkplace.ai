@@ -10,8 +10,8 @@ export default function SSOCallback() {
         <p className="text-white/60 text-sm">Signing you in...</p>
       </div>
       <AuthenticateWithRedirectCallback
-        signInForceRedirectUrl="/sign-in"
-        signUpForceRedirectUrl="/sign-in"
+        signInForceRedirectUrl="/dashboard"
+        signUpForceRedirectUrl="/dashboard"
       />
     </div>
   );

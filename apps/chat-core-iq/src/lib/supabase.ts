@@ -3,8 +3,13 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-// Client for server-side operations (API routes)
+// Client for public schema operations
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+// Client for dcq schema operations (Chat Core IQ specific tables)
+export const supabaseDcq = createClient(supabaseUrl, supabaseAnonKey, {
+  db: { schema: 'dcq' }
+})
 
 // =============================================================================
 // TYPE DEFINITIONS - DCQ SCHEMA

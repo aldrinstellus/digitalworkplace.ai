@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 23:59 (Default Landing Page Update v0.5.1)
-**Version**: 0.5.1
-**Session Status**: Sign-in page confirmed as DEFAULT LANDING PAGE
+**Last Updated**: 2026-01-19 (WordmarkGlitch Animation + Embedding Migration v0.5.2)
+**Version**: 0.5.2
+**Session Status**: Animation enhancements + OpenAI embeddings migration
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -271,14 +271,16 @@ git push origin main
 ## Embedding Configuration
 
 ```typescript
-// All projects use the same embedding config
+// All projects use OpenAI text-embedding-3-small
 {
-  model: 'Xenova/all-MiniLM-L6-v2',
-  dimensions: 384,
-  provider: 'local (transformers.js)',
-  cost: 'FREE'
+  model: 'text-embedding-3-small',
+  dimensions: 1536,
+  provider: 'OpenAI API',
+  cost: '$0.02 per 1M tokens'
 }
 ```
+
+**Migration from Xenova/transformers.js to OpenAI completed on 2026-01-19.**
 
 ---
 
@@ -298,11 +300,14 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 ## Pending Tasks
 
-### Immediate
+### Completed (v0.5.2)
 - [x] Dashboard product order updated
 - [x] Test Pilot IQ disabled in UI
-- [ ] **Git commit and push**
-- [ ] **Vercel deployment**
+- [x] Sign-in page as default landing page (all redirects fixed)
+- [x] WordmarkGlitch animation: chaotic scramble with 75% stable display
+- [x] OpenAI text-embedding-3-small migration (dIQ, dCQ)
+- [x] Git commit and push
+- [x] Vercel deployment
 
 ### Short Term
 - [ ] dSQ (Support IQ) implementation
@@ -378,4 +383,4 @@ When starting a new Claude Code session:
 
 *Last session ended at: 2026-01-19*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Version: 0.5.0 - Monorepo + Semantic Search + Multi-Project*
+*Version: 0.5.2 - WordmarkGlitch Animation + OpenAI Embeddings Migration*

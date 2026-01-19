@@ -55,6 +55,71 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Batch generate embeddings for all knowledge_items without embeddings
+    if (action === 'batch_knowledge_items') {
+      const limit = 50; // Process 50 at a time
+
+      // Get items needing embeddings from public.knowledge_items
+      const { data: items, error } = await supabase
+        .from('knowledge_items')
+        .select('id, title, content, summary, source_table')
+        .is('embedding', null)
+        .limit(limit);
+
+      if (error) {
+        console.error('Failed to fetch knowledge items:', error);
+        return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 });
+      }
+
+      if (!items || items.length === 0) {
+        return NextResponse.json({
+          processed: 0,
+          results: [],
+          message: 'All knowledge items already have embeddings',
+        });
+      }
+
+      const results = [];
+      for (const item of items) {
+        try {
+          const textToEmbed = `${item.title || ''}\n\n${item.summary || ''}\n\n${item.content || ''}`.trim();
+          if (!textToEmbed) {
+            results.push({ id: item.id, source: item.source_table, success: false, error: 'No text content' });
+            continue;
+          }
+
+          const embedding = await generateEmbedding(textToEmbed);
+
+          // Store embedding directly
+          const { error: updateError } = await supabase
+            .from('knowledge_items')
+            .update({ embedding: embedding as unknown as string })
+            .eq('id', item.id);
+
+          if (updateError) {
+            results.push({ id: item.id, source: item.source_table, success: false, error: updateError.message });
+          } else {
+            results.push({ id: item.id, title: item.title, source: item.source_table, success: true });
+          }
+        } catch (err) {
+          results.push({ id: item.id, source: item.source_table, success: false, error: String(err) });
+        }
+      }
+
+      // Get remaining count
+      const { count } = await supabase
+        .from('knowledge_items')
+        .select('id', { count: 'exact', head: true })
+        .is('embedding', null);
+
+      return NextResponse.json({
+        processed: results.filter(r => r.success).length,
+        failed: results.filter(r => !r.success).length,
+        remaining: count || 0,
+        results,
+      });
+    }
+
     // Batch generate embeddings for all articles without embeddings
     if (action === 'batch_articles') {
       // Use direct SQL since diq schema might not be exposed

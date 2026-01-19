@@ -1,25 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function Home() {
-  const { user, isLoaded } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoaded) {
-      if (user) {
-        // Signed-in users go to dashboard
-        router.replace("/dashboard");
-      } else {
-        // Unauthenticated users go to sign-in
-        router.replace("/sign-in");
-      }
-    }
-  }, [isLoaded, user, router]);
+    // Always redirect to sign-in as the default landing page
+    router.replace("/sign-in");
+  }, [router]);
 
   // Show loading spinner while redirecting
   return (

@@ -1,69 +1,139 @@
 /**
- * Local Embeddings using Transformers.js
- * Uses all-MiniLM-L6-v2 model (384 dimensions)
- * No API key required - runs locally
+ * OpenAI Embeddings using text-embedding-3-small
+ * Produces 1536-dimensional embeddings
+ * Optimized for Vercel serverless deployment
  *
- * IMPORTANT: Same model as dIQ for consistent cross-project search
+ * IMPORTANT: Same model used across all subprojects (dIQ, dCQ, dSQ)
+ * for consistent cross-project semantic search
  */
 
-// Dynamic import to avoid issues with server-side rendering
-let embeddingModel: any = null;
+const OPENAI_EMBEDDING_MODEL = 'text-embedding-3-small';
+const EMBEDDING_DIMENSIONS = 1536;
+const MAX_INPUT_TOKENS = 8191; // Model limit
+const MAX_TEXT_LENGTH = 8000; // Safe character limit (~2 tokens per char)
 
-async function getEmbeddingPipeline() {
-  if (embeddingModel) {
-    return embeddingModel;
-  }
-
-  // Dynamically import transformers.js
-  const { pipeline: createPipeline } = await import('@xenova/transformers');
-
-  // Use all-MiniLM-L6-v2 - fast, small, and effective
-  // Produces 384-dimensional embeddings (SAME AS dIQ)
-  embeddingModel = await createPipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-
-  return embeddingModel;
+interface OpenAIEmbeddingResponse {
+  object: string;
+  data: Array<{
+    object: string;
+    index: number;
+    embedding: number[];
+  }>;
+  model: string;
+  usage: {
+    prompt_tokens: number;
+    total_tokens: number;
+  };
 }
 
 /**
- * Generate embedding for text using local model
+ * Generate embedding for text using OpenAI API
  * @param text - Text to embed
- * @returns 384-dimensional embedding vector
+ * @returns 1536-dimensional embedding vector
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
-  const model = await getEmbeddingPipeline();
+  const apiKey = process.env.OPENAI_API_KEY;
 
-  // Truncate text to avoid memory issues (max ~512 tokens)
-  const truncatedText = text.substring(0, 2000);
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY environment variable is not set');
+  }
 
-  // Generate embedding
-  const output = await model(truncatedText, { pooling: 'mean', normalize: true });
+  // Truncate text to avoid token limit
+  const truncatedText = text.substring(0, MAX_TEXT_LENGTH).trim();
 
-  // Convert to regular array
-  return Array.from(output.data);
+  if (!truncatedText) {
+    throw new Error('Cannot generate embedding for empty text');
+  }
+
+  const response = await fetch('https://api.openai.com/v1/embeddings', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: OPENAI_EMBEDDING_MODEL,
+      input: truncatedText,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`OpenAI API error: ${response.status} - ${errorBody}`);
+  }
+
+  const data: OpenAIEmbeddingResponse = await response.json();
+
+  if (!data.data || data.data.length === 0) {
+    throw new Error('No embedding returned from OpenAI API');
+  }
+
+  return data.data[0].embedding;
 }
 
 /**
  * Generate embeddings for multiple texts (batch processing)
+ * OpenAI supports batch embedding in a single request
  * @param texts - Array of texts to embed
- * @returns Array of 384-dimensional embedding vectors
+ * @returns Array of 1536-dimensional embedding vectors
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
-  const model = await getEmbeddingPipeline();
+  const apiKey = process.env.OPENAI_API_KEY;
 
-  const embeddings: number[][] = [];
-
-  for (const text of texts) {
-    const truncatedText = text.substring(0, 2000);
-    const output = await model(truncatedText, { pooling: 'mean', normalize: true });
-    embeddings.push(Array.from(output.data));
+  if (!apiKey) {
+    throw new Error('OPENAI_API_KEY environment variable is not set');
   }
 
-  return embeddings;
+  if (texts.length === 0) {
+    return [];
+  }
+
+  // Truncate each text and filter empty ones
+  const truncatedTexts = texts
+    .map(text => text.substring(0, MAX_TEXT_LENGTH).trim())
+    .filter(text => text.length > 0);
+
+  if (truncatedTexts.length === 0) {
+    throw new Error('No valid texts to embed after filtering');
+  }
+
+  const response = await fetch('https://api.openai.com/v1/embeddings', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: OPENAI_EMBEDDING_MODEL,
+      input: truncatedTexts,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(`OpenAI API error: ${response.status} - ${errorBody}`);
+  }
+
+  const data: OpenAIEmbeddingResponse = await response.json();
+
+  // Sort by index to ensure correct order
+  const sortedEmbeddings = data.data
+    .sort((a, b) => a.index - b.index)
+    .map(item => item.embedding);
+
+  return sortedEmbeddings;
 }
 
 /**
- * Get embedding dimensions (384 for all-MiniLM-L6-v2)
+ * Get embedding dimensions (1536 for text-embedding-3-small)
  */
 export function getEmbeddingDimensions(): number {
-  return 384;
+  return EMBEDDING_DIMENSIONS;
+}
+
+/**
+ * Get the embedding model name
+ */
+export function getEmbeddingModel(): string {
+  return OPENAI_EMBEDDING_MODEL;
 }

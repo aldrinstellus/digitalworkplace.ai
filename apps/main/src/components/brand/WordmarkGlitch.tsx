@@ -9,8 +9,13 @@ interface WordmarkGlitchProps {
   enableSound?: boolean;
 }
 
-// Glitch characters for scrambling effect
+// Glitch characters for scrambling effect - multiple chaotic sets
 const GLITCH_CHARS = "!@#$%^&*()_+-=[]{}|;':\",./<>?`~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const MORPH_CHARS = "░▒▓█▄▀■□▪▫●○◐◑◒◓◔◕◖◗▲▼◄►";
+const TECH_CHARS = "⟨⟩⌐¬⌠⌡∞≈≠≤≥«»÷×±∓∴∵∷∸⊕⊗⊘⊙";
+const CYBER_CHARS = "ĐđĦħıĲĳĸĿŀŁłŃńŅņŇňŉŊŋŌōŎŏ";
+const MATRIX_CHARS = "ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
+const CHAOS_CHARS = "∆Ωψξζλμ№฿₿₴₸ℵℶℷℸ⅀⅁⅂⅃⅄";
 
 // Original text parts
 const ORIGINAL_TEXT = {
@@ -19,14 +24,22 @@ const ORIGINAL_TEXT = {
   ai: ".ai",
 };
 
-// Function to scramble text with random glitch characters
-const scrambleText = (text: string, intensity: number = 1): string => {
+// ULTRA CHAOTIC scramble - maximum drama, each letter morphs wildly
+const scrambleText = (text: string, intensity: number = 1, morphStyle: number = 0, chaos: number = 1): string => {
+  const charSets = [GLITCH_CHARS, MORPH_CHARS, TECH_CHARS, CYBER_CHARS, MATRIX_CHARS, CHAOS_CHARS];
+
   return text
     .split("")
-    .map((char) => {
-      // Higher intensity = more characters get scrambled
-      if (Math.random() < 0.3 + intensity * 0.2) {
-        return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+    .map((char, index) => {
+      // DRAMATIC randomness per letter - 70% more aggressive
+      const letterChance = Math.random();
+      // Much higher threshold for more scrambling
+      const threshold = (0.35 + (intensity * 0.55) + (Math.sin(index * 2.3 + Date.now() * 0.001) * 0.25)) * chaos * 1.7;
+
+      if (letterChance < threshold) {
+        // Pick random character set for each letter - total chaos
+        const randomSet = charSets[Math.floor(Math.random() * charSets.length)];
+        return randomSet[Math.floor(Math.random() * randomSet.length)];
       }
       return char;
     })
@@ -55,21 +68,74 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
     }
   }, [enableSound]);
 
-  // Function to start text scrambling
+  // SLOWER DRAMATIC scrambling - intense morphing with slower timing
   const startScrambling = useCallback((intensity: number, duration: number) => {
     // Clear any existing interval
     if (scrambleIntervalRef.current) {
       clearInterval(scrambleIntervalRef.current);
     }
 
-    // Rapidly scramble text every 30ms for that CRT glitch feel
-    scrambleIntervalRef.current = setInterval(() => {
-      setDigitalText(scrambleText(ORIGINAL_TEXT.digital, intensity));
-      setWorkplaceText(scrambleText(ORIGINAL_TEXT.workplace, intensity));
-      setAiText(scrambleText(ORIGINAL_TEXT.ai, intensity));
-    }, 30);
+    let frameCount = 0;
+    let chaosLevel = 1.4 + Math.random() * 0.8; // Higher base chaos
 
-    // Stop scrambling and reset to original after duration
+    // SLOWER scramble timing (50-80ms) - more visible morphing
+    const baseInterval = 50 + Math.random() * 30;
+    scrambleIntervalRef.current = setInterval(() => {
+      frameCount++;
+
+      // SLOWER intensity waves - smoother transitions
+      const wave1 = Math.sin(frameCount * 0.2) * 0.6;
+      const wave2 = Math.cos(frameCount * 0.35) * 0.5;
+      const wave3 = Math.sin(frameCount * 0.5) * 0.4;
+      const chaosWave = intensity * (0.7 + wave1 + wave2 + wave3) * chaosLevel * 1.7;
+
+      // Chaos spikes
+      const spike = Math.random() > 0.7 ? 2.0 : 1.2;
+
+      // Each word morphs DRAMATICALLY at different rates
+      setDigitalText(scrambleText(ORIGINAL_TEXT.digital, chaosWave * spike, 0, chaosLevel * 1.5));
+      setWorkplaceText(scrambleText(ORIGINAL_TEXT.workplace, chaosWave * 1.5 * spike, 0, chaosLevel * 1.8));
+      setAiText(scrambleText(ORIGINAL_TEXT.ai, chaosWave * 1.2, 0, chaosLevel * 1.3));
+
+      // Chaos spikes mid-animation
+      if (Math.random() > 0.88) {
+        chaosLevel = 1.3 + Math.random() * 1.2;
+      }
+    }, baseInterval);
+
+    // SLOWER settling phase for dramatic reveal
+    const settleStart = duration * 0.5;
+    setTimeout(() => {
+      if (scrambleIntervalRef.current) {
+        clearInterval(scrambleIntervalRef.current);
+        let settleFrame = 0;
+        const settleInterval = 60 + Math.random() * 40; // SLOWER settle
+
+        scrambleIntervalRef.current = setInterval(() => {
+          settleFrame++;
+          // Stuttering fade
+          const stutter = Math.random() > 0.5 ? 0.5 : 0;
+          const fadeIntensity = intensity * Math.max(0, 1.2 - settleFrame * 0.08 + stutter); // SLOWER fade
+
+          if (fadeIntensity <= 0.08) {
+            if (scrambleIntervalRef.current) {
+              clearInterval(scrambleIntervalRef.current);
+              scrambleIntervalRef.current = null;
+            }
+            setDigitalText(ORIGINAL_TEXT.digital);
+            setWorkplaceText(ORIGINAL_TEXT.workplace);
+            setAiText(ORIGINAL_TEXT.ai);
+          } else {
+            // DRAMATIC during settle
+            setDigitalText(scrambleText(ORIGINAL_TEXT.digital, fadeIntensity * 1.3, 0, 1.2));
+            setWorkplaceText(scrambleText(ORIGINAL_TEXT.workplace, fadeIntensity * 1.5, 0, 1.4));
+            setAiText(scrambleText(ORIGINAL_TEXT.ai, fadeIntensity, 0, 1.0));
+          }
+        }, settleInterval);
+      }
+    }, settleStart);
+
+    // Final cleanup
     setTimeout(() => {
       if (scrambleIntervalRef.current) {
         clearInterval(scrambleIntervalRef.current);
@@ -78,7 +144,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
       setDigitalText(ORIGINAL_TEXT.digital);
       setWorkplaceText(ORIGINAL_TEXT.workplace);
       setAiText(ORIGINAL_TEXT.ai);
-    }, duration);
+    }, duration + 300 + Math.random() * 200);
   }, []);
 
   // Cleanup scramble interval on unmount
@@ -90,11 +156,12 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
     };
   }, []);
 
-  // Random glitch effect - more dramatic
+  // SLOWER DRAMATIC glitch effect - intense but with slower, more visible morphing
   useEffect(() => {
     const triggerGlitch = () => {
-      // Softer intensity - mostly light glitches
-      const intensity = Math.random() > 0.7 ? 1.5 : 1;
+      // DRAMATIC intensity
+      const intensityRoll = Math.random();
+      const intensity = intensityRoll > 0.85 ? 3.0 : intensityRoll > 0.5 ? 2.2 : intensityRoll > 0.2 ? 1.6 : 1.0;
       setGlitchIntensity(intensity);
       setGlitchActive(true);
 
@@ -103,39 +170,53 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
         playGlitchSound(intensity);
       }
 
-      // Start text scrambling - longer duration for smoother feel
-      startScrambling(intensity, 200);
+      // MUCH LONGER duration (600-1200ms) - slower, more visible morphing
+      const duration = 600 + Math.random() * 600;
+      startScrambling(intensity, duration);
 
-      // Smoother glitch with gentler timing
+      // Slower visual glitch timing
       setTimeout(() => {
         setGlitchActive(false);
-        // Occasional subtle second pulse
-        setTimeout(() => {
-          if (Math.random() > 0.6) {
+
+        // Echo bursts with SLOWER timing
+        const echoBursts = Math.floor(Math.random() * 3) + 1;
+        let echoDelay = 150 + Math.random() * 200;
+
+        for (let i = 0; i < echoBursts; i++) {
+          setTimeout(() => {
             setGlitchActive(true);
-            // Gentler second sound
+            const echoIntensity = intensity * (0.4 + Math.random() * 0.6);
             if (enableSound && audioInitializedRef.current) {
-              playGlitchSound(intensity * 0.4);
+              playGlitchSound(echoIntensity * 0.6);
             }
-            // Softer second scramble
-            startScrambling(intensity * 0.4, 120);
-            setTimeout(() => setGlitchActive(false), 120);
-          }
-        }, 80);
-      }, 200); // Longer primary glitch duration
+            startScrambling(echoIntensity, 200 + Math.random() * 200); // SLOWER echo
+            setTimeout(() => setGlitchActive(false), 200 + Math.random() * 150);
+          }, echoDelay);
+          echoDelay += 200 + Math.random() * 250; // SLOWER between echoes
+        }
+      }, duration);
     };
 
-    // Initial glitch shortly after load
-    const initialTimeout = setTimeout(triggerGlitch, 500);
+    // Initial delay - show stable text first before any animation
+    const initialTimeout = setTimeout(triggerGlitch, 3000);
 
-    // Regular glitches at comfortable interval
-    const interval = setInterval(() => {
-      triggerGlitch();
-    }, 2600); // Glitch every 2.6 seconds (30% slower)
+    // 75% stable text, then morph, then gap
+    // Total cycle ~12 seconds: 9s stable (75%) + 1.5s morph + 1.5s gap
+    const scheduleNextGlitch = () => {
+      // 9 seconds of stable "digitalworkplace.ai" display (75% of cycle)
+      const stableDisplayTime = 9000;
+
+      return setTimeout(() => {
+        triggerGlitch();
+        intervalRef.current = scheduleNextGlitch();
+      }, stableDisplayTime);
+    };
+
+    const intervalRef = { current: scheduleNextGlitch() };
 
     return () => {
       clearTimeout(initialTimeout);
-      clearInterval(interval);
+      clearTimeout(intervalRef.current);
     };
   }, [enableSound, startScrambling]);
 

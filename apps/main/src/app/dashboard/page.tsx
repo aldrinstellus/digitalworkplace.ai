@@ -141,8 +141,8 @@ export default function DashboardPage() {
 
             {/* Right Side */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Admin Badge - Muted style matching cards */}
-              {isSuperAdmin && (
+              {/* Role Badge - Admin or User */}
+              {isSuperAdmin ? (
                 <motion.button
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -153,6 +153,15 @@ export default function DashboardPage() {
                   <span className="text-xs">👑</span>
                   <span className="text-white/70 text-sm font-medium">Admin</span>
                 </motion.button>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a2e] border border-white/5 rounded-lg"
+                >
+                  <span className="text-xs">👤</span>
+                  <span className="text-white/70 text-sm font-medium">User</span>
+                </motion.div>
               )}
 
               {/* User Avatar */}

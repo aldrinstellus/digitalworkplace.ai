@@ -2,6 +2,7 @@
 
 // Audio context singleton
 let audioContext: AudioContext | null = null;
+let audioInitialized = false;
 
 const getAudioContext = (): AudioContext | null => {
   if (typeof window === "undefined") return null;
@@ -12,11 +13,32 @@ const getAudioContext = (): AudioContext | null => {
   return audioContext;
 };
 
-// Resume audio context on user interaction (required by browsers)
+// Initialize and resume audio context - tries to auto-play
 export const initAudio = (): void => {
   const ctx = getAudioContext();
-  if (ctx && ctx.state === "suspended") {
-    ctx.resume();
+  if (!ctx) return;
+
+  // Try to resume immediately
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {
+      // Silently fail - will work after user interaction
+    });
+  }
+
+  // If not initialized, set up listeners to resume on any interaction
+  if (!audioInitialized) {
+    audioInitialized = true;
+
+    const resumeAudio = () => {
+      if (ctx.state === "suspended") {
+        ctx.resume();
+      }
+    };
+
+    // Listen for any user interaction to enable audio
+    ["click", "touchstart", "keydown", "scroll"].forEach((event) => {
+      window.addEventListener(event, resumeAudio, { once: true, passive: true });
+    });
   }
 };
 

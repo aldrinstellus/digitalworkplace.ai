@@ -46,25 +46,14 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
   // Ref for scramble interval
   const scrambleIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize audio on first user interaction
-  const handleInteraction = useCallback(() => {
-    if (!audioInitialized) {
+  // Auto-initialize audio on mount
+  useEffect(() => {
+    if (enableSound && !audioInitialized) {
+      // Try to initialize audio immediately
       initAudio();
       setAudioInitialized(true);
     }
-  }, [audioInitialized]);
-
-  // Add click listener for audio initialization
-  useEffect(() => {
-    if (enableSound) {
-      window.addEventListener("click", handleInteraction, { once: true });
-      window.addEventListener("touchstart", handleInteraction, { once: true });
-      return () => {
-        window.removeEventListener("click", handleInteraction);
-        window.removeEventListener("touchstart", handleInteraction);
-      };
-    }
-  }, [enableSound, handleInteraction]);
+  }, [enableSound, audioInitialized]);
 
   // Function to start text scrambling
   const startScrambling = useCallback((intensity: number, duration: number) => {

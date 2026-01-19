@@ -1,7 +1,7 @@
 # Digital Workplace AI - Project Context
 
 ## Vision
-Digital Workplace AI is an AI-powered digital workplace solution designed to enhance team collaboration and productivity.
+Digital Workplace AI is an AI-powered digital workplace solution designed to enhance team collaboration and productivity. Features a dark, tech-forward aesthetic with unique brand identity.
 
 ## Architecture
 
@@ -9,13 +9,13 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
 - **Next.js 16** with App Router for server-side rendering and routing
 - **TypeScript** for type safety
 - **Tailwind CSS** for utility-first styling
+- **shadcn/ui** for headless UI components
 - **Framer Motion** for declarative React animations
 - **GSAP** for high-performance JavaScript animations
 
 ### Authentication
 - **Clerk** handles all authentication flows:
-  - Email/password sign-in
-  - OAuth providers (Google, GitHub)
+  - Google OAuth (primary method)
   - SSO support
   - Session management
 
@@ -33,48 +33,63 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
   - CDN distribution
   - Environment variable management
 
-## Login Page Design
+## Login Page Design (v0.2.0)
 
-### Reference Design
-Based on Auzmor Office login page (`/Users/aldrin-mac-mini/v1/office_frontend-v1`)
+### Design Philosophy
+- Full-screen immersive experience
+- Dark grey theme for premium, tech-forward feel
+- Minimalistic centered login overlay
+- High-frequency activity indicators for "alive" platform feel
+- Edgy wordmark with glitch effects
 
 ### Components
 
 #### LoginBackground.tsx
-Left panel featuring:
-- Teal gradient background (`#0d9488` to `#134e4a`)
-- World map SVG overlay (22% opacity, inverted colors)
-- 12 floating avatar photos from Unsplash:
-  - Positioned at geographic locations
+Full-screen background featuring:
+- Dark grey gradient (#0f0f1a to #1a1a2e)
+- World map SVG overlay (20% opacity)
+- 24 floating avatar photos:
+  - Positioned across entire screen (avoiding center)
   - 3 depth layers (front, middle, back)
   - GSAP floating animations
   - Online status indicators with pulse effect
-- Chat bubbles:
-  - Random messages appearing
+- 48 chat messages:
+  - High-frequency display (600-1000ms)
+  - Up to 10 concurrent bubbles
   - Framer Motion enter/exit animations
-  - White background with tail
+- Green data packets:
+  - Slow bezier curve paths (7-15 seconds)
+  - Point-to-point connections
+  - Quadratic interpolation for smooth arcs
 - Connection elements:
   - Arc lines between regions
   - Pulsing city indicators
-  - Floating particles
 
-#### AnimatedLoginForm.tsx
-Right panel featuring:
-- Custom logo (teal diamond icon)
-- "Sign In" heading with subtitle
-- Form fields:
-  - Work Email / Username (rounded input)
-  - Password (with show/hide toggle)
-- Forgot Password link
-- Sign In button (gray, disabled until valid)
-- SSO button (white outline)
-- Sign Up link
-- Staggered Framer Motion animations
+#### WordmarkGlitch.tsx
+Centered wordmark featuring:
+- "digital" - 75% white, font-weight 300
+- "workplace" - 100% white, font-weight 500
+- ".ai" - Green #4ade80, font-weight 600, triple-layer glow
+- Glitch effects:
+  - Chromatic aberration (red #ff0040, cyan #00ffff)
+  - Variable intensity (light/heavy)
+  - Double-tap stuttering
+  - Horizontal slice distortion
+  - Slight skew during glitch
+- Corner bracket decorations
+- Blinking cursor
+
+#### Sign-In Page
+- Full-screen dark background
+- Centered vertically and horizontally
+- WordmarkGlitch component
+- "Continue with Google" button (shadcn/ui Button)
+- Semi-transparent styling
 
 ### Layout
-- Full-screen split layout (50/50 on desktop)
-- Mobile: Form only (background hidden)
-- Sign-in pages use fixed positioning to hide main header
+- Full-screen immersive (no split panels)
+- Mobile: Simplified, centered login
+- Fixed positioning to hide main header
 
 ## API Integration
 
@@ -82,12 +97,9 @@ Right panel featuring:
 ```typescript
 import { useSignIn } from "@clerk/nextjs";
 
-const { isLoaded, signIn, setActive } = useSignIn();
+const { isLoaded, signIn } = useSignIn();
 
-// Email/password login
-await signIn.create({ identifier: email, password });
-
-// OAuth login
+// Google OAuth login
 await signIn.authenticateWithRedirect({
   strategy: "oauth_google",
   redirectUrl: "/sso-callback",
@@ -106,67 +118,67 @@ const supabase = createClient(
 ```
 
 ## Avatar Data
-12 diverse professional headshots from Unsplash:
-```typescript
-const uniqueAvatars = [
-  { id: 1, src: "photo-1494790108377-be9c29b29330", name: "Sarah" },
-  { id: 2, src: "photo-1507003211169-0a1dd7228f2d", name: "Marcus" },
-  { id: 3, src: "photo-1438761681033-6461ffad8d80", name: "Emily" },
-  { id: 4, src: "photo-1472099645785-5658abf4ff4e", name: "David" },
-  { id: 5, src: "photo-1534528741775-53994a69daeb", name: "Sophia" },
-  { id: 6, src: "photo-1500648767791-00dcc994a43e", name: "James" },
-  { id: 7, src: "photo-1517841905240-472988babdf9", name: "Olivia" },
-  { id: 8, src: "photo-1506794778202-cad84cf45f1d", name: "Michael" },
-  { id: 9, src: "photo-1544005313-94ddf0286df2", name: "Ava" },
-  { id: 10, src: "photo-1552058544-f2b08422138a", name: "Robert" },
-  { id: 11, src: "photo-1531746020798-e6953c6e8e04", name: "Isabella" },
-  { id: 12, src: "photo-1463453091185-61582044d556", name: "Daniel" },
-];
-```
+24 diverse professional headshots from Unsplash positioned across the screen:
+- 4 avatars in top row
+- 4 avatars in upper section
+- 4 avatars in upper-mid section
+- 4 avatars in lower-mid section
+- 4 avatars in lower section
+- 4 avatars in bottom row
 
-## Geographic Avatar Positions
-Avatars positioned at major global regions:
-- USA (front layer, largest)
-- Canada (back layer)
-- Brazil (middle layer)
-- UK (middle layer)
-- Europe/Germany (back layer)
-- Africa (middle layer)
-- Dubai (middle layer)
-- India (front layer)
-- China (middle layer)
-- Japan (back layer)
-- Singapore (middle layer)
-- Australia (front layer)
+All avoiding the center area where the login appears.
 
-## Chat Messages
-Rotating chat bubble messages:
-- "Great meeting today!"
-- "Love the new design!"
-- "Thanks for the help!"
-- "See you at standup"
-- "Awesome work!"
-- "Quick sync later?"
-- "Just shipped it!"
-- "Happy Friday!"
-- "Nice job on that!"
-- "Coffee break?"
-- "Let's collaborate!"
-- "You're amazing!"
+## Chat Messages (48 total)
+Rotating messages covering:
+- Meeting coordination
+- Design feedback
+- Technical updates
+- Casual greetings
+- Collaboration requests
+- Celebrations
+- Project status
+- Time-based greetings
 
-## Color Palette
-- **Primary Teal**: `#0d9488` (teal-600)
-- **Teal Light**: `#14b8a6` (teal-500)
-- **Teal Dark**: `#115e59` (teal-800)
-- **Background**: `#fafafa` (neutral-50)
-- **Text**: `#171717` (neutral-900)
-- **Muted**: `#737373` (neutral-500)
-- **Green Indicator**: `#4ade80` (green-400)
+## Color Palette (Dark Theme)
+
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Background Dark | #0f0f1a | Main background |
+| Background Mid | #1a1a2e | Cards, overlays |
+| Background Light | #16213e | Borders, accents |
+| Green Accent | #4ade80 | .ai, indicators, dots |
+| Green Glow | rgba(74,222,128,0.5) | Shadows, glows |
+| Red Glitch | #ff0040 | Chromatic aberration |
+| Cyan Glitch | #00ffff | Chromatic aberration |
+| White | #ffffff | Primary text |
+| White 75% | rgba(255,255,255,0.75) | "digital" text |
+| White 10% | rgba(255,255,255,0.1) | Button backgrounds |
+
+## Typography
+
+| Element | Font Stack | Weight |
+|---------|------------|--------|
+| Wordmark | JetBrains Mono, Fira Code, SF Mono | 300-600 |
+| UI Text | System fonts | 400-500 |
+| Buttons | System fonts | 500 |
+
+## Animation Timings
+
+| Animation | Duration | Easing |
+|-----------|----------|--------|
+| Avatar float | 3-5s | sine.inOut |
+| Chat bubble appear | 300ms | ease-out |
+| Chat bubble visible | 4s | - |
+| Green dot travel | 7-15s | linear |
+| Glitch trigger | 2s interval | - |
+| Glitch duration | 120ms + 80ms | - |
 
 ## Future Enhancements
+- Sound effects for glitch/activity
 - Dashboard with analytics
 - AI Assistant integration
 - Document management
 - Team collaboration features
 - Settings and preferences
 - Notification system
+- Sign-up page redesign

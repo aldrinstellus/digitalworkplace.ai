@@ -4,6 +4,97 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.2.0] - 2026-01-19
+
+### Major Redesign - Dark Theme & Edgy Wordmark
+
+#### Changed
+- **Full-Screen Immersive Login**
+  - Removed split panel layout (was 50/50 left/right)
+  - World map now spans entire screen edge-to-edge
+  - Centered minimalistic login overlay
+  - More dramatic, premium feel
+
+- **Dark Grey Theme** (replacing teal)
+  - Background: #0f0f1a (deep navy-black)
+  - Mid-tone: #1a1a2e (dark purple-grey)
+  - Light accent: #16213e (slate blue)
+  - Green accent: #4ade80 (kept from original)
+
+- **Enhanced Avatars**
+  - Increased from 12 to 24 floating avatars
+  - Repositioned to avoid center (login area)
+  - Spread across entire screen
+  - Maintained GSAP floating animations
+
+- **Chat Messages Enhancement**
+  - Increased from 12 to 48 unique messages
+  - High-frequency display (600-1000ms intervals)
+  - Up to 10 concurrent bubbles (was 6)
+  - Initial burst of 8 messages on load
+
+- **Green Dot Animations**
+  - Changed from fast straight lines to slow curves
+  - Now follow bezier curve paths between points
+  - Duration: 7-15 seconds (was 4 seconds)
+  - Varied speeds and delays for natural feel
+  - Quadratic bezier interpolation for smooth arcs
+
+- **Login Simplification**
+  - Removed email/password form
+  - Google OAuth only ("Continue with Google")
+  - Semi-transparent button styling
+  - shadcn/ui Button component
+
+#### Added
+- **Brand Components** (`src/components/brand/`)
+
+  ##### WordmarkGlitch.tsx (Primary)
+  - Dramatic chromatic aberration effect
+  - Red (#ff0040) and cyan (#00ffff) split layers
+  - Variable intensity glitches (light/heavy)
+  - Double-tap stuttering effect
+  - Horizontal slice distortion during glitch
+  - Whole text skew on glitch
+  - "digital" at 75% opacity with glow
+  - "workplace" at 100% white with glow
+  - ".ai" in green with triple-layer glow
+  - Corner bracket decorations
+  - Blinking cursor
+  - More frequent triggers (50% chance every 2s)
+  - Faster transitions (20ms for snappy feel)
+
+  ##### Wordmark.tsx
+  - Simple letter-by-letter animation
+  - Staggered entrance with Framer Motion
+  - Decorative angle brackets
+
+  ##### WordmarkEdgy.tsx
+  - SVG-based wordmark
+  - Animated underline
+  - Data point decorations
+  - Gradient fills
+
+- **shadcn/ui Integration**
+  - `components.json` configuration
+  - `src/components/ui/button.tsx` - Button component
+  - `src/lib/utils.ts` - cn() utility function
+  - Tailwind CSS variable theming
+
+#### Fixed
+- **tw-animate-css Import Error**
+  - Removed `@import "tw-animate-css"` from globals.css
+  - Was causing 500 error on page load
+  - Framer Motion handles all animations instead
+
+#### Removed
+- Split panel layout
+- Email/password login form
+- AnimatedLoginForm.tsx (no longer used)
+- Teal color scheme
+
+---
+
 ## [0.1.0] - 2026-01-19
 
 ### Project Initialization
@@ -32,76 +123,42 @@ All notable changes to Digital Workplace AI are documented in this file.
   ##### LoginBackground.tsx
   - Teal gradient background (`#0d9488` to `#134e4a`)
   - World map SVG overlay with inverted colors (22% opacity)
-  - 12 floating avatar photos from Unsplash:
-    - Sarah, Marcus, Emily, David, Sophia, James
-    - Olivia, Michael, Ava, Robert, Isabella, Daniel
-  - Geographic positioning at major regions:
-    - USA, Canada, Brazil, UK, Germany, Africa
-    - Dubai, India, China, Japan, Singapore, Australia
+  - 12 floating avatar photos from Unsplash
+  - Geographic positioning at major regions
   - 3 depth layers (front, middle, back) with parallax effect
-  - GSAP-powered floating animations:
-    - Vertical floating with randomized duration (3-5s)
-    - Subtle rotation and 3D perspective
-    - Staggered animation start times
+  - GSAP-powered floating animations
   - Online status indicators with CSS pulse animation
-  - Framer Motion chat bubbles:
-    - 12 rotating messages
-    - Random appearance every 3 seconds
-    - Smooth enter/exit animations
-    - White background with speech bubble tail
-  - Connection elements:
-    - Arc lines between regions (SVG paths)
-    - Pulsing city location indicators
-    - Floating particle effects
+  - Framer Motion chat bubbles
+  - Connection elements (arc lines, pulsing indicators)
 
   ##### AnimatedLoginForm.tsx
   - Custom logo (teal diamond SVG icon)
   - "Digital Workplace AI" branding
-  - "Sign In" heading with descriptive subtitle
-  - Form fields:
-    - Work Email / Username input (rounded-full style)
-    - Password input with show/hide toggle
+  - Form fields (email, password)
   - "Forgot Password?" link
-  - Sign In button (gray, disabled state until valid)
-  - SSO button (white outline style)
-  - Sign Up link
+  - Sign In and SSO buttons
   - Staggered Framer Motion entrance animations
   - Error handling with animated error banner
-  - Loading state with spinning indicator
 
   ##### Sign-In Page Layout
   - Full-screen split layout (50/50 on desktop)
-  - Mobile responsive (form only, background hidden on small screens)
+  - Mobile responsive (form only on small screens)
   - Fixed positioning layout to hide main app header
-  - Smooth page transition animations
 
 - **Project Documentation**
   - `CLAUDE.md` - Claude Code instructions and conventions
   - `context.md` - Detailed project context and specifications
   - `CHANGELOG.md` - This file
-  - `savepoint.md` - Session savepoint for continuity
+  - `SAVEPOINT.md` - Session savepoint for continuity
 
 #### Configuration
-- Environment variables structure in `.env.local`:
-  ```
-  NEXT_PUBLIC_SUPABASE_URL
-  NEXT_PUBLIC_SUPABASE_ANON_KEY
-  SUPABASE_PUBLISHABLE_KEY
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-  CLERK_SECRET_KEY
-  NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-  NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-  ```
-
-#### Styling
-- Hidden Next.js development indicators (error button, floating buttons)
-- Custom CSS in `globals.css` for dev UI hiding
-- Tailwind CSS utility-first approach
-- Teal/neutral color palette throughout
+- Environment variables structure in `.env.local`
+- Hidden Next.js development indicators
+- Custom CSS for dev UI hiding
 
 ---
 
-## File Structure Created
+## File Structure (Current)
 
 ```
 digitalworkplace.ai/
@@ -109,24 +166,32 @@ digitalworkplace.ai/
 │   ├── app/
 │   │   ├── layout.tsx              # Root layout with ClerkProvider
 │   │   ├── page.tsx                # Home page
-│   │   ├── globals.css             # Global styles + Next.js UI hiding
+│   │   ├── globals.css             # Global styles
 │   │   ├── sign-in/
 │   │   │   ├── layout.tsx          # Fixed positioning layout
 │   │   │   └── [[...sign-in]]/
-│   │   │       └── page.tsx        # Sign-in page with split layout
+│   │   │       └── page.tsx        # Minimalistic login page
 │   │   ├── sign-up/
 │   │   │   └── [[...sign-up]]/
 │   │   │       └── page.tsx        # Sign-up page
 │   │   └── sso-callback/
 │   │       └── page.tsx            # OAuth callback handler
-│   └── components/
-│       └── login/
-│           ├── LoginBackground.tsx  # World map with avatars
-│           └── AnimatedLoginForm.tsx # Animated sign-in form
+│   ├── components/
+│   │   ├── brand/
+│   │   │   ├── Wordmark.tsx        # Basic wordmark
+│   │   │   ├── WordmarkEdgy.tsx    # SVG wordmark
+│   │   │   └── WordmarkGlitch.tsx  # Glitch effect wordmark (active)
+│   │   ├── login/
+│   │   │   └── LoginBackground.tsx # World map with avatars
+│   │   └── ui/
+│   │       └── button.tsx          # shadcn/ui Button
+│   └── lib/
+│       └── utils.ts                # Utility functions
+├── components.json                  # shadcn/ui config
 ├── CLAUDE.md                        # Claude Code instructions
 ├── context.md                       # Project context
 ├── CHANGELOG.md                     # This changelog
-├── savepoint.md                     # Session savepoint
+├── SAVEPOINT.md                     # Session savepoint
 ├── package.json
 ├── tsconfig.json
 ├── tailwind.config.ts
@@ -145,6 +210,9 @@ digitalworkplace.ai/
 - `@supabase/supabase-js` - Database client
 - `framer-motion` - React animations
 - `gsap` - High-performance animations
+- `class-variance-authority` - Component variants (shadcn/ui)
+- `clsx` - Class name utility
+- `tailwind-merge` - Tailwind class merging
 
 ### Development
 - `typescript` - Type safety
@@ -155,46 +223,52 @@ digitalworkplace.ai/
 
 ---
 
-## Reference
+## Design System
 
-### Design Reference
-Based on: `/Users/aldrin-mac-mini/v1/office_frontend-v1` (Auzmor Office login page)
+### Color Palette (v0.2.0)
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Background Dark | #0f0f1a | Main background |
+| Background Mid | #1a1a2e | Cards, overlays |
+| Background Light | #16213e | Borders, accents |
+| Green Accent | #4ade80 | .ai, indicators |
+| Green Glow | rgba(74,222,128,0.5) | Shadows |
+| Red Glitch | #ff0040 | Chromatic aberration |
+| Cyan Glitch | #00ffff | Chromatic aberration |
+| White | #ffffff | Primary text |
+| White 75% | rgba(255,255,255,0.75) | Secondary text |
 
-### Key Animations
-1. **GSAP Floating** - Avatars float vertically with subtle rotation
-2. **Framer Motion Stagger** - Form elements appear sequentially
-3. **CSS Pulse** - Online status indicators pulse green
-4. **Chat Bubbles** - Random messages appear and fade
-
-### Color Palette
-| Color | Hex | Tailwind |
-|-------|-----|----------|
-| Primary Teal | #0d9488 | teal-600 |
-| Teal Light | #14b8a6 | teal-500 |
-| Teal Dark | #115e59 | teal-800 |
-| Background | #fafafa | neutral-50 |
-| Text | #171717 | neutral-900 |
-| Muted | #737373 | neutral-500 |
-| Green Indicator | #4ade80 | green-400 |
+### Typography
+| Element | Font | Weight | Color |
+|---------|------|--------|-------|
+| Wordmark "digital" | JetBrains Mono | 300 | White 75% |
+| Wordmark "workplace" | JetBrains Mono | 500 | White 100% |
+| Wordmark ".ai" | JetBrains Mono | 600 | #4ade80 |
 
 ---
 
 ## Deployment
 
 - **Platform**: Vercel
-- **Production URL**: https://digitalworkplace-ai.vercel.app (pending deployment)
+- **Production URL**: https://digitalworkplace-ai.vercel.app
 - **Auto-deploy**: On push to `main` branch
 
 ---
 
 ## Next Release Planning
 
-### [0.2.0] - Planned
+### [0.3.0] - Planned
 - Dashboard page after login
 - User profile management
-- Navigation header for authenticated users
+- Navigation header (dark theme)
+- Sign-up page redesign to match login
 
-### [0.3.0] - Planned
+### [0.4.0] - Planned
+- Supabase schema implementation
+- User data persistence
+- Team/organization support
+
+### [0.5.0] - Planned
 - AI Assistant integration
 - Document management features
-- Team collaboration tools
+- Real-time collaboration

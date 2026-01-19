@@ -27,7 +27,7 @@ const products = [
     title: "AI Intranet",
     description: "Smart internal knowledge network",
     href: "https://intranet-iq.vercel.app/diq/dashboard",
-    disabled: false,
+    disabled: true,
     colors: {
       primary: "#3b82f6",
       secondary: "#8b5cf6",

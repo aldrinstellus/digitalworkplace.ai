@@ -234,8 +234,60 @@ Rotating messages covering:
 | Ambient pulse | 8-12s interval | - |
 | Data packet | 3-5s interval | - |
 
+## Dashboard (v0.4.0)
+
+### Overview
+Protected dashboard page accessible after authentication featuring 4 AI product cards.
+
+### Products
+| Product | Theme Color | Description |
+|---------|-------------|-------------|
+| Support IQ | Green (#10b981) | Intelligent customer support automation |
+| Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network |
+| Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence |
+| Chat Core IQ | Purple (#a855f7) | Conversational AI for your business |
+
+### Product Card Features
+- **Animated SVG Illustrations**: Each product has unique animated SVG background
+  - Support IQ: Headset with sound waves, chat bubbles
+  - Intranet IQ: Globe with orbiting nodes, data particles
+  - Test Pilot IQ: Bug icon, checklist with checkmarks, progress bar
+  - Chat Core IQ: Chat interface mockup, typing indicator
+- **3D Tilt Effect**: Cards tilt toward cursor using Framer Motion springs
+- **Colored Borders**: 2px borders in product theme colors (visible in default state)
+- **Continuous Animations**: All animations loop infinitely in all states
+- **Hover Effects**: Enhanced glow, brighter borders, shine sweep
+- **Launch App Button**: Animated arrow on hover
+
+### User Avatar
+- Displays Google profile picture from Clerk
+- Falls back to first initial if image fails
+- Uses `referrerPolicy="no-referrer"` for Google images
+- Dropdown menu with sign out option
+- Admin link for super admins
+
+### Admin Panel
+- Super admin only access
+- User management with role assignment
+- Roles: user, admin, super_admin
+
+### User Role System (Supabase)
+```typescript
+type UserRole = 'user' | 'admin' | 'super_admin';
+
+interface UserData {
+  id: string;
+  clerk_id: string | null;
+  email: string;
+  full_name: string | null;
+  avatar_url: string | null;
+  role: UserRole;
+  created_at: string;
+  updated_at: string;
+}
+```
+
 ## Future Enhancements
-- Dashboard with analytics
 - AI Assistant integration
 - Document management
 - Team collaboration features
@@ -243,3 +295,4 @@ Rotating messages covering:
 - Notification system
 - Sign-up page redesign
 - Real-time presence indicators
+- Product-specific dashboards

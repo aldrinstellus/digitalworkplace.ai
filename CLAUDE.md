@@ -18,7 +18,7 @@ Digital Workplace AI is a Next.js 16 application with Clerk authentication and S
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── layout.tsx          # Root layout with ClerkProvider
-│   ├── page.tsx            # Home page
+│   ├── page.tsx            # Home page (redirects to dashboard)
 │   ├── globals.css         # Global styles
 │   ├── sign-in/            # Sign-in page (full-screen layout)
 │   │   ├── layout.tsx      # Auth-specific layout (no header)
@@ -27,8 +27,13 @@ src/
 │   ├── sign-up/            # Sign-up page
 │   │   └── [[...sign-up]]/
 │   │       └── page.tsx
-│   └── sso-callback/       # OAuth callback handler
-│       └── page.tsx
+│   ├── sso-callback/       # OAuth callback handler
+│   │   ├── layout.tsx      # SSO callback layout
+│   │   └── page.tsx
+│   ├── dashboard/          # Main dashboard (protected)
+│   │   └── page.tsx        # Product cards with animated SVGs
+│   └── admin/              # Admin panel (super_admin only)
+│       └── page.tsx        # User management interface
 ├── components/
 │   ├── audio/              # Audio components
 │   │   ├── BackgroundMusic.tsx  # Background music player (disabled)
@@ -43,6 +48,8 @@ src/
 │       └── button.tsx      # Button component
 └── lib/
     ├── utils.ts            # Utility functions (cn)
+    ├── supabase.ts         # Supabase client configuration
+    ├── userRole.ts         # User role management & Clerk sync
     ├── sounds.ts           # Web Audio API sound effects
     └── backgroundMusic.ts  # Procedural music generator (disabled)
 ```
@@ -53,6 +60,32 @@ src/
 - `src/app/layout.tsx` - ClerkProvider wrapper
 - `src/app/sign-in/[[...sign-in]]/page.tsx` - Google OAuth login
 - `src/app/sso-callback/page.tsx` - OAuth redirect handler
+
+### Dashboard
+- `src/app/dashboard/page.tsx` - Main dashboard with:
+  - 4 product cards (Support IQ, Intranet IQ, Test Pilot IQ, Chat Core IQ)
+  - Animated SVG illustrations for each product
+  - 3D tilt effects with Framer Motion
+  - Colored borders matching product themes
+  - Continuous looping animations
+  - User avatar with dropdown menu
+  - Super admin badge and link
+
+### User Role System
+- `src/lib/userRole.ts` - Supabase user management:
+  - `getUserByEmail(email)` - Get user by email
+  - `getUserByClerkId(clerkId)` - Get user by Clerk ID
+  - `syncUserWithClerk(email, clerkId, fullName?, avatarUrl?)` - Sync Clerk user to Supabase
+  - `isSuperAdmin(email)` - Check if user is super admin
+  - `isAdmin(email)` - Check if user is admin or super admin
+  - `getAllUsers()` - Get all users (for admin)
+  - `updateUserRole(userId, role)` - Update user role
+
+### Admin Panel
+- `src/app/admin/page.tsx` - Super admin interface:
+  - User list with role badges
+  - Role assignment dropdown
+  - Protected route (super_admin only)
 
 ### Login Page Design
 - `src/components/login/LoginBackground.tsx` - Full-screen world map with:
@@ -157,6 +190,14 @@ npm run lint     # Run ESLint
 | Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
 | White | #ffffff | Primary text |
 | White 75% | rgba(255,255,255,0.75) | Secondary text |
+
+### Product Theme Colors
+| Product | Primary | Secondary | Usage |
+|---------|---------|-----------|-------|
+| Support IQ | #10b981 | #06b6d4 | Green/Cyan |
+| Intranet IQ | #3b82f6 | #8b5cf6 | Blue/Purple |
+| Test Pilot IQ | #f59e0b | #ef4444 | Orange/Red |
+| Chat Core IQ | #a855f7 | #ec4899 | Purple/Pink |
 
 ### Typography
 | Element | Font | Weight |

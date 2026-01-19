@@ -4,6 +4,91 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.4.0] - 2026-01-19
+
+### Dashboard & Product Cards Release
+
+#### Added
+- **Dashboard Page** (`src/app/dashboard/page.tsx`)
+  - Protected route requiring authentication
+  - Welcome message with user's first name
+  - 4 product cards in responsive grid layout
+  - User avatar with dropdown menu (sign out, admin link)
+  - Super admin badge for privileged users
+
+- **4 AI Product Cards with Animated SVG Backgrounds**
+  - **Support IQ** (Green theme #10b981)
+    - Animated headset with sound waves
+    - Floating chat bubbles with typing indicators
+    - Pulsing background circles
+  - **Intranet IQ** (Blue theme #3b82f6)
+    - Rotating globe with latitude/longitude lines
+    - Orbiting connection nodes
+    - Data flow particles
+  - **Test Pilot IQ** (Orange theme #f59e0b)
+    - Bug icon with detection rays
+    - Animated checklist with checkmarks
+    - Progress bar animation
+  - **Chat Core IQ** (Purple theme #a855f7)
+    - Chat interface mockup
+    - Typing indicator dots
+    - Message bubbles animation
+
+- **Product Card Features**
+  - 3D tilt effect on hover (Framer Motion useSpring)
+  - Colored borders matching each product's theme (visible in default state)
+  - Enhanced glow and shadow effects on hover
+  - Continuous looping animations in ALL states (default, hover, clicked)
+  - Glassmorphism with gradient backgrounds
+  - Shine sweep effect on hover
+  - "Launch App" button with arrow icon
+
+- **Admin Page** (`src/app/admin/page.tsx`)
+  - Super admin only access
+  - User management interface
+  - Role assignment (user, admin, super_admin)
+
+- **User Role System** (`src/lib/userRole.ts`)
+  - Supabase integration for user management
+  - Functions: `getUserByEmail`, `getUserByClerkId`, `syncUserWithClerk`
+  - Role checks: `isSuperAdmin`, `isAdmin`
+  - Admin functions: `getAllUsers`, `updateUserRole`
+  - Fixed `.maybeSingle()` for handling 0 rows gracefully
+
+- **SSO Callback Layout** (`src/app/sso-callback/layout.tsx`)
+  - Dedicated layout for OAuth callback handling
+
+#### Changed
+- **Avatar Display**
+  - Added `referrerPolicy="no-referrer"` for Google profile images
+  - Added `onError` handler with fallback to letter avatar
+  - Added `avatarError` state tracking
+
+- **Card Border Styling**
+  - Default state: 2px border with 31% opacity theme color
+  - Hover state: 2px border with 56% opacity + glow effects
+  - Added inset box-shadow for additional edge definition
+
+#### Fixed
+- **Framer Motion Animation Warnings**
+  - Added explicit `initial` props to all motion elements
+  - Fixed "animating from undefined" console errors
+
+- **Supabase PGRST116 Error**
+  - Changed `.single()` to `.maybeSingle()` in user sync
+  - Added fallback to return existing user data on update failure
+
+- **Google Profile Avatar Not Loading**
+  - Added `referrerPolicy="no-referrer"` to bypass referrer restrictions
+  - Graceful fallback to initials when image fails
+
+#### Technical
+- All SVG animations use `repeat: Infinity` for continuous loops
+- Animations vary intensity based on hover state but never stop
+- Product data structure with colors object (primary, secondary, glow)
+
+---
+
 ## [0.3.3] - 2026-01-19
 
 ### Responsive Design & Sound Toggle UX
@@ -310,8 +395,13 @@ digitalworkplace.ai/
 │   │   ├── sign-up/
 │   │   │   └── [[...sign-up]]/
 │   │   │       └── page.tsx        # Sign-up page
-│   │   └── sso-callback/
-│   │       └── page.tsx            # OAuth callback handler
+│   │   ├── sso-callback/
+│   │   │   ├── layout.tsx          # SSO callback layout
+│   │   │   └── page.tsx            # OAuth callback handler
+│   │   ├── dashboard/
+│   │   │   └── page.tsx            # Main dashboard with product cards
+│   │   └── admin/
+│   │       └── page.tsx            # Admin panel (super_admin only)
 │   ├── components/
 │   │   ├── audio/
 │   │   │   ├── BackgroundMusic.tsx # Music player (disabled)
@@ -326,6 +416,8 @@ digitalworkplace.ai/
 │   │       └── button.tsx          # shadcn/ui Button
 │   └── lib/
 │       ├── utils.ts                # Utility functions
+│       ├── supabase.ts             # Supabase client
+│       ├── userRole.ts             # User role management
 │       ├── sounds.ts               # Web Audio API sound effects
 │       └── backgroundMusic.ts      # Procedural music (disabled)
 ├── components.json                  # shadcn/ui config
@@ -399,18 +491,19 @@ digitalworkplace.ai/
 
 ## Next Release Planning
 
-### [0.4.0] - Planned
-- Dashboard page after login
-- User profile management
-- Navigation header (dark theme)
-- Sign-up page redesign to match login
-
 ### [0.5.0] - Planned
-- Supabase schema implementation
-- User data persistence
-- Team/organization support
+- Product-specific dashboards (Support IQ, Intranet IQ, etc.)
+- User profile management page
+- Settings and preferences
+- Sign-up page redesign to match login
 
 ### [0.6.0] - Planned
 - AI Assistant integration
 - Document management features
 - Real-time collaboration
+- Team/organization support
+
+### [0.7.0] - Planned
+- Notification system
+- Real-time presence indicators
+- Advanced analytics dashboard

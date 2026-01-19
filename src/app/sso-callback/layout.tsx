@@ -1,4 +1,4 @@
-export default function SignInLayout({
+export default function SSOCallbackLayout({
   children,
 }: {
   children: React.ReactNode;

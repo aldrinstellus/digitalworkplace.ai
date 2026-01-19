@@ -1,7 +1,7 @@
 // Supabase-backed data store for dCQ
 // Migrated from JSON files to Supabase dcq schema
 
-import { supabaseDcq as supabase } from './supabase';
+import { supabase } from './supabase';
 
 // =============================================================================
 // TYPE DEFINITIONS (Compatible with existing API routes)
@@ -323,7 +323,7 @@ const DEFAULT_BANNER_SETTINGS: BannerSettings = {
 
 export async function getFAQs(): Promise<FAQ[]> {
   const { data, error } = await supabase
-    .from('faqs')
+    .from('dcq_faqs')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -349,7 +349,7 @@ export async function saveFAQ(faq: FAQ): Promise<string | null> {
   if (isNewItem) {
     // Insert new item - let Supabase generate the id
     const { data, error } = await supabase
-      .from('faqs')
+      .from('dcq_faqs')
       .insert(dbFaq)
       .select('id')
       .single();
@@ -362,7 +362,7 @@ export async function saveFAQ(faq: FAQ): Promise<string | null> {
   } else {
     // Update existing item
     const { error } = await supabase
-      .from('faqs')
+      .from('dcq_faqs')
       .update(dbFaq)
       .eq('id', faq.id);
 
@@ -428,7 +428,7 @@ function mapPriority(priority: string): 'low' | 'medium' | 'high' {
 
 export async function getAnnouncements(): Promise<Announcement[]> {
   const { data, error } = await supabase
-    .from('announcements')
+    .from('dcq_announcements')
     .select('*')
     .order('start_date', { ascending: false });
 
@@ -453,7 +453,7 @@ export async function saveAnnouncement(ann: Announcement): Promise<string | null
   if (isNewItem) {
     // Insert new item - let Supabase generate the id
     const { data, error } = await supabase
-      .from('announcements')
+      .from('dcq_announcements')
       .insert(dbAnn)
       .select('id')
       .single();
@@ -466,7 +466,7 @@ export async function saveAnnouncement(ann: Announcement): Promise<string | null
   } else {
     // Update existing item
     const { error } = await supabase
-      .from('announcements')
+      .from('dcq_announcements')
       .update(dbAnn)
       .eq('id', ann.id);
 
@@ -524,7 +524,7 @@ function mapAnnouncementToDb(ann: Announcement): Record<string, unknown> {
 
 export async function getSettings(): Promise<Settings> {
   const { data, error } = await supabase
-    .from('settings')
+    .from('dcq_settings')
     .select('*')
     .limit(1)
     .single();
@@ -638,7 +638,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
   };
 
   const { error } = await supabase
-    .from('settings')
+    .from('dcq_settings')
     .update(dbData)
     .eq('id', 'b0000000-0000-0000-0000-000000000001');
 
@@ -653,7 +653,7 @@ export async function saveSettings(settings: Settings): Promise<void> {
 
 export async function getEscalations(): Promise<Escalation[]> {
   const { data, error } = await supabase
-    .from('escalations')
+    .from('dcq_escalations')
     .select('*')
     .order('requested_at', { ascending: false });
 
@@ -675,7 +675,7 @@ export async function saveEscalation(esc: Escalation): Promise<void> {
   const dbEsc = mapEscalationToDb(esc);
 
   const { error } = await supabase
-    .from('escalations')
+    .from('dcq_escalations')
     .upsert(dbEsc, { onConflict: 'id' });
 
   if (error) {
@@ -721,7 +721,7 @@ function mapEscalationToDb(esc: Escalation): Record<string, unknown> {
 
 export async function getAuditLogs(): Promise<AuditLog[]> {
   const { data, error } = await supabase
-    .from('audit_logs')
+    .from('dcq_audit_logs')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(1000);
@@ -751,7 +751,7 @@ export async function addAuditLog(
   details: Record<string, unknown> = {}
 ): Promise<void> {
   const { error } = await supabase
-    .from('audit_logs')
+    .from('dcq_audit_logs')
     .insert({
       user_name: user,
       action,
@@ -784,7 +784,7 @@ function mapAuditLogFromDb(row: Record<string, unknown>): AuditLog {
 
 export async function getNotifications(): Promise<Notification[]> {
   const { data, error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -806,7 +806,7 @@ export async function saveNotification(notif: Notification): Promise<void> {
   const dbNotif = mapNotificationToDb(notif);
 
   const { error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .upsert(dbNotif, { onConflict: 'id' });
 
   if (error) {
@@ -818,7 +818,7 @@ export async function createNotification(
   notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>
 ): Promise<Notification> {
   const { data, error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .insert({
       type: notification.type,
       category: notification.category,
@@ -848,7 +848,7 @@ export async function createNotification(
 
 export async function markNotificationRead(id: string): Promise<Notification | null> {
   const { data, error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .update({
       is_read: true,
       read_at: new Date().toISOString(),
@@ -867,7 +867,7 @@ export async function markNotificationRead(id: string): Promise<Notification | n
 
 export async function markAllNotificationsRead(): Promise<number> {
   const { data, error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .update({
       is_read: true,
       read_at: new Date().toISOString(),
@@ -885,7 +885,7 @@ export async function markAllNotificationsRead(): Promise<number> {
 
 export async function deleteNotification(id: string): Promise<boolean> {
   const { error } = await supabase
-    .from('notifications')
+    .from('dcq_notifications')
     .delete()
     .eq('id', id);
 
@@ -932,7 +932,7 @@ function mapNotificationToDb(notif: Notification): Record<string, unknown> {
 
 export async function getKnowledgeEntries(): Promise<KnowledgeEntry[]> {
   const { data, error } = await supabase
-    .from('knowledge_entries')
+    .from('dcq_knowledge_entries')
     .select('*')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
@@ -955,7 +955,7 @@ export async function saveKnowledgeEntry(entry: KnowledgeEntry): Promise<void> {
   const dbEntry = mapKnowledgeEntryToDb(entry);
 
   const { error } = await supabase
-    .from('knowledge_entries')
+    .from('dcq_knowledge_entries')
     .upsert(dbEntry, { onConflict: 'id' });
 
   if (error) {
@@ -994,7 +994,7 @@ function mapKnowledgeEntryToDb(entry: KnowledgeEntry): Record<string, unknown> {
 
 export async function getUploadedDocuments(): Promise<UploadedDocument[]> {
   const { data, error } = await supabase
-    .from('documents')
+    .from('dcq_documents')
     .select('*')
     .order('uploaded_at', { ascending: false });
 
@@ -1016,7 +1016,7 @@ export async function saveUploadedDocument(doc: UploadedDocument): Promise<void>
   const dbDoc = mapDocumentToDb(doc);
 
   const { error } = await supabase
-    .from('documents')
+    .from('dcq_documents')
     .upsert(dbDoc, { onConflict: 'id' });
 
   if (error) {
@@ -1055,7 +1055,7 @@ function mapDocumentToDb(doc: UploadedDocument): Record<string, unknown> {
 
 export async function getCrawlerUrls(lang: 'en' | 'es' | 'ht' = 'en'): Promise<CrawlerURL[]> {
   const { data, error } = await supabase
-    .from('crawler_urls')
+    .from('dcq_crawler_urls')
     .select('*')
     .eq('language', lang)
     .order('section')
@@ -1079,7 +1079,7 @@ export async function saveCrawlerUrl(url: CrawlerURL, lang: 'en' | 'es' | 'ht' =
   const dbUrl = mapCrawlerUrlToDb(url, lang);
 
   const { error } = await supabase
-    .from('crawler_urls')
+    .from('dcq_crawler_urls')
     .upsert(dbUrl, { onConflict: 'id' });
 
   if (error) {
@@ -1122,7 +1122,7 @@ function mapCrawlerUrlToDb(url: CrawlerURL, lang: string): Record<string, unknow
 
 export async function getLanguageSettings(): Promise<LanguageSettings> {
   const { data, error } = await supabase
-    .from('languages')
+    .from('dcq_languages')
     .select('*')
     .order('is_default', { ascending: false })
     .order('code');
@@ -1165,7 +1165,7 @@ export async function getLanguageSettings(): Promise<LanguageSettings> {
 export async function saveLanguageSettings(settings: LanguageSettings): Promise<void> {
   for (const lang of settings.languages) {
     const { error } = await supabase
-      .from('languages')
+      .from('dcq_languages')
       .upsert({
         code: lang.code,
         name: lang.name,
@@ -1198,7 +1198,7 @@ export async function getDefaultLanguage(): Promise<string> {
 
 export async function getBannerSettings(): Promise<BannerSettings> {
   const { data, error } = await supabase
-    .from('banner_settings')
+    .from('dcq_banner_settings')
     .select('*')
     .limit(1)
     .single();
@@ -1220,7 +1220,7 @@ export async function getBannerSettings(): Promise<BannerSettings> {
 
 export async function saveBannerSettings(settings: BannerSettings): Promise<void> {
   const { error } = await supabase
-    .from('banner_settings')
+    .from('dcq_banner_settings')
     .upsert({
       is_enabled: settings.rotationEnabled,
       updated_at: new Date().toISOString(),
@@ -1237,7 +1237,7 @@ export async function saveBannerSettings(settings: BannerSettings): Promise<void
 
 export async function getWorkflowTypes(): Promise<WorkflowType[]> {
   const { data, error } = await supabase
-    .from('workflow_types')
+    .from('dcq_workflow_types')
     .select('*, dcq.workflow_categories!workflow_types_category_id_fkey(code, name)')
     .eq('is_active', true)
     .order('created_at');
@@ -1338,7 +1338,7 @@ function getDefaultWorkflowTypes(): WorkflowType[] {
 
 export async function getWorkflowCategories(): Promise<WorkflowCategory[]> {
   const { data, error } = await supabase
-    .from('workflow_categories')
+    .from('dcq_workflow_categories')
     .select('*')
     .eq('is_active', true)
     .order('display_order')
@@ -1380,7 +1380,7 @@ function mapWorkflowCategoryFromDb(row: Record<string, unknown>): WorkflowCatego
 
 export async function getFeedback(): Promise<Feedback[]> {
   const { data, error } = await supabase
-    .from('feedback')
+    .from('dcq_feedback')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -1394,7 +1394,7 @@ export async function getFeedback(): Promise<Feedback[]> {
 
 export async function saveFeedback(feedback: Omit<Feedback, 'id' | 'createdAt'>): Promise<Feedback | null> {
   const { data, error } = await supabase
-    .from('feedback')
+    .from('dcq_feedback')
     .insert({
       message_id: feedback.messageId || null,
       conversation_id: feedback.conversationId || null,
@@ -1442,7 +1442,7 @@ export interface Conversation {
 
 export async function getConversations(): Promise<Conversation[]> {
   const { data, error } = await supabase
-    .from('conversations')
+    .from('dcq_conversations')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(100);
@@ -1465,7 +1465,7 @@ export async function getConversations(): Promise<Conversation[]> {
 
 export async function saveConversation(conversation: Partial<Conversation>): Promise<string | null> {
   const { data, error } = await supabase
-    .from('conversations')
+    .from('dcq_conversations')
     .insert({
       session_id: conversation.sessionId || `sess_${Date.now()}`,
       channel: conversation.channel || 'web',
@@ -1507,7 +1507,7 @@ export async function createCrossChannelToken(
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
   const { data, error } = await supabase
-    .from('cross_channel_tokens')
+    .from('dcq_cross_channel_tokens')
     .insert({
       token,
       source_channel: sourceChannel,
@@ -1542,7 +1542,7 @@ export async function redeemCrossChannelToken(
 ): Promise<CrossChannelToken | null> {
   // First check if token exists and is valid
   const { data: existing, error: checkError } = await supabase
-    .from('cross_channel_tokens')
+    .from('dcq_cross_channel_tokens')
     .select('*')
     .eq('token', token.toUpperCase())
     .eq('redeemed', false)
@@ -1556,7 +1556,7 @@ export async function redeemCrossChannelToken(
 
   // Mark as redeemed
   const { data, error } = await supabase
-    .from('cross_channel_tokens')
+    .from('dcq_cross_channel_tokens')
     .update({
       redeemed: true,
       redeemed_at: new Date().toISOString(),

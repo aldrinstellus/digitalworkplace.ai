@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 16:35 UTC
-**Version**: 0.4.2
-**Session Status**: Complete - Favicon & Auth improvements deployed
+**Last Updated**: 2025-01-19 (Session End)
+**Version**: 0.4.3
+**Session Status**: dIQ v0.2.2 - Database Architecture + Full Flow Verified
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -28,6 +28,17 @@
 | **SSO Callback** | http://localhost:3000/sso-callback |
 | **Dashboard** | http://localhost:3000/dashboard |
 | **Admin Panel** | http://localhost:3000/admin |
+
+### dIQ (Intranet IQ) - Port 3001
+| Page | URL |
+|------|-----|
+| **dIQ Dashboard** | http://localhost:3001/diq/dashboard |
+| **dIQ Chat** | http://localhost:3001/diq/chat |
+| **dIQ Search** | http://localhost:3001/diq/search |
+| **dIQ People** | http://localhost:3001/diq/people |
+| **dIQ Content** | http://localhost:3001/diq/content |
+| **dIQ Agents** | http://localhost:3001/diq/agents |
+| **dIQ Settings** | http://localhost:3001/diq/settings |
 
 ### Tech Stack Dashboards
 | Service | Dashboard URL |
@@ -119,12 +130,23 @@
 - [x] Deployed on Vercel
 
 ### Products
-| Product | Theme | Description |
-|---------|-------|-------------|
-| Support IQ | Green #10b981 | Customer support automation |
-| Intranet IQ | Blue #3b82f6 | Internal knowledge network |
-| Test Pilot IQ | Orange #f59e0b | QA & testing intelligence |
-| Chat Core IQ | Purple #a855f7 | Conversational AI |
+| Product | Theme | Description | Status |
+|---------|-------|-------------|--------|
+| Support IQ (dSQ) | Green #10b981 | Customer support automation | Planned |
+| **Intranet IQ (dIQ)** | Blue #3b82f6 | Internal knowledge network | **v0.2.2 Active** |
+| Test Pilot IQ (dTQ) | Orange #f59e0b | QA & testing intelligence | Planned |
+| Chat Core IQ (dCQ) | Purple #a855f7 | Conversational AI | Planned |
+
+### Sub-Project: dIQ (Intranet IQ)
+| Property | Value |
+|----------|-------|
+| **Location** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq` |
+| **Port** | 3001 |
+| **URL** | http://localhost:3001/diq/dashboard |
+| **Version** | 0.2.2 |
+| **Logo** | `dIQ·` (SVG-based, baseline aligned) |
+| **Database** | Supabase schema `diq` (migrations ready) |
+| **Documentation** | `apps/intranet-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
 
 ---
 
@@ -151,13 +173,13 @@ npm run dev
 
 ### Latest Commit
 ```
-(pending) feat: custom favicon and auth improvements (v0.4.2)
+fdce7cf feat: custom favicon and auth improvements (v0.4.2)
 ```
 
 ### Commit History (Recent)
 ```
-(pending) feat: custom favicon and auth improvements (v0.4.2)
-d306e7c perf: optimize Clerk auth with middleware and non-blocking sync
+fdce7cf feat: custom favicon and auth improvements (v0.4.2)
+72413d7 docs: update documentation for proxy.ts (Next.js 16)
 7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
 ```
 
@@ -340,4 +362,4 @@ When starting a new Claude Code session:
 
 *Last session ended at: 2026-01-19 ~16:35 UTC*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Latest commit: (pending) - Favicon & Auth improvements v0.4.2*
+*Latest commit: fdce7cf - Favicon & Auth improvements v0.4.2*

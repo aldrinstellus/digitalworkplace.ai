@@ -1,5 +1,66 @@
 # Digital Workplace AI - Claude Code Instructions
 
+---
+## AUTO-READ TRIGGER (MANDATORY)
+---
+
+**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL 4 DOC FILES BEFORE RESPONDING:**
+- "hey", "hi", "hello", "start", "begin", "let's go", "ready"
+- "pull latest", "get latest", "check latest", "update"
+- "open dev", "open local", "dev server", "localhost"
+- "where were we", "continue", "resume", "what's next"
+- ANY greeting or session start
+
+**FILES TO READ (in this order):**
+```
+1. /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md  (CURRENT STATE - most important)
+2. /Users/aldrin-mac-mini/digitalworkplace.ai/context.md    (Design specs)
+3. /Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md  (Version history)
+4. /Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md     (This file - already loaded)
+```
+
+**THEN:**
+- Open Chrome DevTools to: http://localhost:3000/sign-in (default dev page)
+- Summarize current state from SAVEPOINT.md
+- List any pending tasks
+
+---
+## SESSION END PROTOCOL (Before User Closes)
+---
+
+**CLAUDE MUST DO THESE BEFORE SESSION ENDS:**
+1. Update SAVEPOINT.md with:
+   - What was accomplished
+   - Any new pending tasks
+   - Current git status/commit
+   - Update timestamp
+2. Update CHANGELOG.md if version changed
+3. Update context.md if design specs changed
+4. Remind user: "Session docs updated. Ready to close."
+
+**USER CHECKLIST (copy this to user):**
+```
+Before closing this session:
+[ ] SAVEPOINT.md updated with current state
+[ ] Git changes committed (if any)
+[ ] Dev server can be stopped: Ctrl+C
+```
+
+---
+## QUICK REFERENCE URLS
+---
+
+| Page | Local Dev | Production |
+|------|-----------|------------|
+| **Sign-in** | http://localhost:3000/sign-in | https://digitalworkplace-ai.vercel.app/sign-in |
+| **Dashboard** | http://localhost:3000/dashboard | https://digitalworkplace-ai.vercel.app/dashboard |
+| **Admin** | http://localhost:3000/admin | https://digitalworkplace-ai.vercel.app/admin |
+| **Home** | http://localhost:3000 | https://digitalworkplace-ai.vercel.app |
+
+**Default dev page: http://localhost:3000/sign-in**
+
+---
+
 ## Project Overview
 Digital Workplace AI is a Next.js 16 application with Clerk authentication and Supabase backend, deployed on Vercel. Features a dark theme with an edgy, tech-forward aesthetic.
 
@@ -161,6 +222,44 @@ npm run lint     # Run ESLint
 - Hosted on Vercel
 - Auto-deploys on push to `main` branch
 - Production URL: https://digitalworkplace-ai.vercel.app
+
+---
+## SUB-PROJECTS
+---
+
+### dIQ - Intranet IQ (v0.2.2)
+
+| Property | Value |
+|----------|-------|
+| **Location** | `apps/intranet-iq/` |
+| **Port** | 3001 |
+| **URL** | http://localhost:3001/diq/dashboard |
+| **basePath** | `/diq` |
+| **Documentation** | `apps/intranet-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
+
+**Quick Start:**
+```bash
+cd /Users/aldrin-mac-mini/digitalworkplace.ai
+npm run dev:intranet     # Start dIQ on port 3001
+```
+
+**Pages:**
+- `/diq/dashboard` - Main dashboard
+- `/diq/chat` - AI Assistant
+- `/diq/search` - Enterprise Search
+- `/diq/people` - Org Chart & Directory
+- `/diq/content` - Knowledge Base
+- `/diq/agents` - Workflow Automation
+- `/diq/settings` - User/Admin Settings
+
+**Database (Supabase):**
+- Schema: `diq` (project-specific) + `public` (shared)
+- TypeScript types: `apps/intranet-iq/src/lib/database.types.ts`
+- Client helpers: `apps/intranet-iq/src/lib/supabase.ts`
+- Migrations: `supabase/migrations/001_core_schema.sql`, `002_diq_schema.sql`
+- Documentation: `docs/DATABASE_ARCHITECTURE.md`
+
+---
 
 ## Code Conventions
 

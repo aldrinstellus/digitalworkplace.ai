@@ -296,6 +296,45 @@ interface UserData {
 }
 ```
 
+## Database Architecture (Supabase)
+
+### Multi-Schema Structure
+```
+┌───────────────────────────────────────────────────────────────┐
+│                     PUBLIC SCHEMA (Shared)                    │
+│  organizations ── projects ── knowledge_items ── activity_log │
+│       │               │                                       │
+│       └── users ──────┴── user_project_access                │
+└───────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              ▼               ▼               ▼
+        ┌─────────┐     ┌─────────┐     ┌─────────┐
+        │   diq   │     │   dsq   │     │   dtq   │
+        │ schema  │     │ (future)│     │ (future)│
+        └─────────┘     └─────────┘     └─────────┘
+```
+
+### Key Features
+- **Schema Separation**: Each sub-project (dIQ, dSQ, etc.) has its own PostgreSQL schema
+- **Cross-Project Search**: `public.knowledge_items` table with full-text search
+- **Row-Level Security**: All tables have RLS policies for access control
+- **Activity Logging**: `public.activity_log` for audit trails
+
+### Migration Files
+```
+supabase/migrations/
+├── 001_core_schema.sql     # Shared tables (public schema)
+└── 002_diq_schema.sql      # dIQ-specific tables
+```
+
+### Documentation
+- Full architecture: `docs/DATABASE_ARCHITECTURE.md`
+- dIQ types: `apps/intranet-iq/src/lib/database.types.ts`
+- dIQ client: `apps/intranet-iq/src/lib/supabase.ts`
+
+---
+
 ## Future Enhancements
 - AI Assistant integration
 - Document management

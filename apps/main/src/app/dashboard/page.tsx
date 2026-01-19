@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { getUserByEmail, syncUserWithClerk, UserData } from "@/lib/userRole";
 
+// Check if running in production (Vercel) or local development
+const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+
 // Product data - 4 core products with rich theming
 const products = [
   {
@@ -13,7 +16,8 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: "http://localhost:3030", // Support IQ app
+    href: isProduction ? "#" : "http://localhost:3003/dsq/dashboard",
+    disabled: isProduction, // Only available locally for now
     colors: {
       primary: "#10b981",
       secondary: "#06b6d4",
@@ -25,7 +29,8 @@ const products = [
     name: "Intranet IQ",
     title: "AI Intranet",
     description: "Smart internal knowledge network",
-    href: "http://localhost:3001/diq/dashboard", // Intranet IQ app
+    href: isProduction ? "#" : "http://localhost:3001/diq/dashboard",
+    disabled: isProduction, // Only available locally for now
     colors: {
       primary: "#3b82f6",
       secondary: "#8b5cf6",
@@ -37,7 +42,8 @@ const products = [
     name: "Chat Core IQ",
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
-    href: "http://localhost:3002/dcq/Home/index.html", // Chat Core IQ static site with chatbot
+    href: isProduction ? "#" : "http://localhost:3002/dcq/Home/index.html",
+    disabled: isProduction, // Only available locally for now
     colors: {
       primary: "#a855f7",
       secondary: "#ec4899",
@@ -49,8 +55,8 @@ const products = [
     name: "Test Pilot IQ",
     title: "AI Testing",
     description: "Automated QA & testing intelligence",
-    href: "/products/test-pilot-iq", // Coming soon
-    disabled: true, // Not yet available
+    href: "#",
+    disabled: true, // Coming soon
     colors: {
       primary: "#f59e0b",
       secondary: "#ef4444",
@@ -157,10 +163,12 @@ export default function DashboardPage() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a2e] border border-white/5 rounded-lg"
+                  className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-[#1a1a2e] border border-cyan-500/20 rounded-lg"
                 >
-                  <span className="text-xs">👤</span>
-                  <span className="text-white/70 text-sm font-medium">User</span>
+                  <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                  </svg>
+                  <span className="text-cyan-400/90 text-sm font-medium">ATC User</span>
                 </motion.div>
               )}
 

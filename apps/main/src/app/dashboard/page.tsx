@@ -6,9 +6,6 @@ import { useRouter } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { getUserByEmail, syncUserWithClerk, UserData } from "@/lib/userRole";
 
-// Check if running in production (Vercel) or local development
-const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-
 // Product data - 4 core products with rich theming
 const products = [
   {
@@ -16,8 +13,8 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: isProduction ? "#" : "http://localhost:3003/dsq/dashboard",
-    disabled: isProduction, // Only available locally for now
+    href: "http://localhost:3003/dsq/dashboard",
+    disabled: false,
     colors: {
       primary: "#10b981",
       secondary: "#06b6d4",
@@ -29,8 +26,8 @@ const products = [
     name: "Intranet IQ",
     title: "AI Intranet",
     description: "Smart internal knowledge network",
-    href: isProduction ? "#" : "http://localhost:3001/diq/dashboard",
-    disabled: isProduction, // Only available locally for now
+    href: "http://localhost:3001/diq/dashboard",
+    disabled: false,
     colors: {
       primary: "#3b82f6",
       secondary: "#8b5cf6",
@@ -42,8 +39,8 @@ const products = [
     name: "Chat Core IQ",
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
-    href: isProduction ? "#" : "http://localhost:3002/dcq/Home/index.html",
-    disabled: isProduction, // Only available locally for now
+    href: "http://localhost:3002/dcq/Home/index.html",
+    disabled: false,
     colors: {
       primary: "#a855f7",
       secondary: "#ec4899",

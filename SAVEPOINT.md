@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19
-**Version**: 0.3.3
-**Session Status**: Complete - Fully responsive design with improved sound toggle UX
+**Last Updated**: 2026-01-19 15:50 UTC
+**Version**: 0.4.0
+**Session Status**: Complete - Dashboard with animated product cards & auth optimization
 
 ---
 
@@ -11,43 +11,50 @@
 ### What's Working
 - [x] Next.js 16 project initialized and running
 - [x] Clerk authentication fully integrated (Google OAuth)
+- [x] **Clerk middleware for route protection** (fast server-side auth)
 - [x] Full-screen world map login design
 - [x] Dark grey theme (#0f0f1a, #1a1a2e, #16213e)
-- [x] 24 floating avatars with GSAP animations (all visible, no blur)
-- [x] 48 chat messages with slower display (40% reduction)
-- [x] Lighter mint-green chat bubbles with transparency
-- [x] Slow point-to-point green dot animations (7-15 seconds)
-- [x] shadcn/ui integration with Button component
-- [x] Edgy WordmarkGlitch component with dramatic effects
-- [x] Minimalistic centered login (wordmark + Google button)
-- [x] **Sound effects system (Web Audio API)**
-- [x] **SoundToggle component (top-right)**
-- [x] **Sound effects ON by default**
-- [x] **Browser autoplay handling (interaction listeners)**
-- [x] **Wordmark glitch tuned (500ms initial, 2.6s interval)**
-- [x] **Three-state sound toggle (Enable → On → Off)**
-- [x] **Fully responsive design (mobile, tablet, desktop)**
-- [x] Avatar click-to-focus with auto-minimize
-- [x] Mobile responsive layout (smaller avatars, compact UI)
-- [x] SSO callback handler
+- [x] 24 floating avatars with GSAP animations
+- [x] 48 chat messages with slower display
+- [x] Lighter mint-green chat bubbles
+- [x] Sound effects system (Web Audio API)
+- [x] SoundToggle component (top-right)
+- [x] **Dashboard page with 4 AI product cards**
+- [x] **Animated SVG illustrations (continuous looping)**
+- [x] **3D tilt effects on product cards**
+- [x] **Colored borders matching product themes**
+- [x] **Admin panel (super_admin only)**
+- [x] **User role system (Supabase)**
+- [x] **User avatar with Google profile picture**
+- [x] SSO callback handler with loading UI
 - [x] Documentation complete
+- [x] Deployed on Vercel
 
-### Local Development
+### Products
+| Product | Theme | Description |
+|---------|-------|-------------|
+| Support IQ | Green #10b981 | Customer support automation |
+| Intranet IQ | Blue #3b82f6 | Internal knowledge network |
+| Test Pilot IQ | Orange #f59e0b | QA & testing intelligence |
+| Chat Core IQ | Purple #a855f7 | Conversational AI |
+
+---
+
+## Local Development
 ```bash
 cd /Users/aldrin-mac-mini/digitalworkplace.ai
 npm run dev
 # Runs on http://localhost:3000
 ```
 
-### Test the Login
+### Test the Flow
 1. Visit `http://localhost:3000/sign-in`
-2. See full-screen dark world map with 24 floating avatars
-3. Hear ambient sound effects playing automatically
-4. See "Sound On" toggle in top-right corner
-5. Centered "digitalworkplace.ai" wordmark with glitch effect
-6. "Continue with Google" button below
-7. Lighter mint-green chat bubbles appear across the screen
-8. Green data packets travel slowly between connection points
+2. Click "Sign in with Google"
+3. Complete OAuth flow
+4. Redirects to Dashboard with 4 product cards
+5. See animated SVG illustrations
+6. Click avatar for dropdown menu
+7. Click Admin (if super_admin) to access admin panel
 
 ---
 
@@ -55,62 +62,77 @@ npm run dev
 
 | File | Status | Description |
 |------|--------|-------------|
-| `src/components/login/LoginBackground.tsx` | Modified | 24 avatars visible, lighter chat bubbles, 40% slower, sound effects integration |
-| `src/app/sign-in/[[...sign-in]]/page.tsx` | Modified | Added SoundToggle component |
-| `src/lib/sounds.ts` | Modified | Sound enabled by default, browser autoplay handling with interaction listeners |
-| `src/components/brand/WordmarkGlitch.tsx` | Modified | Glitch timing tuned (500ms initial, 2.6s interval) |
-| `src/lib/backgroundMusic.ts` | Created | Procedural music generator (disabled) |
-| `src/components/audio/SoundToggle.tsx` | Modified | Three-state toggle (Enable/On/Off), responsive design, pulsing animation |
-| `src/components/audio/BackgroundMusic.tsx` | Created | Music player component (disabled) |
+| `src/middleware.ts` | Created | Clerk middleware for route protection |
+| `src/app/dashboard/page.tsx` | Created | 4 product cards with animated SVGs |
+| `src/app/admin/page.tsx` | Created | Super admin user management |
+| `src/lib/userRole.ts` | Created | Supabase user role functions |
+| `src/app/sso-callback/page.tsx` | Modified | Added loading UI |
+| `CHANGELOG.md` | Updated | Added v0.4.0 changes |
+| `CLAUDE.md` | Updated | Added dashboard & admin docs |
+| `context.md` | Updated | Added dashboard section |
 
 ---
 
-## Audio System
+## Dashboard Features
 
-### Sound Effects (Enabled)
-- **Ambient Pulse**: A minor chord pad, every 8-12 seconds
-- **Data Packet**: Soft blip sounds, every 3-5 seconds
-- **Chat Bubble**: Pop sound, 5% probability per bubble
-- **Glitch Sound**: Musical glitch effect (used with wordmark)
-- **Connection Sound**: Ultra-soft ping
+### Product Cards
+- **4 unique animated SVG backgrounds**
+- **Continuous looping animations** (never stops)
+- **3D tilt effect** using Framer Motion springs
+- **Colored borders** visible in default state
+- **Enhanced glow/shadow** on hover
+- **Glassmorphism** background styling
 
-### Configuration
-- `audioEnabled = true` by default in `sounds.ts`
-- Audio initializes on component mount
-- **Browser autoplay policy**: Sounds start after first user interaction (click/touch/keypress)
-- Global interaction listeners auto-resume AudioContext
-- Toggle in top-right corner to disable
-
-### Background Music (Disabled)
-- Procedural 120 BPM music was created
-- Disabled due to browser autoplay restrictions
-- Code retained in `backgroundMusic.ts` for potential future use
+### User Interface
+- Header with logo and user menu
+- Admin badge for super_admin users
+- Avatar dropdown with sign out
+- Responsive grid (1/2/4 columns)
 
 ---
 
-## Design Updates
+## User Role System
 
-### Chat Bubbles
-- **Color**: Lighter mint-green `rgba(134, 239, 172, 0.7)`
-- **Opacity**: 70% (was 95%)
-- **Effect**: Backdrop blur for glass appearance
-- **Speed**: 40% slower than before
+### Supabase Integration
+```typescript
+type UserRole = 'user' | 'admin' | 'super_admin';
 
-### Avatars
-- All 24 avatars fully visible (no blur)
-- Z-index range: 18-32
-- Click-to-focus with 2.5s auto-minimize
-- Name label appears when focused
+// Functions available:
+getUserByEmail(email)
+getUserByClerkId(clerkId)
+syncUserWithClerk(email, clerkId, fullName?, avatarUrl?)
+isSuperAdmin(email)
+isAdmin(email)
+getAllUsers()
+updateUserRole(userId, role)
+```
+
+### Current Users
+- aldrin@atc.xyz - super_admin
+
+---
+
+## Auth Optimization
+
+### Middleware (NEW)
+- `src/middleware.ts` - Protects routes server-side
+- Public routes: `/sign-in`, `/sign-up`, `/sso-callback`, `/`
+- All other routes require authentication
+
+### Performance Improvements
+- Removed redundant loading states
+- Background Supabase sync (non-blocking)
+- Middleware handles redirects server-side
+- Faster perceived auth experience
 
 ---
 
 ## Environment Setup Required
 
-### .env.local (already configured)
+### .env.local
 ```env
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
-SUPABASE_PUBLISHABLE_KEY=<your-publishable-key>
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-key>
 CLERK_SECRET_KEY=<your-clerk-secret>
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
@@ -119,41 +141,35 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 ---
 
+## Git Status
+
+### Latest Commit
+```
+7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
+```
+
+### Pending Changes (if any)
+```bash
+git status
+```
+
+---
+
 ## Pending Tasks
 
 ### Immediate (Next Session)
-- [ ] **Sign-up page styling** - Match new dark theme design
-  - File: `src/app/sign-up/[[...sign-up]]/page.tsx`
-  - Use same full-screen LoginBackground
-  - Centered wordmark + sign up options
-
-- [ ] **Dashboard page** - Post-login landing
-  - Route: `/dashboard`
-  - Dark theme consistent with login
-  - User info, quick actions
+- [ ] **Product-specific dashboards** - Individual pages for each product
+- [ ] **Launch App buttons** - Link to product dashboards
 
 ### Short Term
-- [ ] **User profile page**
-  - Route: `/profile`
-  - Edit user details
-  - Avatar upload
-
-- [ ] **Navigation component**
-  - Dark theme header
-  - User menu with sign out
-  - Logo and nav links
+- [ ] **User profile page** - `/profile`
+- [ ] **Settings page** - User preferences
+- [ ] **Sign-up page redesign** - Match dark theme
 
 ### Medium Term
-- [ ] **Supabase schema design**
-  - Users table (linked to Clerk)
-  - Organizations/Teams
-  - Documents
-  - Activity logs
-
 - [ ] **AI Assistant integration**
-  - Chat interface
-  - Document analysis
-  - Task suggestions
+- [ ] **Document management**
+- [ ] **Real-time collaboration**
 
 ---
 
@@ -175,89 +191,56 @@ git commit -m "message"
 git push origin main
 ```
 
-### Vercel
-```bash
-npx vercel           # Deploy preview
-npx vercel --prod    # Deploy production
-```
-
 ---
 
 ## Key Code Patterns
 
-### Sound Effects Toggle
+### Product Card Animation
 ```typescript
-import { enableAudio, disableAudio, isAudioEnabled } from "@/lib/sounds";
-
-// In component
-const [isSoundEnabled, setIsSoundEnabled] = useState(true);
-
-const toggleSound = () => {
-  if (isSoundEnabled) {
-    disableAudio();
-    setIsSoundEnabled(false);
-  } else {
-    enableAudio();
-    setIsSoundEnabled(true);
-  }
+const ProductIllustrations = {
+  support: ({ isHovered }) => (
+    <svg>
+      <motion.circle
+        animate={{
+          scale: isHovered ? [1, 1.1, 1] : [1, 1.05, 1],
+          opacity: isHovered ? [0.4, 0.6, 0.4] : [0.2, 0.35, 0.2]
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  ),
 };
 ```
 
-### Web Audio Sound Effect
+### 3D Tilt Effect
 ```typescript
-export const playChatBubbleSound = (): void => {
-  if (!audioEnabled) return;
-  const ctx = getAudioContext();
-  if (!ctx) return;
+const mouseX = useMotionValue(0);
+const mouseY = useMotionValue(0);
 
-  const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  osc.type = "sine";
-  osc.frequency.setValueAtTime(600, now);
-  osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
-
-  const gainNode = ctx.createGain();
-  gainNode.gain.setValueAtTime(0.02, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-  osc.connect(gainNode);
-  gainNode.connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + 0.1);
-};
-```
-
-### Clerk OAuth (Google)
-```typescript
-import { useSignIn } from "@clerk/nextjs";
-
-const { isLoaded, signIn } = useSignIn();
-
-await signIn.authenticateWithRedirect({
-  strategy: "oauth_google",
-  redirectUrl: "/sso-callback",
-  redirectUrlComplete: "/",
+const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), {
+  stiffness: 200,
+  damping: 25,
 });
 ```
 
----
-
-## Architecture Decisions
-
-1. **Full-screen immersive login** - More dramatic, premium feel
-2. **Dark grey over teal** - Modern, tech-forward aesthetic
-3. **Google OAuth only** - Simplified, most common enterprise auth
-4. **shadcn/ui** - Headless components, full customization control
-5. **Glitch effect wordmark** - Unique brand identity, memorable
-6. **Sound effects by default** - Enhanced immersive experience
-7. **Web Audio API** - No external dependencies for audio
-8. **Lighter chat bubbles** - Better readability, softer aesthetic
+### Colored Borders
+```typescript
+<motion.div
+  style={{
+    borderWidth: '2px',
+    borderStyle: 'solid',
+  }}
+  animate={{
+    borderColor: isHovered ? `${colors.primary}90` : `${colors.primary}50`,
+  }}
+/>
+```
 
 ---
 
 ## Known Issues
 
-None currently. All features working as expected.
+1. **Avatar sometimes shows letter** - Fixed with `referrerPolicy="no-referrer"` and `onError` fallback
 
 ---
 
@@ -265,30 +248,35 @@ None currently. All features working as expected.
 
 When starting next session:
 
-1. **Check dev server**
+1. **Start dev server**
    ```bash
    cd /Users/aldrin-mac-mini/digitalworkplace.ai
    npm run dev
    ```
 
-2. **Review this savepoint** for context
+2. **Verify working**
+   - Login: http://localhost:3000/sign-in
+   - Dashboard: http://localhost:3000/dashboard
+   - Admin: http://localhost:3000/admin
 
-3. **Check pending tasks** above
-
-4. **Reference files**:
+3. **Reference files**:
    - `CLAUDE.md` - Project conventions
    - `context.md` - Design specifications
-   - `CHANGELOG.md` - What's been done
+   - `CHANGELOG.md` - Version history
+
+4. **Check pending tasks** above
 
 ---
 
-## Contact / Resources
+## Resources
 
 - **Clerk Dashboard**: https://dashboard.clerk.com
 - **Supabase Dashboard**: https://supabase.com/dashboard
 - **Vercel Dashboard**: https://vercel.com/dashboard
 - **Production URL**: https://digitalworkplace-ai.vercel.app
+- **GitHub Repo**: https://github.com/aldrinstellus/digitalworkplace.ai
 
 ---
 
-*This savepoint ensures continuity between sessions. Update after each work session.*
+*Last session ended at: 2026-01-19 ~15:50 UTC*
+*Next: Test auth speed improvements, consider product dashboards*

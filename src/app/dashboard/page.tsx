@@ -59,33 +59,35 @@ export default function DashboardPage() {
   const { signOut } = useClerk();
   const router = useRouter();
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
 
   useEffect(() => {
+    // Middleware handles auth redirect, but keep this as fallback
     if (isLoaded && !user) {
       router.push("/sign-in");
       return;
     }
 
-    const fetchUserData = async () => {
+    // Sync user data in background (non-blocking)
+    const syncUser = async () => {
       if (!user?.primaryEmailAddress?.emailAddress) return;
 
-      await syncUserWithClerk(
+      // Sync returns the user data, no need for second call
+      const data = await syncUserWithClerk(
         user.primaryEmailAddress.emailAddress,
         user.id,
         user.fullName || undefined,
         user.imageUrl || undefined
       );
 
-      const data = await getUserByEmail(user.primaryEmailAddress.emailAddress);
-      setUserData(data);
-      setLoading(false);
+      if (data) {
+        setUserData(data);
+      }
     };
 
     if (user) {
-      fetchUserData();
+      syncUser();
     }
   }, [user, isLoaded, router]);
 
@@ -93,16 +95,22 @@ export default function DashboardPage() {
     signOut({ redirectUrl: "/sign-in" });
   };
 
-  if (!isLoaded || loading) {
+  // Only show loading for Clerk initialization, not Supabase sync
+  if (!isLoaded) {
     return (
       <div className="min-h-screen bg-[#0f0f1a] flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full"
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="w-10 h-10 border-3 border-green-500/20 border-t-green-500 rounded-full"
         />
       </div>
     );
+  }
+
+  // If Clerk loaded but no user, middleware should redirect (show nothing briefly)
+  if (!user) {
+    return null;
   }
 
   const isSuperAdmin = userData?.role === "super_admin";

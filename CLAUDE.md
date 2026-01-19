@@ -75,6 +75,8 @@ src/
   - `playChatBubbleSound()` - Soft pop notification
   - `playConnectionSound()` - Ultra-soft ping
   - Sound enabled by default, respects toggle state
+  - **Browser autoplay handling**: Listens for user interaction (click, touch, keydown) to resume AudioContext
+  - Sounds auto-play after first user interaction
 
 - `src/components/audio/SoundToggle.tsx` - Toggle button:
   - Fixed top-right position
@@ -85,7 +87,8 @@ src/
 ### Brand Components
 - `src/components/brand/WordmarkGlitch.tsx` - Primary wordmark with:
   - Chromatic aberration (red/cyan split)
-  - Variable intensity glitches
+  - Variable intensity glitches (every 2.6 seconds)
+  - Initial glitch at 500ms after load
   - Double-tap stuttering
   - Horizontal slice distortion
   - Corner bracket decorations

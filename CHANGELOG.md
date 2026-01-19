@@ -4,6 +4,31 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.3.2] - 2026-01-19
+
+### Audio System Improvements & Glitch Tuning
+
+#### Changed
+- **Wordmark Glitch Timing**
+  - Initial glitch: 500ms after load (was 2000ms)
+  - Glitch interval: 2.6 seconds consistently (was 3.5s with 40% random chance)
+  - More dynamic, predictable visual effect
+
+#### Fixed
+- **Browser Autoplay Compliance**
+  - Added global interaction listeners (click, touchstart, keydown, mousedown, pointerdown)
+  - AudioContext now resumes on first user interaction
+  - All sound functions check for running state before playing
+  - Listeners auto-remove after successful audio context resume
+  - Sounds play automatically after first page interaction
+
+#### Technical
+- Sound functions now return early if AudioContext is suspended
+- Each sound function attempts to resume context before playing
+- Proper state management for audio initialization
+
+---
+
 ## [0.3.0] - 2026-01-19
 
 ### Audio System & UX Improvements

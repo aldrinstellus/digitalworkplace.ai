@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-19
-**Version**: 0.3.1
-**Session Status**: Complete - Wordmark glitch effect tuned (2.6s interval)
+**Version**: 0.3.2
+**Session Status**: Complete - Audio autoplay fixed with browser interaction listeners
 
 ---
 
@@ -22,7 +22,9 @@
 - [x] Minimalistic centered login (wordmark + Google button)
 - [x] **Sound effects system (Web Audio API)**
 - [x] **SoundToggle component (top-right)**
-- [x] **Sound effects ON by default (auto-play)**
+- [x] **Sound effects ON by default**
+- [x] **Browser autoplay handling (interaction listeners)**
+- [x] **Wordmark glitch tuned (500ms initial, 2.6s interval)**
 - [x] Avatar click-to-focus with auto-minimize
 - [x] Mobile responsive layout
 - [x] SSO callback handler
@@ -53,7 +55,8 @@ npm run dev
 |------|--------|-------------|
 | `src/components/login/LoginBackground.tsx` | Modified | 24 avatars visible, lighter chat bubbles, 40% slower, sound effects integration |
 | `src/app/sign-in/[[...sign-in]]/page.tsx` | Modified | Added SoundToggle component |
-| `src/lib/sounds.ts` | Modified | Sound enabled by default, audioEnabled checks on all functions |
+| `src/lib/sounds.ts` | Modified | Sound enabled by default, browser autoplay handling with interaction listeners |
+| `src/components/brand/WordmarkGlitch.tsx` | Modified | Glitch timing tuned (500ms initial, 2.6s interval) |
 | `src/lib/backgroundMusic.ts` | Created | Procedural music generator (disabled) |
 | `src/components/audio/SoundToggle.tsx` | Created | Sound effects toggle button |
 | `src/components/audio/BackgroundMusic.tsx` | Created | Music player component (disabled) |
@@ -71,8 +74,9 @@ npm run dev
 
 ### Configuration
 - `audioEnabled = true` by default in `sounds.ts`
-- Audio initializes immediately on component mount
-- No click required to start sounds
+- Audio initializes on component mount
+- **Browser autoplay policy**: Sounds start after first user interaction (click/touch/keypress)
+- Global interaction listeners auto-resume AudioContext
 - Toggle in top-right corner to disable
 
 ### Background Music (Disabled)

@@ -115,7 +115,7 @@ Centered wordmark featuring:
 Web Audio API procedural sound generation:
 - `enableAudio()` / `disableAudio()` - Global toggle
 - `isAudioEnabled()` - Check state
-- `initAudio()` - Initialize audio context
+- `initAudio()` - Initialize audio context and add interaction listeners
 - `playGlitchSound(intensity)` - Digital glitch effect
 - `playDataPacketSound()` - Soft blip for data travel
 - `playAmbientPulse()` - Subtle A minor chord pad
@@ -124,6 +124,13 @@ Web Audio API procedural sound generation:
 
 All sounds check `audioEnabled` before playing.
 Sound enabled by default (`audioEnabled = true`).
+
+### Browser Autoplay Handling
+- Modern browsers require user interaction before allowing audio
+- System adds global listeners for: click, touchstart, keydown, mousedown, pointerdown
+- AudioContext resumes on first user interaction
+- All sounds play automatically after first interaction
+- Listeners are removed after successful audio context resume
 
 ### backgroundMusic.ts (Disabled)
 Procedural 120 BPM music generator (not in use):
@@ -212,8 +219,9 @@ Rotating messages covering:
 | Chat bubble appear | 400ms | backOut |
 | Chat bubble visible | 1.7-2.5s | - |
 | Green dot travel | 7-15s | easeInOut |
-| Glitch trigger | 2s interval | - |
-| Glitch duration | 120ms + 80ms | - |
+| Glitch initial | 500ms after load | - |
+| Glitch interval | 2.6s | consistent |
+| Glitch duration | 200ms + 120ms (double-tap) | - |
 | Ambient pulse | 8-12s interval | - |
 | Data packet | 3-5s interval | - |
 

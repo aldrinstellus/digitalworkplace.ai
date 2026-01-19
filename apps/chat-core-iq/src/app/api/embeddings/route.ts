@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseDcq } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase';
 import { generateEmbedding, getEmbeddingDimensions } from '@/lib/embeddings';
 
 /**
@@ -9,6 +9,7 @@ import { generateEmbedding, getEmbeddingDimensions } from '@/lib/embeddings';
  * Actions:
  * - generate_faq: Generate embedding for a single FAQ
  * - batch_faqs: Generate embeddings for all FAQs without embeddings
+ * - batch_knowledge: Generate embeddings for master knowledge_items
  * - query: Generate embedding for a search query
  */
 export async function POST(request: NextRequest) {
@@ -17,29 +18,30 @@ export async function POST(request: NextRequest) {
 
     // Generate embedding for specific FAQ
     if (action === 'generate_faq' && faqId) {
-      const { data: faq, error } = await supabaseDcq
-        .from('faqs')
+      // Use public schema view
+      const { data: faq, error } = await supabase
+        .from('dcq_faqs')
         .select('id, question, answer, category')
         .eq('id', faqId)
         .single();
 
       if (error || !faq) {
-        return NextResponse.json({ error: 'FAQ not found' }, { status: 404 });
+        return NextResponse.json({ error: 'FAQ not found', details: error?.message }, { status: 404 });
       }
 
       // Combine question and answer for embedding
       const textToEmbed = `${faq.question}\n\n${faq.answer}`;
       const embedding = await generateEmbedding(textToEmbed);
 
-      // Store embedding
-      const { error: updateError } = await supabaseDcq
-        .from('faqs')
+      // Store embedding via public schema view
+      const { error: updateError } = await supabase
+        .from('dcq_faqs')
         .update({ embedding: embedding as unknown as string })
         .eq('id', faqId);
 
       if (updateError) {
         console.error('Failed to store embedding:', updateError);
-        return NextResponse.json({ error: 'Failed to store embedding' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to store embedding', details: updateError.message }, { status: 500 });
       }
 
       return NextResponse.json({
@@ -60,16 +62,16 @@ export async function POST(request: NextRequest) {
 
     // Batch generate embeddings for all FAQs without embeddings
     if (action === 'batch_faqs') {
-      // Get all FAQs without embeddings
-      const { data: faqs, error } = await supabaseDcq
-        .from('faqs')
+      // Get all FAQs without embeddings using public schema view
+      const { data: faqs, error } = await supabase
+        .from('dcq_faqs')
         .select('id, question, answer')
         .is('embedding', null)
         .eq('status', 'active');
 
       if (error) {
         console.error('Error fetching FAQs:', error);
-        return NextResponse.json({ error: 'Failed to fetch FAQs' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to fetch FAQs', details: error.message }, { status: 500 });
       }
 
       if (!faqs || faqs.length === 0) {
@@ -86,14 +88,14 @@ export async function POST(request: NextRequest) {
           const textToEmbed = `${faq.question}\n\n${faq.answer}`;
           const embedding = await generateEmbedding(textToEmbed);
 
-          // Store embedding
-          const { error: updateError } = await supabaseDcq
-            .from('faqs')
+          // Store embedding via public schema view
+          const { error: updateError } = await supabase
+            .from('dcq_faqs')
             .update({ embedding: embedding as unknown as string })
             .eq('id', faq.id);
 
           if (updateError) {
-            results.push({ id: faq.id, question: faq.question.substring(0, 50), success: false, error: String(updateError) });
+            results.push({ id: faq.id, question: faq.question.substring(0, 50), success: false, error: updateError.message });
           } else {
             results.push({ id: faq.id, question: faq.question.substring(0, 50), success: true });
           }
@@ -110,8 +112,60 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Batch generate embeddings for master knowledge_items
+    if (action === 'batch_knowledge') {
+      // Get all knowledge items without embeddings
+      const { data: items, error } = await supabase
+        .from('knowledge_items')
+        .select('id, title, content, source_table')
+        .is('embedding', null)
+        .limit(50); // Process in batches to avoid timeout
+
+      if (error) {
+        console.error('Error fetching knowledge items:', error);
+        return NextResponse.json({ error: 'Failed to fetch knowledge items', details: error.message }, { status: 500 });
+      }
+
+      if (!items || items.length === 0) {
+        return NextResponse.json({
+          processed: 0,
+          results: [],
+          message: 'All knowledge items already have embeddings',
+        });
+      }
+
+      const results = [];
+      for (const item of items) {
+        try {
+          const textToEmbed = `${item.title}\n\n${item.content || ''}`;
+          const embedding = await generateEmbedding(textToEmbed);
+
+          // Store embedding in knowledge_items
+          const { error: updateError } = await supabase
+            .from('knowledge_items')
+            .update({ embedding: embedding as unknown as string })
+            .eq('id', item.id);
+
+          if (updateError) {
+            results.push({ id: item.id, title: item.title?.substring(0, 50), source: item.source_table, success: false, error: updateError.message });
+          } else {
+            results.push({ id: item.id, title: item.title?.substring(0, 50), source: item.source_table, success: true });
+          }
+        } catch (err) {
+          results.push({ id: item.id, title: item.title?.substring(0, 50), source: item.source_table, success: false, error: String(err) });
+        }
+      }
+
+      return NextResponse.json({
+        processed: results.length,
+        successful: results.filter(r => r.success).length,
+        failed: results.filter(r => !r.success).length,
+        results,
+      });
+    }
+
     return NextResponse.json(
-      { error: 'Invalid action. Use: generate_faq, query, or batch_faqs' },
+      { error: 'Invalid action. Use: generate_faq, query, batch_faqs, or batch_knowledge' },
       { status: 400 }
     );
   } catch (error) {
@@ -125,51 +179,91 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/embeddings
- * Get embedding coverage statistics for dCQ
+ * Get embedding coverage statistics for dCQ and master knowledge base
  */
 export async function GET() {
   try {
-    // Get FAQ stats
-    const { data: faqStats, error: faqError } = await supabaseDcq
-      .from('faqs')
-      .select('id, embedding')
-      .eq('status', 'active');
+    // Get FAQ stats using public schema view
+    const { data: faqStats, error: faqError } = await supabase
+      .from('dcq_faqs')
+      .select('id, embedding, status');
 
     if (faqError) {
-      return NextResponse.json({ error: 'Failed to fetch FAQ stats' }, { status: 500 });
+      console.error('FAQ stats error:', faqError);
     }
 
-    const totalFaqs = faqStats?.length || 0;
-    const faqsWithEmbedding = faqStats?.filter(f => f.embedding !== null).length || 0;
+    const activeFaqs = faqStats?.filter(f => f.status === 'active') || [];
+    const totalFaqs = activeFaqs.length;
+    const faqsWithEmbedding = activeFaqs.filter(f => f.embedding !== null).length;
 
-    // Get knowledge entry stats
-    const { data: knowledgeStats, error: knowledgeError } = await supabaseDcq
-      .from('knowledge_entries')
-      .select('id, embedding')
-      .eq('is_active', true);
+    // Get knowledge entry stats using public schema view
+    const { data: knowledgeStats, error: knowledgeError } = await supabase
+      .from('dcq_knowledge_entries')
+      .select('id, embedding, is_active');
 
-    const totalKnowledge = knowledgeStats?.length || 0;
-    const knowledgeWithEmbedding = knowledgeStats?.filter(k => k.embedding !== null).length || 0;
+    if (knowledgeError) {
+      console.error('Knowledge stats error:', knowledgeError);
+    }
+
+    const activeKnowledge = knowledgeStats?.filter(k => k.is_active === true) || [];
+    const totalKnowledge = activeKnowledge.length;
+    const knowledgeWithEmbedding = activeKnowledge.filter(k => k.embedding !== null).length;
+
+    // Get master knowledge_items stats
+    const { data: masterStats, error: masterError } = await supabase
+      .from('knowledge_items')
+      .select('id, embedding, source_table');
+
+    if (masterError) {
+      console.error('Master KB stats error:', masterError);
+    }
+
+    const totalMaster = masterStats?.length || 0;
+    const masterWithEmbedding = masterStats?.filter(m => m.embedding !== null).length || 0;
+
+    // Count by source
+    const bySource: Record<string, { total: number; withEmbedding: number }> = {};
+    masterStats?.forEach(item => {
+      const source = item.source_table?.split('.')[0] || 'unknown';
+      if (!bySource[source]) {
+        bySource[source] = { total: 0, withEmbedding: 0 };
+      }
+      bySource[source].total++;
+      if (item.embedding) bySource[source].withEmbedding++;
+    });
 
     return NextResponse.json({
       stats: {
-        faqs: {
+        dcq_faqs: {
           total: totalFaqs,
           withEmbedding: faqsWithEmbedding,
-          coverage: totalFaqs > 0 ? Math.round((faqsWithEmbedding / totalFaqs) * 100) : 0,
+          missing: totalFaqs - faqsWithEmbedding,
+          coverage: totalFaqs > 0 ? Math.round((faqsWithEmbedding / totalFaqs) * 100) : 100,
         },
-        knowledgeEntries: {
+        dcq_knowledge_entries: {
           total: totalKnowledge,
           withEmbedding: knowledgeWithEmbedding,
-          coverage: totalKnowledge > 0 ? Math.round((knowledgeWithEmbedding / totalKnowledge) * 100) : 0,
+          missing: totalKnowledge - knowledgeWithEmbedding,
+          coverage: totalKnowledge > 0 ? Math.round((knowledgeWithEmbedding / totalKnowledge) * 100) : 100,
+        },
+        master_knowledge_items: {
+          total: totalMaster,
+          withEmbedding: masterWithEmbedding,
+          missing: totalMaster - masterWithEmbedding,
+          coverage: totalMaster > 0 ? Math.round((masterWithEmbedding / totalMaster) * 100) : 100,
+          bySource,
         },
       },
       embeddingModel: 'all-MiniLM-L6-v2',
       dimensions: getEmbeddingDimensions(),
       provider: 'local (transformers.js)',
+      actions: {
+        generateMissing: 'POST with { action: "batch_knowledge" } to generate missing embeddings',
+        generateFaqs: 'POST with { action: "batch_faqs" } to generate FAQ embeddings',
+      },
     });
   } catch (error) {
     console.error('Stats API error:', error);
-    return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch stats', details: String(error) }, { status: 500 });
   }
 }

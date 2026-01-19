@@ -13,7 +13,7 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: "http://localhost:3003/dsq/dashboard",
+    href: "https://support-iq-pearl.vercel.app",
     disabled: false,
     colors: {
       primary: "#10b981",

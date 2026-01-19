@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         .from('knowledge_items')
         .select('id, title, content, summary, source_table')
         .is('embedding', null)
-        .limit(limit);
+        .limit(limit) as { data: Array<{ id: string; title: string | null; content: string | null; summary: string | null; source_table: string | null }> | null; error: any };
 
       if (error) {
         console.error('Failed to fetch knowledge items:', error);
@@ -91,8 +91,8 @@ export async function POST(request: NextRequest) {
           const embedding = await generateEmbedding(textToEmbed);
 
           // Store embedding directly
-          const { error: updateError } = await supabase
-            .from('knowledge_items')
+          const { error: updateError } = await (supabase
+            .from('knowledge_items') as any)
             .update({ embedding: embedding as unknown as string })
             .eq('id', item.id);
 
@@ -123,11 +123,15 @@ export async function POST(request: NextRequest) {
     // Batch generate embeddings for all articles without embeddings
     if (action === 'batch_articles') {
       // Use direct SQL since diq schema might not be exposed
-      const { data: articles, error } = await supabase.rpc('get_articles_without_embeddings');
+      const { data: articles, error } = await supabase.rpc('get_articles_without_embeddings') as { data: Array<{ id: string; title: string; summary: string | null; content: string | null }> | null; error: any };
 
       if (error) {
         // Fallback: try to create the function
-        await supabase.rpc('create_get_articles_function').catch(() => {});
+        try {
+          await supabase.rpc('create_get_articles_function');
+        } catch {
+          // Ignore error
+        }
 
         // Just return an empty result
         return NextResponse.json({

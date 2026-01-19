@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-19
-**Version**: 0.3.0
-**Session Status**: Complete - Audio system with sound effects enabled by default
+**Version**: 0.3.1
+**Session Status**: Complete - Wordmark glitch effect tuned (2.6s interval)
 
 ---
 

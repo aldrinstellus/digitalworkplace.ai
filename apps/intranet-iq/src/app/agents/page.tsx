@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useWorkflows } from "@/lib/hooks/useSupabase";
 import {
   Bot,
   Plus,
@@ -10,12 +11,10 @@ import {
   Settings,
   MoreVertical,
   Search,
-  Filter,
   Clock,
   CheckCircle2,
   XCircle,
   AlertCircle,
-  ArrowRight,
   Zap,
   FileText,
   Mail,
@@ -25,101 +24,10 @@ import {
   Calendar,
   GitBranch,
   Sparkles,
-  Copy,
   Edit,
-  Trash2,
-  ChevronRight,
+  Loader2,
 } from "lucide-react";
-
-interface WorkflowStep {
-  id: string;
-  type: "trigger" | "action" | "condition" | "output";
-  name: string;
-  description: string;
-  icon: typeof Bot;
-  config?: Record<string, string>;
-}
-
-interface Workflow {
-  id: string;
-  name: string;
-  description: string;
-  status: "active" | "paused" | "draft" | "error";
-  lastRun?: string;
-  runs?: number;
-  successRate?: number;
-  steps: WorkflowStep[];
-  createdBy: string;
-  department: string;
-}
-
-const sampleWorkflows: Workflow[] = [
-  {
-    id: "1",
-    name: "New Employee Onboarding",
-    description: "Automates the onboarding process for new employees including account setup, welcome emails, and training assignments.",
-    status: "active",
-    lastRun: "2 hours ago",
-    runs: 145,
-    successRate: 98,
-    steps: [
-      { id: "1-1", type: "trigger", name: "New Employee Added", description: "When a new employee record is created in HR system", icon: Users },
-      { id: "1-2", type: "action", name: "Create Accounts", description: "Set up email, Slack, and system accounts", icon: Mail },
-      { id: "1-3", type: "action", name: "Send Welcome Email", description: "Send personalized welcome message with resources", icon: MessageSquare },
-      { id: "1-4", type: "action", name: "Assign Training", description: "Enroll in required training modules", icon: FileText },
-      { id: "1-5", type: "output", name: "Notify Manager", description: "Send completion summary to hiring manager", icon: CheckCircle2 },
-    ],
-    createdBy: "David Kim",
-    department: "HR",
-  },
-  {
-    id: "2",
-    name: "Support Ticket Triage",
-    description: "AI-powered ticket classification and routing based on content analysis and priority scoring.",
-    status: "active",
-    lastRun: "5 minutes ago",
-    runs: 2341,
-    successRate: 94,
-    steps: [
-      { id: "2-1", type: "trigger", name: "New Ticket Created", description: "When a support ticket is submitted", icon: FileText },
-      { id: "2-2", type: "action", name: "Analyze Content", description: "Use AI to understand ticket intent", icon: Sparkles },
-      { id: "2-3", type: "condition", name: "Priority Check", description: "Evaluate urgency and impact", icon: GitBranch },
-      { id: "2-4", type: "action", name: "Route to Team", description: "Assign to appropriate support team", icon: Users },
-    ],
-    createdBy: "Sarah Chen",
-    department: "Engineering",
-  },
-  {
-    id: "3",
-    name: "Weekly Report Generator",
-    description: "Compiles data from multiple sources to generate automated weekly summary reports.",
-    status: "paused",
-    lastRun: "1 week ago",
-    runs: 52,
-    successRate: 100,
-    steps: [
-      { id: "3-1", type: "trigger", name: "Scheduled (Weekly)", description: "Every Monday at 9:00 AM", icon: Calendar },
-      { id: "3-2", type: "action", name: "Gather Data", description: "Pull metrics from connected systems", icon: Database },
-      { id: "3-3", type: "action", name: "Generate Report", description: "Create formatted report document", icon: FileText },
-      { id: "3-4", type: "output", name: "Distribute", description: "Email report to stakeholders", icon: Mail },
-    ],
-    createdBy: "Michael Park",
-    department: "Marketing",
-  },
-  {
-    id: "4",
-    name: "Contract Review Assistant",
-    description: "AI-assisted contract analysis for risk identification and compliance checking.",
-    status: "draft",
-    steps: [
-      { id: "4-1", type: "trigger", name: "Contract Uploaded", description: "When new contract document is added", icon: FileText },
-      { id: "4-2", type: "action", name: "Extract Terms", description: "AI extracts key contract terms", icon: Sparkles },
-      { id: "4-3", type: "condition", name: "Risk Assessment", description: "Evaluate potential risks and flags", icon: AlertCircle },
-    ],
-    createdBy: "Emily Rodriguez",
-    department: "Sales",
-  },
-];
+import type { Workflow } from "@/lib/database.types";
 
 const workflowTemplates = [
   { name: "Employee Onboarding", icon: Users, category: "HR" },
@@ -135,6 +43,7 @@ const statusConfig = {
   paused: { color: "bg-yellow-500/20 text-yellow-400", icon: Pause, label: "Paused" },
   draft: { color: "bg-gray-500/20 text-gray-400", icon: Edit, label: "Draft" },
   error: { color: "bg-red-500/20 text-red-400", icon: XCircle, label: "Error" },
+  archived: { color: "bg-gray-500/20 text-gray-400", icon: XCircle, label: "Archived" },
 };
 
 const stepTypeConfig = {
@@ -144,19 +53,56 @@ const stepTypeConfig = {
   output: { color: "bg-green-500/20 border-green-500/30", dotColor: "bg-green-500" },
 };
 
+const stepTypeIcons: Record<string, typeof Bot> = {
+  trigger: Zap,
+  action: Play,
+  condition: GitBranch,
+  output: CheckCircle2,
+  llm_call: Sparkles,
+  api_call: Database,
+  notification: Mail,
+};
+
 export default function AgentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(sampleWorkflows[0]);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showTemplates, setShowTemplates] = useState(false);
 
-  const filteredWorkflows = sampleWorkflows.filter((workflow) => {
-    const matchesSearch =
-      workflow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      workflow.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = filterStatus === "all" || workflow.status === filterStatus;
-    return matchesSearch && matchesStatus;
-  });
+  const { workflows, loading, error } = useWorkflows();
+
+  const filteredWorkflows = useMemo(() => {
+    return workflows.filter((workflow) => {
+      const matchesSearch =
+        workflow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (workflow.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+      const matchesStatus = filterStatus === "all" || workflow.status === filterStatus;
+      return matchesSearch && matchesStatus;
+    });
+  }, [workflows, searchQuery, filterStatus]);
+
+  // Auto-select first workflow when loaded
+  useMemo(() => {
+    if (workflows.length > 0 && !selectedWorkflow) {
+      setSelectedWorkflow(workflows[0]);
+    }
+  }, [workflows, selectedWorkflow]);
+
+  // Parse steps from workflow trigger_config or use default structure
+  const getWorkflowSteps = (workflow: Workflow) => {
+    // Check if trigger_config has steps defined
+    const triggerConfig = workflow.trigger_config as { steps?: Array<{ id: string; type: string; name: string; description: string }> } | null;
+    if (triggerConfig?.steps) {
+      return triggerConfig.steps;
+    }
+
+    // Default steps based on workflow type
+    return [
+      { id: "1", type: "trigger", name: "Trigger", description: workflow.trigger_type || "Workflow trigger condition" },
+      { id: "2", type: "action", name: "Process", description: "Main workflow action" },
+      { id: "3", type: "output", name: "Complete", description: "Workflow completion" },
+    ];
+  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -213,58 +159,73 @@ export default function AgentsPage() {
 
           {/* Workflow List */}
           <div className="flex-1 overflow-y-auto p-2">
-            {filteredWorkflows.map((workflow) => {
-              const status = statusConfig[workflow.status];
-              const StatusIcon = status.icon;
-              return (
-                <div
-                  key={workflow.id}
-                  onClick={() => setSelectedWorkflow(workflow)}
-                  className={`p-4 rounded-xl cursor-pointer transition-all mb-2 ${
-                    selectedWorkflow?.id === workflow.id
-                      ? "bg-blue-500/10 border border-blue-500/30"
-                      : "hover:bg-white/5 border border-transparent"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                        <Bot className="w-4 h-4 text-white" />
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-8">
+                <AlertCircle className="w-8 h-8 text-red-400 mx-auto mb-2" />
+                <p className="text-sm text-red-400">{error}</p>
+              </div>
+            ) : filteredWorkflows.length === 0 ? (
+              <div className="text-center py-8">
+                <Bot className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                <p className="text-sm text-white/40">No workflows found</p>
+              </div>
+            ) : (
+              filteredWorkflows.map((workflow) => {
+                const status = statusConfig[workflow.status as keyof typeof statusConfig] || statusConfig.draft;
+                const StatusIcon = status.icon;
+                return (
+                  <div
+                    key={workflow.id}
+                    onClick={() => setSelectedWorkflow(workflow)}
+                    className={`p-4 rounded-xl cursor-pointer transition-all mb-2 ${
+                      selectedWorkflow?.id === workflow.id
+                        ? "bg-blue-500/10 border border-blue-500/30"
+                        : "hover:bg-white/5 border border-transparent"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                          <Bot className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium text-sm">
+                            {workflow.name}
+                          </h3>
+                          {workflow.template_category && (
+                            <span className="text-xs text-white/40">
+                              {workflow.template_category}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-white font-medium text-sm">
-                          {workflow.name}
-                        </h3>
-                        <span className="text-xs text-white/40">
-                          {workflow.department}
-                        </span>
-                      </div>
+                      <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${status.color}`}>
+                        <StatusIcon className="w-3 h-3" />
+                        {status.label}
+                      </span>
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${status.color}`}>
-                      <StatusIcon className="w-3 h-3" />
-                      {status.label}
-                    </span>
-                  </div>
-                  <p className="text-xs text-white/50 line-clamp-2 mb-2">
-                    {workflow.description}
-                  </p>
-                  {workflow.lastRun && (
+                    {workflow.description && (
+                      <p className="text-xs text-white/50 line-clamp-2 mb-2">
+                        {workflow.description}
+                      </p>
+                    )}
                     <div className="flex items-center gap-4 text-xs text-white/40">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
-                        {workflow.lastRun}
+                        {new Date(workflow.updated_at).toLocaleDateString()}
                       </span>
-                      {workflow.runs && (
-                        <span>{workflow.runs} runs</span>
-                      )}
-                      {workflow.successRate && (
-                        <span className="text-green-400">{workflow.successRate}%</span>
+                      {workflow.is_template && (
+                        <span className="text-purple-400">Template</span>
                       )}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -284,7 +245,9 @@ export default function AgentsPage() {
                         {selectedWorkflow.name}
                       </h1>
                       <p className="text-sm text-white/50">
-                        Created by {selectedWorkflow.createdBy} • {selectedWorkflow.department}
+                        Created{" "}
+                        {new Date(selectedWorkflow.created_at).toLocaleDateString()}
+                        {selectedWorkflow.trigger_type && ` • Trigger: ${selectedWorkflow.trigger_type}`}
                       </p>
                     </div>
                   </div>
@@ -311,29 +274,34 @@ export default function AgentsPage() {
                   </div>
                 </div>
 
-                {/* Stats */}
-                {selectedWorkflow.runs && (
-                  <div className="flex gap-6 mt-6">
-                    <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
-                      <div className="text-2xl font-medium text-white">
-                        {selectedWorkflow.runs}
-                      </div>
-                      <div className="text-xs text-white/50">Total Runs</div>
-                    </div>
-                    <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
-                      <div className="text-2xl font-medium text-green-400">
-                        {selectedWorkflow.successRate}%
-                      </div>
-                      <div className="text-xs text-white/50">Success Rate</div>
-                    </div>
-                    <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
-                      <div className="text-2xl font-medium text-white">
-                        {selectedWorkflow.steps.length}
-                      </div>
-                      <div className="text-xs text-white/50">Steps</div>
-                    </div>
-                  </div>
+                {/* Description */}
+                {selectedWorkflow.description && (
+                  <p className="mt-4 text-sm text-white/60">{selectedWorkflow.description}</p>
                 )}
+
+                {/* Stats */}
+                <div className="flex gap-6 mt-6">
+                  <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
+                    <div className="text-2xl font-medium text-white">
+                      {getWorkflowSteps(selectedWorkflow).length}
+                    </div>
+                    <div className="text-xs text-white/50">Steps</div>
+                  </div>
+                  <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
+                    <div className="text-2xl font-medium text-white capitalize">
+                      {selectedWorkflow.status}
+                    </div>
+                    <div className="text-xs text-white/50">Status</div>
+                  </div>
+                  {selectedWorkflow.is_template && (
+                    <div className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3">
+                      <div className="text-2xl font-medium text-purple-400">
+                        Yes
+                      </div>
+                      <div className="text-xs text-white/50">Template</div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Workflow Steps */}
@@ -342,8 +310,9 @@ export default function AgentsPage() {
                   Workflow Steps
                 </h3>
                 <div className="space-y-4">
-                  {selectedWorkflow.steps.map((step, index) => {
-                    const config = stepTypeConfig[step.type];
+                  {getWorkflowSteps(selectedWorkflow).map((step, index) => {
+                    const config = stepTypeConfig[step.type as keyof typeof stepTypeConfig] || stepTypeConfig.action;
+                    const StepIcon = stepTypeIcons[step.type] || Bot;
                     return (
                       <div key={step.id} className="flex items-start gap-4">
                         {/* Step Number & Connector */}
@@ -351,7 +320,7 @@ export default function AgentsPage() {
                           <div className={`w-8 h-8 rounded-full ${config.dotColor} flex items-center justify-center text-white text-sm font-medium`}>
                             {index + 1}
                           </div>
-                          {index < selectedWorkflow.steps.length - 1 && (
+                          {index < getWorkflowSteps(selectedWorkflow).length - 1 && (
                             <div className="w-px h-12 bg-white/20 my-2" />
                           )}
                         </div>
@@ -359,7 +328,7 @@ export default function AgentsPage() {
                         {/* Step Card */}
                         <div className={`flex-1 border rounded-xl p-4 ${config.color}`}>
                           <div className="flex items-center gap-3 mb-2">
-                            <step.icon className="w-5 h-5" />
+                            <StepIcon className="w-5 h-5" />
                             <div>
                               <h4 className="text-white font-medium">{step.name}</h4>
                               <span className="text-xs text-white/40 capitalize">

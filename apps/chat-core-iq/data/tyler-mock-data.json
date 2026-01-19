@@ -1,0 +1,627 @@
+{
+  "metadata": {
+    "system": "Tyler Technologies Enterprise Suite",
+    "modules": ["iasWorld", "Eagle", "EnerGov", "Munis"],
+    "lastSync": "2026-01-05T14:30:00Z",
+    "jurisdiction": "City of Doral, FL"
+  },
+  "properties": {
+    "35-2014-001-0010": {
+      "folio": "35-2014-001-0010",
+      "address": {
+        "street": "8350 NW 52nd Terrace",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33166",
+        "formatted": "8350 NW 52nd Terrace, Doral, FL 33166"
+      },
+      "parcel": {
+        "legalDescription": "DORAL PARK 1ST ADDN PB 157-45 LOT 15 BLK 3",
+        "subdivision": "Doral Park 1st Addition",
+        "platBook": "157",
+        "platPage": "45",
+        "lot": "15",
+        "block": "3",
+        "acres": 0.28,
+        "sqft": 12197
+      },
+      "ownership": {
+        "current": {
+          "name": "RODRIGUEZ, MARIA C & CARLOS A",
+          "mailingAddress": "8350 NW 52nd Terrace, Doral, FL 33166",
+          "ownershipType": "Joint Tenants",
+          "acquisitionDate": "2019-06-15",
+          "acquisitionPrice": 485000,
+          "deedBook": "31245",
+          "deedPage": "1892",
+          "deedType": "Warranty Deed"
+        },
+        "history": [
+          {
+            "name": "CHEN, DAVID W",
+            "fromDate": "2012-03-20",
+            "toDate": "2019-06-14",
+            "salePrice": 380000
+          },
+          {
+            "name": "DORAL HOMES LLC",
+            "fromDate": "2008-01-15",
+            "toDate": "2012-03-19",
+            "salePrice": 425000
+          }
+        ]
+      },
+      "building": {
+        "yearBuilt": 2007,
+        "effectiveYear": 2007,
+        "buildingType": "Single Family Residential",
+        "constructionType": "CBS (Concrete Block Stucco)",
+        "roofType": "Barrel Tile",
+        "stories": 2,
+        "bedrooms": 4,
+        "bathrooms": 3.5,
+        "livingArea": 2847,
+        "totalArea": 3650,
+        "garageSpaces": 2,
+        "poolType": "In-ground Pool",
+        "features": ["Central A/C", "Fireplace", "Impact Windows", "Smart Home System"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "landValue": 185000,
+        "buildingValue": 392000,
+        "totalMarketValue": 577000,
+        "assessedValue": 512000,
+        "taxableValue": 462000,
+        "exemptions": [
+          {
+            "type": "Homestead",
+            "amount": 50000,
+            "status": "Active"
+          }
+        ],
+        "history": [
+          { "year": 2024, "marketValue": 545000, "assessedValue": 485000 },
+          { "year": 2023, "marketValue": 510000, "assessedValue": 458000 },
+          { "year": 2022, "marketValue": 475000, "assessedValue": 432000 }
+        ]
+      },
+      "taxes": {
+        "currentYear": 2025,
+        "annualAmount": 8934.56,
+        "status": "PAID",
+        "paidDate": "2025-11-30",
+        "breakdown": [
+          { "authority": "Miami-Dade County", "amount": 3245.12, "millageRate": 4.6656 },
+          { "authority": "City of Doral", "amount": 2156.78, "millageRate": 3.0987 },
+          { "authority": "School Board", "amount": 2890.45, "millageRate": 4.1534 },
+          { "authority": "South Florida Water Mgmt", "amount": 245.67, "millageRate": 0.3530 },
+          { "authority": "Children's Trust", "amount": 198.34, "millageRate": 0.2849 },
+          { "authority": "Library", "amount": 198.20, "millageRate": 0.2847 }
+        ],
+        "history": [
+          { "year": 2024, "amount": 8456.23, "status": "PAID" },
+          { "year": 2023, "amount": 7892.45, "status": "PAID" },
+          { "year": 2022, "amount": 7234.67, "status": "PAID" }
+        ]
+      },
+      "zoning": {
+        "code": "R-1",
+        "description": "Single Family Residential",
+        "futureUse": "Low Density Residential",
+        "overlay": null,
+        "restrictions": ["Max 35ft height", "40% lot coverage", "Side setback 7.5ft"]
+      },
+      "permits": {
+        "active": [],
+        "completed": [
+          {
+            "number": "BLD-2024-08234",
+            "type": "Pool Construction",
+            "status": "Finaled",
+            "issuedDate": "2024-02-15",
+            "finaledDate": "2024-06-20",
+            "contractor": "Blue Diamond Pools Inc",
+            "value": 45000,
+            "inspections": [
+              { "type": "Steel/Plumbing", "date": "2024-03-10", "result": "Passed" },
+              { "type": "Electric Underground", "date": "2024-03-25", "result": "Passed" },
+              { "type": "Pool Final", "date": "2024-06-20", "result": "Passed" }
+            ]
+          },
+          {
+            "number": "BLD-2022-05123",
+            "type": "Roof Replacement",
+            "status": "Finaled",
+            "issuedDate": "2022-08-10",
+            "finaledDate": "2022-09-05",
+            "contractor": "Storm Shield Roofing LLC",
+            "value": 28500
+          },
+          {
+            "number": "BLD-2020-12456",
+            "type": "Impact Windows",
+            "status": "Finaled",
+            "issuedDate": "2020-04-22",
+            "finaledDate": "2020-06-15",
+            "contractor": "Miami Window Pros",
+            "value": 18750
+          }
+        ]
+      },
+      "liens": [],
+      "codeViolations": []
+    },
+    "35-2014-002-0025": {
+      "folio": "35-2014-002-0025",
+      "address": {
+        "street": "8401 NW 53rd Terrace",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33166",
+        "formatted": "8401 NW 53rd Terrace, Doral, FL 33166"
+      },
+      "parcel": {
+        "legalDescription": "DORAL GOVERNMENT CENTER PB 165-12 TR A",
+        "subdivision": "Doral Government Center",
+        "platBook": "165",
+        "platPage": "12",
+        "lot": "Tract A",
+        "block": "N/A",
+        "acres": 4.85,
+        "sqft": 211266
+      },
+      "ownership": {
+        "current": {
+          "name": "CITY OF DORAL",
+          "mailingAddress": "8401 NW 53rd Terrace, Doral, FL 33166",
+          "ownershipType": "Government Entity",
+          "acquisitionDate": "2003-01-22",
+          "acquisitionPrice": 0,
+          "deedBook": "22456",
+          "deedPage": "0892",
+          "deedType": "Government Deed"
+        }
+      },
+      "building": {
+        "yearBuilt": 2005,
+        "effectiveYear": 2005,
+        "buildingType": "Government/Municipal",
+        "constructionType": "Reinforced Concrete",
+        "roofType": "Flat/Built-up",
+        "stories": 3,
+        "totalArea": 85000,
+        "features": ["Council Chambers", "Emergency Operations Center", "Public Meeting Rooms"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "landValue": 8500000,
+        "buildingValue": 22000000,
+        "totalMarketValue": 30500000,
+        "assessedValue": 0,
+        "taxableValue": 0,
+        "exemptions": [{ "type": "Government", "amount": "Full", "status": "Active" }]
+      },
+      "taxes": {
+        "currentYear": 2025,
+        "annualAmount": 0,
+        "status": "EXEMPT",
+        "breakdown": []
+      },
+      "zoning": {
+        "code": "GU",
+        "description": "Government Use",
+        "futureUse": "Government/Institutional"
+      },
+      "permits": {
+        "active": [
+          {
+            "number": "BLD-2025-00456",
+            "type": "Interior Renovation - 2nd Floor",
+            "status": "Under Review",
+            "submittedDate": "2025-12-10",
+            "contractor": "Government Builders Inc",
+            "estimatedValue": 450000
+          }
+        ],
+        "completed": [
+          {
+            "number": "BLD-2024-11234",
+            "type": "HVAC Replacement",
+            "status": "Finaled",
+            "issuedDate": "2024-08-15",
+            "finaledDate": "2024-11-20",
+            "contractor": "Cool Air Systems",
+            "value": 285000
+          }
+        ]
+      },
+      "liens": [],
+      "codeViolations": []
+    },
+    "35-2018-005-0150": {
+      "folio": "35-2018-005-0150",
+      "address": {
+        "street": "3005 NW 87th Avenue",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33172",
+        "formatted": "3005 NW 87th Avenue, Doral, FL 33172"
+      },
+      "parcel": {
+        "legalDescription": "DORAL CENTRAL PARK PB 172-88 LOT 1 BLK 1",
+        "subdivision": "Doral Central Park",
+        "platBook": "172",
+        "platPage": "88",
+        "lot": "1",
+        "block": "1",
+        "acres": 12.5,
+        "sqft": 544500
+      },
+      "ownership": {
+        "current": {
+          "name": "CITY OF DORAL - PARKS DEPT",
+          "mailingAddress": "8401 NW 53rd Terrace, Doral, FL 33166",
+          "ownershipType": "Government Entity",
+          "acquisitionDate": "2006-05-10"
+        }
+      },
+      "building": {
+        "yearBuilt": 2008,
+        "buildingType": "Recreational/Park",
+        "totalArea": 18500,
+        "features": ["Community Center", "Aquatic Center", "Athletic Fields", "Playground"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "totalMarketValue": 15000000,
+        "taxableValue": 0,
+        "exemptions": [{ "type": "Government", "status": "Active" }]
+      },
+      "taxes": { "status": "EXEMPT" },
+      "zoning": { "code": "PR", "description": "Parks and Recreation" },
+      "permits": { "active": [], "completed": [] },
+      "liens": [],
+      "codeViolations": []
+    },
+    "35-2020-008-0089": {
+      "folio": "35-2020-008-0089",
+      "address": {
+        "street": "7700 NW 25th Street",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33122",
+        "formatted": "7700 NW 25th Street, Doral, FL 33122"
+      },
+      "parcel": {
+        "legalDescription": "DOWNTOWN DORAL PB 180-22 UNIT 405",
+        "subdivision": "Downtown Doral",
+        "platBook": "180",
+        "platPage": "22",
+        "unit": "405",
+        "acres": 0.04,
+        "sqft": 1742
+      },
+      "ownership": {
+        "current": {
+          "name": "MARTINEZ, JOSE ANTONIO",
+          "mailingAddress": "7700 NW 25th Street #405, Doral, FL 33122",
+          "ownershipType": "Fee Simple",
+          "acquisitionDate": "2022-09-28",
+          "acquisitionPrice": 425000,
+          "deedBook": "33567",
+          "deedPage": "4521",
+          "deedType": "Warranty Deed"
+        },
+        "history": [
+          {
+            "name": "DOWNTOWN DORAL DEVELOPERS LLC",
+            "fromDate": "2020-01-15",
+            "toDate": "2022-09-27",
+            "salePrice": 375000
+          }
+        ]
+      },
+      "building": {
+        "yearBuilt": 2020,
+        "buildingType": "Condominium",
+        "constructionType": "Reinforced Concrete",
+        "stories": 1,
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "livingArea": 1285,
+        "totalArea": 1425,
+        "parkingSpaces": 2,
+        "features": ["Balcony", "Modern Kitchen", "In-unit Washer/Dryer", "Smart Thermostat"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "landValue": 85000,
+        "buildingValue": 365000,
+        "totalMarketValue": 450000,
+        "assessedValue": 425000,
+        "taxableValue": 375000,
+        "exemptions": [{ "type": "Homestead", "amount": 50000, "status": "Active" }]
+      },
+      "taxes": {
+        "currentYear": 2025,
+        "annualAmount": 7245.80,
+        "status": "PENDING",
+        "dueDate": "2026-03-31",
+        "breakdown": [
+          { "authority": "Miami-Dade County", "amount": 2634.56 },
+          { "authority": "City of Doral", "amount": 1745.23 },
+          { "authority": "School Board", "amount": 2345.67 },
+          { "authority": "Other", "amount": 520.34 }
+        ]
+      },
+      "zoning": {
+        "code": "MU-3",
+        "description": "Mixed Use High Intensity",
+        "futureUse": "Downtown Mixed Use"
+      },
+      "permits": {
+        "active": [],
+        "completed": [
+          {
+            "number": "BLD-2023-07892",
+            "type": "Interior Remodel",
+            "status": "Finaled",
+            "issuedDate": "2023-03-15",
+            "finaledDate": "2023-05-20",
+            "contractor": "Premium Renovations LLC",
+            "value": 35000
+          }
+        ]
+      },
+      "liens": [],
+      "codeViolations": []
+    },
+    "35-2015-003-0077": {
+      "folio": "35-2015-003-0077",
+      "address": {
+        "street": "10305 NW 41st Street",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33178",
+        "formatted": "10305 NW 41st Street, Doral, FL 33178"
+      },
+      "parcel": {
+        "legalDescription": "DORAL COMMERCE CENTER PB 168-55 LOT 22 BLK 5",
+        "subdivision": "Doral Commerce Center",
+        "platBook": "168",
+        "platPage": "55",
+        "lot": "22",
+        "block": "5",
+        "acres": 1.25,
+        "sqft": 54450
+      },
+      "ownership": {
+        "current": {
+          "name": "GLOBAL LOGISTICS PARTNERS LLC",
+          "mailingAddress": "1200 Brickell Ave, Suite 500, Miami, FL 33131",
+          "ownershipType": "Corporate",
+          "acquisitionDate": "2018-11-05",
+          "acquisitionPrice": 2850000,
+          "deedBook": "30123",
+          "deedPage": "8765",
+          "deedType": "Special Warranty Deed"
+        }
+      },
+      "building": {
+        "yearBuilt": 2015,
+        "buildingType": "Industrial Warehouse",
+        "constructionType": "Pre-engineered Metal",
+        "roofType": "Metal Standing Seam",
+        "stories": 1,
+        "officeArea": 2500,
+        "warehouseArea": 35000,
+        "totalArea": 37500,
+        "clearHeight": 28,
+        "dockDoors": 8,
+        "driveInDoors": 2,
+        "features": ["Climate Control", "Fire Sprinklers", "Security System", "Loading Dock"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "landValue": 1450000,
+        "buildingValue": 2100000,
+        "totalMarketValue": 3550000,
+        "assessedValue": 3200000,
+        "taxableValue": 3200000,
+        "exemptions": []
+      },
+      "taxes": {
+        "currentYear": 2025,
+        "annualAmount": 61856.00,
+        "status": "PAID",
+        "paidDate": "2025-09-15",
+        "breakdown": [
+          { "authority": "Miami-Dade County", "amount": 22456.78 },
+          { "authority": "City of Doral", "amount": 14892.34 },
+          { "authority": "School Board", "amount": 20012.56 },
+          { "authority": "Other", "amount": 4494.32 }
+        ]
+      },
+      "zoning": {
+        "code": "I-1",
+        "description": "Light Industrial",
+        "futureUse": "Industrial/Logistics"
+      },
+      "permits": {
+        "active": [
+          {
+            "number": "BLD-2025-01234",
+            "type": "Solar Panel Installation",
+            "status": "Approved - Awaiting Inspection",
+            "issuedDate": "2025-11-01",
+            "contractor": "SunPower Commercial",
+            "estimatedValue": 125000,
+            "inspections": [
+              { "type": "Electrical Rough", "date": "2025-12-15", "result": "Passed" },
+              { "type": "Final", "scheduledDate": "2026-01-15", "result": "Pending" }
+            ]
+          }
+        ],
+        "completed": [
+          {
+            "number": "BLD-2023-09567",
+            "type": "Warehouse Expansion",
+            "status": "Finaled",
+            "issuedDate": "2023-06-20",
+            "finaledDate": "2023-12-10",
+            "contractor": "Industrial Builders Corp",
+            "value": 450000
+          }
+        ]
+      },
+      "liens": [
+        {
+          "type": "Contractor's Lien",
+          "amount": 15000,
+          "filedDate": "2024-02-28",
+          "creditor": "HVAC Solutions Inc",
+          "status": "Active",
+          "caseNumber": "LN-2024-00234",
+          "description": "Disputed payment for HVAC installation"
+        }
+      ],
+      "codeViolations": []
+    },
+    "35-2019-006-0200": {
+      "folio": "35-2019-006-0200",
+      "address": {
+        "street": "5200 NW 77th Avenue",
+        "city": "Doral",
+        "state": "FL",
+        "zip": "33166",
+        "formatted": "5200 NW 77th Avenue, Doral, FL 33166"
+      },
+      "parcel": {
+        "legalDescription": "DORAL GARDENS PB 175-33 LOT 45 BLK 8",
+        "subdivision": "Doral Gardens",
+        "platBook": "175",
+        "platPage": "33",
+        "lot": "45",
+        "block": "8",
+        "acres": 0.18,
+        "sqft": 7841
+      },
+      "ownership": {
+        "current": {
+          "name": "THOMPSON, JAMES R & SARAH M",
+          "mailingAddress": "5200 NW 77th Avenue, Doral, FL 33166",
+          "ownershipType": "Tenants by Entirety",
+          "acquisitionDate": "2021-04-12",
+          "acquisitionPrice": 515000
+        }
+      },
+      "building": {
+        "yearBuilt": 2018,
+        "buildingType": "Townhouse",
+        "constructionType": "CBS",
+        "stories": 3,
+        "bedrooms": 3,
+        "bathrooms": 2.5,
+        "livingArea": 1950,
+        "totalArea": 2200,
+        "garageSpaces": 1,
+        "features": ["Rooftop Terrace", "Modern Finishes", "Impact Windows"]
+      },
+      "assessment": {
+        "currentYear": 2025,
+        "totalMarketValue": 585000,
+        "assessedValue": 535000,
+        "taxableValue": 485000,
+        "exemptions": [{ "type": "Homestead", "amount": 50000, "status": "Active" }]
+      },
+      "taxes": {
+        "currentYear": 2025,
+        "annualAmount": 9378.45,
+        "status": "DELINQUENT",
+        "dueDate": "2025-03-31",
+        "delinquentSince": "2025-04-01",
+        "penaltyAmount": 468.92,
+        "totalDue": 9847.37
+      },
+      "zoning": {
+        "code": "R-3",
+        "description": "Multi-Family Residential"
+      },
+      "permits": { "active": [], "completed": [] },
+      "liens": [],
+      "codeViolations": [
+        {
+          "number": "CC-2025-00892",
+          "type": "Property Maintenance",
+          "description": "Overgrown vegetation - front yard exceeds 10 inches",
+          "status": "Open",
+          "issuedDate": "2025-12-20",
+          "complianceDeadline": "2026-01-10",
+          "inspector": "Officer Rodriguez",
+          "fineAmount": 0,
+          "notes": "First notice issued. Property owner has 21 days to comply."
+        }
+      ]
+    }
+  },
+  "searchIndex": {
+    "byAddress": {
+      "8350 nw 52nd terrace": "35-2014-001-0010",
+      "8401 nw 53rd terrace": "35-2014-002-0025",
+      "3005 nw 87th avenue": "35-2018-005-0150",
+      "7700 nw 25th street": "35-2020-008-0089",
+      "10305 nw 41st street": "35-2015-003-0077",
+      "5200 nw 77th avenue": "35-2019-006-0200"
+    },
+    "byOwner": {
+      "rodriguez": ["35-2014-001-0010"],
+      "city of doral": ["35-2014-002-0025", "35-2018-005-0150"],
+      "martinez": ["35-2020-008-0089"],
+      "global logistics": ["35-2015-003-0077"],
+      "thompson": ["35-2019-006-0200"]
+    }
+  },
+  "demoScenarios": {
+    "propertyLookup": {
+      "description": "Standard property information lookup by address or folio",
+      "exampleQueries": [
+        "Who owns 8350 NW 52nd Terrace?",
+        "Look up folio 35-2014-001-0010",
+        "Property info for 10305 NW 41st Street"
+      ]
+    },
+    "taxInformation": {
+      "description": "Tax bill details, payment status, and history",
+      "exampleQueries": [
+        "What are the property taxes for 8350 NW 52nd Terrace?",
+        "Show tax breakdown for folio 35-2015-003-0077",
+        "Are there any delinquent taxes on 5200 NW 77th Avenue?"
+      ]
+    },
+    "permitHistory": {
+      "description": "Building permits, inspections, and contractor info",
+      "exampleQueries": [
+        "Show permits for 8350 NW 52nd Terrace",
+        "Any active permits at City Hall?",
+        "Permit status for 10305 NW 41st Street"
+      ]
+    },
+    "liensAndViolations": {
+      "description": "Liens, encumbrances, and code violations",
+      "exampleQueries": [
+        "Are there any liens on 10305 NW 41st Street?",
+        "Code violations at 5200 NW 77th Avenue",
+        "Check encumbrances for folio 35-2015-003-0077"
+      ]
+    },
+    "comprehensiveReport": {
+      "description": "Full property report with all available data",
+      "exampleQueries": [
+        "Give me a complete property report for 8350 NW 52nd Terrace",
+        "Full spectrum report on 10305 NW 41st Street",
+        "Everything about folio 35-2020-008-0089"
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "general": {
+    "botName": "Chat Core IQ Assistant",
+    "welcomeMessage": "Hello! I'm the Chat Core IQ Assistant. How can I help you today?",
+    "welcomeMessageEs": "¡Hola! Soy el Asistente Chat Core IQ. ¿Cómo puedo ayudarle hoy?",
+    "welcomeMessageHt": "Bonjou! Mwen se Asistan Chat Core IQ. Kijan mwen ka ede ou jodi a?",
+    "defaultLanguage": "en",
+    "enableBilingual": true,
+    "officeHours": {
+      "start": "08:00",
+      "end": "17:00",
+      "timezone": "America/New_York"
+    }
+  },
+  "chatbot": {
+    "maxMessagesPerSession": 50,
+    "sessionTimeout": 30,
+    "enableSentimentAnalysis": true,
+    "autoEscalateNegative": true,
+    "escalationThreshold": 5,
+    "responseDelay": 500
+  },
+  "appearance": {
+    "primaryColor": "#1a237e",
+    "position": "bottom-right",
+    "showSources": true,
+    "showFeedback": true
+  },
+  "llm": {
+    "primaryLLM": "claude-3-haiku",
+    "backupLLM": "gpt-4o-mini",
+    "temperature": 0.7,
+    "maxTokens": 1000
+  },
+  "notifications": {
+    "emailAlerts": true,
+    "escalationEmail": "admin@chatcoreiq.com",
+    "dailyDigest": true,
+    "digestTime": "09:00",
+    "alertOnEscalation": true,
+    "alertOnNegativeFeedback": true
+  },
+  "integration": {
+    "enableIVR": true,
+    "enableSMS": true,
+    "enableSocial": true,
+    "twilioPhone": "+13055930000"
+  },
+  "integrations": {
+    "crmEnabled": false,
+    "crmProvider": "none",
+    "sharePointEnabled": false
+  }
+}

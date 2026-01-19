@@ -1,0 +1,2329 @@
+{
+  "sessions": {
+    "ivr:+1-demo-1767539056690": {
+      "sessionId": "ivr_1767539056863_0x8d75yel",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539056690",
+      "startTime": "2026-01-04T15:04:16.863Z",
+      "lastActivity": "2026-01-04T15:04:16.865Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:04:16.865Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767539065194": {
+      "sessionId": "ivr_1767539065201_ytmm6drw5",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539065194",
+      "startTime": "2026-01-04T15:04:25.201Z",
+      "lastActivity": "2026-01-04T15:04:25.203Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:04:25.203Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767539075634": {
+      "sessionId": "ivr_1767539075645_9vv9xd67m",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539075634",
+      "startTime": "2026-01-04T15:04:35.645Z",
+      "lastActivity": "2026-01-04T15:05:06.820Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:04:35.648Z"
+        },
+        {
+          "role": "user",
+          "content": "hello i need to report a pot hole",
+          "timestamp": "2026-01-04T15:04:53.717Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to report a pothole in Doral.\n\n**Doral 311 Portal:**\n• Website: cityofdoral.com/311\n• Mobile app: SeeClickFix\n• Track status online\n\n**Phone:**\n• Call Public Works: (305) 593-6740\n• Hours: Mon-Fri, 7:30AM-5PM\n\n**Email:**\n• publicworks@cityofdoral.com\n\n**In Person:**\n• Doral Government Center\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-04T15:04:55.637Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 7 N V X 6 5. I repeat, your code is: 7 N V X 6 5. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:05:06.820Z"
+        }
+      ]
+    },
+    "web:test-user-123": {
+      "sessionId": "web_1767539218893_lkztoyrfm",
+      "channel": "web",
+      "userId": "test-user-123",
+      "startTime": "2026-01-04T15:06:58.893Z",
+      "lastActivity": "2026-01-04T15:06:58.893Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:04:35.648Z"
+        },
+        {
+          "role": "user",
+          "content": "hello i need to report a pot hole",
+          "timestamp": "2026-01-04T15:04:53.717Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to report a pothole in Doral.\n\n**Doral 311 Portal:**\n• Website: cityofdoral.com/311\n• Mobile app: SeeClickFix\n• Track status online\n\n**Phone:**\n• Call Public Works: (305) 593-6740\n• Hours: Mon-Fri, 7:30AM-5PM\n\n**Email:**\n• publicworks@cityofdoral.com\n\n**In Person:**\n• Doral Government Center\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-04T15:04:55.637Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 7 N V X 6 5. I repeat, your code is: 7 N V X 6 5. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:05:06.820Z"
+        }
+      ],
+      "linkedSessionId": "ivr_1767539075645_9vv9xd67m"
+    },
+    "ivr:+1-demo-1767539321237": {
+      "sessionId": "ivr_1767539321245_89thyabfg",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539321237",
+      "startTime": "2026-01-04T15:08:41.245Z",
+      "lastActivity": "2026-01-04T15:09:02.063Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:08:41.247Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: L Z 8 S T 3. I repeat, your code is: L Z 8 S T 3. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:09:02.063Z"
+        }
+      ]
+    },
+    "web:sess_1767538080676_bga7sdnnu": {
+      "sessionId": "web_1767607515407_moe46jaox",
+      "channel": "web",
+      "userId": "sess_1767538080676_bga7sdnnu",
+      "startTime": "2026-01-05T10:05:15.407Z",
+      "lastActivity": "2026-01-05T10:05:15.407Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T10:04:30.849Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-05T10:04:47.624Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall hours:\n• Monday - Friday, 8 AM - 5 PM\n• Closed on federal holidays",
+          "timestamp": "2026-01-05T10:04:55.505Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: I 7 6 B A 6. I repeat, your code is: I 7 6 B A 6. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T10:05:05.650Z"
+        }
+      ],
+      "linkedSessionId": "ivr_1767607470846_8xxfa3aax"
+    },
+    "ivr:+1-demo-1767539431968": {
+      "sessionId": "ivr_1767539431975_dw0198cp8",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539431968",
+      "startTime": "2026-01-04T15:10:31.975Z",
+      "lastActivity": "2026-01-04T15:10:59.587Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:10:31.976Z"
+        },
+        {
+          "role": "user",
+          "content": "what are city hall hours",
+          "timestamp": "2026-01-04T15:10:48.910Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday-Friday: 8:00 AM - 5:00 PM",
+          "timestamp": "2026-01-04T15:10:50.005Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 0 7 7 0 N N. I repeat, your code is: 0 7 7 0 N N. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:10:59.587Z"
+        }
+      ]
+    },
+    "web:sess_1767539482367_9iofoy68i": {
+      "sessionId": "web_1767539514037_sj4bf4m7x",
+      "channel": "web",
+      "userId": "sess_1767539482367_9iofoy68i",
+      "startTime": "2026-01-04T15:11:54.037Z",
+      "lastActivity": "2026-01-04T15:11:54.037Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:10:31.976Z"
+        },
+        {
+          "role": "user",
+          "content": "what are city hall hours",
+          "timestamp": "2026-01-04T15:10:48.910Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday-Friday: 8:00 AM - 5:00 PM",
+          "timestamp": "2026-01-04T15:10:50.005Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 0 7 7 0 N N. I repeat, your code is: 0 7 7 0 N N. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:10:59.587Z"
+        }
+      ],
+      "linkedSessionId": "ivr_1767539431975_dw0198cp8"
+    },
+    "ivr:+1-demo-1767539605826": {
+      "sessionId": "ivr_1767539605834_l6efhue88",
+      "channel": "ivr",
+      "userId": "+1-demo-1767539605826",
+      "startTime": "2026-01-04T15:13:25.834Z",
+      "lastActivity": "2026-01-04T15:13:55.820Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-04T15:13:25.836Z"
+        },
+        {
+          "role": "user",
+          "content": "What are City Hall hours?",
+          "timestamp": "2026-01-04T15:13:46.972Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday-Friday: 8:00am - 5:00pm",
+          "timestamp": "2026-01-04T15:13:47.883Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: G K C P I 0. I repeat, your code is: G K C P I 0. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-04T15:13:55.820Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588419210": {
+      "sessionId": "ivr_1767588419283_ishft4gfs",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588419210",
+      "startTime": "2026-01-05T04:46:59.283Z",
+      "lastActivity": "2026-01-05T04:46:59.295Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:46:59.295Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588431403": {
+      "sessionId": "ivr_1767588431411_scxue8wb4",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588431403",
+      "startTime": "2026-01-05T04:47:11.411Z",
+      "lastActivity": "2026-01-05T04:47:37.536Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:47:11.413Z"
+        },
+        {
+          "role": "user",
+          "content": "Hello! I want the building permit information.",
+          "timestamp": "2026-01-05T04:47:35.657Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key details about building permits in the City of Doral.\n\n**Building Permits Required For:**\n• Fences, patios, pergolas, driveways\n• Windows, doors, sheds, pools\n• Additions, renovations, roofing, HVAC\n\n**How to Apply:**\n1. Visit online portal\n2. Create account, apply for permit\n3. Upload documents, pay fees\n\n**Contact:**\n• Building Dept: (305) 593-6700\n• Email: building@cityofdoral.com\n• Location: 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-05T04:47:37.536Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588556326": {
+      "sessionId": "ivr_1767588556333_9kghs9vbb",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588556326",
+      "startTime": "2026-01-05T04:49:16.333Z",
+      "lastActivity": "2026-01-05T04:49:16.338Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:49:16.338Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588811163": {
+      "sessionId": "ivr_1767588811179_c1nlq07zw",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588811163",
+      "startTime": "2026-01-05T04:53:31.179Z",
+      "lastActivity": "2026-01-05T04:53:31.184Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:53:31.184Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588905472": {
+      "sessionId": "ivr_1767588905483_qw56bqdkw",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588905472",
+      "startTime": "2026-01-05T04:55:05.483Z",
+      "lastActivity": "2026-01-05T04:55:05.484Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:55:05.484Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588916903": {
+      "sessionId": "ivr_1767588916913_i8otg6qxl",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588916903",
+      "startTime": "2026-01-05T04:55:16.913Z",
+      "lastActivity": "2026-01-05T04:55:16.915Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:55:16.915Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588921613": {
+      "sessionId": "ivr_1767588921621_bpkxx97dx",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588921613",
+      "startTime": "2026-01-05T04:55:21.621Z",
+      "lastActivity": "2026-01-05T04:55:21.623Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:55:21.623Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767588988698": {
+      "sessionId": "ivr_1767588988719_6yz42a2bh",
+      "channel": "ivr",
+      "userId": "+1-demo-1767588988698",
+      "startTime": "2026-01-05T04:56:28.719Z",
+      "lastActivity": "2026-01-05T04:56:28.723Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T04:56:28.723Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767589791945": {
+      "sessionId": "ivr_1767589791956_tczhy3pn2",
+      "channel": "ivr",
+      "userId": "+1-demo-1767589791945",
+      "startTime": "2026-01-05T05:09:51.956Z",
+      "lastActivity": "2026-01-05T05:09:51.962Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:09:51.962Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767589920534": {
+      "sessionId": "ivr_1767589920542_3y9x9bgz8",
+      "channel": "ivr",
+      "userId": "+1-demo-1767589920534",
+      "startTime": "2026-01-05T05:12:00.542Z",
+      "lastActivity": "2026-01-05T05:12:00.544Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:12:00.544Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767590035952": {
+      "sessionId": "ivr_1767590035960_z28tsjc38",
+      "channel": "ivr",
+      "userId": "+1-demo-1767590035952",
+      "startTime": "2026-01-05T05:13:55.960Z",
+      "lastActivity": "2026-01-05T05:13:55.963Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:13:55.963Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767590083339": {
+      "sessionId": "ivr_1767590083358_u12r2tegc",
+      "channel": "ivr",
+      "userId": "+1-demo-1767590083339",
+      "startTime": "2026-01-05T05:14:43.358Z",
+      "lastActivity": "2026-01-05T05:14:43.361Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:14:43.361Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767590179379": {
+      "sessionId": "ivr_1767590179398_vc5o8yt1a",
+      "channel": "ivr",
+      "userId": "+1-demo-1767590179379",
+      "startTime": "2026-01-05T05:16:19.398Z",
+      "lastActivity": "2026-01-05T05:16:19.401Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:16:19.401Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767590773630": {
+      "sessionId": "ivr_1767590773690_khlujke7e",
+      "channel": "ivr",
+      "userId": "+1-demo-1767590773630",
+      "startTime": "2026-01-05T05:26:13.690Z",
+      "lastActivity": "2026-01-05T05:26:13.693Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:26:13.693Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767590997096": {
+      "sessionId": "ivr_1767590997172_8dche66ir",
+      "channel": "ivr",
+      "userId": "+1-demo-1767590997096",
+      "startTime": "2026-01-05T05:29:57.172Z",
+      "lastActivity": "2026-01-05T05:29:57.208Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:29:57.208Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591091785": {
+      "sessionId": "ivr_1767591091825_mebkxuprk",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591091785",
+      "startTime": "2026-01-05T05:31:31.825Z",
+      "lastActivity": "2026-01-05T05:31:31.836Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:31:31.836Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591125587": {
+      "sessionId": "ivr_1767591125640_qswogtuzl",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591125587",
+      "startTime": "2026-01-05T05:32:05.640Z",
+      "lastActivity": "2026-01-05T05:32:05.643Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:32:05.643Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591158224": {
+      "sessionId": "ivr_1767591158242_8wdxcbslu",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591158224",
+      "startTime": "2026-01-05T05:32:38.242Z",
+      "lastActivity": "2026-01-05T05:32:38.244Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral virtual assistant. You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-05T05:32:38.244Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591621616": {
+      "sessionId": "ivr_1767591621626_n2g9q3aoj",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591621616",
+      "startTime": "2026-01-05T05:40:21.626Z",
+      "lastActivity": "2026-01-05T05:40:21.630Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione 2. Pou Kreyòl Ayisyen, peze 3.",
+          "timestamp": "2026-01-05T05:40:21.630Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591666265": {
+      "sessionId": "ivr_1767591666276_dyhlw9p1m",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591666265",
+      "startTime": "2026-01-05T05:41:06.276Z",
+      "lastActivity": "2026-01-05T05:41:06.278Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione 2. Pou Kreyòl Ayisyen, peze 3.",
+          "timestamp": "2026-01-05T05:41:06.278Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591776170": {
+      "sessionId": "ivr_1767591776182_faujiw2hf",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591776170",
+      "startTime": "2026-01-05T05:42:56.182Z",
+      "lastActivity": "2026-01-05T05:42:56.185Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:42:56.185Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767591799283": {
+      "sessionId": "ivr_1767591799295_i9xl8b0om",
+      "channel": "ivr",
+      "userId": "+1-demo-1767591799283",
+      "startTime": "2026-01-05T05:43:19.295Z",
+      "lastActivity": "2026-01-05T05:43:19.297Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:43:19.297Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592410196": {
+      "sessionId": "ivr_1767592410213_d2brfftvz",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592410196",
+      "startTime": "2026-01-05T05:53:30.213Z",
+      "lastActivity": "2026-01-05T05:53:30.217Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:53:30.217Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592489512": {
+      "sessionId": "ivr_1767592489527_kz1rbjb7t",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592489512",
+      "startTime": "2026-01-05T05:54:49.527Z",
+      "lastActivity": "2026-01-05T05:54:49.530Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. ... Press 1, for English. ... Para español, presione el dos. ... Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:54:49.530Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592540438": {
+      "sessionId": "ivr_1767592540450_ue4qsjal4",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592540438",
+      "startTime": "2026-01-05T05:55:40.450Z",
+      "lastActivity": "2026-01-05T05:55:40.453Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. ... Press 1, for English. ... Para español, presione el dos. ... Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:55:40.453Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592713114": {
+      "sessionId": "ivr_1767592713125_dbwvx2s4p",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592713114",
+      "startTime": "2026-01-05T05:58:33.125Z",
+      "lastActivity": "2026-01-05T05:58:33.128Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Daw-rahl. ... Press 1, for English. ... Para español, presione el dos. ... Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:58:33.128Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592723643": {
+      "sessionId": "ivr_1767592723654_dn5b3shgf",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592723643",
+      "startTime": "2026-01-05T05:58:43.654Z",
+      "lastActivity": "2026-01-05T05:58:43.658Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Daw-rahl. ... Press 1, for English. ... Para español, presione el dos. ... Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T05:58:43.658Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592893172": {
+      "sessionId": "ivr_1767592893226_69otze29c",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592893172",
+      "startTime": "2026-01-05T06:01:33.226Z",
+      "lastActivity": "2026-01-05T06:01:33.228Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:01:33.228Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767592969666": {
+      "sessionId": "ivr_1767592969678_718uqfvsl",
+      "channel": "ivr",
+      "userId": "+1-demo-1767592969666",
+      "startTime": "2026-01-05T06:02:49.678Z",
+      "lastActivity": "2026-01-05T06:02:49.680Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:02:49.680Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593014004": {
+      "sessionId": "ivr_1767593014020_mvrwlawmf",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593014004",
+      "startTime": "2026-01-05T06:03:34.020Z",
+      "lastActivity": "2026-01-05T06:04:10.328Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:03:34.024Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: J V 8 O 4 0. I repeat, your code is: J V 8 O 4 0. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T06:04:10.328Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593076870": {
+      "sessionId": "ivr_1767593078232_x8fz7oxvz",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593076870",
+      "startTime": "2026-01-05T06:04:38.232Z",
+      "lastActivity": "2026-01-05T06:04:38.344Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:04:38.344Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593321210": {
+      "sessionId": "ivr_1767593321222_gmcgcuqyn",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593321210",
+      "startTime": "2026-01-05T06:08:41.222Z",
+      "lastActivity": "2026-01-05T06:08:41.224Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:08:41.224Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593449007": {
+      "sessionId": "ivr_1767593449017_5jg317syi",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593449007",
+      "startTime": "2026-01-05T06:10:49.017Z",
+      "lastActivity": "2026-01-05T06:10:49.019Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:10:49.019Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593486687": {
+      "sessionId": "ivr_1767593486700_w6ifrsfoj",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593486687",
+      "startTime": "2026-01-05T06:11:26.700Z",
+      "lastActivity": "2026-01-05T06:11:26.702Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:11:26.702Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593513730": {
+      "sessionId": "ivr_1767593516071_4ticvx97h",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593513730",
+      "startTime": "2026-01-05T06:11:56.071Z",
+      "lastActivity": "2026-01-05T06:11:56.600Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:11:56.600Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593518349": {
+      "sessionId": "ivr_1767593518583_fn21ur9wc",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593518349",
+      "startTime": "2026-01-05T06:11:58.583Z",
+      "lastActivity": "2026-01-05T06:11:58.913Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:11:58.913Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593543496": {
+      "sessionId": "ivr_1767593543511_8izfjbpi8",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593543496",
+      "startTime": "2026-01-05T06:12:23.511Z",
+      "lastActivity": "2026-01-05T06:13:14.235Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:12:23.518Z"
+        },
+        {
+          "role": "user",
+          "content": "i want to know about hurricane alerts",
+          "timestamp": "2026-01-05T06:13:14.235Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593720889": {
+      "sessionId": "ivr_1767593720897_mr8szosz8",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593720889",
+      "startTime": "2026-01-05T06:15:20.897Z",
+      "lastActivity": "2026-01-05T06:15:20.899Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:15:20.899Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767593783932": {
+      "sessionId": "ivr_1767593783939_mcvh9k5g2",
+      "channel": "ivr",
+      "userId": "+1-demo-1767593783932",
+      "startTime": "2026-01-05T06:16:23.939Z",
+      "lastActivity": "2026-01-05T06:16:23.943Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:16:23.943Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767594658908": {
+      "sessionId": "ivr_1767594659011_nojkp6qz6",
+      "channel": "ivr",
+      "userId": "+1-demo-1767594658908",
+      "startTime": "2026-01-05T06:30:59.011Z",
+      "lastActivity": "2026-01-05T06:30:59.019Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T06:30:59.019Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767596458366": {
+      "sessionId": "ivr_1767596458382_3d4po9jmb",
+      "channel": "ivr",
+      "userId": "+1-demo-1767596458366",
+      "startTime": "2026-01-05T07:00:58.382Z",
+      "lastActivity": "2026-01-05T07:00:58.384Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:00:58.384Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767596479651": {
+      "sessionId": "ivr_1767596479657_7iqkgjpyk",
+      "channel": "ivr",
+      "userId": "+1-demo-1767596479651",
+      "startTime": "2026-01-05T07:01:19.658Z",
+      "lastActivity": "2026-01-05T07:02:59.648Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:01:19.662Z"
+        },
+        {
+          "role": "user",
+          "content": "I want to report a pothole.",
+          "timestamp": "2026-01-05T07:01:49.748Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-05T07:01:55.131Z"
+        },
+        {
+          "role": "user",
+          "content": "The address is somewhere X Y Z in Doral. Just put a random address just for testing.",
+          "timestamp": "2026-01-05T07:02:14.531Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the response:\n\n\"The City of Doral is proud to invite you to one of the most anticipated evenings of the year – the Mayor's 2025 State of the City Address, taking place Thursday, October 23, 2025, from 6:30 to 10:00 p.m. at the elegant Donald J. Trump Grand Ballroom inside Trump National Doral.\n\nWhen: \n• Thursday, October 23, 2025\n• 6:30 PM – 10:00 PM\n\nWhere:\n• Trump National Doral\n• Donald J. Trump Grand Ballroom\n• 4400 NW 87th Ave, Doral, FL 33178\"",
+          "timestamp": "2026-01-05T07:02:59.648Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767596663126": {
+      "sessionId": "ivr_1767596663136_5k8mt3nto",
+      "channel": "ivr",
+      "userId": "+1-demo-1767596663126",
+      "startTime": "2026-01-05T07:04:23.136Z",
+      "lastActivity": "2026-01-05T07:04:23.140Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:04:23.140Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767596810185": {
+      "sessionId": "ivr_1767596810728_55zvhofh5",
+      "channel": "ivr",
+      "userId": "+1-demo-1767596810185",
+      "startTime": "2026-01-05T07:06:50.728Z",
+      "lastActivity": "2026-01-05T07:08:20.944Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:06:50.828Z"
+        },
+        {
+          "role": "user",
+          "content": "I want to report a pothole.",
+          "timestamp": "2026-01-05T07:07:29.253Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-05T07:07:34.676Z"
+        },
+        {
+          "role": "user",
+          "content": "What are City Hall ours?",
+          "timestamp": "2026-01-05T07:08:07.439Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall Hours:\n• Monday-Friday: 8:00 AM - 5:00 PM\n• Closed on Weekends and Holidays",
+          "timestamp": "2026-01-05T07:08:16.100Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: M Z W S 3 C. I repeat, your code is: M Z W S 3 C. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T07:08:20.944Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767597410679": {
+      "sessionId": "ivr_1767597410690_3ci3cmggo",
+      "channel": "ivr",
+      "userId": "+1-demo-1767597410679",
+      "startTime": "2026-01-05T07:16:50.690Z",
+      "lastActivity": "2026-01-05T07:18:28.669Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:16:50.695Z"
+        },
+        {
+          "role": "user",
+          "content": "tell me about park services",
+          "timestamp": "2026-01-05T07:17:26.736Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Doral Parks and Facilities:**\n\n• 11 parks with diverse amenities\n• Sports fields, courts, playgrounds\n• Picnic pavilions, trails, dog parks\n• Aquatic center, cultural arts center\n• Rentals for events and celebrations\n• Variety of programs for all ages\n\n**Park Amenities and Features:**\n• Sports: fields, courts, batting cages\n• Nature: trails, greenspaces, dog areas\n• Family: playgrounds, picnic areas, pavilions\n• Community: cultural arts, aquatic center, rentals\n\n**Park Programs and Activities:**\n• Youth sports leagues and lessons\n• Swim lessons and open swim\n• Cultural and enrichment programs\n• Camps during school breaks\n• Fitness classes and facilities\n• Events and celebrations",
+          "timestamp": "2026-01-05T07:18:28.669Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767598264840": {
+      "sessionId": "ivr_1767598264849_14upymxum",
+      "channel": "ivr",
+      "userId": "+1-demo-1767598264840",
+      "startTime": "2026-01-05T07:31:04.849Z",
+      "lastActivity": "2026-01-05T07:33:34.631Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:31:04.852Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T07:32:43.926Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a building permit in the City of Doral:\n\n**Online Portal:**\n• Visit https://energovcss.cityofdoral.com\n• Create account or log in\n• Select 'Apply for Permit'\n\n**Required Documents:**\n• Completed permit application\n• Site plan\n• Property survey\n• DERM approval (if needed)\n\n**Fees:**\n• Approximately $75-$150\n• $25 processing fee\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-05T07:33:28.279Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 7 X V I F I. I repeat, your code is: 7 X V I F I. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T07:33:34.631Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767598579095": {
+      "sessionId": "ivr_1767598579104_xwqaafakd",
+      "channel": "ivr",
+      "userId": "+1-demo-1767598579095",
+      "startTime": "2026-01-05T07:36:19.104Z",
+      "lastActivity": "2026-01-05T07:36:19.108Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T07:36:19.108Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767603108580": {
+      "sessionId": "ivr_1767603108640_krtogbwat",
+      "channel": "ivr",
+      "userId": "+1-demo-1767603108580",
+      "startTime": "2026-01-05T08:51:48.640Z",
+      "lastActivity": "2026-01-05T08:53:19.084Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T08:51:48.646Z"
+        },
+        {
+          "role": "user",
+          "content": "How can I apply for a building permit?",
+          "timestamp": "2026-01-05T08:52:35.269Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key steps to apply for a building permit in the City of Doral:\n\n**How to Apply:**\n• Visit https://energovcss.cityofdoral.com\n• Create account or log in\n• Select 'Apply for Permit'\n• Upload required documents\n• Pay fees online\n• Schedule inspections\n\n**Contact:**\n• Building Department: (305) 593-6700\n• Email: building@cityofdoral.com",
+          "timestamp": "2026-01-05T08:53:19.084Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767603545282": {
+      "sessionId": "ivr_1767603545290_zltl3iew2",
+      "channel": "ivr",
+      "userId": "+1-demo-1767603545282",
+      "startTime": "2026-01-05T08:59:05.290Z",
+      "lastActivity": "2026-01-05T08:59:05.293Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T08:59:05.293Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767603581103": {
+      "sessionId": "ivr_1767603581124_1ubwol66w",
+      "channel": "ivr",
+      "userId": "+1-demo-1767603581103",
+      "startTime": "2026-01-05T08:59:41.124Z",
+      "lastActivity": "2026-01-05T09:00:23.878Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T08:59:41.127Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:00:23.878Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767603755720": {
+      "sessionId": "ivr_1767603755728_l5dg7a1mq",
+      "channel": "ivr",
+      "userId": "+1-demo-1767603755720",
+      "startTime": "2026-01-05T09:02:35.728Z",
+      "lastActivity": "2026-01-05T09:03:07.700Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T09:02:35.730Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:03:07.700Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767603823551": {
+      "sessionId": "ivr_1767603823558_030guk351",
+      "channel": "ivr",
+      "userId": "+1-demo-1767603823551",
+      "startTime": "2026-01-05T09:03:43.558Z",
+      "lastActivity": "2026-01-05T09:05:20.180Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T09:03:43.560Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:04:19.467Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the steps to apply for a building permit in the City of Doral:\n\n**Online Application:**\n• Visit Citizen Self-Service Portal\n• Create account or log in\n• Select 'Apply for Permit'\n\n**Required Documents:**\n• Completed permit application\n• Site plan, survey, DERM approval\n\n**Fees:**\n• Fence permit: $75-$150\n• Processing fee: $25\n\n**Contact:**\n• Building Department: (305) 593-6700\n• Email: building@cityofdoral.com\n\nPress 2 to get a transfer code for more details on the website.",
+          "timestamp": "2026-01-05T09:05:07.317Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 2 W P G V 5. I repeat, your code is: 2 W P G V 5. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T09:05:20.180Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767604255365": {
+      "sessionId": "ivr_1767604255372_laubm310o",
+      "channel": "ivr",
+      "userId": "+1-demo-1767604255365",
+      "startTime": "2026-01-05T09:10:55.372Z",
+      "lastActivity": "2026-01-05T09:12:00.647Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T09:10:55.375Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:11:27.892Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a building permit in Doral.\n\n**Online Application:**\n• Visit Citizen Self-Service Portal\n• Create account or log in\n• Select 'Apply for Permit'\n\n**Required Documents:**\n• Completed application\n• Site plan\n• Property survey\n• DERM approval (if needed)\n\n**Fees:**\n• Permit: $75-$150 \n• Processing: $25\n\nPress 2 to get a website transfer code for more details.",
+          "timestamp": "2026-01-05T09:12:00.647Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767606521138": {
+      "sessionId": "ivr_1767606521147_iuoo2kxoe",
+      "channel": "ivr",
+      "userId": "+1-demo-1767606521138",
+      "startTime": "2026-01-05T09:48:41.147Z",
+      "lastActivity": "2026-01-05T09:50:18.891Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T09:48:41.151Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:49:31.276Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a building permit.\n\n**Online Application:**\n• Visit Citizen Self-Service Portal\n• Create account or log in\n• Select 'Apply for Permit'\n\n**Required Documents:**\n• Completed permit application\n• Site plan, survey, DERM approval\n\n**Fees:**\n• Permit: $75-$150\n• Processing: $25\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-05T09:50:11.666Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 9 J G U X C. I repeat, your code is: 9 J G U X C. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T09:50:18.891Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767607017408": {
+      "sessionId": "ivr_1767607017489_jl0aswlx3",
+      "channel": "ivr",
+      "userId": "+1-demo-1767607017408",
+      "startTime": "2026-01-05T09:56:57.489Z",
+      "lastActivity": "2026-01-05T09:59:03.738Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T09:56:57.505Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T09:58:12.269Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a building permit.\n\n**Online Portal:**\n• Visit cityofdoral.com/building\n• Create account, log in\n• Select 'Apply for Permit'\n\n**Required Documents:**\n• Permit application\n• Site plan\n• Property survey\n• DERM approval\n\n**Permit Fees:**\n• Fence: $75-$150\n• Processing: $25\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-05T09:58:55.486Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: V A Y 2 9 C. I repeat, your code is: V A Y 2 9 C. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T09:59:03.738Z"
+        }
+      ]
+    },
+    "web:sess_1767582838767_de78dtyhb": {
+      "sessionId": "web_1767625548389_pppes1ash",
+      "channel": "web",
+      "userId": "sess_1767582838767_de78dtyhb",
+      "startTime": "2026-01-05T15:05:48.389Z",
+      "lastActivity": "2026-01-05T15:05:48.389Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T15:03:43.215Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T15:04:36.763Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T15:04:56.657Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: B I R 7 F E. I repeat, your code is: B I R 7 F E. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T15:05:19.791Z"
+        }
+      ],
+      "linkedSessionId": "ivr_1767625423208_d5hhgqyhq"
+    },
+    "ivr:+1-demo-1767607470835": {
+      "sessionId": "ivr_1767607470846_8xxfa3aax",
+      "channel": "ivr",
+      "userId": "+1-demo-1767607470835",
+      "startTime": "2026-01-05T10:04:30.846Z",
+      "lastActivity": "2026-01-05T10:05:05.650Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T10:04:30.849Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-05T10:04:47.624Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall hours:\n• Monday - Friday, 8 AM - 5 PM\n• Closed on federal holidays",
+          "timestamp": "2026-01-05T10:04:55.505Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: I 7 6 B A 6. I repeat, your code is: I 7 6 B A 6. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T10:05:05.650Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767613030810": {
+      "sessionId": "ivr_1767613030821_fmpnt0lq3",
+      "channel": "ivr",
+      "userId": "+1-demo-1767613030810",
+      "startTime": "2026-01-05T11:37:10.821Z",
+      "lastActivity": "2026-01-05T11:38:02.295Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T11:37:10.823Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T11:37:43.445Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T11:38:02.295Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767613101744": {
+      "sessionId": "ivr_1767613101757_ovad2zxsu",
+      "channel": "ivr",
+      "userId": "+1-demo-1767613101744",
+      "startTime": "2026-01-05T11:38:21.757Z",
+      "lastActivity": "2026-01-05T11:38:21.761Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T11:38:21.761Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767613147958": {
+      "sessionId": "ivr_1767613147966_gb5kh0egv",
+      "channel": "ivr",
+      "userId": "+1-demo-1767613147958",
+      "startTime": "2026-01-05T11:39:07.966Z",
+      "lastActivity": "2026-01-05T11:40:09.297Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T11:39:07.969Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T11:39:40.010Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T11:39:59.807Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: E K M J 1 9. I repeat, your code is: E K M J 1 9. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T11:40:09.297Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767613386561": {
+      "sessionId": "ivr_1767613386571_z8a8y3jsd",
+      "channel": "ivr",
+      "userId": "+1-demo-1767613386561",
+      "startTime": "2026-01-05T11:43:06.571Z",
+      "lastActivity": "2026-01-05T11:43:06.576Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T11:43:06.576Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767615616780": {
+      "sessionId": "ivr_1767615616789_i4g5hqyck",
+      "channel": "ivr",
+      "userId": "+1-demo-1767615616780",
+      "startTime": "2026-01-05T12:20:16.789Z",
+      "lastActivity": "2026-01-05T12:21:17.649Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T12:20:16.794Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T12:20:48.664Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T12:21:10.947Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: Z S 6 I L F. I repeat, your code is: Z S 6 I L F. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T12:21:17.649Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767619979210": {
+      "sessionId": "ivr_1767619979221_4b8iq68mp",
+      "channel": "ivr",
+      "userId": "+1-demo-1767619979210",
+      "startTime": "2026-01-05T13:32:59.221Z",
+      "lastActivity": "2026-01-05T13:34:44.121Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T13:32:59.223Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T13:33:46.216Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T13:34:05.823Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 1 U R Q V Z. I repeat, your code is: 1 U R Q V Z. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T13:34:44.121Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767620358212": {
+      "sessionId": "ivr_1767620358221_gp5iqpi13",
+      "channel": "ivr",
+      "userId": "+1-demo-1767620358212",
+      "startTime": "2026-01-05T13:39:18.221Z",
+      "lastActivity": "2026-01-05T13:40:33.649Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T13:39:18.225Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T13:40:03.358Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T13:40:23.049Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: 2 N Y 3 H X. I repeat, your code is: 2 N Y 3 H X. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T13:40:33.649Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767621683330": {
+      "sessionId": "ivr_1767621683339_vb2bq9ddn",
+      "channel": "ivr",
+      "userId": "+1-demo-1767621683330",
+      "startTime": "2026-01-05T14:01:23.339Z",
+      "lastActivity": "2026-01-05T14:01:23.344Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T14:01:23.344Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767622246952": {
+      "sessionId": "ivr_1767622246961_ryjf8hh2t",
+      "channel": "ivr",
+      "userId": "+1-demo-1767622246952",
+      "startTime": "2026-01-05T14:10:46.961Z",
+      "lastActivity": "2026-01-05T14:10:46.964Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T14:10:46.964Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767622313551": {
+      "sessionId": "ivr_1767622313558_yjbl6ni8p",
+      "channel": "ivr",
+      "userId": "+1-demo-1767622313551",
+      "startTime": "2026-01-05T14:11:53.558Z",
+      "lastActivity": "2026-01-05T14:11:53.561Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T14:11:53.561Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767623204037": {
+      "sessionId": "ivr_1767623204045_0vhc24rha",
+      "channel": "ivr",
+      "userId": "+1-demo-1767623204037",
+      "startTime": "2026-01-05T14:26:44.045Z",
+      "lastActivity": "2026-01-05T14:26:44.048Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T14:26:44.048Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767625423197": {
+      "sessionId": "ivr_1767625423208_d5hhgqyhq",
+      "channel": "ivr",
+      "userId": "+1-demo-1767625423197",
+      "startTime": "2026-01-05T15:03:43.208Z",
+      "lastActivity": "2026-01-05T15:05:19.791Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-05T15:03:43.215Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-05T15:04:36.763Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-05T15:04:56.657Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I will give you a transfer code to continue this conversation on our website. Your code is: B I R 7 F E. I repeat, your code is: B I R 7 F E. Go to the City of Doral website, open the chat assistant, click the key icon, and enter this code. Your conversation will continue right where you left off.",
+          "timestamp": "2026-01-05T15:05:19.791Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767679048641": {
+      "sessionId": "ivr_1767679048776_a01lhlkm8",
+      "channel": "ivr",
+      "userId": "+1-demo-1767679048641",
+      "startTime": "2026-01-06T05:57:28.776Z",
+      "lastActivity": "2026-01-06T05:58:17.757Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T05:57:28.779Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T05:58:09.954Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on federal holidays",
+          "timestamp": "2026-01-06T05:58:17.757Z"
+        }
+      ]
+    },
+    "web:sess_1767679136775_vqd8cp98z": {
+      "sessionId": "web_1767680554672_uiqnodqun",
+      "channel": "web",
+      "userId": "sess_1767679136775_vqd8cp98z",
+      "startTime": "2026-01-06T06:22:34.672Z",
+      "lastActivity": "2026-01-06T06:22:34.672Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"What parks are in Doral?\"",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the main parks in Doral:\n\n**Doral Central Park:**\n• Largest park, 78 acres\n• Wellness campus, amphitheater\n• Picnic pavilions, playgrounds\n\n**Doral Glades Park:**\n• 25 acres, nature focus\n• Sports fields, walking trails\n\n**Doral Legacy Park:** \n• 18+ acres, sports & arts\n• Indoor sports, nature areas\n\n**Trails & Tails Park:**\n• 8 acres, dog-friendly\n• Off-leash areas, walking trails\n\nFor more details, visit cityofdoral.com/parks.",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+          "timestamp": "2026-01-06T06:22:22.091Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767679199895": {
+      "sessionId": "ivr_1767679199930_3hozgfjh9",
+      "channel": "ivr",
+      "userId": "+1-demo-1767679199895",
+      "startTime": "2026-01-06T05:59:59.930Z",
+      "lastActivity": "2026-01-06T06:01:01.685Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T05:59:59.985Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks are in Doral?",
+          "timestamp": "2026-01-06T06:00:27.048Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The City of Doral has 11 parks:\n\n**Next Meeting:**\n• July 12, 6:30 PM, City Hall\n\n**Agenda Highlights:**\n• FY2023 Budget Presentation\n• New Dog Park Proposal\n• Grant Funding for Trails\n• Ribbon Cutting for Doral Central Park\n• Approval of Wastewater Plant Expansion\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T06:01:01.685Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767679780404": {
+      "sessionId": "ivr_1767679780502_5shdgaqn9",
+      "channel": "ivr",
+      "userId": "+1-demo-1767679780404",
+      "startTime": "2026-01-06T06:09:40.502Z",
+      "lastActivity": "2026-01-06T06:10:03.989Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T06:09:40.532Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T06:09:56.457Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on holidays",
+          "timestamp": "2026-01-06T06:10:03.989Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767679980910": {
+      "sessionId": "ivr_1767679980919_4tg3l9x17",
+      "channel": "ivr",
+      "userId": "+1-demo-1767679980910",
+      "startTime": "2026-01-06T06:13:00.919Z",
+      "lastActivity": "2026-01-06T06:13:00.922Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T06:13:00.922Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767680447754": {
+      "sessionId": "ivr_1767680447761_1hdwlx90m",
+      "channel": "ivr",
+      "userId": "+1-demo-1767680447754",
+      "startTime": "2026-01-06T06:20:47.761Z",
+      "lastActivity": "2026-01-06T06:21:49.632Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T06:20:47.764Z"
+        },
+        {
+          "role": "user",
+          "content": "What parks are in Doral?",
+          "timestamp": "2026-01-06T06:21:08.222Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the main parks in Doral:\n\n**Doral Central Park:**\n• Largest park, 78 acres\n• Wellness campus, amphitheater\n• Picnic pavilions, playgrounds\n\n**Doral Glades Park:**\n• 25 acres, nature focus\n• Sports fields, walking trails\n\n**Doral Legacy Park:** \n• 18+ acres, sports & arts\n• Indoor sports, nature areas\n\n**Trails & Tails Park:**\n• 8 acres, dog-friendly\n• Off-leash areas, walking trails\n\nFor more details, visit cityofdoral.com/parks.",
+          "timestamp": "2026-01-06T06:21:49.632Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767682882667": {
+      "sessionId": "ivr_1767682882675_5csamzh4r",
+      "channel": "ivr",
+      "userId": "+1-demo-1767682882667",
+      "startTime": "2026-01-06T07:01:22.675Z",
+      "lastActivity": "2026-01-06T07:01:22.679Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:01:22.679Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767682905994": {
+      "sessionId": "ivr_1767682906000_saawqf11n",
+      "channel": "ivr",
+      "userId": "+1-demo-1767682905994",
+      "startTime": "2026-01-06T07:01:46.001Z",
+      "lastActivity": "2026-01-06T07:02:09.470Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:01:46.004Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki kote pak yo ye?",
+          "timestamp": "2026-01-06T07:02:09.470Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767682979637": {
+      "sessionId": "ivr_1767682979651_s73cw4w4i",
+      "channel": "ivr",
+      "userId": "+1-demo-1767682979637",
+      "startTime": "2026-01-06T07:02:59.651Z",
+      "lastActivity": "2026-01-06T07:02:59.655Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:02:59.655Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767684044275": {
+      "sessionId": "ivr_1767684044286_d5pvd4c1v",
+      "channel": "ivr",
+      "userId": "+1-demo-1767684044275",
+      "startTime": "2026-01-06T07:20:44.286Z",
+      "lastActivity": "2026-01-06T07:21:10.247Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:20:44.291Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:21:01.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "\"City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on holidays\"",
+          "timestamp": "2026-01-06T07:21:10.247Z"
+        }
+      ]
+    },
+    "web:sess_1767683786731_mtfnyory5": {
+      "sessionId": "web_1767684091408_quiky775s",
+      "channel": "web",
+      "userId": "sess_1767683786731_mtfnyory5",
+      "startTime": "2026-01-06T07:21:31.408Z",
+      "lastActivity": "2026-01-06T07:21:31.408Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"What are the city hall hours?\"",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        },
+        {
+          "role": "assistant",
+          "content": "\"City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on holidays\"",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+          "timestamp": "2026-01-06T07:21:22.300Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767685335001": {
+      "sessionId": "ivr_1767685335030_3xr4qq4fo",
+      "channel": "ivr",
+      "userId": "+1-demo-1767685335001",
+      "startTime": "2026-01-06T07:42:15.030Z",
+      "lastActivity": "2026-01-06T07:43:22.744Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:42:15.047Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:42:36.449Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on federal holidays",
+          "timestamp": "2026-01-06T07:42:46.120Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-06T07:42:57.379Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the options to pay your water bill:\n\n**Payment Options:**\n• Online at miamidade.county-taxes.com\n• By phone: (305) 270-4916\n• In person at Tax Collector's Office\n\nContact the Tax Collector at (305) 270-4916 if you have any questions.",
+          "timestamp": "2026-01-06T07:43:22.744Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767685436291": {
+      "sessionId": "ivr_1767685436310_aafnscuv1",
+      "channel": "ivr",
+      "userId": "+1-demo-1767685436291",
+      "startTime": "2026-01-06T07:43:56.310Z",
+      "lastActivity": "2026-01-06T07:44:21.574Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:43:56.318Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cuáles son los horarios del ayuntamiento?",
+          "timestamp": "2026-01-06T07:44:17.143Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Puedo ayudarte a agendar una cita. Por favor selecciona un servicio:",
+          "timestamp": "2026-01-06T07:44:21.574Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767685488586": {
+      "sessionId": "ivr_1767685488601_zvivo4frd",
+      "channel": "ivr",
+      "userId": "+1-demo-1767685488586",
+      "startTime": "2026-01-06T07:44:48.601Z",
+      "lastActivity": "2026-01-06T07:45:30.512Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:44:48.606Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè mairie a ouvri?",
+          "timestamp": "2026-01-06T07:45:09.386Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Mairie la ouvri lendi jiska vandredi.\n\n**Orè:**\n• 8 è nan maten jiska 5 è diswa\n• Fèmen jou ferye federal yo\n\n**Kontakte:**\n• (305) 593-6725\n• 8401 NW 53rd Terrace, Doral, FL",
+          "timestamp": "2026-01-06T07:45:30.512Z"
+        }
+      ]
+    },
+    "web:sess_1767685149036_x4k1gjjhs": {
+      "sessionId": "web_1767685559044_b7wmrgbs9",
+      "channel": "web",
+      "userId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:45:59.044Z",
+      "lastActivity": "2026-01-06T07:45:59.044Z",
+      "language": "ht",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 3",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Ou ka poze m kesyon sou sèvis vil la, pèmi, pak, ak plis ankò. Peze 1 nenpòt ki lè pou pale ak yon reprezantan. Peze 2 pou jwenn yon kòd pou kontinye konvèsasyon sa a sou sit entènèt nou an. Kijan mwen ka ede w jodi a?",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"Ki lè mairie a ouvri?\"",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Mairie la ouvri lendi jiska vandredi.\n\n**Orè:**\n• 8 è nan maten jiska 5 è diswa\n• Fèmen jou ferye federal yo\n\n**Kontakte:**\n• (305) 593-6725\n• 8401 NW 53rd Terrace, Doral, FL",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Peze 2 pou jwenn yon kòd epi kontinye sou sit entènèt nou an pou plis detay. Oswa poze yon lòt kesyon.",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767687484563": {
+      "sessionId": "ivr_1767687484571_m28gen4om",
+      "channel": "ivr",
+      "userId": "+1-demo-1767687484563",
+      "startTime": "2026-01-06T08:18:04.571Z",
+      "lastActivity": "2026-01-06T08:20:14.407Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T08:18:04.574Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit?",
+          "timestamp": "2026-01-06T08:18:25.538Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key fence permit requirements in Doral:\n\n**Requirements:**\n• Max 6ft rear, 4ft front\n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application \n3. Pay required fees\n\n**Contact:**\n• Building Dept: (305) 593-6700\n• Apply online: energovcss.cityofdoral.com",
+          "timestamp": "2026-01-06T08:18:57.589Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I file a non-emergency vandalism report?",
+          "timestamp": "2026-01-06T08:19:20.790Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to file a non-emergency vandalism report:\n\n**Quick Options:**\n\n• Report online via Doral 311 \n• Call police non-emergency: (305) 593-6699\n• Visit police station 24/7\n\n**Information Needed:**\n• Your contact details\n• Incident location and time\n• Description of damage\n• Photos if available\n• Witness info (if any)\n\n**Next Steps:**\n• You'll get a case number\n• Report assigned to officer\n• Request copy of report later\n\nPlease let me know if you need any other assistance!",
+          "timestamp": "2026-01-06T08:20:00.254Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available and how do I register my child?",
+          "timestamp": "2026-01-06T08:20:14.407Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767687656065": {
+      "sessionId": "ivr_1767687656072_znze7o6no",
+      "channel": "ivr",
+      "userId": "+1-demo-1767687656065",
+      "startTime": "2026-01-06T08:20:56.072Z",
+      "lastActivity": "2026-01-06T08:23:53.075Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T08:20:56.076Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo puedo reportar un bache cerca de mi vecindario?",
+          "timestamp": "2026-01-06T08:21:18.845Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí le explico cómo reportar un bache en su vecindario:\n\n**Reportar bache:**\n• Llamar al (305) 593-6699\n• Proporcionar ubicación exacta\n• Descripción detallada del bache\n• Servicio atendido durante horario hábil\n\n**Contactos adicionales:**\n• City Hall: (305) 593-6725\n• Emergencias: 911\n\nEstaremos contentos de asistirle para abordar y reparar el bache reportado.",
+          "timestamp": "2026-01-06T08:21:55.180Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cuándo debo renovar mi licencia de negocio y puedo pagar en línea?",
+          "timestamp": "2026-01-06T08:22:10.859Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre la renovación de licencias de negocio en Doral:\n\n**Renovación de Licencias:**\n• Fecha límite: 31 de diciembre\n• Pago en línea disponible\n• Requerido cada año\n\n**Cómo Renovar:**\n• Visitar cityofdoral.com/business\n• Completar formulario\n• Pagar en línea o en persona\n\nPóngase en contacto con el Departamento de Desarrollo Económico al (305) 593-6680 si tiene alguna otra pregunta.",
+          "timestamp": "2026-01-06T08:22:49.319Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cuándo es la próxima reunión del Concejo Municipal y dónde puedo encontrar la agenda?",
+          "timestamp": "2026-01-06T08:23:09.770Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre las próximas reuniones del Concejo Municipal:\n\n**Próxima Reunión del Concejo:**\n• 1er y 3er Miércoles a las 6 PM\n• City Hall, 8401 NW 53rd Terrace\n\n**Agenda:**\n• Publicada una semana antes\n• Disponible en sitio web de la Ciudad\n• www.cityofdoral.com/agendas-and-minutes\n\nSi necesita más detalles, puede comunicarse con la Oficina del Secretario de la Ciudad al (305) 593-6730.",
+          "timestamp": "2026-01-06T08:23:53.075Z"
+        }
+      ]
+    },
+    "web:sess_1767687222849_vcg1cvrlj": {
+      "sessionId": "web_1767687856240_2drb8r5du",
+      "channel": "web",
+      "userId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:24:16.240Z",
+      "lastActivity": "2026-01-06T08:24:16.240Z",
+      "language": "es",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 2",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Puede hacerme preguntas sobre servicios de la ciudad, permisos, parques y más. Presione 1 en cualquier momento para hablar con un representante. Presione 2 para obtener un código para continuar esta conversación en nuestro sitio web. ¿En qué puedo ayudarle hoy?",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"¿Cómo puedo reportar un bache cerca de mi vecindario?\"",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí le explico cómo reportar un bache en su vecindario:\n\n**Reportar bache:**\n• Llamar al (305) 593-6699\n• Proporcionar ubicación exacta\n• Descripción detallada del bache\n• Servicio atendido durante horario hábil\n\n**Contactos adicionales:**\n• City Hall: (305) 593-6725\n• Emergencias: 911\n\nEstaremos contentos de asistirle para abordar y reparar el bache reportado.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"¿Cuándo debo renovar mi licencia de negocio y puedo pagar en línea?\"",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre la renovación de licencias de negocio en Doral:\n\n**Renovación de Licencias:**\n• Fecha límite: 31 de diciembre\n• Pago en línea disponible\n• Requerido cada año\n\n**Cómo Renovar:**\n• Visitar cityofdoral.com/business\n• Completar formulario\n• Pagar en línea o en persona\n\nPóngase en contacto con el Departamento de Desarrollo Económico al (305) 593-6680 si tiene alguna otra pregunta.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"¿Cuándo es la próxima reunión del Concejo Municipal y dónde puedo encontrar la agenda?\"",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre las próximas reuniones del Concejo Municipal:\n\n**Próxima Reunión del Concejo:**\n• 1er y 3er Miércoles a las 6 PM\n• City Hall, 8401 NW 53rd Terrace\n\n**Agenda:**\n• Publicada una semana antes\n• Disponible en sitio web de la Ciudad\n• www.cityofdoral.com/agendas-and-minutes\n\nSi necesita más detalles, puede comunicarse con la Oficina del Secretario de la Ciudad al (305) 593-6730.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Presione 2 para obtener un código y continuar en nuestro sitio web para más detalles. O haga otra pregunta.",
+          "timestamp": "2026-01-06T08:24:05.233Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767691570875": {
+      "sessionId": "ivr_1767691570980_t2u1sr36v",
+      "channel": "ivr",
+      "userId": "+1-demo-1767691570875",
+      "startTime": "2026-01-06T09:26:10.980Z",
+      "lastActivity": "2026-01-06T09:27:05.921Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T09:26:11.004Z"
+        },
+        {
+          "role": "user",
+          "content": "When is the next city council meeting?",
+          "timestamp": "2026-01-06T09:26:39.066Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:27:05.921Z"
+        }
+      ]
+    },
+    "web:sess_1767691646241_drvhm9ulu": {
+      "sessionId": "web_1767691646863_uq9nluvi9",
+      "channel": "web",
+      "userId": "sess_1767691646241_drvhm9ulu",
+      "startTime": "2026-01-06T09:27:26.863Z",
+      "lastActivity": "2026-01-06T09:27:26.863Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"When is the next city council meeting?\"",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+          "timestamp": "2026-01-06T09:27:15.820Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1767709281815": {
+      "sessionId": "ivr_1767709281889_ykrv9vem7",
+      "channel": "ivr",
+      "userId": "+1-demo-1767709281815",
+      "startTime": "2026-01-06T14:21:21.889Z",
+      "lastActivity": "2026-01-06T14:22:47.994Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T14:21:21.893Z"
+        },
+        {
+          "role": "user",
+          "content": "parks,",
+          "timestamp": "2026-01-06T14:21:55.159Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Youth Programs:**\n• Sports leagues: basketball, soccer, baseball\n• Swim lessons at Doral Aquatic Center\n• Enrichment: coding, science, arts, karate\n\n**Registration:**\n• Online at cityofdoral.com/parks\n• In-person at parks & rec locations \n• Proof of residency required\n\n**Resident Discount:**\n• Doral residents receive discounted rates\n• Proof of residency needed\n\n**Contact:**\n• Parks & Rec: (305) 593-6600\n• Email: doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T14:22:47.994Z"
+        }
+      ]
+    },
+    "web:sess_1767709394939_grqvuxtd5": {
+      "sessionId": "web_1767709395556_oph59jle6",
+      "channel": "web",
+      "userId": "sess_1767709394939_grqvuxtd5",
+      "startTime": "2026-01-06T14:23:15.556Z",
+      "lastActivity": "2026-01-06T14:23:15.556Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about city services, permits, parks, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"parks,\"",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Youth Programs:**\n• Sports leagues: basketball, soccer, baseball\n• Swim lessons at Doral Aquatic Center\n• Enrichment: coding, science, arts, karate\n\n**Registration:**\n• Online at cityofdoral.com/parks\n• In-person at parks & rec locations \n• Proof of residency required\n\n**Resident Discount:**\n• Doral residents receive discounted rates\n• Proof of residency needed\n\n**Contact:**\n• Parks & Rec: (305) 593-6600\n• Email: doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Press 2 to get a code and continue on our website for more details. Or ask another question.",
+          "timestamp": "2026-01-06T14:22:50.733Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1768826259357": {
+      "sessionId": "ivr_1768826260618_knt104kjl",
+      "channel": "ivr",
+      "userId": "+1-demo-1768826259357",
+      "startTime": "2026-01-19T12:37:40.618Z",
+      "lastActivity": "2026-01-19T12:37:40.631Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-19T12:37:40.631Z"
+        }
+      ]
+    },
+    "ivr: 15551234567": {
+      "sessionId": "ivr_1768826378151_iwyj6xshl",
+      "channel": "ivr",
+      "userId": " 15551234567",
+      "startTime": "2026-01-19T12:39:38.151Z",
+      "lastActivity": "2026-01-19T12:39:40.427Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are your hours",
+          "timestamp": "2026-01-19T12:39:38.166Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Hours:**\n• Monday-Thursday: 10am - 7pm\n• Friday-Saturday: 10am - 12am\n• Sunday: 12pm - 7pm",
+          "timestamp": "2026-01-19T12:39:40.427Z"
+        }
+      ]
+    },
+    "web:sess_1768826407308_ylhka75eh": {
+      "sessionId": "web_1768826475378_wz8p2k2fb",
+      "channel": "web",
+      "userId": "sess_1768826407308_ylhka75eh",
+      "startTime": "2026-01-19T12:41:15.378Z",
+      "lastActivity": "2026-01-19T12:41:15.378Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are your hours",
+          "timestamp": "2026-01-19T12:39:38.166Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Hours:**\n• Monday-Thursday: 10am - 7pm\n• Friday-Saturday: 10am - 12am\n• Sunday: 12pm - 7pm",
+          "timestamp": "2026-01-19T12:39:40.427Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1768826505096": {
+      "sessionId": "ivr_1768826505397_qbwmhow31",
+      "channel": "ivr",
+      "userId": "+1-demo-1768826505096",
+      "startTime": "2026-01-19T12:41:45.397Z",
+      "lastActivity": "2026-01-19T12:43:03.390Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to the City of Doral. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-19T12:41:45.409Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-19T12:42:30.569Z"
+        },
+        {
+          "role": "assistant",
+          "content": "\"Here's how to pay your water bill:\n\n**Payment Options:**\n• Online: miamidade.county-taxes.com\n• Phone: (305) 270-4916 \n• In Person: Tax Collector's Office\n\n**Contact:**\n• Tax Collector: (305) 270-4916\"",
+          "timestamp": "2026-01-19T12:43:03.390Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1768830400185": {
+      "sessionId": "ivr_1768830400199_bbrhh1r4c",
+      "channel": "ivr",
+      "userId": "+1-demo-1768830400185",
+      "startTime": "2026-01-19T13:46:40.199Z",
+      "lastActivity": "2026-01-19T13:46:40.208Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-19T13:46:40.208Z"
+        }
+      ]
+    }
+  },
+  "lastUpdated": "2026-01-19T13:46:40.208Z"
+}

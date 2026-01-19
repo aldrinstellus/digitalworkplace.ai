@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useUserSettings, useCurrentUser, useDepartments } from "@/lib/hooks/useSupabase";
 import {
   Settings,
   User,
@@ -10,22 +11,16 @@ import {
   Lock,
   Palette,
   Monitor,
-  Globe,
   Shield,
-  Key,
   Users,
   Database,
   Activity,
-  ChevronRight,
-  Check,
   Moon,
   Sun,
-  Volume2,
-  VolumeX,
   Mail,
   MessageSquare,
-  Calendar,
-  FileText,
+  Loader2,
+  Check,
 } from "lucide-react";
 
 const settingsSections = [
@@ -52,7 +47,7 @@ interface NotificationSetting {
   inApp: boolean;
 }
 
-const notificationSettings: NotificationSetting[] = [
+const defaultNotificationSettings: NotificationSetting[] = [
   {
     id: "mentions",
     label: "Mentions & Replies",
@@ -96,23 +91,69 @@ const notificationSettings: NotificationSetting[] = [
 ];
 
 export default function SettingsPage() {
-  const { user } = useUser();
+  const { user: clerkUser } = useUser();
+  const { user: dbUser } = useCurrentUser();
+  const { settings, loading: settingsLoading, updateSettings } = useUserSettings();
+  const { departments } = useDepartments();
+
   const [activeSection, setActiveSection] = useState("profile");
   const [theme, setTheme] = useState<"dark" | "light" | "system">("dark");
   const [language, setLanguage] = useState("en");
-  const [notifications, setNotifications] = useState(notificationSettings);
-  const [isAdmin] = useState(true); // In production, check actual role
+  const [notifications, setNotifications] = useState(defaultNotificationSettings);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [isAdmin] = useState(true); // In production, check actual role from dbUser
 
-  const toggleNotification = (
-    id: string,
-    type: "email" | "push" | "inApp"
-  ) => {
+  // Load settings from database
+  useEffect(() => {
+    if (settings) {
+      const appearance = settings.appearance as { theme?: string; language?: string } | null;
+      // Cast through unknown to handle flexible notification_prefs structure
+      const notifPrefs = settings.notification_prefs as unknown as Record<string, { email?: boolean; push?: boolean; inApp?: boolean }> | null;
+
+      if (appearance?.theme) {
+        setTheme(appearance.theme as "dark" | "light" | "system");
+      }
+      if (appearance?.language) {
+        setLanguage(appearance.language);
+      }
+
+      if (notifPrefs && typeof notifPrefs === "object") {
+        setNotifications((prev) =>
+          prev.map((n) => ({
+            ...n,
+            email: notifPrefs[n.id]?.email ?? n.email,
+            push: notifPrefs[n.id]?.push ?? n.push,
+            inApp: notifPrefs[n.id]?.inApp ?? n.inApp,
+          }))
+        );
+      }
+    }
+  }, [settings]);
+
+  const toggleNotification = (id: string, type: "email" | "push" | "inApp") => {
     setNotifications((prev) =>
-      prev.map((n) =>
-        n.id === id ? { ...n, [type]: !n[type] } : n
-      )
+      prev.map((n) => (n.id === id ? { ...n, [type]: !n[type] } : n))
     );
   };
+
+  const handleSaveSettings = useCallback(async () => {
+    setSaving(true);
+
+    const notificationPrefs: Record<string, { email: boolean; push: boolean; inApp: boolean }> = {};
+    notifications.forEach((n) => {
+      notificationPrefs[n.id] = { email: n.email, push: n.push, inApp: n.inApp };
+    });
+
+    await updateSettings({
+      notification_prefs: notificationPrefs,
+      appearance: { theme, language, sidebar_collapsed: false, density: "comfortable" },
+    });
+
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  }, [notifications, theme, language, updateSettings]);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -128,8 +169,19 @@ export default function SettingsPage() {
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <h3 className="text-sm font-medium text-white mb-4">Profile Photo</h3>
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-medium">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-2xl font-medium overflow-hidden">
+                  {clerkUser?.imageUrl ? (
+                    <img
+                      src={clerkUser.imageUrl}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <>
+                      {clerkUser?.firstName?.[0]}
+                      {clerkUser?.lastName?.[0]}
+                    </>
+                  )}
                 </div>
                 <div>
                   <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
@@ -152,7 +204,7 @@ export default function SettingsPage() {
                   </label>
                   <input
                     type="text"
-                    defaultValue={user?.firstName || ""}
+                    defaultValue={clerkUser?.firstName || dbUser?.full_name?.split(" ")[0] || ""}
                     className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50 transition-colors"
                   />
                 </div>
@@ -162,7 +214,7 @@ export default function SettingsPage() {
                   </label>
                   <input
                     type="text"
-                    defaultValue={user?.lastName || ""}
+                    defaultValue={clerkUser?.lastName || dbUser?.full_name?.split(" ")[1] || ""}
                     className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50 transition-colors"
                   />
                 </div>
@@ -172,7 +224,7 @@ export default function SettingsPage() {
                   </label>
                   <input
                     type="email"
-                    defaultValue={user?.primaryEmailAddress?.emailAddress || ""}
+                    defaultValue={clerkUser?.primaryEmailAddress?.emailAddress || dbUser?.email || ""}
                     disabled
                     className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white/50 outline-none"
                   />
@@ -182,11 +234,12 @@ export default function SettingsPage() {
                     Department
                   </label>
                   <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50 transition-colors">
-                    <option>Engineering</option>
-                    <option>Marketing</option>
-                    <option>Sales</option>
-                    <option>HR</option>
-                    <option>Finance</option>
+                    <option value="">Select department...</option>
+                    {departments.map((dept) => (
+                      <option key={dept.id} value={dept.id}>
+                        {dept.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-span-2">
@@ -200,8 +253,17 @@ export default function SettingsPage() {
                   />
                 </div>
               </div>
-              <button className="mt-6 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
-                Save Changes
+              <button
+                onClick={handleSaveSettings}
+                disabled={saving}
+                className="mt-6 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm transition-colors flex items-center gap-2"
+              >
+                {saving ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : saved ? (
+                  <Check className="w-4 h-4" />
+                ) : null}
+                {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
               </button>
             </div>
           </div>
@@ -215,95 +277,116 @@ export default function SettingsPage() {
               <p className="text-sm text-white/50">Control how and when you receive notifications</p>
             </div>
 
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
-              <div className="grid grid-cols-4 gap-4 p-4 border-b border-white/10 bg-white/5">
-                <div className="text-sm font-medium text-white">Notification Type</div>
-                <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
-                  <Mail className="w-4 h-4" /> Email
-                </div>
-                <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
-                  <Bell className="w-4 h-4" /> Push
-                </div>
-                <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
-                  <MessageSquare className="w-4 h-4" /> In-App
-                </div>
+            {settingsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
               </div>
+            ) : (
+              <>
+                <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+                  <div className="grid grid-cols-4 gap-4 p-4 border-b border-white/10 bg-white/5">
+                    <div className="text-sm font-medium text-white">Notification Type</div>
+                    <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
+                      <Mail className="w-4 h-4" /> Email
+                    </div>
+                    <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
+                      <Bell className="w-4 h-4" /> Push
+                    </div>
+                    <div className="text-sm font-medium text-white text-center flex items-center justify-center gap-1">
+                      <MessageSquare className="w-4 h-4" /> In-App
+                    </div>
+                  </div>
 
-              {notifications.map((setting) => (
-                <div
-                  key={setting.id}
-                  className="grid grid-cols-4 gap-4 p-4 border-b border-white/10 last:border-b-0"
+                  {notifications.map((setting) => (
+                    <div
+                      key={setting.id}
+                      className="grid grid-cols-4 gap-4 p-4 border-b border-white/10 last:border-b-0"
+                    >
+                      <div>
+                        <div className="text-sm text-white">{setting.label}</div>
+                        <div className="text-xs text-white/40">{setting.description}</div>
+                      </div>
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => toggleNotification(setting.id, "email")}
+                          className={`w-10 h-6 rounded-full transition-colors ${
+                            setting.email ? "bg-blue-500" : "bg-white/20"
+                          }`}
+                        >
+                          <div
+                            className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
+                              setting.email ? "translate-x-4" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => toggleNotification(setting.id, "push")}
+                          className={`w-10 h-6 rounded-full transition-colors ${
+                            setting.push ? "bg-blue-500" : "bg-white/20"
+                          }`}
+                        >
+                          <div
+                            className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
+                              setting.push ? "translate-x-4" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => toggleNotification(setting.id, "inApp")}
+                          className={`w-10 h-6 rounded-full transition-colors ${
+                            setting.inApp ? "bg-blue-500" : "bg-white/20"
+                          }`}
+                        >
+                          <div
+                            className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
+                              setting.inApp ? "translate-x-4" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Quiet Hours */}
+                <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+                  <h3 className="text-sm font-medium text-white mb-4">Quiet Hours</h3>
+                  <p className="text-sm text-white/50 mb-4">
+                    Pause notifications during specific hours
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none">
+                      <option>10:00 PM</option>
+                      <option>11:00 PM</option>
+                      <option>12:00 AM</option>
+                    </select>
+                    <span className="text-white/50">to</span>
+                    <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none">
+                      <option>6:00 AM</option>
+                      <option>7:00 AM</option>
+                      <option>8:00 AM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleSaveSettings}
+                  disabled={saving}
+                  className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm transition-colors flex items-center gap-2"
                 >
-                  <div>
-                    <div className="text-sm text-white">{setting.label}</div>
-                    <div className="text-xs text-white/40">{setting.description}</div>
-                  </div>
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => toggleNotification(setting.id, "email")}
-                      className={`w-10 h-6 rounded-full transition-colors ${
-                        setting.email ? "bg-blue-500" : "bg-white/20"
-                      }`}
-                    >
-                      <div
-                        className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
-                          setting.email ? "translate-x-4" : ""
-                        }`}
-                      />
-                    </button>
-                  </div>
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => toggleNotification(setting.id, "push")}
-                      className={`w-10 h-6 rounded-full transition-colors ${
-                        setting.push ? "bg-blue-500" : "bg-white/20"
-                      }`}
-                    >
-                      <div
-                        className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
-                          setting.push ? "translate-x-4" : ""
-                        }`}
-                      />
-                    </button>
-                  </div>
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => toggleNotification(setting.id, "inApp")}
-                      className={`w-10 h-6 rounded-full transition-colors ${
-                        setting.inApp ? "bg-blue-500" : "bg-white/20"
-                      }`}
-                    >
-                      <div
-                        className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${
-                          setting.inApp ? "translate-x-4" : ""
-                        }`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Quiet Hours */}
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
-              <h3 className="text-sm font-medium text-white mb-4">Quiet Hours</h3>
-              <p className="text-sm text-white/50 mb-4">
-                Pause notifications during specific hours
-              </p>
-              <div className="flex items-center gap-4">
-                <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none">
-                  <option>10:00 PM</option>
-                  <option>11:00 PM</option>
-                  <option>12:00 AM</option>
-                </select>
-                <span className="text-white/50">to</span>
-                <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none">
-                  <option>6:00 AM</option>
-                  <option>7:00 AM</option>
-                  <option>8:00 AM</option>
-                </select>
-              </div>
-            </div>
+                  {saving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : saved ? (
+                    <Check className="w-4 h-4" />
+                  ) : null}
+                  {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
+                </button>
+              </>
+            )}
           </div>
         );
 
@@ -375,6 +458,19 @@ export default function SettingsPage() {
                 </div>
               </div>
             </div>
+
+            <button
+              onClick={handleSaveSettings}
+              disabled={saving}
+              className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm transition-colors flex items-center gap-2"
+            >
+              {saving ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : saved ? (
+                <Check className="w-4 h-4" />
+              ) : null}
+              {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
+            </button>
           </div>
         );
 

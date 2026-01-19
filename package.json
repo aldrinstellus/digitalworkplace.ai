@@ -10,9 +10,11 @@
     "dev": "turbo dev",
     "dev:main": "turbo dev --filter=@digitalworkplace/main",
     "dev:intranet": "turbo dev --filter=@digitalworkplace/intranet-iq",
+    "dev:chatcore": "turbo dev --filter=@digitalworkplace/chat-core-iq",
     "build": "turbo build",
     "build:main": "turbo build --filter=@digitalworkplace/main",
     "build:intranet": "turbo build --filter=@digitalworkplace/intranet-iq",
+    "build:chatcore": "turbo build --filter=@digitalworkplace/chat-core-iq",
     "lint": "turbo lint",
     "type-check": "turbo type-check",
     "clean": "turbo clean && rm -rf node_modules"

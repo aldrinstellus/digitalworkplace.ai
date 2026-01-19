@@ -1,0 +1,164 @@
+[
+  {
+    "id": "doc-001",
+    "filename": "2025-annual-budget.pdf",
+    "originalName": "City of Doral FY 2024-2025 Annual Budget.pdf",
+    "type": "pdf",
+    "size": 4521984,
+    "chunks": 87,
+    "uploadedAt": "2024-10-15T14:30:00.000Z"
+  },
+  {
+    "id": "doc-002",
+    "filename": "building-permit-guide.pdf",
+    "originalName": "Building Permit Application Guide.pdf",
+    "type": "pdf",
+    "size": 1245678,
+    "chunks": 24,
+    "uploadedAt": "2024-11-02T09:15:00.000Z"
+  },
+  {
+    "id": "doc-003",
+    "filename": "hurricane-preparedness.pdf",
+    "originalName": "Hurricane Preparedness Guide 2025.pdf",
+    "type": "pdf",
+    "size": 3567890,
+    "chunks": 56,
+    "uploadedAt": "2024-06-01T11:00:00.000Z"
+  },
+  {
+    "id": "doc-004",
+    "filename": "business-license-application.pdf",
+    "originalName": "Business Tax Receipt Application Form.pdf",
+    "type": "pdf",
+    "size": 892345,
+    "chunks": 12,
+    "uploadedAt": "2024-09-20T16:45:00.000Z"
+  },
+  {
+    "id": "doc-005",
+    "filename": "parks-recreation-catalog.pdf",
+    "originalName": "Parks and Recreation Programs Catalog Spring 2025.pdf",
+    "type": "pdf",
+    "size": 8234567,
+    "chunks": 134,
+    "uploadedAt": "2025-01-02T08:00:00.000Z"
+  },
+  {
+    "id": "doc-006",
+    "filename": "zoning-regulations.pdf",
+    "originalName": "City of Doral Zoning Regulations Manual.pdf",
+    "type": "pdf",
+    "size": 5678901,
+    "chunks": 98,
+    "uploadedAt": "2024-08-15T10:30:00.000Z"
+  },
+  {
+    "id": "doc-007",
+    "filename": "trolley-routes-schedule.pdf",
+    "originalName": "Doral Trolley Routes and Schedule.pdf",
+    "type": "pdf",
+    "size": 1567234,
+    "chunks": 18,
+    "uploadedAt": "2025-01-15T12:00:00.000Z"
+  },
+  {
+    "id": "doc-008",
+    "filename": "employee-handbook.docx",
+    "originalName": "City Employee Handbook 2025.docx",
+    "type": "docx",
+    "size": 2345678,
+    "chunks": 45,
+    "uploadedAt": "2024-12-01T09:00:00.000Z"
+  },
+  {
+    "id": "doc-009",
+    "filename": "special-events-policy.docx",
+    "originalName": "Special Events Permit Policy and Procedures.docx",
+    "type": "docx",
+    "size": 987654,
+    "chunks": 16,
+    "uploadedAt": "2024-07-22T14:20:00.000Z"
+  },
+  {
+    "id": "doc-010",
+    "filename": "vendor-registration-form.pdf",
+    "originalName": "Vendor Registration Application.pdf",
+    "type": "pdf",
+    "size": 456789,
+    "chunks": 8,
+    "uploadedAt": "2024-10-30T11:45:00.000Z"
+  },
+  {
+    "id": "doc-011",
+    "filename": "water-utility-rates.pdf",
+    "originalName": "Water and Sewer Utility Rate Schedule 2025.pdf",
+    "type": "pdf",
+    "size": 678901,
+    "chunks": 10,
+    "uploadedAt": "2024-12-20T15:30:00.000Z"
+  },
+  {
+    "id": "doc-012",
+    "filename": "faq-permit-questions.txt",
+    "originalName": "Frequently Asked Permit Questions.txt",
+    "type": "txt",
+    "size": 45678,
+    "chunks": 5,
+    "uploadedAt": "2024-11-15T13:00:00.000Z"
+  },
+  {
+    "id": "doc-013",
+    "filename": "code-compliance-guidelines.pdf",
+    "originalName": "Code Compliance Guidelines and Procedures.pdf",
+    "type": "pdf",
+    "size": 2134567,
+    "chunks": 38,
+    "uploadedAt": "2024-09-10T10:15:00.000Z"
+  },
+  {
+    "id": "doc-014",
+    "filename": "senior-programs-guide.pdf",
+    "originalName": "Senior Services and Programs Guide.pdf",
+    "type": "pdf",
+    "size": 1876543,
+    "chunks": 28,
+    "uploadedAt": "2024-11-28T09:30:00.000Z"
+  },
+  {
+    "id": "doc-015",
+    "filename": "small-business-grants.pdf",
+    "originalName": "Small Business Grant Program Application Guide.pdf",
+    "type": "pdf",
+    "size": 1234567,
+    "chunks": 22,
+    "uploadedAt": "2025-01-05T08:45:00.000Z"
+  },
+  {
+    "id": "doc-016",
+    "filename": "recycling-guidelines.pdf",
+    "originalName": "Recycling Guidelines and Schedule 2025.pdf",
+    "type": "pdf",
+    "size": 987654,
+    "chunks": 14,
+    "uploadedAt": "2024-12-28T11:00:00.000Z"
+  },
+  {
+    "id": "doc-017",
+    "filename": "police-community-guide.pdf",
+    "originalName": "Police Department Community Resource Guide.pdf",
+    "type": "pdf",
+    "size": 2567890,
+    "chunks": 42,
+    "uploadedAt": "2024-10-05T14:00:00.000Z"
+  },
+  {
+    "id": "doc-018",
+    "filename": "public-records-request.docx",
+    "originalName": "Public Records Request Form and Instructions.docx",
+    "type": "docx",
+    "size": 345678,
+    "chunks": 6,
+    "uploadedAt": "2024-08-20T16:30:00.000Z"
+  }
+]

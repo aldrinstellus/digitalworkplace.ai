@@ -1,0 +1,82 @@
+[
+  {
+    "id": "tyler-001",
+    "title": "Property Ownership Lookup - Tyler Eagle Integration",
+    "keywords": ["who owns", "owner", "ownership", "property owner", "deed", "title", "land records", "look up owner", "find owner"],
+    "section": "Tyler-Land-Records",
+    "url": "https://www.miamidade.gov/pa/",
+    "priority": 200,
+    "content": "## Property Ownership Lookup - Tyler Eagle Integration\n\n### How to Find Property Owner Information\n\nThe City of Doral's chatbot is integrated with Tyler Technologies Eagle Land Records system, providing instant access to property ownership data.\n\n### Information Available:\n- **Current Owner Name & Mailing Address**\n- **Ownership Type** (Joint Tenants, Fee Simple, Corporate, etc.)\n- **Acquisition Date & Purchase Price**\n- **Deed Information** (Type, Book, Page)\n- **Chain of Title** (Previous owners and sale history)\n\n### How to Search:\nSimply ask questions like:\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Look up the owner of folio 35-2014-001-0010\"\n- \"Property ownership for 10305 NW 41st Street\"\n\n### Data Sources:\n- Tyler Eagle Land Records Management\n- Miami-Dade County Clerk of Courts\n- City of Doral Official Records\n\n### For Official Records:\n- **Miami-Dade Clerk**: www.miamidade.gov/clerk\n- **Property Appraiser**: www.miamidade.gov/pa\n- **City Clerk**: (305) 593-6730",
+    "summary": "Property ownership information is available through Tyler Eagle integration. Ask about any property using the address or folio number to get owner name, acquisition date, deed info, and ownership history."
+  },
+  {
+    "id": "tyler-002",
+    "title": "Property Tax Information - Tyler iasWorld & Munis Integration",
+    "keywords": ["property tax", "taxes", "tax bill", "assessed value", "taxable value", "millage", "exemption", "homestead", "pay taxes", "tax status", "delinquent"],
+    "section": "Tyler-Tax-Assessment",
+    "url": "https://miamidade.county-taxes.com/",
+    "priority": 200,
+    "content": "## Property Tax Information - Tyler Integration\n\n### Tyler iasWorld Assessment + Munis Tax Billing\n\nAccess comprehensive property tax information through our integrated Tyler systems.\n\n### Assessment Information (iasWorld):\n- **Land Value** - Assessed value of the land\n- **Building Value** - Assessed value of improvements\n- **Total Market Value** - Appraiser's market value estimate\n- **Assessed Value** - Value used for tax calculation\n- **Taxable Value** - Value after exemptions\n- **Exemptions** - Homestead, Senior, Veteran, etc.\n- **Historical Values** - Year-over-year comparison\n\n### Tax Billing Information (Munis):\n- **Annual Tax Amount**\n- **Payment Status** (Paid, Pending, Delinquent)\n- **Due Dates**\n- **Penalty Information** (if delinquent)\n- **Tax Breakdown by Authority**:\n  - Miami-Dade County\n  - City of Doral\n  - School Board\n  - South Florida Water Management\n  - Children's Trust\n  - Library\n\n### How to Search:\n- \"What are the property taxes for 8350 NW 52nd Terrace?\"\n- \"Show tax breakdown for folio 35-2015-003-0077\"\n- \"Is there a homestead exemption on 7700 NW 25th Street?\"\n- \"Are there any delinquent taxes on this property?\"\n\n### Payment Options:\n- **Online**: miamidade.county-taxes.com\n- **Phone**: (305) 270-4916\n- **In Person**: Tax Collector's Office\n\n### Contact:\n- **Tax Collector**: (305) 270-4916\n- **Property Appraiser**: (305) 375-4712",
+    "summary": "Property tax information from Tyler iasWorld and Munis includes assessed values, tax amounts, payment status, exemptions, and detailed breakdowns by taxing authority. Ask about any property to see complete tax details."
+  },
+  {
+    "id": "tyler-003",
+    "title": "Building Permits - Tyler EnerGov Integration",
+    "keywords": ["permit", "building permit", "permits", "construction", "inspection", "contractor", "active permit", "permit status", "permit history"],
+    "section": "Tyler-Permitting",
+    "url": "https://energovcss.cityofdoral.com",
+    "priority": 200,
+    "content": "## Building Permit Information - Tyler EnerGov Integration\n\n### Access Permit Data Through the Chatbot\n\nThe City of Doral uses Tyler EnerGov for comprehensive permit management. Get instant access to permit information through our AI assistant.\n\n### Information Available:\n\n**Active Permits:**\n- Permit Number & Type\n- Current Status (Under Review, Approved, In Progress)\n- Submission/Issue Date\n- Contractor Information\n- Estimated Value\n- Inspection Schedule & Results\n\n**Completed Permits:**\n- Permit History\n- Final Inspection Dates\n- Contractor Records\n- Permit Values\n\n### Permit Types Tracked:\n- New Construction\n- Renovations & Additions\n- Roofing\n- Pool Construction\n- Fence Installation\n- Impact Windows/Doors\n- HVAC Replacement\n- Electrical Work\n- Plumbing Work\n- Solar Panel Installation\n\n### How to Search:\n- \"Show permits for 8350 NW 52nd Terrace\"\n- \"Any active permits at 10305 NW 41st Street?\"\n- \"Permit history for folio 35-2014-001-0010\"\n- \"What construction work was done at this address?\"\n\n### Apply for Permits:\n- **Online Portal**: energovcss.cityofdoral.com\n- **Phone**: (305) 593-6700\n- **In Person**: 8401 NW 53rd Terrace, 2nd Floor\n\n### Schedule Inspections:\n- Online through EnerGov CSS Portal\n- Call Building Department before 3:00 PM for next-day inspection",
+    "summary": "Building permit information from Tyler EnerGov includes active and completed permits, inspection status, contractor info, and permit values. Search any property to see its complete permit history."
+  },
+  {
+    "id": "tyler-004",
+    "title": "Liens and Encumbrances - Tyler Eagle Integration",
+    "keywords": ["lien", "liens", "encumbrance", "mortgage", "judgment", "contractor lien", "mechanic lien", "clear title", "owed", "debt"],
+    "section": "Tyler-Land-Records",
+    "url": "https://www.miamidade.gov/clerk/",
+    "priority": 200,
+    "content": "## Liens & Encumbrances - Tyler Eagle Integration\n\n### Property Lien Search\n\nCheck for liens and encumbrances on any property through our Tyler Eagle integration.\n\n### Types of Liens Tracked:\n- **Contractor's Liens** - Unpaid construction work\n- **Mechanic's Liens** - Equipment or labor claims\n- **Tax Liens** - Unpaid property taxes\n- **HOA Liens** - Unpaid association fees\n- **Judgment Liens** - Court-ordered debts\n- **Municipal Liens** - City fines and fees\n- **Mortgage Liens** - Home loans\n- **IRS/State Tax Liens** - Federal/state tax debts\n\n### Information Provided:\n- Lien Type & Amount\n- Creditor Information\n- Filing Date\n- Case/Reference Number\n- Status (Active, Released, Satisfied)\n- Description/Details\n\n### How to Search:\n- \"Are there any liens on 10305 NW 41st Street?\"\n- \"Check encumbrances for folio 35-2015-003-0077\"\n- \"Is the title clear for 8350 NW 52nd Terrace?\"\n\n### For Official Records:\n- **Miami-Dade Clerk of Courts**: www.miamidade.gov/clerk\n- **Lien Search**: (305) 275-1155\n- **Title Companies** for comprehensive title searches\n\n### Important Note:\nFor real estate transactions, always obtain an official title search from a licensed title company or attorney.",
+    "summary": "Search for liens and encumbrances on any property through Tyler Eagle integration. Get information on contractor liens, tax liens, judgments, and more including amounts, creditors, and status."
+  },
+  {
+    "id": "tyler-005",
+    "title": "Code Violations - Tyler EnerGov Code Enforcement",
+    "keywords": ["code violation", "violation", "code enforcement", "compliance", "citation", "fine", "overgrown", "property maintenance"],
+    "section": "Tyler-Code-Enforcement",
+    "url": "https://www.cityofdoral.com/Departments/Code-Compliance-Department",
+    "priority": 200,
+    "content": "## Code Violations - Tyler EnerGov Integration\n\n### Code Compliance Status\n\nCheck for active code violations on any property through our Tyler EnerGov Code Enforcement integration.\n\n### Violation Types Tracked:\n- **Property Maintenance** - Overgrown vegetation, debris\n- **Structural Issues** - Unsafe conditions, damage\n- **Signage Violations** - Unpermitted signs\n- **Parking Violations** - Illegal parking, RV storage\n- **Building Code** - Unpermitted construction\n- **Noise Violations** - Commercial/residential noise\n- **Business License** - Operating without BTR\n- **Zoning Violations** - Prohibited uses\n\n### Information Provided:\n- Case Number\n- Violation Type & Description\n- Status (Open, Pending, Closed)\n- Issue Date\n- Compliance Deadline\n- Inspector Assigned\n- Fine Amount (if applicable)\n- Notes & Resolution Requirements\n\n### How to Search:\n- \"Are there code violations at 5200 NW 77th Avenue?\"\n- \"Check compliance status for 8350 NW 52nd Terrace\"\n- \"Any open citations on this property?\"\n\n### Report a Violation:\n- **Doral 311**: cityofdoral.com/311\n- **Phone**: (305) 593-6680\n- **Email**: codecompliance@cityofdoral.com\n\n### Contact Code Compliance:\n- **Phone**: (305) 593-6680\n- **Location**: 8401 NW 53rd Terrace\n- **Hours**: Monday-Friday, 8:00 AM - 5:00 PM",
+    "summary": "Check code violation status on any property through Tyler EnerGov. Get information on open violations, compliance deadlines, fines, and resolution requirements."
+  },
+  {
+    "id": "tyler-006",
+    "title": "Zoning Information - City Planning Integration",
+    "keywords": ["zoning", "zone", "land use", "building restriction", "setback", "lot coverage", "height limit", "zoning code"],
+    "section": "Tyler-Planning",
+    "url": "https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department",
+    "priority": 200,
+    "content": "## Zoning & Land Use Information\n\n### Property Zoning Lookup\n\nGet instant zoning information for any property in the City of Doral.\n\n### Zoning Classifications:\n- **R-1** - Single Family Residential\n- **R-2** - Two-Family Residential\n- **R-3** - Multi-Family Residential\n- **MU-1/2/3** - Mixed Use (Low/Medium/High)\n- **C-1/2/3** - Commercial\n- **I-1/I-2** - Industrial (Light/Heavy)\n- **GU** - Government Use\n- **PR** - Parks and Recreation\n\n### Information Available:\n- Zoning Code & Description\n- Future Land Use Designation\n- Overlay Districts (if any)\n- Development Restrictions:\n  - Maximum Height\n  - Lot Coverage\n  - Setback Requirements\n  - Floor Area Ratio (FAR)\n- Permitted Uses\n- Parcel Details\n\n### How to Search:\n- \"What's the zoning for 10305 NW 41st Street?\"\n- \"Building restrictions for folio 35-2020-008-0089\"\n- \"Can I build commercial at this address?\"\n\n### For Zoning Questions:\n- **Planning & Zoning**: (305) 593-6680\n- **Zoning Verification Letter**: Available upon request\n- **Development Review**: Schedule pre-application meeting\n\n### Resources:\n- **Zoning Map**: cityofdoral.com/planning\n- **Land Development Code**: Available online\n- **Pre-Application Meetings**: Recommended for development projects",
+    "summary": "Get zoning information for any property including zoning code, permitted uses, restrictions, setbacks, and future land use. Ask about any address to see complete zoning details."
+  },
+  {
+    "id": "tyler-007",
+    "title": "Comprehensive Property Report - Full Tyler Integration",
+    "keywords": ["full report", "complete report", "comprehensive report", "property report", "everything about", "all information", "full spectrum"],
+    "section": "Tyler-Comprehensive",
+    "url": "https://www.cityofdoral.com",
+    "priority": 250,
+    "content": "## Comprehensive Property Report - Full Tyler Integration\n\n### Complete Property Information\n\nRequest a comprehensive property report that combines data from all Tyler modules and city systems.\n\n### Report Includes:\n\n**1. Ownership Record (Tyler Eagle)**\n- Current owner name & contact\n- Ownership type\n- Acquisition date & price\n- Deed information\n- Complete chain of title\n\n**2. Property Details (Tyler iasWorld)**\n- Property type & characteristics\n- Building details (size, bedrooms, features)\n- Construction type & year built\n- Parcel information\n- Legal description\n\n**3. Assessment & Taxes (iasWorld + Munis)**\n- Land & building values\n- Market value & assessed value\n- Taxable value & exemptions\n- Annual tax amount\n- Payment status\n- Tax breakdown by authority\n\n**4. Zoning & Land Use**\n- Zoning designation\n- Permitted uses\n- Development restrictions\n- Future land use\n\n**5. Permit History (Tyler EnerGov)**\n- All active permits\n- Completed permits\n- Inspection history\n- Contractor information\n\n**6. Liens & Encumbrances (Tyler Eagle)**\n- Active liens\n- Creditor information\n- Amounts owed\n- Title status\n\n**7. Code Compliance (Tyler EnerGov)**\n- Active violations\n- Compliance status\n- Fines & deadlines\n\n### How to Request:\n- \"Give me a complete property report for 8350 NW 52nd Terrace\"\n- \"Full spectrum report on 10305 NW 41st Street\"\n- \"Everything about folio 35-2014-001-0010\"\n\n### Data Sources:\n- Tyler iasWorld Assessment\n- Tyler Eagle Land Records\n- Tyler EnerGov Permitting\n- Tyler Munis Financial\n- Miami-Dade Property Appraiser\n- City of Doral Official Records",
+    "summary": "Request a comprehensive property report that includes ownership, building details, taxes, zoning, permits, liens, and code compliance - all from Tyler integrated systems."
+  },
+  {
+    "id": "tyler-008",
+    "title": "Tyler Technologies Integration Overview",
+    "keywords": ["tyler", "tyler technologies", "integration", "property system", "land records", "assessment", "energov"],
+    "section": "Tyler-Overview",
+    "url": "https://www.tylertech.com",
+    "priority": 150,
+    "content": "## Tyler Technologies Integration\n\n### City of Doral's Integrated Property Systems\n\nThe City of Doral utilizes Tyler Technologies Enterprise Suite for comprehensive property and land records management.\n\n### Integrated Modules:\n\n**Tyler iasWorld**\n- Property assessment\n- Valuation management\n- Tax roll processing\n- Exemption tracking\n\n**Tyler Eagle**\n- Land records management\n- Document recording\n- Deed tracking\n- Lien management\n\n**Tyler EnerGov**\n- Building permits\n- Inspection scheduling\n- Code enforcement\n- Plan review\n\n**Tyler Munis**\n- Tax billing\n- Payment processing\n- Financial management\n- Revenue tracking\n\n### Benefits for Residents:\n- **Instant Access** - Get property info through AI chatbot\n- **Comprehensive Data** - All property data in one place\n- **Real-Time Updates** - Current information from city systems\n- **Self-Service** - 24/7 access to property records\n\n### How to Use:\nSimply ask the chatbot about any property:\n- Property ownership\n- Tax information\n- Permit history\n- Code violations\n- Zoning details\n- Liens & encumbrances\n- Comprehensive reports\n\n### Contact:\n- **Building Dept**: (305) 593-6700\n- **Tax Questions**: (305) 270-4916\n- **Planning**: (305) 593-6680\n- **Code Compliance**: (305) 593-6680",
+    "summary": "The City of Doral uses Tyler Technologies (iasWorld, Eagle, EnerGov, Munis) for integrated property management. Access property info, taxes, permits, and more through the AI chatbot."
+  }
+]

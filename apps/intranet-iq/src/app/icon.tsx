@@ -1,40 +1,42 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-
 export const size = {
   width: 32,
   height: 32,
 };
-
 export const contentType = "image/png";
 
-// dIQ Favicon - matches Digital Workplace AI style (dark bg + green dot)
 export default function Icon() {
   return new ImageResponse(
     (
       <div
         style={{
-          fontSize: 20,
-          background: "#0f0f1a",
+          fontSize: 24,
+          background: "#1a1a2e",
           width: "100%",
           height: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           borderRadius: 6,
-          fontFamily: "monospace",
-          fontWeight: 500,
-          position: "relative",
         }}
       >
-        <span style={{ color: "#ffffff", marginRight: 2 }}>d</span>
+        <span
+          style={{
+            color: "white",
+            fontWeight: 600,
+            fontFamily: "system-ui, sans-serif",
+            marginRight: 1,
+          }}
+        >
+          d
+        </span>
         <div
           style={{
-            width: 8,
-            height: 8,
+            width: 6,
+            height: 6,
             borderRadius: "50%",
-            background: "#4ade80",
+            background: "#3b82f6",
             marginTop: 8,
           }}
         />

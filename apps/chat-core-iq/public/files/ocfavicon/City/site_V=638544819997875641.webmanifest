@@ -1,0 +1,17 @@
+{
+    "name": "City",
+    "short_name": "City",
+    "icons": [
+        {
+            "src": "/files/ocfavicon/City/android-chrome-192x192.png?V=638544819997875641",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/files/ocfavicon/City/android-chrome-384x384.png?V=638544819997875641",
+            "sizes": "384x384",
+            "type": "image/png"
+        }
+    ],
+    "display": "standalone"
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "esc-001",
+    "sessionId": "sess-abc123def",
+    "userName": "Maria Garcia",
+    "contactMethod": "phone",
+    "contactValue": "(305) 555-0123",
+    "reason": "Need help with building permit application - chatbot couldn't answer specific zoning questions",
+    "status": "in_progress",
+    "requestedAt": "2026-01-01T19:22:25.279Z",
+    "notes": "Scenario testing - assigned to building dept"
+  },
+  {
+    "id": "esc-002",
+    "sessionId": "sess-xyz789ghi",
+    "userName": "John Smith",
+    "contactMethod": "email",
+    "contactValue": "john.smith@email.com",
+    "reason": "Business license renewal - need clarification on required documents",
+    "status": "in_progress",
+    "requestedAt": "2025-12-31T21:22:25.279Z",
+    "assignedTo": "Admin",
+    "notes": "Called back, waiting for document submission"
+  },
+  {
+    "id": "esc-003",
+    "sessionId": "sess-mno456pqr",
+    "userName": "Ana Rodriguez",
+    "contactMethod": "phone",
+    "contactValue": "(786) 555-0456",
+    "reason": "Water bill dispute - need to speak with billing department",
+    "status": "resolved",
+    "requestedAt": "2025-12-30T21:22:25.279Z",
+    "resolvedAt": "2025-12-31T21:22:25.279Z",
+    "notes": "Issue resolved - billing adjustment applied"
+  }
+]

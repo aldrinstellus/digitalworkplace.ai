@@ -63,6 +63,7 @@ export interface KnowledgeItem {
   summary: string | null;
   metadata: Record<string, unknown>;
   tags: string[];
+  embedding?: number[] | null;  // pgvector embedding (1536 dimensions)
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -161,6 +162,7 @@ export interface Article {
   metadata: Record<string, unknown>;
   view_count: number;
   helpful_count: number;
+  embedding?: number[] | null;  // pgvector embedding (1536 dimensions)
   created_at: string;
   updated_at: string;
 }
@@ -203,6 +205,7 @@ export interface ChatMessage {
   tokens_used: number | null;
   llm_model: string | null;
   metadata: Record<string, unknown>;
+  embedding?: number[] | null;  // pgvector embedding for RAG retrieval
   created_at: string;
 }
 
@@ -407,6 +410,48 @@ export interface ArticleSearchResult {
   author_name: string | null;
   published_at: string | null;
   relevance: number;
+}
+
+// =============================================================================
+// SEMANTIC SEARCH TYPES (pgvector)
+// =============================================================================
+
+export interface SemanticSearchResult {
+  id: string;
+  title: string;
+  summary: string | null;
+  slug: string;
+  category_name: string | null;
+  department_name: string | null;
+  similarity: number;
+}
+
+export interface HybridSearchResult {
+  id: string;
+  project_code: string;
+  item_type: string;
+  title: string;
+  summary: string | null;
+  combined_score: number;
+  keyword_score: number;
+  semantic_score: number;
+}
+
+export interface SimilarArticleResult {
+  id: string;
+  title: string;
+  summary: string | null;
+  slug: string;
+  category_name: string | null;
+  similarity: number;
+}
+
+export interface EmbeddingStats {
+  table_name: string;
+  total_rows: number;
+  with_embeddings: number;
+  without_embeddings: number;
+  coverage_percent: number;
 }
 
 // =============================================================================

@@ -4,6 +4,72 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.5.0] - 2026-01-19
+
+### Major Release: Monorepo Architecture + Semantic Search + Multi-Project Support
+
+#### Added
+
+**Monorepo Architecture**
+- Restructured project as monorepo with `apps/` directory
+- Main dashboard moved to `apps/main/` (port 3000)
+- dIQ (Intranet IQ) at `apps/intranet-iq/` (port 3001)
+- dCQ (Chat Core IQ) at `apps/chat-core-iq/` (port 3002)
+- dSQ (Support IQ) scaffolded at `apps/support-iq/` (port 3003)
+- dTQ (Test Pilot IQ) scaffolded at `apps/test-pilot-iq/` (port 3004)
+
+**Master Database Reference**
+- Created `docs/SUPABASE_DATABASE_REFERENCE.md` - Single source of truth for all projects
+- Multi-schema architecture (public, diq, dsq, dtq, dcq)
+- Cross-project search hub via `public.knowledge_items`
+- All projects linked through unified Supabase database
+
+**Semantic Search (pgvector)**
+- Created `docs/PGVECTOR_BEST_PRACTICES.md` - Comprehensive pgvector guide
+- Created `docs/EMBEDDING_QUICKSTART.md` - Step-by-step implementation checklist
+- Local embeddings using all-MiniLM-L6-v2 (384 dimensions)
+- FREE - no API key required (transformers.js)
+- HNSW indexes for fast vector similarity search
+
+**dIQ Semantic Search** (Complete)
+- 100% embedding coverage on articles
+- `/api/embeddings` - Generate and store embeddings
+- `/api/search` - Hybrid semantic + keyword search
+- Chat with RAG (Retrieval Augmented Generation)
+
+**dCQ Database** (Complete)
+- 28 tables created in `dcq` schema
+- 6 tables with vector embeddings (faqs, intents, training_phrases, messages, knowledge_entries, fallback_logs)
+- Sync triggers to `public.knowledge_items`
+- Embedding library created
+
+**CLAUDE.md Files for All Projects**
+- `apps/main/CLAUDE.md` - Main dashboard instructions
+- `apps/intranet-iq/CLAUDE.md` - Updated with pgvector docs
+- `apps/chat-core-iq/CLAUDE.md` - dCQ instructions
+- `apps/support-iq/CLAUDE.md` - dSQ scaffolding
+- `apps/test-pilot-iq/CLAUDE.md` - dTQ scaffolding
+
+#### Changed
+
+**Dashboard Product Order**
+- Reordered products: Support IQ (1), Intranet IQ (2), Chat Core IQ (3), Test Pilot IQ (4)
+- Test Pilot IQ now disabled (grayed out, "Coming Soon" label)
+- Chat Core IQ moved to 3rd position
+
+**Documentation Structure**
+- All CLAUDE.md files now auto-read master database reference
+- Unified documentation pattern across all projects
+- SESSION END PROTOCOL added to CLAUDE.md
+
+#### Technical
+
+- Supabase migrations updated (003_pgvector_embeddings.sql, 004_dsq_schema.sql)
+- NPM workspace scripts: `dev:main`, `dev:intranet`, `dev:chatcore`
+- Environment variable standardization across projects
+
+---
+
 ## [0.4.2] - 2026-01-19
 
 ### Favicon & Auth Improvements

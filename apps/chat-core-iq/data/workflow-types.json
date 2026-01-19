@@ -1,0 +1,47 @@
+[
+  {
+    "id": "wf-appointments",
+    "name": "Appointment Scheduling",
+    "slug": "appointments",
+    "description": "Configure departments, time slots, and manage citizen appointments",
+    "icon": "Calendar",
+    "color": "from-blue-500 to-indigo-600",
+    "handlerType": "appointment",
+    "isActive": true,
+    "isSystem": true,
+    "order": 1,
+    "config": {},
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "wf-service-requests",
+    "name": "Service Request Routing",
+    "slug": "service-requests",
+    "description": "Set up automatic routing rules for service requests by category",
+    "icon": "GitBranch",
+    "color": "from-emerald-500 to-teal-600",
+    "handlerType": "routing",
+    "isActive": true,
+    "isSystem": true,
+    "order": 2,
+    "config": {},
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "wf-faq-actions",
+    "name": "FAQ Actions",
+    "slug": "faq-actions",
+    "description": "Connect FAQs to trigger appointment booking or service requests",
+    "icon": "MessageSquareText",
+    "color": "from-purple-500 to-violet-600",
+    "handlerType": "faq-action",
+    "isActive": true,
+    "isSystem": true,
+    "order": 3,
+    "config": {},
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]

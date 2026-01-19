@@ -121,7 +121,8 @@ export async function getEmployees(options?: {
  * Get org chart
  */
 export async function getOrgChart(departmentId?: string) {
-  return supabase.rpc('diq.get_org_chart', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('diq.get_org_chart', {
     dept_id: departmentId || null,
   });
 }
@@ -454,7 +455,8 @@ export async function searchKnowledge(
     maxResults?: number;
   }
 ) {
-  return supabase.rpc('search_knowledge', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('search_knowledge', {
     search_query: query,
     project_codes: options?.projectCodes || null,
     item_types: options?.itemTypes || null,
@@ -472,7 +474,8 @@ export async function searchArticles(
     maxResults?: number;
   }
 ) {
-  return supabase.rpc('diq.search_articles', {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('diq.search_articles', {
     search_query: query,
     category_slug: options?.categorySlug || null,
     max_results: options?.maxResults || 20,
@@ -492,17 +495,19 @@ export async function logActivity(
   }
 ) {
   // Get dIQ project ID
-  const { data: project } = await supabase
+  const { data: projectData } = await supabase
     .from('projects')
     .select('id')
     .eq('code', 'dIQ')
     .single();
 
-  if (!project) return;
+  const projectId = (projectData as { id: string } | null)?.id;
+  if (!projectId) return;
 
-  return supabase.from('activity_log').insert({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).from('activity_log').insert({
     user_id: userId,
-    project_id: project.id,
+    project_id: projectId,
     action,
     entity_type: options?.entityType || null,
     entity_id: options?.entityId || null,
@@ -541,4 +546,120 @@ export async function getDepartmentBySlug(slug: string) {
     `)
     .eq('slug', slug)
     .single();
+}
+
+// =============================================================================
+// SEMANTIC SEARCH (pgvector)
+// =============================================================================
+
+/**
+ * Semantic search across knowledge items using vector similarity
+ * Requires embeddings to be generated for content
+ */
+export async function searchKnowledgeSemantic(
+  queryEmbedding: number[],
+  options?: {
+    matchThreshold?: number;
+    matchCount?: number;
+    projectCodes?: string[];
+    itemTypes?: string[];
+  }
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('search_knowledge_semantic', {
+    query_embedding: queryEmbedding,
+    match_threshold: options?.matchThreshold || 0.7,
+    match_count: options?.matchCount || 10,
+    filter_project_codes: options?.projectCodes || null,
+    filter_item_types: options?.itemTypes || null,
+  });
+}
+
+/**
+ * Hybrid search combining keyword and vector similarity
+ * Best of both worlds: keyword precision + semantic understanding
+ */
+export async function searchKnowledgeHybrid(
+  searchQuery: string,
+  queryEmbedding?: number[],
+  options?: {
+    matchCount?: number;
+    projectCodes?: string[];
+    itemTypes?: string[];
+    semanticWeight?: number; // 0.0 = pure keyword, 1.0 = pure semantic
+  }
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('search_knowledge_hybrid', {
+    search_query: searchQuery,
+    query_embedding: queryEmbedding || null,
+    match_count: options?.matchCount || 20,
+    filter_project_codes: options?.projectCodes || null,
+    filter_item_types: options?.itemTypes || null,
+    semantic_weight: options?.semanticWeight || 0.5,
+  });
+}
+
+/**
+ * Semantic search for dIQ articles
+ */
+export async function searchArticlesSemantic(
+  queryEmbedding: number[],
+  options?: {
+    matchThreshold?: number;
+    matchCount?: number;
+    categorySlug?: string;
+    status?: string;
+  }
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('diq.search_articles_semantic', {
+    query_embedding: queryEmbedding,
+    match_threshold: options?.matchThreshold || 0.7,
+    match_count: options?.matchCount || 10,
+    filter_category_slug: options?.categorySlug || null,
+    filter_status: options?.status || 'published',
+  });
+}
+
+/**
+ * Find similar articles based on content
+ */
+export async function findSimilarArticles(
+  articleId: string,
+  matchCount = 5
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('diq.find_similar_articles', {
+    article_id: articleId,
+    match_count: matchCount,
+  });
+}
+
+/**
+ * Get RAG context for AI chat responses
+ * Returns relevant content from articles and knowledge items
+ */
+export async function getChatContext(
+  queryEmbedding: number[],
+  options?: {
+    maxTokens?: number;
+    matchThreshold?: number;
+  }
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (supabase as any).rpc('diq.get_chat_context', {
+    query_embedding: queryEmbedding,
+    max_tokens: options?.maxTokens || 4000,
+    match_threshold: options?.matchThreshold || 0.7,
+  });
+}
+
+/**
+ * Get embedding coverage statistics
+ */
+export async function getEmbeddingStats() {
+  return supabase
+    .from('embedding_stats')
+    .select('*');
 }

@@ -4,7 +4,7 @@
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
 
-**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL 4 DOC FILES BEFORE RESPONDING:**
+**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL 6 DOC FILES BEFORE RESPONDING:**
 - "hey", "hi", "hello", "start", "begin", "let's go", "ready"
 - "pull latest", "get latest", "check latest", "update"
 - "open dev", "open local", "dev server", "localhost"
@@ -16,7 +16,9 @@
 1. /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md  (CURRENT STATE - most important)
 2. /Users/aldrin-mac-mini/digitalworkplace.ai/context.md    (Design specs)
 3. /Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md  (Version history)
-4. /Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md     (This file - already loaded)
+4. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - all projects)
+5. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search standards)
+6. /Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md     (This file - already loaded)
 ```
 
 **THEN:**
@@ -258,6 +260,37 @@ npm run dev:intranet     # Start dIQ on port 3001
 - Client helpers: `apps/intranet-iq/src/lib/supabase.ts`
 - Migrations: `supabase/migrations/001_core_schema.sql`, `002_diq_schema.sql`
 - Documentation: `docs/DATABASE_ARCHITECTURE.md`
+
+---
+
+### dCQ - Chat Core IQ (v0.1.0)
+
+| Property | Value |
+|----------|-------|
+| **Location** | `apps/chat-core-iq/` |
+| **Port** | 3002 |
+| **URL** | http://localhost:3002/dcq/Home/index.html |
+| **basePath** | `/dcq` |
+| **Documentation** | `apps/chat-core-iq/CLAUDE.md` |
+
+**Quick Start:**
+```bash
+cd /Users/aldrin-mac-mini/digitalworkplace.ai
+npm run dev:chatcore     # Start dCQ on port 3002
+```
+
+**Pages:**
+- `/dcq/Home/index.html` - Main static homepage with chatbot (PRIMARY)
+- `/dcq/admin` - Admin dashboard
+- `/dcq/admin/content` - FAQ & content management
+- `/dcq/admin/analytics` - Usage analytics
+- `/dcq/demo/ivr` - IVR demo
+
+**Features:**
+- AI Chatbot (Claude/OpenAI)
+- FAQ management
+- Multi-language (EN/ES)
+- Admin portal
 
 ---
 

@@ -13,7 +13,7 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: "/products/support-iq", // Coming soon
+    href: "http://localhost:3030", // Support IQ app
     colors: {
       primary: "#10b981",
       secondary: "#06b6d4",
@@ -34,26 +34,27 @@ const products = [
   },
   {
     id: 3,
-    name: "Test Pilot IQ",
-    title: "AI Testing",
-    description: "Automated QA & testing intelligence",
-    href: "/products/test-pilot-iq", // Coming soon
-    colors: {
-      primary: "#f59e0b",
-      secondary: "#ef4444",
-      glow: "rgba(245, 158, 11, 0.4)",
-    },
-  },
-  {
-    id: 4,
     name: "Chat Core IQ",
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
-    href: "/products/chat-core-iq", // Coming soon
+    href: "http://localhost:3002/dcq/Home/index.html", // Chat Core IQ static site with chatbot
     colors: {
       primary: "#a855f7",
       secondary: "#ec4899",
       glow: "rgba(168, 85, 247, 0.4)",
+    },
+  },
+  {
+    id: 4,
+    name: "Test Pilot IQ",
+    title: "AI Testing",
+    description: "Automated QA & testing intelligence",
+    href: "/products/test-pilot-iq", // Coming soon
+    disabled: true, // Not yet available
+    colors: {
+      primary: "#f59e0b",
+      secondary: "#ef4444",
+      glow: "rgba(245, 158, 11, 0.4)",
     },
   },
 ];
@@ -730,8 +731,10 @@ function ProductCard({
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const isDisabled = 'disabled' in product && product.disabled;
 
   const handleLaunchApp = () => {
+    if (isDisabled) return;
     // Open all product apps in a new tab - they are self-contained projects
     window.open(product.href, '_blank', 'noopener,noreferrer');
   };
@@ -767,8 +770,8 @@ function ProductCard({
   const IllustrationComponent = {
     1: ProductIllustrations.support,
     2: ProductIllustrations.intranet,
-    3: ProductIllustrations.testing,
-    4: ProductIllustrations.chatbot,
+    3: ProductIllustrations.chatbot,
+    4: ProductIllustrations.testing,
   }[product.id] || ProductIllustrations.support;
 
   return (
@@ -786,19 +789,25 @@ function ProductCard({
         transformStyle: "preserve-3d",
         perspective: 1200,
       }}
-      className="group cursor-pointer"
+      className={`group ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <motion.div
         className="relative h-64 sm:h-72 rounded-3xl overflow-hidden"
         initial={{
-          boxShadow: `0 10px 40px -10px rgba(0,0,0,0.5), inset 0 0 0 1px ${product.colors.primary}40`,
-          borderColor: `${product.colors.primary}50`,
+          boxShadow: isDisabled
+            ? `0 10px 40px -10px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(100,100,100,0.3)`
+            : `0 10px 40px -10px rgba(0,0,0,0.5), inset 0 0 0 1px ${product.colors.primary}40`,
+          borderColor: isDisabled ? `rgba(100,100,100,0.3)` : `${product.colors.primary}50`,
         }}
         animate={{
-          boxShadow: isHovered
-            ? `0 30px 60px -15px ${product.colors.glow}, 0 0 80px -20px ${product.colors.primary}60, inset 0 0 0 1px ${product.colors.primary}60`
-            : `0 10px 40px -10px rgba(0,0,0,0.5), inset 0 0 0 1px ${product.colors.primary}40`,
-          borderColor: isHovered ? `${product.colors.primary}90` : `${product.colors.primary}50`,
+          boxShadow: isDisabled
+            ? `0 10px 40px -10px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(100,100,100,0.3)`
+            : isHovered
+              ? `0 30px 60px -15px ${product.colors.glow}, 0 0 80px -20px ${product.colors.primary}60, inset 0 0 0 1px ${product.colors.primary}60`
+              : `0 10px 40px -10px rgba(0,0,0,0.5), inset 0 0 0 1px ${product.colors.primary}40`,
+          borderColor: isDisabled ? `rgba(100,100,100,0.3)` : isHovered ? `${product.colors.primary}90` : `${product.colors.primary}50`,
+          filter: isDisabled ? 'grayscale(100%)' : 'grayscale(0%)',
+          opacity: isDisabled ? 0.6 : 1,
         }}
         transition={{ duration: 0.4 }}
         style={{
@@ -897,33 +906,39 @@ function ProductCard({
             className="flex items-center gap-3"
             initial={{ opacity: 0, y: 10 }}
             animate={{
-              opacity: isHovered ? 1 : 0,
-              y: isHovered ? 0 : 10,
+              opacity: isHovered || isDisabled ? 1 : 0,
+              y: isHovered || isDisabled ? 0 : 10,
             }}
             transition={{ duration: 0.3 }}
           >
-            <motion.button
-              onClick={handleLaunchApp}
-              className="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
-              style={{
-                background: `linear-gradient(135deg, ${product.colors.primary}, ${product.colors.secondary})`,
-                color: '#fff',
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Launch App
-              <motion.svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 1, repeat: Infinity }}
+            {isDisabled ? (
+              <div className="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2 bg-gray-600/50 text-gray-300">
+                Coming Soon
+              </div>
+            ) : (
+              <motion.button
+                onClick={handleLaunchApp}
+                className="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
+                style={{
+                  background: `linear-gradient(135deg, ${product.colors.primary}, ${product.colors.secondary})`,
+                  color: '#fff',
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </motion.svg>
-            </motion.button>
+                Launch App
+                <motion.svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </motion.svg>
+              </motion.button>
+            )}
           </motion.div>
         </div>
       </motion.div>

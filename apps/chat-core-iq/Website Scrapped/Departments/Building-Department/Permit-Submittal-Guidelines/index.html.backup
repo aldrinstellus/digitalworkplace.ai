@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en-US">
+<!--<![endif]-->
+<head>
+	<!-- Published by OpenCities, 1.36.1.2 -->
+
+    
+        
+    
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="theme-color" content="#FFFFFF"/>
+    <title>Permit Submittal Guidelines - City of Doral</title>
+	<meta name="generator" content="OpenCities - https://granicus.com/product/opencities" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="description" content="Steps to submitting a permit, Flatten All PDFs First, Contractor Registration (for Contractors ONLY) and Permit Submittal Process." />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines" />
+    <meta property="og:title" content="Permit Submittal Guidelines" />
+    <meta property="og:description" content="Steps to submitting a permit, Flatten All PDFs First, Contractor Registration (for Contractors ONLY) and Permit Submittal Process." />
+    <meta property="og:image" content="https://www.cityofdoral.com/files/ocwebsite/City/HeroImage/gov-center-meta-data.jpg?w=1200" />
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Permit Submittal Guidelines" />
+    <meta property="twitter:description" content="Steps to submitting a permit, Flatten All PDFs First, Contractor Registration (for Contractors ONLY) and Permit Submittal Process." />
+    <meta property="twitter:image" content="https://www.cityofdoral.com/files/ocwebsite/City/HeroImage/gov-center-meta-data.jpg?w=1080" />
+    <link rel="canonical" href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines" />
+
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/files/ocfavicon/City/apple-touch-icon.png?V=638544819997875641">
+<link rel="icon" type="image/png" sizes="32x32" href="/files/ocfavicon/City/favicon-32x32.png?V=638544819997875641">
+<link rel="icon" type="image/png" sizes="16x16" href="/files/ocfavicon/City/favicon-16x16.png?V=638544819997875641">
+<link rel="manifest" href="/files/ocfavicon/City/site.webmanifest?V=638544819997875641">
+<link rel="shortcut icon" href="/files/ocfavicon/City/favicon.ico?V=638544819997875641">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-config" content="/files/ocfavicon/City/browserconfig.xml?V=638544819997875641">
+    <script>
+        document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, "js");
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
+    
+        
+            <script type="text/javascript">
+                window.__oc_flags_ImprovedBreakpointEventHandling = true;
+            </script>
+            
+        
+    
+    
+    
+        <script type="text/javascript">
+            var __metaQueryBreakpoints = {
+                'sc-size-4': '(max-width: 480px)',
+                'sc-size-3': '(min-width: 480px) and (max-width: 768px)',
+                'sc-size-2': '(min-width: 768px) and (max-width: 992px)',
+                'sc-size-1': '(min-width: 992px)'
+            }
+
+            var __ocSizePoints = [
+                { min: 0, name: 'sc-size-4' },
+                { min: 480, name: 'sc-size-3' },
+                { min: 768, name: 'sc-size-2' },
+                { min: 992, name: 'sc-size-1' }
+            ];
+
+        </script>
+    
+
+    <!-- Framework Section -->
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/files/templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/jquery-3.6.0.min.js?seamlessts=638978990859064806" ><\/script>')</script>
+    
+        <script src="https://maps.googleapis.com/maps/api/js?v=quarterly&key=AIzaSyBQzxqE-L8izPvhgKKtdD0saSdiIsnUH5s&libraries=geometry,places,marker,geocoding"></script>
+    
+    <script src="/files/templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/modernizr.custom.710f3bf.js?seamlessts=638978990859064806" defer></script>
+    
+    <!--// End Framework Section -->
+    <!-- OpenCities Section -->
+    <script>
+        var OpenCities = OpenCities || {};
+        OpenCities.Paths = {
+            SiteTemplate: '/files/templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/',
+            ThemePath: '/files/templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/'
+        };
+    </script>
+    <script src='/ocapi/d556fe61-cc82-48d0-a402-55ddd3b5a87d/en-US/websitesettings.js'></script>
+    <script src="/files/templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/oc_head.js?applied=20250929055040"></script>
+    <!-- Script Combine. To enter debug mode for this browser session, enter OcScriptCombineDebug=true as a querystring -->
+<link href="/files/oc-templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/oc_grid.css~oc_grid_s1.css~oc_style.css~oc_wizard_style.css~oc_main.css~oc_forms.css~oc_wizard.css~oc_wizard_menu.css~oc_main_s1.css~oc_wizard_s1.css~oc_wizard_menu_s1.css~OcScriptCombine_Minify0?uniqueid=20250929055040" rel="stylesheet" type="text/css">
+    <!-- Script Combine. To enter debug mode for this browser session, enter OcScriptCombineDebug=true as a querystring -->
+<link href="/files/oc-templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/client_style.css~client.css~client_menu.css~client_s1.css~client_menu_s1.css~client_forms.css~OcScriptCombine_Minify0?uniqueid=20250929055040" rel="stylesheet" type="text/css">
+    <style type="text/css">.content-outer-container
+{
+    background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg?w=480');
+    
+}
+
+@media (min-width: 480px)
+{
+    .content-outer-container
+    {
+      background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg?w=768');
+    }
+}
+@media (min-width: 768px)
+{
+    .content-outer-container
+    {
+      background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg?w=992');
+    }
+}
+@media (min-width: 992px)
+{
+    .content-outer-container
+    {
+      background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg');
+    }
+}
+@media (min-width: 1280px)
+{
+    .content-outer-container
+    {
+      background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg');
+    }
+}
+@media (min-width: 1920px)
+{
+    .content-outer-container
+    {
+      background-image:url('/files/assets/city/v/3/featured-backgrounds/gov-center-aerial.jpg');
+    }
+}
+        </style><script>
+(function (BackgroundSettings, $, undefined) {
+    BackgroundSettings.initialise = function () {
+        this.Application = {"CSSSelector":".content-outer-container","EnableFade":false};
+    };
+} (OpenCities.BackgroundSettings = OpenCities.BackgroundSettings || {}, jQuery));
+OpenCities.BackgroundSettings.initialise();
+</script>
+    
+    <!-- Script Combine. To enter debug mode for this browser session, enter OcScriptCombineDebug=true as a querystring -->
+<link href="/files/oc-templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/oc_print.css~client_print.css~OcScriptCombine_Minify0?uniqueid=20250929055040" rel="stylesheet" type="text/css" media="print">
+    <!-- Script Combine. To enter debug mode for this browser session, enter OcScriptCombineDebug=true as a querystring -->
+<script src="/files/oc-templates/00000000-0000-0000-0000-000000000000/cb43379f-eba5-4cd1-93a4-8079e117411e/v/240/external_plugins.js~oc_form_helper.js~oc_main.js~plugins.js~oc_main_init.js~OcScriptCombine_Minify0?uniqueid=20250929055040" defer="true"></script>
+    <script type="text/javascript">
+    window._monsido = window._monsido || {
+        token: "lSHJOigyU0pps-HdexhHxA",
+        statistics: {
+            enabled: true,
+            cookieLessTracking: false,
+            documentTracking: {
+                enabled: false,
+                documentCls: "monsido_download",
+                documentIgnoreCls: "monsido_ignore_download",
+                documentExt: [],
+            },
+        },
+        pageAssistV2: {
+            enabled: true,
+            theme: "light",
+            mainColor: "#000080",
+            textColor: "#ffffff",
+            linkColor: "#252525",
+            buttonHoverColor: "#41596b",
+            mainDarkColor: "#052942",
+            textDarkColor: "#ffffff",
+            linkColorDark: "#FFCF4B",
+            buttonHoverDarkColor: "#FFCF4B",
+            greeting: "Discover your personalization options",
+            direction: "leftbottom",
+            coordinates: "unset unset 3 20",
+            iconShape: "circle",
+            title: "Personalization Options",
+            titleText: "Welcome to PageAssist™ toolbar! Adjust the options below to cater the website to your accessibility needs.",
+            iconPictureUrl: "logo",
+            logoPictureUrl: "https://res.cloudinary.com/dpqp2pvqp/image/upload/v1668702047/doral-logo2_xhl24o.png",
+            logoPictureBase64: "",
+            languages: ["en-US", "pt-PT", "es-MX"],
+            defaultLanguage: "en-US",
+            skipTo: false,
+            alwaysOnTop: false,
+        },
+    };
+</script>
+<script type="text/javascript" async src="https://app-script.monsido.com/v2/monsido-script.js"></script>
+    
+
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("False"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="DYTCK-JM9C8-ED4EP-C3GGK-Z575H",function(){function e(){if(!r){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,o.appendChild(e),r=!0}}function t(e){r=!0;var n,t,a,i,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(o,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",i=(a.frameElement||a).style,i.width=0,i.height=0,i.border=0,i.display="none",o.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void 0;",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=14,window.BOOMR.url=n+"DYTCK-JM9C8-ED4EP-C3GGK-Z575H";var i=document.currentScript||document.getElementsByTagName("script")[0],o=i.parentNode,r=!1,d=document.createElement("link");if(d.relList&&"function"==typeof d.relList.supports&&d.relList.supports("preload")&&"as"in d)window.BOOMR.snippetMethod="p",d.href=window.BOOMR.url,d.rel="preload",d.as="script",d.addEventListener("load",e),d.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!r)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),o.appendChild(d);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="kdru56ax3clsu2k2be5q-f-497872317-clientnsv4-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"1728392","ak.ai":parseInt("1075935",10),"ak.ol":"0","ak.cr":7,"ak.ipv":4,"ak.proto":"h2","ak.rid":"ac3ee8c9","ak.r":51792,"ak.a2":n,"ak.m":"dscb","ak.n":"essl","ak.bpcip":"80.227.78.0","ak.cport":59218,"ak.gh":"23.216.151.38","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"","ak.t":"1767508283","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==8myh4uPllyYh+wDJBlhcm7MVMooo3NiV+Lub2K6FNVJt30h6GUvM7CPeoXe7Xhn1wLw36ydAvjhAacbEqRXen7kRNEUoTnjTbDPuMwXV1FLq0Vor79XkclO5bpjIiQArZOW7MNASVrD2eRI4tw/gXWh9CFg/duQLZdp6c5pWR2Z3rxyLbr4zFSBxWOQREEMgflijPmJ7hXUefvl8a0uILSlSUf2DS8ZRn0+Q3P082w9Cq36cy8SPzx7l7TP3S5rc0vn9PXTo0s5SoAYgxTvxZipr3ZZSi9u3l+Vl+nUBPF/9OpOMvYqSWEU6WUCiG6GezRefQWt8ud2ZSZtjJ+wrSWMFKmKmUQpH3plQRr903DWJ4aV4q3/cXNpi+PpmyuyLCKfD1znYwxa2nUSTwqqqgLoC0dQL+c/o1N+uZLXYT6o=","ak.pv":"261","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script></head>
+<body class="body layout-modern  site-search-always-visble  content-type-oc-general content-template-oc-2-column group-template-oc-2-column-with-default-header page-name-permit-submittal-guidelines page-sequence-19 page-depth-3 page-section-25 website-type-primary device-desktop " id="body-top">
+    <form name="mainForm" method="post" action="/Departments/Building-Department/Permit-Submittal-Guidelines" id="mainForm">
+<input type="hidden" name="__SEAMLESSVIEWSTATE" id="__SEAMLESSVIEWSTATE" value="H4sIAAAAAAAEAAEwCc/2XAwzRQrp3BOvMRj1SeUYMnsm8d3j1nh7LN4MH7fltE3OSel2F0iGNgnQMiuROEtKeYMb279yMbD6mUdrlKmk151o/aD0uB7qfcutzglBXcBULpjTXJx5xEYsRMQZd34blP0LuF3wTvApHfqOJXkKWHxWj30oWhfIJZst9zBealoBW9FURYd+9RqzNdhiOMwJ6Z1GC3ydtHy2jsGYA4I25X6l7TuaE/Kzm4Bb+ddQ5vq1vlnaiZud5ZYmB04Fok/2QEBn07vko0sO2UXiyA03gmaflXqQg9X6uFRZRVinRc2ouhTV1xH5F+ZMYcDCD6gTu+M+zWr34pOnJ7wSN0GJg50K5jHQYfEEeY60wwVK+ilWk2U9HnbzVkFb95yaaRWP3fvwUe0YPGUqSHohxQeXaije9FcYVJehVbt6DAxQUFm1MNJw4t/shB7Ov5LRJwALvNhibUJlwPRgKKBpvC//IMLST5DYluuE9W44yEM3CizZ2tiNbNWx63H05cy0u+g3/Hb9Yz3+IBh6IdMUcebZ5uOOIlKh2Pw9mtc2kPbvwg/W84nBF6WZw17M1Iq4DT+NsbA/DCZQWY5WNAJGGF07ax4lQNPsIjTM71jBsWX7jcvnUHuboLAhXv2F+QB4z9kOL7eMHLUHOjNUziSTem5RMiDLnF+g7bVZ20P1DUG0AwxAQKViTUsl0aq6OfUWkc++KjlPz3S4z425/KcKS0s8TZpEbYkTT6HVUTuRI7Kof4H23o2he0Lyy3twb7WI/SpSoofJwO82+SLlr1hGnvf94xkWQLZ9EauDHlCsqDG0oL3ORLlOye15OkToI+a2t9Ly2Gj2ZFU5hPdR04hKJZdaVZAIrhcaRG8dZfeNWajipiFZOGism8tyMsGq/819lQkM164c5y0ysFYG0z4eh0Youi2O0Asn8/cBWRqscDB1yYfiY4xcic9OtYw3wBzzPCU26RkjnJhj8pWX8oaMThN8D6HEuGstv7z5L+Sq0gPXAnm9dYdhvjIjNxOOv5iZuiqiTy8LFoM+14X2VmG1Oagk6h2PtI4Ta6/KnohsanyxzOWJH4dM4TMnCqcF37c1sgr8zjipQzehAGp6xfL71bQAFBTB7PJi5wioUr6kcRoncu2yCD79m2l7B6Zvl2aftJXKPPRDJ9HG7CiWvIf8EVa549tewCHuOyzcisAkA2B7glWGJzlLyWsePt3ARhwqnamDBpfxcOjwygEScT4bNG8BSBGh7DXV9g6LWG/h6CLKAwJDjM8ipACfCyR8hGDvdry2LNoXqXx6C+wdsIanaXcQDIGO3LYsLAhvjLuonsXJBb29W3LaohCLBrmxYQ2ne1cb7pKfxeudDxJWxiJAPfzGsxUKegkL70fPQ/N6N9nmNQyTXRNedYeqWdvBZzLLGFR+tXjxMO9ywvwRTe7j1eSwxUnjZOafUZ9dE9L9E2KXv9cSmsfvi0OcMwopGuAm8w1535q12GQBMPYkVRlhU8NBAabTPojG3aTyRpqzFF9Pa5I9JMleF+owyhZB3a3NwJVlfg0QdonI57LZalQ2uZeay9Blype7BDMc3JDLt76Ir03n+rfQVuYGat1rT3P+r3BbozAaGjuBdoRYo523rLfVOtRql/jN69uRVprmrSdyUh04NAZRcetEq1XduOiN36W8ZTsoTJJOKMDmATqMuwQsuR4Zmjh+scM2n0PPvdYZKJmkqzO0hA8bzcOItk++GdPyXgreDTeQ8cADPjOGbhY67GVqoXvmNmr3lzKI6xy0Qrj4E29kHTjHzOrIiieQyq7A6EY6O053VC27ywTrQh7KKIAW0zaU7pcniI08x1TIhEnbTgDT4+t0vVJ/A6pzsSkJRwY9aTZTC52z1tHvueCbhpsiRXk5i68YgCzhHV6npqFZwQIySlTP0/ujc+RQLrmTmAgvE9CGoOECa5RXnp3gBttNnvRBYuSQk0Y08ruUsnwtbCofHiILvguY5zOxD44R0rV4n0DyqG8HKFCSYBYGMtLzJjtmJuAQgRGfn5wTFgxlAEpwkmwfOlv6uiR4rAJanpdfVwQXGoKnwnjrnUnpiVonxlTCZIMQqDUUzL2Ckqe8DJKRC1whvLlF61sRpe9z/dt5Vqo4lk0+uiCV+bkVeqttRCo3Ix6kmORMyzAzeMJJZE2bnEH2Gz15eJjn4HU0aQMJzjyYk3qmOnjByUA/TPE2L3QmAFjvHgj0Ucr0Zq1kfT3RUk1FuXjhdCpY+9qnT3hgJzjd1hyqO30J54Ok/3B1QFXCcsS3z0U525gFRgAOTJqkNCcKqZoCYF4eq3iLpiIbcjshtLFPeM033v8wed7jQBOjEoqXVdZSNovP62+kCj/l2VELtB9CN+uqOZwpQtU17ycPGY9p8V+IKYksToyVIvhJyl7+75dEWBdqnVh5HwU9kUikvOW3v3SmW9A893ufgX6P9HpdNro8d+BRWqzNxXHTt7n0Wdw7iE4OQbZnzbhjqIFMCT8b9h/Eh8/02xkjHZuO28cXktusU8IO8yG0EcMbwf4IZwysCopfIYqtggOR4gf+QEZgMnArssshtBy3jBa9JlRJEsfNTu7Zjf0h0mRit0+j9H47G7uedy8aF1XFGHK8F5sSsUyoYM410+He292GtNaiQh7148Q9ilCBe1r/6vK9CHfYkL136h2McZWabfADGwJWLwqDhBnIssfFSx5Gavb9eTFVFwvwmGsXDosPvA4J5t97HecXSGNlIMnE9QCeUhMfXpUG8f/UQLklLxSatcW381V6E92pUmaRUZ8YR3omghMFHLL37kLIvmH6G/qL7C0dqBUPmqDx3rJupwI/0d7m1HWZRNR+2QlyNB039yIvBhL3DNp//MI9g5ndHQRUmVkSzLcdgT7hNyctPCtpyEY+uvAEuPhdyh/2/LCoGa1oK6OM/BdQIcFxAEXRh7swmkp0hC0bFfoNPJJwc+wHwrga/D3jv8cs3zWyMEbmMPYZKKAkn7WoI7kqTvsKe7ZbL13spJV/Ipb1LyhRVe5DBnB7NvNVE73ROD9TcY2wKfxQpY1k4D7QXg45Fxsx2Nqz7u7FOnqqrphehaluUbUlFXnEnyt9oRPKCYH63QSWlBgvnkRpUr+1e5CSVefejyuH3Lqi/HzbDX5FoV+P3TAJAAA=" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="" />
+
+
+<script src="https://ajax.aspnetcdn.com/ajax/4.6/1/MicrosoftAjax.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+(window.Sys && Sys._Application && Sys.Observer)||document.write('<script type="text/javascript" src="/ScriptResource.axd?d=5GOX_fqKEdc2p-5gWAn5AFDg3MFgIitJfO_FPUK7316wTO3eFmRj6o9iQmX1rGB-kgpXxAimoeEfeWhzxObgNlZ_oQIxNweME4RCpCa7P7uQP0F-VmmbUREPQ2j6ohOPWsxs5tcJC1TXVjyfZsFM8zTsCp1_IuD3yQ_tcxm1OwI1&t=5c0e0825"><\/script>');//]]>
+</script>
+
+<script src="/ScriptResource.axd?d=owBGw_CQ3TeY_JBqW2B4LxJ2MEiWKdcBbT8Ac2zkfCFtKRiiEr7_0fVbRe8M7PhBl6W-60-gUu-esfYAwjNHtF-mm2T7r3R7KWlf62vMZy2XVWNQS6kVwW6EH6Q7ynAJ5z_jphgCabnW1dxdxtDVcdMea0AetraqF-NfQCd1GlsZRBHtYzJQT4WVVruIzzBv5B9vvZI-pcSXULV2q9gt63lawFFEfGfDdNOH4M_s3lyI9TcOG0X-xLAxbhDglOpp6kowiq9FBHFSP84xRJIBVQaq-uKvbRwaUYy2dgqYqPOrdVBN61TVWXxHRPpwhdjoJosj7t1qvnij4mK36_WXBllfIKSIbdVRSBYBRrMEMocasWbjLrSLgbVx34U38S1hopTUs10D9H_2FZG8zgbl3XLuO1Fnu_scjLGDcFO5gu8H--TPxMponHI-8aRe6snm0" type="text/javascript"></script>
+<script src="/ScriptResource.axd?d=SIvv7XeIqFy08DlMtnsxxw17X3wH1gqwSulolX3GkkdyFI2wCzO59XsC99pDvj94FGU5dro2Ne0XzItrs0t1BCHwczBWY-9fiB2oDeFPGxfXpRxawIokQrbL1Gc8KSj5MdOemjRQOdi4oBC_cBOnFUFyNuS-JRRcQou5bfpIhoLzXy0kSsBHLPkQa9WPuxOq0&amp;t=640da230" type="text/javascript"></script>
+    
+<script type="text/javascript">
+    try{
+        function SeamlessEndRequestHandler(sender, args) {
+            try {
+                var dataItems = args.get_dataItems();
+                if(dataItems.ctl04_seamless_script_manager)
+                    document.getElementById('__SEAMLESSVIEWSTATE').value = dataItems.ctl04_seamless_script_manager;
+            }
+            catch (e) { }
+        }
+
+        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(SeamlessEndRequestHandler);
+    }
+    catch (e) { }
+</script>
+
+    <div class="unsupported-browser-warning js-element"></div>
+    
+    <div hidden>
+        <span id="new-window-0">opens in new tab or window </span>
+    </div>
+    <div class="overlay-container"></div>
+    
+    <div class="background-container">
+        <div class="page-container">
+            <!-- OC Layout Element GROUP TEMPLATE -->
+            <!--groupTemplateStart--><div id="skip-to-content-container">
+        <a href='#main-content' class="visuallyhidden focusable" id='skip-to-content-link'>Skip to main content</a>
+    </div><header>
+            <div class="toolbar-outer-container">
+  <div class="toolbar-inner-container clearfix">
+    <div class="toolbar-item toolbar-quicklinks toolbar-display-dropdown">
+	<button type="button" aria-controls="toolbar-quicklinks-drop-down" aria-expanded="false" class="toolbar-button toolbar-button-quicklinks js-element"><span>Quick Links</span><i aria-hidden="true"></i></button>	
+	<div id="toolbar-quicklinks-drop-down" class="toolbar-drop-down toolbar-quicklinks-drop-down clearfix">
+		<ul>
+		  <li><a href="https://www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings" class="oc-icon-b oc-i--none link-type-internal"><span>City Meetings</span></a></li><li><a href="https://www.cityofdoral.com/Elected-officials" class="oc-icon-b oc-i--none link-type-internal"><span>Elected Officials</span></a></li><li><a href="https://doralfl.attract.neogov.com/p/careers" class="oc-icon-b oc-i--none link-type-external" target="_blank"><span>Jobs</span></a></li>
+		</ul>
+	</div>
+</div><div class="toolbar-item toolbar-language notranslate toolbar-display-dropdown"><div class="no-js-element">
+			<a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines?oc_lang=en-US" class="lang-item lang-en-us" data-translate-to="en-us" lang="en-US">English (United States)<span class="visuallyhidden"> Select this as your preferred language</span></a><a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines?oc_lang=es" class="lang-item lang-es" data-translate-to="es" lang="en">Spanish<span class="visuallyhidden"> Select this as your preferred language</span></a>
+		</div>
+	<button type="button" aria-controls="toolbar-language-drop-down" aria-expanded="false" class="toolbar-button toolbar-button-language js-element">  
+        <span class="current-language">
+            Select a language to translate to
+		</span>
+		<i aria-hidden="true"></i>
+	</button>
+	<div id="toolbar-language-drop-down" class="toolbar-drop-down toolbar-language-drop-down js-element clearfix">
+		<ul>
+		    <li><a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines?oc_lang=en-US" class="lang-item lang-en-us" data-translate-to="en-us" lang="en-US">English (United States)<span class="visuallyhidden"> Select this as your preferred language</span></a></li><li><a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines?oc_lang=es" class="lang-item lang-es" data-translate-to="es" lang="en">Spanish<span class="visuallyhidden"> Select this as your preferred language</span></a></li>
+        </ul>
+	</div></div>
+  </div>
+</div>
+            <div class="header-outer-container">
+    <div class="header-container header-layout-4  clearfix">
+			<div class="header-site-logo">
+				<a href="https://www.cityofdoral.com/Home"  lang="en-US">
+					<span class="visuallyhidden">
+					City of Doral - Home - Logo
+					</span>
+				</a>
+			</div>
+      
+		    <div class="mobile-search-btn js-element">
+		        <button><i aria-hidden="true"></i><span class="mobile-search-btn-text"><span class="visuallyhidden">Open </span>Search</span></button>
+		    </div>
+		    <div class="header-website-settings">
+                <button id="btn-mob-nav">
+                    <i aria-hidden="true"></i><span class="side-menu-btn-text">Menu</span>
+                </button>
+        	</div>
+          <div class="navigation-outer-container">
+	<div id="nav" role="navigation" class="navigation-container  navigation-container-option-8" data-menu-type="horizontal" aria-label="primary">
+        <div class="grid">
+            <div class="col-xs-12">              
+                <ul class="sf-menu" id="sc-main-menu"><li class="nav-section-quarters-1   first-item nav-item-seq-1">
+<a href="https://www.cityofdoral.com/About" class="nav-level-1 nav-has-children"  target="">
+	<i class="item-icon" aria-hidden="true"></i><span class="item-text">About</span>
+</a>
+<button class="mobnav-subarrow"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text" >Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+
+          
+            <li class=" "><a href="https://www.cityofdoral.com/About/Doral-Facts" class=""  target="">Doral Facts</a></li><li class=" "><a href="https://www.cityofdoral.com/About/Doral-History" class=""  target="">Doral History</a></li></ul></li>
+          
+            <li class="nav-section-quarters-1   nav-item-seq-2">
+<a href="https://www.cityofdoral.com/Businesses" class="nav-level-1 nav-has-children"  target="">Businesses</a>
+<button class="mobnav-subarrow"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text" >Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Businesses/Starting-a-Business-in-Doral" class=""  target="">Starting a Business in Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Grand-Openings-and-Ribbon-Cutting-Ceremonies" class=""  target="">Grand Openings and Ribbon-Cutting Ceremonies</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Community-Assistance" class=""  target="">Community Assistance</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Commercial-Property-Search" class=""  target="">Commercial Property Search</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Doral-at-a-Glance" class=""  target="">Doral at a Glance</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/New-Businesses" class=""  target="">New Businesses</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Economic-Development-Partners" class=""  target="">Economic Development Partners</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Economic-Development-Reports" class=""  target="">Economic Development Reports</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Doral-Décor-District" class=""  target="">Doral Décor District</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Downtown-Doral-Arts-District" class=""  target="">Downtown Doral Arts District</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Best-of-the-Best" class=""  target="">Best of the Best 2025</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Local-Discounts" class=""  target="">Spend Local, Save Local</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Sister-Cities-Program" class=""  target="">Sister Cities Program</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Doral-GIS-Info-Portal" class=""  target="_blank">Doral GIS Info Portal</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Sponsorship-Opportunities" class=""  target="_blank">Sponsorship Opportunities</a></li><li class=" "><a href="https://www.cityofdoral.com/Businesses/Business-Mailing-List" class=""  target="">Business Mailing List</a></li></ul></li>
+          
+            <li class="nav-section-quarters-2 nav-active-path  nav-item-seq-3">
+<a href="https://www.cityofdoral.com/Departments" class="nav-level-1 nav-has-children"  target="">Departments</a>
+<button class="mobnav-subarrow"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text" >Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/City-Attorneys-Office" class=""  target="_self">City Attorney's Office</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/City-Clerks-Office" class=""  target="_self">City Clerk's Office</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/City-Managers-Office" class=""  target="_self">City Manager's Office</a></li><li class="nav-active-path "><a href="https://www.cityofdoral.com/Departments/Building-Department" class="nav-has-children"  target="">Building Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/About-Building-Department"  target="">About Building Department</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Announcements-and-Updates"  target="">Announcements and Updates</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Building-Recertification-Program"  target="">Building Recertification Program</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Complaints"  target="">Complaints</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Contractor-Registration"  target="">Contractor Registration</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Fee-Schedule"  target="">Fee Schedule</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Frequently-Asked-Questions"  target="">Frequently Asked Questions</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Flood-Information"  target="">Flood Information</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Hours-of-Operation"  target="">Hours of Operation</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Inspections-and-Route-Info"  target="">Inspections and Route Info</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Lobby-Queue"  target="">Lobby Queue</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/MeetQ"  target="">MeetQ</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/New-Business-Information"  target="">New Business Information</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/New-Homeowner-Information"  target="">New Homeowner Information</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Outdoor-Dining-Requirements"  target="">Outdoor Dining Requirements</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Fee-Utilization-Report"  target="">Permit Fee Utilization Report</a></li><li class="nav-active-path nav-active-page"><a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines"  target="">Permit Submittal Guidelines</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Private-Provider-Guidelines"  target="">Private Provider Guidelines</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Records-Request"  target="">Records Request</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Building-Department/Videos-and-Tutorial-Guides"  target="">Videos and Tutorial Guides</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department" class="nav-has-children"  target="">Code Compliance Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Code-Violation-Lien-Searches"  target="">Code Violation Lien Searches</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Frequently-Asked-Questions"  target="">Frequently Asked Questions</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Helpful-Links"  target="">Helpful Links</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/If-you-receive-a-code-violation"  target="">If you receive a code violation</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Keep-Doral-Beautiful-Award"  target="">Keep Doral Beautiful Award</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Mayors-Citizens-Government-Academy"  target="">Mayor's Citizens Government Academy</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Outreach-Activities"  target="">Outreach Activities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Registration-of-Defaulted-Mortgaged-Property"  target="">Registration of Defaulted Mortgaged Property</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Report-a-Concern"  target="">Report a Concern</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Short-Term-Vacation-Rental-Ordinance-FAQs"  target="">Short-Term Vacation Rental Ordinance FAQs</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department/Special-Magistrate"  target="">Special Magistrate</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department" class="nav-has-children"  target="">Finance Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/Adopted-Budget-in-Brief"  target="">Adopted Budget in Brief</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/Annual-Financial-Reports"  target="">Annual Financial Reports</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/City-Budget"  target="">City Budget</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/Community-Development-Budgets"  target="">Community Development Budgets</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Finance-Department/Popular-Financial-Reports"  target="">Popular Financial Reports</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources" class="nav-has-children"  target="">Human Resources</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources/Why-Doral"  target="_blank">Why Doral?</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources/Collective-Bargaining-Agreements"  target="">Collective Bargaining Agreements</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources/Job-Opportunities"  target="_blank">Job Opportunities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources/Pay-and-Classification-Plan"  target="">Pay & Classification Plan</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Human-Resources/Policies-and-Procedures"  target="">Policies and Procedures</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology" class="nav-has-children"  target="">Information Technology</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology/About-IT-Department"  target="">About IT Department</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology/Awards"  target="">Awards</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology/Essential-IT-Capabilities"  target="">Essential IT Capabilities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology/Residents-Engagement-and-Smart-City-Initiatives"  target="">Residents Engagement and Smart City Initiatives</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Information-Technology/Technology-Innovative-Community"  target="">Technology Innovative Community</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation" class="nav-has-children"  target="">Parks & Recreation</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Adopt-a-Garden-Program"  target="">Adopt-a-Garden Program</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Adult-and-Teens-Programs"  target="">Adult and Teens Programs</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Adult-Sports"  target="">Adult Sports</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Call-for-Works-International-Women’s-Month-Art-Exhibit-2026"  target="">Call for Works - International Women’s Month Art Exhibit</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Camps"  target="">Camps</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Event-Vendors"  target="">Event Vendors</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Fitness-Center-Classes-and-Memberships"  target="">Fitness Center Classes and Memberships</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Mailing-List"  target="">Mailing List</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Master-Plan"  target="">Master Plan</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/New-Kayak-Kiosks-Now-Available"  target="">New Kayak Kiosks Now Available!</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Parks-and-Facilities"  target="">Parks and Facilities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Private-Swim-Lessons"  target="">Private Swim Lessons</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Program-Registration-Launch"  target="_self">Program Registration Launch</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Publications"  target="">Publications</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Refund-Policy"  target="">Refund Policy</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Silver-Club"  target="">Silver Club</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Special-Events"  target="">Special Events</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Special-Needs-Programs"  target="">Special Needs Programs</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Sponsorship-Opportunities"  target="">Sponsorship Opportunities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Step-Up-Doral-Programs"  target="">Step Up Doral Programs</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Swim-Lessons-Winter-2026"  target="">Swim Lessons - Winter 2026</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Volunteers"  target="">Volunteers</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Youth-Programs"  target="">Youth Programs</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Youth-Sports"  target="">Youth Sports</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department" class="nav-has-children"  target="">Police Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Camping-Ordinance-Resources"  target="">Camping Ordinance & Resources</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Citizens-Police-Academy"  target="">Citizens Police Academy</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Command-Staff"  target="">Command Staff</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Commendations-Complaints"  target="">Commendations & Complaints</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Connect-Doral"  target="">Connect Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Crime-Mapping"  target="">Crime Mapping</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Emergency-Preparedness"  target="">Emergency Preparedness</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Job-Opportunities"  target="_blank">Job Opportunities</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Property-and-Evidence"  target="">Property and Evidence</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Special-Needs-Registry"  target="">Special Needs Registry</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Police-Department/Speeding-Cameras-in-School-Zones"  target="">Speeding Cameras in School Zones</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department" class="nav-has-children"  target="">Planning and Zoning Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/BTR-Payment-Schedule-Sample"  target="">BTR Payment Schedule Sample</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Business-License-Process"  target="">Business License Process</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Business-License-Division"  target="">Business License Division</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Business-Tax-Receipt-Quick-Pay"  target="">Business Tax Receipt Quick Pay</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Certificate-of-Use-for-Foreclosed-Properties"  target="">Certificate of Use for Foreclosed Properties</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Comprehensive-Plan"  target="">Comprehensive Plan</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Development-Population-Stats"  target="">Development - Population Stats</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Development-Review-Application-and-Forms"  target="">Development Review Application and Forms</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Development-Review-Process"  target="">Development Review Process</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Future-Land-Use-Map"  target="">Future Land Use Map</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/General-information"  target="">General information</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Green-Re-use-Redevelopment"  target="">Green Re-use Redevelopment</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Housing-Masterplan"  target="">Housing Masterplan</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Illustrative-Zoning-Guide"  target="">Illustrative Zoning Guide</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Land-Use-Documents"  target="">Land Use Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Official-Zoning-Map"  target="">Official Zoning Map</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Public-Arts-Program"  target="">Public Arts Program</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/School-Concurrency"  target="">School Concurrency</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Special-Events-Permits"  target="">Special Events Permits</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department/Studies-and-Master-Plans"  target="">Studies and Master Plans</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department" class="nav-has-children"  target="">Procurement and Asset Management Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Active-Solicitations-2025"  target="">Active Solicitations 2025</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Active-Solicitations-2024"  target="">Active Solicitations 2024</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Bid-Notifications"  target="">Bid Notifications</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Cone-of-Silence"  target="">Cone of Silence</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Formal-Bid-Process"  target="">Formal Bid Process</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/How-to-do-Business-with-City-of-Doral"  target="">How to do Business with City of Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Solicitations-2021-2023"  target="">Solicitations 2021 - 2023</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department" class="nav-has-children"  target="">Public Affairs Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department/Photo-Video-Disclaimer"  target="">Photo-Video Disclaimer</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department/Request-for-Use-of-Facility"  target="">Request for Use of Facility</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department/Social-Media-Disclaimer"  target="">Social Media Disclaimer</a></li></ul></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department" class="nav-has-children"  target="">Public Works Department</a><button class="mobnav-subarrow-child"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text">Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Adopt-A-Street"  target="">Adopt-A-Street</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Composting-Program"  target="">Composting Program</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Directory"  target="">Directory</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Documents"  target="">Documents</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Doral-Trolley"  target="">Doral Trolley</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Frequently-Asked-Questions"  target="">Frequently Asked Questions</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Green-Initiatives"  target="">Green Initiatives</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Helpful-Links"  target="">Helpful Links</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Master-Plans"  target="">Master Plans</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Parking-in-Doral"  target="">Parking in Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Permit-Procedures"  target="">Permit Procedures</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Solid-Waste"  target="">Solid Waste</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Storm-Preparedness-of-Urban-Forest"  target="">Storm Preparedness of Urban Forest</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Stormwater-Utility-Division"  target="">Stormwater Utility Division</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Summer-Irrigation-Tips"  target="">Summer Irrigation Tips</a></li><li class=" "><a href="https://www.cityofdoral.com/Departments/Public-Works-Department/Tree-Permits"  target="">Tree Permits</a></li></ul></li></ul></li>
+          
+            <li class="nav-section-quarters-2   nav-item-seq-4">
+<a href="https://www.cityofdoral.com/Residents" class="nav-level-1 nav-has-children"  target="">Residents</a>
+<button class="mobnav-subarrow"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text" >Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Residents/BlastingMining-Information" class=""  target="">Blasting/Mining Information</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/City-of-Doral-App" class=""  target="">City of Doral App</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/City-of-Doral-Emergency-Hardship-Grant-for-Families" class=""  target="">City of Doral Emergency Hardship Grant for Families (EHG4F)</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Community-Development-Districts-Information" class=""  target="">Community Development Districts Information</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/move-the-incinerator" class=""  target="">Help us move the Incinerator out of Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Department-Phone-Numbers" class=""  target="">Department Phone Numbers</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Doral-Alerts" class=""  target="_blank">Doral Alerts</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Doral-Life" class=""  target="">Doral Life</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Doral-TV-Channel-77" class=""  target="">Doral TV - Channel 77</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Feedback" class=""  target="">Feedback</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Freebee-in-Doral" class=""  target="">Freebee in Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/GIS-Portal-redirect" class=""  target="_blank">GIS Portal</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Info-Doral" class=""  target="">Info Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Odor-Monitoring-Services" class=""  target="">Odor Monitoring Services</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Online-Services" class=""  target="_self">Online Services</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Party-Rentals" class=""  target="_self">Party Rentals</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Sign-Up-for-Our-Newsletter" class=""  target="">Sign Up for Our Newsletter</a></li><li class=" "><a href="https://www.cityofdoral.com/Residents/Special-Needs-Resource-Directory" class=""  target="">Special Needs Resource Directory</a></li></ul></li>
+          
+            <li class="nav-section-quarters-3   nav-item-seq-5">
+<a href="https://www.cityofdoral.com/Visitors" class="nav-level-1 nav-has-children"  target="">Visitors</a>
+<button class="mobnav-subarrow"><i aria-hidden="true"></i><span class="visuallyhidden opensubmenu text" >Sub-menu</span></button>
+<ul aria-label="Sub-menu">
+
+          
+            <li class=" "><a href="https://www.cityofdoral.com/Visitors/Dining-News-in-Doral" class=""  target="">Dining News in Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Visitors/Hotels-in-Doral" class=""  target="">Hotels in Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Visitors/Parks-and-Facilities" class=""  target="_self">Parks and Facilities</a></li><li class=" "><a href="https://www.cityofdoral.com/Visitors/Ritmo-Doral" class=""  target="">Ritmo Doral</a></li><li class=" "><a href="https://www.cityofdoral.com/Visitors/Shopping-in-Doral" class=""  target="">Shopping in Doral</a></li></ul></li>
+          
+            </ul>
+            </div>
+        </div>
+    </div>
+</div>
+			
+			<div class="header-search-control-container" id="header-search">
+				<div class="search-inner-container">
+					<div class="sc-search-panel">
+	<label for="ctl08_txtSearch" id="ctl08_lblSearch" class="sc-search-label">Search</label><input name="ctl08$txtSearch" type="text" id="ctl08_txtSearch" class="sc-search-text" placeholder="How can we help you?" /><input type="submit" name="ctl08$btnSearch" value="Search" id="ctl08_btnSearch" class="sc-search-button" />
+</div>
+					<div role="status" id="predictiveResults"></div>
+				</div>
+			</div>
+    </div>
+</div>
+
+            
+            </header>
+            <div class="content-outer-container">
+                <div id="main" role="main" class="main-outer-container clearfix">
+                        
+                        <div class="content-main-container">
+                            <div class="grid">
+					            <div class="col-xs-12">
+						            <nav id="breadcrumbs-container" aria-label="Breadcrumbs">
+							            <span class="visuallyhidden">You Are Here : </span>
+<span role="list">
+<span role="listitem">
+	<a href="https://www.cityofdoral.com/Home"  lang="en-US">Home</a>
+	<span class="nav-separator" role="presentation">/</span>
+</span>
+          <span role="listitem"><a href="https://www.cityofdoral.com/Departments" >Departments</a><span class='nav-separator' role="presentation">/</span></span><span role="listitem">
+	<a href="https://www.cityofdoral.com/Departments/Building-Department" >
+		Building Department
+	</a>
+	<span class='nav-separator' role="presentation">/</span>
+</span>
+<span class="current-page" role="listitem" >Permit Submittal Guidelines</span>
+          </span>
+						            </nav>
+					            </div>
+                      
+					            <div class="col-xs-12">
+						            <div class="main-inner-container">
+                                        <div class="grid">							
+								            <div class="col-lg-4">								
+									            <div id="sub-navigation-outter-container" role="navigation" aria-label="Section Navigation">
+									            &nbsp;
+									            <div id="sub-navigation-container">
+                                <p class="sub-nav-header" role="heading" aria-level="2" id="in-this-section" >
+	In This Section
+</p>
+<ul><li class='nav-level-1   '>
+	<a href="https://www.cityofdoral.com/Departments/City-Attorneys-Office"  target="_self">City Attorney's Office</a>
+	
+</li><li class='nav-level-1   '>
+	<a href="https://www.cityofdoral.com/Departments/City-Clerks-Office"  target="_self">City Clerk's Office</a>
+	
+</li><li class='nav-level-1   '>
+	<a href="https://www.cityofdoral.com/Departments/City-Managers-Office"  target="_self">City Manager's Office</a>
+	
+</li><li class='nav-level-1 nav-active-path  nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department"  target="">Building Department</a>
+	<ul><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/About-Building-Department"  target="">About Building Department</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Announcements-and-Updates"  target="">Announcements and Updates</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Building-Recertification-Program"  target="">Building Recertification Program</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Complaints"  target="">Complaints</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Contractor-Registration"  target="">Contractor Registration</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Directory"  target="">Directory</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Documents"  target="">Documents</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Fee-Schedule"  target="">Fee Schedule</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Frequently-Asked-Questions"  target="">Frequently Asked Questions</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Flood-Information"  target="">Flood Information</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Hours-of-Operation"  target="">Hours of Operation</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Inspections-and-Route-Info"  target="">Inspections and Route Info</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Lobby-Queue"  target="">Lobby Queue</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/MeetQ"  target="">MeetQ</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/New-Business-Information"  target="">New Business Information</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/New-Homeowner-Information"  target="">New Homeowner Information</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Outdoor-Dining-Requirements"  target="">Outdoor Dining Requirements</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Fee-Utilization-Report"  target="">Permit Fee Utilization Report</a>
+	
+</li><li class='nav-level-2 nav-active-path nav-active-page '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Permit-Submittal-Guidelines"  target="">Permit Submittal Guidelines</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Private-Provider-Guidelines"  target="">Private Provider Guidelines</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Records-Request"  target="">Records Request</a>
+	
+</li><li class='nav-level-2   '>
+	<a href="https://www.cityofdoral.com/Departments/Building-Department/Videos-and-Tutorial-Guides"  target="">Videos and Tutorial Guides</a>
+	
+</li></ul>
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Code-Compliance-Department"  target="">Code Compliance Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Finance-Department"  target="">Finance Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Human-Resources"  target="">Human Resources</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Information-Technology"  target="">Information Technology</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation"  target="">Parks & Recreation</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Police-Department"  target="">Police Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Planning-and-Zoning-Department"  target="">Planning and Zoning Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department"  target="">Procurement and Asset Management Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Public-Affairs-Department"  target="">Public Affairs Department</a>
+	
+</li><li class='nav-level-1   nav-has-children'>
+	<a href="https://www.cityofdoral.com/Departments/Public-Works-Department"  target="">Public Works Department</a>
+	
+</li></ul>
+									            </div>
+									            </div>
+								            </div>
+								            <div class="col-xs-12 col-lg-8">
+							                <div id="main-content" class="main-container clearfix">
+							                  
+                                <!-- OC Layout Element Conent Template -->
+							                  <!--normalTemplateStart--><h1 class='oc-page-title '>Permit Submittal Guidelines</h1>
+
+
+<div><style>
+	.row-index-9{display:none;}
+	.velaro-available-launcher .velaro-custom-launcher-frame, .velaro-available-launcher .velaro-custom-launcher-frame iframe 
+		{right: 5em; !important;}
+</style>
+<script>
+/*	(function () {
+        var w = window; var d = document;
+        if (w.Velaro) { return; }
+        var v = function () { return v.c(arguments) };
+        v.q = []; v.c = function (args) { v.q.push(args) }; w.Velaro = v;
+        v.endpoints = {
+            mainApi: 'https://api-main-us-east.velaro.com/',
+            cdn: 'https://eastprodcdn.azureedge.net/'
+        };
+        w.addEventListener('load', function () {
+            var s = d.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = v.endpoints.cdn + 'widgets/shim';
+            var x = d.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        });
+
+        Velaro('boot', {
+            siteId: 20180,
+            groupId: 0,
+            // CustomVars are optional.
+            // These are only available with some subscriptions.
+            customVars: {
+                exampleKey1: 'exampleValue1',
+                exampleKey2: 'exampleValue2'
+            }
+        });
+    }());
+
+</script>
+<noscript>
+    <a href=https://www.velaro.com title="Contact us" target="_blank">Questions?</a>
+    powered by <a href=http://www.velaro.com title="Velaro live chat">velaro live chat</a>
+</noscript></div>
+<p><a href="/files/assets/city/v/2/departments/building/documents/permit-submittal-guidelines.pdf" target="_blank" title="Permit Submittal Guidelines" class="styled-button document ext-pdf"><i aria-hidden="true"></i>Permit Submittal Guide<span class="file-info">(PDF,&nbsp;1012KB)</span></a></p>
+<p><a title="Window Door Inspection Guidelines" href="/files/assets/city/v/2/departments/building/documents/window-door-inspection-guidelines-09-29-25.pdf" target="_blank" class="document ext-pdf"><i aria-hidden="true"></i>Window - Door Inspection Guidelines<span class="file-info">(PDF,&nbsp;492KB)</span></a></p>
+<p><a title="Window Door Replacement Permit Submittal Checklist" href="/files/assets/city/v/1/departments/building/documents/window-door-replacement-permit-submittal-checklist.pdf" target="_blank" class="document ext-pdf"><i aria-hidden="true"></i>Window - Door Replacement - Permit Submittal Checklist<span class="file-info">(PDF,&nbsp;162KB)</span></a></p>
+<h2>Steps to submitting a permit</h2>
+<p><span class="emphasis-box-1">Online System Registration (<strong>all users must register</strong>)<br />
+Please <a href="https://doralfl-energovweb.tylerhost.net/apps/SelfService#/home" target="_blank">Register Here</a> at our CSS Portal.</span></p>
+<h2>Flatten All PDFs First!</h2>
+<p><iframe allowfullscreen="" frameborder="0" height="640" src="https://scribehow.com/embed/Customer_Guide_PDFs_and_Flattening_Layers__lIqrzwagTTm2oYGGsKMIfQ?as=scrollable&amp;removeLogo=true" width="100%" title="Flattening PDFs"></iframe></p>
+<h2>Contractor Registration (for Contractors ONLY)</h2>
+<p>Contractor of record must be registered with the City of Doral. Please see <a href="https://www.cityofdoral.com/Departments/Building-Department/Contractor-Registration" target="_blank">Contractor Registration Page</a> for more information.&nbsp;<a href="/files/assets/city/v/1/departments/building/documents/contractor-registration.pdf" target="_blank" title="Contractor Registration" class="document ext-pdf"><i aria-hidden="true"></i>Contractor Registration Form<span class="file-info">(PDF,&nbsp;143KB)</span></a>.</p>
+<h2>Permit Submittal Process</h2>
+<ol>
+<li>Print and fill out the City of Doral <a href="/files/assets/city/v/4/departments/building/documents/permit-application.pdf" target="_blank" title="Permit Application" class="document ext-pdf"><i aria-hidden="true"></i>Permit Application<span class="file-info">(PDF,&nbsp;2MB)</span></a> as well as any other required forms and if required, submit one application for each discipline (sub-permit) - depending on the scope of work. Make sure all Documents are completely filled out signed and notarized.<br />
+a) For new construction or commercial projects please include the <a href="https://www.miamidade.gov/permits/library/municipal-permit.pdf" target="_blank">Miami Dade County Municipal Permit Application</a> and the <a href="https://www.miamidade.gov/permits/library/requested-reviews.pdf" target="_blank">Miami-Dade County Contact Form</a>.<br />
+<br /></li>
+<li>All plans requiring a design professional&rsquo;s signature shall be digitally signed; digitally signing your design file protects the contents from being altered. Please do not add any additional/optional security from your PDF software or certification authority. &ldquo;Locking&rdquo; or &ldquo;Restricting&rdquo; the document before you submit the file can prevent us from opening and processing the document or stamping it for approval in our software. This results in lost time for us all and may require you to resubmit a new set of documents.<br />
+<br /></li>
+<li>If applying for an <strong>Owner-Builder permit</strong>, please read the requirements prior to applying, fill out, and submit the <a href="/files/assets/city/v/1/departments/building/documents/owner-builder-affidavit.pdf" target="_blank" title="Owner Builder Affidavit" class="document ext-pdf"><i aria-hidden="true"></i>Owner Builder Affidavit<span class="file-info">(PDF,&nbsp;84KB)</span></a> with all the required documents.<br />
+<br /></li>
+<li>A recorded <a href="/files/assets/city/v/1/departments/building/documents/notice-of-commencement.pdf" target="_blank" title="Notice of Commencement" class="document ext-pdf"><i aria-hidden="true"></i>Notice of Commencement (NOC)<span class="file-info">(PDF,&nbsp;151KB)</span></a> will be required for any job value greater than $5,000; except permits related to heat and air-conditioning systems, which require an NOC when the job value is greater than $15,000. <strong>The NOC must be recorded thru Miami-Dade County Clerk of Courts prior to submitting to the City of Doral.</strong><br />
+<br /></li>
+<li>When submitting documentation (specifications, calculations, NOAs, etc.) - <strong>please submit each file as one combined PDF</strong> and named accordingly, &ldquo;Specs&rdquo;, &ldquo;Structural Calcs&rdquo; etc. All files shall be appropriately named according to <a href="https://www.miamidade.gov/permits/library/guidelines/concurrent-plans-processing.pdf" target="_blank">NAMING CONVENTIONS</a> and should only be submitted as PDFs. All other formats such as img, jpeg, tiff will <span style="text-decoration: underline;"><strong>NOT</strong></span> be accepted.<br />
+<br /></li>
+<li>All documents must be submitted thru the <a href="https://doralfl-energovweb.tylerhost.net/apps/SelfService#/home" target="_blank">CSS Portal</a>.<br />
+<br /></li>
+<li>Additional permit application forms, fee sheets, etc. may be <a href="https://www.cityofdoral.com/Departments/Building-Department/Documents" target="_blank">found here</a>.</li>
+</ol>
+<p>If you have any questions or require further assistance, please contact, the City of Doral Building Department by phone: <a href="tel:3055936700">305-593-6700</a> or via email. See <a href="https://www.cityofdoral.com/Departments/Building-Department/Directory" target="_blank">staff directory here</a>.<br />
+<br />
+<span class="emphasis-box-1"><strong>Thank you for cooperation and patience.</strong></span></p>
+
+
+      
+
+
+<!--normalTemplateEnd-->
+                                
+                                
+                                
+							                </div>
+							                </div>
+							             </div>
+						            </div>
+						            </div>
+                        
+					                  </div>
+                        </div>
+                        <div class="back-to-top-container text-center">
+                            <a href="#body-top" id="back-to-top"><i aria-hidden="true"></i><span class="js-visuallyhidden">Back to top</span></a>
+                        </div>
+                </div>
+            </div><!--groupTemplateEnd-->
+            <footer>
+                
+                    <div class="footer-outer-container footer-first-row">
+                        <div class="footer-container clearfix">
+                            <div class="grid grid-pad">
+                                <div class="col-xs-12 col-s-6 col-m-3 col-lg-3 contact-us-widget" >
+	<h3 class="footer-title">Contact Us</h3>
+	<p><strong>City of Doral</strong></p>
+<p>8401 NW 53rd Terrace</p>
+<p>Doral, Florida 33166</p>
+<p><a href="https://maps.app.goo.gl/HAPNUPD1MbJYfjk38" target="_blank">View on Map</a></p>
+<p><a href="tel:305-593-6725">Phone: 305-593-6725</a></p>
+
+
+	
+	
+</div><div class="col-xs-12 col-s-6 col-m-3 col-lg-3 quick-links-widget" >
+	<h3 class="footer-title">Quick Links</h3>
+	
+	<ul class="footer-links without-icons ">  <li>
+<a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Active-Solicitations-2025" target="_self"  >Active Solicitations</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Departments/Building-Department/Flood-Information" target="_self"  >Flood Information</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Online-Services" target="_self"  >Online Services</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Government-Center/Office-of-the-City-Manager/Transparency" target="_self"  >Transparency</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Departments/Procurement-and-Asset-Management-Department/Bid-Notifications" target="_self"  >Vendor Registration</a>
+</li>
+           </ul>
+	
+</div><div class="col-xs-12 col-s-6 col-m-3 col-lg-3 get-involved-widget" >
+	<h3 class="footer-title">Get Involved</h3>
+	
+	<ul class="footer-links without-icons ">  <li>
+<a href="https://www.cityofdoral.com/Departments/Human-Resources/Job-Opportunities" target="_blank"  >Job Opportunities</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings" target="_self"  >Council Meetings</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Election-Information" target="_self"  >Elections Information</a>
+</li>
+          <li>
+<a href="https://www.cityofdoral.com/Departments/Parks-and-Recreation/Event-Vendors" target="_self"  >Become a Sponsor</a>
+</li>
+           </ul>
+	
+</div><div class="col-xs-12 col-s-6 col-m-3 col-lg-3 share-connect-widget" >
+	<h3 class="footer-title">Share &amp; Connect</h3>
+	
+	<ul class="footer-links with-icons social-media-links">  <li class="footer-link-x">
+	<a href="https://twitter.com/cityofdoral" target="_blank"  >
+<i aria-hidden="true"></i>X
+</a>
+</li>
+          <li class="footer-link-facebook">
+	<a href="https://facebook.com/cityofdoral" target="_blank"  >
+<i aria-hidden="true"></i>Facebook
+</a>
+</li>
+          <li class="footer-link-youtube">
+	<a href="https://youtube.com/user/DoralTV77" target="_blank"  >
+<i aria-hidden="true"></i>YouTube
+</a>
+</li>
+          <li class="footer-link-instagram">
+	<a href="https://instagram.com/cityofdoral/" target="_blank"  >
+<i aria-hidden="true"></i>Instagram
+</a>
+</li>
+          <li class="footer-link-">
+	<a href="https://www.cityofdoral.com/Residents/Sign-Up-for-Our-Newsletter" target="_blank"  >
+<i aria-hidden="true"></i>Subscribe to our Newsletter
+</a>
+</li>
+           </ul>
+	
+</div>
+                            </div>
+                        </div>
+                    </div>
+                
+                <div class="footer-outer-container footer-second-row">
+                    <div class="footer-container clearfix">
+                        <div class="grid grid-pad footer-secondary-links">
+                            <div class="col-xs-12 col-m-7">
+                                
+                                    <div><a href="https://www.cityofdoral.com/Privacy-Policy" target="_self"  >Privacy Statement</a>&nbsp;| <a href="https://www.cityofdoral.com/Site-Map" target="_self"  >Sitemap</a>&nbsp;| <a href="https://www.cityofdoral.com/A-Z-Index" target="_self"  >A - Z Index</a></div>
+                                
+                            </div>
+                            <div class="col-xs-12 col-m-5 powered-by">
+                                <div class="right">
+                                    &copy; 2026 City of Doral&nbsp;|&nbsp;<span class="powered-by">Powered by <a href="https://granicus.com/solution/govaccess/opencities/" target="_blank">Granicus</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="/files/oc-resources/b9015858-988c-48a4-9473-7c193df083e4/JsTextSnippets.js?ocsvclang=en-US" type="text/javascript"></script><script></script>
+    
+    // Adds Flag Icons to the Translate Function
+<script>
+$(document).ready(function() {
+    // Add flags to all language links based on class
+    $('.lang-en-us').prepend('🇺🇸 ');
+    $('.lang-es').prepend('🇪🇸 ');
+
+    // Add flag to current language based on text content
+    var currentText = $('.current-language').text().trim();
+    if (currentText === 'English (United States)') {
+        $('.current-language').prepend('🇺🇸 ');
+    } else if (currentText === 'Spanish') {
+        $('.current-language').prepend('🇪🇸 ');
+    }
+});
+</script>
+<style>
+.oc-emergency-announcement-container .side-box {
+	padding:17px 18px 0px 22px !important;
+	text-align:center;	
+	}
+.oc-emergency-announcement-container .side-box .side-box-title {
+	font-size:1.4em;
+}
+</style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZW2SDKHF6L"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-ZW2SDKHF6L');
+</script>
+    
+    </form>
+</body>
+</html>

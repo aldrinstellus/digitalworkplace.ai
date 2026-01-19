@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useKBCategories, useArticles, useDepartments } from "@/lib/hooks/useSupabase";
 import {
   Search,
   FolderOpen,
@@ -9,213 +10,39 @@ import {
   Plus,
   ChevronRight,
   ChevronDown,
-  MoreVertical,
   Edit,
-  Trash2,
-  Copy,
   Star,
   Clock,
-  User,
   Tag,
   Eye,
   Lock,
-  Building2,
   BookOpen,
   File,
-  Image,
-  Video,
-  Link2,
-  Download,
   Share2,
   History,
   CheckCircle2,
+  Loader2,
+  ThumbsUp,
 } from "lucide-react";
+import type { KBCategory, Article } from "@/lib/database.types";
 
-interface KBItem {
+interface TreeItem {
   id: string;
   name: string;
-  type: "folder" | "article" | "file";
-  department?: string;
-  children?: KBItem[];
-  updatedAt?: string;
-  updatedBy?: string;
-  status?: "draft" | "published" | "archived";
-  tags?: string[];
-  views?: number;
-  isLocked?: boolean;
+  type: "folder" | "article";
+  slug?: string;
+  children?: TreeItem[];
+  article?: Article;
+  category?: KBCategory;
 }
 
-const sampleKBStructure: KBItem[] = [
-  {
-    id: "1",
-    name: "Engineering",
-    type: "folder",
-    department: "Engineering",
-    children: [
-      {
-        id: "1-1",
-        name: "Development Guidelines",
-        type: "folder",
-        children: [
-          {
-            id: "1-1-1",
-            name: "Code Review Standards",
-            type: "article",
-            updatedAt: "2 hours ago",
-            updatedBy: "Sarah Chen",
-            status: "published",
-            tags: ["development", "standards"],
-            views: 234,
-          },
-          {
-            id: "1-1-2",
-            name: "Git Workflow",
-            type: "article",
-            updatedAt: "Yesterday",
-            updatedBy: "Alex Thompson",
-            status: "published",
-            tags: ["git", "workflow"],
-            views: 156,
-          },
-        ],
-      },
-      {
-        id: "1-2",
-        name: "Architecture Documents",
-        type: "folder",
-        children: [
-          {
-            id: "1-2-1",
-            name: "System Architecture Overview",
-            type: "article",
-            updatedAt: "1 week ago",
-            updatedBy: "Sarah Chen",
-            status: "published",
-            tags: ["architecture", "system"],
-            views: 89,
-          },
-        ],
-      },
-      {
-        id: "1-3",
-        name: "API Documentation",
-        type: "article",
-        updatedAt: "3 days ago",
-        updatedBy: "Lisa Wang",
-        status: "published",
-        tags: ["api", "documentation"],
-        views: 412,
-      },
-    ],
-  },
-  {
-    id: "2",
-    name: "Human Resources",
-    type: "folder",
-    department: "HR",
-    children: [
-      {
-        id: "2-1",
-        name: "Policies",
-        type: "folder",
-        children: [
-          {
-            id: "2-1-1",
-            name: "Employee Handbook",
-            type: "article",
-            updatedAt: "1 month ago",
-            updatedBy: "David Kim",
-            status: "published",
-            tags: ["policy", "handbook"],
-            views: 892,
-          },
-          {
-            id: "2-1-2",
-            name: "Vacation Policy",
-            type: "article",
-            updatedAt: "2 weeks ago",
-            updatedBy: "David Kim",
-            status: "published",
-            tags: ["policy", "vacation"],
-            views: 567,
-          },
-        ],
-      },
-      {
-        id: "2-2",
-        name: "Benefits Guide",
-        type: "article",
-        updatedAt: "1 week ago",
-        updatedBy: "David Kim",
-        status: "published",
-        tags: ["benefits", "guide"],
-        views: 345,
-      },
-    ],
-  },
-  {
-    id: "3",
-    name: "Marketing",
-    type: "folder",
-    department: "Marketing",
-    children: [
-      {
-        id: "3-1",
-        name: "Brand Guidelines",
-        type: "article",
-        updatedAt: "3 days ago",
-        updatedBy: "Michael Park",
-        status: "published",
-        tags: ["brand", "guidelines"],
-        views: 234,
-      },
-      {
-        id: "3-2",
-        name: "Campaign Templates",
-        type: "folder",
-        children: [
-          {
-            id: "3-2-1",
-            name: "Email Templates",
-            type: "article",
-            updatedAt: "1 week ago",
-            updatedBy: "Robert Johnson",
-            status: "draft",
-            tags: ["email", "templates"],
-            views: 78,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "4",
-    name: "Sales",
-    type: "folder",
-    department: "Sales",
-    children: [
-      {
-        id: "4-1",
-        name: "Sales Playbook",
-        type: "article",
-        updatedAt: "5 days ago",
-        updatedBy: "Emily Rodriguez",
-        status: "published",
-        tags: ["sales", "playbook"],
-        views: 456,
-        isLocked: true,
-      },
-    ],
-  },
-];
-
 interface TreeNodeProps {
-  item: KBItem;
+  item: TreeItem;
   level: number;
   expandedFolders: Set<string>;
   selectedItem: string | null;
   onToggleFolder: (id: string) => void;
-  onSelectItem: (id: string) => void;
+  onSelectItem: (id: string, item: TreeItem) => void;
 }
 
 function TreeNode({
@@ -243,7 +70,7 @@ function TreeNode({
           if (isFolder) {
             onToggleFolder(item.id);
           }
-          onSelectItem(item.id);
+          onSelectItem(item.id, item);
         }}
       >
         {isFolder ? (
@@ -253,7 +80,11 @@ function TreeNode({
             ) : (
               <ChevronRight className="w-4 h-4 text-white/40 flex-shrink-0" />
             )}
-            <FolderOpen className={`w-4 h-4 flex-shrink-0 ${isExpanded ? "text-blue-400" : "text-yellow-400"}`} />
+            <FolderOpen
+              className={`w-4 h-4 flex-shrink-0 ${
+                isExpanded ? "text-blue-400" : "text-yellow-400"
+              }`}
+            />
           </>
         ) : (
           <>
@@ -262,12 +93,11 @@ function TreeNode({
           </>
         )}
         <span className="truncate text-sm">{item.name}</span>
-        {item.status === "draft" && (
+        {item.article?.status === "draft" && (
           <span className="px-1.5 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-400">
             Draft
           </span>
         )}
-        {item.isLocked && <Lock className="w-3 h-3 text-white/30" />}
       </div>
       {isFolder && isExpanded && item.children && (
         <div>
@@ -288,24 +118,86 @@ function TreeNode({
   );
 }
 
-function findItem(items: KBItem[], id: string): KBItem | null {
-  for (const item of items) {
-    if (item.id === id) return item;
-    if (item.children) {
-      const found = findItem(item.children, id);
-      if (found) return found;
-    }
-  }
-  return null;
-}
-
 export default function ContentPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(["1", "2"])
-  );
-  const [selectedItem, setSelectedItem] = useState<string | null>("1-1-1");
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [selectedData, setSelectedData] = useState<TreeItem | null>(null);
   const [showNewMenu, setShowNewMenu] = useState(false);
+
+  const { categories, loading: categoriesLoading } = useKBCategories();
+  const { articles, loading: articlesLoading } = useArticles();
+  const { departments, loading: departmentsLoading } = useDepartments();
+
+  const loading = categoriesLoading || articlesLoading || departmentsLoading;
+
+  // Build tree structure from categories and articles
+  const treeData = useMemo(() => {
+    if (!categories.length && !articles.length) return [];
+
+    // Group categories by department
+    const deptMap = new Map<string, TreeItem>();
+
+    // Create department folders
+    departments.forEach((dept) => {
+      deptMap.set(dept.id, {
+        id: `dept-${dept.id}`,
+        name: dept.name,
+        type: "folder",
+        children: [],
+      });
+    });
+
+    // Add categories as subfolders
+    categories.forEach((cat) => {
+      const catItem: TreeItem = {
+        id: `cat-${cat.id}`,
+        name: cat.name,
+        type: "folder",
+        slug: cat.slug,
+        category: cat,
+        children: [],
+      };
+
+      // Find articles for this category
+      const categoryArticles = articles.filter((a) => a.category_id === cat.id);
+      catItem.children = categoryArticles.map((article) => ({
+        id: `article-${article.id}`,
+        name: article.title,
+        type: "article" as const,
+        slug: article.slug,
+        article,
+      }));
+
+      // Add to department folder or root
+      if (cat.department_id && deptMap.has(cat.department_id)) {
+        deptMap.get(cat.department_id)!.children!.push(catItem);
+      } else {
+        // Add to a "General" folder if no department
+        if (!deptMap.has("general")) {
+          deptMap.set("general", {
+            id: "dept-general",
+            name: "General",
+            type: "folder",
+            children: [],
+          });
+        }
+        deptMap.get("general")!.children!.push(catItem);
+      }
+    });
+
+    // Convert map to array and filter out empty departments
+    return Array.from(deptMap.values()).filter(
+      (dept) => dept.children && dept.children.length > 0
+    );
+  }, [categories, articles, departments]);
+
+  // Auto-expand first folder
+  useEffect(() => {
+    if (treeData.length > 0 && expandedFolders.size === 0) {
+      setExpandedFolders(new Set([treeData[0].id]));
+    }
+  }, [treeData, expandedFolders.size]);
 
   const toggleFolder = (id: string) => {
     setExpandedFolders((prev) => {
@@ -319,7 +211,38 @@ export default function ContentPage() {
     });
   };
 
-  const selected = selectedItem ? findItem(sampleKBStructure, selectedItem) : null;
+  const handleSelectItem = (id: string, item: TreeItem) => {
+    setSelectedItem(id);
+    setSelectedData(item);
+  };
+
+  // Filter tree based on search
+  const filteredTree = useMemo(() => {
+    if (!searchQuery) return treeData;
+
+    const filterItems = (items: TreeItem[]): TreeItem[] => {
+      return items
+        .map((item) => {
+          if (item.type === "folder" && item.children) {
+            const filteredChildren = filterItems(item.children);
+            if (
+              filteredChildren.length > 0 ||
+              item.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ) {
+              return { ...item, children: filteredChildren };
+            }
+            return null;
+          }
+          if (item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+            return item;
+          }
+          return null;
+        })
+        .filter((item): item is TreeItem => item !== null);
+    };
+
+    return filterItems(treeData);
+  }, [treeData, searchQuery]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -346,7 +269,7 @@ export default function ContentPage() {
                   <div className="absolute right-0 top-10 w-48 bg-[#1a1a1f] border border-white/10 rounded-lg shadow-xl z-50">
                     <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white">
                       <FolderOpen className="w-4 h-4" />
-                      New Folder
+                      New Category
                     </button>
                     <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white">
                       <FileText className="w-4 h-4" />
@@ -376,23 +299,34 @@ export default function ContentPage() {
 
           {/* Tree View */}
           <div className="flex-1 overflow-y-auto py-2">
-            {sampleKBStructure.map((item) => (
-              <TreeNode
-                key={item.id}
-                item={item}
-                level={0}
-                expandedFolders={expandedFolders}
-                selectedItem={selectedItem}
-                onToggleFolder={toggleFolder}
-                onSelectItem={setSelectedItem}
-              />
-            ))}
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+              </div>
+            ) : filteredTree.length === 0 ? (
+              <div className="text-center py-8">
+                <BookOpen className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                <p className="text-sm text-white/40">No content found</p>
+              </div>
+            ) : (
+              filteredTree.map((item) => (
+                <TreeNode
+                  key={item.id}
+                  item={item}
+                  level={0}
+                  expandedFolders={expandedFolders}
+                  selectedItem={selectedItem}
+                  onToggleFolder={toggleFolder}
+                  onSelectItem={handleSelectItem}
+                />
+              ))
+            )}
           </div>
         </div>
 
         {/* Right Panel - Content View */}
         <div className="flex-1 flex flex-col">
-          {selected && selected.type === "article" ? (
+          {selectedData && selectedData.type === "article" && selectedData.article ? (
             <>
               {/* Article Header */}
               <div className="border-b border-white/10 p-6">
@@ -400,32 +334,37 @@ export default function ContentPage() {
                   <div>
                     <div className="flex items-center gap-3 mb-2">
                       <h1 className="text-2xl font-medium text-white">
-                        {selected.name}
+                        {selectedData.article.title}
                       </h1>
-                      {selected.status === "published" && (
+                      {selectedData.article.status === "published" && (
                         <span className="px-2 py-0.5 rounded-full text-xs bg-green-500/20 text-green-400 flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
                           Published
                         </span>
                       )}
-                      {selected.status === "draft" && (
+                      {selectedData.article.status === "draft" && (
                         <span className="px-2 py-0.5 rounded-full text-xs bg-yellow-500/20 text-yellow-400">
                           Draft
+                        </span>
+                      )}
+                      {selectedData.article.status === "pending_review" && (
+                        <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                          Pending Review
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-white/50">
                       <span className="flex items-center gap-1">
-                        <User className="w-4 h-4" />
-                        {selected.updatedBy}
-                      </span>
-                      <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {selected.updatedAt}
+                        {new Date(selectedData.article.updated_at).toLocaleDateString()}
                       </span>
                       <span className="flex items-center gap-1">
                         <Eye className="w-4 h-4" />
-                        {selected.views} views
+                        {selectedData.article.view_count || 0} views
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <ThumbsUp className="w-4 h-4" />
+                        {selectedData.article.helpful_count || 0} helpful
                       </span>
                     </div>
                   </div>
@@ -448,10 +387,10 @@ export default function ContentPage() {
                 </div>
 
                 {/* Tags */}
-                {selected.tags && (
+                {selectedData.article.tags && selectedData.article.tags.length > 0 && (
                   <div className="flex items-center gap-2 mt-4">
                     <Tag className="w-4 h-4 text-white/40" />
-                    {selected.tags.map((tag) => (
+                    {(selectedData.article.tags as string[]).map((tag: string) => (
                       <span
                         key={tag}
                         className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/60"
@@ -467,53 +406,22 @@ export default function ContentPage() {
               <div className="flex-1 overflow-y-auto p-6">
                 <div className="max-w-3xl">
                   <div className="prose prose-invert prose-sm">
-                    <p className="text-white/70 leading-relaxed">
-                      This is a sample article content area. In the production
-                      version, this would display the full rich text content of
-                      the knowledge base article, including:
-                    </p>
-                    <ul className="text-white/60 space-y-2 mt-4">
-                      <li>Formatted text with headings and paragraphs</li>
-                      <li>Code blocks and syntax highlighting</li>
-                      <li>Images and embedded media</li>
-                      <li>Tables and lists</li>
-                      <li>Links to related articles</li>
-                      <li>Inline comments and annotations</li>
-                    </ul>
-
-                    <h2 className="text-lg font-medium text-white mt-8 mb-4">
-                      Overview
-                    </h2>
-                    <p className="text-white/70 leading-relaxed">
-                      The content would be stored in a structured format and
-                      rendered using a rich text editor. Users with appropriate
-                      permissions can edit the content directly in the browser.
-                    </p>
-
-                    <h2 className="text-lg font-medium text-white mt-8 mb-4">
-                      Getting Started
-                    </h2>
-                    <p className="text-white/70 leading-relaxed">
-                      To get started, review the related documentation and
-                      follow the step-by-step guide below. Make sure you have
-                      the necessary permissions to access all referenced
-                      materials.
-                    </p>
-
-                    <div className="bg-[#0f0f14] border border-white/10 rounded-lg p-4 mt-6">
-                      <code className="text-sm text-blue-400">
-                        // Example code block
-                        <br />
-                        const guidelines = await fetchGuidelines();
-                        <br />
-                        applyStandards(guidelines);
-                      </code>
-                    </div>
+                    {selectedData.article.summary && (
+                      <p className="text-lg text-white/70 mb-6 italic">
+                        {selectedData.article.summary}
+                      </p>
+                    )}
+                    <div
+                      className="text-white/70 leading-relaxed"
+                      dangerouslySetInnerHTML={{
+                        __html: selectedData.article.content || "<p>No content available.</p>",
+                      }}
+                    />
                   </div>
                 </div>
               </div>
             </>
-          ) : selected && selected.type === "folder" ? (
+          ) : selectedData && selectedData.type === "folder" ? (
             <div className="flex-1 p-6">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
@@ -521,21 +429,21 @@ export default function ContentPage() {
                 </div>
                 <div>
                   <h1 className="text-xl font-medium text-white">
-                    {selected.name}
+                    {selectedData.name}
                   </h1>
                   <p className="text-sm text-white/50">
-                    {selected.children?.length || 0} items
+                    {selectedData.children?.length || 0} items
                   </p>
                 </div>
               </div>
 
-              {selected.children && selected.children.length > 0 ? (
+              {selectedData.children && selectedData.children.length > 0 ? (
                 <div className="grid grid-cols-3 gap-4">
-                  {selected.children.map((child) => (
+                  {selectedData.children.map((child) => (
                     <div
                       key={child.id}
                       onClick={() => {
-                        setSelectedItem(child.id);
+                        handleSelectItem(child.id, child);
                         if (child.type === "folder") {
                           setExpandedFolders((prev) => new Set([...prev, child.id]));
                         }
@@ -552,9 +460,9 @@ export default function ContentPage() {
                       <h3 className="text-white font-medium mb-1 truncate">
                         {child.name}
                       </h3>
-                      {child.type === "article" && (
+                      {child.type === "article" && child.article && (
                         <p className="text-xs text-white/40">
-                          Updated {child.updatedAt}
+                          Updated {new Date(child.article.updated_at).toLocaleDateString()}
                         </p>
                       )}
                       {child.type === "folder" && (

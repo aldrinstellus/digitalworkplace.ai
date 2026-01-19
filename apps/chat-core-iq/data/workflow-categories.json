@@ -1,0 +1,119 @@
+[
+  {
+    "id": "cat-clerk",
+    "name": "City Clerk",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 1,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-building",
+    "name": "Building Department",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 2,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-finance",
+    "name": "Finance",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 3,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-parks",
+    "name": "Parks & Recreation",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 4,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-police",
+    "name": "Police Department",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 5,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-public-works",
+    "name": "Public Works",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 6,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-planning",
+    "name": "Planning & Zoning",
+    "workflowTypeId": "wf-appointments",
+    "isActive": true,
+    "order": 7,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-utilities",
+    "name": "Utilities",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 1,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-roads",
+    "name": "Roads & Traffic",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 2,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-parks",
+    "name": "Parks & Green Spaces",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 3,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-code",
+    "name": "Code Compliance",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 4,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-permits",
+    "name": "Permits",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 5,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "cat-sr-general",
+    "name": "General Inquiry",
+    "workflowTypeId": "wf-service-requests",
+    "isActive": true,
+    "order": 6,
+    "createdAt": "2025-01-01T00:00:00.000Z",
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+]

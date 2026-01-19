@@ -1,0 +1,1240 @@
+[
+  {
+    "id": "log-1767685100581",
+    "timestamp": "2026-01-06T07:38:20.581Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "escalation",
+    "resourceId": "esc-001",
+    "details": {
+      "newStatus": "in_progress",
+      "notes": "Scenario testing - assigned to building dept"
+    }
+  },
+  {
+    "id": "log-1767685048007",
+    "timestamp": "2026-01-06T07:37:28.007Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "faq",
+    "resourceId": "faq-1767685032867",
+    "details": {
+      "question": "TEST: How do I contact scenario testing?"
+    }
+  },
+  {
+    "id": "log-1767685032871",
+    "timestamp": "2026-01-06T07:37:12.871Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "faq",
+    "resourceId": "faq-1767685032867",
+    "details": {
+      "question": "TEST: How do I contact scenario testing?",
+      "category": "General"
+    }
+  },
+  {
+    "id": "log-1767684977569",
+    "timestamp": "2026-01-06T07:36:17.569Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "announcement",
+    "resourceId": "ann-1767684920195",
+    "details": {
+      "title": "TEST: Scenario Testing - EDITED"
+    }
+  },
+  {
+    "id": "log-1767684963136",
+    "timestamp": "2026-01-06T07:36:03.136Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-1767684920195",
+    "details": {
+      "title": "TEST: Scenario Testing - EDITED",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767684955279",
+    "timestamp": "2026-01-06T07:35:55.279Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-1767684920195",
+    "details": {
+      "title": "TEST: Scenario Testing - EDITED",
+      "changes": {
+        "title": "TEST: Scenario Testing - EDITED",
+        "content": "This is a test announcement created during scenario testing to verify CRUD operations work correctly.",
+        "type": "warning",
+        "startDate": "2026-01-06",
+        "endDate": "2026-01-13",
+        "targetAudience": "all",
+        "language": "all",
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767684920198",
+    "timestamp": "2026-01-06T07:35:20.198Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "announcement",
+    "resourceId": "ann-1767684920195",
+    "details": {
+      "title": "TEST: Scenario Testing Announcement",
+      "type": "warning"
+    }
+  },
+  {
+    "id": "log-1767626095263",
+    "timestamp": "2026-01-05T15:14:55.263Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-6",
+    "details": {
+      "title": "Road Closure: NW 74th Street Resurfacing Project",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767626022816",
+    "timestamp": "2026-01-05T15:13:42.816Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767626021172",
+    "timestamp": "2026-01-05T15:13:41.172Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": false
+    }
+  },
+  {
+    "id": "log-1767625980886",
+    "timestamp": "2026-01-05T15:13:00.886Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-7",
+    "details": {
+      "question": "How do I sign up for the Doral Trolley alerts?",
+      "changes": {
+        "question": "How do I sign up for the Doral Trolley alerts?",
+        "answer": "Sign up for Trolley alerts by texting DORALTROLLEY to 888777 or visiting cityofdoral.com/trolley to subscribe to email notifications.",
+        "category": "Transportation",
+        "priority": "low",
+        "status": "active"
+      }
+    }
+  },
+  {
+    "id": "log-1767623086631",
+    "timestamp": "2026-01-05T14:24:46.631Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-7",
+    "details": {
+      "question": "How do I sign up for the Doral Trolley alerts?",
+      "changes": {
+        "question": "How do I sign up for the Doral Trolley alerts?",
+        "answer": "Sign up for Trolley alerts by texting DORALTROLLEY to 888777 or visiting cityofdoral.com/trolley to subscribe to email notifications.",
+        "category": "Transportation",
+        "priority": "low",
+        "status": "inactive"
+      }
+    }
+  },
+  {
+    "id": "log-1767621205333",
+    "timestamp": "2026-01-05T13:53:25.333Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767621204255",
+    "timestamp": "2026-01-05T13:53:24.255Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767621102504",
+    "timestamp": "2026-01-05T13:51:42.504Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-7",
+    "details": {
+      "question": "How do I sign up for the Doral Trolley alerts?",
+      "changes": {
+        "question": "How do I sign up for the Doral Trolley alerts?",
+        "answer": "Sign up for Trolley alerts by texting DORALTROLLEY to 888777 or visiting cityofdoral.com/trolley to subscribe to email notifications.",
+        "category": "Transportation",
+        "priority": "low",
+        "status": "active"
+      }
+    }
+  },
+  {
+    "id": "log-1767597374136",
+    "timestamp": "2026-01-05T07:16:14.136Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "banner-settings",
+    "resourceId": "global",
+    "details": {
+      "changes": {
+        "rotationEnabled": true,
+        "rotationInterval": 10000,
+        "pauseOnHover": true,
+        "showNavigation": true,
+        "showDismiss": true,
+        "updatedAt": "2026-01-05T06:31:04.862Z"
+      }
+    }
+  },
+  {
+    "id": "log-1767590376704",
+    "timestamp": "2026-01-05T05:19:36.704Z",
+    "user": "System",
+    "action": "update",
+    "resource": "language",
+    "resourceId": "en",
+    "details": {
+      "name": "English"
+    }
+  },
+  {
+    "id": "log-1767589739370",
+    "timestamp": "2026-01-05T05:08:59.370Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "workflow-category",
+    "resourceId": "cat-1767589731223",
+    "details": {
+      "name": "Test Category Updated"
+    }
+  },
+  {
+    "id": "log-1767589739326",
+    "timestamp": "2026-01-05T05:08:59.326Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "workflow-category",
+    "resourceId": "cat-1767589731223",
+    "details": {
+      "name": "Test Category Updated",
+      "changes": {
+        "name": "Test Category Updated"
+      }
+    }
+  },
+  {
+    "id": "log-1767589731226",
+    "timestamp": "2026-01-05T05:08:51.226Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "workflow-category",
+    "resourceId": "cat-1767589731223",
+    "details": {
+      "name": "Test Category",
+      "workflowTypeId": "wf-appointments"
+    }
+  },
+  {
+    "id": "log-1767589629574",
+    "timestamp": "2026-01-05T05:07:09.574Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767589609293",
+    "details": {
+      "name": "Test Workflow Updated"
+    }
+  },
+  {
+    "id": "log-1767589625473",
+    "timestamp": "2026-01-05T05:07:05.473Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767589609293",
+    "details": {
+      "name": "Test Workflow Updated",
+      "changes": {
+        "name": "Test Workflow Updated",
+        "description": "Updated description"
+      }
+    }
+  },
+  {
+    "id": "log-1767589609297",
+    "timestamp": "2026-01-05T05:06:49.297Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767589609293",
+    "details": {
+      "name": "Test Workflow",
+      "slug": "test-workflow"
+    }
+  },
+  {
+    "id": "log-1767528280259",
+    "timestamp": "2026-01-04T12:04:40.259Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767528260340",
+    "details": {
+      "name": "Document Processing System"
+    }
+  },
+  {
+    "id": "log-1767528270085",
+    "timestamp": "2026-01-04T12:04:30.085Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767528260340",
+    "details": {
+      "name": "Document Processing System",
+      "changes": {
+        "name": "Document Processing System",
+        "description": "Handle document submissions, approvals, and archiving"
+      }
+    }
+  },
+  {
+    "id": "log-1767528260344",
+    "timestamp": "2026-01-04T12:04:20.344Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "workflow-type",
+    "resourceId": "wf-1767528260340",
+    "details": {
+      "name": "Document Processing",
+      "slug": "document-processing"
+    }
+  },
+  {
+    "id": "log-1767525262694",
+    "timestamp": "2026-01-04T11:14:22.695Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-1",
+    "details": {
+      "question": "How do I pay my water bill?",
+      "changes": {}
+    }
+  },
+  {
+    "id": "log-1767525065782",
+    "timestamp": "2026-01-04T11:11:05.782Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-3",
+    "details": {
+      "question": "How do I apply for a building permit?",
+      "changes": {}
+    }
+  },
+  {
+    "id": "log-1767520045005",
+    "timestamp": "2026-01-04T09:47:25.005Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-7",
+    "details": {
+      "question": "How do I sign up for the Doral Trolley alerts?",
+      "changes": {
+        "question": "How do I sign up for the Doral Trolley alerts?",
+        "answer": "Sign up for Trolley alerts by texting DORALTROLLEY to 888777 or visiting cityofdoral.com/trolley to subscribe to email notifications.",
+        "category": "Transportation",
+        "priority": "low",
+        "status": "inactive"
+      }
+    }
+  },
+  {
+    "id": "log-1767520022464",
+    "timestamp": "2026-01-04T09:47:02.464Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-7",
+    "details": {
+      "question": "How do I sign up for the Doral Trolley alerts?",
+      "changes": {
+        "question": "How do I sign up for the Doral Trolley alerts?",
+        "answer": "Sign up for Trolley alerts by texting DORALTROLLEY to 888777 or visiting cityofdoral.com/trolley to subscribe to email notifications.",
+        "category": "Transportation",
+        "priority": "low",
+        "status": "active"
+      }
+    }
+  },
+  {
+    "id": "log-1767518068196",
+    "timestamp": "2026-01-04T09:14:28.196Z",
+    "user": "Admin",
+    "action": "DELETE",
+    "resource": "faq",
+    "resourceId": "faq-1767518002824",
+    "details": {
+      "question": "TEST: How do I contact the Mayor's office?"
+    }
+  },
+  {
+    "id": "log-1767518029933",
+    "timestamp": "2026-01-04T09:13:49.933Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "faq",
+    "resourceId": "faq-1767518002824",
+    "details": {
+      "question": "TEST: How do I contact the Mayor's office?",
+      "changes": {
+        "question": "TEST: How do I contact the Mayor's office?",
+        "answer": "Contact the Mayor's office at (305) 593-6700 or visit City Hall at 8401 NW 53rd Terrace.",
+        "category": "General",
+        "priority": "medium",
+        "status": "inactive"
+      }
+    }
+  },
+  {
+    "id": "log-1767518002826",
+    "timestamp": "2026-01-04T09:13:22.826Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "faq",
+    "resourceId": "faq-1767518002824",
+    "details": {
+      "question": "TEST: How do I contact the Mayor's office?",
+      "category": "General"
+    }
+  },
+  {
+    "id": "log-1767458472628",
+    "timestamp": "2026-01-03T16:41:12.628Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-0",
+    "details": {
+      "url": "/A-Z-Index",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767458471614",
+    "timestamp": "2026-01-03T16:41:11.614Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-0",
+    "details": {
+      "url": "/A-Z-Index",
+      "enabled": false
+    }
+  },
+  {
+    "id": "log-1767424211851",
+    "timestamp": "2026-01-03T07:10:11.851Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767424210803",
+    "timestamp": "2026-01-03T07:10:10.803Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767424058367",
+    "timestamp": "2026-01-03T07:07:38.367Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-5",
+    "details": {
+      "url": "/Businesses",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767424057531",
+    "timestamp": "2026-01-03T07:07:37.531Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-5",
+    "details": {
+      "url": "/Businesses",
+      "enabled": false
+    }
+  },
+  {
+    "id": "log-1767343799466",
+    "timestamp": "2026-01-02T08:49:59.466Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767343797817",
+    "timestamp": "2026-01-02T08:49:57.817Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-15",
+    "details": {
+      "title": "Power Outage Restoration Update - NW 112th Area",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767343536971",
+    "timestamp": "2026-01-02T08:45:36.971Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": true
+    }
+  },
+  {
+    "id": "log-1767343534537",
+    "timestamp": "2026-01-02T08:45:34.537Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "crawler_url",
+    "resourceId": "kb-1",
+    "details": {
+      "url": "/About",
+      "enabled": false
+    }
+  },
+  {
+    "id": "log-1767325899908",
+    "timestamp": "2026-01-02T03:51:39.908Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-2",
+    "details": {
+      "title": "Water Main Maintenance Notice",
+      "changes": {
+        "isActive": true
+      }
+    }
+  },
+  {
+    "id": "log-1767325898535",
+    "timestamp": "2026-01-02T03:51:38.535Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "announcement",
+    "resourceId": "ann-2",
+    "details": {
+      "title": "Water Main Maintenance Notice",
+      "changes": {
+        "isActive": false
+      }
+    }
+  },
+  {
+    "id": "log-1767309857542",
+    "timestamp": "2026-01-01T23:24:17.542Z",
+    "user": "Admin",
+    "action": "UPDATE",
+    "resource": "settings",
+    "resourceId": "global",
+    "details": {
+      "appearance": {
+        "primaryColor": "#FF5722",
+        "position": "bottom-left"
+      }
+    }
+  },
+  {
+    "id": "log-1767304334002",
+    "timestamp": "2026-01-01T21:52:14.002Z",
+    "user": "Admin",
+    "action": "CREATE",
+    "resource": "faq",
+    "resourceId": "faq-1767304334000",
+    "details": {
+      "question": "How do I register for youth sports?",
+      "category": "Recreation"
+    }
+  },
+  {
+    "id": "audit-1767302551924-41",
+    "timestamp": "2026-01-01T19:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Settings",
+    "resourceId": "1041",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.85"
+  },
+  {
+    "id": "audit-1767302551924-43",
+    "timestamp": "2026-01-01T17:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.9"
+  },
+  {
+    "id": "audit-1767302551924-32",
+    "timestamp": "2026-01-01T16:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1032",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.212"
+  },
+  {
+    "id": "audit-1767302551924-23",
+    "timestamp": "2026-01-01T12:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1023",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.91"
+  },
+  {
+    "id": "audit-1767302551924-4",
+    "timestamp": "2026-01-01T11:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "Escalation",
+    "resourceId": "1004",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.47"
+  },
+  {
+    "id": "audit-1767302551924-11",
+    "timestamp": "2026-01-01T10:22:31.924Z",
+    "user": "Admin User",
+    "action": "EXPORT",
+    "resource": "Announcement",
+    "resourceId": "1011",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.249"
+  },
+  {
+    "id": "audit-1767302551924-28",
+    "timestamp": "2026-01-01T07:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW_PII",
+    "resource": "Conversation",
+    "resourceId": "1028",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.87"
+  },
+  {
+    "id": "audit-1767302551924-29",
+    "timestamp": "2026-01-01T05:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1029",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.83"
+  },
+  {
+    "id": "audit-1767302551924-47",
+    "timestamp": "2026-01-01T04:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.244"
+  },
+  {
+    "id": "audit-1767302551924-14",
+    "timestamp": "2025-12-31T09:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "CREATE",
+    "resource": "Announcement",
+    "resourceId": "1014",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.253"
+  },
+  {
+    "id": "audit-1767302551924-22",
+    "timestamp": "2025-12-31T09:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1022",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.228"
+  },
+  {
+    "id": "audit-1767302551924-5",
+    "timestamp": "2025-12-31T08:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1005",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.31"
+  },
+  {
+    "id": "audit-1767302551924-1",
+    "timestamp": "2025-12-30T23:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Announcement",
+    "resourceId": "1001",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.85"
+  },
+  {
+    "id": "audit-1767302551924-48",
+    "timestamp": "2025-12-30T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGIN",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.189"
+  },
+  {
+    "id": "audit-1767302551924-42",
+    "timestamp": "2025-12-30T12:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Escalation",
+    "resourceId": "1042",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.47"
+  },
+  {
+    "id": "audit-1767302551924-31",
+    "timestamp": "2025-12-30T09:22:31.924Z",
+    "user": "John Manager",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.207"
+  },
+  {
+    "id": "audit-1767302551924-8",
+    "timestamp": "2025-12-30T08:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGIN",
+    "resource": "Announcement",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.223"
+  },
+  {
+    "id": "audit-1767302551924-20",
+    "timestamp": "2025-12-30T08:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Settings",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.84"
+  },
+  {
+    "id": "audit-1767302551924-40",
+    "timestamp": "2025-12-30T06:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Settings",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.113"
+  },
+  {
+    "id": "audit-1767302551924-10",
+    "timestamp": "2025-12-30T04:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Settings",
+    "resourceId": "1010",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.101"
+  },
+  {
+    "id": "audit-1767302551924-25",
+    "timestamp": "2025-12-30T01:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Announcement",
+    "resourceId": "1025",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.187"
+  },
+  {
+    "id": "audit-1767302551924-18",
+    "timestamp": "2025-12-29T23:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Escalation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.217"
+  },
+  {
+    "id": "audit-1767302551924-7",
+    "timestamp": "2025-12-29T15:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1007",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.24"
+  },
+  {
+    "id": "audit-1767302551924-44",
+    "timestamp": "2025-12-29T14:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGIN",
+    "resource": "FAQ",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.16"
+  },
+  {
+    "id": "audit-1767302551924-12",
+    "timestamp": "2025-12-29T06:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1012",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.252"
+  },
+  {
+    "id": "audit-1767302551924-26",
+    "timestamp": "2025-12-29T06:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "VIEW_PII",
+    "resource": "Escalation",
+    "resourceId": "1026",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.254"
+  },
+  {
+    "id": "audit-1767302551924-19",
+    "timestamp": "2025-12-29T04:22:31.924Z",
+    "user": "John Manager",
+    "action": "EXPORT",
+    "resource": "Settings",
+    "resourceId": "1019",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.105"
+  },
+  {
+    "id": "audit-1767302551924-27",
+    "timestamp": "2025-12-29T01:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "FAQ",
+    "resourceId": "1027",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.32"
+  },
+  {
+    "id": "audit-1767302551924-45",
+    "timestamp": "2025-12-28T21:22:31.924Z",
+    "user": "Admin User",
+    "action": "CREATE",
+    "resource": "Settings",
+    "resourceId": "1045",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.230"
+  },
+  {
+    "id": "audit-1767302551924-37",
+    "timestamp": "2025-12-28T17:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "FAQ",
+    "resourceId": "1037",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.138"
+  },
+  {
+    "id": "audit-1767302551924-36",
+    "timestamp": "2025-12-28T14:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.16"
+  },
+  {
+    "id": "audit-1767302551924-0",
+    "timestamp": "2025-12-28T07:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "LOGIN",
+    "resource": "FAQ",
+    "resourceId": "",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.86"
+  },
+  {
+    "id": "audit-1767302551924-13",
+    "timestamp": "2025-12-28T07:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "FAQ",
+    "resourceId": "1013",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.235"
+  },
+  {
+    "id": "audit-1767302551924-6",
+    "timestamp": "2025-12-28T03:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Announcement",
+    "resourceId": "1006",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.75"
+  },
+  {
+    "id": "audit-1767302551924-2",
+    "timestamp": "2025-12-28T00:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1002",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.231"
+  },
+  {
+    "id": "audit-1767302551924-21",
+    "timestamp": "2025-12-28T00:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW_PII",
+    "resource": "Announcement",
+    "resourceId": "1021",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.11"
+  },
+  {
+    "id": "audit-1767302551924-24",
+    "timestamp": "2025-12-27T18:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Conversation",
+    "resourceId": "1024",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.175"
+  },
+  {
+    "id": "audit-1767302551924-39",
+    "timestamp": "2025-12-27T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "CREATE",
+    "resource": "FAQ",
+    "resourceId": "1039",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.200"
+  },
+  {
+    "id": "audit-1767302551924-49",
+    "timestamp": "2025-12-27T12:22:31.924Z",
+    "user": "John Manager",
+    "action": "VIEW",
+    "resource": "Conversation",
+    "resourceId": "1049",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.225"
+  },
+  {
+    "id": "audit-1767302551924-35",
+    "timestamp": "2025-12-27T09:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "EXPORT",
+    "resource": "FAQ",
+    "resourceId": "1035",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.119"
+  },
+  {
+    "id": "audit-1767302551924-46",
+    "timestamp": "2025-12-27T08:22:31.924Z",
+    "user": "John Manager",
+    "action": "DELETE",
+    "resource": "Escalation",
+    "resourceId": "1046",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.120"
+  },
+  {
+    "id": "audit-1767302551924-17",
+    "timestamp": "2025-12-27T01:22:31.924Z",
+    "user": "Admin User",
+    "action": "UPDATE",
+    "resource": "Announcement",
+    "resourceId": "1017",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.67"
+  },
+  {
+    "id": "audit-1767302551924-16",
+    "timestamp": "2025-12-26T22:22:31.924Z",
+    "user": "John Manager",
+    "action": "UPDATE",
+    "resource": "Conversation",
+    "resourceId": "1016",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.187"
+  },
+  {
+    "id": "audit-1767302551924-9",
+    "timestamp": "2025-12-26T18:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "Settings",
+    "resourceId": "1009",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.139"
+  },
+  {
+    "id": "audit-1767302551924-38",
+    "timestamp": "2025-12-26T15:22:31.924Z",
+    "user": "Admin User",
+    "action": "VIEW",
+    "resource": "FAQ",
+    "resourceId": "1038",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.181"
+  },
+  {
+    "id": "audit-1767302551924-30",
+    "timestamp": "2025-12-26T05:22:31.924Z",
+    "user": "Admin User",
+    "action": "LOGOUT",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.63"
+  },
+  {
+    "id": "audit-1767302551924-15",
+    "timestamp": "2025-12-26T03:22:31.924Z",
+    "user": "John Manager",
+    "action": "LOGIN",
+    "resource": "Conversation",
+    "resourceId": "",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.46"
+  },
+  {
+    "id": "audit-1767302551924-34",
+    "timestamp": "2025-12-26T00:22:31.924Z",
+    "user": "Admin User",
+    "action": "UPDATE",
+    "resource": "Analytics",
+    "resourceId": "1034",
+    "details": {
+      "email": "admin@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.167"
+  },
+  {
+    "id": "audit-1767302551924-3",
+    "timestamp": "2025-12-25T23:22:31.924Z",
+    "user": "Sarah Editor",
+    "action": "UPDATE",
+    "resource": "Escalation",
+    "resourceId": "1003",
+    "details": {
+      "email": "sarah.e@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.86"
+  },
+  {
+    "id": "audit-1767302551924-33",
+    "timestamp": "2025-12-25T23:22:31.924Z",
+    "user": "John Manager",
+    "action": "EXPORT",
+    "resource": "Settings",
+    "resourceId": "1033",
+    "details": {
+      "email": "john.m@cityofdoral.com"
+    },
+    "ipAddress": "192.168.1.44"
+  }
+]

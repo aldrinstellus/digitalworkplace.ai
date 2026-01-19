@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2025-01-19 (Session End)
-**Version**: 0.4.3
-**Session Status**: dIQ v0.2.2 - Database Architecture + Full Flow Verified
+**Last Updated**: 2026-01-19 (Comprehensive Savepoint v0.5.0)
+**Version**: 0.5.0
+**Session Status**: Monorepo + Semantic Search + Multi-Project Architecture
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -20,6 +20,8 @@
 | **GitHub Repository** | https://github.com/aldrinstellus/digitalworkplace.ai |
 
 ### Local Development URLs
+
+#### Main Dashboard (Port 3000)
 | Page | URL |
 |------|-----|
 | **Home** | http://localhost:3000 |
@@ -29,7 +31,7 @@
 | **Dashboard** | http://localhost:3000/dashboard |
 | **Admin Panel** | http://localhost:3000/admin |
 
-### dIQ (Intranet IQ) - Port 3001
+#### dIQ - Intranet IQ (Port 3001)
 | Page | URL |
 |------|-----|
 | **dIQ Dashboard** | http://localhost:3001/diq/dashboard |
@@ -39,6 +41,22 @@
 | **dIQ Content** | http://localhost:3001/diq/content |
 | **dIQ Agents** | http://localhost:3001/diq/agents |
 | **dIQ Settings** | http://localhost:3001/diq/settings |
+
+#### dCQ - Chat Core IQ (Port 3002)
+| Page | URL |
+|------|-----|
+| **dCQ Home** | http://localhost:3002/dcq/Home/index.html |
+| **dCQ Admin** | http://localhost:3002/dcq/admin |
+
+#### dSQ - Support IQ (Port 3003) - PENDING
+| Page | URL |
+|------|-----|
+| **dSQ Dashboard** | http://localhost:3003/dsq/dashboard |
+
+#### dTQ - Test Pilot IQ (Port 3004) - PENDING
+| Page | URL |
+|------|-----|
+| **dTQ Dashboard** | http://localhost:3004/dtq/dashboard |
 
 ### Tech Stack Dashboards
 | Service | Dashboard URL |
@@ -64,130 +82,155 @@
 | **CLAUDE.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` |
 | **CHANGELOG.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md` |
 | **context.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md` |
-| **README.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/README.md` |
-| **package.json** | `/Users/aldrin-mac-mini/digitalworkplace.ai/package.json` |
+| **SUPABASE_DATABASE_REFERENCE.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md` |
+| **PGVECTOR_BEST_PRACTICES.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md` |
+| **EMBEDDING_QUICKSTART.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/docs/EMBEDDING_QUICKSTART.md` |
 
-### Source Code Paths
-| Category | Path |
-|----------|------|
-| **App Router** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/` |
-| **Components** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/` |
-| **Libraries** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/` |
-
-### Critical Source Files
-| File | Full Path |
-|------|-----------|
-| **Root Layout** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/layout.tsx` |
-| **Global CSS** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/globals.css` |
-| **Proxy (Auth)** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/proxy.ts` |
-| **Dashboard** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/dashboard/page.tsx` |
-| **Admin** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/admin/page.tsx` |
-| **Sign-in Page** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/sign-in/[[...sign-in]]/page.tsx` |
-| **SSO Callback** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/sso-callback/page.tsx` |
-| **Login Background** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/login/LoginBackground.tsx` |
-| **User Roles** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/userRole.ts` |
-| **Supabase Client** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/supabase.ts` |
-| **Sound Effects** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/sounds.ts` |
-| **Wordmark Glitch** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/brand/WordmarkGlitch.tsx` |
-| **Sound Toggle** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/audio/SoundToggle.tsx` |
-
-### Configuration Files
-| File | Full Path |
-|------|-----------|
-| **TypeScript Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/tsconfig.json` |
-| **Tailwind Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/tailwind.config.ts` |
-| **Next.js Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/next.config.ts` |
-| **ESLint Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/eslint.config.mjs` |
-| **Environment** | `/Users/aldrin-mac-mini/digitalworkplace.ai/.env.local` |
+### Monorepo Structure
+```
+digitalworkplace.ai/
+├── apps/
+│   ├── main/                    # Main dashboard (port 3000)
+│   │   ├── CLAUDE.md
+│   │   └── src/
+│   ├── intranet-iq/             # dIQ (port 3001)
+│   │   ├── CLAUDE.md
+│   │   ├── SAVEPOINT.md
+│   │   └── src/
+│   ├── chat-core-iq/            # dCQ (port 3002)
+│   │   ├── CLAUDE.md
+│   │   └── src/
+│   ├── support-iq/              # dSQ (port 3003) - PENDING
+│   │   └── CLAUDE.md
+│   └── test-pilot-iq/           # dTQ (port 3004) - PENDING
+│       └── CLAUDE.md
+├── docs/
+│   ├── SUPABASE_DATABASE_REFERENCE.md  # MASTER DATABASE
+│   ├── PGVECTOR_BEST_PRACTICES.md
+│   └── EMBEDDING_QUICKSTART.md
+├── supabase/
+│   └── migrations/
+│       ├── 001_core_schema.sql
+│       ├── 002_diq_schema.sql
+│       ├── 003_pgvector_embeddings.sql
+│       └── 004_dsq_schema.sql
+├── CLAUDE.md
+├── SAVEPOINT.md
+├── CHANGELOG.md
+├── context.md
+└── package.json
+```
 
 ---
 
 ## Current State
 
 ### What's Working
-- [x] Next.js 16 project initialized and running
-- [x] Clerk authentication fully integrated (Google OAuth)
-- [x] **Clerk proxy for route protection** (fast server-side auth)
-- [x] **Custom favicon "d." branding** (dynamic PNG generation)
-- [x] **Google OAuth with account picker** (always shows accounts)
-- [x] **"Continue with Google" button** (industry standard)
+
+#### Main Dashboard (apps/main)
+- [x] Next.js 16 project with App Router
+- [x] Clerk authentication (Google OAuth)
+- [x] Clerk proxy for route protection (proxy.ts)
+- [x] Custom favicon "d." branding
 - [x] Full-screen world map login design
 - [x] Dark grey theme (#0f0f1a, #1a1a2e, #16213e)
 - [x] 24 floating avatars with GSAP animations
-- [x] 48 chat messages with slower display
-- [x] Lighter mint-green chat bubbles
 - [x] Sound effects system (Web Audio API)
-- [x] SoundToggle component (top-right)
-- [x] **Dashboard page with 4 AI product cards**
-- [x] **Animated SVG illustrations (continuous looping)**
-- [x] **3D tilt effects on product cards**
-- [x] **Colored borders matching product themes**
-- [x] **Admin panel (super_admin only)**
-- [x] **User role system (Supabase)**
-- [x] **User avatar with Google profile picture**
-- [x] SSO callback handler with loading UI
-- [x] Documentation complete
+- [x] Dashboard with 4 AI product cards
+- [x] **Product order: Support IQ, Intranet IQ, Chat Core IQ, Test Pilot IQ**
+- [x] **Test Pilot IQ disabled (gray, "Coming Soon")**
+- [x] Animated SVG illustrations (continuous looping)
+- [x] 3D tilt effects on product cards
+- [x] Admin panel (super_admin only)
+- [x] User role system (Supabase)
 - [x] Deployed on Vercel
 
-### Products
-| Product | Theme | Description | Status |
-|---------|-------|-------------|--------|
-| Support IQ (dSQ) | Green #10b981 | Customer support automation | Planned |
-| **Intranet IQ (dIQ)** | Blue #3b82f6 | Internal knowledge network | **v0.2.2 Active** |
-| Test Pilot IQ (dTQ) | Orange #f59e0b | QA & testing intelligence | Planned |
-| Chat Core IQ (dCQ) | Purple #a855f7 | Conversational AI | Planned |
+#### dIQ - Intranet IQ (apps/intranet-iq)
+- [x] Complete UI with all pages
+- [x] Supabase database schema (`diq`)
+- [x] **pgvector Semantic Search** - 100% embedding coverage
+- [x] `/api/embeddings` - Generate embeddings
+- [x] `/api/search` - Hybrid search (semantic + keyword)
+- [x] Chat with RAG (Retrieval Augmented Generation)
+- [x] Local embeddings (all-MiniLM-L6-v2, 384 dims)
 
-### Sub-Project: dIQ (Intranet IQ)
-| Property | Value |
-|----------|-------|
-| **Location** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq` |
-| **Port** | 3001 |
-| **URL** | http://localhost:3001/diq/dashboard |
-| **Version** | 0.2.2 |
-| **Logo** | `dIQ·` (SVG-based, baseline aligned) |
-| **Database** | Supabase schema `diq` (migrations ready) |
-| **Documentation** | `apps/intranet-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
+#### dCQ - Chat Core IQ (apps/chat-core-iq)
+- [x] Static site with chatbot
+- [x] 28 database tables in `dcq` schema
+- [x] 6 tables with vector embeddings
+- [x] Sync triggers to `public.knowledge_items`
+- [x] Embedding library created
+
+#### Database (Supabase)
+- [x] Multi-schema architecture (public, diq, dsq, dtq, dcq)
+- [x] Master database reference document
+- [x] pgvector extension enabled
+- [x] HNSW indexes for fast vector search
+- [x] Cross-project search hub (`public.knowledge_items`)
+
+### Products Status
+
+| Product | Code | Port | Status | Embeddings |
+|---------|------|------|--------|------------|
+| Support IQ | dSQ | 3003 | ⬜ Pending | ⬜ Pending |
+| **Intranet IQ** | **dIQ** | **3001** | **✅ Active** | **✅ 100%** |
+| **Chat Core IQ** | **dCQ** | **3002** | **✅ Active** | **✅ Ready** |
+| Test Pilot IQ | dTQ | 3004 | ⬜ Pending (Disabled in UI) | ⬜ Pending |
 
 ---
 
 ## 🚀 Quick Start Commands
 
-### Start Development Server
+### Start All Projects
 ```bash
 cd /Users/aldrin-mac-mini/digitalworkplace.ai
-npm run dev
-# Server runs on http://localhost:3000
+npm run dev              # Start main app (port 3000)
+npm run dev:intranet     # Start dIQ (port 3001)
+npm run dev:chatcore     # Start dCQ (port 3002)
 ```
 
 ### Test the Complete Flow
 1. Open http://localhost:3000/sign-in
-2. Click "Sign in with Google"
+2. Click "Continue with Google"
 3. Complete OAuth → Redirects to Dashboard
-4. See animated SVG product cards
-5. Click avatar for dropdown menu
-6. Click Admin (if super_admin) to access admin panel
+4. See 4 product cards (Test Pilot IQ is grayed out)
+5. Click "Launch App" on any active product
+6. Click avatar for dropdown menu
+7. Click Admin (if super_admin) to access admin panel
 
 ---
 
 ## Git Status
 
-### Latest Commit
+### Pending Changes
 ```
-fdce7cf feat: custom favicon and auth improvements (v0.4.2)
+Modified files:
+- CLAUDE.md
+- SAVEPOINT.md
+- CHANGELOG.md
+- apps/intranet-iq/* (semantic search updates)
+- apps/main/src/app/dashboard/page.tsx (product order + disabled state)
+- package.json (workspace scripts)
+
+New files:
+- apps/chat-core-iq/
+- apps/support-iq/
+- apps/test-pilot-iq/
+- apps/main/CLAUDE.md
+- docs/SUPABASE_DATABASE_REFERENCE.md
+- docs/PGVECTOR_BEST_PRACTICES.md
+- docs/EMBEDDING_QUICKSTART.md
+- supabase/migrations/003_pgvector_embeddings.sql
+- supabase/migrations/004_dsq_schema.sql
 ```
 
-### Commit History (Recent)
-```
-fdce7cf feat: custom favicon and auth improvements (v0.4.2)
-72413d7 docs: update documentation for proxy.ts (Next.js 16)
-7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
-```
-
-### Check Status
+### Commands
 ```bash
 cd /Users/aldrin-mac-mini/digitalworkplace.ai
 git status
-git log --oneline -5
+git add .
+git commit -m "feat: v0.5.0 - monorepo architecture + semantic search + multi-project"
+git push origin main
 ```
 
 ---
@@ -200,54 +243,31 @@ git log --oneline -5
 | **TypeScript** | 5.x | Type safety |
 | **Clerk** | @clerk/nextjs | Authentication (Google OAuth) |
 | **Supabase** | @supabase/supabase-js | Database & user roles |
+| **pgvector** | 0.7+ | Vector similarity search |
 | **Tailwind CSS** | 4.x | Styling |
 | **Framer Motion** | 12.x | UI animations |
 | **GSAP** | 3.x | Complex animations |
-| **shadcn/ui** | latest | UI components |
+| **transformers.js** | @xenova/transformers | Local embeddings |
 
 ---
 
-## User Role System
+## Embedding Configuration
 
-### Supabase Functions
 ```typescript
-type UserRole = 'user' | 'admin' | 'super_admin';
-
-// Available functions in /Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/userRole.ts
-getUserByEmail(email)
-getUserByClerkId(clerkId)
-syncUserWithClerk(email, clerkId, fullName?, avatarUrl?)
-isSuperAdmin(email)
-isAdmin(email)
-getAllUsers()
-updateUserRole(userId, role)
+// All projects use the same embedding config
+{
+  model: 'Xenova/all-MiniLM-L6-v2',
+  dimensions: 384,
+  provider: 'local (transformers.js)',
+  cost: 'FREE'
+}
 ```
-
-### Current Users
-- aldrin@atc.xyz - super_admin
-
----
-
-## Auth Optimization (v0.4.1)
-
-### Proxy Implementation (Next.js 16)
-- **File**: `/Users/aldrin-mac-mini/digitalworkplace.ai/src/proxy.ts`
-- Protects routes server-side (no client-side redirect flash)
-- Public routes: `/`, `/sign-in`, `/sign-up`, `/sso-callback`
-- All other routes require authentication
-- Note: Next.js 16 uses `proxy.ts` instead of deprecated `middleware.ts`
-
-### Performance Improvements
-- Removed redundant loading states
-- Background Supabase sync (non-blocking)
-- Middleware handles redirects server-side
-- Faster perceived auth experience
 
 ---
 
 ## Environment Variables Required
 
-### .env.local
+### .env.local (All Projects)
 ```env
 NEXT_PUBLIC_SUPABASE_URL=<your-supabase-project-url>
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
@@ -261,52 +281,53 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 ## Pending Tasks
 
-### Immediate (Next Session)
-- [ ] **Product-specific dashboards** - Individual pages for each product
-- [ ] **Launch App buttons** - Link to product dashboards
+### Immediate
+- [x] Dashboard product order updated
+- [x] Test Pilot IQ disabled in UI
+- [ ] **Git commit and push**
+- [ ] **Vercel deployment**
 
 ### Short Term
-- [ ] **User profile page** - `/profile`
-- [ ] **Settings page** - User preferences
-- [ ] **Sign-up page redesign** - Match dark theme
+- [ ] dSQ (Support IQ) implementation
+- [ ] dTQ (Test Pilot IQ) implementation
+- [ ] Cross-project search UI
 
 ### Medium Term
-- [ ] **AI Assistant integration**
-- [ ] **Document management**
-- [ ] **Real-time collaboration**
+- [ ] User profile page
+- [ ] Settings page
+- [ ] Real-time collaboration
 
 ---
 
-## Development Commands
+## Session Resume Checklist
 
-```bash
-# Navigate to project
-cd /Users/aldrin-mac-mini/digitalworkplace.ai
+When starting a new Claude Code session:
 
-# Development
-npm run dev          # Start dev server (localhost:3000)
-npm run build        # Production build
-npm run start        # Start production server
-npm run lint         # Run ESLint
+1. **Read the savepoint**
+   ```bash
+   cat /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md
+   ```
 
-# Git operations
-git status
-git add .
-git commit -m "message"
-git push origin main
+2. **Read master database reference**
+   ```bash
+   cat /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md
+   ```
 
-# Open in VS Code
-code /Users/aldrin-mac-mini/digitalworkplace.ai
-```
+3. **Start dev server**
+   ```bash
+   cd /Users/aldrin-mac-mini/digitalworkplace.ai
+   npm run dev
+   ```
 
----
+4. **Verify working locally**
+   - http://localhost:3000/sign-in
+   - http://localhost:3000/dashboard
+   - http://localhost:3000/admin
 
-## Known Issues & Fixes
-
-| Issue | Status | Fix |
-|-------|--------|-----|
-| Avatar shows letter instead of image | ✅ Fixed | Added `referrerPolicy="no-referrer"` and `onError` fallback |
-| Auth redirect too slow | ✅ Fixed | Added middleware.ts for server-side protection |
+5. **Reference documentation**
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md`
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md`
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md`
 
 ---
 
@@ -322,44 +343,22 @@ code /Users/aldrin-mac-mini/digitalworkplace.ai
 | Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
 
 ### Product Theme Colors
-| Product | Primary | Secondary |
-|---------|---------|-----------|
-| Support IQ | #10b981 | #06b6d4 |
-| Intranet IQ | #3b82f6 | #8b5cf6 |
-| Test Pilot IQ | #f59e0b | #ef4444 |
-| Chat Core IQ | #a855f7 | #ec4899 |
+| Product | Primary | Secondary | Status |
+|---------|---------|-----------|--------|
+| Support IQ | #10b981 | #06b6d4 | Active |
+| Intranet IQ | #3b82f6 | #8b5cf6 | Active |
+| Chat Core IQ | #a855f7 | #ec4899 | Active |
+| Test Pilot IQ | #f59e0b | #ef4444 | Disabled (Gray) |
+
+### Responsive Breakpoints
+| Breakpoint | Width | Grid Columns |
+|------------|-------|--------------|
+| Mobile | <640px | 1 |
+| Tablet | 640-1024px | 2 |
+| Desktop | >1024px | 4 |
 
 ---
 
-## Session Resume Checklist
-
-When starting a new Claude Code session:
-
-1. **Read this savepoint**
-   ```bash
-   cat /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md
-   ```
-
-2. **Start dev server**
-   ```bash
-   cd /Users/aldrin-mac-mini/digitalworkplace.ai
-   npm run dev
-   ```
-
-3. **Verify working locally**
-   - http://localhost:3000/sign-in
-   - http://localhost:3000/dashboard
-   - http://localhost:3000/admin
-
-4. **Reference documentation**
-   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` - Project conventions
-   - `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md` - Design specifications
-   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md` - Version history
-
-5. **Check pending tasks** above
-
----
-
-*Last session ended at: 2026-01-19 ~16:35 UTC*
+*Last session ended at: 2026-01-19*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Latest commit: fdce7cf - Favicon & Auth improvements v0.4.2*
+*Version: 0.5.0 - Monorepo + Semantic Search + Multi-Project*

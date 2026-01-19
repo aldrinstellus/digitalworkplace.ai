@@ -1,0 +1,130 @@
+[
+  {
+    "id": "route-001",
+    "name": "Permit Inquiries",
+    "category": "permits",
+    "keywords": [
+      "permit",
+      "building",
+      "construction",
+      "renovation",
+      "addition"
+    ],
+    "targetDepartment": "Building & Permits",
+    "priority": "medium",
+    "slaHours": 48,
+    "autoAssign": true,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-002",
+    "name": "Code Violations",
+    "category": "code-compliance",
+    "keywords": [
+      "violation",
+      "code",
+      "complaint",
+      "illegal",
+      "noise",
+      "parking"
+    ],
+    "targetDepartment": "Code Compliance",
+    "priority": "high",
+    "slaHours": 24,
+    "autoAssign": true,
+    "isActive": false,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-003",
+    "name": "Utility Issues",
+    "category": "utilities",
+    "keywords": [
+      "water",
+      "sewer",
+      "bill",
+      "leak",
+      "outage",
+      "utility"
+    ],
+    "targetDepartment": "Public Works",
+    "priority": "high",
+    "slaHours": 12,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-004",
+    "name": "Parks & Recreation",
+    "category": "recreation",
+    "keywords": [
+      "park",
+      "pool",
+      "recreation",
+      "sports",
+      "facility",
+      "rental"
+    ],
+    "targetDepartment": "Parks & Recreation",
+    "priority": "low",
+    "slaHours": 72,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-005",
+    "name": "Business Licensing",
+    "category": "business",
+    "keywords": [
+      "license",
+      "business",
+      "registration",
+      "certificate",
+      "occupational"
+    ],
+    "targetDepartment": "Business Licensing",
+    "priority": "medium",
+    "slaHours": 48,
+    "autoAssign": true,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-006",
+    "name": "Road Maintenance",
+    "category": "roads",
+    "keywords": [
+      "pothole",
+      "road",
+      "street",
+      "pavement",
+      "sidewalk",
+      "curb",
+      "sign",
+      "traffic",
+      "streetlight",
+      "light out"
+    ],
+    "targetDepartment": "Public Works",
+    "priority": "medium",
+    "slaHours": 48,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-007",
+    "name": "General Inquiries",
+    "category": "general",
+    "keywords": [],
+    "targetDepartment": "City Manager's Office",
+    "priority": "low",
+    "slaHours": 96,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  }
+]

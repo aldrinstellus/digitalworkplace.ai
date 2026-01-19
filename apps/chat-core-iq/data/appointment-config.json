@@ -1,0 +1,113 @@
+[
+  {
+    "id": "apt-001",
+    "department": "Building & Permits",
+    "serviceName": "Building Permit Consultation",
+    "description": "Schedule a consultation for building permits, zoning questions, or construction requirements.",
+    "duration": 30,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "09:00",
+        "end": "12:00"
+      },
+      {
+        "start": "14:00",
+        "end": "16:30"
+      }
+    ],
+    "maxPerSlot": 2,
+    "leadTimeHours": 24,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-05T05:10:19.295Z"
+  },
+  {
+    "id": "apt-002",
+    "department": "Code Compliance",
+    "serviceName": "Code Compliance Inspection",
+    "description": "Request an inspection for code compliance issues or violations.",
+    "duration": 45,
+    "availableDays": [
+      "monday",
+      "wednesday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "10:00",
+        "end": "12:00"
+      },
+      {
+        "start": "13:00",
+        "end": "15:00"
+      }
+    ],
+    "maxPerSlot": 1,
+    "leadTimeHours": 48,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "apt-003",
+    "department": "Planning & Zoning",
+    "serviceName": "Zoning Review Meeting",
+    "description": "Meet with planning staff to discuss zoning requirements and land use questions.",
+    "duration": 60,
+    "availableDays": [
+      "tuesday",
+      "thursday"
+    ],
+    "timeSlots": [
+      {
+        "start": "09:00",
+        "end": "11:00"
+      },
+      {
+        "start": "14:00",
+        "end": "16:00"
+      }
+    ],
+    "maxPerSlot": 1,
+    "leadTimeHours": 72,
+    "isActive": true,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "apt-004",
+    "department": "Business Licensing",
+    "serviceName": "Business License Application",
+    "description": "Schedule an appointment to apply for or renew your business license.",
+    "duration": 30,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "08:30",
+        "end": "11:30"
+      },
+      {
+        "start": "13:00",
+        "end": "16:00"
+      }
+    ],
+    "maxPerSlot": 3,
+    "leadTimeHours": 24,
+    "isActive": false,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

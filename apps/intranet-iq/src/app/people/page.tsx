@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import {
   Search,
@@ -11,144 +11,14 @@ import {
   ChevronDown,
   ChevronRight,
   Building2,
-  User,
   MessageSquare,
   Calendar,
-  ExternalLink,
   Grid3X3,
   List,
   Network,
 } from "lucide-react";
-
-interface Person {
-  id: string;
-  name: string;
-  title: string;
-  department: string;
-  location: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  status: "online" | "away" | "offline";
-  reports?: string[];
-  manager?: string;
-}
-
-interface OrgNode {
-  person: Person;
-  children: OrgNode[];
-  expanded?: boolean;
-}
-
-const samplePeople: Person[] = [
-  {
-    id: "1",
-    name: "James Morrison",
-    title: "CEO",
-    department: "Executive",
-    location: "San Francisco, CA",
-    email: "james.morrison@company.com",
-    phone: "+1 (555) 100-0001",
-    avatar: "JM",
-    status: "online",
-    reports: ["2", "3", "4", "5"],
-  },
-  {
-    id: "2",
-    name: "Sarah Chen",
-    title: "VP of Engineering",
-    department: "Engineering",
-    location: "San Francisco, CA",
-    email: "sarah.chen@company.com",
-    phone: "+1 (555) 100-0002",
-    avatar: "SC",
-    status: "online",
-    manager: "1",
-    reports: ["6", "7"],
-  },
-  {
-    id: "3",
-    name: "Michael Park",
-    title: "VP of Marketing",
-    department: "Marketing",
-    location: "New York, NY",
-    email: "michael.park@company.com",
-    phone: "+1 (555) 100-0003",
-    avatar: "MP",
-    status: "away",
-    manager: "1",
-    reports: ["8"],
-  },
-  {
-    id: "4",
-    name: "Emily Rodriguez",
-    title: "VP of Sales",
-    department: "Sales",
-    location: "Chicago, IL",
-    email: "emily.rodriguez@company.com",
-    phone: "+1 (555) 100-0004",
-    avatar: "ER",
-    status: "online",
-    manager: "1",
-  },
-  {
-    id: "5",
-    name: "David Kim",
-    title: "VP of HR",
-    department: "Human Resources",
-    location: "San Francisco, CA",
-    email: "david.kim@company.com",
-    phone: "+1 (555) 100-0005",
-    avatar: "DK",
-    status: "offline",
-    manager: "1",
-  },
-  {
-    id: "6",
-    name: "Alex Thompson",
-    title: "Engineering Manager",
-    department: "Engineering",
-    location: "Austin, TX",
-    email: "alex.thompson@company.com",
-    phone: "+1 (555) 100-0006",
-    avatar: "AT",
-    status: "online",
-    manager: "2",
-  },
-  {
-    id: "7",
-    name: "Lisa Wang",
-    title: "Senior Software Engineer",
-    department: "Engineering",
-    location: "Remote",
-    email: "lisa.wang@company.com",
-    phone: "+1 (555) 100-0007",
-    avatar: "LW",
-    status: "online",
-    manager: "2",
-  },
-  {
-    id: "8",
-    name: "Robert Johnson",
-    title: "Marketing Manager",
-    department: "Marketing",
-    location: "New York, NY",
-    email: "robert.johnson@company.com",
-    phone: "+1 (555) 100-0008",
-    avatar: "RJ",
-    status: "away",
-    manager: "3",
-  },
-];
-
-const departments = [
-  { name: "All Departments", count: 8 },
-  { name: "Engineering", count: 3 },
-  { name: "Marketing", count: 2 },
-  { name: "Sales", count: 1 },
-  { name: "Human Resources", count: 1 },
-  { name: "Executive", count: 1 },
-];
+import { useDepartments, useEmployees } from "@/lib/hooks/useSupabase";
+import type { Employee, Department } from "@/lib/database.types";
 
 type ViewMode = "grid" | "list" | "org";
 
@@ -158,37 +28,72 @@ const statusColors = {
   offline: "bg-gray-500",
 };
 
-export default function PeoplePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
-  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set(["1", "2"]));
+// Mock status since we don't have real-time presence
+function getRandomStatus(): "online" | "away" | "offline" {
+  const statuses: ("online" | "away" | "offline")[] = ["online", "away", "offline"];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+}
 
-  const filteredPeople = samplePeople.filter((person) => {
+export default function PeoplePage() {
+  const { departments, loading: deptLoading } = useDepartments();
+  const { employees, loading: empLoading } = useEmployees();
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [selectedPerson, setSelectedPerson] = useState<any | null>(null);
+  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
+  const [employeeStatuses, setEmployeeStatuses] = useState<Record<string, "online" | "away" | "offline">>({});
+
+  // Set random statuses for demo
+  useEffect(() => {
+    if (employees.length > 0) {
+      const statuses: Record<string, "online" | "away" | "offline"> = {};
+      employees.forEach((emp: any) => {
+        statuses[emp.id] = getRandomStatus();
+      });
+      setEmployeeStatuses(statuses);
+    }
+  }, [employees]);
+
+  // Expand CEO node by default
+  useEffect(() => {
+    if (employees.length > 0) {
+      const ceo = employees.find((emp: any) => !emp.manager_id);
+      if (ceo) {
+        setExpandedNodes(new Set([ceo.id]));
+      }
+    }
+  }, [employees]);
+
+  const loading = deptLoading || empLoading;
+
+  // Transform employees with user data
+  const transformedEmployees = employees.map((emp: any) => ({
+    id: emp.id,
+    name: emp.user?.full_name || "Unknown",
+    title: emp.job_title || "Employee",
+    department: emp.department?.name || "General",
+    departmentId: emp.department_id,
+    location: emp.location || "Remote",
+    email: emp.user?.email || "",
+    phone: emp.phone || "",
+    avatar: (emp.user?.full_name || "U").split(" ").map((n: string) => n[0]).join("").toUpperCase(),
+    status: employeeStatuses[emp.id] || "offline",
+    manager: emp.manager_id,
+    managerId: emp.manager_id,
+    skills: emp.skills || [],
+  }));
+
+  const filteredPeople = transformedEmployees.filter((person: any) => {
     const matchesSearch =
       person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       person.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       person.email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesDepartment =
-      selectedDepartment === "All Departments" ||
-      person.department === selectedDepartment;
+      selectedDepartment === "all" || person.departmentId === selectedDepartment;
     return matchesSearch && matchesDepartment;
   });
-
-  const buildOrgTree = (people: Person[]): OrgNode | null => {
-    const ceo = people.find((p) => !p.manager);
-    if (!ceo) return null;
-
-    const buildNode = (person: Person): OrgNode => {
-      const children = people
-        .filter((p) => p.manager === person.id)
-        .map(buildNode);
-      return { person, children, expanded: expandedNodes.has(person.id) };
-    };
-
-    return buildNode(ceo);
-  };
 
   const toggleNode = (id: string) => {
     setExpandedNodes((prev) => {
@@ -202,7 +107,21 @@ export default function PeoplePage() {
     });
   };
 
-  const renderOrgNode = (node: OrgNode, level: number = 0) => {
+  const buildOrgTree = () => {
+    const ceo = transformedEmployees.find((p: any) => !p.managerId);
+    if (!ceo) return null;
+
+    const buildNode = (person: any): any => {
+      const children = transformedEmployees
+        .filter((p: any) => p.managerId === person.id)
+        .map(buildNode);
+      return { person, children, expanded: expandedNodes.has(person.id) };
+    };
+
+    return buildNode(ceo);
+  };
+
+  const renderOrgNode = (node: any, level: number = 0) => {
     const hasChildren = node.children.length > 0;
     const isExpanded = expandedNodes.has(node.person.id);
 
@@ -221,7 +140,7 @@ export default function PeoplePage() {
               </div>
               <span
                 className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[#0f0f14] ${
-                  statusColors[node.person.status]
+                  statusColors[node.person.status as keyof typeof statusColors] || statusColors.offline
                 }`}
               />
             </div>
@@ -251,15 +170,10 @@ export default function PeoplePage() {
           <div className="mt-4 relative">
             <div className="absolute top-0 left-1/2 w-px h-4 bg-white/20 -translate-x-1/2" />
             <div className="flex gap-6 pt-4">
-              {node.children.map((child, idx) => (
+              {node.children.map((child: any, idx: number) => (
                 <div key={child.person.id} className="relative">
-                  {idx === 0 && node.children.length > 1 && (
-                    <div className="absolute top-0 left-1/2 right-0 h-px bg-white/20" style={{ width: `${(node.children.length - 1) * 100}%` }} />
-                  )}
                   <div className="absolute top-0 left-1/2 w-px h-4 bg-white/20 -translate-x-1/2" />
-                  <div className="pt-4">
-                    {renderOrgNode(child, level + 1)}
-                  </div>
+                  <div className="pt-4">{renderOrgNode(child, level + 1)}</div>
                 </div>
               ))}
             </div>
@@ -269,7 +183,7 @@ export default function PeoplePage() {
     );
   };
 
-  const orgTree = buildOrgTree(samplePeople);
+  const orgTree = buildOrgTree();
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -280,11 +194,9 @@ export default function PeoplePage() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-medium text-white mb-2">
-                People Directory
-              </h1>
+              <h1 className="text-2xl font-medium text-white mb-2">People Directory</h1>
               <p className="text-white/50">
-                {samplePeople.length} employees across the organization
+                {loading ? "Loading..." : `${transformedEmployees.length} employees across the organization`}
               </p>
             </div>
 
@@ -339,16 +251,23 @@ export default function PeoplePage() {
               onChange={(e) => setSelectedDepartment(e.target.value)}
               className="bg-[#0f0f14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-blue-500/50 transition-colors cursor-pointer"
             >
-              {departments.map((dept) => (
-                <option key={dept.name} value={dept.name}>
-                  {dept.name} ({dept.count})
-                </option>
-              ))}
+              <option value="all">All Departments ({transformedEmployees.length})</option>
+              {departments.map((dept: Department) => {
+                const count = transformedEmployees.filter((e: any) => e.departmentId === dept.id).length;
+                return (
+                  <option key={dept.id} value={dept.id}>
+                    {dept.name} ({count})
+                  </option>
+                );
+              })}
             </select>
           </div>
 
-          {/* Content based on view mode */}
-          {viewMode === "org" ? (
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
+            </div>
+          ) : viewMode === "org" ? (
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-8 overflow-x-auto">
               <h2 className="text-lg font-medium text-white mb-8 flex items-center gap-2">
                 <Network className="w-5 h-5 text-blue-400" />
@@ -364,7 +283,7 @@ export default function PeoplePage() {
               <div className="flex-1">
                 {viewMode === "grid" ? (
                   <div className="grid grid-cols-3 gap-4">
-                    {filteredPeople.map((person) => (
+                    {filteredPeople.map((person: any) => (
                       <div
                         key={person.id}
                         onClick={() => setSelectedPerson(person)}
@@ -381,14 +300,12 @@ export default function PeoplePage() {
                             </div>
                             <span
                               className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[#0f0f14] ${
-                                statusColors[person.status]
+                                statusColors[person.status as keyof typeof statusColors] || statusColors.offline
                               }`}
                             />
                           </div>
                           <div>
-                            <h4 className="text-white font-medium">
-                              {person.name}
-                            </h4>
+                            <h4 className="text-white font-medium">{person.name}</h4>
                             <p className="text-sm text-white/50">{person.title}</p>
                           </div>
                         </div>
@@ -407,7 +324,7 @@ export default function PeoplePage() {
                   </div>
                 ) : (
                   <div className="bg-[#0f0f14] border border-white/10 rounded-xl divide-y divide-white/10">
-                    {filteredPeople.map((person) => (
+                    {filteredPeople.map((person: any) => (
                       <div
                         key={person.id}
                         onClick={() => setSelectedPerson(person)}
@@ -421,7 +338,7 @@ export default function PeoplePage() {
                           </div>
                           <span
                             className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-[#0f0f14] ${
-                              statusColors[person.status]
+                              statusColors[person.status as keyof typeof statusColors] || statusColors.offline
                             }`}
                           />
                         </div>
@@ -447,13 +364,11 @@ export default function PeoplePage() {
                       </div>
                       <span
                         className={`absolute bottom-1 right-1 w-4 h-4 rounded-full border-2 border-[#0f0f14] ${
-                          statusColors[selectedPerson.status]
+                          statusColors[selectedPerson.status as keyof typeof statusColors] || statusColors.offline
                         }`}
                       />
                     </div>
-                    <h3 className="text-xl font-medium text-white mt-4">
-                      {selectedPerson.name}
-                    </h3>
+                    <h3 className="text-xl font-medium text-white mt-4">{selectedPerson.name}</h3>
                     <p className="text-white/50">{selectedPerson.title}</p>
                     <p className="text-sm text-white/40">{selectedPerson.department}</p>
                   </div>
@@ -470,60 +385,74 @@ export default function PeoplePage() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-center gap-3 text-sm">
-                      <Mail className="w-4 h-4 text-white/40" />
-                      <a
-                        href={`mailto:${selectedPerson.email}`}
-                        className="text-blue-400 hover:underline"
-                      >
-                        {selectedPerson.email}
-                      </a>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <Phone className="w-4 h-4 text-white/40" />
-                      <span className="text-white/70">{selectedPerson.phone}</span>
-                    </div>
+                    {selectedPerson.email && (
+                      <div className="flex items-center gap-3 text-sm">
+                        <Mail className="w-4 h-4 text-white/40" />
+                        <a href={`mailto:${selectedPerson.email}`} className="text-blue-400 hover:underline">
+                          {selectedPerson.email}
+                        </a>
+                      </div>
+                    )}
+                    {selectedPerson.phone && (
+                      <div className="flex items-center gap-3 text-sm">
+                        <Phone className="w-4 h-4 text-white/40" />
+                        <span className="text-white/70">{selectedPerson.phone}</span>
+                      </div>
+                    )}
                     <div className="flex items-center gap-3 text-sm">
                       <MapPin className="w-4 h-4 text-white/40" />
                       <span className="text-white/70">{selectedPerson.location}</span>
                     </div>
                   </div>
 
-                  {selectedPerson.manager && (
+                  {selectedPerson.skills && selectedPerson.skills.length > 0 && (
                     <div className="mt-6 pt-6 border-t border-white/10">
-                      <h4 className="text-xs text-white/40 uppercase tracking-wider mb-3">
-                        Reports To
-                      </h4>
-                      <div className="flex items-center gap-3">
-                        {(() => {
-                          const manager = samplePeople.find(
-                            (p) => p.id === selectedPerson.manager
-                          );
-                          return manager ? (
-                            <>
-                              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
-                                {manager.avatar}
-                              </div>
-                              <div>
-                                <p className="text-sm text-white">{manager.name}</p>
-                                <p className="text-xs text-white/50">{manager.title}</p>
-                              </div>
-                            </>
-                          ) : null;
-                        })()}
+                      <h4 className="text-xs text-white/40 uppercase tracking-wider mb-3">Skills</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedPerson.skills.map((skill: string) => (
+                          <span
+                            key={skill}
+                            className="px-2 py-1 rounded-full text-xs bg-white/10 text-white/60"
+                          >
+                            {skill}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   )}
 
-                  {selectedPerson.reports && selectedPerson.reports.length > 0 && (
+                  {selectedPerson.managerId && (
                     <div className="mt-6 pt-6 border-t border-white/10">
-                      <h4 className="text-xs text-white/40 uppercase tracking-wider mb-3">
-                        Direct Reports ({selectedPerson.reports.length})
-                      </h4>
-                      <div className="space-y-2">
-                        {selectedPerson.reports.map((reportId) => {
-                          const report = samplePeople.find((p) => p.id === reportId);
-                          return report ? (
+                      <h4 className="text-xs text-white/40 uppercase tracking-wider mb-3">Reports To</h4>
+                      {(() => {
+                        const manager = transformedEmployees.find((p: any) => p.id === selectedPerson.managerId);
+                        return manager ? (
+                          <div
+                            className="flex items-center gap-3 cursor-pointer hover:bg-white/5 rounded-lg p-2 -mx-2"
+                            onClick={() => setSelectedPerson(manager)}
+                          >
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-medium">
+                              {manager.avatar}
+                            </div>
+                            <div>
+                              <p className="text-sm text-white">{manager.name}</p>
+                              <p className="text-xs text-white/50">{manager.title}</p>
+                            </div>
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  )}
+
+                  {(() => {
+                    const reports = transformedEmployees.filter((p: any) => p.managerId === selectedPerson.id);
+                    return reports.length > 0 ? (
+                      <div className="mt-6 pt-6 border-t border-white/10">
+                        <h4 className="text-xs text-white/40 uppercase tracking-wider mb-3">
+                          Direct Reports ({reports.length})
+                        </h4>
+                        <div className="space-y-2">
+                          {reports.map((report: any) => (
                             <div
                               key={report.id}
                               className="flex items-center gap-3 cursor-pointer hover:bg-white/5 rounded-lg p-2 -mx-2"
@@ -537,11 +466,11 @@ export default function PeoplePage() {
                                 <p className="text-xs text-white/50">{report.title}</p>
                               </div>
                             </div>
-                          ) : null;
-                        })}
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    ) : null;
+                  })()}
                 </div>
               )}
             </div>

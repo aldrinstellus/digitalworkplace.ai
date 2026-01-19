@@ -8,6 +8,11 @@ export const metadata: Metadata = {
     template: "%s | dIQ",
   },
   description: "AI-powered internal knowledge network - Enterprise search, AI assistant, and knowledge management",
+  icons: {
+    icon: "/diq/icon",
+    shortcut: "/diq/icon",
+    apple: "/diq/icon",
+  },
 };
 
 export default function RootLayout({

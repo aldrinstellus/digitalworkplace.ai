@@ -1,131 +1,93 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { useSearch, useDepartments, useActivityLog } from "@/lib/hooks/useSupabase";
 import {
   Search,
-  Filter,
   FileText,
   Users,
   Calendar,
   Mail,
   Database,
-  ChevronDown,
-  X,
-  ExternalLink,
   Clock,
   Star,
   Sparkles,
   SlidersHorizontal,
-  Image as ImageIcon,
-  Video,
-  Link2,
+  ExternalLink,
+  Loader2,
 } from "lucide-react";
-
-interface SearchResult {
-  id: string;
-  title: string;
-  snippet: string;
-  type: "document" | "channel" | "person" | "event" | "email" | "kb";
-  source: string;
-  relevance: number;
-  date: string;
-  thumbnail?: string;
-}
-
-const sampleResults: SearchResult[] = [
-  {
-    id: "1",
-    title: "Q4 2025 Strategic Planning Document",
-    snippet:
-      "This document outlines the strategic priorities for Q4 2025, including market expansion plans, product roadmap updates, and key performance indicators...",
-    type: "document",
-    source: "Company Documents",
-    relevance: 98,
-    date: "Updated 2 days ago",
-  },
-  {
-    id: "2",
-    title: "Engineering Team Channel",
-    snippet:
-      "Discussion about Q4 planning milestones and resource allocation for the upcoming sprint cycles...",
-    type: "channel",
-    source: "Team Channels",
-    relevance: 92,
-    date: "12 new messages",
-  },
-  {
-    id: "3",
-    title: "Sarah Chen - VP of Engineering",
-    snippet:
-      "Leading the engineering team. Key contact for technical decisions and Q4 planning coordination...",
-    type: "person",
-    source: "People Directory",
-    relevance: 88,
-    date: "Active now",
-  },
-  {
-    id: "4",
-    title: "Q4 Planning Kickoff Meeting",
-    snippet:
-      "All-hands meeting to discuss Q4 priorities, team goals, and resource planning for the quarter...",
-    type: "event",
-    source: "Calendar",
-    relevance: 85,
-    date: "Tomorrow at 2:00 PM",
-  },
-  {
-    id: "5",
-    title: "Project Management Best Practices",
-    snippet:
-      "Knowledge base article covering project planning methodologies, sprint planning, and quarterly goal setting...",
-    type: "kb",
-    source: "Knowledge Base",
-    relevance: 82,
-    date: "Last updated 1 week ago",
-  },
-];
 
 const filterCategories = [
   { id: "all", label: "All Results", icon: Database },
-  { id: "documents", label: "Documents", icon: FileText },
-  { id: "channels", label: "Channels", icon: Users },
-  { id: "people", label: "People", icon: Users },
-  { id: "events", label: "Events", icon: Calendar },
-  { id: "emails", label: "Emails", icon: Mail },
-  { id: "kb", label: "Knowledge Base", icon: Database },
+  { id: "article", label: "Articles", icon: FileText },
+  { id: "employee", label: "People", icon: Users },
+  { id: "event", label: "Events", icon: Calendar },
+  { id: "document", label: "Documents", icon: FileText },
 ];
 
 const typeIcons: Record<string, typeof FileText> = {
+  article: FileText,
+  employee: Users,
+  event: Calendar,
   document: FileText,
   channel: Users,
-  person: Users,
-  event: Calendar,
   email: Mail,
-  kb: Database,
 };
 
 const typeColors: Record<string, string> = {
-  document: "bg-blue-500/20 text-blue-400",
-  channel: "bg-purple-500/20 text-purple-400",
-  person: "bg-green-500/20 text-green-400",
+  article: "bg-blue-500/20 text-blue-400",
+  employee: "bg-green-500/20 text-green-400",
   event: "bg-orange-500/20 text-orange-400",
-  email: "bg-cyan-500/20 text-cyan-400",
-  kb: "bg-pink-500/20 text-pink-400",
+  document: "bg-purple-500/20 text-purple-400",
+  channel: "bg-cyan-500/20 text-cyan-400",
 };
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("Q4 planning");
+  const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
-  const [results, setResults] = useState<SearchResult[]>(sampleResults);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [dateRange, setDateRange] = useState("any");
   const [sortBy, setSortBy] = useState("relevance");
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
 
-  const handleSearch = () => {
-    // In production, this would call Elasticsearch API
-    console.log("Searching:", query);
+  const { results, loading, error, search } = useSearch();
+  const { departments } = useDepartments();
+  const { log } = useActivityLog();
+
+  const handleSearch = useCallback(async () => {
+    if (!query.trim()) return;
+
+    await search(query, {
+      itemTypes: activeFilter === "all" ? undefined : [activeFilter],
+      maxResults: 20,
+    });
+
+    // Log search activity
+    await log("search", {
+      entityType: "search",
+      metadata: { query, filter: activeFilter },
+    });
+  }, [query, activeFilter, search, log]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
+
+  const toggleDepartment = (deptId: string) => {
+    setSelectedDepartments((prev) =>
+      prev.includes(deptId)
+        ? prev.filter((id) => id !== deptId)
+        : [...prev, deptId]
+    );
+  };
+
+  const filteredResults = results.filter((result) => {
+    if (activeFilter === "all") return true;
+    return result.type === activeFilter;
+  });
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -139,7 +101,7 @@ export default function SearchPage() {
               Enterprise Search
             </h1>
             <p className="text-white/50">
-              Search across documents, knowledge bases, channels, and more
+              Search across articles, knowledge bases, people, and more
             </p>
           </div>
 
@@ -152,7 +114,7 @@ export default function SearchPage() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  onKeyDown={handleKeyDown}
                   placeholder="Search anything..."
                   className="flex-1 bg-transparent text-white placeholder-white/40 outline-none text-lg"
                 />
@@ -170,8 +132,10 @@ export default function SearchPage() {
                   </button>
                   <button
                     onClick={handleSearch}
-                    className="px-4 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition-colors"
+                    disabled={loading || !query.trim()}
+                    className="px-4 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors flex items-center gap-2"
                   >
+                    {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                     Search
                   </button>
                 </div>
@@ -226,26 +190,29 @@ export default function SearchPage() {
             </div>
           </div>
 
-          {/* AI Suggestion */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-white/90">
-                  <strong className="text-blue-400">AI Summary:</strong> Based on
-                  your search for &quot;Q4 planning&quot;, I found the main strategic
-                  document, related team discussions, and upcoming meetings. The
-                  VP of Engineering is the key stakeholder for technical
-                  planning.
-                </p>
-                <button className="mt-2 text-sm text-blue-400 hover:text-blue-300">
-                  Ask AI for more details →
-                </button>
+          {/* AI Suggestion - show when there are results */}
+          {filteredResults.length > 0 && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-4 h-4 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-white/90">
+                    <strong className="text-blue-400">AI Summary:</strong> Found{" "}
+                    {filteredResults.length} results for &quot;{query}&quot;.
+                    {filteredResults.some((r) => r.type === "article") &&
+                      " Includes knowledge base articles."}
+                    {filteredResults.some((r) => r.type === "employee") &&
+                      " Found matching people in the directory."}
+                  </p>
+                  <button className="mt-2 text-sm text-blue-400 hover:text-blue-300">
+                    Ask AI for more details →
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className="flex gap-6">
             {/* Filters Sidebar */}
@@ -276,20 +243,20 @@ export default function SearchPage() {
                     Department
                   </h3>
                   <div className="space-y-2">
-                    {["Engineering", "Marketing", "Sales", "HR", "Finance"].map(
-                      (dept) => (
-                        <label
-                          key={dept}
-                          className="flex items-center gap-2 text-sm text-white/60 cursor-pointer hover:text-white"
-                        >
-                          <input
-                            type="checkbox"
-                            className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
-                          />
-                          {dept}
-                        </label>
-                      )
-                    )}
+                    {departments.map((dept) => (
+                      <label
+                        key={dept.id}
+                        className="flex items-center gap-2 text-sm text-white/60 cursor-pointer hover:text-white"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedDepartments.includes(dept.id)}
+                          onChange={() => toggleDepartment(dept.id)}
+                          className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
+                        />
+                        {dept.name}
+                      </label>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -299,7 +266,8 @@ export default function SearchPage() {
             <div className="flex-1">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm text-white/50">
-                  {results.length} results for &quot;{query}&quot;
+                  {filteredResults.length} results
+                  {query && ` for "${query}"`}
                 </span>
                 <button className="text-sm text-white/50 hover:text-white flex items-center gap-1">
                   <Clock className="w-4 h-4" />
@@ -307,67 +275,99 @@ export default function SearchPage() {
                 </button>
               </div>
 
-              <div className="space-y-4">
-                {results.map((result) => {
-                  const Icon = typeIcons[result.type] || FileText;
-                  return (
-                    <div
-                      key={result.id}
-                      className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 hover:border-blue-500/30 transition-colors cursor-pointer group"
-                    >
-                      <div className="flex items-start gap-4">
-                        {/* Type Icon */}
-                        <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                            typeColors[result.type]
-                          }`}
-                        >
-                          <Icon className="w-5 h-5" />
-                        </div>
+              {error && (
+                <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                  Error: {error}
+                </div>
+              )}
 
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-white font-medium group-hover:text-blue-400 transition-colors">
-                              {result.title}
-                            </h3>
-                            <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/50">
-                              {result.relevance}% match
-                            </span>
-                          </div>
-                          <p className="text-sm text-white/60 line-clamp-2 mb-2">
-                            {result.snippet}
-                          </p>
-                          <div className="flex items-center gap-4 text-xs text-white/40">
-                            <span className="flex items-center gap-1">
-                              <Database className="w-3 h-3" />
-                              {result.source}
-                            </span>
-                            <span>{result.date}</span>
-                          </div>
-                        </div>
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+                </div>
+              ) : filteredResults.length === 0 ? (
+                <div className="text-center py-12">
+                  <Search className="w-12 h-12 text-white/10 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-white/50 mb-2">
+                    {query ? "No results found" : "Start searching"}
+                  </h3>
+                  <p className="text-sm text-white/30">
+                    {query
+                      ? "Try different keywords or filters"
+                      : "Enter a search term to find articles, people, and more"}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredResults.map((result) => {
+                    const Icon = typeIcons[result.type] || FileText;
+                    const colorClass = typeColors[result.type] || "bg-gray-500/20 text-gray-400";
 
-                        {/* Actions */}
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
-                            <Star className="w-4 h-4" />
-                          </button>
-                          <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
-                            <ExternalLink className="w-4 h-4" />
-                          </button>
+                    return (
+                      <div
+                        key={result.id}
+                        className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 hover:border-blue-500/30 transition-colors cursor-pointer group"
+                      >
+                        <div className="flex items-start gap-4">
+                          {/* Type Icon */}
+                          <div
+                            className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${colorClass}`}
+                          >
+                            <Icon className="w-5 h-5" />
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-white font-medium group-hover:text-blue-400 transition-colors">
+                                {result.title}
+                              </h3>
+                              {result.relevance && (
+                                <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/50">
+                                  {Math.round(result.relevance * 100)}% match
+                                </span>
+                              )}
+                            </div>
+                            {result.summary && (
+                              <p className="text-sm text-white/60 line-clamp-2 mb-2">
+                                {result.summary.substring(0, 200)}...
+                              </p>
+                            )}
+                            <div className="flex items-center gap-4 text-xs text-white/40">
+                              <span className="flex items-center gap-1">
+                                <Database className="w-3 h-3" />
+                                {result.type}
+                              </span>
+                              {result.project_code && (
+                                <span>{result.project_code}</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
+                              <Star className="w-4 h-4" />
+                            </button>
+                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
+                              <ExternalLink className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Load More */}
-              <div className="mt-6 text-center">
-                <button className="px-6 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-colors">
-                  Load more results
-                </button>
-              </div>
+              {filteredResults.length > 0 && (
+                <div className="mt-6 text-center">
+                  <button className="px-6 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-colors">
+                    Load more results
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
 
-**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL DOC FILES BEFORE RESPONDING:**
+**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL 6 DOC FILES BEFORE RESPONDING:**
 - "hey", "hi", "hello", "start", "begin", "let's go", "ready"
 - "pull latest", "get latest", "check latest", "update"
 - "open dev", "open local", "dev server", "localhost"
@@ -16,7 +16,9 @@
 1. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 2. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/context.md
 3. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CHANGELOG.md
-4. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CLAUDE.md
+4. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - all projects)
+5. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
+6. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CLAUDE.md
 ```
 
 **THEN:**
@@ -311,11 +313,13 @@ public schema (shared)     diq schema (project-specific)
 ```
 supabase/migrations/
 ├── 001_core_schema.sql           # Shared tables
-└── 002_diq_schema.sql            # dIQ-specific tables
+├── 002_diq_schema.sql            # dIQ-specific tables
+└── 003_pgvector_embeddings.sql   # pgvector semantic search
 
 apps/intranet-iq/src/lib/
 ├── database.types.ts             # TypeScript types
-└── supabase.ts                   # Client + helpers
+├── supabase.ts                   # Client + helpers
+└── hooks/useSupabase.ts          # React data hooks
 
 docs/DATABASE_ARCHITECTURE.md     # Full documentation
 ```
@@ -366,10 +370,18 @@ updateUserSettings(userId, settings)
 
 // Activity
 logActivity(userId, action, options)
+
+// Semantic Search (pgvector)
+searchKnowledgeSemantic(queryEmbedding, options)      // Vector similarity search
+searchKnowledgeHybrid(searchQuery, queryEmbedding, options)  // Keyword + vector
+searchArticlesSemantic(queryEmbedding, options)       // Article semantic search
+findSimilarArticles(articleId, matchCount)            // Find similar content
+getChatContext(queryEmbedding, options)               // RAG context for AI chat
+getEmbeddingStats()                                   // Embedding coverage stats
 ```
 
 ---
 
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
-*Version: 0.2.2*
+*Version: 0.2.4*

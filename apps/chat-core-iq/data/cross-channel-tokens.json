@@ -1,0 +1,165 @@
+{
+  "0770NN": {
+    "token": "0770NN",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767539431968",
+    "sessionId": "ivr_1767539431975_dw0198cp8",
+    "language": "en",
+    "createdAt": "2026-01-04T15:10:59.567Z",
+    "expiresAt": "2026-01-04T15:40:59.562Z",
+    "used": true
+  },
+  "GKCPI0": {
+    "token": "GKCPI0",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767539605826",
+    "sessionId": "ivr_1767539605834_l6efhue88",
+    "language": "en",
+    "createdAt": "2026-01-04T15:13:55.806Z",
+    "expiresAt": "2026-01-04T15:43:55.806Z",
+    "used": true
+  },
+  "JV8O40": {
+    "token": "JV8O40",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767593014004",
+    "sessionId": "ivr_1767593014020_mvrwlawmf",
+    "language": "en",
+    "createdAt": "2026-01-05T06:04:10.270Z",
+    "expiresAt": "2026-01-05T06:34:10.268Z",
+    "used": false
+  },
+  "MZWS3C": {
+    "token": "MZWS3C",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767596810185",
+    "sessionId": "ivr_1767596810728_55zvhofh5",
+    "language": "en",
+    "createdAt": "2026-01-05T07:08:20.882Z",
+    "expiresAt": "2026-01-05T07:38:20.879Z",
+    "used": false
+  },
+  "7XVIFI": {
+    "token": "7XVIFI",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767598264840",
+    "sessionId": "ivr_1767598264849_14upymxum",
+    "language": "en",
+    "createdAt": "2026-01-05T07:33:34.584Z",
+    "expiresAt": "2026-01-05T08:03:34.583Z",
+    "used": false
+  },
+  "2WPGV5": {
+    "token": "2WPGV5",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767603823551",
+    "sessionId": "ivr_1767603823558_030guk351",
+    "language": "en",
+    "createdAt": "2026-01-05T09:05:20.139Z",
+    "expiresAt": "2026-01-05T09:35:20.135Z",
+    "used": false
+  },
+  "9JGUXC": {
+    "token": "9JGUXC",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767606521138",
+    "sessionId": "ivr_1767606521147_iuoo2kxoe",
+    "language": "en",
+    "createdAt": "2026-01-05T09:50:18.816Z",
+    "expiresAt": "2026-01-05T10:20:18.814Z",
+    "used": false
+  },
+  "VAY29C": {
+    "token": "VAY29C",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767607017408",
+    "sessionId": "ivr_1767607017489_jl0aswlx3",
+    "language": "en",
+    "createdAt": "2026-01-05T09:59:03.701Z",
+    "expiresAt": "2026-01-05T10:29:03.698Z",
+    "used": true
+  },
+  "I76BA6": {
+    "token": "I76BA6",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767607470835",
+    "sessionId": "ivr_1767607470846_8xxfa3aax",
+    "language": "en",
+    "createdAt": "2026-01-05T10:05:05.592Z",
+    "expiresAt": "2026-01-05T10:35:05.589Z",
+    "used": true
+  },
+  "EKMJ19": {
+    "token": "EKMJ19",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767613147958",
+    "sessionId": "ivr_1767613147966_gb5kh0egv",
+    "language": "en",
+    "createdAt": "2026-01-05T11:40:09.258Z",
+    "expiresAt": "2026-01-05T12:10:09.256Z",
+    "used": true
+  },
+  "ZS6ILF": {
+    "token": "ZS6ILF",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767615616780",
+    "sessionId": "ivr_1767615616789_i4g5hqyck",
+    "language": "en",
+    "createdAt": "2026-01-05T12:21:17.628Z",
+    "expiresAt": "2026-01-05T12:51:17.626Z",
+    "used": true
+  },
+  "1URQVZ": {
+    "token": "1URQVZ",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767619979210",
+    "sessionId": "ivr_1767619979221_4b8iq68mp",
+    "language": "en",
+    "createdAt": "2026-01-05T13:34:44.098Z",
+    "expiresAt": "2026-01-05T14:04:44.096Z",
+    "used": false
+  },
+  "2NY3HX": {
+    "token": "2NY3HX",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767620358212",
+    "sessionId": "ivr_1767620358221_gp5iqpi13",
+    "language": "en",
+    "createdAt": "2026-01-05T13:40:33.612Z",
+    "expiresAt": "2026-01-05T14:10:33.610Z",
+    "used": true
+  },
+  "BIR7FE": {
+    "token": "BIR7FE",
+    "sourceChannel": "ivr",
+    "sourceUserId": "+1-demo-1767625423197",
+    "sessionId": "ivr_1767625423208_d5hhgqyhq",
+    "language": "en",
+    "createdAt": "2026-01-05T15:05:19.732Z",
+    "expiresAt": "2026-01-05T15:35:19.730Z",
+    "used": true
+  },
+  "EYJJIJ": {
+    "token": "EYJJIJ",
+    "sourceChannel": "ivr",
+    "sourceUserId": " 15551234567",
+    "sessionId": "ivr_1768826378151_iwyj6xshl",
+    "language": "en",
+    "createdAt": "2026-01-19T12:39:46.357Z",
+    "expiresAt": "2026-01-19T13:09:46.354Z",
+    "used": true,
+    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2ODgyODE4NjM1NCwidiI6MX0",
+    "messages": [
+      {
+        "role": "user",
+        "content": "What are your hours",
+        "timestamp": "2026-01-19T12:39:38.166Z"
+      },
+      {
+        "role": "assistant",
+        "content": "**Hours:**\n• Monday-Thursday: 10am - 7pm\n• Friday-Saturday: 10am - 12am\n• Sunday: 12pm - 7pm",
+        "timestamp": "2026-01-19T12:39:40.427Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,2017 @@
+{
+  "conversations": [
+    {
+      "id": "conv_1767685197821_uqielhuo8",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:39:09.038Z",
+      "endTime": "2026-01-06T07:39:57.777Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:39:09.038Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:39:30.581Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:39:31.547Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:39:56.639Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:39:57.777Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767685227228_6kswoobbb",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:40:27.228Z",
+      "endTime": "2026-01-06T07:40:27.228Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:40:27.228Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767685227255_dgiuaezpm",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:39:09.038Z",
+      "endTime": "2026-01-06T07:40:27.230Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:39:09.038Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:39:30.581Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:39:31.547Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:39:56.639Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:39:57.777Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:40:25.780Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:40:27.230Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767685299210_bcr6ezays",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:41:39.210Z",
+      "endTime": "2026-01-06T07:41:39.210Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "user",
+          "content": "Kijan pou mwen aplike pou yon pèmi konstriksyon?",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Etap pou Aplike pou Yon Pèmi Konstriksyon:**\n1. Ranpli fòm pèmi yo\n2. Soumèt plan konsepsyon\n3. Peye frè aplikasyon yo\n4. Atann apwobasyon ak pèmi a\n5. Asire w ou genyen tout inspeksyon yo\n\nOu ka kontakte Depatman Bilding nan (305) 593-6700 pou plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:41:39.210Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767685299236_6bmkowh11",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:39:09.038Z",
+      "endTime": "2026-01-06T07:41:39.212Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:39:09.038Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:39:30.581Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:39:31.547Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:39:56.639Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:39:57.777Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:40:25.780Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:40:27.230Z"
+        },
+        {
+          "role": "user",
+          "content": "Kijan pou mwen aplike pou yon pèmi konstriksyon?",
+          "timestamp": "2026-01-06T07:41:36.915Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Etap pou Aplike pou Yon Pèmi Konstriksyon:**\n1. Ranpli fòm pèmi yo\n2. Soumèt plan konsepsyon\n3. Peye frè aplikasyon yo\n4. Atann apwobasyon ak pèmi a\n5. Asire w ou genyen tout inspeksyon yo\n\nOu ka kontakte Depatman Bilding nan (305) 593-6700 pou plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:41:39.212Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767685310242_22h595nj9",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:41:50.242Z",
+      "endTime": "2026-01-06T07:41:50.242Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "user",
+          "content": "Kijan pou mwen aplike pou yon pèmi konstriksyon?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Etap pou Aplike pou Yon Pèmi Konstriksyon:**\n1. Ranpli fòm pèmi yo\n2. Soumèt plan konsepsyon\n3. Peye frè aplikasyon yo\n4. Atann apwobasyon ak pèmi a\n5. Asire w ou genyen tout inspeksyon yo\n\nOu ka kontakte Depatman Bilding nan (305) 593-6700 pou plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki evènman ki gen k ap vini nan Doral?",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Evènman Pwochen nan Doral:**\n• Fèt Endepandans - 4 Jiyè\n• Festi Mizik Doral - 15 Jiyè\n• Fèt Nwèl Doral - 1 Desanm\n• Mashe Famasi Lokal - Chak Samdi\n\nOu ka tcheke Kalandriye Evènman Vil la sou sitwèb ofisyèl Vil Doral la pou plis detay.",
+          "timestamp": "2026-01-06T07:41:50.242Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767685310369_qoxli0nzo",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:39:09.038Z",
+      "endTime": "2026-01-06T07:41:50.245Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T07:39:09.038Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:39:30.581Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday to Friday, 8AM to 5PM\n• Closed on weekends and holidays",
+          "timestamp": "2026-01-06T07:39:31.547Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-06T07:39:56.639Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Pagar Factura de Agua:**\n• Visitar Departamento de Finanzas\n• Pagar en línea en sitio web\n• Llamar al (305) 593-6725",
+          "timestamp": "2026-01-06T07:39:57.777Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè Mezon Vil la ouvri?",
+          "timestamp": "2026-01-06T07:40:25.780Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Orè Mezon Vil Doral:**\n• Lendi jiska Vandredi, 8è AM a 5è PM\n• Fèmen sou wikenn ak jou ferye",
+          "timestamp": "2026-01-06T07:40:27.230Z"
+        },
+        {
+          "role": "user",
+          "content": "Kijan pou mwen aplike pou yon pèmi konstriksyon?",
+          "timestamp": "2026-01-06T07:41:36.915Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Etap pou Aplike pou Yon Pèmi Konstriksyon:**\n1. Ranpli fòm pèmi yo\n2. Soumèt plan konsepsyon\n3. Peye frè aplikasyon yo\n4. Atann apwobasyon ak pèmi a\n5. Asire w ou genyen tout inspeksyon yo\n\nOu ka kontakte Depatman Bilding nan (305) 593-6700 pou plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:41:39.212Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki evènman ki gen k ap vini nan Doral?",
+          "timestamp": "2026-01-06T07:41:48.298Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Evènman Pwochen nan Doral:**\n• Fèt Endepandans - 4 Jiyè\n• Festi Mizik Doral - 15 Jiyè\n• Fèt Nwèl Doral - 1 Desanm\n• Mashe Famasi Lokal - Chak Samdi\n\nOu ka tcheke Kalandriye Evènman Vil la sou sitwèb ofisyèl Vil Doral la pou plis detay.",
+          "timestamp": "2026-01-06T07:41:50.245Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767685358443_i6qrg2f5f",
+      "sessionId": "ivr-demo-1767685356456",
+      "startTime": "2026-01-06T07:42:38.443Z",
+      "endTime": "2026-01-06T07:42:38.443Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-06T07:42:38.443Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday-Friday.\n\n**Hours:**\n• 8 AM to 5 PM\n• Closed on federal holidays",
+          "timestamp": "2026-01-06T07:42:38.443Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767685378577_ti60gemdh",
+      "sessionId": "ivr-demo-1767685377389",
+      "startTime": "2026-01-06T07:42:58.577Z",
+      "endTime": "2026-01-06T07:42:58.577Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-06T07:42:58.577Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the options to pay your water bill:\n\n**Payment Options:**\n• Online at miamidade.county-taxes.com\n• By phone: (305) 270-4916\n• In person at Tax Collector's Office\n\nContact the Tax Collector at (305) 270-4916 if you have any questions.",
+          "timestamp": "2026-01-06T07:42:58.577Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767685510641_p775ksala",
+      "sessionId": "ivr-demo-1767685509392",
+      "startTime": "2026-01-06T07:45:10.641Z",
+      "endTime": "2026-01-06T07:45:10.641Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki lè mairie a ouvri?",
+          "timestamp": "2026-01-06T07:45:10.641Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Mairie la ouvri lendi jiska vandredi.\n\n**Orè:**\n• 8 è nan maten jiska 5 è diswa\n• Fèmen jou ferye federal yo\n\n**Kontakte:**\n• (305) 593-6725\n• 8401 NW 53rd Terrace, Doral, FL",
+          "timestamp": "2026-01-06T07:45:10.641Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767685598318_dg01djf0j",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:46:38.318Z",
+      "endTime": "2026-01-06T07:46:38.318Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Pressed: 3",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Ou ka poze m kesyon sou sèvis vil la, pèmi, pak, ak plis ankò. Peze 1 nenpòt ki lè pou pale ak yon reprezantan. Peze 2 pou jwenn yon kòd pou kontinye konvèsasyon sa a sou sit entènèt nou an. Kijan mwen ka ede w jodi a?",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"Ki lè mairie a ouvri?\"",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Mairie la ouvri lendi jiska vandredi.\n\n**Orè:**\n• 8 è nan maten jiska 5 è diswa\n• Fèmen jou ferye federal yo\n\n**Kontakte:**\n• (305) 593-6725\n• 8401 NW 53rd Terrace, Doral, FL",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Peze 2 pou jwenn yon kòd epi kontinye sou sit entènèt nou an pou plis detay. Oswa poze yon lòt kesyon.",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "user",
+          "content": "Eske mwen ka rele tou?",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Wi, ou ka rele Mairie a tou pou kesyon ak demand ou yo. Voye yo nan nimewo sa yo:\n\n**Nimewo telefòn:**\n- (305) 593-6725\n\nNòmalman, yo reponn apèl yo nan lè biznis yo, ki se:\n\n- Lendi - Vandredi: 8è AM - 5è PM\n- Yo fèmen jou feri federal yo\n\nOu ka tou kontakte yo pa imel:\n\n- Imel: info@cityofdoral.com\n\nYo toujou rete disponib pou ede ou ak nenpòt kesyon ou ka gen sou sèvis ak aktivite vil la. Peze 2 si ou bezwen plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:46:38.318Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767685598351_1gnleudzo",
+      "sessionId": "sess_1767685149036_x4k1gjjhs",
+      "startTime": "2026-01-06T07:45:48.366Z",
+      "endTime": "2026-01-06T07:46:38.324Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Pressed: 3",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Ou ka poze m kesyon sou sèvis vil la, pèmi, pak, ak plis ankò. Peze 1 nenpòt ki lè pou pale ak yon reprezantan. Peze 2 pou jwenn yon kòd pou kontinye konvèsasyon sa a sou sit entènèt nou an. Kijan mwen ka ede w jodi a?",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "user",
+          "content": "Said: \"Ki lè mairie a ouvri?\"",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Mairie la ouvri lendi jiska vandredi.\n\n**Orè:**\n• 8 è nan maten jiska 5 è diswa\n• Fèmen jou ferye federal yo\n\n**Kontakte:**\n• (305) 593-6725\n• 8401 NW 53rd Terrace, Doral, FL",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Peze 2 pou jwenn yon kòd epi kontinye sou sit entènèt nou an pou plis detay. Oswa poze yon lòt kesyon.",
+          "timestamp": "2026-01-06T07:45:48.366Z"
+        },
+        {
+          "role": "user",
+          "content": "Eske mwen ka rele tou?",
+          "timestamp": "2026-01-06T07:46:35.721Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Wi, ou ka rele Mairie a tou pou kesyon ak demand ou yo. Voye yo nan nimewo sa yo:\n\n**Nimewo telefòn:**\n- (305) 593-6725\n\nNòmalman, yo reponn apèl yo nan lè biznis yo, ki se:\n\n- Lendi - Vandredi: 8è AM - 5è PM\n- Yo fèmen jou feri federal yo\n\nOu ka tou kontakte yo pa imel:\n\n- Imel: info@cityofdoral.com\n\nYo toujou rete disponib pou ede ou ak nenpòt kesyon ou ka gen sou sèvis ak aktivite vil la. Peze 2 si ou bezwen plis enfòmasyon.",
+          "timestamp": "2026-01-06T07:46:38.324Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687270214_4ws0q1usb",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:14:30.198Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687304705_ekgr4mz9r",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:15:04.705Z",
+      "endTime": "2026-01-06T08:15:04.705Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.705Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767687304719_j3v6c7lcs",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:15:04.707Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687332183_0rdtiirqe",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:15:32.183Z",
+      "endTime": "2026-01-06T08:15:32.183Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.183Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767687332197_f5oxcttuz",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:15:32.185Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687347806_iafa51zzb",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:15:47.806Z",
+      "endTime": "2026-01-06T08:15:47.806Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.806Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767687347824_3d4i920hn",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:15:47.808Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:46.217Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.808Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687409233_qnl69gqgq",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:16:49.219Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:46.217Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.808Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:16:49.202Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:16:49.219Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687418677_tfqjdsob4",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:16:58.661Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:46.217Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.808Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:16:49.202Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:16:49.219Z"
+        },
+        {
+          "role": "user",
+          "content": "8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.648Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Road Maintenance\n**Department:** Public Works\n**Priority:** Medium\n**Description:** I need to report a pothole near my neighborhood. Can you submit a service request for me?\n**Location:** 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.661Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687446761_roe3rn0e8",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:17:26.761Z",
+      "endTime": "2026-01-06T08:17:26.761Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Road Maintenance\n**Department:** Public Works\n**Priority:** Medium\n**Description:** I need to report a pothole near my neighborhood. Can you submit a service request for me?\n**Location:** 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Your service request has been submitted!**\n\n**Ticket #:** SR-2026-00015\n**Category:** Road Maintenance\n**Department:** Public Works\n**Expected Response:** within 48 hours\n\nYou can reference this ticket number for follow-up. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "user",
+          "content": "When do I need to renew my Business Tax Receipt, and can I pay for it online?",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Renewal Deadline:**\n• Fiscal Year: October 1 - September 30\n• Deadline: September 30th annually\n\n**Online Payment:**\n1. Visit: https://energovcss.cityofdoral.com\n2. Click 'PAY INVOICES' \n3. Enter invoice # with 'INV-' prefix\n4. Pay with credit card or e-check\n\n**Other Options:**\n• In-person at Doral Govt Center\n• Mail payment to City address\n\n**Contact:**\n• (305) 593-6631\n• btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:26.761Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767687446784_ovt32xa4q",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:17:26.763Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:46.217Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.808Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:16:49.202Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:16:49.219Z"
+        },
+        {
+          "role": "user",
+          "content": "8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.648Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Road Maintenance\n**Department:** Public Works\n**Priority:** Medium\n**Description:** I need to report a pothole near my neighborhood. Can you submit a service request for me?\n**Location:** 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.661Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Your service request has been submitted!**\n\n**Ticket #:** SR-2026-00015\n**Category:** Road Maintenance\n**Department:** Public Works\n**Expected Response:** within 48 hours\n\nYou can reference this ticket number for follow-up. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:06.053Z"
+        },
+        {
+          "role": "user",
+          "content": "When do I need to renew my Business Tax Receipt, and can I pay for it online?",
+          "timestamp": "2026-01-06T08:17:25.057Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Renewal Deadline:**\n• Fiscal Year: October 1 - September 30\n• Deadline: September 30th annually\n\n**Online Payment:**\n1. Visit: https://energovcss.cityofdoral.com\n2. Click 'PAY INVOICES' \n3. Enter invoice # with 'INV-' prefix\n4. Pay with credit card or e-check\n\n**Other Options:**\n• In-person at Doral Govt Center\n• Mail payment to City address\n\n**Contact:**\n• (305) 593-6631\n• btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:26.763Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687456326_6fxijyqwx",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:17:36.326Z",
+      "endTime": "2026-01-06T08:17:36.326Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Road Maintenance\n**Department:** Public Works\n**Priority:** Medium\n**Description:** I need to report a pothole near my neighborhood. Can you submit a service request for me?\n**Location:** 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Your service request has been submitted!**\n\n**Ticket #:** SR-2026-00015\n**Category:** Road Maintenance\n**Department:** Public Works\n**Expected Response:** within 48 hours\n\nYou can reference this ticket number for follow-up. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "When do I need to renew my Business Tax Receipt, and can I pay for it online?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Renewal Deadline:**\n• Fiscal Year: October 1 - September 30\n• Deadline: September 30th annually\n\n**Online Payment:**\n1. Visit: https://energovcss.cityofdoral.com\n2. Click 'PAY INVOICES' \n3. Enter invoice # with 'INV-' prefix\n4. Pay with credit card or e-check\n\n**Other Options:**\n• In-person at Doral Govt Center\n• Mail payment to City address\n\n**Contact:**\n• (305) 593-6631\n• btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "user",
+          "content": "When is the next City Council meeting, and where can I find the agenda?",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Date: Thursday, January 15, 2026\n• Time: 10:00 AM (Morning) and 6:00 PM (Evening)\n• Location: Doral Government Center, Council Chambers\n\n**Agenda Highlights:**\n• FY2026 Budget Amendment for Parks\n• Zoning Text Amendment for Mixed-Use\n• Downtown Doral Streetscape Project Update\n• 2026 Summer Camp Program Fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T08:17:36.326Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767687456344_xt2fenh2s",
+      "sessionId": "sess_1767687222849_vcg1cvrlj",
+      "startTime": "2026-01-06T08:14:03.046Z",
+      "endTime": "2026-01-06T08:17:36.328Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Bonjou! Mwen se Asistan AI Vil Doral la. Kijan mwen ka ede ou jodi a?",
+          "timestamp": "2026-01-06T08:14:03.046Z"
+        },
+        {
+          "role": "user",
+          "content": "Where can I find the requirements to apply for a fence permit, and how do I submit the application?",
+          "timestamp": "2026-01-06T08:14:30.176Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:14:30.198Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Permit Inquiries\n**Department:** Building & Permits\n**Priority:** Medium\n**Description:** Where can I find the requirements to apply for a fence permit, and how do I submit the application?\n**Location:** Not specified",
+          "timestamp": "2026-01-06T08:14:39.788Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Service request cancelled. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:14:49.652Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit in Doral?",
+          "timestamp": "2026-01-06T08:15:02.153Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Requirements:**\n• Max 6ft rear, 4ft front \n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application\n3. Pay fees online\n\n**Contact:**\n• (305) 593-6700\n• building@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:04.707Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to file a non-emergency report for vandalism. Can you help me start the report?",
+          "timestamp": "2026-01-06T08:15:30.519Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Steps:**\n\n• File report online via Doral 311\n• Call non-emergency police line: (305) 593-6699\n• Visit Doral Police Dept: 6100 NW 99th Ave\n\n**Information Needed:**\n• Your contact details\n• Location of incident\n• Date, time, damage description\n• Photos if available\n• Witness info (if any)\n\nLet me know if you need any clarification or have additional questions!",
+          "timestamp": "2026-01-06T08:15:32.185Z"
+        },
+        {
+          "role": "user",
+          "content": "What youth programs are available this month, and how do I register my child?",
+          "timestamp": "2026-01-06T08:15:46.217Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Current Youth Programs:**\n\n• Youth Basketball League\n• Youth Soccer League \n• Youth Baseball/Softball\n• Flag Football\n• Youth Broncos Cheer\n\n**Registration:**\n\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n\n**Resident Discount:**\nProof of Doral residency required\n\n**Contact:**\n• (305) 593-6600\n• doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T08:15:47.808Z"
+        },
+        {
+          "role": "user",
+          "content": "I need to report a pothole near my neighborhood. Can you submit a service request for me?",
+          "timestamp": "2026-01-06T08:16:49.202Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Thank you. Please provide the location or address where this issue is occurring:",
+          "timestamp": "2026-01-06T08:16:49.219Z"
+        },
+        {
+          "role": "user",
+          "content": "8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.648Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Please confirm your service request:\n\n**Category:** Road Maintenance\n**Department:** Public Works\n**Priority:** Medium\n**Description:** I need to report a pothole near my neighborhood. Can you submit a service request for me?\n**Location:** 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-06T08:16:58.661Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Your service request has been submitted!**\n\n**Ticket #:** SR-2026-00015\n**Category:** Road Maintenance\n**Department:** Public Works\n**Expected Response:** within 48 hours\n\nYou can reference this ticket number for follow-up. Is there anything else I can help you with?",
+          "timestamp": "2026-01-06T08:17:06.053Z"
+        },
+        {
+          "role": "user",
+          "content": "When do I need to renew my Business Tax Receipt, and can I pay for it online?",
+          "timestamp": "2026-01-06T08:17:25.057Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Renewal Deadline:**\n• Fiscal Year: October 1 - September 30\n• Deadline: September 30th annually\n\n**Online Payment:**\n1. Visit: https://energovcss.cityofdoral.com\n2. Click 'PAY INVOICES' \n3. Enter invoice # with 'INV-' prefix\n4. Pay with credit card or e-check\n\n**Other Options:**\n• In-person at Doral Govt Center\n• Mail payment to City address\n\n**Contact:**\n• (305) 593-6631\n• btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-06T08:17:26.763Z"
+        },
+        {
+          "role": "user",
+          "content": "When is the next City Council meeting, and where can I find the agenda?",
+          "timestamp": "2026-01-06T08:17:34.534Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Date: Thursday, January 15, 2026\n• Time: 10:00 AM (Morning) and 6:00 PM (Evening)\n• Location: Doral Government Center, Council Chambers\n\n**Agenda Highlights:**\n• FY2026 Budget Amendment for Parks\n• Zoning Text Amendment for Mixed-Use\n• Downtown Doral Streetscape Project Update\n• 2026 Summer Camp Program Fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T08:17:36.328Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767687507246_uzjwpqo2x",
+      "sessionId": "ivr-demo-1767687505541",
+      "startTime": "2026-01-06T08:18:27.246Z",
+      "endTime": "2026-01-06T08:18:27.246Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the requirements to apply for a fence permit?",
+          "timestamp": "2026-01-06T08:18:27.246Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key fence permit requirements in Doral:\n\n**Requirements:**\n• Max 6ft rear, 4ft front\n• DERM approval needed\n• Within property lines\n\n**Steps:**\n1. Get DERM approval\n2. Submit permit application \n3. Pay required fees\n\n**Contact:**\n• Building Dept: (305) 593-6700\n• Apply online: energovcss.cityofdoral.com",
+          "timestamp": "2026-01-06T08:18:27.246Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767687562706_2ts02urgy",
+      "sessionId": "ivr-demo-1767687560794",
+      "startTime": "2026-01-06T08:19:22.706Z",
+      "endTime": "2026-01-06T08:19:22.706Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I file a non-emergency vandalism report?",
+          "timestamp": "2026-01-06T08:19:22.706Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to file a non-emergency vandalism report:\n\n**Quick Options:**\n\n• Report online via Doral 311 \n• Call police non-emergency: (305) 593-6699\n• Visit police station 24/7\n\n**Information Needed:**\n• Your contact details\n• Incident location and time\n• Description of damage\n• Photos if available\n• Witness info (if any)\n\n**Next Steps:**\n• You'll get a case number\n• Report assigned to officer\n• Request copy of report later\n\nPlease let me know if you need any other assistance!",
+          "timestamp": "2026-01-06T08:19:22.706Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767687615952_raqlphxro",
+      "sessionId": "ivr-demo-1767687614415",
+      "startTime": "2026-01-06T08:20:15.952Z",
+      "endTime": "2026-01-06T08:20:15.952Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What youth programs are available and how do I register my child?",
+          "timestamp": "2026-01-06T08:20:15.952Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the key youth programs and registration details:\n\n**Youth Programs:**\n• Sports leagues: basketball, soccer, baseball\n• Swim lessons at Doral Aquatic Center\n• Enrichment: coding, science, arts, karate\n\n**Registration:**\n• Online at cityofdoral.com/parks\n• In-person at Doral parks\n• Bring birth certificate, residency proof\n• Resident discounts available\n\nView full program details: cityofdoral.com/parks",
+          "timestamp": "2026-01-06T08:20:15.952Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767687680817_0xggw4oww",
+      "sessionId": "ivr-demo-1767687678848",
+      "startTime": "2026-01-06T08:21:20.817Z",
+      "endTime": "2026-01-06T08:21:20.817Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo puedo reportar un bache cerca de mi vecindario?",
+          "timestamp": "2026-01-06T08:21:20.817Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí le explico cómo reportar un bache en su vecindario:\n\n**Reportar bache:**\n• Llamar al (305) 593-6699\n• Proporcionar ubicación exacta\n• Descripción detallada del bache\n• Servicio atendido durante horario hábil\n\n**Contactos adicionales:**\n• City Hall: (305) 593-6725\n• Emergencias: 911\n\nEstaremos contentos de asistirle para abordar y reparar el bache reportado.",
+          "timestamp": "2026-01-06T08:21:20.817Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767687735055_1c7ex24ll",
+      "sessionId": "ivr-demo-1767687730862",
+      "startTime": "2026-01-06T08:22:15.055Z",
+      "endTime": "2026-01-06T08:22:15.055Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cuándo debo renovar mi licencia de negocio y puedo pagar en línea?",
+          "timestamp": "2026-01-06T08:22:15.055Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre la renovación de licencias de negocio en Doral:\n\n**Renovación de Licencias:**\n• Fecha límite: 31 de diciembre\n• Pago en línea disponible\n• Requerido cada año\n\n**Cómo Renovar:**\n• Visitar cityofdoral.com/business\n• Completar formulario\n• Pagar en línea o en persona\n\nPóngase en contacto con el Departamento de Desarrollo Económico al (305) 593-6680 si tiene alguna otra pregunta.",
+          "timestamp": "2026-01-06T08:22:15.055Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767687791680_5yybanigu",
+      "sessionId": "ivr-demo-1767687789776",
+      "startTime": "2026-01-06T08:23:11.680Z",
+      "endTime": "2026-01-06T08:23:11.680Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cuándo es la próxima reunión del Concejo Municipal y dónde puedo encontrar la agenda?",
+          "timestamp": "2026-01-06T08:23:11.680Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está la información sobre las próximas reuniones del Concejo Municipal:\n\n**Próxima Reunión del Concejo:**\n• 1er y 3er Miércoles a las 6 PM\n• City Hall, 8401 NW 53rd Terrace\n\n**Agenda:**\n• Publicada una semana antes\n• Disponible en sitio web de la Ciudad\n• www.cityofdoral.com/agendas-and-minutes\n\nSi necesita más detalles, puede comunicarse con la Oficina del Secretario de la Ciudad al (305) 593-6730.",
+          "timestamp": "2026-01-06T08:23:11.680Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767691601012_v98n5cyda",
+      "sessionId": "ivr-demo-1767691599070",
+      "startTime": "2026-01-06T09:26:41.012Z",
+      "endTime": "2026-01-06T09:26:41.012Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "When is the next city council meeting?",
+          "timestamp": "2026-01-06T09:26:41.012Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• January 15, 2026\n• 10 AM and 6 PM\n• Doral Government Center\n\n**Agenda Highlights:**\n• Budget amendment for parks\n• Zoning text amendment\n• Downtown streetscape update\n• Summer camp program fees\n\nView full agenda: www.cityofdoral.com/Government-Center/Office-of-the-City-Clerk/Council-Meetings",
+          "timestamp": "2026-01-06T09:26:41.012Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1767693596587_r4rr71yrj",
+      "sessionId": "sess_1767691613568_k83cqy2i6",
+      "startTime": "2026-01-06T09:59:56.587Z",
+      "endTime": "2026-01-06T09:59:56.587Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        },
+        {
+          "role": "user",
+          "content": "What events are coming up in Doral?",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Jan 6, 6pm - Military Affairs Committee\n• Jan 8, 6pm - Environmental Advisory Board\n\n**Upcoming Events:**\n• Jan 5 - Full Moon Yoga\n• Jan 10 - Farmers Market\n• Jan 12 - Paint Like Masters\n• Jan 15 - Kick Start Your Business\n\nView full calendar: www.cityofdoral.com/events",
+          "timestamp": "2026-01-06T09:59:56.587Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/Home/index.html"
+    },
+    {
+      "id": "conv_1767693596872_q1wop7dwd",
+      "sessionId": "sess_1767691613568_k83cqy2i6",
+      "startTime": "2026-01-06T09:36:36.068Z",
+      "endTime": "2026-01-06T09:59:56.592Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-06T09:36:36.068Z"
+        },
+        {
+          "role": "user",
+          "content": "What events are coming up in Doral?",
+          "timestamp": "2026-01-06T09:59:54.868Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Next Meeting:**\n• Jan 6, 6pm - Military Affairs Committee\n• Jan 8, 6pm - Environmental Advisory Board\n\n**Upcoming Events:**\n• Jan 5 - Full Moon Yoga\n• Jan 10 - Farmers Market\n• Jan 12 - Paint Like Masters\n• Jan 15 - Kick Start Your Business\n\nView full calendar: www.cityofdoral.com/events",
+          "timestamp": "2026-01-06T09:59:56.592Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1767709318244_mx54544s1",
+      "sessionId": "ivr-demo-1767709315163",
+      "startTime": "2026-01-06T14:21:58.244Z",
+      "endTime": "2026-01-06T14:21:58.244Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "parks,",
+          "timestamp": "2026-01-06T14:21:58.244Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Youth Programs:**\n• Sports leagues: basketball, soccer, baseball\n• Swim lessons at Doral Aquatic Center\n• Enrichment: coding, science, arts, karate\n\n**Registration:**\n• Online at cityofdoral.com/parks\n• In-person at parks & rec locations \n• Proof of residency required\n\n**Resident Discount:**\n• Doral residents receive discounted rates\n• Proof of residency needed\n\n**Contact:**\n• Parks & Rec: (305) 593-6600\n• Email: doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-06T14:21:58.244Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3000/demo/ivr"
+    },
+    {
+      "id": "conv_1768824480326_je6ecc54u",
+      "sessionId": "sess_1768824463796_ulwbpi8cv",
+      "startTime": "2026-01-19T12:08:00.327Z",
+      "endTime": "2026-01-19T12:08:00.327Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-19T12:08:00.327Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-19T12:08:00.327Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-19T12:08:00.327Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1768824480616_nqwaj0qoc",
+      "sessionId": "sess_1768824463796_ulwbpi8cv",
+      "startTime": "2026-01-19T12:07:43.798Z",
+      "endTime": "2026-01-19T12:08:00.331Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-19T12:07:43.798Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-19T12:07:58.890Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-19T12:08:00.331Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768825468165_ww9ddvb7v",
+      "sessionId": "session_1768825465080",
+      "startTime": "2026-01-19T12:24:28.164Z",
+      "endTime": "2026-01-19T12:24:28.164Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello",
+          "timestamp": "2026-01-19T12:24:28.164Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-19T12:24:28.164Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768825632920_kvk7y9pum",
+      "sessionId": "session_1768825631157",
+      "startTime": "2026-01-19T12:27:12.920Z",
+      "endTime": "2026-01-19T12:27:12.920Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the park hours?",
+          "timestamp": "2026-01-19T12:27:12.920Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Hours of Operation:**\n• Monday-Friday: 6AM-9PM\n• Saturday: 8AM-9PM\n• Sunday: 8AM-Sunset\n• Fishing: Park Opening-Sunset\n• Kayak Launch: Park Opening-Sunset\n• Nature Boardwalk: Park Opening-Sunset",
+          "timestamp": "2026-01-19T12:27:12.920Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768826333348_grwkvbj46",
+      "sessionId": "session_1768826331480",
+      "startTime": "2026-01-19T12:38:53.348Z",
+      "endTime": "2026-01-19T12:38:53.348Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What services do you offer?",
+          "timestamp": "2026-01-19T12:38:53.348Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how I can assist you:\n\n**Information Available:**\n• Property tax and assessment details\n• Building permit status and history\n• GMX roadside assistance program\n• Business workshop opportunities\n\n**Contact Info:**\n• City Hall: (305) 593-6725\n• Police: (305) 593-6699\n• Emergency: 911",
+          "timestamp": "2026-01-19T12:38:53.348Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768826440530_rbkewgsc8",
+      "sessionId": "sess_1768826407308_ylhka75eh",
+      "startTime": "2026-01-19T12:40:40.530Z",
+      "endTime": "2026-01-19T12:40:40.530Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-19T12:40:40.530Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-19T12:40:40.530Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday - Friday, 8am - 5pm\n• Closed weekends and holidays",
+          "timestamp": "2026-01-19T12:40:40.530Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1768826440573_1stxv65es",
+      "sessionId": "sess_1768826407308_ylhka75eh",
+      "startTime": "2026-01-19T12:40:07.310Z",
+      "endTime": "2026-01-19T12:40:40.536Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! I'm the City of Doral AI Assistant. How can I help you today?",
+          "timestamp": "2026-01-19T12:40:07.310Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-19T12:40:38.831Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**City Hall Hours:**\n• Monday - Friday, 8am - 5pm\n• Closed weekends and holidays",
+          "timestamp": "2026-01-19T12:40:40.536Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768826553658_yckzdecht",
+      "sessionId": "ivr-demo-1768826550573",
+      "startTime": "2026-01-19T12:42:33.658Z",
+      "endTime": "2026-01-19T12:42:33.658Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my water bill?",
+          "timestamp": "2026-01-19T12:42:33.658Z"
+        },
+        {
+          "role": "assistant",
+          "content": "\"Here's how to pay your water bill:\n\n**Payment Options:**\n• Online: miamidade.county-taxes.com\n• Phone: (305) 270-4916 \n• In Person: Tax Collector's Office\n\n**Contact:**\n• Tax Collector: (305) 270-4916\"",
+          "timestamp": "2026-01-19T12:42:33.658Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/demo/ivr"
+    }
+  ],
+  "lastUpdated": "2026-01-19T12:42:35.608Z"
+}

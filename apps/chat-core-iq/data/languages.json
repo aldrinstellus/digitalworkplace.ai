@@ -1,0 +1,41 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English",
+      "enabled": true,
+      "isDefault": true,
+      "autoDetect": true,
+      "order": 1,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2026-01-05T05:19:36.702Z"
+    },
+    {
+      "code": "es",
+      "name": "Spanish",
+      "nativeName": "Español",
+      "enabled": true,
+      "isDefault": false,
+      "autoDetect": true,
+      "order": 2,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "code": "ht",
+      "name": "Haitian Creole",
+      "nativeName": "Kreyòl Ayisyen",
+      "enabled": true,
+      "isDefault": false,
+      "autoDetect": true,
+      "order": 3,
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "autoDetectEnabled": true,
+  "fallbackLanguage": "en",
+  "browserDetectEnabled": true,
+  "userOverrideAllowed": true
+}

@@ -1,0 +1,90 @@
+[
+  {
+    "id": "notif-001",
+    "type": "system",
+    "category": "scrape_error",
+    "title": "Web Scraper Failed",
+    "message": "Failed to scrape 3 URLs from the Government section. Check crawler settings.",
+    "severity": "error",
+    "isRead": false,
+    "createdAt": "2025-01-02T10:30:00.000Z",
+    "link": "/admin/content"
+  },
+  {
+    "id": "notif-002",
+    "type": "activity",
+    "category": "escalation",
+    "title": "New Escalation",
+    "message": "A user escalated a conversation about permit requirements.",
+    "severity": "warning",
+    "isRead": false,
+    "createdAt": "2025-01-02T09:15:00.000Z",
+    "link": "/admin/escalations"
+  },
+  {
+    "id": "notif-003",
+    "type": "reminder",
+    "category": "renewal",
+    "title": "Business License Renewals Due",
+    "message": "25 business licenses are due for renewal in the next 30 days.",
+    "severity": "info",
+    "isRead": true,
+    "createdAt": "2025-01-01T08:00:00.000Z",
+    "link": null
+  },
+  {
+    "id": "notif-004",
+    "type": "activity",
+    "category": "feedback",
+    "title": "New Feedback Received",
+    "message": "5 new feedback submissions from chatbot users.",
+    "severity": "success",
+    "isRead": false,
+    "createdAt": "2025-01-02T11:00:00.000Z",
+    "link": "/admin/analytics"
+  },
+  {
+    "id": "notif-005",
+    "type": "system",
+    "category": "api_error",
+    "title": "API Rate Limit Warning",
+    "message": "OpenAI API approaching rate limit. Consider reducing chat frequency.",
+    "severity": "warning",
+    "isRead": false,
+    "createdAt": "2025-01-02T10:45:00.000Z",
+    "link": "/admin/settings"
+  },
+  {
+    "id": "notif-006",
+    "type": "activity",
+    "category": "chat_session",
+    "title": "High Volume Alert",
+    "message": "50 new chat sessions started in the last hour.",
+    "severity": "info",
+    "isRead": true,
+    "createdAt": "2025-01-02T08:00:00.000Z",
+    "link": "/admin/analytics"
+  },
+  {
+    "id": "notif-007",
+    "type": "reminder",
+    "category": "maintenance",
+    "title": "Scheduled Maintenance",
+    "message": "System maintenance scheduled for January 5th, 2:00 AM - 4:00 AM EST.",
+    "severity": "info",
+    "isRead": false,
+    "createdAt": "2025-01-02T07:00:00.000Z",
+    "link": null
+  },
+  {
+    "id": "notif-008",
+    "type": "system",
+    "category": "knowledge_update",
+    "title": "Knowledge Base Updated",
+    "message": "12 new pages successfully crawled and indexed.",
+    "severity": "success",
+    "isRead": true,
+    "createdAt": "2025-01-01T22:00:00.000Z",
+    "link": "/admin/content"
+  }
+]

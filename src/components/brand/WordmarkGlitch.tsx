@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState, useCallback, useRef } from "react";
 import { playGlitchSound, initAudio } from "@/lib/sounds";
 
 interface WordmarkGlitchProps {
@@ -9,10 +9,42 @@ interface WordmarkGlitchProps {
   enableSound?: boolean;
 }
 
+// Glitch characters for scrambling effect
+const GLITCH_CHARS = "!@#$%^&*()_+-=[]{}|;':\",./<>?`~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+// Original text parts
+const ORIGINAL_TEXT = {
+  digital: "digital",
+  workplace: "workplace",
+  ai: ".ai",
+};
+
+// Function to scramble text with random glitch characters
+const scrambleText = (text: string, intensity: number = 1): string => {
+  return text
+    .split("")
+    .map((char) => {
+      // Higher intensity = more characters get scrambled
+      if (Math.random() < 0.3 + intensity * 0.2) {
+        return GLITCH_CHARS[Math.floor(Math.random() * GLITCH_CHARS.length)];
+      }
+      return char;
+    })
+    .join("");
+};
+
 const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound = true }) => {
   const [glitchActive, setGlitchActive] = useState(false);
   const [glitchIntensity, setGlitchIntensity] = useState(0);
   const [audioInitialized, setAudioInitialized] = useState(false);
+
+  // Scrambled text states
+  const [digitalText, setDigitalText] = useState(ORIGINAL_TEXT.digital);
+  const [workplaceText, setWorkplaceText] = useState(ORIGINAL_TEXT.workplace);
+  const [aiText, setAiText] = useState(ORIGINAL_TEXT.ai);
+
+  // Ref for scramble interval
+  const scrambleIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize audio on first user interaction
   const handleInteraction = useCallback(() => {
@@ -34,6 +66,41 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
     }
   }, [enableSound, handleInteraction]);
 
+  // Function to start text scrambling
+  const startScrambling = useCallback((intensity: number, duration: number) => {
+    // Clear any existing interval
+    if (scrambleIntervalRef.current) {
+      clearInterval(scrambleIntervalRef.current);
+    }
+
+    // Rapidly scramble text every 30ms for that CRT glitch feel
+    scrambleIntervalRef.current = setInterval(() => {
+      setDigitalText(scrambleText(ORIGINAL_TEXT.digital, intensity));
+      setWorkplaceText(scrambleText(ORIGINAL_TEXT.workplace, intensity));
+      setAiText(scrambleText(ORIGINAL_TEXT.ai, intensity));
+    }, 30);
+
+    // Stop scrambling and reset to original after duration
+    setTimeout(() => {
+      if (scrambleIntervalRef.current) {
+        clearInterval(scrambleIntervalRef.current);
+        scrambleIntervalRef.current = null;
+      }
+      setDigitalText(ORIGINAL_TEXT.digital);
+      setWorkplaceText(ORIGINAL_TEXT.workplace);
+      setAiText(ORIGINAL_TEXT.ai);
+    }, duration);
+  }, []);
+
+  // Cleanup scramble interval on unmount
+  useEffect(() => {
+    return () => {
+      if (scrambleIntervalRef.current) {
+        clearInterval(scrambleIntervalRef.current);
+      }
+    };
+  }, []);
+
   // Random glitch effect - more dramatic
   useEffect(() => {
     const triggerGlitch = () => {
@@ -47,6 +114,9 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
         playGlitchSound(intensity);
       }
 
+      // Start text scrambling synchronized with glitch
+      startScrambling(intensity, 120);
+
       // Double-tap glitch for more drama
       setTimeout(() => {
         setGlitchActive(false);
@@ -57,6 +127,8 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
             if (enableSound && audioInitialized) {
               playGlitchSound(intensity * 0.5);
             }
+            // Second scramble burst
+            startScrambling(intensity * 0.5, 80);
             setTimeout(() => setGlitchActive(false), 80);
           }
         }, 50);
@@ -77,7 +149,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
       clearTimeout(initialTimeout);
       clearInterval(interval);
     };
-  }, [enableSound, audioInitialized]);
+  }, [enableSound, audioInitialized, startScrambling]);
 
   return (
     <motion.div
@@ -122,9 +194,9 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
             }}
             aria-hidden="true"
           >
-            <span style={{ opacity: 0.75 }}>digital</span>
-            <span style={{ opacity: 1 }}>workplace</span>
-            <span style={{ color: "#4ade80" }}>.ai</span>
+            <span style={{ opacity: 0.75 }}>{digitalText}</span>
+            <span style={{ opacity: 1 }}>{workplaceText}</span>
+            <span style={{ color: "#4ade80" }}>{aiText}</span>
           </span>
 
           {/* Chromatic aberration - CYAN */}
@@ -139,9 +211,9 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
             }}
             aria-hidden="true"
           >
-            <span style={{ opacity: 0.75 }}>digital</span>
-            <span style={{ opacity: 1 }}>workplace</span>
-            <span style={{ color: "#4ade80" }}>.ai</span>
+            <span style={{ opacity: 0.75 }}>{digitalText}</span>
+            <span style={{ opacity: 1 }}>{workplaceText}</span>
+            <span style={{ color: "#4ade80" }}>{aiText}</span>
           </span>
 
           {/* Glitch slice effect */}
@@ -154,9 +226,9 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
               }}
               aria-hidden="true"
             >
-              <span style={{ color: "rgba(255, 255, 255, 0.75)" }}>digital</span>
-              <span style={{ color: "#fff" }}>workplace</span>
-              <span style={{ color: "#4ade80" }}>.ai</span>
+              <span style={{ color: "rgba(255, 255, 255, 0.75)" }}>{digitalText}</span>
+              <span style={{ color: "#fff" }}>{workplaceText}</span>
+              <span style={{ color: "#4ade80" }}>{aiText}</span>
             </span>
           )}
 
@@ -173,7 +245,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              digital
+              {digitalText}
             </motion.span>
 
             {/* "workplace" - solid white, prominent */}
@@ -187,7 +259,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              workplace
+              {workplaceText}
             </motion.span>
 
             {/* ".ai" - accent with stronger glow */}
@@ -202,7 +274,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
                 style={{ color: "#4ade80", opacity: 0.8 }}
                 aria-hidden="true"
               >
-                .ai
+                {aiText}
               </span>
               <span
                 style={{
@@ -210,7 +282,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
                   textShadow: "0 0 20px rgba(74, 222, 128, 0.8), 0 0 40px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.3)",
                 }}
               >
-                .ai
+                {aiText}
               </span>
             </motion.span>
 
@@ -222,7 +294,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
               transition={{
                 duration: 1,
                 repeat: Infinity,
-                ease: "steps(1)",
+                times: [0, 0.5, 1],
                 delay: 1,
               }}
             />

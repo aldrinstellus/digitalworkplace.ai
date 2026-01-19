@@ -20,74 +20,168 @@ export const initAudio = (): void => {
   }
 };
 
-// Glitch/shudder sound effect - digital distortion
+// Old-school CRT TV glitch sound effect - Black Mirror style
 export const playGlitchSound = (intensity: number = 1): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
   const now = ctx.currentTime;
-  const duration = 0.08 + intensity * 0.04;
-  const volume = 0.15 + intensity * 0.1; // Louder for higher intensity
+  const duration = 0.15 + intensity * 0.08;
+  const volume = 0.25 + intensity * 0.15; // Louder, more present
 
-  // Create noise buffer
-  const bufferSize = ctx.sampleRate * duration;
-  const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-  const output = noiseBuffer.getChannelData(0);
+  // === LAYER 1: TV Static/White Noise with crackle ===
+  const staticDuration = duration;
+  const staticBuffer = ctx.createBuffer(2, ctx.sampleRate * staticDuration, ctx.sampleRate);
 
-  // Generate glitchy noise with bit-crushing effect
-  for (let i = 0; i < bufferSize; i++) {
-    // Random noise with digital artifacts
-    const noise = Math.random() * 2 - 1;
-    // Bit crush effect (reduce resolution)
-    const bitDepth = 4 + intensity * 2;
-    const crushed = Math.round(noise * bitDepth) / bitDepth;
-    output[i] = crushed * (1 - (i / bufferSize) * 0.5); // Fade out
+  for (let channel = 0; channel < 2; channel++) {
+    const output = staticBuffer.getChannelData(channel);
+    let lastValue = 0;
+
+    for (let i = 0; i < output.length; i++) {
+      // Mix of white noise and crackling
+      const noise = Math.random() * 2 - 1;
+
+      // Add sudden pops/crackles (like old TV)
+      const crackle = Math.random() > 0.97 ? (Math.random() > 0.5 ? 1 : -1) * 0.8 : 0;
+
+      // Bit-crush for that digital artifact sound
+      const bitDepth = 3 + Math.floor(intensity);
+      const crushed = Math.round(noise * bitDepth) / bitDepth;
+
+      // Add some "stickiness" like analog static
+      lastValue = lastValue * 0.3 + (crushed + crackle) * 0.7;
+
+      // Envelope: sharp attack, quick decay
+      const envelope = i < output.length * 0.1
+        ? i / (output.length * 0.1)
+        : Math.pow(1 - (i - output.length * 0.1) / (output.length * 0.9), 0.5);
+
+      output[i] = lastValue * envelope;
+    }
   }
 
-  const noiseSource = ctx.createBufferSource();
-  noiseSource.buffer = noiseBuffer;
+  const staticSource = ctx.createBufferSource();
+  staticSource.buffer = staticBuffer;
 
-  // High-pass filter for digital crackle
-  const highpass = ctx.createBiquadFilter();
-  highpass.type = "highpass";
-  highpass.frequency.value = 800 + intensity * 400;
+  // Harsh bandpass for that CRT hiss
+  const staticFilter = ctx.createBiquadFilter();
+  staticFilter.type = "bandpass";
+  staticFilter.frequency.value = 3000 + Math.random() * 2000;
+  staticFilter.Q.value = 1.5;
 
-  // Bandpass for focused "digital" sound
-  const bandpass = ctx.createBiquadFilter();
-  bandpass.type = "bandpass";
-  bandpass.frequency.value = 2000 + Math.random() * 1000;
-  bandpass.Q.value = 5;
+  const staticGain = ctx.createGain();
+  staticGain.gain.setValueAtTime(volume * 0.6, now);
 
-  // Gain node for volume control
-  const gainNode = ctx.createGain();
-  gainNode.gain.setValueAtTime(volume, now);
-  gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+  staticSource.connect(staticFilter);
+  staticFilter.connect(staticGain);
+  staticGain.connect(ctx.destination);
 
-  // Connect nodes
-  noiseSource.connect(highpass);
-  highpass.connect(bandpass);
-  bandpass.connect(gainNode);
-  gainNode.connect(ctx.destination);
+  staticSource.start(now);
+  staticSource.stop(now + staticDuration);
 
-  noiseSource.start(now);
-  noiseSource.stop(now + duration);
+  // === LAYER 2: Low frequency "thump" / power surge ===
+  const thumpOsc = ctx.createOscillator();
+  thumpOsc.type = "sine";
+  thumpOsc.frequency.setValueAtTime(80, now);
+  thumpOsc.frequency.exponentialRampToValueAtTime(30, now + 0.08);
 
-  // Add a secondary "click" for extra punch
+  const thumpGain = ctx.createGain();
+  thumpGain.gain.setValueAtTime(volume * 0.4, now);
+  thumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+  thumpOsc.connect(thumpGain);
+  thumpGain.connect(ctx.destination);
+
+  thumpOsc.start(now);
+  thumpOsc.stop(now + 0.1);
+
+  // === LAYER 3: High frequency "zap" / scan line ===
+  const zapOsc = ctx.createOscillator();
+  zapOsc.type = "sawtooth";
+  zapOsc.frequency.setValueAtTime(2000 + Math.random() * 1000, now);
+  zapOsc.frequency.exponentialRampToValueAtTime(100, now + 0.05);
+
+  const zapGain = ctx.createGain();
+  zapGain.gain.setValueAtTime(volume * 0.15, now);
+  zapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+  const zapFilter = ctx.createBiquadFilter();
+  zapFilter.type = "highpass";
+  zapFilter.frequency.value = 1000;
+
+  zapOsc.connect(zapFilter);
+  zapFilter.connect(zapGain);
+  zapGain.connect(ctx.destination);
+
+  zapOsc.start(now);
+  zapOsc.stop(now + 0.05);
+
+  // === LAYER 4: Electrical buzz/hum ===
+  const buzzOsc = ctx.createOscillator();
+  buzzOsc.type = "square";
+  buzzOsc.frequency.value = 60; // 60Hz hum like old electronics
+
+  const buzzOsc2 = ctx.createOscillator();
+  buzzOsc2.type = "square";
+  buzzOsc2.frequency.value = 120; // Harmonic
+
+  const buzzGain = ctx.createGain();
+  buzzGain.gain.setValueAtTime(0, now);
+  buzzGain.gain.linearRampToValueAtTime(volume * 0.08, now + 0.02);
+  buzzGain.gain.linearRampToValueAtTime(volume * 0.08, now + duration - 0.03);
+  buzzGain.gain.linearRampToValueAtTime(0, now + duration);
+
+  const buzzFilter = ctx.createBiquadFilter();
+  buzzFilter.type = "lowpass";
+  buzzFilter.frequency.value = 400;
+
+  buzzOsc.connect(buzzFilter);
+  buzzOsc2.connect(buzzFilter);
+  buzzFilter.connect(buzzGain);
+  buzzGain.connect(ctx.destination);
+
+  buzzOsc.start(now);
+  buzzOsc2.start(now);
+  buzzOsc.stop(now + duration);
+  buzzOsc2.stop(now + duration);
+
+  // === LAYER 5: Random digital artifacts (for higher intensity) ===
   if (intensity > 1) {
-    const osc = ctx.createOscillator();
-    osc.type = "square";
-    osc.frequency.setValueAtTime(100 + Math.random() * 50, now);
-    osc.frequency.exponentialRampToValueAtTime(20, now + 0.02);
+    // Rapid clicking/ticking like a broken signal
+    for (let i = 0; i < 3 + intensity; i++) {
+      const clickTime = now + Math.random() * duration * 0.8;
 
-    const clickGain = ctx.createGain();
-    clickGain.gain.setValueAtTime(0.1, now);
-    clickGain.gain.exponentialRampToValueAtTime(0.01, now + 0.02);
+      const clickOsc = ctx.createOscillator();
+      clickOsc.type = "square";
+      clickOsc.frequency.value = 1000 + Math.random() * 2000;
 
-    osc.connect(clickGain);
-    clickGain.connect(ctx.destination);
+      const clickGain = ctx.createGain();
+      clickGain.gain.setValueAtTime(volume * 0.2, clickTime);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.01);
 
-    osc.start(now);
-    osc.stop(now + 0.02);
+      clickOsc.connect(clickGain);
+      clickGain.connect(ctx.destination);
+
+      clickOsc.start(clickTime);
+      clickOsc.stop(clickTime + 0.015);
+    }
+
+    // Add a "degauss" sweep sound
+    const sweepOsc = ctx.createOscillator();
+    sweepOsc.type = "sine";
+    sweepOsc.frequency.setValueAtTime(100, now);
+    sweepOsc.frequency.exponentialRampToValueAtTime(2000, now + 0.06);
+    sweepOsc.frequency.exponentialRampToValueAtTime(50, now + 0.12);
+
+    const sweepGain = ctx.createGain();
+    sweepGain.gain.setValueAtTime(volume * 0.1, now);
+    sweepGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+    sweepOsc.connect(sweepGain);
+    sweepGain.connect(ctx.destination);
+
+    sweepOsc.start(now);
+    sweepOsc.stop(now + 0.12);
   }
 };
 

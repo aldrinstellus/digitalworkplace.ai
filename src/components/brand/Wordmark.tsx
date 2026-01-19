@@ -28,7 +28,7 @@ const Wordmark: FC<WordmarkProps> = ({
       transition: {
         delay: i * 0.03,
         duration: 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
       },
     }),
   };
@@ -40,7 +40,7 @@ const Wordmark: FC<WordmarkProps> = ({
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   };

@@ -32,7 +32,7 @@ const WordmarkEdgy: FC<WordmarkEdgyProps> = ({
       pathLength: 1,
       opacity: 1,
       transition: {
-        pathLength: { duration: 1.5, ease: "easeInOut" },
+        pathLength: { duration: 1.5, ease: "easeInOut" as const },
         opacity: { duration: 0.3 },
       },
     },
@@ -48,7 +48,7 @@ const WordmarkEdgy: FC<WordmarkEdgyProps> = ({
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   };
@@ -70,7 +70,7 @@ const WordmarkEdgy: FC<WordmarkEdgyProps> = ({
             "radial-gradient(ellipse at 30% 50%, rgba(74, 222, 128, 0.2) 0%, transparent 50%)",
           ],
         }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" as const }}
       />
 
       {/* SVG Wordmark */}
@@ -201,7 +201,7 @@ const WordmarkEdgy: FC<WordmarkEdgyProps> = ({
             delay: 1.5,
             duration: 1,
             repeat: Infinity,
-            ease: "steps(1)",
+            times: [0, 0.5, 1],
           }}
         />
 

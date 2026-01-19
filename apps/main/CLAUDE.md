@@ -1,6 +1,22 @@
 # Digital Workplace AI - Main Dashboard | Claude Code Instructions
 
 ---
+## ⚠️ CRITICAL: DEFAULT LANDING PAGE
+---
+
+**THE SIGN-IN PAGE IS THE DEFAULT LANDING PAGE.**
+
+| URL | Behavior |
+|-----|----------|
+| `http://localhost:3000` | **REDIRECTS** → `/sign-in` (unauth) or `/dashboard` (auth) |
+| `http://localhost:3000/sign-in` | **DEFAULT LANDING PAGE** |
+
+**Code**: `src/app/page.tsx` uses `router.replace("/sign-in")` for unauthenticated users.
+**There is NO separate landing page. Root URL (`/`) always redirects.**
+
+*Last verified: 2026-01-19*
+
+---
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
 
@@ -34,11 +50,12 @@
 - User management and admin panel
 
 ### URLs
-| Page | Route | Local Dev |
-|------|-------|-----------|
-| **Sign-in** | `/sign-in` | http://localhost:3000/sign-in |
-| **Dashboard** | `/dashboard` | http://localhost:3000/dashboard |
-| **Admin** | `/admin` | http://localhost:3000/admin |
+| Page | Route | Local Dev | Notes |
+|------|-------|-----------|-------|
+| **Root** | `/` | http://localhost:3000 | **REDIRECTS** to sign-in or dashboard |
+| **Sign-in (DEFAULT)** | `/sign-in` | http://localhost:3000/sign-in | **DEFAULT LANDING PAGE** |
+| **Dashboard** | `/dashboard` | http://localhost:3000/dashboard | Protected - requires auth |
+| **Admin** | `/admin` | http://localhost:3000/admin | super_admin only |
 
 ---
 ## DATABASE REFERENCE

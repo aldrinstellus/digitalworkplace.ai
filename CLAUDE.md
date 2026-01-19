@@ -1,6 +1,24 @@
 # Digital Workplace AI - Claude Code Instructions
 
 ---
+## ⚠️ CRITICAL: DEFAULT LANDING PAGE (READ FIRST)
+---
+
+**THE SIGN-IN PAGE IS THE DEFAULT LANDING PAGE FOR DIGITAL WORKPLACE AI.**
+
+| URL | Behavior |
+|-----|----------|
+| `http://localhost:3000` | **REDIRECTS** → `/sign-in` (unauthenticated) or `/dashboard` (authenticated) |
+| `http://localhost:3000/sign-in` | **DEFAULT LANDING PAGE** - World map with Google OAuth |
+| `https://digitalworkplace-ai.vercel.app` | **REDIRECTS** → `/sign-in` (unauthenticated) or `/dashboard` (authenticated) |
+
+**Implementation**: `apps/main/src/app/page.tsx` uses `router.replace("/sign-in")` for unauthenticated users.
+
+**There is NO separate landing/home page. The root URL (`/`) always redirects.**
+
+*Last verified: 2026-01-19*
+
+---
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
 
@@ -52,14 +70,15 @@ Before closing this session:
 ## QUICK REFERENCE URLS
 ---
 
-| Page | Local Dev | Production |
-|------|-----------|------------|
-| **Sign-in** | http://localhost:3000/sign-in | https://digitalworkplace-ai.vercel.app/sign-in |
-| **Dashboard** | http://localhost:3000/dashboard | https://digitalworkplace-ai.vercel.app/dashboard |
-| **Admin** | http://localhost:3000/admin | https://digitalworkplace-ai.vercel.app/admin |
-| **Home** | http://localhost:3000 | https://digitalworkplace-ai.vercel.app |
+| Page | Local Dev | Production | Notes |
+|------|-----------|------------|-------|
+| **Sign-in (DEFAULT)** | http://localhost:3000/sign-in | https://digitalworkplace-ai.vercel.app/sign-in | **THE DEFAULT LANDING PAGE** |
+| **Dashboard** | http://localhost:3000/dashboard | https://digitalworkplace-ai.vercel.app/dashboard | Protected - requires auth |
+| **Admin** | http://localhost:3000/admin | https://digitalworkplace-ai.vercel.app/admin | super_admin only |
+| **Root (/)** | http://localhost:3000 | https://digitalworkplace-ai.vercel.app | **REDIRECTS to sign-in or dashboard** |
 
-**Default dev page: http://localhost:3000/sign-in**
+**⚠️ DEFAULT PAGE: http://localhost:3000/sign-in**
+**Root URL (`/`) is NOT a landing page - it redirects based on auth status.**
 
 ---
 
@@ -81,7 +100,7 @@ Digital Workplace AI is a Next.js 16 application with Clerk authentication and S
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── layout.tsx          # Root layout with ClerkProvider
-│   ├── page.tsx            # Home page (redirects to dashboard)
+│   ├── page.tsx            # ROOT REDIRECT → /sign-in (unauth) or /dashboard (auth)
 │   ├── globals.css         # Global styles
 │   ├── sign-in/            # Sign-in page (full-screen layout)
 │   │   ├── layout.tsx      # Auth-specific layout (no header)

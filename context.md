@@ -3,6 +3,38 @@
 ## Vision
 Digital Workplace AI is an AI-powered digital workplace solution designed to enhance team collaboration and productivity. Features a dark, tech-forward aesthetic with unique brand identity and immersive sound design.
 
+---
+
+## ⚠️ URL ROUTING (CRITICAL)
+
+**THE SIGN-IN PAGE IS THE DEFAULT LANDING PAGE.**
+
+| Route | Behavior | File |
+|-------|----------|------|
+| `/` (root) | **REDIRECT** → `/sign-in` (unauthenticated) or `/dashboard` (authenticated) | `apps/main/src/app/page.tsx` |
+| `/sign-in` | **DEFAULT LANDING PAGE** - Full-screen world map with Google OAuth | `apps/main/src/app/sign-in/` |
+| `/dashboard` | Protected - 4 AI product cards | `apps/main/src/app/dashboard/` |
+| `/admin` | Protected - super_admin only | `apps/main/src/app/admin/` |
+
+**There is NO separate home/landing page. The root URL always redirects.**
+
+```typescript
+// apps/main/src/app/page.tsx
+useEffect(() => {
+  if (isLoaded) {
+    if (user) {
+      router.replace("/dashboard");  // Authenticated → Dashboard
+    } else {
+      router.replace("/sign-in");    // Unauthenticated → Sign-in
+    }
+  }
+}, [isLoaded, user, router]);
+```
+
+*Last verified: 2026-01-19*
+
+---
+
 ## Architecture
 
 ### Frontend

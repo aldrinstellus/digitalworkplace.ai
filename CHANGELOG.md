@@ -4,6 +4,34 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.5.1] - 2026-01-19
+
+### Default Landing Page Update
+
+#### Changed
+
+**Root URL Redirect Behavior**
+- Root URL (`/`) now **ALWAYS** redirects:
+  - Unauthenticated users → `/sign-in` (DEFAULT LANDING PAGE)
+  - Authenticated users → `/dashboard`
+- **NO separate landing/home page exists** - sign-in IS the default
+- `apps/main/src/app/page.tsx` updated with redirect logic using `router.replace()`
+
+**Documentation Updates**
+- `CLAUDE.md` - Added CRITICAL section about default landing page at top
+- `context.md` - Added URL ROUTING section with redirect behavior
+- `SAVEPOINT.md` - Updated with current state and timestamp
+- All documentation explicitly states sign-in is the default landing page
+
+#### Technical
+- Uses Clerk's `useUser()` hook to check auth state
+- Uses Next.js `useRouter().replace()` for clean redirects (no back-button loop)
+- Loading spinner shown during redirect
+
+*Verified: Triple-checked in browser - root URL redirects to sign-in for unauthenticated users*
+
+---
+
 ## [0.5.0] - 2026-01-19
 
 ### Major Release: Monorepo Architecture + Semantic Search + Multi-Project Support

@@ -1,9 +1,26 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 (Comprehensive Savepoint v0.5.0)
-**Version**: 0.5.0
-**Session Status**: Monorepo + Semantic Search + Multi-Project Architecture
+**Last Updated**: 2026-01-19 23:59 (Default Landing Page Update v0.5.1)
+**Version**: 0.5.1
+**Session Status**: Sign-in page confirmed as DEFAULT LANDING PAGE
 **Machine**: Mac Mini (aldrin-mac-mini)
+
+---
+
+## ⚠️ CRITICAL: DEFAULT LANDING PAGE
+
+**THE SIGN-IN PAGE IS THE DEFAULT LANDING PAGE FOR DIGITAL WORKPLACE AI.**
+
+| URL | What Happens |
+|-----|--------------|
+| `http://localhost:3000` | **REDIRECTS** → `/sign-in` (if not logged in) |
+| `http://localhost:3000` | **REDIRECTS** → `/dashboard` (if logged in) |
+| `http://localhost:3000/sign-in` | **DEFAULT LANDING PAGE** - This is what users see first |
+
+**Code Location**: `apps/main/src/app/page.tsx`
+**There is NO separate landing page. Root URL (`/`) always redirects.**
+
+*Triple verified on 2026-01-19*
 
 ---
 
@@ -22,14 +39,14 @@
 ### Local Development URLs
 
 #### Main Dashboard (Port 3000)
-| Page | URL |
-|------|-----|
-| **Home** | http://localhost:3000 |
-| **Sign-in** | http://localhost:3000/sign-in |
-| **Sign-up** | http://localhost:3000/sign-up |
-| **SSO Callback** | http://localhost:3000/sso-callback |
-| **Dashboard** | http://localhost:3000/dashboard |
-| **Admin Panel** | http://localhost:3000/admin |
+| Page | URL | Notes |
+|------|-----|-------|
+| **Root (/)** | http://localhost:3000 | **REDIRECTS** to sign-in or dashboard |
+| **Sign-in (DEFAULT)** | http://localhost:3000/sign-in | **DEFAULT LANDING PAGE** |
+| **Sign-up** | http://localhost:3000/sign-up | |
+| **SSO Callback** | http://localhost:3000/sso-callback | |
+| **Dashboard** | http://localhost:3000/dashboard | Protected - requires auth |
+| **Admin Panel** | http://localhost:3000/admin | super_admin only |
 
 #### dIQ - Intranet IQ (Port 3001)
 | Page | URL |

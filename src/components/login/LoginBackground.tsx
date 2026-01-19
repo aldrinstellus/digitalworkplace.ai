@@ -1,8 +1,14 @@
 "use client";
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  playChatBubbleSound,
+  playDataPacketSound,
+  playAmbientPulse,
+  initAudio
+} from "@/lib/sounds";
 
 // 24 unique avatar photos - diverse professional headshots
 const uniqueAvatars = [
@@ -129,13 +135,63 @@ interface ChatBubble {
 
 interface LoginBackgroundProps {
   className?: string;
+  enableSound?: boolean;
 }
 
-const LoginBackground: FC<LoginBackgroundProps> = ({ className = "" }) => {
+const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound = true }) => {
   const avatarRefs = useRef<(HTMLDivElement | null)[]>([]);
   const animationsRef = useRef<gsap.core.Tween[]>([]);
   const [chatBubbles, setChatBubbles] = useState<ChatBubble[]>([]);
   const bubbleIdRef = useRef(0);
+  const [audioInitialized, setAudioInitialized] = useState(false);
+
+  // Initialize audio on first user interaction
+  const handleInteraction = useCallback(() => {
+    if (!audioInitialized) {
+      initAudio();
+      setAudioInitialized(true);
+    }
+  }, [audioInitialized]);
+
+  // Add click listener for audio initialization
+  useEffect(() => {
+    if (enableSound) {
+      window.addEventListener("click", handleInteraction, { once: true });
+      window.addEventListener("touchstart", handleInteraction, { once: true });
+      return () => {
+        window.removeEventListener("click", handleInteraction);
+        window.removeEventListener("touchstart", handleInteraction);
+      };
+    }
+  }, [enableSound, handleInteraction]);
+
+  // Ambient sound pulse
+  useEffect(() => {
+    if (!enableSound || !audioInitialized) return;
+
+    // Play ambient pulse every 8-12 seconds
+    const interval = setInterval(() => {
+      if (Math.random() > 0.6) {
+        playAmbientPulse();
+      }
+    }, 8000 + Math.random() * 4000);
+
+    return () => clearInterval(interval);
+  }, [enableSound, audioInitialized]);
+
+  // Data packet sounds
+  useEffect(() => {
+    if (!enableSound || !audioInitialized) return;
+
+    // Play data packet sound periodically
+    const interval = setInterval(() => {
+      if (Math.random() > 0.7) {
+        playDataPacketSound();
+      }
+    }, 3000 + Math.random() * 2000);
+
+    return () => clearInterval(interval);
+  }, [enableSound, audioInitialized]);
 
   // GSAP floating animation for each avatar with 3D depth
   useEffect(() => {
@@ -212,6 +268,11 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "" }) => {
         return [...filtered, { id: newBubbleId, avatarIndex: randomAvatarIndex, message: randomMessage }];
       });
 
+      // Play chat bubble sound (with low probability to avoid sound spam)
+      if (enableSound && audioInitialized && Math.random() > 0.85) {
+        playChatBubbleSound();
+      }
+
       setTimeout(() => {
         setChatBubbles((prev) => prev.filter((b) => b.id !== newBubbleId));
       }, 2000 + Math.random() * 1000);
@@ -231,7 +292,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "" }) => {
     const interval = setInterval(showRandomBubble, 600 + Math.random() * 400);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [enableSound, audioInitialized]);
 
   return (
     <div

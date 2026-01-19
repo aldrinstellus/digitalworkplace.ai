@@ -1,22 +1,51 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useCallback } from "react";
+import { playGlitchSound, initAudio } from "@/lib/sounds";
 
 interface WordmarkGlitchProps {
   className?: string;
+  enableSound?: boolean;
 }
 
-const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "" }) => {
+const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound = true }) => {
   const [glitchActive, setGlitchActive] = useState(false);
   const [glitchIntensity, setGlitchIntensity] = useState(0);
+  const [audioInitialized, setAudioInitialized] = useState(false);
+
+  // Initialize audio on first user interaction
+  const handleInteraction = useCallback(() => {
+    if (!audioInitialized) {
+      initAudio();
+      setAudioInitialized(true);
+    }
+  }, [audioInitialized]);
+
+  // Add click listener for audio initialization
+  useEffect(() => {
+    if (enableSound) {
+      window.addEventListener("click", handleInteraction, { once: true });
+      window.addEventListener("touchstart", handleInteraction, { once: true });
+      return () => {
+        window.removeEventListener("click", handleInteraction);
+        window.removeEventListener("touchstart", handleInteraction);
+      };
+    }
+  }, [enableSound, handleInteraction]);
 
   // Random glitch effect - more dramatic
   useEffect(() => {
     const triggerGlitch = () => {
       // Random intensity for variety
-      setGlitchIntensity(Math.random() > 0.5 ? 2 : 1);
+      const intensity = Math.random() > 0.5 ? 2 : 1;
+      setGlitchIntensity(intensity);
       setGlitchActive(true);
+
+      // Play glitch sound
+      if (enableSound && audioInitialized) {
+        playGlitchSound(intensity);
+      }
 
       // Double-tap glitch for more drama
       setTimeout(() => {
@@ -24,6 +53,10 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "" }) => {
         setTimeout(() => {
           if (Math.random() > 0.5) {
             setGlitchActive(true);
+            // Play second glitch sound (quieter)
+            if (enableSound && audioInitialized) {
+              playGlitchSound(intensity * 0.5);
+            }
             setTimeout(() => setGlitchActive(false), 80);
           }
         }, 50);
@@ -44,7 +77,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "" }) => {
       clearTimeout(initialTimeout);
       clearInterval(interval);
     };
-  }, []);
+  }, [enableSound, audioInitialized]);
 
   return (
     <motion.div

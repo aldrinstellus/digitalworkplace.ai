@@ -66,6 +66,8 @@ src/
   - Connection arc lines
   - Avatar click-to-focus with auto-minimize (2.5s)
   - Sound effects (ambient pulse, data packets, chat bubbles)
+  - **Responsive**: Smaller avatars on mobile (44-52px vs 58-68px desktop)
+  - **Responsive**: Smaller chat bubbles and labels on mobile
 
 ### Audio System
 - `src/lib/sounds.ts` - Web Audio API sound effects:
@@ -79,10 +81,12 @@ src/
   - Sounds auto-play after first user interaction
 
 - `src/components/audio/SoundToggle.tsx` - Toggle button:
-  - Fixed top-right position
+  - Fixed top-right position (responsive: smaller on mobile)
+  - Three states: "Enable" (initial), "On" (active), "Off" (muted)
+  - Pulsing speaker icon before first interaction
   - Green animated bars when ON
   - Muted speaker icon when OFF
-  - Sound ON by default
+  - Text labels hidden on mobile for compact display
 
 ### Brand Components
 - `src/components/brand/WordmarkGlitch.tsx` - Primary wordmark with:

@@ -76,11 +76,13 @@ Full-screen background featuring:
   - All enabled by default, auto-play on load
 
 #### SoundToggle.tsx
-Fixed top-right corner toggle:
-- Green animated equalizer bars when ON
-- Muted speaker icon when OFF
-- Sound ON by default
-- Controls all sound effects globally
+Fixed top-right corner toggle (responsive):
+- **Initial state**: Pulsing speaker icon + "Enable" text (desktop)
+- **On state**: Green animated equalizer bars + "On" text (desktop)
+- **Off state**: Muted speaker icon + "Off" text (desktop)
+- Mobile: Icon only (text hidden for compact display)
+- First click activates audio (browser autoplay compliance)
+- Subsequent clicks toggle sound on/off
 
 #### WordmarkGlitch.tsx
 Centered wordmark featuring:
@@ -108,6 +110,13 @@ Centered wordmark featuring:
 - Full-screen immersive (no split panels)
 - Mobile: Simplified, centered login
 - Fixed positioning to hide main header
+
+### Responsive Breakpoints
+| Breakpoint | Width | Avatar Size | Chat Bubble | Sound Toggle |
+|------------|-------|-------------|-------------|--------------|
+| Mobile | <640px | 44-52px | text-xs, px-3 | Icon only |
+| Tablet | 640-1024px | 58-68px | text-sm, px-4 | Icon + text |
+| Desktop | >1024px | 58-68px | text-sm, px-4 | Icon + text |
 
 ## Audio System
 

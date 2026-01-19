@@ -4,6 +4,44 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.3.3] - 2026-01-19
+
+### Responsive Design & Sound Toggle UX
+
+#### Added
+- **Mobile screen detection** in LoginBackground using window resize listener
+- **Three-state Sound Toggle**: "Enable" → "On" → "Off"
+- **Pulsing animation** on initial sound button to draw attention
+
+#### Changed
+- **SoundToggle Component**
+  - Initial state: Pulsing speaker icon with "Enable" text
+  - After first click: Animated bars with "On" text
+  - Toggled off: Muted icon with "Off" text
+  - Text labels hidden on mobile (<640px) for compact display
+  - Smaller padding on mobile (px-3 py-1.5 vs px-4 py-2)
+
+- **LoginBackground Avatars**
+  - Mobile size: 44-52px (was 58-68px on all screens)
+  - Desktop size: 58-68px (unchanged)
+
+- **Chat Bubbles**
+  - Mobile: text-xs, px-3 py-1.5
+  - Desktop: text-sm, px-4 py-2
+
+- **Name Labels**
+  - Mobile: text-xs, px-3 py-1
+  - Desktop: text-sm, px-4 py-1.5
+
+#### Responsive Breakpoints
+| Breakpoint | Width | Behavior |
+|------------|-------|----------|
+| Mobile | <640px | Smaller avatars, compact UI, icon-only toggle |
+| Tablet | 640-1024px | Full size, text labels |
+| Desktop | >1024px | Full size, text labels |
+
+---
+
 ## [0.3.2] - 2026-01-19
 
 ### Audio System Improvements & Glitch Tuning

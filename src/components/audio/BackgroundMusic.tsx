@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BackgroundMusicProps {
   src: string;
@@ -111,7 +112,7 @@ const BackgroundMusic: FC<BackgroundMusicProps> = ({
     };
   }, [src, startAudio]);
 
-  // Toggle mute - also starts audio if not started
+  // Toggle mute
   const toggleMute = async () => {
     if (!hasStartedRef.current) {
       await startAudio();
@@ -128,49 +129,91 @@ const BackgroundMusic: FC<BackgroundMusicProps> = ({
     }
   };
 
+  // Click to enable audio (for the prominent button)
+  const enableAudio = async () => {
+    await startAudio();
+  };
+
   return (
-    <button
-      onClick={toggleMute}
-      className="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-sm group"
-      aria-label={isMuted ? "Unmute" : "Mute"}
-      title={isMuted ? "Unmute" : "Mute"}
-    >
-      {isMuted || !isReady ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-white/40 group-hover:text-white/60 transition-colors"
-        >
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-          <line x1="23" y1="9" x2="17" y2="15" />
-          <line x1="17" y1="9" x2="23" y2="15" />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-green-400/70 group-hover:text-green-400 transition-colors"
-        >
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" className="animate-pulse" />
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" className="animate-pulse" style={{ animationDelay: "0.2s" }} />
-        </svg>
-      )}
-    </button>
+    <>
+      {/* Prominent "Enable Audio" button - shows when audio hasn't started */}
+      <AnimatePresence>
+        {!isReady && (
+          <motion.button
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            onClick={enableAudio}
+            className="fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/20 hover:bg-green-500/30 border border-green-500/40 hover:border-green-500/60 transition-all duration-300 backdrop-blur-sm group"
+          >
+            {/* Play icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="text-green-400"
+            >
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+            <span className="text-green-400 text-sm font-medium">Enable Audio</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Mute/Unmute button - shows when audio is playing */}
+      <AnimatePresence>
+        {isReady && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            onClick={toggleMute}
+            className="fixed bottom-4 right-4 z-50 p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all duration-300 backdrop-blur-sm group"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            title={isMuted ? "Unmute" : "Mute"}
+          >
+            {isMuted ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-white/40 group-hover:text-white/60 transition-colors"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-green-400/70 group-hover:text-green-400 transition-colors"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" className="animate-pulse" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" className="animate-pulse" style={{ animationDelay: "0.2s" }} />
+              </svg>
+            )}
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

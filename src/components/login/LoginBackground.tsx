@@ -165,6 +165,17 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
   const bubbleIdRef = useRef(0);
   const [focusedAvatarId, setFocusedAvatarId] = useState<number | null>(null);
   const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Initialize audio immediately on mount
   useEffect(() => {
@@ -570,7 +581,10 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
         {uniqueAvatars.map((avatar, index) => {
           const position = avatarPositions[index];
           const bubble = chatBubbles.find((b) => b.avatarIndex === index);
-          const baseSize = position.depth === "middle" ? 58 : 68;
+          // Smaller avatars on mobile
+          const baseSize = isMobile
+            ? (position.depth === "middle" ? 44 : 52)
+            : (position.depth === "middle" ? 58 : 68);
           const isFocused = focusedAvatarId === avatar.id;
           const focusedSize = baseSize * 1.6;
 
@@ -611,7 +625,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                     style={{ zIndex: 200 }}
                   >
                     <motion.div
-                      className="px-4 py-2 rounded-2xl text-sm font-semibold"
+                      className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl text-xs sm:text-sm font-semibold"
                       animate={{
                         y: [0, -2, 0],
                       }}
@@ -739,7 +753,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                       className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
                     >
                       <div
-                        className="px-4 py-1.5 rounded-full text-sm font-medium"
+                        className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-xs sm:text-sm font-medium"
                         style={{
                           background: "rgba(20, 20, 35, 0.95)",
                           border: "1px solid rgba(74, 222, 128, 0.4)",

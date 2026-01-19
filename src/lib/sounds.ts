@@ -3,6 +3,8 @@
 // Audio context singleton
 let audioContext: AudioContext | null = null;
 let audioEnabled = true;
+let interactionListenerAdded = false;
+let audioContextResumed = false;
 
 // Check if audio has been enabled by user
 export const isAudioEnabled = (): boolean => audioEnabled;
@@ -27,21 +29,52 @@ const getAudioContext = (): AudioContext | null => {
   return audioContext;
 };
 
-// Resume audio context if suspended
-const ensureAudioContextResumed = async (): Promise<boolean> => {
+// Resume audio context - called on user interaction
+const resumeAudioContext = async (): Promise<void> => {
   const ctx = getAudioContext();
-  if (!ctx) return false;
+  if (!ctx) return;
 
   if (ctx.state === "suspended") {
     try {
       await ctx.resume();
-      console.log("Audio context resumed");
-      return true;
-    } catch {
-      return false;
+      audioContextResumed = true;
+      console.log("Audio context resumed after user interaction");
+    } catch (e) {
+      console.log("Failed to resume audio context:", e);
     }
+  } else if (ctx.state === "running") {
+    audioContextResumed = true;
   }
-  return ctx.state === "running";
+};
+
+// Handler for user interaction - resumes audio context
+const handleUserInteraction = (): void => {
+  resumeAudioContext();
+  // Remove listeners after first interaction
+  if (audioContextResumed) {
+    removeInteractionListeners();
+  }
+};
+
+// Add interaction listeners for any user activity
+const addInteractionListeners = (): void => {
+  if (typeof window === "undefined" || interactionListenerAdded) return;
+
+  const events = ["click", "touchstart", "keydown", "mousedown", "pointerdown"];
+  events.forEach(event => {
+    document.addEventListener(event, handleUserInteraction, { once: false, passive: true });
+  });
+  interactionListenerAdded = true;
+};
+
+// Remove interaction listeners
+const removeInteractionListeners = (): void => {
+  if (typeof window === "undefined") return;
+
+  const events = ["click", "touchstart", "keydown", "mousedown", "pointerdown"];
+  events.forEach(event => {
+    document.removeEventListener(event, handleUserInteraction);
+  });
 };
 
 // Initialize and resume audio context
@@ -49,8 +82,17 @@ export const initAudio = (): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
-  // Try to resume
-  ensureAudioContextResumed();
+  // Try to resume immediately (works if there was prior interaction)
+  resumeAudioContext();
+
+  // Also add listeners for future interaction
+  addInteractionListeners();
+};
+
+// Check if audio context is ready to play
+const isAudioReady = (): boolean => {
+  const ctx = getAudioContext();
+  return ctx !== null && ctx.state === "running";
 };
 
 // Pleasant digital glitch sound effect - softer, more musical
@@ -61,10 +103,13 @@ export const playGlitchSound = (intensity: number = 1): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
-  // Ensure audio context is running
+  // Ensure audio context is running - try to resume on every play attempt
   if (ctx.state === "suspended") {
-    ctx.resume();
+    ctx.resume().catch(() => {});
+    return; // Don't play if suspended, will play on next attempt after interaction
   }
+
+  if (ctx.state !== "running") return;
 
   const now = ctx.currentTime;
   const duration = 0.25 + intensity * 0.1; // Longer, smoother duration
@@ -206,6 +251,13 @@ export const playDataPacketSound = (): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
+  // Ensure audio context is running
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+    return;
+  }
+  if (ctx.state !== "running") return;
+
   const now = ctx.currentTime;
 
   // Soft sine wave blip
@@ -238,6 +290,13 @@ export const playAmbientPulse = (): void => {
 
   const ctx = getAudioContext();
   if (!ctx) return;
+
+  // Ensure audio context is running
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+    return;
+  }
+  if (ctx.state !== "running") return;
 
   const now = ctx.currentTime;
   const duration = 2;
@@ -277,6 +336,13 @@ export const playChatBubbleSound = (): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
+  // Ensure audio context is running
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+    return;
+  }
+  if (ctx.state !== "running") return;
+
   const now = ctx.currentTime;
 
   // Soft "pop" sound
@@ -302,6 +368,13 @@ export const playConnectionSound = (): void => {
 
   const ctx = getAudioContext();
   if (!ctx) return;
+
+  // Ensure audio context is running
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+    return;
+  }
+  if (ctx.state !== "running") return;
 
   const now = ctx.currentTime;
 

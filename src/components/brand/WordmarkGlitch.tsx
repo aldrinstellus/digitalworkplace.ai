@@ -125,15 +125,13 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
       }, 200); // Longer primary glitch duration
     };
 
-    // Initial glitch after load
-    const initialTimeout = setTimeout(triggerGlitch, 2000);
+    // Initial glitch shortly after load
+    const initialTimeout = setTimeout(triggerGlitch, 500);
 
-    // Less frequent glitches for a more relaxed feel
+    // Regular frequent glitches for dynamic effect
     const interval = setInterval(() => {
-      if (Math.random() > 0.6) {
-        triggerGlitch();
-      }
-    }, 3500); // Longer interval between glitches
+      triggerGlitch();
+    }, 2000); // Glitch every 2 seconds consistently
 
     return () => {
       clearTimeout(initialTimeout);

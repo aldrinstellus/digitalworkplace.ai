@@ -767,7 +767,7 @@ function ProductCard({
   });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || isDisabled) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -779,6 +779,12 @@ function ProductCard({
     mouseX.set(0);
     mouseY.set(0);
     setIsHovered(false);
+  };
+
+  const handleMouseEnter = () => {
+    if (!isDisabled) {
+      setIsHovered(true);
+    }
   };
 
   const IllustrationComponent = {
@@ -795,7 +801,7 @@ function ProductCard({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: index * 0.15, duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
         rotateX,
@@ -830,9 +836,9 @@ function ProductCard({
           borderStyle: 'solid',
         }}
       >
-        {/* Animated Illustration Background */}
+        {/* Animated Illustration Background - static for disabled cards */}
         <div className="absolute inset-0 overflow-hidden">
-          <IllustrationComponent isHovered={isHovered} />
+          {isDisabled ? null : <IllustrationComponent isHovered={isHovered} />}
         </div>
 
         {/* Gradient overlay for text readability */}

@@ -93,8 +93,8 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
   // Random glitch effect - more dramatic
   useEffect(() => {
     const triggerGlitch = () => {
-      // Random intensity for variety
-      const intensity = Math.random() > 0.5 ? 2 : 1;
+      // Softer intensity - mostly light glitches
+      const intensity = Math.random() > 0.7 ? 1.5 : 1;
       setGlitchIntensity(intensity);
       setGlitchActive(true);
 
@@ -103,36 +103,37 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
         playGlitchSound(intensity);
       }
 
-      // Start text scrambling synchronized with glitch
-      startScrambling(intensity, 120);
+      // Start text scrambling - longer duration for smoother feel
+      startScrambling(intensity, 200);
 
-      // Double-tap glitch for more drama
+      // Smoother glitch with gentler timing
       setTimeout(() => {
         setGlitchActive(false);
+        // Occasional subtle second pulse
         setTimeout(() => {
-          if (Math.random() > 0.5) {
+          if (Math.random() > 0.6) {
             setGlitchActive(true);
-            // Play second glitch sound (quieter)
+            // Gentler second sound
             if (enableSound && audioInitialized) {
-              playGlitchSound(intensity * 0.5);
+              playGlitchSound(intensity * 0.4);
             }
-            // Second scramble burst
-            startScrambling(intensity * 0.5, 80);
-            setTimeout(() => setGlitchActive(false), 80);
+            // Softer second scramble
+            startScrambling(intensity * 0.4, 120);
+            setTimeout(() => setGlitchActive(false), 120);
           }
-        }, 50);
-      }, 120);
+        }, 80);
+      }, 200); // Longer primary glitch duration
     };
 
     // Initial glitch after load
-    const initialTimeout = setTimeout(triggerGlitch, 1500);
+    const initialTimeout = setTimeout(triggerGlitch, 2000);
 
-    // More frequent glitches
+    // Less frequent glitches for a more relaxed feel
     const interval = setInterval(() => {
-      if (Math.random() > 0.5) {
+      if (Math.random() > 0.6) {
         triggerGlitch();
       }
-    }, 2000);
+    }, 3500); // Longer interval between glitches
 
     return () => {
       clearTimeout(initialTimeout);
@@ -167,8 +168,8 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
           className="relative text-3xl sm:text-4xl md:text-5xl font-mono tracking-tight select-none"
           style={{
             fontFamily: "'JetBrains Mono', 'Fira Code', 'SF Mono', monospace",
-            transform: glitchActive ? `skewX(${glitchIntensity * -0.5}deg)` : "skewX(0deg)",
-            transition: "transform 0.05s ease-out",
+            transform: glitchActive ? `skewX(${glitchIntensity * -0.3}deg)` : "skewX(0deg)",
+            transition: "transform 0.1s ease-out",
           }}
         >
           {/* Chromatic aberration layers (only visible during glitch) - RED */}
@@ -176,10 +177,10 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
             className="absolute inset-0"
             style={{
               color: "#ff0040",
-              opacity: glitchActive ? 0.9 : 0,
-              transform: glitchActive ? `translateX(${-3 * glitchIntensity}px) translateY(${glitchIntensity}px)` : "translateX(0)",
+              opacity: glitchActive ? 0.6 : 0,
+              transform: glitchActive ? `translateX(${-2 * glitchIntensity}px) translateY(${glitchIntensity * 0.5}px)` : "translateX(0)",
               mixBlendMode: "screen",
-              transition: "opacity 0.02s, transform 0.02s",
+              transition: "opacity 0.08s ease-out, transform 0.08s ease-out",
             }}
             aria-hidden="true"
           >
@@ -193,10 +194,10 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
             className="absolute inset-0"
             style={{
               color: "#00ffff",
-              opacity: glitchActive ? 0.9 : 0,
-              transform: glitchActive ? `translateX(${3 * glitchIntensity}px) translateY(${-glitchIntensity}px)` : "translateX(0)",
+              opacity: glitchActive ? 0.6 : 0,
+              transform: glitchActive ? `translateX(${2 * glitchIntensity}px) translateY(${-glitchIntensity * 0.5}px)` : "translateX(0)",
               mixBlendMode: "screen",
-              transition: "opacity 0.02s, transform 0.02s",
+              transition: "opacity 0.08s ease-out, transform 0.08s ease-out",
             }}
             aria-hidden="true"
           >

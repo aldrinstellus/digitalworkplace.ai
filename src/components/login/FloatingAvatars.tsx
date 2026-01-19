@@ -4,6 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Pre-generate random particle data to avoid Math.random during render
+const generateParticleData = (count: number) => {
+  return Array.from({ length: count }, () => ({
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    duration: 3 + Math.random() * 2,
+    delay: Math.random() * 2,
+  }));
+};
+
+const PARTICLE_DATA = generateParticleData(20);
+
 // Unique avatar data - diverse names and colors
 const avatarData = [
   { initials: "AJ", name: "Alex Johnson", color: "#6366f1" },
@@ -47,26 +59,23 @@ interface FloatingAvatar {
   bubbleDirection: "left" | "right";
 }
 
+// Pre-generate initial avatars at module level
+const INITIAL_AVATARS: FloatingAvatar[] = avatarData.map((data, index) => ({
+  id: index,
+  ...data,
+  x: Math.random() * 70 + 10, // 10-80% of container width
+  y: Math.random() * 70 + 10, // 10-80% of container height
+  scale: 0.8 + Math.random() * 0.4, // 0.8-1.2 scale
+  showBubble: false,
+  bubbleText: conversations[Math.floor(Math.random() * conversations.length)],
+  bubbleDirection: Math.random() > 0.5 ? "left" : "right",
+}));
+
 const FloatingAvatars = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const avatarsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [avatars, setAvatars] = useState<FloatingAvatar[]>([]);
+  const [avatars, setAvatars] = useState<FloatingAvatar[]>(INITIAL_AVATARS);
   const animationsRef = useRef<gsap.core.Tween[]>([]);
-
-  // Initialize avatars with random positions
-  useEffect(() => {
-    const initialAvatars: FloatingAvatar[] = avatarData.map((data, index) => ({
-      id: index,
-      ...data,
-      x: Math.random() * 70 + 10, // 10-80% of container width
-      y: Math.random() * 70 + 10, // 10-80% of container height
-      scale: 0.8 + Math.random() * 0.4, // 0.8-1.2 scale
-      showBubble: false,
-      bubbleText: conversations[Math.floor(Math.random() * conversations.length)],
-      bubbleDirection: Math.random() > 0.5 ? "left" : "right",
-    }));
-    setAvatars(initialAvatars);
-  }, []);
 
   // GSAP floating animation
   useEffect(() => {
@@ -320,22 +329,22 @@ const FloatingAvatars = () => {
       </svg>
 
       {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
+      {PARTICLE_DATA.map((particle, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute w-1 h-1 rounded-full bg-white/20"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
           }}
           animate={{
             y: [0, -30, 0],
             opacity: [0.1, 0.4, 0.1],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
+            duration: particle.duration,
             repeat: Infinity,
-            delay: Math.random() * 2,
+            delay: particle.delay,
           }}
         />
       ))}

@@ -1,7 +1,7 @@
 # Digital Workplace AI - Project Context
 
 ## Vision
-Digital Workplace AI is an AI-powered digital workplace solution designed to enhance team collaboration and productivity. Features a dark, tech-forward aesthetic with unique brand identity.
+Digital Workplace AI is an AI-powered digital workplace solution designed to enhance team collaboration and productivity. Features a dark, tech-forward aesthetic with unique brand identity and immersive sound design.
 
 ## Architecture
 
@@ -12,6 +12,7 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
 - **shadcn/ui** for headless UI components
 - **Framer Motion** for declarative React animations
 - **GSAP** for high-performance JavaScript animations
+- **Web Audio API** for procedural sound effects
 
 ### Authentication
 - **Clerk** handles all authentication flows:
@@ -33,7 +34,7 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
   - CDN distribution
   - Environment variable management
 
-## Login Page Design (v0.2.0)
+## Login Page Design (v0.3.0)
 
 ### Design Philosophy
 - Full-screen immersive experience
@@ -41,6 +42,7 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
 - Minimalistic centered login overlay
 - High-frequency activity indicators for "alive" platform feel
 - Edgy wordmark with glitch effects
+- Ambient sound effects for enhanced engagement
 
 ### Components
 
@@ -50,13 +52,16 @@ Full-screen background featuring:
 - World map SVG overlay (20% opacity)
 - 24 floating avatar photos:
   - Positioned across entire screen (avoiding center)
-  - 3 depth layers (front, middle, back)
+  - 2 depth layers (front, middle) - all visible without blur
   - GSAP floating animations
   - Online status indicators with pulse effect
-- 48 chat messages:
-  - High-frequency display (600-1000ms)
-  - Up to 10 concurrent bubbles
-  - Framer Motion enter/exit animations
+  - Click-to-focus with auto-minimize (2.5s)
+- 15 max concurrent chat messages:
+  - Slower display speed (40% reduction)
+  - Interval: 210-400ms
+  - Duration: 1.7-2.5 seconds
+  - Lighter mint-green with 70% opacity
+  - Backdrop blur effect
 - Green data packets:
   - Slow bezier curve paths (7-15 seconds)
   - Point-to-point connections
@@ -64,6 +69,18 @@ Full-screen background featuring:
 - Connection elements:
   - Arc lines between regions
   - Pulsing city indicators
+- Sound effects:
+  - Ambient pulse (A minor chord, every 8-12s)
+  - Data packet sounds (soft blips, every 3-5s)
+  - Chat bubble pops (5% probability per bubble)
+  - All enabled by default, auto-play on load
+
+#### SoundToggle.tsx
+Fixed top-right corner toggle:
+- Green animated equalizer bars when ON
+- Muted speaker icon when OFF
+- Sound ON by default
+- Controls all sound effects globally
 
 #### WordmarkGlitch.tsx
 Centered wordmark featuring:
@@ -82,6 +99,7 @@ Centered wordmark featuring:
 #### Sign-In Page
 - Full-screen dark background
 - Centered vertically and horizontally
+- SoundToggle component (top-right)
 - WordmarkGlitch component
 - "Continue with Google" button (shadcn/ui Button)
 - Semi-transparent styling
@@ -90,6 +108,29 @@ Centered wordmark featuring:
 - Full-screen immersive (no split panels)
 - Mobile: Simplified, centered login
 - Fixed positioning to hide main header
+
+## Audio System
+
+### sounds.ts
+Web Audio API procedural sound generation:
+- `enableAudio()` / `disableAudio()` - Global toggle
+- `isAudioEnabled()` - Check state
+- `initAudio()` - Initialize audio context
+- `playGlitchSound(intensity)` - Digital glitch effect
+- `playDataPacketSound()` - Soft blip for data travel
+- `playAmbientPulse()` - Subtle A minor chord pad
+- `playChatBubbleSound()` - Soft pop notification
+- `playConnectionSound()` - Ultra-soft high ping
+
+All sounds check `audioEnabled` before playing.
+Sound enabled by default (`audioEnabled = true`).
+
+### backgroundMusic.ts (Disabled)
+Procedural 120 BPM music generator (not in use):
+- Happy chord progression (I-V-vi-IV)
+- Kick, snare, hi-hat drums
+- Bass and melody lines
+- Removed due to browser autoplay restrictions
 
 ## API Integration
 
@@ -119,14 +160,14 @@ const supabase = createClient(
 
 ## Avatar Data
 24 diverse professional headshots from Unsplash positioned across the screen:
-- 4 avatars in top row
-- 4 avatars in upper section
-- 4 avatars in upper-mid section
-- 4 avatars in lower-mid section
-- 4 avatars in lower section
-- 4 avatars in bottom row
+- 6 avatars in top row
+- 4 avatars in upper-middle area
+- 4 avatars in middle area (sides only)
+- 4 avatars in lower-middle area
+- 6 avatars in bottom row
 
 All avoiding the center area where the login appears.
+All fully visible without blur (z-index 18-32).
 
 ## Chat Messages (48 total)
 Rotating messages covering:
@@ -147,6 +188,7 @@ Rotating messages covering:
 | Background Mid | #1a1a2e | Cards, overlays |
 | Background Light | #16213e | Borders, accents |
 | Green Accent | #4ade80 | .ai, indicators, dots |
+| Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
 | Green Glow | rgba(74,222,128,0.5) | Shadows, glows |
 | Red Glitch | #ff0040 | Chromatic aberration |
 | Cyan Glitch | #00ffff | Chromatic aberration |
@@ -166,15 +208,16 @@ Rotating messages covering:
 
 | Animation | Duration | Easing |
 |-----------|----------|--------|
-| Avatar float | 3-5s | sine.inOut |
-| Chat bubble appear | 300ms | ease-out |
-| Chat bubble visible | 4s | - |
-| Green dot travel | 7-15s | linear |
+| Avatar float | 3-7s | sine.inOut |
+| Chat bubble appear | 400ms | backOut |
+| Chat bubble visible | 1.7-2.5s | - |
+| Green dot travel | 7-15s | easeInOut |
 | Glitch trigger | 2s interval | - |
 | Glitch duration | 120ms + 80ms | - |
+| Ambient pulse | 8-12s interval | - |
+| Data packet | 3-5s interval | - |
 
 ## Future Enhancements
-- Sound effects for glitch/activity
 - Dashboard with analytics
 - AI Assistant integration
 - Document management
@@ -182,3 +225,4 @@ Rotating messages covering:
 - Settings and preferences
 - Notification system
 - Sign-up page redesign
+- Real-time presence indicators

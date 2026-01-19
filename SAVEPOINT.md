@@ -1,7 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-19
-**Session Status**: Complete - Full-screen dark theme login with edgy wordmark
+**Version**: 0.3.0
+**Session Status**: Complete - Audio system with sound effects enabled by default
 
 ---
 
@@ -12,12 +13,17 @@
 - [x] Clerk authentication fully integrated (Google OAuth)
 - [x] Full-screen world map login design
 - [x] Dark grey theme (#0f0f1a, #1a1a2e, #16213e)
-- [x] 24 floating avatars with GSAP animations
-- [x] 48 chat messages with high-frequency display (600-1000ms)
+- [x] 24 floating avatars with GSAP animations (all visible, no blur)
+- [x] 48 chat messages with slower display (40% reduction)
+- [x] Lighter mint-green chat bubbles with transparency
 - [x] Slow point-to-point green dot animations (7-15 seconds)
 - [x] shadcn/ui integration with Button component
 - [x] Edgy WordmarkGlitch component with dramatic effects
 - [x] Minimalistic centered login (wordmark + Google button)
+- [x] **Sound effects system (Web Audio API)**
+- [x] **SoundToggle component (top-right)**
+- [x] **Sound effects ON by default (auto-play)**
+- [x] Avatar click-to-focus with auto-minimize
 - [x] Mobile responsive layout
 - [x] SSO callback handler
 - [x] Documentation complete
@@ -32,10 +38,12 @@ npm run dev
 ### Test the Login
 1. Visit `http://localhost:3000/sign-in`
 2. See full-screen dark world map with 24 floating avatars
-3. Centered "digitalworkplace.ai" wordmark with glitch effect
-4. "Continue with Google" button below
-5. Chat bubbles appear rapidly across the screen
-6. Green data packets travel slowly between connection points
+3. Hear ambient sound effects playing automatically
+4. See "Sound On" toggle in top-right corner
+5. Centered "digitalworkplace.ai" wordmark with glitch effect
+6. "Continue with Google" button below
+7. Lighter mint-green chat bubbles appear across the screen
+8. Green data packets travel slowly between connection points
 
 ---
 
@@ -43,55 +51,50 @@ npm run dev
 
 | File | Status | Description |
 |------|--------|-------------|
-| `src/components/login/LoginBackground.tsx` | Modified | 24 avatars, dark theme, 48 messages, slow green dots |
-| `src/app/sign-in/[[...sign-in]]/page.tsx` | Modified | Minimalistic layout with WordmarkGlitch |
-| `src/app/globals.css` | Modified | Fixed tw-animate-css import error |
-| `src/components/brand/Wordmark.tsx` | Created | Basic animated wordmark |
-| `src/components/brand/WordmarkEdgy.tsx` | Created | SVG-based wordmark with decorations |
-| `src/components/brand/WordmarkGlitch.tsx` | Created | Dramatic glitch effect wordmark |
-| `src/components/ui/button.tsx` | Created | shadcn/ui Button component |
-| `src/lib/utils.ts` | Created | cn() utility for classnames |
-| `components.json` | Created | shadcn/ui configuration |
+| `src/components/login/LoginBackground.tsx` | Modified | 24 avatars visible, lighter chat bubbles, 40% slower, sound effects integration |
+| `src/app/sign-in/[[...sign-in]]/page.tsx` | Modified | Added SoundToggle component |
+| `src/lib/sounds.ts` | Modified | Sound enabled by default, audioEnabled checks on all functions |
+| `src/lib/backgroundMusic.ts` | Created | Procedural music generator (disabled) |
+| `src/components/audio/SoundToggle.tsx` | Created | Sound effects toggle button |
+| `src/components/audio/BackgroundMusic.tsx` | Created | Music player component (disabled) |
 
 ---
 
-## Brand Components
+## Audio System
 
-### WordmarkGlitch.tsx (Active)
-The primary wordmark used on the login page featuring:
-- **"digital"** - 75% opacity white with subtle glow
-- **"workplace"** - 100% white, prominent with glow
-- **".ai"** - Green (#4ade80) with triple-layer glow effect
-- **Glitch Effects**:
-  - Chromatic aberration (red/cyan split)
-  - Variable intensity (light and heavy)
-  - Double-tap stuttering
-  - Horizontal slice distortion
-  - Slight skew during glitch
-- Corner bracket decorations
-- Blinking cursor
+### Sound Effects (Enabled)
+- **Ambient Pulse**: A minor chord pad, every 8-12 seconds
+- **Data Packet**: Soft blip sounds, every 3-5 seconds
+- **Chat Bubble**: Pop sound, 5% probability per bubble
+- **Glitch Sound**: Musical glitch effect (used with wordmark)
+- **Connection Sound**: Ultra-soft ping
 
-### Other Wordmark Variants
-- `Wordmark.tsx` - Simple letter-by-letter animation
-- `WordmarkEdgy.tsx` - SVG-based with underline and data points
+### Configuration
+- `audioEnabled = true` by default in `sounds.ts`
+- Audio initializes immediately on component mount
+- No click required to start sounds
+- Toggle in top-right corner to disable
+
+### Background Music (Disabled)
+- Procedural 120 BPM music was created
+- Disabled due to browser autoplay restrictions
+- Code retained in `backgroundMusic.ts` for potential future use
 
 ---
 
-## Design System
+## Design Updates
 
-### Color Palette
-| Color | Hex | Usage |
-|-------|-----|-------|
-| Background Dark | #0f0f1a | Main background |
-| Background Mid | #1a1a2e | Cards, overlays |
-| Background Light | #16213e | Borders, accents |
-| Green Accent | #4ade80 | .ai, indicators, dots |
-| White | #ffffff | Primary text |
-| White 75% | rgba(255,255,255,0.75) | "digital" text |
+### Chat Bubbles
+- **Color**: Lighter mint-green `rgba(134, 239, 172, 0.7)`
+- **Opacity**: 70% (was 95%)
+- **Effect**: Backdrop blur for glass appearance
+- **Speed**: 40% slower than before
 
-### Typography
-- **Font**: JetBrains Mono, Fira Code, SF Mono (monospace)
-- **Wordmark sizes**: text-3xl / text-4xl / text-5xl (responsive)
+### Avatars
+- All 24 avatars fully visible (no blur)
+- Z-index range: 18-32
+- Click-to-focus with 2.5s auto-minimize
+- Name label appears when focused
 
 ---
 
@@ -176,6 +179,48 @@ npx vercel --prod    # Deploy production
 
 ## Key Code Patterns
 
+### Sound Effects Toggle
+```typescript
+import { enableAudio, disableAudio, isAudioEnabled } from "@/lib/sounds";
+
+// In component
+const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+
+const toggleSound = () => {
+  if (isSoundEnabled) {
+    disableAudio();
+    setIsSoundEnabled(false);
+  } else {
+    enableAudio();
+    setIsSoundEnabled(true);
+  }
+};
+```
+
+### Web Audio Sound Effect
+```typescript
+export const playChatBubbleSound = (): void => {
+  if (!audioEnabled) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+
+  const gainNode = ctx.createGain();
+  gainNode.gain.setValueAtTime(0.02, now);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+  osc.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.1);
+};
+```
+
 ### Clerk OAuth (Google)
 ```typescript
 import { useSignIn } from "@clerk/nextjs";
@@ -189,43 +234,6 @@ await signIn.authenticateWithRedirect({
 });
 ```
 
-### Glitch Effect Pattern
-```typescript
-const [glitchActive, setGlitchActive] = useState(false);
-const [glitchIntensity, setGlitchIntensity] = useState(0);
-
-// Double-tap glitch with variable intensity
-const triggerGlitch = () => {
-  setGlitchIntensity(Math.random() > 0.5 ? 2 : 1);
-  setGlitchActive(true);
-  setTimeout(() => {
-    setGlitchActive(false);
-    // Follow-up glitch 50% of the time
-    if (Math.random() > 0.5) {
-      setTimeout(() => {
-        setGlitchActive(true);
-        setTimeout(() => setGlitchActive(false), 80);
-      }, 50);
-    }
-  }, 120);
-};
-```
-
-### shadcn/ui Button
-```typescript
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-
-<Button
-  className={cn(
-    "bg-white/10 hover:bg-white/15",
-    "border border-white/10 hover:border-green-500/30"
-  )}
->
-  Continue with Google
-</Button>
-```
-
 ---
 
 ## Architecture Decisions
@@ -235,7 +243,9 @@ import { cn } from "@/lib/utils";
 3. **Google OAuth only** - Simplified, most common enterprise auth
 4. **shadcn/ui** - Headless components, full customization control
 5. **Glitch effect wordmark** - Unique brand identity, memorable
-6. **High-frequency chat bubbles** - Creates sense of active platform
+6. **Sound effects by default** - Enhanced immersive experience
+7. **Web Audio API** - No external dependencies for audio
+8. **Lighter chat bubbles** - Better readability, softer aesthetic
 
 ---
 

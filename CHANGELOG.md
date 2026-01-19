@@ -4,6 +4,79 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.3.0] - 2026-01-19
+
+### Audio System & UX Improvements
+
+#### Added
+- **Web Audio API Sound Effects System** (`src/lib/sounds.ts`)
+  - Procedural sound generation using Web Audio API
+  - No external audio files required
+  - `playGlitchSound()` - Digital glitch with musical harmonics
+  - `playDataPacketSound()` - Soft blip for data travel animations
+  - `playAmbientPulse()` - Subtle A minor chord pad
+  - `playChatBubbleSound()` - Soft pop notification
+  - `playConnectionSound()` - Ultra-soft high-frequency ping
+  - Global enable/disable toggle
+  - **Sound enabled by default** - auto-plays on page load
+
+- **SoundToggle Component** (`src/components/audio/SoundToggle.tsx`)
+  - Fixed position top-right corner
+  - Animated equalizer bars when sound ON
+  - Muted speaker icon when sound OFF
+  - Green styling for ON state, white/grey for OFF
+  - Syncs with global audio state
+
+- **BackgroundMusic System** (`src/lib/backgroundMusic.ts`) - *Disabled*
+  - Procedural 120 BPM music generator
+  - Happy chord progression (I-V-vi-IV)
+  - Drums, bass, melody, sparkle accents
+  - Disabled due to browser autoplay restrictions
+
+- **Audio Component** (`src/components/audio/BackgroundMusic.tsx`) - *Not in use*
+  - Music player with toggle UI
+  - Retained for potential future use
+
+#### Changed
+- **Chat Bubbles Speed Reduced by 40%**
+  - Interval: 150-280ms → 210-400ms
+  - Duration: 1200-1800ms → 1700-2500ms
+  - Initial burst: 18 messages → 12 messages
+  - Max concurrent: 20 → 15
+
+- **Chat Bubble Styling**
+  - Color: Bold green → Lighter mint-green (30% lighter)
+  - Opacity: 0.95 → 0.7
+  - Added `backdropFilter: blur(8px)` for glass effect
+  - Border: 2px → 1px with softer white (0.25 opacity)
+  - Softer box shadows
+
+- **Avatar Visibility**
+  - Fixed z-index issues - all 24 avatars now visible
+  - Removed blur from background avatars
+  - Avatar z-index range: 18-32 (all on top)
+  - Gradient overlay z-index: 2 → 1
+  - Avatar container z-index: 10 → 50
+
+- **Avatar Click Behavior**
+  - Click to focus/enlarge avatar
+  - Auto-minimize after 2.5 seconds
+  - Shows name label when focused
+  - Enhanced glow effect when focused
+
+- **Sound Effects Integration in LoginBackground**
+  - Ambient pulse plays every 8-12 seconds
+  - Data packet sounds every 3-5 seconds
+  - Chat bubble sounds with 5% probability
+  - Audio initializes immediately on mount (no click required)
+
+#### Fixed
+- TypeScript error with avatar depth type comparison
+- Avatar z-index stacking order
+- Sound effects not playing (added `audioEnabled` check to all sound functions)
+
+---
+
 ## [0.2.0] - 2026-01-19
 
 ### Major Redesign - Dark Theme & Edgy Wordmark
@@ -177,6 +250,9 @@ digitalworkplace.ai/
 │   │   └── sso-callback/
 │   │       └── page.tsx            # OAuth callback handler
 │   ├── components/
+│   │   ├── audio/
+│   │   │   ├── BackgroundMusic.tsx # Music player (disabled)
+│   │   │   └── SoundToggle.tsx     # Sound effects toggle
 │   │   ├── brand/
 │   │   │   ├── Wordmark.tsx        # Basic wordmark
 │   │   │   ├── WordmarkEdgy.tsx    # SVG wordmark
@@ -186,7 +262,9 @@ digitalworkplace.ai/
 │   │   └── ui/
 │   │       └── button.tsx          # shadcn/ui Button
 │   └── lib/
-│       └── utils.ts                # Utility functions
+│       ├── utils.ts                # Utility functions
+│       ├── sounds.ts               # Web Audio API sound effects
+│       └── backgroundMusic.ts      # Procedural music (disabled)
 ├── components.json                  # shadcn/ui config
 ├── CLAUDE.md                        # Claude Code instructions
 ├── context.md                       # Project context
@@ -225,13 +303,14 @@ digitalworkplace.ai/
 
 ## Design System
 
-### Color Palette (v0.2.0)
+### Color Palette (v0.3.0)
 | Color | Hex | Usage |
 |-------|-----|-------|
 | Background Dark | #0f0f1a | Main background |
 | Background Mid | #1a1a2e | Cards, overlays |
 | Background Light | #16213e | Borders, accents |
 | Green Accent | #4ade80 | .ai, indicators |
+| Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
 | Green Glow | rgba(74,222,128,0.5) | Shadows |
 | Red Glitch | #ff0040 | Chromatic aberration |
 | Cyan Glitch | #00ffff | Chromatic aberration |
@@ -257,18 +336,18 @@ digitalworkplace.ai/
 
 ## Next Release Planning
 
-### [0.3.0] - Planned
+### [0.4.0] - Planned
 - Dashboard page after login
 - User profile management
 - Navigation header (dark theme)
 - Sign-up page redesign to match login
 
-### [0.4.0] - Planned
+### [0.5.0] - Planned
 - Supabase schema implementation
 - User data persistence
 - Team/organization support
 
-### [0.5.0] - Planned
+### [0.6.0] - Planned
 - AI Assistant integration
 - Document management features
 - Real-time collaboration

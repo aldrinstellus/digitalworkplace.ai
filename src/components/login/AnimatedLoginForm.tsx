@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 
 const AnimatedLoginForm = () => {
   const { isLoaded, signIn, setActive } = useSignIn();

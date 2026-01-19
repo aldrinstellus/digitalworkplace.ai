@@ -10,6 +10,7 @@ Digital Workplace AI is a Next.js 16 application with Clerk authentication and S
 - **Database**: Supabase
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Animations**: Framer Motion, GSAP
+- **Audio**: Web Audio API (procedural sound effects)
 - **Deployment**: Vercel
 
 ## Project Structure
@@ -29,6 +30,9 @@ src/
 │   └── sso-callback/       # OAuth callback handler
 │       └── page.tsx
 ├── components/
+│   ├── audio/              # Audio components
+│   │   ├── BackgroundMusic.tsx  # Background music player (disabled)
+│   │   └── SoundToggle.tsx      # Sound effects toggle (active)
 │   ├── brand/              # Brand identity components
 │   │   ├── Wordmark.tsx        # Basic animated wordmark
 │   │   ├── WordmarkEdgy.tsx    # SVG-based wordmark
@@ -38,7 +42,9 @@ src/
 │   └── ui/                 # shadcn/ui components
 │       └── button.tsx      # Button component
 └── lib/
-    └── utils.ts            # Utility functions (cn)
+    ├── utils.ts            # Utility functions (cn)
+    ├── sounds.ts           # Web Audio API sound effects
+    └── backgroundMusic.ts  # Procedural music generator (disabled)
 ```
 
 ## Key Files
@@ -53,10 +59,28 @@ src/
   - 24 floating avatar photos positioned across screen
   - Dark grey theme (#0f0f1a, #1a1a2e)
   - GSAP-powered floating animations
-  - 48 Framer Motion chat bubbles (high frequency)
+  - 15 max concurrent Framer Motion chat bubbles (40% slower speed)
+  - Lighter mint-green chat bubbles with 70% opacity
   - Slow bezier-curve green dot animations (7-15s)
   - Pulsing location indicators
   - Connection arc lines
+  - Avatar click-to-focus with auto-minimize (2.5s)
+  - Sound effects (ambient pulse, data packets, chat bubbles)
+
+### Audio System
+- `src/lib/sounds.ts` - Web Audio API sound effects:
+  - `playGlitchSound()` - Digital glitch effect
+  - `playDataPacketSound()` - Soft blip for data packets
+  - `playAmbientPulse()` - Subtle ambient pad (A minor chord)
+  - `playChatBubbleSound()` - Soft pop notification
+  - `playConnectionSound()` - Ultra-soft ping
+  - Sound enabled by default, respects toggle state
+
+- `src/components/audio/SoundToggle.tsx` - Toggle button:
+  - Fixed top-right position
+  - Green animated bars when ON
+  - Muted speaker icon when OFF
+  - Sound ON by default
 
 ### Brand Components
 - `src/components/brand/WordmarkGlitch.tsx` - Primary wordmark with:
@@ -106,6 +130,7 @@ npm run lint     # Run ESLint
 - Use `cn()` utility from `@/lib/utils` for conditional classes
 - Dark grey theme: #0f0f1a (bg), #1a1a2e (mid), #16213e (light)
 - Green accent: #4ade80
+- Lighter mint green for chat bubbles: rgba(134, 239, 172, 0.7)
 - Monospace fonts: JetBrains Mono, Fira Code, SF Mono
 
 ### TypeScript
@@ -122,6 +147,7 @@ npm run lint     # Run ESLint
 | Background Mid | #1a1a2e | Cards, overlays |
 | Background Light | #16213e | Borders, accents |
 | Green Accent | #4ade80 | .ai, indicators |
+| Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
 | White | #ffffff | Primary text |
 | White 75% | rgba(255,255,255,0.75) | Secondary text |
 
@@ -153,6 +179,11 @@ npx shadcn@latest add [component-name]
 1. Configure in Clerk Dashboard
 2. Add button in sign-in page
 3. Use `signIn.authenticateWithRedirect()` with appropriate strategy
+
+### Modifying Sound Effects
+1. Edit `src/lib/sounds.ts` for sound generation
+2. Edit `src/components/audio/SoundToggle.tsx` for toggle UI
+3. Sounds auto-play on page load (enabled by default)
 
 ## Key Animation Patterns
 
@@ -203,4 +234,28 @@ gsap.to(element, {
     </motion.div>
   ))}
 </AnimatePresence>
+```
+
+### Web Audio Sound Effect
+```typescript
+export const playChatBubbleSound = (): void => {
+  if (!audioEnabled) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(300, now + 0.1);
+
+  const gainNode = ctx.createGain();
+  gainNode.gain.setValueAtTime(0.02, now);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+  osc.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.1);
+};
 ```

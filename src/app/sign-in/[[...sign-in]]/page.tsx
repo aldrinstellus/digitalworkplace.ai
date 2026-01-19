@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/nextjs";
 import LoginBackground from "@/components/login/LoginBackground";
 import WordmarkGlitch from "@/components/brand/WordmarkGlitch";
-import BackgroundMusic from "@/components/audio/BackgroundMusic";
+import SoundToggle from "@/components/audio/SoundToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -30,12 +30,8 @@ export default function SignInPage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#0f0f1a]">
-      {/* Background Music - Dark Ambient */}
-      <BackgroundMusic
-        src="/audio/ambient-dark.mp3"
-        volume={0.12}
-        fadeInDuration={4000}
-      />
+      {/* Sound Effects Toggle */}
+      <SoundToggle />
 
       {/* Full-screen World Map Background */}
       <div className="absolute inset-0">

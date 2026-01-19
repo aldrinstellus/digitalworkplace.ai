@@ -2,7 +2,21 @@
 
 // Audio context singleton
 let audioContext: AudioContext | null = null;
-let audioInitialized = false;
+let audioEnabled = true;
+
+// Check if audio has been enabled by user
+export const isAudioEnabled = (): boolean => audioEnabled;
+
+// Enable audio (called when user clicks Enable Audio button)
+export const enableAudio = (): void => {
+  audioEnabled = true;
+  initAudio();
+};
+
+// Disable audio (called when user clicks Disable Audio button)
+export const disableAudio = (): void => {
+  audioEnabled = false;
+};
 
 const getAudioContext = (): AudioContext | null => {
   if (typeof window === "undefined") return null;
@@ -30,46 +44,20 @@ const ensureAudioContextResumed = async (): Promise<boolean> => {
   return ctx.state === "running";
 };
 
-// Initialize and resume audio context - tries to auto-play
+// Initialize and resume audio context
 export const initAudio = (): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
-  // Try to resume immediately
+  // Try to resume
   ensureAudioContextResumed();
-
-  // If not initialized, set up listeners to resume on any interaction
-  if (!audioInitialized) {
-    audioInitialized = true;
-
-    const resumeAudio = () => {
-      ensureAudioContextResumed();
-    };
-
-    // Listen for ANY user interaction to enable audio
-    const events = [
-      "click",
-      "touchstart",
-      "touchend",
-      "keydown",
-      "keyup",
-      "scroll",
-      "mousemove",
-      "mousedown",
-      "mouseup",
-      "wheel",
-      "pointerdown",
-      "pointermove",
-    ];
-
-    events.forEach((event) => {
-      document.addEventListener(event, resumeAudio, { passive: true, capture: true });
-    });
-  }
 };
 
 // Pleasant digital glitch sound effect - softer, more musical
 export const playGlitchSound = (intensity: number = 1): void => {
+  // Only play if audio has been enabled by user
+  if (!audioEnabled) return;
+
   const ctx = getAudioContext();
   if (!ctx) return;
 
@@ -213,6 +201,8 @@ export const playGlitchSound = (intensity: number = 1): void => {
 
 // Data packet / node travel sound - soft blip
 export const playDataPacketSound = (): void => {
+  if (!audioEnabled) return;
+
   const ctx = getAudioContext();
   if (!ctx) return;
 
@@ -244,6 +234,8 @@ export const playDataPacketSound = (): void => {
 
 // Ambient floating/cascade sound - very subtle pad
 export const playAmbientPulse = (): void => {
+  if (!audioEnabled) return;
+
   const ctx = getAudioContext();
   if (!ctx) return;
 
@@ -280,6 +272,8 @@ export const playAmbientPulse = (): void => {
 
 // Chat bubble pop sound - soft notification
 export const playChatBubbleSound = (): void => {
+  if (!audioEnabled) return;
+
   const ctx = getAudioContext();
   if (!ctx) return;
 
@@ -304,6 +298,8 @@ export const playChatBubbleSound = (): void => {
 
 // Connection line pulse sound - very subtle
 export const playConnectionSound = (): void => {
+  if (!audioEnabled) return;
+
   const ctx = getAudioContext();
   if (!ctx) return;
 

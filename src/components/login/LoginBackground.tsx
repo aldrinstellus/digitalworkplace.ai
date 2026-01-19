@@ -10,6 +10,26 @@ import {
   initAudio
 } from "@/lib/sounds";
 
+// Pre-generate random particle data to avoid Math.random during render
+const generateBackgroundParticles = (count: number) => {
+  return Array.from({ length: count }, (_, i) => {
+    const depth = i % 3;
+    return {
+      left: 2 + Math.random() * 96,
+      top: 2 + Math.random() * 96,
+      xOffset: (Math.random() - 0.5) * 30,
+      duration: 4 + Math.random() * 3,
+      delay: Math.random() * 2,
+      depth,
+      size: depth === 0 ? 2 : depth === 1 ? 3 : 4,
+      opacity: depth === 0 ? 0.15 : depth === 1 ? 0.25 : 0.4,
+      isGreen: i % 4 === 0,
+    };
+  });
+};
+
+const BACKGROUND_PARTICLES = generateBackgroundParticles(40);
+
 // 24 unique avatar photos - diverse professional headshots
 const uniqueAvatars = [
   { id: 1, src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face", name: "Sarah" },
@@ -90,41 +110,41 @@ const chatMessages = [
   "High five! ✋",
 ];
 
-// 24 avatar positions spread across the entire screen
+// 24 avatar positions spread across the entire screen - ALL visible with high z-index
 const avatarPositions = [
-  // Top row
-  { top: "5%", left: "5%", rotate: -3, scale: 0.75, zIndex: 3, depth: "back" as const },
-  { top: "8%", left: "18%", rotate: 4, scale: 0.9, zIndex: 8, depth: "middle" as const },
-  { top: "3%", left: "35%", rotate: -2, scale: 0.7, zIndex: 2, depth: "back" as const },
-  { top: "6%", left: "52%", rotate: 5, scale: 0.85, zIndex: 6, depth: "middle" as const },
-  { top: "4%", left: "70%", rotate: -4, scale: 0.72, zIndex: 2, depth: "back" as const },
-  { top: "7%", left: "88%", rotate: 3, scale: 0.8, zIndex: 5, depth: "middle" as const },
+  // Top row - all clearly visible
+  { top: "5%", left: "5%", rotate: -3, scale: 0.8, zIndex: 20, depth: "middle" as const },
+  { top: "8%", left: "18%", rotate: 4, scale: 0.95, zIndex: 25, depth: "front" as const },
+  { top: "3%", left: "35%", rotate: -2, scale: 0.75, zIndex: 18, depth: "middle" as const },
+  { top: "6%", left: "52%", rotate: 5, scale: 0.9, zIndex: 22, depth: "front" as const },
+  { top: "4%", left: "70%", rotate: -4, scale: 0.78, zIndex: 19, depth: "middle" as const },
+  { top: "7%", left: "88%", rotate: 3, scale: 0.85, zIndex: 21, depth: "front" as const },
 
   // Upper middle row
-  { top: "22%", left: "8%", rotate: 2, scale: 1.1, zIndex: 12, depth: "front" as const },
-  { top: "25%", left: "25%", rotate: -5, scale: 0.78, zIndex: 4, depth: "back" as const },
-  { top: "20%", left: "75%", rotate: 4, scale: 0.88, zIndex: 7, depth: "middle" as const },
-  { top: "24%", left: "92%", rotate: -3, scale: 1.05, zIndex: 11, depth: "front" as const },
+  { top: "22%", left: "8%", rotate: 2, scale: 1.1, zIndex: 30, depth: "front" as const },
+  { top: "25%", left: "25%", rotate: -5, scale: 0.82, zIndex: 24, depth: "middle" as const },
+  { top: "20%", left: "75%", rotate: 4, scale: 0.92, zIndex: 26, depth: "front" as const },
+  { top: "24%", left: "92%", rotate: -3, scale: 1.05, zIndex: 28, depth: "front" as const },
 
   // Middle row (avoiding center for login card)
-  { top: "42%", left: "3%", rotate: -2, scale: 0.95, zIndex: 9, depth: "middle" as const },
-  { top: "45%", left: "15%", rotate: 5, scale: 0.7, zIndex: 3, depth: "back" as const },
-  { top: "48%", left: "85%", rotate: -4, scale: 0.75, zIndex: 4, depth: "back" as const },
-  { top: "44%", left: "95%", rotate: 3, scale: 0.92, zIndex: 8, depth: "middle" as const },
+  { top: "42%", left: "3%", rotate: -2, scale: 0.95, zIndex: 27, depth: "front" as const },
+  { top: "45%", left: "15%", rotate: 5, scale: 0.78, zIndex: 23, depth: "middle" as const },
+  { top: "48%", left: "85%", rotate: -4, scale: 0.8, zIndex: 22, depth: "middle" as const },
+  { top: "44%", left: "95%", rotate: 3, scale: 0.95, zIndex: 26, depth: "front" as const },
 
   // Lower middle row
-  { top: "62%", left: "6%", rotate: 4, scale: 0.82, zIndex: 5, depth: "middle" as const },
-  { top: "65%", left: "22%", rotate: -3, scale: 1.08, zIndex: 13, depth: "front" as const },
-  { top: "68%", left: "78%", rotate: 2, scale: 1.0, zIndex: 10, depth: "front" as const },
-  { top: "64%", left: "90%", rotate: -5, scale: 0.73, zIndex: 3, depth: "back" as const },
+  { top: "62%", left: "6%", rotate: 4, scale: 0.88, zIndex: 25, depth: "front" as const },
+  { top: "65%", left: "22%", rotate: -3, scale: 1.08, zIndex: 32, depth: "front" as const },
+  { top: "68%", left: "78%", rotate: 2, scale: 1.0, zIndex: 29, depth: "front" as const },
+  { top: "64%", left: "90%", rotate: -5, scale: 0.8, zIndex: 23, depth: "middle" as const },
 
   // Bottom row
-  { top: "82%", left: "4%", rotate: -2, scale: 0.76, zIndex: 4, depth: "back" as const },
-  { top: "85%", left: "18%", rotate: 5, scale: 0.85, zIndex: 6, depth: "middle" as const },
-  { top: "88%", left: "35%", rotate: -4, scale: 0.9, zIndex: 7, depth: "middle" as const },
-  { top: "84%", left: "55%", rotate: 3, scale: 0.72, zIndex: 2, depth: "back" as const },
-  { top: "86%", left: "72%", rotate: -3, scale: 1.05, zIndex: 11, depth: "front" as const },
-  { top: "83%", left: "92%", rotate: 4, scale: 0.78, zIndex: 5, depth: "middle" as const },
+  { top: "82%", left: "4%", rotate: -2, scale: 0.82, zIndex: 24, depth: "middle" as const },
+  { top: "85%", left: "18%", rotate: 5, scale: 0.9, zIndex: 26, depth: "front" as const },
+  { top: "88%", left: "35%", rotate: -4, scale: 0.95, zIndex: 27, depth: "front" as const },
+  { top: "84%", left: "55%", rotate: 3, scale: 0.78, zIndex: 21, depth: "middle" as const },
+  { top: "86%", left: "72%", rotate: -3, scale: 1.05, zIndex: 30, depth: "front" as const },
+  { top: "83%", left: "92%", rotate: 4, scale: 0.85, zIndex: 25, depth: "front" as const },
 ];
 
 interface ChatBubble {
@@ -143,31 +163,50 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
   const animationsRef = useRef<gsap.core.Tween[]>([]);
   const [chatBubbles, setChatBubbles] = useState<ChatBubble[]>([]);
   const bubbleIdRef = useRef(0);
-  const [audioInitialized, setAudioInitialized] = useState(false);
+  const [focusedAvatarId, setFocusedAvatarId] = useState<number | null>(null);
+  const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize audio on first user interaction
-  const handleInteraction = useCallback(() => {
-    if (!audioInitialized) {
-      initAudio();
-      setAudioInitialized(true);
-    }
-  }, [audioInitialized]);
-
-  // Add click listener for audio initialization
+  // Initialize audio immediately on mount
   useEffect(() => {
     if (enableSound) {
-      window.addEventListener("click", handleInteraction, { once: true });
-      window.addEventListener("touchstart", handleInteraction, { once: true });
-      return () => {
-        window.removeEventListener("click", handleInteraction);
-        window.removeEventListener("touchstart", handleInteraction);
-      };
+      initAudio();
     }
-  }, [enableSound, handleInteraction]);
+  }, [enableSound]);
 
-  // Ambient sound pulse
+  // Handle avatar click - focus and auto-minimize
+  const handleAvatarClick = useCallback((avatarId: number) => {
+    // Clear any existing timeout
+    if (focusTimeoutRef.current) {
+      clearTimeout(focusTimeoutRef.current);
+    }
+
+    // If clicking the same avatar, unfocus it
+    if (focusedAvatarId === avatarId) {
+      setFocusedAvatarId(null);
+      return;
+    }
+
+    // Focus the clicked avatar
+    setFocusedAvatarId(avatarId);
+
+    // Auto-minimize after 2.5 seconds
+    focusTimeoutRef.current = setTimeout(() => {
+      setFocusedAvatarId(null);
+    }, 2500);
+  }, [focusedAvatarId]);
+
+  // Cleanup focus timeout on unmount
   useEffect(() => {
-    if (!enableSound || !audioInitialized) return;
+    return () => {
+      if (focusTimeoutRef.current) {
+        clearTimeout(focusTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Ambient sound pulse - plays automatically
+  useEffect(() => {
+    if (!enableSound) return;
 
     // Play ambient pulse every 8-12 seconds
     const interval = setInterval(() => {
@@ -177,11 +216,11 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
     }, 8000 + Math.random() * 4000);
 
     return () => clearInterval(interval);
-  }, [enableSound, audioInitialized]);
+  }, [enableSound]);
 
-  // Data packet sounds
+  // Data packet sounds - plays automatically
   useEffect(() => {
-    if (!enableSound || !audioInitialized) return;
+    if (!enableSound) return;
 
     // Play data packet sound periodically
     const interval = setInterval(() => {
@@ -191,7 +230,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
     }, 3000 + Math.random() * 2000);
 
     return () => clearInterval(interval);
-  }, [enableSound, audioInitialized]);
+  }, [enableSound]);
 
   // GSAP floating animation for each avatar with 3D depth
   useEffect(() => {
@@ -199,9 +238,9 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
       if (!avatarEl) return;
 
       const position = avatarPositions[index];
-      const depthMultiplier = position.depth === "back" ? 0.5 : position.depth === "middle" ? 0.75 : 1;
+      const depthMultiplier = position.depth === "middle" ? 0.85 : 1;
 
-      // Initial entrance animation with 3D effect
+      // Initial entrance animation with 3D effect - ALL avatars fully visible
       gsap.fromTo(
         avatarEl,
         {
@@ -212,7 +251,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
         },
         {
           scale: position.scale,
-          opacity: position.depth === "back" ? 0.5 : position.depth === "middle" ? 0.75 : 1,
+          opacity: 1, // All avatars fully visible
           rotationY: 0,
           rotationX: 0,
           rotation: position.rotate,
@@ -246,53 +285,48 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
       setTimeout(floatAnimation, 800 + index * 100);
     });
 
+    // Copy ref value for cleanup
+    const animations = animationsRef.current;
     return () => {
-      animationsRef.current.forEach((anim) => anim.kill());
+      animations.forEach((anim) => anim.kill());
     };
   }, []);
 
-  // Random chat bubbles appearing - HIGH FREQUENCY for real-time feel
+  // Random chat bubbles appearing - reduced by 40% from original speed
   useEffect(() => {
     const showRandomBubble = () => {
-      const frontMiddleIndices = avatarPositions
-        .map((p, i) => ({ depth: p.depth, index: i }))
-        .filter((p) => p.depth !== "back")
-        .map((p) => p.index);
-
-      const randomAvatarIndex = frontMiddleIndices[Math.floor(Math.random() * frontMiddleIndices.length)];
+      // ALL avatars can have messages - pick any random avatar
+      const randomAvatarIndex = Math.floor(Math.random() * uniqueAvatars.length);
       const randomMessage = chatMessages[Math.floor(Math.random() * chatMessages.length)];
       const newBubbleId = bubbleIdRef.current++;
 
       setChatBubbles((prev) => {
-        const filtered = prev.length >= 10 ? prev.slice(1) : prev;
+        // Allow up to 15 concurrent bubbles
+        const filtered = prev.length >= 15 ? prev.slice(1) : prev;
         return [...filtered, { id: newBubbleId, avatarIndex: randomAvatarIndex, message: randomMessage }];
       });
 
       // Play chat bubble sound (with low probability to avoid sound spam)
-      if (enableSound && audioInitialized && Math.random() > 0.85) {
+      if (enableSound && Math.random() > 0.95) {
         playChatBubbleSound();
       }
 
+      // Longer bubble duration (40% slower: 1.7-2.5 seconds)
       setTimeout(() => {
         setChatBubbles((prev) => prev.filter((b) => b.id !== newBubbleId));
-      }, 2000 + Math.random() * 1000);
+      }, 1700 + Math.random() * 800);
     };
 
-    // Initial burst of messages - rapid fire
-    setTimeout(showRandomBubble, 400);
-    setTimeout(showRandomBubble, 600);
-    setTimeout(showRandomBubble, 800);
-    setTimeout(showRandomBubble, 1000);
-    setTimeout(showRandomBubble, 1200);
-    setTimeout(showRandomBubble, 1400);
-    setTimeout(showRandomBubble, 1700);
-    setTimeout(showRandomBubble, 2000);
+    // Initial burst of messages - slower by 40%
+    for (let i = 0; i < 12; i++) {
+      setTimeout(showRandomBubble, 140 + i * 140);
+    }
 
-    // Continuous messages - very fast interval
-    const interval = setInterval(showRandomBubble, 600 + Math.random() * 400);
+    // Continuous messages - 40% slower interval (210-400ms)
+    const interval = setInterval(showRandomBubble, 210 + Math.random() * 190);
 
     return () => clearInterval(interval);
-  }, [enableSound, audioInitialized]);
+  }, [enableSound]);
 
   return (
     <div
@@ -431,16 +465,16 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
 
           {/* Animated data packets along specific connection paths */}
           {[
-            { x1: 150, y1: 150, x2: 420, y2: 140, duration: 12, delay: 0 },
-            { x1: 200, y1: 180, x2: 480, y2: 160, duration: 10, delay: 3 },
-            { x1: 480, y1: 160, x2: 780, y2: 220, duration: 14, delay: 6 },
-            { x1: 780, y1: 220, x2: 850, y2: 200, duration: 8, delay: 2 },
-            { x1: 280, y1: 350, x2: 520, y2: 300, duration: 11, delay: 8 },
-            { x1: 700, y1: 200, x2: 880, y2: 320, duration: 13, delay: 5 },
-            { x1: 200, y1: 180, x2: 280, y2: 350, duration: 9, delay: 10 },
-            { x1: 650, y1: 180, x2: 750, y2: 240, duration: 7, delay: 4 },
-            { x1: 320, y1: 280, x2: 580, y2: 250, duration: 15, delay: 7 },
-            { x1: 420, y1: 140, x2: 650, y2: 180, duration: 10, delay: 1 },
+            { x1: 150, y1: 150, x2: 420, y2: 140, duration: 12, delay: 0, repeatDelay: 3.2 },
+            { x1: 200, y1: 180, x2: 480, y2: 160, duration: 10, delay: 3, repeatDelay: 4.8 },
+            { x1: 480, y1: 160, x2: 780, y2: 220, duration: 14, delay: 6, repeatDelay: 2.5 },
+            { x1: 780, y1: 220, x2: 850, y2: 200, duration: 8, delay: 2, repeatDelay: 5.1 },
+            { x1: 280, y1: 350, x2: 520, y2: 300, duration: 11, delay: 8, repeatDelay: 3.8 },
+            { x1: 700, y1: 200, x2: 880, y2: 320, duration: 13, delay: 5, repeatDelay: 4.2 },
+            { x1: 200, y1: 180, x2: 280, y2: 350, duration: 9, delay: 10, repeatDelay: 2.9 },
+            { x1: 650, y1: 180, x2: 750, y2: 240, duration: 7, delay: 4, repeatDelay: 5.5 },
+            { x1: 320, y1: 280, x2: 580, y2: 250, duration: 15, delay: 7, repeatDelay: 3.5 },
+            { x1: 420, y1: 140, x2: 650, y2: 180, duration: 10, delay: 1, repeatDelay: 4.0 },
           ].map((packet, i) => {
             const midX = (packet.x1 + packet.x2) / 2;
             const midY = Math.min(packet.y1, packet.y2) - 50;
@@ -468,7 +502,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                   delay: packet.delay,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  repeatDelay: 2 + Math.random() * 4,
+                  repeatDelay: packet.repeatDelay,
                 }}
               />
             );
@@ -476,9 +510,9 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
         </svg>
       </motion.div>
 
-      {/* Animated gradient overlay for atmosphere */}
+      {/* Animated gradient overlay for atmosphere - low z-index to not cover avatars */}
       <motion.div
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-40 pointer-events-none"
         animate={{
           background: [
             "radial-gradient(ellipse at 20% 20%, rgba(74,222,128,0.08) 0%, transparent 50%)",
@@ -492,56 +526,53 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        style={{ zIndex: 2 }}
+        style={{ zIndex: 1 }}
       />
 
-      {/* Floating particles - MORE particles */}
-      {[...Array(40)].map((_, i) => {
-        const depth = i % 3;
-        const size = depth === 0 ? 2 : depth === 1 ? 3 : 4;
-        const opacity = depth === 0 ? 0.15 : depth === 1 ? 0.25 : 0.4;
+      {/* Floating particles - MORE particles - low z-index */}
+      {BACKGROUND_PARTICLES.map((particle, i) => (
+        <motion.div
+          key={`particle-${i}`}
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: particle.size,
+            height: particle.size,
+            backgroundColor: particle.isGreen ? "#4ade80" : "rgba(255,255,255,0.5)",
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
+            zIndex: 3,
+          }}
+          animate={{
+            y: [0, -40 - particle.depth * 15, 0],
+            x: [0, particle.xOffset, 0],
+            opacity: [particle.opacity * 0.5, particle.opacity, particle.opacity * 0.5],
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: particle.duration,
+            repeat: Infinity,
+            delay: particle.delay,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
 
-        return (
-          <motion.div
-            key={`particle-${i}`}
-            className="absolute rounded-full"
-            style={{
-              width: size,
-              height: size,
-              backgroundColor: i % 4 === 0 ? "#4ade80" : "rgba(255,255,255,0.5)",
-              left: `${2 + Math.random() * 96}%`,
-              top: `${2 + Math.random() * 96}%`,
-              zIndex: depth,
-            }}
-            animate={{
-              y: [0, -40 - depth * 15, 0],
-              x: [0, (Math.random() - 0.5) * 30, 0],
-              opacity: [opacity * 0.5, opacity, opacity * 0.5],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-              ease: "easeInOut",
-            }}
-          />
-        );
-      })}
-
-      {/* 3D Container for avatars */}
+      {/* 3D Container for avatars - high z-index to stay above overlays */}
       <div
         className="absolute inset-0"
         style={{
           transformStyle: "preserve-3d",
           transform: "rotateX(3deg)",
+          zIndex: 50,
         }}
       >
         {/* Animated Avatar Cards - 24 avatars */}
         {uniqueAvatars.map((avatar, index) => {
           const position = avatarPositions[index];
           const bubble = chatBubbles.find((b) => b.avatarIndex === index);
-          const baseSize = position.depth === "back" ? 48 : position.depth === "middle" ? 56 : 68;
+          const baseSize = position.depth === "middle" ? 58 : 68;
+          const isFocused = focusedAvatarId === avatar.id;
+          const focusedSize = baseSize * 1.6;
 
           return (
             <div
@@ -553,82 +584,140 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
               style={{
                 top: position.top,
                 left: position.left,
-                zIndex: position.zIndex,
+                zIndex: isFocused ? 100 : position.zIndex,
                 transformStyle: "preserve-3d",
-                filter: position.depth === "back" ? "blur(1.5px)" : position.depth === "middle" ? "blur(0.5px)" : "none",
+                // No blur - all avatars clearly visible
               }}
             >
-              {/* Chat Bubble */}
+              {/* Chat Bubble - Bubbly and Fun! */}
               <AnimatePresence>
-                {bubble && (
+                {bubble && !isFocused && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.5, y: 15, rotateX: -20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-                    exit={{ opacity: 0, scale: 0.5, y: -15, rotateX: 20 }}
-                    transition={{ duration: 0.35, ease: "backOut" }}
-                    className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap"
-                    style={{ zIndex: 100 }}
+                    initial={{ opacity: 0, scale: 0.3, y: 20 }}
+                    animate={{
+                      opacity: 1,
+                      scale: [0.3, 1.15, 1],
+                      y: 0,
+                      rotate: [0, -3, 3, 0],
+                    }}
+                    exit={{ opacity: 0, scale: 0.5, y: -20 }}
+                    transition={{
+                      duration: 0.4,
+                      ease: "backOut",
+                      scale: { duration: 0.5, times: [0, 0.6, 1] },
+                      rotate: { duration: 0.4, times: [0, 0.3, 0.6, 1] },
+                    }}
+                    className="absolute -top-12 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                    style={{ zIndex: 200 }}
                   >
-                    <div
-                      className="px-3 py-1.5 rounded-full text-xs font-medium"
+                    <motion.div
+                      className="px-4 py-2 rounded-2xl text-sm font-semibold"
+                      animate={{
+                        y: [0, -2, 0],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                       style={{
-                        background: "rgba(30, 30, 45, 0.95)",
-                        border: "1px solid rgba(74, 222, 128, 0.3)",
-                        color: "#e5e5e5",
-                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(74, 222, 128, 0.1)",
+                        background: "linear-gradient(135deg, rgba(134, 239, 172, 0.7) 0%, rgba(110, 231, 183, 0.7) 100%)",
+                        border: "1px solid rgba(255, 255, 255, 0.25)",
+                        color: "#0f0f1a",
+                        boxShadow: "0 6px 24px rgba(134, 239, 172, 0.25), 0 3px 10px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255,255,255,0.2)",
+                        textShadow: "0 1px 0 rgba(255,255,255,0.2)",
+                        backdropFilter: "blur(8px)",
                       }}
                     >
                       {bubble.message}
-                      <div
-                        className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rotate-45"
-                        style={{
-                          background: "rgba(30, 30, 45, 0.95)",
-                          borderRight: "1px solid rgba(74, 222, 128, 0.3)",
-                          borderBottom: "1px solid rgba(74, 222, 128, 0.3)",
+                      {/* Bouncy bubble tail */}
+                      <motion.div
+                        className="absolute -bottom-2 left-1/2 -translate-x-1/2"
+                        animate={{
+                          scaleY: [1, 1.2, 1],
                         }}
-                      />
-                    </div>
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      >
+                        <div
+                          className="w-4 h-4 rotate-45"
+                          style={{
+                            background: "linear-gradient(135deg, rgba(110, 231, 183, 0.7) 0%, rgba(134, 239, 172, 0.7) 100%)",
+                            borderRight: "1px solid rgba(255, 255, 255, 0.25)",
+                            borderBottom: "1px solid rgba(255, 255, 255, 0.25)",
+                            boxShadow: "3px 3px 6px rgba(0,0,0,0.15)",
+                          }}
+                        />
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
 
               {/* Avatar Card with 3D effect */}
               <motion.div
-                whileHover={{
+                onClick={() => handleAvatarClick(avatar.id)}
+                whileHover={!isFocused ? {
                   scale: 1.15,
                   rotateY: 8,
                   transition: { duration: 0.3 },
+                } : undefined}
+                animate={isFocused ? {
+                  scale: 1.6,
+                  rotateY: 0,
+                  rotateX: 0,
+                } : {
+                  scale: 1,
                 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="relative cursor-pointer"
                 style={{ transformStyle: "preserve-3d" }}
               >
-                {/* Glow effect */}
-                <div
+                {/* Glow effect - enhanced when focused */}
+                <motion.div
                   className="absolute rounded-lg"
+                  animate={{
+                    width: isFocused ? focusedSize + 24 : baseSize + 12,
+                    height: isFocused ? focusedSize + 24 : baseSize + 12,
+                    background: isFocused
+                      ? "rgba(74, 222, 128, 0.4)"
+                      : position.depth === "front"
+                        ? "rgba(74, 222, 128, 0.2)"
+                        : "transparent",
+                    filter: isFocused ? "blur(20px)" : "blur(12px)",
+                    top: isFocused ? -12 : -6,
+                    left: isFocused ? -12 : -6,
+                  }}
+                  transition={{ duration: 0.4 }}
                   style={{
-                    width: baseSize + 12,
-                    height: baseSize + 12,
-                    background: position.depth === "front" ? "rgba(74, 222, 128, 0.2)" : "transparent",
-                    filter: "blur(12px)",
                     transform: "translateZ(-15px)",
-                    top: -6,
-                    left: -6,
                   }}
                 />
 
                 {/* Main Card */}
-                <div
+                <motion.div
                   className="rounded-lg overflow-hidden"
+                  animate={{
+                    width: isFocused ? focusedSize : baseSize,
+                    height: isFocused ? focusedSize : baseSize,
+                  }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                   style={{
-                    width: baseSize,
-                    height: baseSize,
                     background: "linear-gradient(135deg, #2a2a3e 0%, #1a1a2e 100%)",
-                    boxShadow:
-                      position.depth === "front"
+                    boxShadow: isFocused
+                      ? "0 25px 50px rgba(0,0,0,0.6), 0 0 0 2px rgba(74,222,128,0.4), 0 0 40px rgba(74,222,128,0.2), inset 0 1px 0 rgba(255,255,255,0.15)"
+                      : position.depth === "front"
                         ? "0 15px 35px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,222,128,0.2), inset 0 1px 0 rgba(255,255,255,0.1)"
                         : "0 8px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
                     transform: "translateZ(0)",
-                    border: position.depth === "front" ? "1px solid rgba(74,222,128,0.15)" : "1px solid rgba(255,255,255,0.05)",
+                    border: isFocused
+                      ? "2px solid rgba(74,222,128,0.5)"
+                      : position.depth === "front"
+                        ? "1px solid rgba(74,222,128,0.15)"
+                        : "1px solid rgba(255,255,255,0.05)",
                   }}
                 >
                   <img
@@ -637,17 +726,46 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                </div>
+                </motion.div>
+
+                {/* Name label - shows when focused */}
+                <AnimatePresence>
+                  {isFocused && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 5, scale: 0.9 }}
+                      transition={{ duration: 0.3, delay: 0.1 }}
+                      className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap"
+                    >
+                      <div
+                        className="px-4 py-1.5 rounded-full text-sm font-medium"
+                        style={{
+                          background: "rgba(20, 20, 35, 0.95)",
+                          border: "1px solid rgba(74, 222, 128, 0.4)",
+                          color: "#4ade80",
+                          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(74, 222, 128, 0.15)",
+                          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                          letterSpacing: "0.05em",
+                        }}
+                      >
+                        {avatar.name}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* Online indicator */}
                 <motion.div
                   animate={{
-                    scale: [1, 1.4, 1],
+                    scale: isFocused ? [1.2, 1.6, 1.2] : [1, 1.4, 1],
                     boxShadow: [
                       "0 0 0 0 rgba(74, 222, 128, 0.7)",
                       "0 0 0 8px rgba(74, 222, 128, 0)",
                       "0 0 0 0 rgba(74, 222, 128, 0.7)",
                     ],
+                    width: isFocused ? 18 : position.depth === "front" ? 14 : position.depth === "middle" ? 11 : 8,
+                    height: isFocused ? 18 : position.depth === "front" ? 14 : position.depth === "middle" ? 11 : 8,
                   }}
                   transition={{
                     duration: 2,
@@ -657,10 +775,8 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                   }}
                   className="absolute -bottom-1 -right-1 bg-green-400 rounded-full"
                   style={{
-                    width: position.depth === "front" ? 14 : position.depth === "middle" ? 11 : 8,
-                    height: position.depth === "front" ? 14 : position.depth === "middle" ? 11 : 8,
                     transform: "translateZ(10px)",
-                    border: "2px solid #1a1a2e",
+                    border: isFocused ? "3px solid #1a1a2e" : "2px solid #1a1a2e",
                   }}
                 />
               </motion.div>
@@ -669,21 +785,23 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
         })}
       </div>
 
-      {/* Vignette overlay for depth */}
+      {/* Vignette overlay for depth - low z-index */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: "radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 100%)",
+          zIndex: 5,
         }}
       />
 
-      {/* Subtle grid pattern */}
+      {/* Subtle grid pattern - low z-index */}
       <div
         className="absolute inset-0 pointer-events-none opacity-5"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
                            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
           backgroundSize: "50px 50px",
+          zIndex: 5,
         }}
       />
     </div>

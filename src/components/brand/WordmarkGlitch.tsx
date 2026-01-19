@@ -36,7 +36,6 @@ const scrambleText = (text: string, intensity: number = 1): string => {
 const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound = true }) => {
   const [glitchActive, setGlitchActive] = useState(false);
   const [glitchIntensity, setGlitchIntensity] = useState(0);
-  const [audioInitialized, setAudioInitialized] = useState(false);
 
   // Scrambled text states
   const [digitalText, setDigitalText] = useState(ORIGINAL_TEXT.digital);
@@ -45,15 +44,16 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
 
   // Ref for scramble interval
   const scrambleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioInitializedRef = useRef(false);
 
   // Auto-initialize audio on mount
   useEffect(() => {
-    if (enableSound && !audioInitialized) {
+    if (enableSound && !audioInitializedRef.current) {
       // Try to initialize audio immediately
       initAudio();
-      setAudioInitialized(true);
+      audioInitializedRef.current = true;
     }
-  }, [enableSound, audioInitialized]);
+  }, [enableSound]);
 
   // Function to start text scrambling
   const startScrambling = useCallback((intensity: number, duration: number) => {
@@ -99,7 +99,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
       setGlitchActive(true);
 
       // Play glitch sound
-      if (enableSound && audioInitialized) {
+      if (enableSound && audioInitializedRef.current) {
         playGlitchSound(intensity);
       }
 
@@ -114,7 +114,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
           if (Math.random() > 0.6) {
             setGlitchActive(true);
             // Gentler second sound
-            if (enableSound && audioInitialized) {
+            if (enableSound && audioInitializedRef.current) {
               playGlitchSound(intensity * 0.4);
             }
             // Softer second scramble
@@ -139,7 +139,7 @@ const WordmarkGlitch: FC<WordmarkGlitchProps> = ({ className = "", enableSound =
       clearTimeout(initialTimeout);
       clearInterval(interval);
     };
-  }, [enableSound, audioInitialized, startScrambling]);
+  }, [enableSound, startScrambling]);
 
   return (
     <motion.div

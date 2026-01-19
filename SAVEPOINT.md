@@ -68,7 +68,7 @@
 |------|-----------|
 | **Root Layout** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/layout.tsx` |
 | **Global CSS** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/globals.css` |
-| **Middleware** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/middleware.ts` |
+| **Proxy (Auth)** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/proxy.ts` |
 | **Dashboard** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/dashboard/page.tsx` |
 | **Admin** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/admin/page.tsx` |
 | **Sign-in Page** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/sign-in/[[...sign-in]]/page.tsx` |
@@ -204,11 +204,12 @@ updateUserRole(userId, role)
 
 ## Auth Optimization (v0.4.1)
 
-### Middleware Implementation
-- **File**: `/Users/aldrin-mac-mini/digitalworkplace.ai/src/middleware.ts`
+### Proxy Implementation (Next.js 16)
+- **File**: `/Users/aldrin-mac-mini/digitalworkplace.ai/src/proxy.ts`
 - Protects routes server-side (no client-side redirect flash)
-- Public routes: `/sign-in`, `/sign-up`, `/sso-callback`, `/`
+- Public routes: `/`, `/sign-in`, `/sign-up`, `/sso-callback`
 - All other routes require authentication
+- Note: Next.js 16 uses `proxy.ts` instead of deprecated `middleware.ts`
 
 ### Performance Improvements
 - Removed redundant loading states

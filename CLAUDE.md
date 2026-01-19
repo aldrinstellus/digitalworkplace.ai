@@ -46,6 +46,7 @@ src/
 │   │   └── LoginBackground.tsx # World map with floating avatars
 │   └── ui/                 # shadcn/ui components
 │       └── button.tsx      # Button component
+├── proxy.ts                # Clerk auth proxy (Next.js 16)
 └── lib/
     ├── utils.ts            # Utility functions (cn)
     ├── supabase.ts         # Supabase client configuration
@@ -57,6 +58,7 @@ src/
 ## Key Files
 
 ### Authentication
+- `src/proxy.ts` - Clerk auth proxy (server-side route protection)
 - `src/app/layout.tsx` - ClerkProvider wrapper
 - `src/app/sign-in/[[...sign-in]]/page.tsx` - Google OAuth login
 - `src/app/sso-callback/page.tsx` - OAuth redirect handler

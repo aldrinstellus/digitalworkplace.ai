@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 const AnimatedLoginForm = () => {
   const { isLoaded, signIn, setActive } = useSignIn();
@@ -38,9 +39,7 @@ const AnimatedLoginForm = () => {
       }
     } catch (err: unknown) {
       const clerkError = err as { errors?: Array<{ message: string }> };
-      setError(
-        clerkError.errors?.[0]?.message || "Invalid email or password"
-      );
+      setError(clerkError.errors?.[0]?.message || "Invalid email or password");
     } finally {
       setIsLoading(false);
     }
@@ -67,18 +66,18 @@ const AnimatedLoginForm = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: "easeOut" as const },
+      transition: { duration: 0.4, ease: "easeOut" as const },
     },
   };
 
@@ -87,42 +86,47 @@ const AnimatedLoginForm = () => {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="w-full max-w-md px-8"
+      className="w-full max-w-[440px] px-4"
     >
       {/* Logo */}
-      <motion.div variants={itemVariants} className="flex justify-center mb-10">
-        <motion.div
-          className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.2 }}
-        >
-          Digital Workplace AI
-        </motion.div>
+      <motion.div variants={itemVariants} className="flex justify-center mb-8">
+        <div className="flex items-center gap-2">
+          <div className="relative w-10 h-10">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 0L40 20L20 40L0 20L20 0Z" fill="#0d9488" />
+              <path d="M20 8L32 20L20 32L8 20L20 8Z" fill="#14b8a6" />
+            </svg>
+          </div>
+          <div>
+            <span className="text-2xl font-bold text-teal-600">Digital Workplace</span>
+            <span className="block text-sm font-semibold text-teal-500">AI</span>
+          </div>
+        </div>
       </motion.div>
 
       {/* Title */}
-      <motion.div variants={itemVariants} className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-        <p className="text-gray-500">Sign in to continue to your workspace</p>
+      <motion.div variants={itemVariants} className="mb-6">
+        <h1 className="text-2xl font-extrabold text-neutral-900">Sign In</h1>
+        <p className="text-neutral-500 text-xs font-medium mt-1">
+          Enter your details to get signed in to your account.
+        </p>
       </motion.div>
 
       {/* Error Banner */}
       {error && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="mb-6 p-4 rounded-xl bg-red-50 border border-red-100"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 p-3 rounded-lg bg-red-50 border border-red-200"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex-shrink-0 w-5 h-5 text-red-500">
-              <svg fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
+          <div className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clipRule="evenodd"
+              />
+            </svg>
             <p className="text-sm text-red-700">{error}</p>
           </div>
         </motion.div>
@@ -132,43 +136,21 @@ const AnimatedLoginForm = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Email Input */}
         <motion.div variants={itemVariants}>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email
+          <label className="block text-sm font-bold text-neutral-900 mb-2">
+            Work Email / Username
           </label>
-          <div className="relative">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full px-4 py-3.5 rounded-xl border-2 transition-all duration-200 outline-none border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 bg-gray-50/50 hover:bg-white focus:bg-white"
-            />
-            <motion.div
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                />
-              </svg>
-            </motion.div>
-          </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email address / username"
+            className="w-full h-[44px] px-4 rounded-full border border-neutral-300 transition-all duration-200 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 bg-white text-sm"
+          />
         </motion.div>
 
         {/* Password Input */}
         <motion.div variants={itemVariants}>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-bold text-neutral-900 mb-2">
             Password
           </label>
           <div className="relative">
@@ -176,21 +158,16 @@ const AnimatedLoginForm = () => {
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full px-4 py-3.5 pr-12 rounded-xl border-2 transition-all duration-200 outline-none border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 bg-gray-50/50 hover:bg-white focus:bg-white"
+              placeholder="Enter password"
+              className="w-full h-[44px] px-4 pr-12 rounded-full border border-neutral-300 transition-all duration-200 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100 bg-white text-sm"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
             >
               {showPassword ? (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -199,12 +176,7 @@ const AnimatedLoginForm = () => {
                   />
                 </svg>
               ) : (
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -227,9 +199,9 @@ const AnimatedLoginForm = () => {
         <motion.div variants={itemVariants} className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+            className="text-xs font-bold text-neutral-900 hover:text-teal-600 transition-colors"
           >
-            Forgot password?
+            Forgot Password?
           </Link>
         </motion.div>
 
@@ -238,22 +210,20 @@ const AnimatedLoginForm = () => {
           <motion.button
             type="submit"
             disabled={!isValid || isLoading}
-            whileHover={{ scale: isValid ? 1.02 : 1 }}
-            whileTap={{ scale: isValid ? 0.98 : 1 }}
-            className={`w-full py-4 rounded-xl font-semibold text-white transition-all duration-200
-              ${
-                isValid
-                  ? "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40"
-                  : "bg-gray-300 cursor-not-allowed"
-              }
-            `}
+            whileHover={{ scale: isValid ? 1.01 : 1 }}
+            whileTap={{ scale: isValid ? 0.99 : 1 }}
+            className={`w-full h-[44px] rounded-full font-semibold text-sm transition-all duration-200 ${
+              isValid
+                ? "bg-neutral-200 hover:bg-neutral-300 text-neutral-700"
+                : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+            }`}
           >
             {isLoading ? (
               <div className="flex items-center justify-center gap-2">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                  className="w-4 h-4 border-2 border-neutral-400 border-t-neutral-600 rounded-full"
                 />
                 <span>Signing in...</span>
               </div>
@@ -263,61 +233,16 @@ const AnimatedLoginForm = () => {
           </motion.button>
         </motion.div>
 
-        {/* Divider */}
-        <motion.div variants={itemVariants} className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-gray-500">Or continue with</span>
-          </div>
-        </motion.div>
-
-        {/* OAuth Buttons */}
-        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
+        {/* SSO Button */}
+        <motion.div variants={itemVariants}>
           <motion.button
             type="button"
             onClick={() => handleOAuthSignIn("oauth_google")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl font-medium text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 shadow-sm"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
+            className="w-full h-[44px] rounded-full font-semibold text-sm text-neutral-700 bg-white border border-neutral-300 hover:bg-neutral-50 transition-all duration-200"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              />
-            </svg>
-            Google
-          </motion.button>
-
-          <motion.button
-            type="button"
-            onClick={() => handleOAuthSignIn("oauth_github")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl font-medium text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 shadow-sm"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                fillRule="evenodd"
-                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                clipRule="evenodd"
-              />
-            </svg>
-            GitHub
+            Sign In with Single Sign-On (SSO)
           </motion.button>
         </motion.div>
       </form>
@@ -325,24 +250,15 @@ const AnimatedLoginForm = () => {
       {/* Sign Up Link */}
       <motion.div
         variants={itemVariants}
-        className="mt-8 text-center text-sm text-gray-500"
+        className="mt-8 text-center text-sm text-neutral-500"
       >
         Don&apos;t have an account?{" "}
         <Link
           href="/sign-up"
-          className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors"
+          className="font-semibold text-teal-600 hover:text-teal-500 transition-colors"
         >
           Sign up
         </Link>
-      </motion.div>
-
-      {/* Footer */}
-      <motion.div
-        variants={itemVariants}
-        className="mt-6 text-center text-sm text-gray-400"
-      >
-        Powered by{" "}
-        <span className="font-semibold text-gray-600">Clerk + Supabase</span>
       </motion.div>
     </motion.div>
   );

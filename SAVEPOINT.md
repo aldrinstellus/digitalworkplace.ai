@@ -1,8 +1,93 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 15:50 UTC
-**Version**: 0.4.0
-**Session Status**: Complete - Dashboard with animated product cards & auth optimization
+**Last Updated**: 2026-01-19 16:05 UTC
+**Version**: 0.4.1
+**Session Status**: Complete - Auth optimization deployed
+**Machine**: Mac Mini (aldrin-mac-mini)
+
+---
+
+## 🔗 Complete URL Reference
+
+### Production & Deployment
+| Service | URL |
+|---------|-----|
+| **Production App** | https://digitalworkplace-ai.vercel.app |
+| **Production Sign-in** | https://digitalworkplace-ai.vercel.app/sign-in |
+| **Production Dashboard** | https://digitalworkplace-ai.vercel.app/dashboard |
+| **Production Admin** | https://digitalworkplace-ai.vercel.app/admin |
+| **Vercel Dashboard** | https://vercel.com/aldrinstellus/digitalworkplace-ai |
+| **GitHub Repository** | https://github.com/aldrinstellus/digitalworkplace.ai |
+
+### Local Development URLs
+| Page | URL |
+|------|-----|
+| **Home** | http://localhost:3000 |
+| **Sign-in** | http://localhost:3000/sign-in |
+| **Sign-up** | http://localhost:3000/sign-up |
+| **SSO Callback** | http://localhost:3000/sso-callback |
+| **Dashboard** | http://localhost:3000/dashboard |
+| **Admin Panel** | http://localhost:3000/admin |
+
+### Tech Stack Dashboards
+| Service | Dashboard URL |
+|---------|---------------|
+| **Clerk** | https://dashboard.clerk.com |
+| **Supabase** | https://supabase.com/dashboard |
+| **Vercel** | https://vercel.com/dashboard |
+| **GitHub** | https://github.com |
+
+---
+
+## 📁 Local File System Paths (Mac Mini)
+
+### Project Root
+```
+/Users/aldrin-mac-mini/digitalworkplace.ai
+```
+
+### Key Documentation Files
+| File | Full Path |
+|------|-----------|
+| **SAVEPOINT.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md` |
+| **CLAUDE.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` |
+| **CHANGELOG.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md` |
+| **context.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md` |
+| **README.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/README.md` |
+| **package.json** | `/Users/aldrin-mac-mini/digitalworkplace.ai/package.json` |
+
+### Source Code Paths
+| Category | Path |
+|----------|------|
+| **App Router** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/` |
+| **Components** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/` |
+| **Libraries** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/` |
+
+### Critical Source Files
+| File | Full Path |
+|------|-----------|
+| **Root Layout** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/layout.tsx` |
+| **Global CSS** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/globals.css` |
+| **Middleware** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/middleware.ts` |
+| **Dashboard** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/dashboard/page.tsx` |
+| **Admin** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/admin/page.tsx` |
+| **Sign-in Page** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/sign-in/[[...sign-in]]/page.tsx` |
+| **SSO Callback** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/app/sso-callback/page.tsx` |
+| **Login Background** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/login/LoginBackground.tsx` |
+| **User Roles** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/userRole.ts` |
+| **Supabase Client** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/supabase.ts` |
+| **Sound Effects** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/sounds.ts` |
+| **Wordmark Glitch** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/brand/WordmarkGlitch.tsx` |
+| **Sound Toggle** | `/Users/aldrin-mac-mini/digitalworkplace.ai/src/components/audio/SoundToggle.tsx` |
+
+### Configuration Files
+| File | Full Path |
+|------|-----------|
+| **TypeScript Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/tsconfig.json` |
+| **Tailwind Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/tailwind.config.ts` |
+| **Next.js Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/next.config.ts` |
+| **ESLint Config** | `/Users/aldrin-mac-mini/digitalworkplace.ai/eslint.config.mjs` |
+| **Environment** | `/Users/aldrin-mac-mini/digitalworkplace.ai/.env.local` |
 
 ---
 
@@ -40,64 +125,69 @@
 
 ---
 
-## Local Development
+## 🚀 Quick Start Commands
+
+### Start Development Server
 ```bash
 cd /Users/aldrin-mac-mini/digitalworkplace.ai
 npm run dev
-# Runs on http://localhost:3000
+# Server runs on http://localhost:3000
 ```
 
-### Test the Flow
-1. Visit `http://localhost:3000/sign-in`
+### Test the Complete Flow
+1. Open http://localhost:3000/sign-in
 2. Click "Sign in with Google"
-3. Complete OAuth flow
-4. Redirects to Dashboard with 4 product cards
-5. See animated SVG illustrations
-6. Click avatar for dropdown menu
-7. Click Admin (if super_admin) to access admin panel
+3. Complete OAuth → Redirects to Dashboard
+4. See animated SVG product cards
+5. Click avatar for dropdown menu
+6. Click Admin (if super_admin) to access admin panel
 
 ---
 
-## Files Modified This Session
+## Git Status
 
-| File | Status | Description |
-|------|--------|-------------|
-| `src/middleware.ts` | Created | Clerk middleware for route protection |
-| `src/app/dashboard/page.tsx` | Created | 4 product cards with animated SVGs |
-| `src/app/admin/page.tsx` | Created | Super admin user management |
-| `src/lib/userRole.ts` | Created | Supabase user role functions |
-| `src/app/sso-callback/page.tsx` | Modified | Added loading UI |
-| `CHANGELOG.md` | Updated | Added v0.4.0 changes |
-| `CLAUDE.md` | Updated | Added dashboard & admin docs |
-| `context.md` | Updated | Added dashboard section |
+### Latest Commit
+```
+d306e7c perf: optimize Clerk auth with middleware and non-blocking sync
+```
+
+### Commit History (Recent)
+```
+d306e7c perf: optimize Clerk auth with middleware and non-blocking sync
+7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
+```
+
+### Check Status
+```bash
+cd /Users/aldrin-mac-mini/digitalworkplace.ai
+git status
+git log --oneline -5
+```
 
 ---
 
-## Dashboard Features
+## Tech Stack Summary
 
-### Product Cards
-- **4 unique animated SVG backgrounds**
-- **Continuous looping animations** (never stops)
-- **3D tilt effect** using Framer Motion springs
-- **Colored borders** visible in default state
-- **Enhanced glow/shadow** on hover
-- **Glassmorphism** background styling
-
-### User Interface
-- Header with logo and user menu
-- Admin badge for super_admin users
-- Avatar dropdown with sign out
-- Responsive grid (1/2/4 columns)
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16 | React framework with App Router |
+| **TypeScript** | 5.x | Type safety |
+| **Clerk** | @clerk/nextjs | Authentication (Google OAuth) |
+| **Supabase** | @supabase/supabase-js | Database & user roles |
+| **Tailwind CSS** | 4.x | Styling |
+| **Framer Motion** | 12.x | UI animations |
+| **GSAP** | 3.x | Complex animations |
+| **shadcn/ui** | latest | UI components |
 
 ---
 
 ## User Role System
 
-### Supabase Integration
+### Supabase Functions
 ```typescript
 type UserRole = 'user' | 'admin' | 'super_admin';
 
-// Functions available:
+// Available functions in /Users/aldrin-mac-mini/digitalworkplace.ai/src/lib/userRole.ts
 getUserByEmail(email)
 getUserByClerkId(clerkId)
 syncUserWithClerk(email, clerkId, fullName?, avatarUrl?)
@@ -112,10 +202,11 @@ updateUserRole(userId, role)
 
 ---
 
-## Auth Optimization
+## Auth Optimization (v0.4.1)
 
-### Middleware (NEW)
-- `src/middleware.ts` - Protects routes server-side
+### Middleware Implementation
+- **File**: `/Users/aldrin-mac-mini/digitalworkplace.ai/src/middleware.ts`
+- Protects routes server-side (no client-side redirect flash)
 - Public routes: `/sign-in`, `/sign-up`, `/sso-callback`, `/`
 - All other routes require authentication
 
@@ -127,30 +218,16 @@ updateUserRole(userId, role)
 
 ---
 
-## Environment Setup Required
+## Environment Variables Required
 
 ### .env.local
 ```env
-NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-key>
-CLERK_SECRET_KEY=<your-clerk-secret>
+NEXT_PUBLIC_SUPABASE_URL=<your-supabase-project-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<your-clerk-publishable-key>
+CLERK_SECRET_KEY=<your-clerk-secret-key>
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-```
-
----
-
-## Git Status
-
-### Latest Commit
-```
-7a7642e feat: Dashboard with animated product cards and user management (v0.4.0)
-```
-
-### Pending Changes (if any)
-```bash
-git status
 ```
 
 ---
@@ -173,110 +250,89 @@ git status
 
 ---
 
-## Reference Commands
+## Development Commands
 
-### Development
 ```bash
-npm run dev          # Start dev server
+# Navigate to project
+cd /Users/aldrin-mac-mini/digitalworkplace.ai
+
+# Development
+npm run dev          # Start dev server (localhost:3000)
 npm run build        # Production build
-npm run start        # Start production
+npm run start        # Start production server
 npm run lint         # Run ESLint
-```
 
-### Git
-```bash
+# Git operations
 git status
 git add .
 git commit -m "message"
 git push origin main
+
+# Open in VS Code
+code /Users/aldrin-mac-mini/digitalworkplace.ai
 ```
 
 ---
 
-## Key Code Patterns
+## Known Issues & Fixes
 
-### Product Card Animation
-```typescript
-const ProductIllustrations = {
-  support: ({ isHovered }) => (
-    <svg>
-      <motion.circle
-        animate={{
-          scale: isHovered ? [1, 1.1, 1] : [1, 1.05, 1],
-          opacity: isHovered ? [0.4, 0.6, 0.4] : [0.2, 0.35, 0.2]
-        }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </svg>
-  ),
-};
-```
-
-### 3D Tilt Effect
-```typescript
-const mouseX = useMotionValue(0);
-const mouseY = useMotionValue(0);
-
-const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), {
-  stiffness: 200,
-  damping: 25,
-});
-```
-
-### Colored Borders
-```typescript
-<motion.div
-  style={{
-    borderWidth: '2px',
-    borderStyle: 'solid',
-  }}
-  animate={{
-    borderColor: isHovered ? `${colors.primary}90` : `${colors.primary}50`,
-  }}
-/>
-```
+| Issue | Status | Fix |
+|-------|--------|-----|
+| Avatar shows letter instead of image | ✅ Fixed | Added `referrerPolicy="no-referrer"` and `onError` fallback |
+| Auth redirect too slow | ✅ Fixed | Added middleware.ts for server-side protection |
 
 ---
 
-## Known Issues
+## Design System Reference
 
-1. **Avatar sometimes shows letter** - Fixed with `referrerPolicy="no-referrer"` and `onError` fallback
+### Color Palette
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Background Dark | #0f0f1a | Main background |
+| Background Mid | #1a1a2e | Cards, overlays |
+| Background Light | #16213e | Borders, accents |
+| Green Accent | #4ade80 | .ai, indicators |
+| Mint Green | rgba(134, 239, 172, 0.7) | Chat bubbles |
+
+### Product Theme Colors
+| Product | Primary | Secondary |
+|---------|---------|-----------|
+| Support IQ | #10b981 | #06b6d4 |
+| Intranet IQ | #3b82f6 | #8b5cf6 |
+| Test Pilot IQ | #f59e0b | #ef4444 |
+| Chat Core IQ | #a855f7 | #ec4899 |
 
 ---
 
-## Quick Resume Checklist
+## Session Resume Checklist
 
-When starting next session:
+When starting a new Claude Code session:
 
-1. **Start dev server**
+1. **Read this savepoint**
+   ```bash
+   cat /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md
+   ```
+
+2. **Start dev server**
    ```bash
    cd /Users/aldrin-mac-mini/digitalworkplace.ai
    npm run dev
    ```
 
-2. **Verify working**
-   - Login: http://localhost:3000/sign-in
-   - Dashboard: http://localhost:3000/dashboard
-   - Admin: http://localhost:3000/admin
+3. **Verify working locally**
+   - http://localhost:3000/sign-in
+   - http://localhost:3000/dashboard
+   - http://localhost:3000/admin
 
-3. **Reference files**:
-   - `CLAUDE.md` - Project conventions
-   - `context.md` - Design specifications
-   - `CHANGELOG.md` - Version history
+4. **Reference documentation**
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` - Project conventions
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md` - Design specifications
+   - `/Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md` - Version history
 
-4. **Check pending tasks** above
-
----
-
-## Resources
-
-- **Clerk Dashboard**: https://dashboard.clerk.com
-- **Supabase Dashboard**: https://supabase.com/dashboard
-- **Vercel Dashboard**: https://vercel.com/dashboard
-- **Production URL**: https://digitalworkplace-ai.vercel.app
-- **GitHub Repo**: https://github.com/aldrinstellus/digitalworkplace.ai
+5. **Check pending tasks** above
 
 ---
 
-*Last session ended at: 2026-01-19 ~15:50 UTC*
-*Next: Test auth speed improvements, consider product dashboards*
+*Last session ended at: 2026-01-19 ~16:05 UTC*
+*Machine: Mac Mini (aldrin-mac-mini)*
+*Latest commit: d306e7c - Auth optimization with middleware*

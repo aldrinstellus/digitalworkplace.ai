@@ -13,31 +13,57 @@ const getAudioContext = (): AudioContext | null => {
   return audioContext;
 };
 
+// Resume audio context if suspended
+const ensureAudioContextResumed = async (): Promise<boolean> => {
+  const ctx = getAudioContext();
+  if (!ctx) return false;
+
+  if (ctx.state === "suspended") {
+    try {
+      await ctx.resume();
+      console.log("Audio context resumed");
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return ctx.state === "running";
+};
+
 // Initialize and resume audio context - tries to auto-play
 export const initAudio = (): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
 
   // Try to resume immediately
-  if (ctx.state === "suspended") {
-    ctx.resume().catch(() => {
-      // Silently fail - will work after user interaction
-    });
-  }
+  ensureAudioContextResumed();
 
   // If not initialized, set up listeners to resume on any interaction
   if (!audioInitialized) {
     audioInitialized = true;
 
     const resumeAudio = () => {
-      if (ctx.state === "suspended") {
-        ctx.resume();
-      }
+      ensureAudioContextResumed();
     };
 
-    // Listen for any user interaction to enable audio
-    ["click", "touchstart", "keydown", "scroll"].forEach((event) => {
-      window.addEventListener(event, resumeAudio, { once: true, passive: true });
+    // Listen for ANY user interaction to enable audio
+    const events = [
+      "click",
+      "touchstart",
+      "touchend",
+      "keydown",
+      "keyup",
+      "scroll",
+      "mousemove",
+      "mousedown",
+      "mouseup",
+      "wheel",
+      "pointerdown",
+      "pointermove",
+    ];
+
+    events.forEach((event) => {
+      document.addEventListener(event, resumeAudio, { passive: true, capture: true });
     });
   }
 };
@@ -46,6 +72,11 @@ export const initAudio = (): void => {
 export const playGlitchSound = (intensity: number = 1): void => {
   const ctx = getAudioContext();
   if (!ctx) return;
+
+  // Ensure audio context is running
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
 
   const now = ctx.currentTime;
   const duration = 0.25 + intensity * 0.1; // Longer, smoother duration

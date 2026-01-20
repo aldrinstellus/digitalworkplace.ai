@@ -1,16 +1,35 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Search, Sparkles, Clock, TrendingUp, FileText, Users, Calendar, MessageSquare, Newspaper, Bell } from "lucide-react";
 import { useNewsPosts, useUpcomingEvents, useRecentActivity } from "@/lib/hooks/useSupabase";
 import type { NewsPost, Event } from "@/lib/database.types";
 import Link from "next/link";
+import { MeetingCard } from "@/components/dashboard/MeetingCard";
+import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
 
 export default function Dashboard() {
-  const { user } = useUser();
-  const firstName = user?.firstName || "there";
+  const { user, isLoaded } = useUser();
+
+  // Get display name from Clerk user
+  const getDisplayName = (): string | null => {
+    if (!isLoaded) return null; // Still loading
+    if (!user) return null; // Not logged in
+    if (user.firstName) return user.firstName;
+    if (user.fullName) return user.fullName.split(" ")[0];
+    if (user.primaryEmailAddress?.emailAddress) {
+      return user.primaryEmailAddress.emailAddress.split("@")[0];
+    }
+    return null;
+  };
+
+  const userName = getDisplayName();
+  // If we have a user name, show "Good [time], [name]". Otherwise show "Hello there"
+  const greeting = userName
+    ? `Good ${getTimeOfDay()}, ${userName}`
+    : "Hello there";
 
   // Fetch real data from Supabase
   const { posts: newsPosts, loading: postsLoading } = useNewsPosts({ limit: 5 });
@@ -26,28 +45,11 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <main className="ml-16 p-8">
-        {/* Header */}
         <div className="max-w-5xl mx-auto">
-          {/* dIQ Badge */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30">
-                <svg height="18" viewBox="0 0 32 18" style={{ overflow: "visible" }}>
-                  <text x="0" y="14" fill="white" fontSize="18" fontWeight="700" fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace">d</text>
-                  <text x="11" y="14" fill="white" fillOpacity="0.85" fontSize="10" fontWeight="400" fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace">I</text>
-                  <text x="16.5" y="14" fill="white" fillOpacity="0.85" fontSize="10" fontWeight="400" fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace">Q</text>
-                  <circle cx="27" cy="13" r="2.5" fill="#60a5fa" style={{ filter: "drop-shadow(0 0 3px rgba(96, 165, 250, 0.6))" }} />
-                </svg>
-              </div>
-              <span className="text-white/40 text-sm">Intranet IQ</span>
-            </div>
-            <span className="text-xs text-white/30 font-mono">localhost:3001</span>
-          </div>
-
           {/* Greeting */}
           <div className="mb-8">
             <h1 className="text-2xl font-medium text-white mb-1">
-              Good {getTimeOfDay()}, {firstName}
+              {greeting}
             </h1>
             <div className="flex items-center gap-2 text-sm text-white/50">
               <span>For you</span>
@@ -73,6 +75,9 @@ export default function Dashboard() {
               </div>
             </div>
           </Link>
+
+          {/* Meeting Card */}
+          <MeetingCard />
 
           {/* Quick Actions */}
           <div className="grid grid-cols-3 gap-4 mb-8">
@@ -110,7 +115,7 @@ export default function Dashboard() {
                   <Newspaper className="w-5 h-5 text-purple-400" />
                   Company News
                 </h2>
-                <button className="text-sm text-blue-400 hover:text-blue-300">View all</button>
+                <Link href="/content" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
               </div>
 
               {postsLoading ? (
@@ -161,7 +166,7 @@ export default function Dashboard() {
                   <Calendar className="w-5 h-5 text-green-400" />
                   Upcoming Events
                 </h2>
-                <button className="text-sm text-blue-400 hover:text-blue-300">View all</button>
+                <Link href="/content?tab=events" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
               </div>
 
               {eventsLoading ? (
@@ -220,7 +225,7 @@ export default function Dashboard() {
                 <Clock className="w-5 h-5 text-blue-400" />
                 Recent Activity
               </h2>
-              <button className="text-sm text-blue-400 hover:text-blue-300">View all</button>
+              <Link href="/settings?tab=activity" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
             </div>
 
             {activitiesLoading ? (
@@ -299,6 +304,9 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* App Shortcuts Bar */}
+      <AppShortcutsBar />
     </div>
   );
 }

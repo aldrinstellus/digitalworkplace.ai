@@ -453,6 +453,7 @@ export async function searchKnowledge(
     projectCodes?: string[];
     itemTypes?: string[];
     maxResults?: number;
+    offset?: number;
   }
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -461,6 +462,7 @@ export async function searchKnowledge(
     project_codes: options?.projectCodes || null,
     item_types: options?.itemTypes || null,
     max_results: options?.maxResults || 20,
+    result_offset: options?.offset || 0,
   });
 }
 

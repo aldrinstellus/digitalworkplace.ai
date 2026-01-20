@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { FacetedSidebar } from "@/components/search/FacetedSidebar";
+import { SearchResultCard } from "@/components/search/SearchResultCard";
+import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { useSearch, useDepartments, useActivityLog } from "@/lib/hooks/useSupabase";
 import {
   Search,
@@ -16,6 +19,11 @@ import {
   SlidersHorizontal,
   ExternalLink,
   Loader2,
+  MessageSquare,
+  ThumbsUp,
+  ThumbsDown,
+  X,
+  Trash2,
 } from "lucide-react";
 
 const filterCategories = [
@@ -43,6 +51,8 @@ const typeColors: Record<string, string> = {
   channel: "bg-cyan-500/20 text-cyan-400",
 };
 
+const RESULTS_PER_PAGE = 20;
+
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
@@ -50,25 +60,158 @@ export default function SearchPage() {
   const [dateRange, setDateRange] = useState("any");
   const [sortBy, setSortBy] = useState("relevance");
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const [summarizingId, setSummarizingId] = useState<string | null>(null);
+  const [feedbackGiven, setFeedbackGiven] = useState<"positive" | "negative" | null>(null);
+
+  // Pagination state for infinite scroll
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [allResults, setAllResults] = useState<any[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Search history state
+  const [showSearchHistory, setShowSearchHistory] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<Array<{ query: string; timestamp: Date; resultCount: number }>>([
+    { query: "employee handbook", timestamp: new Date(Date.now() - 86400000), resultCount: 15 },
+    { query: "vacation policy", timestamp: new Date(Date.now() - 172800000), resultCount: 8 },
+    { query: "quarterly report", timestamp: new Date(Date.now() - 259200000), resultCount: 23 },
+    { query: "onboarding checklist", timestamp: new Date(Date.now() - 345600000), resultCount: 12 },
+    { query: "remote work guidelines", timestamp: new Date(Date.now() - 432000000), resultCount: 6 },
+  ]);
 
   const { results, loading, error, search } = useSearch();
   const { departments } = useDepartments();
   const { log } = useActivityLog();
 
-  const handleSearch = useCallback(async () => {
-    if (!query.trim()) return;
+  // Add to search history when a new search is performed
+  const addToHistory = useCallback((searchQuery: string, resultCount: number) => {
+    setSearchHistory((prev) => {
+      const filtered = prev.filter((h) => h.query.toLowerCase() !== searchQuery.toLowerCase());
+      return [{ query: searchQuery, timestamp: new Date(), resultCount }, ...filtered].slice(0, 10);
+    });
+  }, []);
+
+  // Clear a single history item
+  const removeFromHistory = (queryToRemove: string) => {
+    setSearchHistory((prev) => prev.filter((h) => h.query !== queryToRemove));
+  };
+
+  // Clear all history
+  const clearAllHistory = () => {
+    setSearchHistory([]);
+    setShowSearchHistory(false);
+  };
+
+  // Use a history item as search query
+  const useHistoryItem = (historyQuery: string) => {
+    setQuery(historyQuery);
+    setShowSearchHistory(false);
+    // Trigger search
+    handleSearchWithQuery(historyQuery);
+  };
+
+  // Filter results by department
+  const departmentFilteredResults = allResults.filter((result) => {
+    if (selectedDepartments.length === 0) return true;
+    return selectedDepartments.includes(result.department_id);
+  });
+
+  // Set up intersection observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading && !isLoadingMore && query.trim()) {
+          loadMoreResults();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, loading, isLoadingMore, query, page]);
+
+  // Update allResults when new search results come in
+  useEffect(() => {
+    if (page === 1) {
+      setAllResults(results);
+      setHasMore(results.length >= RESULTS_PER_PAGE);
+    } else {
+      setAllResults((prev) => [...prev, ...results]);
+      setHasMore(results.length >= RESULTS_PER_PAGE);
+    }
+  }, [results]);
+
+  const loadMoreResults = useCallback(async () => {
+    if (isLoadingMore || !hasMore) return;
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    setPage(nextPage);
 
     await search(query, {
       itemTypes: activeFilter === "all" ? undefined : [activeFilter],
-      maxResults: 20,
+      maxResults: RESULTS_PER_PAGE,
+      offset: (nextPage - 1) * RESULTS_PER_PAGE,
     });
+
+    setIsLoadingMore(false);
+  }, [isLoadingMore, hasMore, page, query, activeFilter, search]);
+
+  // Compute faceted counts from department-filtered results
+  const facetCounts = [
+    { type: "all", label: "All Results", count: departmentFilteredResults.length, icon: Database },
+    { type: "article", label: "Articles", count: departmentFilteredResults.filter(r => r.type === "article").length, icon: FileText },
+    { type: "employee", label: "People", count: departmentFilteredResults.filter(r => r.type === "employee").length, icon: Users },
+    { type: "event", label: "Events", count: departmentFilteredResults.filter(r => r.type === "event").length, icon: Calendar },
+    { type: "document", label: "Documents", count: departmentFilteredResults.filter(r => r.type === "document").length, icon: FileText },
+  ];
+
+  const handleSummarize = async (resultId: string) => {
+    setSummarizingId(resultId);
+    // Simulate AI summarization
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setSummarizingId(null);
+  };
+
+  const handleFeedback = async (type: "positive" | "negative") => {
+    setFeedbackGiven(type);
+    await log("search_feedback", {
+      entityType: "search",
+      metadata: { query, feedbackType: type },
+    });
+  };
+
+  const handleSearchWithQuery = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim()) return;
+
+    // Reset pagination for new search
+    setPage(1);
+    setAllResults([]);
+    setHasMore(true);
+
+    await search(searchQuery, {
+      itemTypes: activeFilter === "all" ? undefined : [activeFilter],
+      maxResults: RESULTS_PER_PAGE,
+    });
+
+    // Add to search history (results will be in the `results` state from useSearch)
+    // We'll use a placeholder count since the actual results are set asynchronously
+    addToHistory(searchQuery, 0);
 
     // Log search activity
     await log("search", {
       entityType: "search",
-      metadata: { query, filter: activeFilter },
+      metadata: { query: searchQuery, filter: activeFilter, departments: selectedDepartments },
     });
-  }, [query, activeFilter, search, log]);
+  }, [activeFilter, search, log, selectedDepartments, addToHistory]);
+
+  const handleSearch = useCallback(async () => {
+    await handleSearchWithQuery(query);
+  }, [query, handleSearchWithQuery]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -84,7 +227,7 @@ export default function SearchPage() {
     );
   };
 
-  const filteredResults = results.filter((result) => {
+  const filteredResults = departmentFilteredResults.filter((result) => {
     if (activeFilter === "all") return true;
     return result.type === activeFilter;
   });
@@ -211,56 +354,48 @@ export default function SearchPage() {
                   </button>
                 </div>
               </div>
+
+              {/* Feedback buttons */}
+              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/10">
+                <span className="text-xs text-white/40">Was this helpful?</span>
+                <button
+                  onClick={() => handleFeedback("positive")}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    feedbackGiven === "positive"
+                      ? "bg-green-500/20 text-green-400"
+                      : "hover:bg-white/5 text-white/40 hover:text-white/60"
+                  }`}
+                >
+                  <ThumbsUp className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleFeedback("negative")}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    feedbackGiven === "negative"
+                      ? "bg-red-500/20 text-red-400"
+                      : "hover:bg-white/5 text-white/40 hover:text-white/60"
+                  }`}
+                >
+                  <ThumbsDown className="w-4 h-4" />
+                </button>
+                {feedbackGiven && (
+                  <span className="text-xs text-white/40 ml-2">Thanks for your feedback!</span>
+                )}
+              </div>
             </div>
           )}
 
           <div className="flex gap-6">
-            {/* Filters Sidebar */}
-            <div className="w-56 flex-shrink-0">
-              <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
-                <h3 className="text-sm font-medium text-white mb-3">
-                  Filter by Type
-                </h3>
-                <div className="space-y-1">
-                  {filterCategories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setActiveFilter(cat.id)}
-                      className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                        activeFilter === cat.id
-                          ? "bg-blue-500/20 text-blue-400"
-                          : "text-white/60 hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
-                      <cat.icon className="w-4 h-4" />
-                      {cat.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10">
-                  <h3 className="text-sm font-medium text-white mb-3">
-                    Department
-                  </h3>
-                  <div className="space-y-2">
-                    {departments.map((dept) => (
-                      <label
-                        key={dept.id}
-                        className="flex items-center gap-2 text-sm text-white/60 cursor-pointer hover:text-white"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedDepartments.includes(dept.id)}
-                          onChange={() => toggleDepartment(dept.id)}
-                          className="w-4 h-4 rounded border-white/20 bg-white/5 text-blue-500 focus:ring-blue-500"
-                        />
-                        {dept.name}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Faceted Sidebar with counts */}
+            <FacetedSidebar
+              facets={facetCounts}
+              activeFilter={activeFilter}
+              onFilterChange={setActiveFilter}
+              totalCount={results.length}
+              departments={departments}
+              selectedDepartments={selectedDepartments}
+              onDepartmentToggle={toggleDepartment}
+            />
 
             {/* Results */}
             <div className="flex-1">
@@ -269,10 +404,76 @@ export default function SearchPage() {
                   {filteredResults.length} results
                   {query && ` for "${query}"`}
                 </span>
-                <button className="text-sm text-white/50 hover:text-white flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  Search history
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSearchHistory(!showSearchHistory)}
+                    className="text-sm text-white/50 hover:text-white flex items-center gap-1"
+                  >
+                    <Clock className="w-4 h-4" />
+                    Search history
+                  </button>
+
+                  {/* Search History Dropdown */}
+                  {showSearchHistory && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowSearchHistory(false)}
+                      />
+                      <div className="absolute right-0 top-full mt-2 w-80 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                          <span className="text-sm font-medium text-white">Recent Searches</span>
+                          {searchHistory.length > 0 && (
+                            <button
+                              onClick={clearAllHistory}
+                              className="text-xs text-white/40 hover:text-red-400 flex items-center gap-1 transition-colors"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              Clear all
+                            </button>
+                          )}
+                        </div>
+                        <div className="max-h-64 overflow-y-auto">
+                          {searchHistory.length === 0 ? (
+                            <div className="py-8 text-center text-white/40 text-sm">
+                              No search history yet
+                            </div>
+                          ) : (
+                            searchHistory.map((item, idx) => (
+                              <div
+                                key={idx}
+                                className="flex items-center justify-between px-4 py-2 hover:bg-white/5 transition-colors group"
+                              >
+                                <button
+                                  onClick={() => useHistoryItem(item.query)}
+                                  className="flex-1 text-left"
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <Clock className="w-3.5 h-3.5 text-white/30" />
+                                    <span className="text-sm text-white/80">{item.query}</span>
+                                  </div>
+                                  <div className="ml-5.5 text-xs text-white/40">
+                                    {item.resultCount} results •{" "}
+                                    {new Date(item.timestamp).toLocaleDateString()}
+                                  </div>
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    removeFromHistory(item.query);
+                                  }}
+                                  className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-white/10 text-white/30 hover:text-white/60 transition-all"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               {error && (
@@ -299,73 +500,45 @@ export default function SearchPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {filteredResults.map((result) => {
-                    const Icon = typeIcons[result.type] || FileText;
-                    const colorClass = typeColors[result.type] || "bg-gray-500/20 text-gray-400";
-
-                    return (
-                      <div
-                        key={result.id}
-                        className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 hover:border-blue-500/30 transition-colors cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4">
-                          {/* Type Icon */}
-                          <div
-                            className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${colorClass}`}
-                          >
-                            <Icon className="w-5 h-5" />
-                          </div>
-
-                          {/* Content */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-white font-medium group-hover:text-blue-400 transition-colors">
-                                {result.title}
-                              </h3>
-                              {result.relevance && (
-                                <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/50">
-                                  {Math.round(result.relevance * 100)}% match
-                                </span>
-                              )}
-                            </div>
-                            {result.summary && (
-                              <p className="text-sm text-white/60 line-clamp-2 mb-2">
-                                {result.summary.substring(0, 200)}...
-                              </p>
-                            )}
-                            <div className="flex items-center gap-4 text-xs text-white/40">
-                              <span className="flex items-center gap-1">
-                                <Database className="w-3 h-3" />
-                                {result.type}
-                              </span>
-                              {result.project_code && (
-                                <span>{result.project_code}</span>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Actions */}
-                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
-                              <Star className="w-4 h-4" />
-                            </button>
-                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white">
-                              <ExternalLink className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {filteredResults.map((result) => (
+                    <SearchResultCard
+                      key={result.id}
+                      result={{
+                        id: result.id,
+                        title: result.title,
+                        summary: result.summary || "",
+                        type: result.type,
+                        source: result.project_code || "dIQ",
+                        relevance: result.relevance || 0,
+                        updatedAt: result.created_at,
+                      }}
+                      onSummarize={() => handleSummarize(result.id)}
+                      isSummarizing={summarizingId === result.id}
+                    />
+                  ))}
                 </div>
               )}
 
-              {/* Load More */}
+              {/* Infinite Scroll Trigger */}
               {filteredResults.length > 0 && (
-                <div className="mt-6 text-center">
-                  <button className="px-6 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-colors">
-                    Load more results
-                  </button>
+                <div ref={loadMoreRef} className="mt-6 text-center">
+                  {isLoadingMore ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 className="w-6 h-6 animate-spin text-blue-400 mr-2" />
+                      <span className="text-white/50">Loading more results...</span>
+                    </div>
+                  ) : hasMore ? (
+                    <button
+                      onClick={loadMoreResults}
+                      className="px-6 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-colors"
+                    >
+                      Load more results
+                    </button>
+                  ) : (
+                    <p className="text-white/40 text-sm py-4">
+                      No more results to load
+                    </p>
+                  )}
                 </div>
               )}
             </div>

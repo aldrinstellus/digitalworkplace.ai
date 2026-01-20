@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import {
   Search,
@@ -44,27 +44,27 @@ export default function PeoplePage() {
   const [selectedPerson, setSelectedPerson] = useState<any | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [employeeStatuses, setEmployeeStatuses] = useState<Record<string, "online" | "away" | "offline">>({});
+  const hasInitializedStatusesRef = useRef(false);
+  const hasInitializedNodesRef = useRef(false);
 
-  // Set random statuses for demo
-  useEffect(() => {
-    if (employees.length > 0) {
-      const statuses: Record<string, "online" | "away" | "offline"> = {};
-      employees.forEach((emp: any) => {
-        statuses[emp.id] = getRandomStatus();
-      });
-      setEmployeeStatuses(statuses);
-    }
-  }, [employees]);
+  // Set random statuses for demo (sync during render)
+  if (employees.length > 0 && !hasInitializedStatusesRef.current) {
+    hasInitializedStatusesRef.current = true;
+    const statuses: Record<string, "online" | "away" | "offline"> = {};
+    employees.forEach((emp: { id: string }) => {
+      statuses[emp.id] = getRandomStatus();
+    });
+    setEmployeeStatuses(statuses);
+  }
 
-  // Expand CEO node by default
-  useEffect(() => {
-    if (employees.length > 0) {
-      const ceo = employees.find((emp: any) => !emp.manager_id);
-      if (ceo) {
-        setExpandedNodes(new Set([ceo.id]));
-      }
+  // Expand CEO node by default (sync during render)
+  if (employees.length > 0 && !hasInitializedNodesRef.current) {
+    hasInitializedNodesRef.current = true;
+    const ceo = employees.find((emp: { manager_id?: string | null }) => !emp.manager_id);
+    if (ceo) {
+      setExpandedNodes(new Set([ceo.id]));
     }
-  }, [employees]);
+  }
 
   const loading = deptLoading || empLoading;
 

@@ -314,7 +314,23 @@ export function useWorkflows(options?: {
     fetch();
   }, [options?.status, options?.isTemplate]);
 
-  return { workflows, loading, error, setWorkflows };
+  const updateWorkflow = async (workflowId: string, updates: Partial<Workflow>) => {
+    // Optimistic update
+    setWorkflows(prev =>
+      prev.map(w => w.id === workflowId ? { ...w, ...updates } : w)
+    );
+    // In production, persist to Supabase:
+    // await supabase.from('diq.workflows').update(updates).eq('id', workflowId);
+  };
+
+  const createWorkflow = async (workflow: Workflow) => {
+    setWorkflows(prev => [workflow, ...prev]);
+    // In production, persist to Supabase:
+    // await supabase.from('diq.workflows').insert(workflow);
+    return workflow;
+  };
+
+  return { workflows, loading, error, setWorkflows, updateWorkflow, createWorkflow };
 }
 
 // =============================================================================
@@ -445,6 +461,7 @@ export function useSearch() {
         projectCodes?: string[];
         itemTypes?: string[];
         maxResults?: number;
+        offset?: number;
       }
     ) => {
       if (!query.trim()) {

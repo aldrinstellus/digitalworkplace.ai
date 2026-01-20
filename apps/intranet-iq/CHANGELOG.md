@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.6] - 2025-01-20
+
+### Added
+
+#### UI Audit - All Non-Functional Buttons Fixed
+- Settings page: Invite User modal with email input and role selector
+- Settings page: Photo upload functionality
+- Settings page: 2FA toggle with enable/disable states
+- Settings page: Session management (Sign out all devices)
+- Content page: New Article modal with title, category, and editor
+- Agents page: Workflow templates modal with template selection
+- Integrations page: Add Integration modal (Salesforce, HubSpot, Zendesk, GitHub, Figma, Dropbox)
+- Channels page: Create Channel modal with public/private options
+
+#### Security Enhancements
+- Added DOMPurify for HTML content sanitization
+- ArticleEditor component now sanitizes all user content
+- VersionHistoryModal sanitizes historical content
+- Protection against XSS attacks in user-generated content
+
+#### Dynamic Greeting System
+- Greeting now shows "Good [morning/afternoon/evening], [Name]" when logged in
+- Falls back to "Hello there" when not logged in
+- Graceful handling of Clerk loading states
+- Fallback chain: firstName → fullName → email username → "Hello there"
+
+#### Cross-App Authentication
+- ClerkProvider configured to use main app sign-in URLs
+- Added NEXT_PUBLIC_MAIN_APP_URL environment variable
+- Authentication cookies shared between port 3000 and 3001
+
+### Changed
+
+#### Dashboard Cleanup
+- Removed redundant dIQ badge from main content header
+- Removed "Intranet IQ" text from content area
+- Removed "localhost:3001" dev indicator
+- Sidebar dIQ logo now serves as sole branding element
+- Cleaner, more focused dashboard layout
+
+### Browser Testing Verified
+All pages tested via browser automation:
+- Dashboard, Search, Content, Chat, Agents, Settings, Integrations, Channels
+
+---
+
 ## [0.2.2] - 2025-01-19
 
 ### Added

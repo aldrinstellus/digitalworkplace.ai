@@ -1,8 +1,12 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useKBCategories, useArticles, useDepartments } from "@/lib/hooks/useSupabase";
+import { ArticleEditor } from "@/components/content/ArticleEditor";
+import { CreateContentModal } from "@/components/content/CreateContentModal";
+import { VersionHistoryModal } from "@/components/content/VersionHistoryModal";
+import DOMPurify from "isomorphic-dompurify";
 import {
   Search,
   FolderOpen,
@@ -15,7 +19,6 @@ import {
   Clock,
   Tag,
   Eye,
-  Lock,
   BookOpen,
   File,
   Share2,
@@ -23,6 +26,8 @@ import {
   CheckCircle2,
   Loader2,
   ThumbsUp,
+  Link2,
+  Check,
 } from "lucide-react";
 import type { KBCategory, Article } from "@/lib/database.types";
 
@@ -124,10 +129,64 @@ export default function ContentPage() {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<TreeItem | null>(null);
   const [showNewMenu, setShowNewMenu] = useState(false);
+  const [showArticleEditor, setShowArticleEditor] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState<"category" | "article" | null>(null);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showShareToast, setShowShareToast] = useState(false);
 
   const { categories, loading: categoriesLoading } = useKBCategories();
   const { articles, loading: articlesLoading } = useArticles();
   const { departments, loading: departmentsLoading } = useDepartments();
+
+  // Handle article save
+  const handleSaveArticle = async (data: {
+    title: string;
+    content: string;
+    summary: string;
+    tags: string[];
+    status: string;
+  }) => {
+    // In production, save to Supabase
+    console.log("Saving article:", data);
+    // Simulate save
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setShowArticleEditor(false);
+  };
+
+  // Handle create content
+  const handleCreateContent = async (data: {
+    name?: string;
+    title?: string;
+    slug: string;
+    description?: string;
+    departmentId?: string;
+    categoryId?: string;
+  }) => {
+    // In production, create in Supabase
+    console.log("Creating content:", data);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  // Handle version restore
+  const handleVersionRestore = async (version: { id: string; content: string }) => {
+    console.log("Restoring version:", version.id);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
+  // Handle share
+  const handleShare = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    setShowShareToast(true);
+    setTimeout(() => setShowShareToast(false), 2000);
+  };
+
+  // Handle bookmark toggle
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
+    // In production, save to user bookmarks in Supabase
+  };
 
   const loading = categoriesLoading || articlesLoading || departmentsLoading;
 
@@ -192,12 +251,12 @@ export default function ContentPage() {
     );
   }, [categories, articles, departments]);
 
-  // Auto-expand first folder
-  useEffect(() => {
-    if (treeData.length > 0 && expandedFolders.size === 0) {
-      setExpandedFolders(new Set([treeData[0].id]));
-    }
-  }, [treeData, expandedFolders.size]);
+  // Auto-expand first folder (sync during render)
+  const hasExpandedFirstFolderRef = useRef(false);
+  if (treeData.length > 0 && expandedFolders.size === 0 && !hasExpandedFirstFolderRef.current) {
+    hasExpandedFirstFolderRef.current = true;
+    setExpandedFolders(new Set([treeData[0].id]));
+  }
 
   const toggleFolder = (id: string) => {
     setExpandedFolders((prev) => {
@@ -266,20 +325,49 @@ export default function ContentPage() {
                   <Plus className="w-4 h-4" />
                 </button>
                 {showNewMenu && (
-                  <div className="absolute right-0 top-10 w-48 bg-[#1a1a1f] border border-white/10 rounded-lg shadow-xl z-50">
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white">
-                      <FolderOpen className="w-4 h-4" />
-                      New Category
-                    </button>
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white">
-                      <FileText className="w-4 h-4" />
-                      New Article
-                    </button>
-                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white">
-                      <File className="w-4 h-4" />
-                      Upload File
-                    </button>
-                  </div>
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowNewMenu(false)} />
+                    <div className="absolute right-0 top-10 w-48 bg-[#1a1a1f] border border-white/10 rounded-lg shadow-xl z-50">
+                      <button
+                        onClick={() => {
+                          setShowNewMenu(false);
+                          setShowCreateModal("category");
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
+                      >
+                        <FolderOpen className="w-4 h-4" />
+                        New Category
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowNewMenu(false);
+                          setShowCreateModal("article");
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
+                      >
+                        <FileText className="w-4 h-4" />
+                        New Article
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowNewMenu(false);
+                          // In production, open file upload dialog
+                          const input = document.createElement("input");
+                          input.type = "file";
+                          input.accept = ".pdf,.doc,.docx,.txt,.md";
+                          input.onchange = (e) => {
+                            const file = (e.target as HTMLInputElement).files?.[0];
+                            if (file) console.log("Uploading file:", file.name);
+                          };
+                          input.click();
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
+                      >
+                        <File className="w-4 h-4" />
+                        Upload File
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -370,16 +458,33 @@ export default function ContentPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors">
-                      <Star className="w-5 h-5" />
+                    <button
+                      onClick={handleBookmark}
+                      className={`p-2 rounded-lg hover:bg-white/5 transition-colors ${
+                        isBookmarked ? "text-yellow-400" : "text-white/50 hover:text-white"
+                      }`}
+                      title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+                    >
+                      <Star className={`w-5 h-5 ${isBookmarked ? "fill-yellow-400" : ""}`} />
                     </button>
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors">
-                      <Share2 className="w-5 h-5" />
+                    <button
+                      onClick={handleShare}
+                      className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors relative"
+                      title="Copy link"
+                    >
+                      {showShareToast ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                     </button>
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors">
+                    <button
+                      onClick={() => setShowVersionHistory(true)}
+                      className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors"
+                      title="Version history"
+                    >
                       <History className="w-5 h-5" />
                     </button>
-                    <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 transition-colors">
+                    <button
+                      onClick={() => setShowArticleEditor(true)}
+                      className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 transition-colors"
+                    >
                       <Edit className="w-4 h-4" />
                       Edit
                     </button>
@@ -414,7 +519,7 @@ export default function ContentPage() {
                     <div
                       className="text-white/70 leading-relaxed"
                       dangerouslySetInnerHTML={{
-                        __html: selectedData.article.content || "<p>No content available.</p>",
+                        __html: DOMPurify.sanitize(selectedData.article.content || "<p>No content available.</p>"),
                       }}
                     />
                   </div>
@@ -477,7 +582,10 @@ export default function ContentPage() {
                 <div className="text-center py-12">
                   <FolderOpen className="w-12 h-12 text-white/20 mx-auto mb-4" />
                   <p className="text-white/40">This folder is empty</p>
-                  <button className="mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
+                  <button
+                    onClick={() => setShowCreateModal("article")}
+                    className="mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors"
+                  >
                     Add Content
                   </button>
                 </div>
@@ -498,6 +606,61 @@ export default function ContentPage() {
           )}
         </div>
       </main>
+
+      {/* Article Editor Modal */}
+      {showArticleEditor && selectedData?.article && (
+        <ArticleEditor
+          article={{
+            id: selectedData.article.id,
+            title: selectedData.article.title,
+            content: selectedData.article.content || "",
+            summary: selectedData.article.summary || "",
+            tags: (selectedData.article.tags as string[]) || [],
+            status: selectedData.article.status,
+          }}
+          onSave={handleSaveArticle}
+          onCancel={() => setShowArticleEditor(false)}
+        />
+      )}
+
+      {/* New Article Editor (for creating) */}
+      {showArticleEditor && !selectedData?.article && (
+        <ArticleEditor
+          onSave={handleSaveArticle}
+          onCancel={() => setShowArticleEditor(false)}
+        />
+      )}
+
+      {/* Create Content Modal */}
+      {showCreateModal && (
+        <CreateContentModal
+          type={showCreateModal}
+          departmentId={selectedData?.type === "folder" ? selectedData.id.replace("dept-", "") : undefined}
+          parentId={selectedData?.type === "folder" && selectedData.id.startsWith("cat-") ? selectedData.id.replace("cat-", "") : undefined}
+          onClose={() => setShowCreateModal(null)}
+          onCreate={handleCreateContent}
+          departments={departments}
+          categories={categories}
+        />
+      )}
+
+      {/* Version History Modal */}
+      {showVersionHistory && selectedData?.article && (
+        <VersionHistoryModal
+          articleId={selectedData.article.id}
+          currentTitle={selectedData.article.title}
+          onClose={() => setShowVersionHistory(false)}
+          onRestore={handleVersionRestore}
+        />
+      )}
+
+      {/* Share Toast */}
+      {showShareToast && (
+        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-50">
+          <Check className="w-4 h-4" />
+          Link copied to clipboard
+        </div>
+      )}
     </div>
   );
 }

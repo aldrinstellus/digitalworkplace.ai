@@ -10,6 +10,9 @@ import {
   FolderOpen,
   Search,
   Settings,
+  Database,
+  BarChart3,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IQLogo } from "@/components/brand/IQLogo";
@@ -20,6 +23,12 @@ const navigation = [
   { name: "Agents", href: "/agents", icon: Bot },
   { name: "People", href: "/people", icon: Users },
   { name: "Content", href: "/content", icon: FolderOpen },
+];
+
+const adminNavigation = [
+  { name: "Elasticsearch", href: "/admin/elasticsearch", icon: Database },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+  { name: "Permissions", href: "/admin/permissions", icon: Shield },
 ];
 
 export function Sidebar() {
@@ -60,6 +69,37 @@ export function Sidebar() {
               {/* Active indicator */}
               {isActive && (
                 <span className="absolute left-0 w-0.5 h-6 bg-blue-500 rounded-r" />
+              )}
+            </Link>
+          );
+        })}
+
+        {/* Admin Divider */}
+        <div className="w-8 h-px bg-white/10 my-2" />
+
+        {/* Admin Navigation */}
+        {adminNavigation.map((item) => {
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={cn(
+                "w-10 h-10 rounded-lg flex items-center justify-center transition-all group relative",
+                isActive
+                  ? "bg-purple-500/20 text-purple-400"
+                  : "text-white/40 hover:text-white/70 hover:bg-white/5"
+              )}
+              title={item.name}
+            >
+              <item.icon className="w-5 h-5" />
+              {/* Tooltip */}
+              <span className="absolute left-14 px-2 py-1 bg-[#1f1f23] text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                {item.name}
+              </span>
+              {/* Active indicator */}
+              {isActive && (
+                <span className="absolute left-0 w-0.5 h-6 bg-purple-500 rounded-r" />
               )}
             </Link>
           );

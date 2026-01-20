@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useUserSettings, useCurrentUser, useDepartments } from "@/lib/hooks/useSupabase";
@@ -103,33 +103,97 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [isAdmin] = useState(true); // In production, check actual role from dbUser
+  const settingsInitializedRef = useRef(false);
+  const prevSettingsIdRef = useRef<string | null>(null);
 
-  // Load settings from database
-  useEffect(() => {
-    if (settings) {
-      const appearance = settings.appearance as { theme?: string; language?: string } | null;
-      // Cast through unknown to handle flexible notification_prefs structure
-      const notifPrefs = settings.notification_prefs as unknown as Record<string, { email?: boolean; push?: boolean; inApp?: boolean }> | null;
+  // Session management state
+  const [sessions, setSessions] = useState([
+    { id: "1", device: "MacBook Pro", location: "San Francisco, CA", current: true },
+    { id: "2", device: "iPhone 15", location: "San Francisco, CA", current: false },
+  ]);
+  const [showActivityStatus, setShowActivityStatus] = useState(true);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("Viewer");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-      if (appearance?.theme) {
-        setTheme(appearance.theme as "dark" | "light" | "system");
-      }
-      if (appearance?.language) {
-        setLanguage(appearance.language);
-      }
+  // Handle photo change
+  const handlePhotoChange = () => {
+    fileInputRef.current?.click();
+  };
 
-      if (notifPrefs && typeof notifPrefs === "object") {
-        setNotifications((prev) =>
-          prev.map((n) => ({
-            ...n,
-            email: notifPrefs[n.id]?.email ?? n.email,
-            push: notifPrefs[n.id]?.push ?? n.push,
-            inApp: notifPrefs[n.id]?.inApp ?? n.inApp,
-          }))
-        );
-      }
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // In production, upload to storage and update user profile
+      console.log("Uploading photo:", file.name);
+      // await uploadProfilePhoto(file);
     }
-  }, [settings]);
+  };
+
+  // Handle photo remove
+  const handleRemovePhoto = () => {
+    // In production, remove photo from storage and update user profile
+    console.log("Removing photo");
+  };
+
+  // Handle sign out session
+  const handleSignOutSession = (sessionId: string) => {
+    setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+    // In production, invalidate the session token
+  };
+
+  // Handle 2FA toggle
+  const handleToggle2FA = () => {
+    if (twoFactorEnabled) {
+      // In production, show confirmation dialog before disabling
+      if (confirm("Are you sure you want to disable Two-Factor Authentication?")) {
+        setTwoFactorEnabled(false);
+      }
+    } else {
+      // In production, show 2FA setup wizard
+      setTwoFactorEnabled(true);
+    }
+  };
+
+  // Handle invite user
+  const handleInviteUser = async () => {
+    if (!inviteEmail.trim()) return;
+    // In production, send invite via API
+    console.log("Inviting user:", inviteEmail, "with role:", inviteRole);
+    setShowInviteModal(false);
+    setInviteEmail("");
+    setInviteRole("Viewer");
+  };
+
+  // Load settings from database (only when settings data changes)
+  const settingsId = settings?.id ?? null;
+  if (settings && settingsId !== prevSettingsIdRef.current && !settingsInitializedRef.current) {
+    prevSettingsIdRef.current = settingsId;
+    settingsInitializedRef.current = true;
+
+    const appearance = settings.appearance as { theme?: string; language?: string } | null;
+    const notifPrefs = settings.notification_prefs as unknown as Record<string, { email?: boolean; push?: boolean; inApp?: boolean }> | null;
+
+    if (appearance?.theme) {
+      setTheme(appearance.theme as "dark" | "light" | "system");
+    }
+    if (appearance?.language) {
+      setLanguage(appearance.language);
+    }
+
+    if (notifPrefs && typeof notifPrefs === "object") {
+      setNotifications((prev) =>
+        prev.map((n) => ({
+          ...n,
+          email: notifPrefs[n.id]?.email ?? n.email,
+          push: notifPrefs[n.id]?.push ?? n.push,
+          inApp: notifPrefs[n.id]?.inApp ?? n.inApp,
+        }))
+      );
+    }
+  }
 
   const toggleNotification = (id: string, type: "email" | "push" | "inApp") => {
     setNotifications((prev) =>
@@ -184,10 +248,23 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <div>
-                  <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                  <button
+                    onClick={handlePhotoChange}
+                    className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors"
+                  >
                     Change Photo
                   </button>
-                  <button className="px-4 py-2 rounded-lg text-white/50 hover:text-white text-sm ml-2 transition-colors">
+                  <button
+                    onClick={handleRemovePhoto}
+                    className="px-4 py-2 rounded-lg text-white/50 hover:text-white text-sm ml-2 transition-colors"
+                  >
                     Remove
                   </button>
                 </div>
@@ -486,16 +563,23 @@ export default function SettingsPage() {
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-green-400" />
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${twoFactorEnabled ? "bg-green-500/20" : "bg-white/10"}`}>
+                    <Shield className={`w-5 h-5 ${twoFactorEnabled ? "text-green-400" : "text-white/40"}`} />
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-white">Two-Factor Authentication</h3>
                     <p className="text-xs text-white/50">Add an extra layer of security to your account</p>
                   </div>
                 </div>
-                <button className="px-4 py-2 rounded-lg border border-green-500/30 text-green-400 text-sm hover:bg-green-500/10 transition-colors">
-                  Enabled
+                <button
+                  onClick={handleToggle2FA}
+                  className={`px-4 py-2 rounded-lg border text-sm transition-colors ${
+                    twoFactorEnabled
+                      ? "border-green-500/30 text-green-400 hover:bg-green-500/10"
+                      : "border-white/10 text-white/60 hover:bg-white/5"
+                  }`}
+                >
+                  {twoFactorEnabled ? "Enabled" : "Enable"}
                 </button>
               </div>
             </div>
@@ -504,12 +588,9 @@ export default function SettingsPage() {
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <h3 className="text-sm font-medium text-white mb-4">Active Sessions</h3>
               <div className="space-y-3">
-                {[
-                  { device: "MacBook Pro", location: "San Francisco, CA", current: true },
-                  { device: "iPhone 15", location: "San Francisco, CA", current: false },
-                ].map((session, idx) => (
+                {sessions.map((session) => (
                   <div
-                    key={idx}
+                    key={session.id}
                     className="flex items-center justify-between p-3 rounded-lg bg-white/5"
                   >
                     <div className="flex items-center gap-3">
@@ -522,7 +603,10 @@ export default function SettingsPage() {
                     {session.current ? (
                       <span className="text-xs text-green-400">Current session</span>
                     ) : (
-                      <button className="text-xs text-red-400 hover:text-red-300">
+                      <button
+                        onClick={() => handleSignOutSession(session.id)}
+                        className="text-xs text-red-400 hover:text-red-300"
+                      >
                         Sign out
                       </button>
                     )}
@@ -551,8 +635,11 @@ export default function SettingsPage() {
                     <div className="text-sm text-white">Activity Status</div>
                     <div className="text-xs text-white/40">Show when you&apos;re online</div>
                   </div>
-                  <button className="w-10 h-6 rounded-full bg-blue-500 transition-colors">
-                    <div className="w-4 h-4 bg-white rounded-full transition-transform translate-x-4 mx-1" />
+                  <button
+                    onClick={() => setShowActivityStatus(!showActivityStatus)}
+                    className={`w-10 h-6 rounded-full transition-colors ${showActivityStatus ? "bg-blue-500" : "bg-white/20"}`}
+                  >
+                    <div className={`w-4 h-4 bg-white rounded-full transition-transform mx-1 ${showActivityStatus ? "translate-x-4" : ""}`} />
                   </button>
                 </div>
               </div>
@@ -577,7 +664,10 @@ export default function SettingsPage() {
                     className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg pl-4 pr-4 py-2 text-sm text-white placeholder-white/40 outline-none"
                   />
                 </div>
-                <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
+                <button
+                  onClick={() => setShowInviteModal(true)}
+                  className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors"
+                >
                   Invite User
                 </button>
               </div>
@@ -688,6 +778,62 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
+
+      {/* Invite User Modal */}
+      {showInviteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-lg font-medium text-white mb-4">Invite User</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  placeholder="colleague@company.com"
+                  className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/30 outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
+                  Role
+                </label>
+                <select
+                  value={inviteRole}
+                  onChange={(e) => setInviteRole(e.target.value)}
+                  className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50 transition-colors"
+                >
+                  <option value="Viewer">Viewer</option>
+                  <option value="Editor">Editor</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowInviteModal(false);
+                  setInviteEmail("");
+                  setInviteRole("Viewer");
+                }}
+                className="px-4 py-2 rounded-lg text-white/60 hover:text-white text-sm transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleInviteUser}
+                disabled={!inviteEmail.trim()}
+                className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm transition-colors"
+              >
+                Send Invite
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

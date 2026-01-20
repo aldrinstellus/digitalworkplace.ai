@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Main app URL for authentication - use environment variable or default to localhost
+const mainAppUrl = process.env.NEXT_PUBLIC_MAIN_APP_URL || "http://localhost:3000";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,10 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
-      signInUrl="/sign-in"
-      signUpUrl="/sign-up"
-      afterSignInUrl="/dashboard"
-      afterSignUpUrl="/dashboard"
+      signInUrl={`${mainAppUrl}/sign-in`}
+      signUpUrl={`${mainAppUrl}/sign-up`}
+      afterSignInUrl="/diq/dashboard"
+      afterSignUpUrl="/diq/dashboard"
     >
       <html lang="en" className="dark">
         <body className="antialiased min-h-screen bg-[#0a0a0f]">

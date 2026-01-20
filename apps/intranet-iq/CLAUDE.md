@@ -284,6 +284,74 @@ import { IQLogo, IQMark } from "@/components/brand/IQLogo";
 ---
 
 ---
+## ELASTICSEARCH INTEGRATION
+---
+
+### Overview
+dIQ uses Elasticsearch 8.x for enterprise-grade full-text search with the following capabilities:
+- Real-time and batch indexing
+- Hybrid search (keyword + semantic with OpenAI embeddings)
+- Autocomplete suggestions
+- Faceted search with aggregations
+- Highlighted search results
+
+### Quick Start
+```bash
+# Start Elasticsearch (requires Docker)
+cd /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq
+docker compose -f docker-compose.elasticsearch.yml up -d
+
+# Access Elasticsearch: http://localhost:9200
+# Access Kibana: http://localhost:5601
+```
+
+### API Endpoints
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/elasticsearch/search` | POST | Search with keyword/semantic/hybrid |
+| `/api/elasticsearch/search` | GET | Autocomplete suggestions |
+| `/api/elasticsearch/index` | GET | Index status and stats |
+| `/api/elasticsearch/index` | POST | Index operations |
+
+### Indexing Operations
+```bash
+# Create index
+curl -X POST http://localhost:3001/diq/api/elasticsearch/index \
+  -H "Content-Type: application/json" \
+  -d '{"action": "create-index"}'
+
+# Full sync from Supabase
+curl -X POST http://localhost:3001/diq/api/elasticsearch/index \
+  -H "Content-Type: application/json" \
+  -d '{"action": "full-sync"}'
+
+# Generate demo data (100-500 items)
+curl -X POST http://localhost:3001/diq/api/elasticsearch/index \
+  -H "Content-Type: application/json" \
+  -d '{"action": "generate-demo", "options": {"count": 200}}'
+```
+
+### Key Files
+```
+apps/intranet-iq/
+├── docker-compose.elasticsearch.yml  # ES + Kibana Docker config
+├── docs/ELASTICSEARCH_SETUP.md       # Full setup guide
+├── src/lib/
+│   ├── elasticsearch.ts              # ES client + search functions
+│   └── elasticsearch-indexer.ts      # Content sync from Supabase
+└── src/app/api/elasticsearch/
+    ├── search/route.ts               # Search & autocomplete API
+    └── index/route.ts                # Index management API
+```
+
+### Environment Variables
+```env
+ELASTICSEARCH_URL=http://localhost:9200  # ES server URL
+ELASTICSEARCH_INDEX=diq-content          # Index name
+ELASTICSEARCH_API_KEY=                   # Optional: for Elastic Cloud
+```
+
+---
 ## DATABASE ARCHITECTURE
 ---
 

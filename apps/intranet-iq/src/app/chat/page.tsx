@@ -2,6 +2,11 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { TransparencyPane } from "@/components/chat/TransparencyPane";
+import { ChatSpaces, type ChatSpace } from "@/components/chat/ChatSpaces";
+import { FileUploadModal } from "@/components/chat/FileUploadModal";
+import { SearchScopeToggle, type SearchScope } from "@/components/chat/SearchScopeToggle";
+import { MentionInput } from "@/components/chat/MentionInput";
 import {
   Send,
   Sparkles,
@@ -20,8 +25,9 @@ import {
   FileText,
   Plus,
   Trash2,
+  Eye,
 } from "lucide-react";
-import { useChatThreads, useChatMessages, useCurrentUser } from "@/lib/hooks/useSupabase";
+import { useChatThreads, useChatMessages } from "@/lib/hooks/useSupabase";
 import type { ChatThread, ChatMessage } from "@/lib/database.types";
 
 const llmOptions = [
@@ -36,8 +42,14 @@ const responseStyles = [
   { id: "creative", name: "Creative", description: "Engaging explanations" },
 ];
 
+// Demo spaces data
+const demoSpaces: ChatSpace[] = [
+  { id: "1", name: "Engineering", description: "Engineering team discussions", memberCount: 24, isPublic: true, isFavorite: true },
+  { id: "2", name: "Product", description: "Product planning and roadmap", memberCount: 12, isPublic: true },
+  { id: "3", name: "HR Confidential", description: "HR team private space", memberCount: 5, isPublic: false },
+];
+
 export default function ChatPage() {
-  const { user } = useCurrentUser();
   const { threads, loading: threadsLoading, createThread, setThreads } = useChatThreads();
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const { messages, loading: messagesLoading, addMessage, setMessages } = useChatMessages(activeThreadId);
@@ -48,13 +60,86 @@ export default function ChatPage() {
   const [responseStyle, setResponseStyle] = useState(responseStyles[1]);
   const [showSettings, setShowSettings] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hasInitializedThreadRef = useRef(false);
 
-  // Set first thread as active when threads load
+  // New feature states
+  const [showTransparency, setShowTransparency] = useState(false);
+  const [searchScope, setSearchScope] = useState<SearchScope>("company");
+  const [activeSpaceId, setActiveSpaceId] = useState<string | null>(null);
+  const [showFileUpload, setShowFileUpload] = useState(false);
+  const [spaces] = useState<ChatSpace[]>(demoSpaces);
+
+  // Transparency pane data (simulated)
+  const [transparencyData, setTransparencyData] = useState({
+    sources: [] as { id: string; title: string; type: string; url?: string; relevance?: number }[],
+    steps: [] as { id: string; name: string; status: "completed" | "running" | "pending"; duration?: number }[],
+    isProcessing: false,
+    totalTokens: 0,
+    responseTime: 0,
+  });
+
+  // Track last user query for regeneration
+  const [lastUserQuery, setLastUserQuery] = useState<string | null>(null);
+
+  // Voice input state
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+
+  // Check for voice support on mount
   useEffect(() => {
-    if (threads.length > 0 && !activeThreadId) {
-      setActiveThreadId(threads[0].id);
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognitionAPI) {
+        setVoiceSupported(true);
+        const recognition = new SpeechRecognitionAPI();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = "en-US";
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .map((result: any) => result[0].transcript)
+            .join("");
+          setInput(transcript);
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        recognition.onerror = (event: any) => {
+          console.error("Speech recognition error:", event.error);
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      }
     }
-  }, [threads, activeThreadId]);
+  }, []);
+
+  const toggleVoiceInput = useCallback(() => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  }, [isListening]);
+
+  // Set first thread as active when threads load (sync during render)
+  if (threads.length > 0 && !activeThreadId && !hasInitializedThreadRef.current) {
+    hasInitializedThreadRef.current = true;
+    setActiveThreadId(threads[0].id);
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -91,22 +176,53 @@ export default function ChatPage() {
     const userMessage = await addMessage("user", input);
     if (!userMessage) return;
 
+    setLastUserQuery(input);
     setInput("");
     setIsTyping(true);
 
+    // Update transparency data to show processing
+    setTransparencyData({
+      sources: [],
+      steps: [
+        { id: "1", name: "Parsing query", status: "running" },
+        { id: "2", name: "Searching knowledge base", status: "pending" },
+        { id: "3", name: "Generating response", status: "pending" },
+      ],
+      isProcessing: true,
+      totalTokens: 0,
+      responseTime: 0,
+    });
+
     // Simulate AI response (in production, this would call an AI API)
     setTimeout(async () => {
-      const aiResponse = await addMessage(
+      const sources = [
+        { id: "src-1", type: "article", title: "Internal Documentation", url: "/content", relevance: 0.92 },
+        { id: "src-2", type: "document", title: "HR Policy Guide", url: "/content/hr", relevance: 0.85 },
+        { id: "src-3", type: "article", title: "Company Handbook", url: "/content/handbook", relevance: 0.78 },
+      ];
+
+      const _aiResponse = await addMessage(
         "assistant",
         generateAIResponse(input, responseStyle.id),
         {
-          sources: [
-            { id: "src-1", type: "article", title: "Internal Documentation", url: "/content" },
-          ],
+          sources: sources.map(s => ({ id: s.id, type: s.type, title: s.title, url: s.url })),
           confidence: Math.floor(Math.random() * 15) + 85,
           llmModel: selectedLLM.id,
         }
       );
+
+      // Update transparency data with results
+      setTransparencyData({
+        sources,
+        steps: [
+          { id: "1", name: "Parsing query", status: "completed", duration: 120 },
+          { id: "2", name: "Searching knowledge base", status: "completed", duration: 450 },
+          { id: "3", name: "Generating response", status: "completed", duration: 890 },
+        ],
+        isProcessing: false,
+        totalTokens: Math.floor(Math.random() * 500) + 200,
+        responseTime: 1460,
+      });
 
       // Update thread title if it's the first message
       if (threads.find(t => t.id === threadId)?.title === null) {
@@ -118,6 +234,64 @@ export default function ChatPage() {
       setIsTyping(false);
     }, 1500);
   }, [input, activeThreadId, createThread, addMessage, selectedLLM.id, responseStyle.id, threads, setThreads]);
+
+  const handleRegenerate = useCallback(async (messageId: string) => {
+    if (!lastUserQuery || isTyping) return;
+
+    // Find the message to regenerate and remove it
+    const messageIndex = messages.findIndex(m => m.id === messageId);
+    if (messageIndex === -1) return;
+
+    // Remove the message from the display (in production, this would also delete from DB)
+    setMessages(prev => prev.filter(m => m.id !== messageId));
+    setIsTyping(true);
+
+    // Update transparency data to show processing
+    setTransparencyData({
+      sources: [],
+      steps: [
+        { id: "1", name: "Regenerating response", status: "running" },
+        { id: "2", name: "Searching knowledge base", status: "pending" },
+        { id: "3", name: "Generating new response", status: "pending" },
+      ],
+      isProcessing: true,
+      totalTokens: 0,
+      responseTime: 0,
+    });
+
+    // Simulate regenerated response
+    setTimeout(async () => {
+      const sources = [
+        { id: "src-1", type: "article", title: "Internal Documentation", url: "/content", relevance: 0.94 },
+        { id: "src-2", type: "document", title: "HR Policy Guide", url: "/content/hr", relevance: 0.88 },
+        { id: "src-3", type: "article", title: "Company Handbook", url: "/content/handbook", relevance: 0.81 },
+      ];
+
+      await addMessage(
+        "assistant",
+        generateAIResponse(lastUserQuery, responseStyle.id) + "\n\n_(Regenerated response)_",
+        {
+          sources: sources.map(s => ({ id: s.id, type: s.type, title: s.title, url: s.url })),
+          confidence: Math.floor(Math.random() * 10) + 88,
+          llmModel: selectedLLM.id,
+        }
+      );
+
+      setTransparencyData({
+        sources,
+        steps: [
+          { id: "1", name: "Regenerating response", status: "completed", duration: 150 },
+          { id: "2", name: "Searching knowledge base", status: "completed", duration: 480 },
+          { id: "3", name: "Generating new response", status: "completed", duration: 920 },
+        ],
+        isProcessing: false,
+        totalTokens: Math.floor(Math.random() * 500) + 250,
+        responseTime: 1550,
+      });
+
+      setIsTyping(false);
+    }, 1500);
+  }, [lastUserQuery, isTyping, messages, setMessages, addMessage, responseStyle.id, selectedLLM.id]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -141,6 +315,26 @@ export default function ChatPage() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Search Scope Toggle */}
+              <SearchScopeToggle
+                scope={searchScope}
+                onScopeChange={setSearchScope}
+                activeSpaceName={spaces.find(s => s.id === activeSpaceId)?.name}
+              />
+
+              {/* Show Work Button */}
+              <button
+                onClick={() => setShowTransparency(!showTransparency)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm transition-colors ${
+                  showTransparency
+                    ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
+                    : "bg-white/5 hover:bg-white/10 text-white/70"
+                }`}
+              >
+                <Eye className="w-4 h-4" />
+                Show work
+              </button>
+
               {/* LLM Selector */}
               <div className="relative">
                 <button
@@ -206,6 +400,19 @@ export default function ChatPage() {
               </button>
             </div>
           </div>
+
+          {/* Transparency Pane */}
+          {showTransparency && (
+            <div className="border-b border-white/10">
+              <TransparencyPane
+                sources={transparencyData.sources}
+                steps={transparencyData.steps}
+                isProcessing={transparencyData.isProcessing}
+                totalTokens={transparencyData.totalTokens}
+                responseTime={transparencyData.responseTime}
+              />
+            </div>
+          )}
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
@@ -276,11 +483,20 @@ export default function ChatPage() {
                     {/* Actions */}
                     {message.role === "assistant" && (
                       <div className="mt-3 flex items-center gap-2">
-                        <button className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors">
+                        <button
+                          onClick={() => navigator.clipboard.writeText(message.content)}
+                          className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors"
+                          title="Copy response"
+                        >
                           <Copy className="w-4 h-4" />
                         </button>
-                        <button className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors">
-                          <RefreshCw className="w-4 h-4" />
+                        <button
+                          onClick={() => handleRegenerate(message.id)}
+                          disabled={isTyping}
+                          className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          title="Regenerate response"
+                        >
+                          <RefreshCw className={`w-4 h-4 ${isTyping ? "animate-spin" : ""}`} />
                         </button>
                         <div className="flex items-center gap-1 ml-2">
                           <button className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-green-400 transition-colors">
@@ -344,27 +560,32 @@ export default function ChatPage() {
               <div className="bg-[#0f0f14] border border-white/10 rounded-2xl p-3 focus-within:border-blue-500/50 transition-colors">
                 <div className="flex items-end gap-3">
                   <div className="flex-1">
-                    <textarea
+                    <MentionInput
                       value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSend();
-                        }
-                      }}
-                      placeholder="Ask anything about your organization..."
-                      className="w-full bg-transparent text-white placeholder-white/40 outline-none resize-none text-sm leading-relaxed min-h-[24px] max-h-[120px]"
-                      rows={1}
+                      onChange={setInput}
+                      onSend={handleSend}
+                      placeholder="Ask anything about your organization... Use @ to mention people or docs"
                     />
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+                    <button
+                      onClick={() => setShowFileUpload(true)}
+                      className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors"
+                    >
                       <Paperclip className="w-5 h-5" />
                     </button>
-                    <button className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
-                      <Mic className="w-5 h-5" />
+                    <button
+                      onClick={toggleVoiceInput}
+                      disabled={!voiceSupported}
+                      className={`p-2 rounded-lg transition-colors ${
+                        isListening
+                          ? "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                          : "hover:bg-white/5 text-white/40 hover:text-white/70"
+                      } ${!voiceSupported ? "opacity-50 cursor-not-allowed" : ""}`}
+                      title={voiceSupported ? (isListening ? "Stop listening" : "Start voice input") : "Voice input not supported"}
+                    >
+                      <Mic className={`w-5 h-5 ${isListening ? "animate-pulse" : ""}`} />
                     </button>
                     <button
                       onClick={handleSend}
@@ -391,8 +612,24 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Right Panel - Chat History */}
+        {/* Right Panel - Chat History & Spaces */}
         <div className="w-72 border-l border-white/10 bg-[#0f0f14] p-4 hidden lg:flex flex-col">
+          {/* Spaces Section */}
+          <ChatSpaces
+            spaces={spaces}
+            activeSpaceId={activeSpaceId ?? undefined}
+            onSelectSpace={(spaceId) => {
+              setActiveSpaceId(spaceId);
+              if (spaceId) {
+                setSearchScope("space");
+              }
+            }}
+            onCreateSpace={() => {
+              // In production, this would open a create space modal
+              console.log("Create space");
+            }}
+          />
+
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-white">Chat History</h3>
             <button
@@ -444,6 +681,16 @@ export default function ChatPage() {
           )}
         </div>
       </main>
+
+      {/* File Upload Modal */}
+      <FileUploadModal
+        isOpen={showFileUpload}
+        onClose={() => setShowFileUpload(false)}
+        onUpload={(files) => {
+          console.log("Uploaded files:", files);
+          setShowFileUpload(false);
+        }}
+      />
     </div>
   );
 }

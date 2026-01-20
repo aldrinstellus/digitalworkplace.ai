@@ -188,10 +188,10 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 - **Logo:** dIQ logo at top (links to dashboard)
 - **Active State:** Blue gradient bg + left indicator bar
 
-### Dashboard Header Badge
-- **Content:** "dIQ" badge + "Intranet IQ" label + port indicator
-- **Badge Style:** Gradient background, rounded corners
-- **Position:** Top of main content area
+### Dashboard Header (Simplified)
+- **Content:** Dynamic greeting only ("Good [time], [Name]" or "Hello there")
+- **Branding:** Sidebar logo only (no redundant badges in main content)
+- **User Name:** Retrieved from Clerk authentication
 
 ### Search Bar (Hero)
 - **Height:** 56px
@@ -228,16 +228,17 @@ font-family: 'JetBrains Mono', 'Fira Code', monospace;
 │ Sidebar │           Main Content Area               │
 │  64px   │                                           │
 │         │  ┌─────────────────────────────────────┐  │
-│ [dIQ]   │  │  [dIQ Badge] Intranet IQ  :3001    │  │
-│         │  └─────────────────────────────────────┘  │
-│ [Home]  │  ┌─────────────────────────────────────┐  │
-│ [Chat]  │  │  Greeting + Search Bar              │  │
-│ [Agents]│  └─────────────────────────────────────┘  │
-│ [People]│                                           │
-│ [Content│  ┌────────┐ ┌────────┐ ┌────────┐       │
-│         │  │ Quick  │ │ Quick  │ │ Quick  │       │
-│ [Search]│  │ Action │ │ Action │ │ Action │       │
-│ [Gear]  │  └────────┘ └────────┘ └────────┘       │
+│ [dIQ]   │  │  "Hello there" or "Good afternoon,  │  │
+│         │  │   [Name]" + For you | Company       │  │
+│ [Home]  │  └─────────────────────────────────────┘  │
+│ [Chat]  │  ┌─────────────────────────────────────┐  │
+│ [Agents]│  │  Search Bar ("Ask anything...")     │  │
+│ [People]│  └─────────────────────────────────────┘  │
+│ [Content│                                           │
+│         │  ┌────────┐ ┌────────┐ ┌────────┐       │
+│ [Search]│  │ Quick  │ │ Quick  │ │ Quick  │       │
+│ [Gear]  │  │ Action │ │ Action │ │ Action │       │
+│         │  └────────┘ └────────┘ └────────┘       │
 │         │                                           │
 │         │  ┌─────────────────────────────────────┐ │
 │         │  │ Recent Activity / Trending Topics   │ │
@@ -491,6 +492,6 @@ interface KnowledgeItem {
 
 ---
 
-*Last Updated: January 19, 2025*
-*Version: 0.2.2*
+*Last Updated: January 20, 2025*
+*Version: 0.2.6*
 *Part of Digital Workplace AI Product Suite*

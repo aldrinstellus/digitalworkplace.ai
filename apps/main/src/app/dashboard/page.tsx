@@ -27,7 +27,7 @@ const products = [
     title: "AI Intranet",
     description: "Smart internal knowledge network",
     href: "https://intranet-iq.vercel.app/diq/dashboard",
-    disabled: false,
+    disabled: true, // Coming soon
     colors: {
       primary: "#3b82f6",
       secondary: "#8b5cf6",
@@ -39,7 +39,7 @@ const products = [
     name: "Chat Core IQ",
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
-    href: "http://localhost:3002/dcq/Home/index.html",
+    href: "https://chat-core-iq.vercel.app/dcq/Home/index.html",
     disabled: false,
     colors: {
       primary: "#a855f7",

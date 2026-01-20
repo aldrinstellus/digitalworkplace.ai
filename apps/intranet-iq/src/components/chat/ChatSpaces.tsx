@@ -91,9 +91,9 @@ export function ChatSpaces({
   return (
     <div className="border-b border-white/10 pb-4 mb-4">
       {/* Header */}
-      <button
+      <div
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-1 py-2 hover:bg-white/5 rounded-lg transition-colors"
+        className="w-full flex items-center justify-between px-1 py-2 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-2">
           <ChevronRight
@@ -116,7 +116,7 @@ export function ChatSpaces({
         >
           <Plus className="w-4 h-4" />
         </button>
-      </button>
+      </div>
 
       {expanded && (
         <div className="mt-2 space-y-3">
@@ -205,9 +205,9 @@ function SpaceItem({
   onSelect: () => void;
 }) {
   return (
-    <button
+    <div
       onClick={onSelect}
-      className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors group ${
+      className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg text-sm transition-colors group cursor-pointer ${
         isActive
           ? "bg-blue-500/20 text-blue-400"
           : "text-white/60 hover:bg-white/5 hover:text-white"
@@ -223,10 +223,13 @@ function SpaceItem({
       </div>
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <span className="text-xs text-white/40">{space.memberCount}</span>
-        <button className="p-0.5 rounded hover:bg-white/10">
+        <button
+          onClick={(e) => e.stopPropagation()}
+          className="p-0.5 rounded hover:bg-white/10"
+        >
           <MoreHorizontal className="w-3 h-3 text-white/40" />
         </button>
       </div>
-    </button>
+    </div>
   );
 }

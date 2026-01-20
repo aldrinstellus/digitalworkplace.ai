@@ -85,16 +85,22 @@ export function useDepartments() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
-      const { data, error } = await getDepartments();
-      if (error) {
-        setError(error.message);
-      } else {
-        setDepartments(data || []);
+    async function fetchData() {
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/people');
+        if (!response.ok) {
+          throw new Error('Failed to fetch departments');
+        }
+        const data = await response.json();
+        setDepartments(data.departments || []);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, []);
 
   return { departments, loading, error };
@@ -114,17 +120,35 @@ export function useEmployees(options?: {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const { data, error } = await getEmployees(options);
-      if (error) {
-        setError(error.message);
-      } else {
-        setEmployees(data || []);
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/people');
+        if (!response.ok) {
+          throw new Error('Failed to fetch employees');
+        }
+        const data = await response.json();
+        let filteredEmployees = data.employees || [];
+
+        // Apply client-side filtering
+        if (options?.departmentId) {
+          filteredEmployees = filteredEmployees.filter(
+            (e: any) => e.department_id === options.departmentId
+          );
+        }
+        if (options?.limit) {
+          filteredEmployees = filteredEmployees.slice(0, options.limit);
+        }
+
+        setEmployees(filteredEmployees);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [options?.departmentId, options?.search, options?.limit]);
 
   return { employees, loading, error };
@@ -144,17 +168,40 @@ export function useArticles(options?: {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const { data, error } = await getArticles(options);
-      if (error) {
-        setError(error.message);
-      } else {
-        setArticles(data || []);
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/content');
+        if (!response.ok) {
+          throw new Error('Failed to fetch articles');
+        }
+        const data = await response.json();
+        let filteredArticles = data.articles || [];
+
+        // Apply client-side filtering
+        if (options?.categoryId) {
+          filteredArticles = filteredArticles.filter(
+            (a: any) => a.category_id === options.categoryId
+          );
+        }
+        if (options?.status) {
+          filteredArticles = filteredArticles.filter(
+            (a: any) => a.status === options.status
+          );
+        }
+        if (options?.limit) {
+          filteredArticles = filteredArticles.slice(0, options.limit);
+        }
+
+        setArticles(filteredArticles);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [options?.categoryId, options?.status, options?.limit]);
 
   return { articles, loading, error, setArticles };
@@ -170,16 +217,31 @@ export function useKBCategories(departmentId?: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
-      const { data, error } = await getKBCategories(departmentId);
-      if (error) {
-        setError(error.message);
-      } else {
-        setCategories(data || []);
+    async function fetchData() {
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/content');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        let filteredCategories = data.categories || [];
+
+        // Apply client-side filtering
+        if (departmentId) {
+          filteredCategories = filteredCategories.filter(
+            (c: any) => c.department_id === departmentId
+          );
+        }
+
+        setCategories(filteredCategories);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [departmentId]);
 
   return { categories, loading, error };
@@ -301,17 +363,38 @@ export function useWorkflows(options?: {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const { data, error } = await getWorkflows(options);
-      if (error) {
-        setError(error.message);
-      } else {
-        setWorkflows(data || []);
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/workflows');
+        if (!response.ok) {
+          throw new Error('Failed to fetch workflows');
+        }
+        const data = await response.json();
+        let filteredWorkflows = data.workflows || [];
+
+        // Apply client-side filtering
+        if (options?.status) {
+          filteredWorkflows = filteredWorkflows.filter(
+            (w: Workflow) => w.status === options.status
+          );
+        }
+        if (options?.isTemplate !== undefined) {
+          filteredWorkflows = filteredWorkflows.filter(
+            (w: Workflow) => w.is_template === options.isTemplate
+          );
+        }
+
+        setWorkflows(filteredWorkflows);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [options?.status, options?.isTemplate]);
 
   const updateWorkflow = async (workflowId: string, updates: Partial<Workflow>) => {
@@ -347,17 +430,41 @@ export function useNewsPosts(options?: {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const { data, error } = await getNewsPosts(options);
-      if (error) {
-        setError(error.message);
-      } else {
-        setPosts(data || []);
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch news posts');
+        }
+        const data = await response.json();
+        let filteredPosts = data.news_posts || [];
+
+        // Apply client-side filtering
+        if (options?.departmentId) {
+          filteredPosts = filteredPosts.filter(
+            (p: NewsPost) => p.department_id === options.departmentId
+          );
+        }
+        if (options?.type) {
+          filteredPosts = filteredPosts.filter(
+            (p: NewsPost) => p.type === options.type
+          );
+        }
+        if (options?.limit) {
+          filteredPosts = filteredPosts.slice(0, options.limit);
+        }
+
+        setPosts(filteredPosts);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [options?.departmentId, options?.type, options?.limit]);
 
   return { posts, loading, error, setPosts };
@@ -376,17 +483,36 @@ export function useUpcomingEvents(options?: {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
       setLoading(true);
-      const { data, error } = await getUpcomingEvents(options);
-      if (error) {
-        setError(error.message);
-      } else {
-        setEvents(data || []);
+      try {
+        // Use API route for cross-schema data
+        const response = await fetch('/diq/api/dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data = await response.json();
+        let filteredEvents = data.events || [];
+
+        // Apply client-side filtering
+        if (options?.departmentId) {
+          filteredEvents = filteredEvents.filter(
+            (e: Event) => e.department_id === options.departmentId
+          );
+        }
+        if (options?.limit) {
+          filteredEvents = filteredEvents.slice(0, options.limit);
+        }
+
+        setEvents(filteredEvents);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(errorMessage);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
-    fetch();
+    fetchData();
   }, [options?.departmentId, options?.limit]);
 
   return { events, loading, error, setEvents };

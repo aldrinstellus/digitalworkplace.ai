@@ -281,12 +281,24 @@ Rotating messages covering:
 Protected dashboard page accessible after authentication featuring 4 AI product cards.
 
 ### Products
-| Product | Theme Color | Description |
-|---------|-------------|-------------|
-| Support IQ | Green (#10b981) | Intelligent customer support automation |
-| Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network |
-| Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence |
-| Chat Core IQ | Purple (#a855f7) | Conversational AI for your business |
+| Product | Theme Color | Description | Status |
+|---------|-------------|-------------|--------|
+| Support IQ | Green (#10b981) | Intelligent customer support automation | ✅ Active |
+| Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network | ✅ Active |
+| Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
+| Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Active |
+
+### dSQ - Support IQ (v1.1.0)
+- **Port**: 3003
+- **Production**: https://support-iq-pearl.vercel.app
+- **GitHub**: https://github.com/aldrinstellus/support-iq
+- **Features**:
+  - 3 Modes: Government, Project, ATC (SME)
+  - 10 Personas across all modes
+  - FloatingModeSwitcher (top-right dropdown)
+  - Theme toggle with animations
+  - 15 Supabase tables with 100% embedding coverage
+  - Fully responsive (mobile/tablet/desktop)
 
 ### Product Card Features
 - **Animated SVG Illustrations**: Each product has unique animated SVG background

@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-19 (WordmarkGlitch Animation + Embedding Migration v0.5.2)
-**Version**: 0.5.2
-**Session Status**: Animation enhancements + OpenAI embeddings migration
+**Last Updated**: 2026-01-20 (dSQ FloatingModeSwitcher + Full Deployment v0.6.0)
+**Version**: 0.6.0
+**Session Status**: dSQ complete with floating mode switcher, GitHub/Vercel deployed
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -65,10 +65,14 @@
 | **dCQ Home** | http://localhost:3002/dcq/Home/index.html |
 | **dCQ Admin** | http://localhost:3002/dcq/admin |
 
-#### dSQ - Support IQ (Port 3003) - PENDING
+#### dSQ - Support IQ (Port 3003) - ACTIVE
 | Page | URL |
 |------|-----|
-| **dSQ Dashboard** | http://localhost:3003/dsq/dashboard |
+| **dSQ Demo (ATC)** | http://localhost:3003/demo/atc-executive |
+| **dSQ Demo (Government)** | http://localhost:3003/demo/cor |
+| **dSQ Demo (Project)** | http://localhost:3003/demo/project-manager |
+| **dSQ Health** | http://localhost:3003/api/health |
+| **dSQ Production** | https://support-iq-pearl.vercel.app |
 
 #### dTQ - Test Pilot IQ (Port 3004) - PENDING
 | Page | URL |
@@ -189,7 +193,7 @@ digitalworkplace.ai/
 
 | Product | Code | Port | Status | Embeddings |
 |---------|------|------|--------|------------|
-| Support IQ | dSQ | 3003 | ⬜ Pending | ⬜ Pending |
+| **Support IQ** | **dSQ** | **3003** | **✅ Active** | **✅ 100%** |
 | **Intranet IQ** | **dIQ** | **3001** | **✅ Active** | **✅ 100%** |
 | **Chat Core IQ** | **dCQ** | **3002** | **✅ Active** | **✅ Ready** |
 | Test Pilot IQ | dTQ | 3004 | ⬜ Pending (Disabled in UI) | ⬜ Pending |
@@ -300,17 +304,21 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 ## Pending Tasks
 
-### Completed (v0.5.2)
+### Completed (v0.6.0)
 - [x] Dashboard product order updated
 - [x] Test Pilot IQ disabled in UI
 - [x] Sign-in page as default landing page (all redirects fixed)
 - [x] WordmarkGlitch animation: chaotic scramble with 75% stable display
 - [x] OpenAI text-embedding-3-small migration (dIQ, dCQ)
+- [x] **dSQ (Support IQ) fully implemented and deployed**
+- [x] **dSQ FloatingModeSwitcher (top-right dropdown with animations)**
+- [x] **dSQ Supabase schema with 15 tables, 100% embedding coverage**
+- [x] **dSQ GitHub repo: aldrinstellus/support-iq**
+- [x] **dSQ Vercel: https://support-iq-pearl.vercel.app**
 - [x] Git commit and push
 - [x] Vercel deployment
 
 ### Short Term
-- [ ] dSQ (Support IQ) implementation
 - [ ] dTQ (Test Pilot IQ) implementation
 - [ ] Cross-project search UI
 
@@ -381,6 +389,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session ended at: 2026-01-19*
+*Last session ended at: 2026-01-20*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Version: 0.5.2 - WordmarkGlitch Animation + OpenAI Embeddings Migration*
+*Version: 0.6.0 - dSQ FloatingModeSwitcher + Full Deployment*

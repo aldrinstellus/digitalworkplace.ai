@@ -2011,7 +2011,55 @@
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3002/dcq/demo/ivr"
+    },
+    {
+      "id": "conv_1768850527411_y7yxopr0c",
+      "sessionId": "test-local-123",
+      "startTime": "2026-01-19T19:22:07.411Z",
+      "endTime": "2026-01-19T19:22:07.411Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is Chat Core IQ?",
+          "timestamp": "2026-01-19T19:22:07.411Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-19T19:22:07.411Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768850528631_tybaaw93y",
+      "sessionId": "test-local-123",
+      "startTime": "2026-01-19T19:22:08.631Z",
+      "endTime": "2026-01-19T19:22:08.631Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is Chat Core IQ?",
+          "timestamp": "2026-01-19T19:22:08.631Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I apologize, I could not process your request. Please try again.",
+          "timestamp": "2026-01-19T19:22:08.631Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-19T12:42:35.608Z"
+  "lastUpdated": "2026-01-19T19:22:08.641Z"
 }

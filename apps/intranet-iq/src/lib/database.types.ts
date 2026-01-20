@@ -362,6 +362,14 @@ export interface UserSettings {
     theme: 'dark' | 'light' | 'system';
     sidebar_collapsed: boolean;
     density: 'compact' | 'comfortable' | 'spacious';
+    dashboardWidgets?: Array<{
+      id: string;
+      type: string;
+      title: string;
+      visible: boolean;
+      order: number;
+      size?: string;
+    }>;
   };
   ai_prefs: {
     default_llm: string;

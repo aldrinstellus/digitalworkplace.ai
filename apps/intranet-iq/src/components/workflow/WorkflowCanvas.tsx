@@ -11,12 +11,7 @@ import {
   Settings,
   Play,
   GitBranch,
-  Mail,
-  Database,
-  MessageSquare,
   Bot,
-  Sparkles,
-  GripVertical,
   ZoomIn,
   ZoomOut,
   Maximize2,
@@ -99,6 +94,14 @@ const nodeTypeConfig: Record<
 const NODE_WIDTH = 240;
 const NODE_HEIGHT = 80;
 
+interface ConnectionDrag {
+  fromNodeId: string;
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+}
+
 export function WorkflowCanvas({
   nodes,
   onNodesChange,
@@ -110,6 +113,8 @@ export function WorkflowCanvas({
   const [dragging, setDragging] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [connectionDrag, setConnectionDrag] = useState<ConnectionDrag | null>(null);
+  const [hoveredConnectionTarget, setHoveredConnectionTarget] = useState<string | null>(null);
 
   const handleZoomIn = () => setZoom((z) => Math.min(z + 0.1, 2));
   const handleZoomOut = () => setZoom((z) => Math.max(z - 0.1, 0.5));
@@ -177,6 +182,79 @@ export function WorkflowCanvas({
     onNodesChange(nodes.filter((n) => n.id !== nodeId));
     if (selectedNode === nodeId) setSelectedNode(null);
   };
+
+  // Handle connection drag start from output port
+  const handleConnectionDragStart = useCallback(
+    (nodeId: string, e: React.MouseEvent) => {
+      if (readOnly) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const node = nodes.find((n) => n.id === nodeId);
+      if (!node) return;
+
+      const fromX = node.position.x + NODE_WIDTH;
+      const fromY = node.position.y + NODE_HEIGHT / 2;
+
+      setConnectionDrag({
+        fromNodeId: nodeId,
+        fromX,
+        fromY,
+        toX: fromX,
+        toY: fromY,
+      });
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!canvasRef.current) return;
+        const rect = canvasRef.current.getBoundingClientRect();
+        const scrollLeft = canvasRef.current.scrollLeft;
+        const scrollTop = canvasRef.current.scrollTop;
+        const x = (moveEvent.clientX - rect.left + scrollLeft) / zoom;
+        const y = (moveEvent.clientY - rect.top + scrollTop) / zoom;
+
+        setConnectionDrag((prev) =>
+          prev ? { ...prev, toX: x, toY: y } : null
+        );
+      };
+
+      const handleMouseUp = () => {
+        // Check if we're over a valid target node
+        if (hoveredConnectionTarget && hoveredConnectionTarget !== nodeId) {
+          // Create the connection
+          onNodesChange(
+            nodes.map((n) =>
+              n.id === nodeId
+                ? { ...n, connections: { ...n.connections, success: hoveredConnectionTarget } }
+                : n
+            )
+          );
+        }
+        setConnectionDrag(null);
+        setHoveredConnectionTarget(null);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseup", handleMouseUp);
+      };
+
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    },
+    [nodes, onNodesChange, zoom, readOnly, hoveredConnectionTarget]
+  );
+
+  // Handle removing a connection
+  const handleRemoveConnection = useCallback(
+    (nodeId: string) => {
+      if (readOnly) return;
+      onNodesChange(
+        nodes.map((n) =>
+          n.id === nodeId
+            ? { ...n, connections: { ...n.connections, success: undefined } }
+            : n
+        )
+      );
+    },
+    [nodes, onNodesChange, readOnly]
+  );
 
   // Calculate connection paths
   const getConnectionPath = (fromNode: WorkflowNode, toNode: WorkflowNode) => {
@@ -287,7 +365,21 @@ export function WorkflowCanvas({
                   fill="rgba(96, 165, 250, 0.5)"
                 />
               </marker>
+              <marker
+                id="arrowhead-dragging"
+                markerWidth="10"
+                markerHeight="7"
+                refX="9"
+                refY="3.5"
+                orient="auto"
+              >
+                <polygon
+                  points="0 0, 10 3.5, 0 7"
+                  fill="rgba(74, 222, 128, 0.7)"
+                />
+              </marker>
             </defs>
+            {/* Existing connections */}
             {nodes.map((node) => {
               if (node.connections.success) {
                 const targetNode = nodes.find(
@@ -295,19 +387,42 @@ export function WorkflowCanvas({
                 );
                 if (targetNode) {
                   return (
-                    <path
-                      key={`${node.id}-${targetNode.id}`}
-                      d={getConnectionPath(node, targetNode)}
-                      stroke="rgba(96, 165, 250, 0.5)"
-                      strokeWidth="2"
-                      fill="none"
-                      markerEnd="url(#arrowhead)"
-                    />
+                    <g key={`${node.id}-${targetNode.id}`}>
+                      <path
+                        d={getConnectionPath(node, targetNode)}
+                        stroke="rgba(96, 165, 250, 0.5)"
+                        strokeWidth="2"
+                        fill="none"
+                        markerEnd="url(#arrowhead)"
+                      />
+                      {/* Invisible wider path for easier clicking */}
+                      {!readOnly && (
+                        <path
+                          d={getConnectionPath(node, targetNode)}
+                          stroke="transparent"
+                          strokeWidth="12"
+                          fill="none"
+                          className="cursor-pointer pointer-events-auto"
+                          onClick={() => handleRemoveConnection(node.id)}
+                        />
+                      )}
+                    </g>
                   );
                 }
               }
               return null;
             })}
+            {/* Dragging connection */}
+            {connectionDrag && (
+              <path
+                d={`M ${connectionDrag.fromX} ${connectionDrag.fromY} C ${(connectionDrag.fromX + connectionDrag.toX) / 2} ${connectionDrag.fromY}, ${(connectionDrag.fromX + connectionDrag.toX) / 2} ${connectionDrag.toY}, ${connectionDrag.toX} ${connectionDrag.toY}`}
+                stroke={hoveredConnectionTarget ? "rgba(74, 222, 128, 0.7)" : "rgba(96, 165, 250, 0.3)"}
+                strokeWidth="2"
+                strokeDasharray={hoveredConnectionTarget ? "none" : "5,5"}
+                fill="none"
+                markerEnd={hoveredConnectionTarget ? "url(#arrowhead-dragging)" : undefined}
+              />
+            )}
           </svg>
 
           {/* Nodes */}
@@ -385,8 +500,33 @@ export function WorkflowCanvas({
                   )}
 
                   {/* Connection Points */}
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-white/20 border-2 border-white/40" />
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-blue-400" />
+                  {/* Input port (left) */}
+                  <div
+                    className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full transition-all ${
+                      connectionDrag && connectionDrag.fromNodeId !== node.id
+                        ? hoveredConnectionTarget === node.id
+                          ? "bg-green-500 border-2 border-green-400 scale-150"
+                          : "bg-white/40 border-2 border-white/60 scale-125"
+                        : "bg-white/20 border-2 border-white/40"
+                    }`}
+                    onMouseEnter={() => {
+                      if (connectionDrag && connectionDrag.fromNodeId !== node.id) {
+                        setHoveredConnectionTarget(node.id);
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredConnectionTarget(null);
+                    }}
+                  />
+                  {/* Output port (right) */}
+                  <div
+                    className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-4 h-4 rounded-full transition-all ${
+                      !readOnly
+                        ? "bg-blue-500 border-2 border-blue-400 cursor-crosshair hover:scale-125 hover:bg-blue-400"
+                        : "bg-blue-500 border-2 border-blue-400"
+                    } ${connectionDrag?.fromNodeId === node.id ? "scale-125 bg-blue-400" : ""}`}
+                    onMouseDown={(e) => handleConnectionDragStart(node.id, e)}
+                  />
                 </div>
               </div>
             );
@@ -437,6 +577,22 @@ export function WorkflowCanvas({
       {readOnly && (
         <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-yellow-500/20 border border-yellow-500/30 rounded-lg text-xs text-yellow-400">
           Viewer Mode - Changes won&apos;t be saved
+        </div>
+      )}
+
+      {/* Connection dragging hint */}
+      {connectionDrag && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg text-sm text-blue-400 pointer-events-none">
+          {hoveredConnectionTarget
+            ? "Release to connect"
+            : "Drag to another node's input to connect"}
+        </div>
+      )}
+
+      {/* Help hint for connections */}
+      {!readOnly && nodes.length > 1 && !nodes.some((n) => n.connections.success) && !connectionDrag && (
+        <div className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-white/40">
+          Tip: Drag from the blue dot to connect nodes
         </div>
       )}
     </div>

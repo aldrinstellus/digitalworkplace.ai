@@ -5,13 +5,17 @@ import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Search, Sparkles, Clock, TrendingUp, FileText, Users, Calendar, MessageSquare, Newspaper, Bell } from "lucide-react";
 import { useNewsPosts, useUpcomingEvents, useRecentActivity } from "@/lib/hooks/useSupabase";
+import { useDashboardWidgets } from "@/lib/hooks/useDashboardWidgets";
 import type { NewsPost, Event } from "@/lib/database.types";
 import Link from "next/link";
 import { MeetingCard } from "@/components/dashboard/MeetingCard";
 import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
+import { DashboardCustomizer, DashboardCustomizeButton } from "@/components/dashboard/DashboardCustomizer";
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+  const { visibleWidgets, loading: widgetsLoading } = useDashboardWidgets();
 
   // Get display name from Clerk user
   const getDisplayName = (): string | null => {
@@ -39,6 +43,10 @@ export default function Dashboard() {
   // Trending topics derived from recent posts
   const trendingTopics = ["AI Strategy", "Q4 Goals", "New Hires", "Product Launch", "Team Building"];
 
+  // Helper to check if a widget is visible
+  const isWidgetVisible = (widgetType: string) =>
+    visibleWidgets.some((w) => w.type === widgetType);
+
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
       <Sidebar />
@@ -47,15 +55,18 @@ export default function Dashboard() {
       <main className="ml-16 p-8">
         <div className="max-w-5xl mx-auto">
           {/* Greeting */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-medium text-white mb-1">
-              {greeting}
-            </h1>
-            <div className="flex items-center gap-2 text-sm text-white/50">
-              <span>For you</span>
-              <span>|</span>
-              <span>Company</span>
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-medium text-white mb-1">
+                {greeting}
+              </h1>
+              <div className="flex items-center gap-2 text-sm text-white/50">
+                <span>For you</span>
+                <span>|</span>
+                <span>Company</span>
+              </div>
             </div>
+            <DashboardCustomizeButton onClick={() => setIsCustomizerOpen(true)} />
           </div>
 
           {/* Search Bar */}
@@ -77,9 +88,10 @@ export default function Dashboard() {
           </Link>
 
           {/* Meeting Card */}
-          <MeetingCard />
+          {isWidgetVisible("meeting") && <MeetingCard />}
 
           {/* Quick Actions */}
+          {isWidgetVisible("quick-actions") && (
           <div className="grid grid-cols-3 gap-4 mb-8">
             <Link href="/content">
               <QuickActionCard
@@ -106,9 +118,13 @@ export default function Dashboard() {
               />
             </Link>
           </div>
+          )}
 
-          <div className="grid grid-cols-2 gap-6">
+          {/* News & Events Grid */}
+          {(isWidgetVisible("news") || isWidgetVisible("events")) && (
+          <div className={`grid gap-6 mb-6 ${isWidgetVisible("news") && isWidgetVisible("events") ? "grid-cols-2" : "grid-cols-1"}`}>
             {/* News Feed */}
+            {isWidgetVisible("news") && (
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-medium text-white flex items-center gap-2">
@@ -158,8 +174,10 @@ export default function Dashboard() {
                 <p className="text-white/40 text-sm">No news posts yet</p>
               )}
             </div>
+            )}
 
             {/* Upcoming Events */}
+            {isWidgetVisible("events") && (
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-medium text-white flex items-center gap-2">
@@ -216,9 +234,12 @@ export default function Dashboard() {
                 <p className="text-white/40 text-sm">No upcoming events</p>
               )}
             </div>
+            )}
           </div>
+          )}
 
           {/* Recent Activity */}
+          {isWidgetVisible("activity") && (
           <div className="mt-6 bg-[#0f0f14] border border-white/10 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-white flex items-center gap-2">
@@ -283,8 +304,10 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+          )}
 
           {/* Trending */}
+          {isWidgetVisible("trending") && (
           <div className="mt-6 bg-[#0f0f14] border border-white/10 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-5 h-5 text-green-400" />
@@ -302,8 +325,12 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
+          )}
         </div>
       </main>
+
+      {/* Dashboard Customizer */}
+      <DashboardCustomizer isOpen={isCustomizerOpen} onClose={() => setIsCustomizerOpen(false)} />
 
       {/* App Shortcuts Bar */}
       <AppShortcutsBar />

@@ -248,19 +248,18 @@ export default function SearchPage() {
             </p>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar with Autocomplete */}
           <div className="relative mb-6">
             <div className="bg-[#0f0f14] border border-white/10 rounded-2xl p-4 focus-within:border-blue-500/50 transition-colors">
               <div className="flex items-center gap-3">
-                <Search className="w-5 h-5 text-white/40" />
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Search anything..."
-                  className="flex-1 bg-transparent text-white placeholder-white/40 outline-none text-lg"
-                />
+                <div className="flex-1">
+                  <SearchAutocomplete
+                    value={query}
+                    onChange={setQuery}
+                    onSearch={handleSearchWithQuery}
+                    placeholder="Search anything..."
+                  />
+                </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setShowAdvanced(!showAdvanced)}

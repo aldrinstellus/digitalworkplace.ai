@@ -6,6 +6,7 @@ import { useKBCategories, useArticles, useDepartments } from "@/lib/hooks/useSup
 import { ArticleEditor } from "@/components/content/ArticleEditor";
 import { CreateContentModal } from "@/components/content/CreateContentModal";
 import { VersionHistoryModal } from "@/components/content/VersionHistoryModal";
+import { ArticleApprovalPanel } from "@/components/content/ArticleApprovalPanel";
 import DOMPurify from "isomorphic-dompurify";
 import {
   Search,
@@ -28,6 +29,7 @@ import {
   ThumbsUp,
   Link2,
   Check,
+  ClipboardCheck,
 } from "lucide-react";
 import type { KBCategory, Article } from "@/lib/database.types";
 
@@ -132,6 +134,7 @@ export default function ContentPage() {
   const [showArticleEditor, setShowArticleEditor] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState<"category" | "article" | null>(null);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
+  const [showApprovalPanel, setShowApprovalPanel] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
 
@@ -317,7 +320,15 @@ export default function ContentPage() {
                 <BookOpen className="w-5 h-5 text-blue-400" />
                 Knowledge Base
               </h2>
-              <div className="relative">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowApprovalPanel(true)}
+                  className="p-2 rounded-lg bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400 transition-colors"
+                  title="Pending Approvals"
+                >
+                  <ClipboardCheck className="w-4 h-4" />
+                </button>
+                <div className="relative">
                 <button
                   onClick={() => setShowNewMenu(!showNewMenu)}
                   className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
@@ -369,6 +380,7 @@ export default function ContentPage() {
                     </div>
                   </>
                 )}
+              </div>
               </div>
             </div>
 
@@ -653,6 +665,16 @@ export default function ContentPage() {
           onRestore={handleVersionRestore}
         />
       )}
+
+      {/* Article Approval Panel */}
+      <ArticleApprovalPanel
+        isOpen={showApprovalPanel}
+        onClose={() => setShowApprovalPanel(false)}
+        onApprovalComplete={() => {
+          // Refresh the articles list after approval
+          window.location.reload();
+        }}
+      />
 
       {/* Share Toast */}
       {showShareToast && (

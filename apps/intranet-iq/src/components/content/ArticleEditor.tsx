@@ -147,6 +147,13 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
               Save Draft
             </button>
             <button
+              onClick={() => handleSave("pending_review")}
+              disabled={saving || !title.trim()}
+              className="px-4 py-1.5 rounded-lg bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400 text-sm flex items-center gap-2 transition-colors"
+            >
+              Submit for Review
+            </button>
+            <button
               onClick={() => handleSave("published")}
               disabled={saving || !title.trim()}
               className="px-4 py-1.5 rounded-lg bg-green-500 hover:bg-green-600 disabled:opacity-50 text-white text-sm flex items-center gap-2 transition-colors"
@@ -156,7 +163,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
               ) : saved ? (
                 <Check className="w-4 h-4" />
               ) : null}
-              {saving ? "Saving..." : saved ? "Saved!" : "Publish"}
+              {saving ? "Saving..." : saved ? "Saved!" : "Publish Direct"}
             </button>
             <button
               onClick={onCancel}

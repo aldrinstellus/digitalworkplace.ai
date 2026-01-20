@@ -176,7 +176,8 @@ export default function ChatPage() {
     const userMessage = await addMessage("user", input);
     if (!userMessage) return;
 
-    setLastUserQuery(input);
+    const userQuery = input;
+    setLastUserQuery(userQuery);
     setInput("");
     setIsTyping(true);
 
@@ -193,46 +194,81 @@ export default function ChatPage() {
       responseTime: 0,
     });
 
-    // Simulate AI response (in production, this would call an AI API)
-    setTimeout(async () => {
-      const sources = [
-        { id: "src-1", type: "article", title: "Internal Documentation", url: "/content", relevance: 0.92 },
-        { id: "src-2", type: "document", title: "HR Policy Guide", url: "/content/hr", relevance: 0.85 },
-        { id: "src-3", type: "article", title: "Company Handbook", url: "/content/handbook", relevance: 0.78 },
-      ];
+    try {
+      // Call the Chat API with Claude integration
+      const response = await fetch("/diq/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userQuery,
+          threadId,
+          model: selectedLLM.id === "claude-3" ? "claude-sonnet-4-20250514" : selectedLLM.id,
+          responseStyle: responseStyle.id,
+        }),
+      });
 
-      const _aiResponse = await addMessage(
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get response");
+      }
+
+      // Add AI response to messages
+      await addMessage(
         "assistant",
-        generateAIResponse(input, responseStyle.id),
+        data.message,
         {
-          sources: sources.map(s => ({ id: s.id, type: s.type, title: s.title, url: s.url })),
-          confidence: Math.floor(Math.random() * 15) + 85,
+          sources: data.sources || [],
+          confidence: data.confidence || 85,
           llmModel: selectedLLM.id,
         }
       );
 
-      // Update transparency data with results
+      // Update transparency data with results from API
       setTransparencyData({
-        sources,
-        steps: [
+        sources: data.sources || [],
+        steps: data.steps || [
           { id: "1", name: "Parsing query", status: "completed", duration: 120 },
           { id: "2", name: "Searching knowledge base", status: "completed", duration: 450 },
           { id: "3", name: "Generating response", status: "completed", duration: 890 },
         ],
         isProcessing: false,
-        totalTokens: Math.floor(Math.random() * 500) + 200,
-        responseTime: 1460,
+        totalTokens: data.metrics?.totalTokens || data.tokensUsed || 0,
+        responseTime: data.metrics?.responseTime || 1000,
       });
 
       // Update thread title if it's the first message
       if (threads.find(t => t.id === threadId)?.title === null) {
         setThreads(prev => prev.map(t =>
-          t.id === threadId ? { ...t, title: input.slice(0, 50) } : t
+          t.id === threadId ? { ...t, title: userQuery.slice(0, 50) } : t
         ));
       }
+    } catch (error) {
+      console.error("Chat API error:", error);
+      // Fallback to demo response on error
+      await addMessage(
+        "assistant",
+        "I apologize, but I encountered an error processing your request. Please try again.",
+        {
+          sources: [],
+          confidence: 0,
+          llmModel: selectedLLM.id,
+        }
+      );
 
-      setIsTyping(false);
-    }, 1500);
+      setTransparencyData({
+        sources: [],
+        steps: [
+          { id: "1", name: "Parsing query", status: "completed", duration: 50 },
+          { id: "2", name: "Error occurred", status: "completed", duration: 0 },
+        ],
+        isProcessing: false,
+        totalTokens: 0,
+        responseTime: 0,
+      });
+    }
+
+    setIsTyping(false);
   }, [input, activeThreadId, createThread, addMessage, selectedLLM.id, responseStyle.id, threads, setThreads]);
 
   const handleRegenerate = useCallback(async (messageId: string) => {
@@ -259,39 +295,72 @@ export default function ChatPage() {
       responseTime: 0,
     });
 
-    // Simulate regenerated response
-    setTimeout(async () => {
-      const sources = [
-        { id: "src-1", type: "article", title: "Internal Documentation", url: "/content", relevance: 0.94 },
-        { id: "src-2", type: "document", title: "HR Policy Guide", url: "/content/hr", relevance: 0.88 },
-        { id: "src-3", type: "article", title: "Company Handbook", url: "/content/handbook", relevance: 0.81 },
-      ];
+    try {
+      // Call the Chat API with Claude integration
+      const response = await fetch("/diq/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: lastUserQuery,
+          threadId: activeThreadId,
+          model: selectedLLM.id === "claude-3" ? "claude-sonnet-4-20250514" : selectedLLM.id,
+          responseStyle: responseStyle.id,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to regenerate response");
+      }
 
       await addMessage(
         "assistant",
-        generateAIResponse(lastUserQuery, responseStyle.id) + "\n\n_(Regenerated response)_",
+        data.message + "\n\n_(Regenerated response)_",
         {
-          sources: sources.map(s => ({ id: s.id, type: s.type, title: s.title, url: s.url })),
-          confidence: Math.floor(Math.random() * 10) + 88,
+          sources: data.sources || [],
+          confidence: data.confidence || 88,
           llmModel: selectedLLM.id,
         }
       );
 
       setTransparencyData({
-        sources,
-        steps: [
+        sources: data.sources || [],
+        steps: data.steps || [
           { id: "1", name: "Regenerating response", status: "completed", duration: 150 },
           { id: "2", name: "Searching knowledge base", status: "completed", duration: 480 },
           { id: "3", name: "Generating new response", status: "completed", duration: 920 },
         ],
         isProcessing: false,
-        totalTokens: Math.floor(Math.random() * 500) + 250,
-        responseTime: 1550,
+        totalTokens: data.metrics?.totalTokens || data.tokensUsed || 0,
+        responseTime: data.metrics?.responseTime || 1000,
       });
+    } catch (error) {
+      console.error("Regenerate API error:", error);
+      await addMessage(
+        "assistant",
+        "I apologize, but I couldn't regenerate the response. Please try again.",
+        {
+          sources: [],
+          confidence: 0,
+          llmModel: selectedLLM.id,
+        }
+      );
 
-      setIsTyping(false);
-    }, 1500);
-  }, [lastUserQuery, isTyping, messages, setMessages, addMessage, responseStyle.id, selectedLLM.id]);
+      setTransparencyData({
+        sources: [],
+        steps: [
+          { id: "1", name: "Regenerating response", status: "completed", duration: 50 },
+          { id: "2", name: "Error occurred", status: "completed", duration: 0 },
+        ],
+        isProcessing: false,
+        totalTokens: 0,
+        responseTime: 0,
+      });
+    }
+
+    setIsTyping(false);
+  }, [lastUserQuery, isTyping, messages, setMessages, addMessage, responseStyle.id, selectedLLM.id, activeThreadId]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0f]">
@@ -695,54 +764,3 @@ export default function ChatPage() {
   );
 }
 
-// Helper function to generate demo AI responses
-function generateAIResponse(query: string, style: string): string {
-  const lowerQuery = query.toLowerCase();
-
-  if (lowerQuery.includes("vacation") || lowerQuery.includes("time off") || lowerQuery.includes("leave")) {
-    return `Based on the HR Knowledge Base, here's a summary of our vacation policy:
-
-**Annual Leave Entitlement:**
-- Full-time employees: 20 days per year
-- Part-time employees: Pro-rated based on hours
-- Additional days after 5 years of service
-
-**Key Points:**
-1. Leave requests should be submitted at least 2 weeks in advance
-2. Maximum consecutive days: 15 working days
-3. Unused days can carry over (max 5 days) to the next year
-
-**Holiday Scheduling:**
-- Peak periods (Dec-Jan) require 4 weeks notice
-- Team coverage must be maintained
-
-Would you like more details on any specific aspect?`;
-  }
-
-  if (lowerQuery.includes("code review") || lowerQuery.includes("development")) {
-    return `Here are our code review standards:
-
-**Key Principles:**
-1. Be Respectful - Reviews should be constructive
-2. Be Thorough - Check for logic errors, security, performance
-3. Be Timely - Complete reviews within 24 hours
-
-**Requirements:**
-- At least 2 approvals for production code
-- 1 senior engineer approval for critical changes
-
-Would you like more details on the review process?`;
-  }
-
-  return `I understand your question about "${query}". Let me search through the knowledge base and provide you with a comprehensive answer...
-
-Based on the available information, here's what I found:
-
-${style === "factual" ? "The data shows that..." : style === "creative" ? "Interestingly, our research reveals..." : "According to our documentation..."}
-
-1. Key finding relevant to your query
-2. Additional context from internal sources
-3. Recommended next steps
-
-Would you like me to elaborate on any of these points?`;
-}

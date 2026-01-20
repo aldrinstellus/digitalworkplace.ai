@@ -10,6 +10,45 @@ interface SearchSuggestion {
   subtitle?: string;
 }
 
+// Get recent searches from localStorage
+function getRecentSearches(): SearchSuggestion[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem('diq-recent-searches');
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+// Save recent search to localStorage
+function saveRecentSearch(text: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getRecentSearches();
+    const filtered = current.filter(s => s.text.toLowerCase() !== text.toLowerCase());
+    const updated = [
+      { id: `recent-${Date.now()}`, type: 'recent' as const, text },
+      ...filtered,
+    ].slice(0, 5);
+    localStorage.setItem('diq-recent-searches', JSON.stringify(updated));
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
+// Remove a recent search
+function removeRecentSearch(id: string) {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getRecentSearches();
+    const updated = current.filter(s => s.id !== id);
+    localStorage.setItem('diq-recent-searches', JSON.stringify(updated));
+  } catch {
+    // Ignore localStorage errors
+  }
+}
+
 interface SearchAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
@@ -47,42 +86,41 @@ export function SearchAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Mock data - in production would come from API
-  const recentSearches: SearchSuggestion[] = [
-    { id: "r1", type: "recent", text: "employee handbook" },
-    { id: "r2", type: "recent", text: "vacation policy" },
-    { id: "r3", type: "recent", text: "engineering guidelines" },
-  ];
-
-  const trendingSearches: SearchSuggestion[] = [
-    { id: "t1", type: "trending", text: "Q2 roadmap", subtitle: "150 searches today" },
-    { id: "t2", type: "trending", text: "benefits enrollment", subtitle: "89 searches today" },
-    { id: "t3", type: "trending", text: "remote work policy", subtitle: "67 searches today" },
-  ];
-
   const fetchSuggestions = useCallback(async (query: string) => {
+    const recentSearches = getRecentSearches();
+
     if (!query.trim()) {
-      setSuggestions([...recentSearches, ...trendingSearches]);
+      // Fetch trending suggestions from API
+      try {
+        const response = await fetch('/diq/api/search/autocomplete?limit=5');
+        const data = await response.json();
+        setSuggestions([...recentSearches, ...data.suggestions]);
+      } catch {
+        setSuggestions(recentSearches);
+      }
       return;
     }
 
     setLoading(true);
 
-    // Simulate API call with debounce
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    try {
+      // Fetch real suggestions from API
+      const response = await fetch(`/diq/api/search/autocomplete?q=${encodeURIComponent(query)}&limit=10`);
+      const data = await response.json();
 
-    // Mock matching suggestions
-    const mockResults: SearchSuggestion[] = [
-      { id: "s1", type: "article" as const, text: `${query} - Getting Started Guide`, subtitle: "Knowledge Base" },
-      { id: "s2", type: "article" as const, text: `${query} best practices`, subtitle: "Engineering Docs" },
-      { id: "s3", type: "person" as const, text: `Sarah Chen`, subtitle: `Matches "${query}"` },
-      { id: "s4", type: "event" as const, text: `${query} Team Sync`, subtitle: "Tomorrow at 2pm" },
-    ].filter((s) => s.text.toLowerCase().includes(query.toLowerCase()));
+      // Filter recent searches to match query
+      const matchingRecent = recentSearches.filter((r) =>
+        r.text.toLowerCase().includes(query.toLowerCase())
+      );
 
-    setSuggestions([
-      ...recentSearches.filter((r) => r.text.toLowerCase().includes(query.toLowerCase())),
-      ...mockResults,
-    ]);
+      setSuggestions([...matchingRecent, ...data.suggestions]);
+    } catch (error) {
+      console.error('Failed to fetch suggestions:', error);
+      // Fall back to recent searches only
+      setSuggestions(recentSearches.filter((r) =>
+        r.text.toLowerCase().includes(query.toLowerCase())
+      ));
+    }
 
     setLoading(false);
   }, []);
@@ -152,13 +190,15 @@ export function SearchAutocomplete({
   const handleSuggestionClick = (suggestion: SearchSuggestion) => {
     onChange(suggestion.text);
     onSearch(suggestion.text);
+    // Save to recent searches
+    saveRecentSearch(suggestion.text);
     setShowSuggestions(false);
   };
 
   const clearRecentSearch = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    removeRecentSearch(id);
     setSuggestions((prev) => prev.filter((s) => s.id !== id));
-    // In production, would also remove from localStorage/backend
   };
 
   return (

@@ -1,9 +1,104 @@
+/**
+ * Chat API Route with Claude AI Integration
+ * Handles AI chat with RAG (Retrieval Augmented Generation) from knowledge base
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+interface Source {
+  id: string;
+  type: string;
+  title: string;
+  url?: string;
+  relevance: number;
+  content?: string;
+}
+
+// Fetch relevant context from knowledge base using direct queries
+async function getRAGContext(query: string, limit: number = 5): Promise<Source[]> {
+  try {
+    const searchTerms = query.toLowerCase().split(' ').filter(t => t.length > 2);
+    const sources: Source[] = [];
+
+    // Search articles in diq schema using ilike for partial matching
+    const { data: articles, error: artError } = await supabase
+      .schema('diq')
+      .from('articles')
+      .select('id, title, content, slug')
+      .or(searchTerms.map(term => `title.ilike.%${term}%,content.ilike.%${term}%`).join(','))
+      .eq('status', 'published')
+      .limit(limit);
+
+    if (!artError && articles) {
+      articles.forEach((article, idx) => {
+        sources.push({
+          id: article.id,
+          type: 'article',
+          title: article.title || 'Untitled Article',
+          url: `/diq/content/${article.slug || article.id}`,
+          relevance: 0.95 - (idx * 0.05),
+          content: article.content?.slice(0, 500) || '',
+        });
+      });
+    }
+
+    // Also search knowledge items in public schema
+    const { data: knowledgeItems, error: kiError } = await supabase
+      .from('knowledge_items')
+      .select('id, title, content, item_type, source_url')
+      .or(searchTerms.map(term => `title.ilike.%${term}%,content.ilike.%${term}%`).join(','))
+      .limit(limit);
+
+    if (!kiError && knowledgeItems) {
+      knowledgeItems.forEach((item, idx) => {
+        sources.push({
+          id: item.id,
+          type: item.item_type || 'document',
+          title: item.title || 'Untitled Document',
+          url: item.source_url || '/diq/content',
+          relevance: 0.90 - (idx * 0.05),
+          content: item.content?.slice(0, 500) || '',
+        });
+      });
+    }
+
+    // Sort by relevance and return top sources
+    return sources.sort((a, b) => b.relevance - a.relevance).slice(0, limit);
+  } catch (error) {
+    console.error('Error fetching RAG context:', error);
+    return [];
+  }
+}
+
+// Build system prompt based on response style
+function buildSystemPrompt(style: string, sources: Source[]): string {
+  const basePrompt = `You are an AI assistant for a company intranet called dIQ (Intranet IQ). You help employees find information, answer questions about company policies, and provide assistance with work-related queries.
+
+Your knowledge is grounded in the company's knowledge base. When answering questions:
+1. Be accurate and cite sources when available
+2. If you're not sure about something, say so
+3. Provide actionable information when possible
+4. Keep responses professional but friendly
+
+`;
+
+  const styleInstructions: Record<string, string> = {
+    factual: 'Provide direct, precise answers with minimal elaboration. Focus on facts and data.',
+    balanced: 'Provide clear answers with helpful context. Balance brevity with completeness.',
+    creative: 'Provide engaging explanations with examples and analogies. Make information memorable.',
+  };
+
+  const contextSection = sources.length > 0
+    ? `\n\nRELEVANT KNOWLEDGE BASE CONTENT:\n${sources.map((s, i) => `[${i + 1}] ${s.title}:\n${s.content}\n`).join('\n')}`
+    : '';
+
+  return basePrompt + (styleInstructions[style] || styleInstructions.balanced) + contextSection;
+}
 
 // Demo responses for when no API key is configured
 const DEMO_RESPONSES: Record<string, string> = {
@@ -46,37 +141,22 @@ function getDemoResponse(message: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+
   try {
-    const { message, threadId, model = 'claude-sonnet-4-20250514' } = await request.json();
+    const {
+      message,
+      threadId,
+      model = 'claude-sonnet-4-20250514',
+      responseStyle = 'balanced'
+    } = await request.json();
 
     if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    // Search for relevant articles using the RPC function
-    let sources: { type: string; id: string; title: string }[] = [];
-    let context = '';
-
-    try {
-      const { data: searchResults } = await supabase.rpc('search_diq_articles', {
-        search_query: message,
-        category_slug: null,
-        max_results: 3,
-      });
-
-      if (searchResults && searchResults.length > 0) {
-        context = searchResults
-          .map((r: any) => `### ${r.title}\n${r.summary || r.content?.substring(0, 500)}`)
-          .join('\n\n');
-        sources = searchResults.map((r: any) => ({
-          type: 'article',
-          id: r.id,
-          title: r.title,
-        }));
-      }
-    } catch (searchError) {
-      console.warn('Search failed, continuing without context:', searchError);
-    }
+    // Fetch relevant context from knowledge base using direct queries
+    const sources = await getRAGContext(message, 5);
 
     // Check if Anthropic API key is configured
     if (process.env.ANTHROPIC_API_KEY) {
@@ -86,13 +166,8 @@ export async function POST(request: NextRequest) {
           apiKey: process.env.ANTHROPIC_API_KEY,
         });
 
-        const systemPrompt = `You are an AI assistant for Digital Workplace AI's Intranet IQ platform.
-You help employees find information, answer questions about company policies, and assist with work tasks.
-
-Be helpful, professional, and concise. If you're not sure about something, say so.
-When citing information from the knowledge base, mention the source.
-
-${context ? `Here is relevant information from our knowledge base:\n\n${context}` : ''}`;
+        // Build system prompt with RAG context and response style
+        const systemPrompt = buildSystemPrompt(responseStyle, sources);
 
         const response = await anthropic.messages.create({
           model,
@@ -104,11 +179,38 @@ ${context ? `Here is relevant information from our knowledge base:\n\n${context}
         const assistantMessage =
           response.content[0].type === 'text' ? response.content[0].text : '';
 
+        // Calculate metrics
+        const responseTime = Date.now() - startTime;
+        const totalTokens = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
+
+        // Calculate confidence based on sources found
+        const confidence = sources.length > 0
+          ? Math.min(95, 75 + (sources.length * 4))
+          : 70;
+
         return NextResponse.json({
           message: assistantMessage,
-          sources,
+          sources: sources.map(s => ({
+            id: s.id,
+            type: s.type,
+            title: s.title,
+            url: s.url,
+            relevance: s.relevance,
+          })),
+          confidence,
           model,
-          tokensUsed: response.usage.output_tokens,
+          tokensUsed: response.usage?.output_tokens || 0,
+          metrics: {
+            responseTime,
+            totalTokens,
+            inputTokens: response.usage?.input_tokens || 0,
+            outputTokens: response.usage?.output_tokens || 0,
+          },
+          steps: [
+            { id: '1', name: 'Parsing query', status: 'completed', duration: 50 },
+            { id: '2', name: 'Searching knowledge base', status: 'completed', duration: Math.floor(responseTime * 0.2) },
+            { id: '3', name: 'Generating response', status: 'completed', duration: Math.floor(responseTime * 0.8) },
+          ],
         });
       } catch (apiError) {
         console.error('Anthropic API error, falling back to demo mode:', apiError);
@@ -117,6 +219,7 @@ ${context ? `Here is relevant information from our knowledge base:\n\n${context}
 
     // Demo mode: Return contextual response based on message
     const demoResponse = getDemoResponse(message);
+    const responseTime = Date.now() - startTime;
 
     // Add context-aware response if we found relevant articles
     let finalResponse = demoResponse;
@@ -126,10 +229,28 @@ ${context ? `Here is relevant information from our knowledge base:\n\n${context}
 
     return NextResponse.json({
       message: finalResponse,
-      sources,
+      sources: sources.map(s => ({
+        id: s.id,
+        type: s.type,
+        title: s.title,
+        url: s.url,
+        relevance: s.relevance,
+      })),
+      confidence: sources.length > 0 ? 75 : 60,
       model: 'demo-mode',
       tokensUsed: 0,
       demo: true,
+      metrics: {
+        responseTime,
+        totalTokens: 0,
+        inputTokens: 0,
+        outputTokens: 0,
+      },
+      steps: [
+        { id: '1', name: 'Parsing query', status: 'completed', duration: 20 },
+        { id: '2', name: 'Searching knowledge base', status: 'completed', duration: Math.floor(responseTime * 0.3) },
+        { id: '3', name: 'Generating response', status: 'completed', duration: Math.floor(responseTime * 0.7) },
+      ],
     });
   } catch (error) {
     console.error('Chat API error:', error);

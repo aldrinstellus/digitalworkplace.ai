@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-20 (dSQ FloatingModeSwitcher + Full Deployment v0.6.0)
-**Version**: 0.6.0
-**Session Status**: dSQ complete with floating mode switcher, GitHub/Vercel deployed
+**Last Updated**: 2025-01-20 (dIQ Full Spectrum Analysis + Cross-Schema Fixes v0.6.1)
+**Version**: 0.6.1
+**Session Status**: dIQ enterprise data + cross-schema API routes, GitHub/Vercel deployed
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -166,14 +166,21 @@ digitalworkplace.ai/
 - [x] User role system (Supabase)
 - [x] Deployed on Vercel
 
-#### dIQ - Intranet IQ (apps/intranet-iq)
-- [x] Complete UI with all pages
+#### dIQ - Intranet IQ (apps/intranet-iq) - v0.2.7
+- [x] Complete UI with all 12 pages verified
 - [x] Supabase database schema (`diq`)
 - [x] **pgvector Semantic Search** - 100% embedding coverage
 - [x] `/api/embeddings` - Generate embeddings
 - [x] `/api/search` - Hybrid search (semantic + keyword)
 - [x] Chat with RAG (Retrieval Augmented Generation)
 - [x] Local embeddings (all-MiniLM-L6-v2, 384 dims)
+- [x] **Cross-Schema API Routes** (v0.2.7):
+  - `/api/dashboard` - News + events with user joins
+  - `/api/workflows` - Workflows with creator + steps
+  - `/api/people` - Employees with departments
+  - `/api/content` - Articles with authors
+- [x] **Enterprise Data Populated**: 60 users, 15 depts, 212 articles, 31 workflows
+- [x] **Production**: https://intranet-iq.vercel.app
 
 #### dCQ - Chat Core IQ (apps/chat-core-iq)
 - [x] Static site with chatbot
@@ -304,7 +311,7 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 ## Pending Tasks
 
-### Completed (v0.6.0)
+### Completed (v0.6.1)
 - [x] Dashboard product order updated
 - [x] Test Pilot IQ disabled in UI
 - [x] Sign-in page as default landing page (all redirects fixed)
@@ -315,8 +322,13 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 - [x] **dSQ Supabase schema with 15 tables, 100% embedding coverage**
 - [x] **dSQ GitHub repo: aldrinstellus/support-iq**
 - [x] **dSQ Vercel: https://support-iq-pearl.vercel.app**
+- [x] **dIQ (Intranet IQ) v0.2.7 - Full Spectrum Analysis**
+- [x] **dIQ Cross-schema API routes for PostgREST limitations**
+- [x] **dIQ Enterprise data: 60 users, 212 articles, 31 workflows**
+- [x] **dIQ Hydration error fix (ChatSpaces.tsx)**
+- [x] **dIQ Vercel: https://intranet-iq.vercel.app**
 - [x] Git commit and push
-- [x] Vercel deployment
+- [x] Vercel deployment (both main + dIQ)
 
 ### Short Term
 - [ ] dTQ (Test Pilot IQ) implementation
@@ -389,6 +401,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session ended at: 2026-01-20*
+*Last session ended at: 2025-01-20*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Version: 0.6.0 - dSQ FloatingModeSwitcher + Full Deployment*
+*Version: 0.6.1 - dIQ Full Spectrum Analysis + Cross-Schema API Routes*

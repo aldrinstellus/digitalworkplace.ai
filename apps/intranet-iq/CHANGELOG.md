@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.7] - 2025-01-20
+
+### Added
+
+#### Enterprise Data Population
+- 60 users across roles (super_admin, admin, user)
+- 15 departments with organizational hierarchies
+- 60 employees with realistic profiles
+- 20 KB categories in tree structure
+- 212 knowledge base articles
+- 61 news posts
+- 49 events
+- 31 workflow templates
+- 66 workflow steps
+- 29 workflow executions
+- 30 chat threads
+- 26 chat messages
+- 174 activity logs
+
+#### API Routes for Cross-Schema Joins
+PostgREST cannot resolve foreign keys across schemas. Created API routes to handle this:
+
+- `/api/dashboard/route.ts` - News posts + events with user joins (author_id, organizer_id → public.users)
+- `/api/workflows/route.ts` - Workflows with creator + steps + executions
+- `/api/people/route.ts` - Employees with department joins
+- `/api/content/route.ts` - Articles with author joins
+
+#### Architecture Pattern Documented
+```typescript
+// Cross-schema join pattern
+export async function GET() {
+  // 1. Fetch from diq schema
+  const { data } = await supabase.schema('diq').from('table').select('*');
+
+  // 2. Get unique foreign key IDs
+  const userIds = [...new Set(data?.map(d => d.user_id).filter(Boolean))];
+
+  // 3. Fetch from public schema
+  const { data: users } = await supabase.from('users').select('*').in('id', userIds);
+
+  // 4. Combine in JavaScript
+  const enriched = data?.map(d => ({ ...d, user: users?.find(u => u.id === d.user_id) }));
+
+  return NextResponse.json(enriched);
+}
+```
+
+### Fixed
+
+#### Hydration Error in ChatSpaces.tsx
+- Fixed nested button error (button cannot be descendant of button)
+- Changed outer `<button>` elements to `<div>` with `cursor-pointer`
+- Added proper `event.stopPropagation()` for inner buttons
+
+#### Schema Permissions
+- Granted `USAGE ON SCHEMA diq` to anon and authenticated roles
+- Granted `SELECT ON ALL TABLES IN SCHEMA diq` to anon and authenticated roles
+
+### Changed
+
+#### useSupabase.ts Hooks
+- `useWorkflows` now fetches from `/api/workflows` instead of direct Supabase join
+- `useNewsPosts` now fetches from `/api/dashboard` instead of direct Supabase join
+- `useUpcomingEvents` now fetches from `/api/dashboard` instead of direct Supabase join
+
+### Deployment
+- GitHub commit: `6c36d81`
+- Vercel production: https://intranet-iq.vercel.app
+
+---
+
 ## [0.2.6] - 2025-01-20
 
 ### Added
@@ -254,10 +325,9 @@ dCQ  - Digital Chat Core IQ
 ## [Unreleased]
 
 ### Planned - Phase 2
-- Connect to Supabase for real data
-- Implement actual AI chat functionality
-- Add real employee data to People directory
-- Create real knowledge base articles
+- Implement actual AI chat functionality with LLM backend
+- Add real-time updates with Supabase subscriptions
+- Sync article embeddings to knowledge_items
 
 ### Planned - Phase 3 (from PRD)
 1. EPIC 1: Core Search and Discovery (Elasticsearch)

@@ -492,6 +492,70 @@ interface KnowledgeItem {
 
 ---
 
+---
+
+## API ROUTES (Cross-Schema Joins)
+
+PostgREST cannot automatically resolve foreign keys across schemas (e.g., `diq.workflows.created_by` → `public.users.id`). API routes handle this:
+
+### Available Endpoints
+
+| Endpoint | Purpose | Foreign Keys Resolved |
+|----------|---------|----------------------|
+| `/api/dashboard` | News + Events | author_id, organizer_id → users |
+| `/api/workflows` | Workflows + Steps + Executions | created_by → users |
+| `/api/people` | Employees + Departments | user_id → users |
+| `/api/content` | Articles + Categories | author_id → users |
+
+### Pattern Implementation
+
+```typescript
+// /api/workflows/route.ts
+export async function GET() {
+  // 1. Fetch from diq schema
+  const { data: workflows } = await supabase
+    .schema('diq')
+    .from('workflows')
+    .select('*');
+
+  // 2. Get unique foreign key IDs
+  const creatorIds = [...new Set(workflows?.map(w => w.created_by).filter(Boolean))];
+
+  // 3. Fetch from public schema
+  const { data: users } = await supabase
+    .from('users')
+    .select('id, full_name, avatar_url')
+    .in('id', creatorIds);
+
+  // 4. Combine in JavaScript
+  const enrichedWorkflows = workflows?.map(workflow => ({
+    ...workflow,
+    creator: users?.find(u => u.id === workflow.created_by) || null,
+  }));
+
+  return NextResponse.json({ workflows: enrichedWorkflows });
+}
+```
+
+---
+
+## DEPLOYMENT
+
+### Production URLs
+
+| Service | URL |
+|---------|-----|
+| **dIQ Production** | https://intranet-iq.vercel.app |
+| **dIQ Dashboard** | https://intranet-iq.vercel.app/diq/dashboard |
+| **Main App** | https://digitalworkplace-ai.vercel.app |
+
+### Latest Deployment
+- **Git Commit:** `6c36d81`
+- **Date:** January 20, 2025
+- **Changes:** Cross-schema API routes, hydration fixes, enterprise data
+
+---
+
 *Last Updated: January 20, 2025*
-*Version: 0.2.6*
+*Version: 0.2.7*
 *Part of Digital Workplace AI Product Suite*

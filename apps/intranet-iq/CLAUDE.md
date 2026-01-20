@@ -452,4 +452,4 @@ getEmbeddingStats()                                   // Embedding coverage stat
 
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
-*Version: 0.2.4*
+*Version: 0.2.7*

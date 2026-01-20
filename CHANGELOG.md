@@ -4,6 +4,41 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.6.1] - 2025-01-20
+
+### dIQ - Intranet IQ v0.2.7
+
+#### Added
+
+**Enterprise Data Population**
+- 60 users across roles (super_admin, admin, user)
+- 15 departments with organizational hierarchies
+- 60 employees with realistic profiles
+- 20 KB categories in tree structure
+- 212 knowledge base articles
+- 61 news posts, 49 events
+- 31 workflow templates, 66 steps, 29 executions
+- 30 chat threads, 26 messages
+- 174 activity logs
+
+**Cross-Schema API Routes**
+PostgREST cannot resolve foreign keys across schemas. Created API routes:
+- `/api/dashboard` - News posts + events with author/organizer joins
+- `/api/workflows` - Workflows with creator + steps + executions
+- `/api/people` - Employees with department joins
+- `/api/content` - Articles with author joins
+
+#### Fixed
+- Hydration error in ChatSpaces.tsx (nested buttons → divs)
+- Schema permissions for anon/authenticated roles
+
+#### Deployment
+- GitHub commit: `6c36d81`
+- dIQ Production: https://intranet-iq.vercel.app
+- Main App: https://digitalworkplace-ai.vercel.app
+
+---
+
 ## [0.5.1] - 2026-01-19
 
 ### Default Landing Page Update

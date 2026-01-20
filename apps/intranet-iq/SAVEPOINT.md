@@ -4,12 +4,47 @@
 
 ## CURRENT STATE
 **Last Updated:** January 20, 2025
-**Session:** Full Spectrum Analysis & Cross-Schema Fixes
-**Version:** 0.2.7
+**Session:** PRD Compliance Push - v0.6.1 Features
+**Version:** 0.6.1
 
 ---
 
 ## WHAT WAS ACCOMPLISHED
+
+### Session: January 20, 2025 (PRD Compliance - v0.6.1)
+
+1. **Drag-Drop Workflow Builder Connections**
+   - Added `ConnectionDrag` interface for tracking connection creation
+   - Interactive connection points with hover states
+   - Visual dragging line from source to cursor
+   - Click to remove existing connections
+   - User help hints for connection workflow
+
+2. **Customizable Dashboard Widgets**
+   - Created `useDashboardWidgets.ts` hook with DEFAULT_WIDGETS
+   - localStorage persistence + Supabase user settings sync
+   - Created `DashboardCustomizer.tsx` modal component
+   - Drag-to-reorder, toggle visibility, reset to defaults
+   - Dashboard page now respects widget visibility settings
+
+3. **KB Article Approval Workflow**
+   - Created `ArticleApprovalPanel.tsx` component
+   - Actions: approve (publish), reject (archive), request_changes (draft)
+   - Created `/api/content/pending/route.ts` for pending articles
+   - Created `/api/content/approve/route.ts` for approval processing
+   - Added "Submit for Review" button to ArticleEditor
+   - RBAC permission checks for approvers
+
+4. **Bug Fixes**
+   - Fixed JSX parsing error in content/page.tsx (missing closing div)
+   - Fixed TypeScript error in useDashboardWidgets.ts (added dashboardWidgets to interface)
+   - Updated database.types.ts with dashboardWidgets schema
+
+5. **Deployment**
+   - Committed 18 files (2004 insertions)
+   - Pushed to GitHub main branch
+   - Main app deployed: https://digitalworkplace-ai.vercel.app
+   - dIQ deployed: https://intranet-iq.vercel.app/diq/dashboard
 
 ### Session: January 20, 2025 (Full Spectrum Analysis)
 
@@ -125,11 +160,15 @@ apps/intranet-iq/src/components/chat/
 
 ## PENDING TASKS
 
-### Immediate
+### Completed (v0.6.1)
 - [x] Cross-schema join fixes - ✅ API routes created
 - [x] Hydration errors fixed - ✅ ChatSpaces.tsx
 - [x] Full spectrum testing - ✅ All 10 pages verified
 - [x] Enterprise data populated - ✅ 500+ records
+- [x] Drag-drop workflow connections - ✅ WorkflowCanvas.tsx
+- [x] Customizable dashboard widgets - ✅ useDashboardWidgets + DashboardCustomizer
+- [x] KB article approval workflow - ✅ ArticleApprovalPanel + API routes
+- [x] Vercel deployment - ✅ Both main app and dIQ live
 
 ### Short-term
 - [ ] Implement actual AI chat functionality with LLM backend
@@ -177,6 +216,7 @@ export async function GET() {
 
 ## QUICK REFERENCE URLs
 
+### Local Development
 ```
 Dashboard:     http://localhost:3001/diq/dashboard
 Chat:          http://localhost:3001/diq/chat
@@ -187,6 +227,12 @@ Agents:        http://localhost:3001/diq/agents
 Settings:      http://localhost:3001/diq/settings
 Channels:      http://localhost:3001/diq/channels
 Integrations:  http://localhost:3001/diq/admin/integrations
+```
+
+### Production
+```
+Main App:      https://digitalworkplace-ai.vercel.app
+dIQ Dashboard: https://intranet-iq.vercel.app/diq/dashboard
 ```
 
 ---
@@ -208,4 +254,4 @@ npm run dev:intranet     # Start only dIQ (port 3001)
 
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
-*Version: 0.2.7*
+*Version: 0.6.1*

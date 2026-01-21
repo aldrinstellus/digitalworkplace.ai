@@ -4,6 +4,61 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.0] - 2026-01-21
+
+### dCQ - Chat Core IQ v1.0.0 Production Release
+
+#### Added
+
+**Full Production Deployment**
+- Live at https://chat-core-iq.vercel.app
+- Homepage: https://chat-core-iq.vercel.app/dcq/Home/index.html
+- Admin Panel: https://chat-core-iq.vercel.app/dcq/admin
+
+**AI Chat Integration**
+- Claude (Anthropic) as primary LLM
+- OpenAI GPT as fallback LLM
+- Semantic search with 100% vector embedding coverage
+- 348 knowledge items in master database
+
+**Environment Configuration**
+- 7 production environment variables on Vercel
+- ANTHROPIC_API_KEY, OPENAI_API_KEY configured
+- NEXT_PUBLIC_BASE_URL for proper API routing
+
+**Dashboard Integration**
+- Main dashboard links to live Vercel production URL
+- Chat Core IQ card at position 3 in product grid
+
+#### Fixed
+
+**LLM Configuration**
+- Fixed invalid model name `claude-sonnet-4-20250514` → `claude-3-sonnet`
+- Fixed TypeScript error in workflow types query
+
+**Vercel Deployment**
+- Fixed API key trailing newlines causing 401 auth errors
+- Added missing NEXT_PUBLIC_BASE_URL environment variable
+- Fixed knowledge context fetch using localhost instead of Supabase
+
+#### Verified
+
+**Full Spectrum Analysis**
+| Component | Local | Vercel |
+|-----------|-------|--------|
+| Environment Vars | ✅ 7/7 | ✅ 7/7 |
+| Database | ✅ Connected | ✅ Connected |
+| Embeddings | ✅ 100% | ✅ 100% |
+| API Endpoints | ✅ 11/11 | ✅ 11/11 |
+| Chat (LLM) | ✅ Working | ✅ Working |
+
+#### Deployment
+- GitHub commit: `29ac31a`
+- Vercel: https://chat-core-iq.vercel.app
+- Vercel Dashboard: https://vercel.com/aldos-projects-8cf34b67/chat-core-iq
+
+---
+
 ## [0.6.1] - 2025-01-20
 
 ### dIQ - Intranet IQ v0.2.7

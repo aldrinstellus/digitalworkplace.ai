@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2025-01-20 (dIQ Full Spectrum Analysis + Cross-Schema Fixes v0.6.1)
-**Version**: 0.6.1
-**Session Status**: dIQ enterprise data + cross-schema API routes, GitHub/Vercel deployed
+**Last Updated**: 2026-01-21 (dCQ Chat Core IQ v1.0.0 Production Release)
+**Version**: 0.7.0
+**Session Status**: dCQ fully deployed to Vercel, all systems operational
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -59,11 +59,12 @@
 | **dIQ Agents** | http://localhost:3001/diq/agents |
 | **dIQ Settings** | http://localhost:3001/diq/settings |
 
-#### dCQ - Chat Core IQ (Port 3002)
-| Page | URL |
-|------|-----|
-| **dCQ Home** | http://localhost:3002/dcq/Home/index.html |
-| **dCQ Admin** | http://localhost:3002/dcq/admin |
+#### dCQ - Chat Core IQ (Port 3002) - PRODUCTION LIVE
+| Page | Local URL | Production URL |
+|------|-----------|----------------|
+| **dCQ Home** | http://localhost:3002/dcq/Home/index.html | https://chat-core-iq.vercel.app/dcq/Home/index.html |
+| **dCQ Admin** | http://localhost:3002/dcq/admin | https://chat-core-iq.vercel.app/dcq/admin |
+| **dCQ Vercel Dashboard** | - | https://vercel.com/aldos-projects-8cf34b67/chat-core-iq |
 
 #### dSQ - Support IQ (Port 3003) - ACTIVE
 | Page | URL |
@@ -182,12 +183,14 @@ digitalworkplace.ai/
 - [x] **Enterprise Data Populated**: 60 users, 15 depts, 212 articles, 31 workflows
 - [x] **Production**: https://intranet-iq.vercel.app
 
-#### dCQ - Chat Core IQ (apps/chat-core-iq)
-- [x] Static site with chatbot
-- [x] 28 database tables in `dcq` schema
-- [x] 6 tables with vector embeddings
-- [x] Sync triggers to `public.knowledge_items`
-- [x] Embedding library created
+#### dCQ - Chat Core IQ (apps/chat-core-iq) - v1.0.0 PRODUCTION
+- [x] **Production Live**: https://chat-core-iq.vercel.app
+- [x] AI Chat with Claude (primary) + OpenAI (fallback)
+- [x] **348 knowledge items** with 100% vector embedding coverage
+- [x] 11 API endpoints all operational
+- [x] 7 Vercel environment variables configured
+- [x] Dashboard linked to Vercel production URL
+- [x] Full spectrum analysis verified
 
 #### Database (Supabase)
 - [x] Multi-schema architecture (public, diq, dsq, dtq, dcq)
@@ -198,12 +201,12 @@ digitalworkplace.ai/
 
 ### Products Status
 
-| Product | Code | Port | Status | Embeddings |
-|---------|------|------|--------|------------|
-| **Support IQ** | **dSQ** | **3003** | **✅ Active** | **✅ 100%** |
-| **Intranet IQ** | **dIQ** | **3001** | **✅ Active** | **✅ 100%** |
-| **Chat Core IQ** | **dCQ** | **3002** | **✅ Active** | **✅ Ready** |
-| Test Pilot IQ | dTQ | 3004 | ⬜ Pending (Disabled in UI) | ⬜ Pending |
+| Product | Code | Port | Status | Embeddings | Production URL |
+|---------|------|------|--------|------------|----------------|
+| **Support IQ** | **dSQ** | **3003** | **✅ Active** | **✅ 100%** | https://support-iq-pearl.vercel.app |
+| **Intranet IQ** | **dIQ** | **3001** | **✅ Active** | **✅ 100%** | https://intranet-iq.vercel.app |
+| **Chat Core IQ** | **dCQ** | **3002** | **✅ LIVE** | **✅ 100%** | https://chat-core-iq.vercel.app |
+| Test Pilot IQ | dTQ | 3004 | ⬜ Pending (Disabled in UI) | ⬜ Pending | - |
 
 ---
 
@@ -401,6 +404,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session ended at: 2025-01-20*
+*Last session ended at: 2026-01-21*
 *Machine: Mac Mini (aldrin-mac-mini)*
-*Version: 0.6.1 - dIQ Full Spectrum Analysis + Cross-Schema API Routes*
+*Version: 0.7.0 - dCQ Chat Core IQ v1.0.0 Production Release*

@@ -1,5 +1,20 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
+**Version**: 1.0.0
+**Last Updated**: 2026-01-21
+**Status**: Production Live
+
+---
+## PRODUCTION URLS
+---
+
+| Environment | URL |
+|-------------|-----|
+| **Production Homepage** | https://chat-core-iq.vercel.app/dcq/Home/index.html |
+| **Production Admin** | https://chat-core-iq.vercel.app/dcq/admin |
+| **Vercel Dashboard** | https://vercel.com/aldos-projects-8cf34b67/chat-core-iq |
+| **GitHub Repository** | https://github.com/aldrinstellus/digitalworkplace.ai |
+
 ---
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
@@ -26,16 +41,15 @@
 ## PROJECT OVERVIEW
 ---
 
-**Chat Core IQ (dCQ)** is an AI-powered chatbot platform - part of the Digital Workplace AI product suite. Cloned from City of Doral project with full chatbot and admin functionality.
+**Chat Core IQ (dCQ)** is an AI-powered chatbot platform - part of the Digital Workplace AI product suite. Features Claude/OpenAI LLM integration with semantic search and 100% vector embedding coverage.
 
 ### URLs
-| Page | Route | Local Dev |
-|------|-------|-----------|
-| **Homepage (Static)** | `/dcq/Home/index.html` | http://localhost:3002/dcq/Home/index.html |
-| **Admin** | `/dcq/admin` | http://localhost:3002/dcq/admin |
-| **Admin Content** | `/dcq/admin/content` | http://localhost:3002/dcq/admin/content |
-| **Demo IVR** | `/dcq/demo/ivr` | http://localhost:3002/dcq/demo/ivr |
-| **Main App** | - | http://localhost:3000/dashboard |
+| Page | Local Dev | Production |
+|------|-----------|------------|
+| **Homepage** | http://localhost:3002/dcq/Home/index.html | https://chat-core-iq.vercel.app/dcq/Home/index.html |
+| **Admin** | http://localhost:3002/dcq/admin | https://chat-core-iq.vercel.app/dcq/admin |
+| **Admin Content** | http://localhost:3002/dcq/admin/content | https://chat-core-iq.vercel.app/dcq/admin/content |
+| **Demo IVR** | http://localhost:3002/dcq/demo/ivr | https://chat-core-iq.vercel.app/dcq/demo/ivr |
 
 **Note:** All routes use `basePath: "/dcq"` configured in `next.config.ts`
 
@@ -60,7 +74,8 @@ npm run lint             # Run ESLint
 ## KEY FEATURES
 ---
 
-- **AI Chatbot**: Conversational interface with Claude/OpenAI integration
+- **AI Chatbot**: Claude (primary) + OpenAI (fallback) LLM integration
+- **Semantic Search**: 348 knowledge items with 100% vector embedding coverage
 - **FAQ Widget**: Homepage displays FAQs from admin portal
 - **Admin Portal**: Full CRUD for FAQs, knowledge base, announcements
 - **Multi-language**: English/Spanish support
@@ -74,11 +89,37 @@ npm run lint             # Run ESLint
 |------------|---------|---------|
 | **Next.js** | 16.1.1 | React framework with App Router |
 | **TypeScript** | 5.x | Type safety |
-| **Supabase** | @supabase/supabase-js | Database |
+| **Supabase** | @supabase/supabase-js | Database + pgvector |
 | **Tailwind CSS** | 4.x | Styling |
 | **Framer Motion** | 12.x | UI animations |
 | **Anthropic SDK** | 0.71.x | Claude AI integration |
-| **OpenAI SDK** | 6.x | GPT integration |
+| **OpenAI SDK** | 6.x | GPT integration + embeddings |
+| **Transformers.js** | - | Local embeddings (all-MiniLM-L6-v2) |
+
+---
+## ENVIRONMENT VARIABLES
+---
+
+### Local (.env.local)
+```
+NEXT_PUBLIC_SUPABASE_URL=https://fhtempgkltrazrgbedrh.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-anon-key>
+SUPABASE_PUBLISHABLE_KEY=<your-publishable-key>
+ANTHROPIC_API_KEY=<your-anthropic-key>
+OPENAI_API_KEY=<your-openai-key>
+ELEVENLABS_API_KEY=<your-elevenlabs-key>
+NEXT_PUBLIC_BASE_URL=http://localhost:3002/dcq
+```
+
+### Vercel Production
+All 7 environment variables configured:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_PUBLISHABLE_KEY`
+- `ANTHROPIC_API_KEY`
+- `OPENAI_API_KEY`
+- `ELEVENLABS_API_KEY`
+- `NEXT_PUBLIC_BASE_URL` (https://chat-core-iq.vercel.app/dcq)
 
 ---
 ## PROJECT STRUCTURE
@@ -108,9 +149,25 @@ apps/chat-core-iq/
 ├── package.json
 ├── tsconfig.json
 ├── next.config.ts              # basePath: "/dcq", port: 3002
-├── start.sh                    # Alternative: dual-server startup script
 └── CLAUDE.md                   # This file
 ```
+
+---
+## API ENDPOINTS
+---
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health` | GET | Health check |
+| `/api/chat` | POST | AI chat with semantic search |
+| `/api/faqs` | GET/POST | FAQ management |
+| `/api/knowledge` | GET | Knowledge base items |
+| `/api/settings` | GET/PATCH | App settings |
+| `/api/announcements` | GET | Announcements |
+| `/api/analytics` | GET | Usage analytics |
+| `/api/embeddings` | POST | Generate embeddings |
+| `/api/feedback` | POST | User feedback |
+| `/api/escalations` | GET/POST | Escalation management |
 
 ---
 ## INTEGRATION WITH MAIN APP
@@ -118,8 +175,31 @@ apps/chat-core-iq/
 
 - **Port:** 3002 (main app on 3000, intranet-iq on 3001)
 - **BasePath:** /dcq
-- **Dashboard Link:** Main app dashboard links to http://localhost:3002/dcq/Home/index.html
+- **Dashboard Link:** https://chat-core-iq.vercel.app/dcq/Home/index.html
 - **Identity:** Standalone Chat Core IQ branding
+
+---
+## DEPLOYMENT
+---
+
+### Vercel
+```bash
+# Deploy to production
+vercel --prod
+
+# Check logs
+vercel logs chat-core-iq.vercel.app
+
+# List env vars
+vercel env ls production
+```
+
+### GitHub
+```bash
+git add .
+git commit -m "Your message"
+git push origin main
+```
 
 ---
 ## DEVELOPMENT COMMANDS
@@ -142,3 +222,4 @@ npm run type-check       # TypeScript check
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/chat-core-iq*
 *Port: 3002 | BasePath: /dcq*
+*Production: https://chat-core-iq.vercel.app*

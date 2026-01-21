@@ -704,6 +704,434 @@ export default function SettingsPage() {
           </div>
         );
 
+      case "integrations":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-white mb-1">Integrations</h2>
+              <p className="text-sm text-white/50">Connect external services and data sources</p>
+            </div>
+
+            {/* Connected Integrations */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">Connected Services</h3>
+              <div className="space-y-4">
+                {[
+                  { name: "Microsoft 365", icon: "M", status: "connected", lastSync: "2 hours ago", color: "bg-blue-500" },
+                  { name: "Google Workspace", icon: "G", status: "connected", lastSync: "1 hour ago", color: "bg-red-500" },
+                  { name: "Slack", icon: "S", status: "connected", lastSync: "5 mins ago", color: "bg-purple-500" },
+                ].map((integration, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg ${integration.color} flex items-center justify-center text-white font-bold`}>
+                        {integration.icon}
+                      </div>
+                      <div>
+                        <div className="text-sm text-white">{integration.name}</div>
+                        <div className="text-xs text-white/40">Last synced: {integration.lastSync}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">Connected</span>
+                      <button className="text-xs text-white/50 hover:text-white">Configure</button>
+                      <button className="text-xs text-red-400 hover:text-red-300">Disconnect</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Available Integrations */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">Available Integrations</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { name: "Salesforce", icon: "SF", description: "CRM & customer data", color: "bg-cyan-500" },
+                  { name: "Jira", icon: "J", description: "Project management", color: "bg-blue-600" },
+                  { name: "Confluence", icon: "C", description: "Documentation", color: "bg-blue-400" },
+                  { name: "ServiceNow", icon: "SN", description: "IT service management", color: "bg-green-600" },
+                  { name: "Zendesk", icon: "Z", description: "Customer support", color: "bg-emerald-500" },
+                  { name: "Box", icon: "B", description: "File storage", color: "bg-blue-500" },
+                ].map((integration, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-lg ${integration.color} flex items-center justify-center text-white font-bold text-sm`}>
+                        {integration.icon}
+                      </div>
+                      <div>
+                        <div className="text-sm text-white">{integration.name}</div>
+                        <div className="text-xs text-white/40">{integration.description}</div>
+                      </div>
+                    </div>
+                    <button className="px-3 py-1.5 rounded-lg border border-blue-500/30 text-blue-400 text-xs hover:bg-blue-500/10 transition-colors">
+                      Connect
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* API Settings */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">API Configuration</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">API Key</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="password"
+                      value="sk-diq-xxxx-xxxx-xxxx-xxxx"
+                      disabled
+                      className="flex-1 bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white/50 font-mono text-sm"
+                    />
+                    <button className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white text-sm transition-colors">
+                      Regenerate
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Webhook URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://your-server.com/webhook"
+                    className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/30 text-sm outline-none focus:border-blue-500/50"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "roles":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-white mb-1">Roles & Permissions</h2>
+              <p className="text-sm text-white/50">Define access levels and permissions for your organization</p>
+            </div>
+
+            {/* Roles List */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+              <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                <h3 className="text-sm font-medium text-white">Organization Roles</h3>
+                <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
+                  Create Role
+                </button>
+              </div>
+              <div className="divide-y divide-white/10">
+                {[
+                  { name: "Super Admin", users: 2, permissions: ["all"], color: "bg-red-500", system: true },
+                  { name: "Admin", users: 5, permissions: ["manage_users", "manage_content", "view_analytics"], color: "bg-orange-500", system: true },
+                  { name: "Editor", users: 12, permissions: ["create_content", "edit_content", "publish"], color: "bg-blue-500", system: true },
+                  { name: "Contributor", users: 25, permissions: ["create_content", "edit_own"], color: "bg-green-500", system: false },
+                  { name: "Viewer", users: 150, permissions: ["view_content"], color: "bg-gray-500", system: true },
+                ].map((role, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${role.color}`} />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-white">{role.name}</span>
+                          {role.system && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] bg-white/10 text-white/50">System</span>
+                          )}
+                        </div>
+                        <div className="text-xs text-white/40">{role.users} users</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-wrap gap-1 max-w-[200px]">
+                        {role.permissions.slice(0, 3).map((perm, pidx) => (
+                          <span key={pidx} className="px-2 py-0.5 rounded-full text-xs bg-white/5 text-white/60">
+                            {perm}
+                          </span>
+                        ))}
+                        {role.permissions.length > 3 && (
+                          <span className="text-xs text-white/40">+{role.permissions.length - 3}</span>
+                        )}
+                      </div>
+                      <button className="text-xs text-white/50 hover:text-white">Edit</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Permissions Matrix */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">Permission Categories</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { category: "Content Management", permissions: ["Create articles", "Edit articles", "Delete articles", "Publish content"] },
+                  { category: "User Management", permissions: ["View users", "Invite users", "Edit roles", "Remove users"] },
+                  { category: "Analytics", permissions: ["View reports", "Export data", "Create dashboards"] },
+                  { category: "System", permissions: ["Manage integrations", "Configure settings", "View audit logs"] },
+                ].map((cat, idx) => (
+                  <div key={idx} className="p-4 rounded-lg border border-white/10">
+                    <div className="text-sm text-white mb-3">{cat.category}</div>
+                    <div className="space-y-2">
+                      {cat.permissions.map((perm, pidx) => (
+                        <div key={pidx} className="flex items-center gap-2 text-xs text-white/60">
+                          <Shield className="w-3 h-3" />
+                          {perm}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+
+      case "audit":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-white mb-1">Audit Logs</h2>
+              <p className="text-sm text-white/50">Track all system activities and user actions</p>
+            </div>
+
+            {/* Filters */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="Search logs..."
+                    className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder-white/40 outline-none"
+                  />
+                </div>
+                <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-sm text-white outline-none">
+                  <option value="">All Actions</option>
+                  <option value="login">Login</option>
+                  <option value="create">Create</option>
+                  <option value="update">Update</option>
+                  <option value="delete">Delete</option>
+                </select>
+                <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-sm text-white outline-none">
+                  <option value="">All Users</option>
+                  <option value="sarah">Sarah Chen</option>
+                  <option value="michael">Michael Park</option>
+                </select>
+                <select className="bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-sm text-white outline-none">
+                  <option value="7d">Last 7 days</option>
+                  <option value="30d">Last 30 days</option>
+                  <option value="90d">Last 90 days</option>
+                </select>
+                <button className="px-4 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white text-sm transition-colors">
+                  Export
+                </button>
+              </div>
+            </div>
+
+            {/* Audit Log Entries */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+              <div className="divide-y divide-white/10">
+                {[
+                  { action: "Article Published", user: "Sarah Chen", target: "Q4 Strategy Guide", time: "2 minutes ago", type: "create", ip: "192.168.1.45" },
+                  { action: "User Role Updated", user: "Admin System", target: "Michael Park -> Editor", time: "15 minutes ago", type: "update", ip: "10.0.0.1" },
+                  { action: "Login Success", user: "Emily Rodriguez", target: "Web Dashboard", time: "1 hour ago", type: "login", ip: "172.16.0.89" },
+                  { action: "Document Deleted", user: "Sarah Chen", target: "Draft: Old Policy v1", time: "2 hours ago", type: "delete", ip: "192.168.1.45" },
+                  { action: "Integration Connected", user: "Admin System", target: "Slack Workspace", time: "3 hours ago", type: "create", ip: "10.0.0.1" },
+                  { action: "Password Changed", user: "Michael Park", target: "Self", time: "5 hours ago", type: "update", ip: "192.168.1.102" },
+                  { action: "API Key Generated", user: "Sarah Chen", target: "Production API Key", time: "1 day ago", type: "create", ip: "192.168.1.45" },
+                  { action: "Bulk Import", user: "Admin System", target: "150 knowledge items", time: "2 days ago", type: "create", ip: "10.0.0.1" },
+                ].map((log, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        log.type === "create" ? "bg-green-500/20 text-green-400" :
+                        log.type === "update" ? "bg-blue-500/20 text-blue-400" :
+                        log.type === "delete" ? "bg-red-500/20 text-red-400" :
+                        "bg-purple-500/20 text-purple-400"
+                      }`}>
+                        <Activity className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-sm text-white">{log.action}</div>
+                        <div className="text-xs text-white/40">
+                          <span className="text-blue-400">{log.user}</span> &middot; {log.target}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-white/50">{log.time}</div>
+                      <div className="text-xs text-white/30 font-mono">{log.ip}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="p-4 border-t border-white/10 flex items-center justify-between">
+                <div className="text-xs text-white/50">Showing 1-8 of 1,234 entries</div>
+                <div className="flex items-center gap-2">
+                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 text-xs hover:text-white transition-colors">
+                    Previous
+                  </button>
+                  <button className="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-xs">1</button>
+                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 text-xs hover:text-white transition-colors">2</button>
+                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 text-xs hover:text-white transition-colors">3</button>
+                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 text-xs hover:text-white transition-colors">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "system":
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-medium text-white mb-1">System Settings</h2>
+              <p className="text-sm text-white/50">Configure global system preferences and features</p>
+            </div>
+
+            {/* General Settings */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">General</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Organization Name</label>
+                  <input
+                    type="text"
+                    defaultValue="Digital Workplace AI"
+                    className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Default Language</label>
+                  <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50">
+                    <option value="en">English (US)</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Default Timezone</label>
+                  <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50">
+                    <option>Pacific Time (PT)</option>
+                    <option>Eastern Time (ET)</option>
+                    <option>UTC</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Settings */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">AI Configuration</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Default LLM Model</label>
+                  <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50">
+                    <option value="claude-3">Claude 3.5 Sonnet</option>
+                    <option value="gpt-4">GPT-4 Turbo</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="custom">Custom Model</option>
+                  </select>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm text-white">AI Response Citations</div>
+                    <div className="text-xs text-white/40">Include source references in AI responses</div>
+                  </div>
+                  <button className="w-10 h-6 rounded-full bg-blue-500">
+                    <div className="w-4 h-4 bg-white rounded-full mx-1 translate-x-4" />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm text-white">Confidence Scores</div>
+                    <div className="text-xs text-white/40">Display confidence levels for AI answers</div>
+                  </div>
+                  <button className="w-10 h-6 rounded-full bg-blue-500">
+                    <div className="w-4 h-4 bg-white rounded-full mx-1 translate-x-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Search Settings */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">Search Configuration</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Search Mode</label>
+                  <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50">
+                    <option value="hybrid">Hybrid (Keyword + Semantic)</option>
+                    <option value="semantic">Semantic Only</option>
+                    <option value="keyword">Keyword Only</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Semantic Threshold</label>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      defaultValue="70"
+                      className="flex-1"
+                    />
+                    <span className="text-sm text-white/70 w-12 text-right">0.70</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm text-white">Auto-generate Embeddings</div>
+                    <div className="text-xs text-white/40">Automatically create embeddings for new content</div>
+                  </div>
+                  <button className="w-10 h-6 rounded-full bg-blue-500">
+                    <div className="w-4 h-4 bg-white rounded-full mx-1 translate-x-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Security Settings */}
+            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+              <h3 className="text-sm font-medium text-white mb-4">Security</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm text-white">Enforce 2FA</div>
+                    <div className="text-xs text-white/40">Require two-factor authentication for all users</div>
+                  </div>
+                  <button className="w-10 h-6 rounded-full bg-white/20">
+                    <div className="w-4 h-4 bg-white rounded-full mx-1" />
+                  </button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-sm text-white">SSO Only</div>
+                    <div className="text-xs text-white/40">Disable password login, require SSO</div>
+                  </div>
+                  <button className="w-10 h-6 rounded-full bg-white/20">
+                    <div className="w-4 h-4 bg-white rounded-full mx-1" />
+                  </button>
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">Session Timeout (minutes)</label>
+                  <input
+                    type="number"
+                    defaultValue="60"
+                    className="w-32 bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-blue-500/50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors">
+              Save System Settings
+            </button>
+          </div>
+        );
+
       default:
         return (
           <div className="flex items-center justify-center h-64">

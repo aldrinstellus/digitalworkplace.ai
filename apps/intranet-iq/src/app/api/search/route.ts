@@ -123,68 +123,80 @@ export async function POST(request: NextRequest) {
 
     // Fallback to Supabase if Elasticsearch unavailable or failed
     if (searchEngine === 'supabase') {
-      // Try semantic search if OpenAI is configured
+      // Try semantic search if configured
       if (searchType === 'semantic' || searchType === 'hybrid') {
-        const embedding = await generateQueryEmbedding(query);
+        try {
+          const embedding = await generateQueryEmbedding(query);
 
-        if (embedding) {
-          if (searchType === 'semantic') {
-            // Pure semantic search using pgvector
-            const { data, error } = await (supabase.rpc as any)('search_articles_semantic', {
-              query_embedding: embedding,
-              match_threshold: threshold,
-              match_count: limit,
-              department_filter: departmentId || null,
-            }) as { data: SemanticSearchResult[] | null; error: any };
+          if (embedding && embedding.length > 0) {
+            if (searchType === 'semantic') {
+              // Pure semantic search using pgvector
+              const { data, error } = await (supabase.rpc as any)('search_articles_semantic', {
+                query_embedding: embedding,
+                match_threshold: threshold,
+                match_count: limit,
+                department_filter: departmentId || null,
+              }) as { data: SemanticSearchResult[] | null; error: any };
 
-            if (!error && data) {
-              results = data.map((item) => ({
-                id: item.id,
-                type: 'article',
-                title: item.title,
-                summary: item.summary,
-                slug: item.slug,
-                category: item.category_name,
-                department: item.department_name,
-                similarity: item.similarity,
-                relevanceScore: Math.round(item.similarity * 100),
-              }));
+              if (!error && data) {
+                results = data.map((item) => ({
+                  id: item.id,
+                  type: 'article',
+                  title: item.title,
+                  summary: item.summary,
+                  slug: item.slug,
+                  category: item.category_name,
+                  department: item.department_name,
+                  similarity: item.similarity,
+                  relevanceScore: Math.round(item.similarity * 100),
+                }));
+              } else if (error) {
+                console.warn('[Search] Semantic RPC failed, falling back to keyword:', error.message);
+                searchMethod = 'keyword';
+              }
+            } else {
+              // Hybrid search: combine keyword + semantic
+              const { data, error } = await (supabase.rpc as any)('search_knowledge_hybrid', {
+                search_query: query,
+                query_embedding: embedding,
+                keyword_weight: 0.3,
+                semantic_weight: 0.7,
+                match_threshold: threshold,
+                match_count: limit,
+                project_codes: null, // Search all projects
+                item_types: contentTypes,
+              }) as { data: HybridSearchResult[] | null; error: any };
+
+              if (!error && data) {
+                results = data.map((item) => ({
+                  id: item.id,
+                  type: item.item_type,
+                  title: item.title,
+                  summary: item.summary,
+                  projectCode: item.project_code,
+                  combinedScore: item.combined_score,
+                  keywordScore: item.keyword_score,
+                  semanticScore: item.semantic_score,
+                  relevanceScore: Math.round(item.combined_score * 100),
+                }));
+              } else if (error) {
+                console.warn('[Search] Hybrid RPC failed, falling back to keyword:', error.message);
+                searchMethod = 'keyword';
+              }
             }
           } else {
-            // Hybrid search: combine keyword + semantic
-            const { data, error } = await (supabase.rpc as any)('search_knowledge_hybrid', {
-              search_query: query,
-              query_embedding: embedding,
-              keyword_weight: 0.3,
-              semantic_weight: 0.7,
-              match_threshold: threshold,
-              match_count: limit,
-              project_codes: null, // Search all projects
-              item_types: contentTypes,
-            }) as { data: HybridSearchResult[] | null; error: any };
-
-            if (!error && data) {
-              results = data.map((item) => ({
-                id: item.id,
-                type: item.item_type,
-                title: item.title,
-                summary: item.summary,
-                projectCode: item.project_code,
-                combinedScore: item.combined_score,
-                keywordScore: item.keyword_score,
-                semanticScore: item.semantic_score,
-                relevanceScore: Math.round(item.combined_score * 100),
-              }));
-            }
+            // No embedding generated, fall back to keyword
+            console.warn('[Search] Embedding generation returned empty, falling back to keyword');
+            searchMethod = 'keyword';
           }
-        } else if (searchType === 'semantic') {
-          // No OpenAI configured, fall back to keyword for semantic requests
+        } catch (embeddingError) {
+          console.warn('[Search] Embedding/semantic search failed, falling back to keyword:', embeddingError);
           searchMethod = 'keyword';
         }
       }
 
       // Keyword-only search (fallback or explicit)
-      if (searchType === 'keyword' || (searchMethod === 'keyword' && results.length === 0)) {
+      if (searchType === 'keyword' || searchMethod === 'keyword' || results.length === 0) {
         searchMethod = 'keyword';
 
         // Use public wrapper function for diq schema search

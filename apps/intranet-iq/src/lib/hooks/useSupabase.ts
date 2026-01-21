@@ -588,6 +588,7 @@ export function useSearch() {
         itemTypes?: string[];
         maxResults?: number;
         offset?: number;
+        mode?: 'keyword' | 'semantic' | 'hybrid';
       }
     ) => {
       if (!query.trim()) {
@@ -596,14 +597,51 @@ export function useSearch() {
       }
       setLoading(true);
       setError(null);
-      const { data, error } = await searchKnowledge(query, options);
-      if (error) {
-        setError(error.message);
+
+      try {
+        // Use the API route instead of direct RPC call
+        // Map parameters to match what the API expects
+        // Default to 'semantic' search now that embeddings are fully populated (100% coverage)
+        const response = await fetch('/diq/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query,
+            searchType: options?.mode || 'semantic',
+            contentTypes: options?.itemTypes || ['article', 'news', 'event'],
+            limit: options?.maxResults || 20,
+            threshold: 0.3,
+            useElasticsearch: false,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Search failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Transform API response to match SearchResult interface
+        const transformedResults: SearchResult[] = (data.results || []).map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          content: item.content,
+          summary: item.summary || item.highlights?.[0] || '',
+          type: item.type || 'article',
+          source: item.source || 'knowledge_base',
+          url: item.url,
+          score: item.score,
+          created_at: item.created_at,
+          metadata: item.metadata,
+        }));
+
+        setResults(transformedResults);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Search failed');
         setResults([]);
-      } else {
-        setResults(data || []);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     },
     []
   );

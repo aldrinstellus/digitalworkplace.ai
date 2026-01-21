@@ -23,14 +23,17 @@ export async function GET(request: NextRequest) {
     // Query parameters for filtering
     const departmentId = searchParams.get('departmentId');
     const search = searchParams.get('search');
-    const limit = parseInt(searchParams.get('limit') || '0'); // 0 = no limit
+    // Default limit to 100 for performance - use limit=-1 to fetch all
+    const rawLimit = searchParams.get('limit');
+    const limit = rawLimit === '-1' ? 0 : parseInt(rawLimit || '100');
     const offset = parseInt(searchParams.get('offset') || '0');
 
     // Build employees query with optional filtering
+    // Select only needed fields for performance (exclude large profile_data unless needed)
     let employeesQuery = supabase
       .schema('diq')
       .from('employees')
-      .select('*')
+      .select('id, user_id, department_id, job_title, bio, phone, location, skills, manager_id, hire_date, created_at, updated_at')
       .order('created_at', { ascending: false });
 
     // Apply department filter at query level

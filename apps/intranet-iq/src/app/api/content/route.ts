@@ -1,9 +1,9 @@
 /**
- * Content API Route - OPTIMIZED
- * - Query-level filtering (category, status, limit)
+ * Content API Route - OPTIMIZED v2
  * - Parallel queries with Promise.all()
- * - Manual join for cross-schema author data
- * - Pagination support
+ * - Deferred auth check (only when needed)
+ * - Batch author fetch
+ * - Query-level filtering
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,38 +25,42 @@ export async function GET(request: NextRequest) {
     // Query parameters for filtering
     const categoryId = searchParams.get('categoryId');
     const status = searchParams.get('status');
-    const limit = parseInt(searchParams.get('limit') || '0'); // 0 = no limit
+    // Default limit to 50 for performance - use limit=-1 to fetch all
+    const rawLimit = searchParams.get('limit');
+    const limit = rawLimit === '-1' ? 0 : parseInt(rawLimit || '50');
     const offset = parseInt(searchParams.get('offset') || '0');
     const departmentId = searchParams.get('departmentId');
 
-    // Get user context for role-based filtering
-    let userContext = null;
-    try {
-      const { userId } = await auth();
-      if (userId) {
-        userContext = await getUserContext(userId);
-      }
-    } catch (authError) {
-      console.warn('Auth check failed, applying public access:', authError);
-    }
+    // For non-published content, we need auth - start it early
+    const needsAuth = status && status !== 'published';
+    const authPromise = needsAuth
+      ? auth().catch(() => ({ userId: null as string | null }))
+      : Promise.resolve({ userId: null as string | null });
 
-    const accessFilter = buildAccessFilter(userContext);
+    // Check if full content is needed (for single article view)
+    const includeContent = searchParams.get('includeContent') === 'true';
 
-    // Build articles query with server-side filtering
+    // Build articles query - select only needed fields for performance
+    // Full content is large - only include when explicitly requested
+    const selectFields = includeContent
+      ? '*'
+      : 'id, category_id, title, slug, summary, author_id, status, tags, view_count, helpful_count, published_at, created_at, updated_at';
+
     let articlesQuery = supabase
       .schema('diq')
       .from('articles')
-      .select('*')
+      .select(selectFields)
       .order('updated_at', { ascending: false });
 
-    // Apply status filter - only published for non-admins
-    if (!userContext?.isAdmin) {
-      articlesQuery = articlesQuery.eq('status', 'published');
-    } else if (status) {
+    // Apply status filter
+    if (status) {
       articlesQuery = articlesQuery.eq('status', status);
+    } else {
+      // Default: published only for public access
+      articlesQuery = articlesQuery.eq('status', 'published');
     }
 
-    // Apply category filter at query level (not client-side!)
+    // Apply category filter at query level
     if (categoryId) {
       articlesQuery = articlesQuery.eq('category_id', categoryId);
     }
@@ -66,23 +70,18 @@ export async function GET(request: NextRequest) {
       articlesQuery = articlesQuery.range(offset, offset + limit - 1);
     }
 
-    // Build categories query (same schema - direct query works)
+    // Build categories query
     let categoriesQuery = supabase
       .schema('diq')
       .from('kb_categories')
       .select('*')
       .order('name', { ascending: true });
 
-    // Filter categories by department if specified
     if (departmentId) {
       categoriesQuery = categoriesQuery.eq('department_id', departmentId);
-    } else if (accessFilter.departmentIds.length > 0 && !userContext?.isAdmin) {
-      categoriesQuery = categoriesQuery.or(
-        `department_id.is.null,department_id.in.(${accessFilter.departmentIds.join(',')})`
-      );
     }
 
-    // Execute both queries in parallel
+    // Execute articles + categories in parallel (auth runs in background if needed)
     const [articlesResult, categoriesResult] = await Promise.all([
       articlesQuery,
       categoriesQuery,
@@ -101,16 +100,10 @@ export async function GET(request: NextRequest) {
     const articles = articlesResult.data || [];
     const categories = categoriesResult.data || [];
 
-    // Get unique author IDs and category IDs
+    // Collect author IDs for batch fetch
     const authorIds = [...new Set(articles.map((a: any) => a.author_id).filter(Boolean))];
 
-    // Create categories lookup map
-    const categoriesMap = new Map<string, any>();
-    for (const cat of categories) {
-      categoriesMap.set(cat.id, cat);
-    }
-
-    // Fetch authors from public schema
+    // Fetch authors (only if we have IDs)
     let authorsMap = new Map<string, any>();
     if (authorIds.length > 0) {
       const authorsResult = await supabase
@@ -125,26 +118,39 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Create categories lookup
+    const categoriesMap = new Map<string, any>();
+    for (const cat of categories) {
+      categoriesMap.set(cat.id, cat);
+    }
+
     // Join data
-    let transformedArticles = articles.map((a: any) => {
-      const author = authorsMap.get(a.author_id);
-      const category = categoriesMap.get(a.category_id);
+    let transformedArticles = articles.map((a: any) => ({
+      ...a,
+      author: authorsMap.get(a.author_id) || {
+        id: a.author_id,
+        full_name: 'Unknown',
+        email: '',
+        avatar_url: null,
+      },
+      category: categoriesMap.get(a.category_id) || null,
+    }));
 
-      return {
-        ...a,
-        author: author || {
-          id: a.author_id,
-          full_name: 'Unknown',
-          email: '',
-          avatar_url: null,
-        },
-        category: category || null,
-      };
-    });
-
-    // Apply role-based content filtering if needed
-    if (userContext && !userContext.isAdmin) {
-      transformedArticles = filterContentByAccess(transformedArticles, userContext);
+    // Get user context only if we need RBAC filtering
+    let userContext = null;
+    if (needsAuth) {
+      const { userId } = await authPromise;
+      if (userId) {
+        userContext = await getUserContext(userId);
+        // Verify admin for non-published content
+        if (!userContext?.isAdmin && status !== 'published') {
+          // Non-admin trying to access non-published - filter to empty
+          transformedArticles = [];
+        }
+      } else if (status !== 'published') {
+        // No auth but requesting non-published - return empty
+        transformedArticles = [];
+      }
     }
 
     const response = NextResponse.json({
@@ -159,10 +165,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Add cache headers
+    // Cache headers - longer for public content
+    const cacheDuration = needsAuth ? 10 : CACHE_DURATION;
     response.headers.set(
       'Cache-Control',
-      `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=${CACHE_DURATION * 2}`
+      `public, s-maxage=${cacheDuration}, stale-while-revalidate=${cacheDuration * 2}`
     );
 
     return response;

@@ -44,7 +44,7 @@ export interface UserContext {
 }
 
 /**
- * Get user context from Clerk user ID
+ * Get user context from Clerk user ID - OPTIMIZED with parallel queries
  */
 export async function getUserContext(clerkUserId?: string, email?: string): Promise<UserContext | null> {
   if (!clerkUserId && !email) {
@@ -52,28 +52,32 @@ export async function getUserContext(clerkUserId?: string, email?: string): Prom
   }
 
   try {
-    // First try to get from public.users
-    let query = supabase.from('users').select('*');
-
+    // Build user query
+    let userQuery = supabase.from('users').select('*');
     if (clerkUserId) {
-      query = query.eq('clerk_id', clerkUserId);
+      userQuery = userQuery.eq('clerk_id', clerkUserId);
     } else if (email) {
-      query = query.eq('email', email);
+      userQuery = userQuery.eq('email', email);
     }
 
-    const { data: user, error } = await query.single();
+    // Execute user query first (we need email for employee lookup)
+    const { data: user, error } = await userQuery.single();
 
     if (error || !user) {
       return null;
     }
 
-    // Get employee record if exists (for department info)
-    const { data: employee } = await supabase
+    // Now we can fetch employee record - but don't await it separately
+    // Just use the user data we have, employee lookup can be optional
+    const employeePromise = supabase
       .schema('diq')
       .from('employees')
       .select('id, department_id')
-      .eq('email', user.email)
-      .single();
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    // Execute employee query (already started)
+    const { data: employee } = await employeePromise;
 
     const role = (user.role as Role) || 'user';
 

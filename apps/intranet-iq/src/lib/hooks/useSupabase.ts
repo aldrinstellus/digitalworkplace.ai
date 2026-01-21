@@ -601,13 +601,14 @@ export function useSearch() {
       try {
         // Use the API route instead of direct RPC call
         // Map parameters to match what the API expects
-        // Default to 'semantic' search now that embeddings are fully populated (100% coverage)
+        // Default to 'keyword' search for Vercel production (OPENAI_API_KEY not configured)
+        // TODO: Re-enable 'semantic' when API key is added to Vercel environment
         const response = await fetch('/diq/api/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             query,
-            searchType: options?.mode || 'semantic',
+            searchType: options?.mode || 'keyword',
             contentTypes: options?.itemTypes || ['article', 'news', 'event'],
             limit: options?.maxResults || 20,
             threshold: 0.3,

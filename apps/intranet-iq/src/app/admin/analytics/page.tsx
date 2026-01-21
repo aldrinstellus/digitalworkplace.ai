@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { DrillDownModal } from "@/components/analytics/DrillDownModal";
 import {
   TrendingUp,
   Users,
@@ -14,6 +15,7 @@ import {
   Download,
   FileDown,
   ChevronDown,
+  ExternalLink,
 } from "lucide-react";
 
 interface MetricCard {
@@ -71,12 +73,72 @@ const dailyActivity = [
   { day: "Sun", searches: 670, chats: 95, views: 1450 },
 ];
 
+type DrillDownType = "users" | "searches" | "conversations" | "views" | "day" | "feature";
+
+interface DrillDownData {
+  type: DrillDownType;
+  title: string;
+  value: string | number;
+  change?: number;
+  period?: string;
+  dayData?: {
+    day: string;
+    searches: number;
+    chats: number;
+    views: number;
+  };
+  featureData?: {
+    name: string;
+    percentage: number;
+  };
+}
+
 export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState("7d");
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [drillDownData, setDrillDownData] = useState<DrillDownData | null>(null);
 
   const maxActivity = Math.max(...dailyActivity.map(d => Math.max(d.searches, d.views)));
+
+  // Handle metric card click
+  const handleMetricClick = (metric: MetricCard) => {
+    const typeMap: Record<string, DrillDownType> = {
+      "Active Users": "users",
+      "Search Queries": "searches",
+      "AI Conversations": "conversations",
+      "Content Views": "views",
+    };
+    setDrillDownData({
+      type: typeMap[metric.title] || "users",
+      title: metric.title,
+      value: metric.value,
+      change: metric.change,
+      period: dateRange === "24h" ? "Last 24 hours" : dateRange === "7d" ? "Last 7 days" : dateRange === "30d" ? "Last 30 days" : "Last 90 days",
+    });
+  };
+
+  // Handle day bar click
+  const handleDayClick = (day: typeof dailyActivity[0]) => {
+    setDrillDownData({
+      type: "day",
+      title: `${day.day} Activity`,
+      value: (day.searches + day.chats + day.views).toLocaleString(),
+      period: "Total interactions",
+      dayData: day,
+    });
+  };
+
+  // Handle feature usage click
+  const handleFeatureClick = (name: string, percentage: number) => {
+    setDrillDownData({
+      type: "feature",
+      title: `${name} Usage`,
+      value: `${percentage}%`,
+      period: "of total platform usage",
+      featureData: { name, percentage },
+    });
+  };
 
   // Export to CSV
   const exportToCSV = useCallback(() => {
@@ -269,13 +331,20 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* Metric Cards */}
+          {/* Metric Cards - Clickable for Drill-Down */}
           <div className="grid grid-cols-4 gap-4 mb-8">
             {metrics.map((metric) => (
-              <div key={metric.title} className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
+              <div
+                key={metric.title}
+                onClick={() => handleMetricClick(metric)}
+                className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 cursor-pointer hover:bg-white/5 hover:border-white/20 transition-all group"
+              >
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-white/50 text-sm">{metric.title}</span>
-                  <metric.icon className="w-4 h-4 text-white/40" />
+                  <div className="flex items-center gap-2">
+                    <metric.icon className="w-4 h-4 text-white/40" />
+                    <ExternalLink className="w-3 h-3 text-white/0 group-hover:text-white/40 transition-colors" />
+                  </div>
                 </div>
                 <div className="text-2xl font-medium text-white mb-1">{metric.value}</div>
                 <div className={`flex items-center gap-1 text-sm ${metric.trend === "up" ? "text-green-400" : "text-red-400"}`}>
@@ -283,6 +352,9 @@ export default function AnalyticsPage() {
                   {Math.abs(metric.change)}%
                   <span className="text-white/40 ml-1">vs last period</span>
                 </div>
+                <p className="text-xs text-white/0 group-hover:text-white/30 mt-2 transition-colors">
+                  Click for detailed breakdown
+                </p>
               </div>
             ))}
           </div>
@@ -309,68 +381,64 @@ export default function AnalyticsPage() {
               </div>
               <div className="flex items-end justify-between h-48 gap-2">
                 {dailyActivity.map((day) => (
-                  <div key={day.day} className="flex-1 flex flex-col items-center gap-1">
-                    <div className="w-full flex items-end gap-0.5 h-40">
+                  <div
+                    key={day.day}
+                    onClick={() => handleDayClick(day)}
+                    className="flex-1 flex flex-col items-center gap-1 cursor-pointer group"
+                  >
+                    <div className="w-full flex items-end gap-0.5 h-40 group-hover:opacity-80 transition-opacity">
                       <div
-                        className="flex-1 bg-blue-500 rounded-t"
+                        className="flex-1 bg-blue-500 rounded-t group-hover:bg-blue-400 transition-colors"
                         style={{ height: `${(day.searches / maxActivity) * 100}%` }}
                       />
                       <div
-                        className="flex-1 bg-purple-500 rounded-t"
+                        className="flex-1 bg-purple-500 rounded-t group-hover:bg-purple-400 transition-colors"
                         style={{ height: `${(day.views / maxActivity) * 100}%` }}
                       />
                       <div
-                        className="flex-1 bg-green-500 rounded-t"
+                        className="flex-1 bg-green-500 rounded-t group-hover:bg-green-400 transition-colors"
                         style={{ height: `${(day.chats / maxActivity) * 20}%` }}
                       />
                     </div>
-                    <span className="text-xs text-white/40">{day.day}</span>
+                    <span className="text-xs text-white/40 group-hover:text-white/70 transition-colors">{day.day}</span>
                   </div>
                 ))}
               </div>
+              <p className="text-xs text-white/30 mt-3 text-center">Click on any day to see detailed breakdown</p>
             </div>
 
-            {/* Usage Distribution */}
+            {/* Usage Distribution - Clickable for Drill-Down */}
             <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
               <h3 className="text-lg font-medium text-white mb-6">Usage by Feature</h3>
               <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white/70">Search</span>
-                    <span className="text-sm text-white/50">45%</span>
+                {[
+                  { name: "Search", percentage: 45, color: "blue" },
+                  { name: "AI Chat", percentage: 28, color: "purple" },
+                  { name: "Content Browse", percentage: 18, color: "green" },
+                  { name: "People Directory", percentage: 9, color: "orange" },
+                ].map((feature) => (
+                  <div
+                    key={feature.name}
+                    onClick={() => handleFeatureClick(feature.name, feature.percentage)}
+                    className="cursor-pointer group p-2 -mx-2 rounded-lg hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm text-white/70 group-hover:text-white transition-colors">{feature.name}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-white/50">{feature.percentage}%</span>
+                        <ExternalLink className="w-3 h-3 text-white/0 group-hover:text-white/40 transition-colors" />
+                      </div>
+                    </div>
+                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full bg-${feature.color}-500 rounded-full group-hover:bg-${feature.color}-400 transition-colors`}
+                        style={{ width: `${feature.percentage}%`, backgroundColor: feature.color === "blue" ? "#3b82f6" : feature.color === "purple" ? "#a855f7" : feature.color === "green" ? "#22c55e" : "#f97316" }}
+                      />
+                    </div>
                   </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: "45%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white/70">AI Chat</span>
-                    <span className="text-sm text-white/50">28%</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-purple-500 rounded-full" style={{ width: "28%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white/70">Content Browse</span>
-                    <span className="text-sm text-white/50">18%</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-green-500 rounded-full" style={{ width: "18%" }} />
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white/70">People Directory</span>
-                    <span className="text-sm text-white/50">9%</span>
-                  </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-orange-500 rounded-full" style={{ width: "9%" }} />
-                  </div>
-                </div>
+                ))}
               </div>
+              <p className="text-xs text-white/30 mt-4 text-center">Click on any feature for details</p>
             </div>
           </div>
 
@@ -439,26 +507,71 @@ export default function AnalyticsPage() {
           <div className="mt-6 bg-[#0f0f14] border border-white/10 rounded-xl p-6">
             <h3 className="text-lg font-medium text-white mb-4">AI Assistant Performance</h3>
             <div className="grid grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="text-3xl font-medium text-white mb-1">87%</div>
+              <div
+                onClick={() => setDrillDownData({
+                  type: "conversations",
+                  title: "Answer Accuracy",
+                  value: "87%",
+                  change: 3.2,
+                  period: "AI accuracy metrics",
+                })}
+                className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
+              >
+                <div className="text-3xl font-medium text-white mb-1 group-hover:text-blue-400 transition-colors">87%</div>
                 <div className="text-sm text-white/50">Answer Accuracy</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-medium text-white mb-1">1.2s</div>
+              <div
+                onClick={() => setDrillDownData({
+                  type: "conversations",
+                  title: "Response Time",
+                  value: "1.2s",
+                  change: -8.5,
+                  period: "Average response latency",
+                })}
+                className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
+              >
+                <div className="text-3xl font-medium text-white mb-1 group-hover:text-green-400 transition-colors">1.2s</div>
                 <div className="text-sm text-white/50">Avg Response Time</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-medium text-white mb-1">92%</div>
+              <div
+                onClick={() => setDrillDownData({
+                  type: "conversations",
+                  title: "User Satisfaction",
+                  value: "92%",
+                  change: 5.1,
+                  period: "Based on user feedback",
+                })}
+                className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
+              >
+                <div className="text-3xl font-medium text-white mb-1 group-hover:text-purple-400 transition-colors">92%</div>
                 <div className="text-sm text-white/50">User Satisfaction</div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-medium text-white mb-1">78%</div>
+              <div
+                onClick={() => setDrillDownData({
+                  type: "conversations",
+                  title: "Source Citations",
+                  value: "78%",
+                  change: 12.3,
+                  period: "Responses with citations",
+                })}
+                className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
+              >
+                <div className="text-3xl font-medium text-white mb-1 group-hover:text-orange-400 transition-colors">78%</div>
                 <div className="text-sm text-white/50">Source Citation Rate</div>
               </div>
             </div>
+            <p className="text-xs text-white/30 mt-4 text-center">Click on any metric for detailed breakdown</p>
           </div>
         </div>
       </main>
+
+      {/* Drill-Down Modal */}
+      {drillDownData && (
+        <DrillDownModal
+          data={drillDownData}
+          onClose={() => setDrillDownData(null)}
+        />
+      )}
     </div>
   );
 }

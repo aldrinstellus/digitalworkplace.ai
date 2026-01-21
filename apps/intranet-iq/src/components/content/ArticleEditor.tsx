@@ -23,7 +23,20 @@ import {
   X,
   Check,
   Loader2,
+  Paperclip,
 } from "lucide-react";
+import { FileAttachmentUpload } from "./FileAttachmentUpload";
+
+interface FileAttachment {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  url?: string;
+  status: "uploading" | "complete" | "error";
+  progress?: number;
+  error?: string;
+}
 
 interface ArticleEditorProps {
   article?: {
@@ -33,6 +46,7 @@ interface ArticleEditorProps {
     summary?: string;
     tags?: string[];
     status: string;
+    attachments?: FileAttachment[];
   };
   onSave: (data: {
     title: string;
@@ -40,6 +54,7 @@ interface ArticleEditorProps {
     summary: string;
     tags: string[];
     status: string;
+    attachments: FileAttachment[];
   }) => Promise<void>;
   onCancel: () => void;
 }
@@ -54,6 +69,8 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
   const [isPreview, setIsPreview] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [attachments, setAttachments] = useState<FileAttachment[]>(article?.attachments || []);
+  const [showAttachments, setShowAttachments] = useState(false);
   const editorRef = useRef<HTMLDivElement>(null);
 
   const execCommand = useCallback((command: string, value?: string) => {
@@ -81,6 +98,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
         summary,
         tags,
         status: saveStatus || status,
+        attachments: attachments.filter((a) => a.status === "complete"),
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -112,6 +130,13 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
       prompt: true,
       title: "Insert Link",
     },
+    {
+      icon: Paperclip,
+      command: "attachments",
+      custom: true,
+      title: "Add Attachments",
+    },
+    { type: "divider" },
     { icon: Undo, command: "undo", title: "Undo (Ctrl+Z)" },
     { icon: Redo, command: "redo", title: "Redo (Ctrl+Y)" },
   ];
@@ -206,7 +231,9 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
                 <button
                   key={idx}
                   onClick={() => {
-                    if (btn.prompt) {
+                    if ((btn as any).custom && btn.command === "attachments") {
+                      setShowAttachments(!showAttachments);
+                    } else if (btn.prompt) {
                       const url = prompt("Enter URL:");
                       if (url) execCommand(btn.command!, url);
                     } else {
@@ -214,12 +241,33 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
                     }
                   }}
                   title={btn.title}
-                  className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+                  className={`p-2 rounded-lg hover:bg-white/10 transition-colors ${
+                    (btn as any).custom && showAttachments
+                      ? "bg-blue-500/20 text-blue-400"
+                      : "text-white/50 hover:text-white"
+                  }`}
                 >
                   {btn.icon && <btn.icon className="w-4 h-4" />}
+                  {btn.command === "attachments" && attachments.length > 0 && (
+                    <span className="ml-1 text-xs bg-blue-500 text-white rounded-full px-1.5">
+                      {attachments.length}
+                    </span>
+                  )}
                 </button>
               )
             )}
+          </div>
+        )}
+
+        {/* Attachments Panel */}
+        {showAttachments && (
+          <div className="px-4 py-3 border-b border-white/10 bg-white/5">
+            <FileAttachmentUpload
+              attachments={attachments}
+              onAttachmentsChange={setAttachments}
+              maxFiles={10}
+              maxSizeMB={25}
+            />
           </div>
         )}
 

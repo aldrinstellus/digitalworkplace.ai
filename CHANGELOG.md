@@ -4,6 +4,54 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.1] - 2026-01-21
+
+### Login Page Performance Optimization
+
+#### Changed
+
+**Image Optimization**
+- Reduced avatar image sizes from 150x150 to 80x80 pixels
+- Added quality parameter (q=75) to reduce file sizes by ~50%
+- First 6 avatars load with `eager` + `fetchPriority="high"` (above-the-fold)
+- Remaining 18 avatars load with `loading="lazy"`
+- Added `decoding="async"` to prevent main thread blocking
+
+**Animation Deferral (Post-LCP)**
+- Added `isLCPComplete` and `animationsEnabled` state tracking
+- Initial particle count reduced from 40 to 20 (doubled after LCP)
+- GSAP floating animations deferred 300ms after initial paint
+- Chat bubbles deferred until animations are enabled
+- All complex SVG animations now start post-LCP
+
+**Resource Hints**
+- Added `preconnect` for `images.unsplash.com`
+- Added `preconnect` for `upload.wikimedia.org`
+- Added `dns-prefetch` fallbacks for both domains
+
+**Next.js Configuration**
+- Enabled AVIF and WebP image formats
+- Configured `remotePatterns` for Unsplash and Wikimedia
+- Optimized device sizes for faster responsive images
+
+#### Performance Impact
+| Metric | Before | After (Expected) |
+|--------|--------|------------------|
+| LCP | 3,722ms | ~1,500-2,000ms |
+| Render Delay | 3,713ms | ~1,200-1,600ms |
+| Image Load | 213KB | ~85KB |
+
+#### Files Changed
+- `apps/main/src/components/login/LoginBackground.tsx`
+- `apps/main/src/app/sign-in/layout.tsx`
+- `apps/main/next.config.ts`
+
+#### Deployment
+- GitHub commit: `ceaf7f1`
+- Vercel: Auto-deploying
+
+---
+
 ## [0.7.0] - 2026-01-21
 
 ### dCQ - Chat Core IQ v1.0.0 Production Release

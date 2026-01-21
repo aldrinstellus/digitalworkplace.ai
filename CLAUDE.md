@@ -248,13 +248,14 @@ npm run lint     # Run ESLint
 ## SUB-PROJECTS
 ---
 
-### dIQ - Intranet IQ (v0.2.2)
+### dIQ - Intranet IQ (v0.6.5) - PRODUCTION LIVE
 
 | Property | Value |
 |----------|-------|
 | **Location** | `apps/intranet-iq/` |
 | **Port** | 3001 |
-| **URL** | http://localhost:3001/diq/dashboard |
+| **Local URL** | http://localhost:3001/diq/dashboard |
+| **Production URL** | https://intranet-iq.vercel.app/diq/dashboard |
 | **basePath** | `/diq` |
 | **Documentation** | `apps/intranet-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
 
@@ -264,17 +265,28 @@ cd /Users/aldrin-mac-mini/digitalworkplace.ai
 npm run dev:intranet     # Start dIQ on port 3001
 ```
 
-**Pages:**
-- `/diq/dashboard` - Main dashboard
-- `/diq/chat` - AI Assistant
-- `/diq/search` - Enterprise Search
-- `/diq/people` - Org Chart & Directory
-- `/diq/content` - Knowledge Base
-- `/diq/agents` - Workflow Automation
-- `/diq/settings` - User/Admin Settings
+**Pages (10 total, all production-verified):**
+- `/diq/dashboard` - Main dashboard (news, events, activity feed)
+- `/diq/chat` - AI Assistant (Claude 3 integration)
+- `/diq/search` - Enterprise Search (keyword + semantic)
+- `/diq/people` - Org Chart & Directory (60 employees)
+- `/diq/content` - Knowledge Base (20+ categories, 212 articles)
+- `/diq/agents` - Workflow Automation (3 featured agents)
+- `/diq/settings` - User/Admin Settings (9 panels)
+- `/diq/admin/elasticsearch` - Elasticsearch Admin (3 nodes, 28,690 docs)
+- `/diq/admin/analytics` - Analytics Dashboard
+- `/diq/admin/permissions` - RBAC Management (4 roles)
+
+**Features:**
+- AI Assistant: Claude 3 integration for intelligent responses
+- Semantic Search: 212 articles + 348 knowledge items with 100% embedding coverage
+- AI Summary: Anthropic API generating search summaries
+- RBAC: 4 roles (Super Admin, Admin, Editor, Viewer), 191 total users
+- Elasticsearch: 3 nodes, 28,690 indexed documents
 
 **Database (Supabase):**
 - Schema: `diq` (project-specific) + `public` (shared)
+- 21 tables with full RLS policies
 - TypeScript types: `apps/intranet-iq/src/lib/database.types.ts`
 - Client helpers: `apps/intranet-iq/src/lib/supabase.ts`
 - Migrations: `supabase/migrations/001_core_schema.sql`, `002_diq_schema.sql`

@@ -312,6 +312,19 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
   - 15 Supabase tables with 100% embedding coverage
   - Fully responsive (mobile/tablet/desktop)
 
+### dIQ - Intranet IQ (v0.6.5)
+- **Port**: 3001
+- **Production**: https://intranet-iq.vercel.app
+- **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
+- **Features**:
+  - 10 fully verified production pages
+  - AI Assistant: Claude 3 integration
+  - Semantic Search: 212 articles + 348 knowledge items (100% embeddings)
+  - AI Summary: Anthropic API generating search summaries
+  - RBAC: 4 roles, 191 users
+  - Elasticsearch: 3 nodes, 28,690 indexed documents
+  - 21 Supabase tables in diq schema
+
 ### Product Card Features
 - **Animated SVG Illustrations**: Each product has unique animated SVG background
   - Support IQ: Headset with sound waves, chat bubbles

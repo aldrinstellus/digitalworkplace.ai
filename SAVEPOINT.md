@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-21 08:30 UTC
-**Version**: 0.7.1
-**Session Status**: All systems operational, all documentation updated
+**Last Updated**: 2026-01-21 13:00 UTC
+**Version**: 0.7.2
+**Session Status**: Full spectrum save - all products synced
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -24,18 +24,19 @@
 
 ## Production URLs (All Verified)
 
-| Product | Production URL | Status |
-|---------|----------------|--------|
-| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live |
-| **Support IQ (dSQ)** | https://support-iq-pearl.vercel.app | ✅ Live |
-| **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live |
-| **Chat Core IQ (dCQ)** | https://chat-core-iq.vercel.app | ✅ Live |
-| **Test Pilot IQ (dTQ)** | - | ⬜ Pending |
+| Product | Production URL | Status | Version |
+|---------|----------------|--------|---------|
+| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.2 |
+| **Support IQ (dSQ)** | https://support-iq-pearl.vercel.app | ✅ Live | 1.1.0 |
+| **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 0.6.5 |
+| **Chat Core IQ (dCQ)** | https://chat-core-iq.vercel.app | ✅ Live | 1.0.0 |
+| **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: `caf26a6` (dCQ v1.0.0 production docs)
+- **Latest Commit**: `2d1bfaa` (docs: update all documentation with dCQ v1.0.0 production info)
 - **Performance Commit**: `ceaf7f1` (login page optimization)
+- **Support IQ Commit**: `ebd268f` (dSQ v1.1.0 SAVEPOINT.md)
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -65,18 +66,29 @@
 | **Search** | http://localhost:3001/diq/search |
 | **People** | http://localhost:3001/diq/people |
 | **Content** | http://localhost:3001/diq/content |
+| **Agents** | http://localhost:3001/diq/agents |
+| **Settings** | http://localhost:3001/diq/settings |
+| **Admin Elasticsearch** | http://localhost:3001/diq/admin/elasticsearch |
+| **Admin Analytics** | http://localhost:3001/diq/admin/analytics |
+| **Admin Permissions** | http://localhost:3001/diq/admin/permissions |
 
 ### dCQ - Chat Core IQ (Port 3002)
 | Page | URL |
 |------|-----|
 | **Home** | http://localhost:3002/dcq/Home/index.html |
 | **Admin** | http://localhost:3002/dcq/admin |
+| **Admin Content** | http://localhost:3002/dcq/admin/content |
+| **Demo IVR** | http://localhost:3002/dcq/demo/ivr |
 
 ### dSQ - Support IQ (Port 3003)
 | Page | URL |
 |------|-----|
-| **ATC Demo** | http://localhost:3003/demo/atc-executive |
-| **Gov Demo** | http://localhost:3003/demo/cor |
+| **ATC Executive** | http://localhost:3003/demo/atc-executive |
+| **ATC Manager** | http://localhost:3003/demo/atc-manager |
+| **ATC Support** | http://localhost:3003/demo/atc-support |
+| **ATC CSM** | http://localhost:3003/demo/atc-csm |
+| **Gov COR** | http://localhost:3003/demo/cor |
+| **Gov Program Manager** | http://localhost:3003/demo/program-manager |
 
 ---
 
@@ -97,9 +109,15 @@
 
 ---
 
-## Latest Changes (v0.7.1)
+## Latest Changes (v0.7.2)
 
-### Login Page Performance Optimization
+### Full Spectrum Save (Current Session)
+- Synced all documentation across parallel Claude Code sessions
+- Updated version numbers for all products
+- Verified all production deployments live
+- Updated CLAUDE.md with correct versions for dIQ (0.6.5), dCQ (1.0.0), dSQ (1.1.0)
+
+### Login Page Performance Optimization (v0.7.1)
 - Reduced avatar images from 150x150 to 80x80 pixels
 - First 6 avatars load eagerly, remaining 18 lazy loaded
 - GSAP/Framer animations deferred 300ms post-LCP
@@ -109,12 +127,19 @@
 
 **Expected Impact**: LCP from 3,722ms → ~1,500-2,000ms
 
-### Files Changed
+### Files Changed (v0.7.1)
 ```
 apps/main/src/components/login/LoginBackground.tsx
 apps/main/src/app/sign-in/layout.tsx
 apps/main/next.config.ts
 ```
+
+### Parallel Session Changes (Uncommitted)
+- `apps/intranet-iq/docs/USER_GUIDE.md` - New comprehensive user guide
+- `apps/intranet-iq/src/app/search/page.tsx` - Search page updates
+- `apps/intranet-iq/src/app/api/content/route.ts` - API improvements
+- `apps/chat-core-iq/data/conversations.json` - Test conversation data
+- `apps/support-iq` submodule updated to v1.1.0
 
 ---
 
@@ -156,6 +181,14 @@ git add . && git commit -m "message" && git push
 | **context.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/context.md` |
 | **DB Reference** | `/Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md` |
 
+### Product Documentation
+| Product | CLAUDE.md | SAVEPOINT.md |
+|---------|-----------|--------------|
+| **Main** | `apps/main/CLAUDE.md` | - |
+| **dIQ** | `apps/intranet-iq/CLAUDE.md` | `apps/intranet-iq/SAVEPOINT.md` |
+| **dCQ** | `apps/chat-core-iq/CLAUDE.md` | - |
+| **dSQ** | `apps/support-iq/CLAUDE.md` | `apps/support-iq/SAVEPOINT.md` |
+
 ### Monorepo Structure
 ```
 digitalworkplace.ai/
@@ -194,12 +227,17 @@ ELEVENLABS_API_KEY=<elevenlabs-key>  # TTS for IVR
 NEXT_PUBLIC_BASE_URL=https://chat-core-iq.vercel.app/dcq
 ```
 
+### dIQ Additional
+```env
+ANTHROPIC_API_KEY=<anthropic-key>  # AI summaries
+```
+
 ---
 
 ## Tech Stack
 
 | Technology | Version | Purpose |
-|------------|---------|---------|
+|------------|---------|---------
 | **Next.js** | 16.x | React framework |
 | **TypeScript** | 5.x | Type safety |
 | **Clerk** | @clerk/nextjs | Authentication |
@@ -209,6 +247,7 @@ NEXT_PUBLIC_BASE_URL=https://chat-core-iq.vercel.app/dcq
 | **Framer Motion** | 12.x | Animations |
 | **GSAP** | 3.x | Complex animations |
 | **OpenAI** | text-embedding-3-small | Embeddings |
+| **Anthropic Claude** | claude-3-5-sonnet | LLM |
 
 ---
 
@@ -216,6 +255,7 @@ NEXT_PUBLIC_BASE_URL=https://chat-core-iq.vercel.app/dcq
 
 ### Short Term
 - [ ] Verify login page performance improvement post-deploy
+- [ ] Commit parallel session changes
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -272,6 +312,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session: 2026-01-21 07:50 UTC*
-*Version: 0.7.1*
+*Last session: 2026-01-21 13:00 UTC*
+*Version: 0.7.2*
 *Machine: Mac Mini (aldrin-mac-mini)*

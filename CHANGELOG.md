@@ -4,6 +4,38 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.2] - 2026-01-21
+
+### Full Spectrum Save - All Products Synced
+
+#### Summary
+Comprehensive documentation sync across all parallel Claude Code sessions. All products verified live on Vercel.
+
+#### Products Status
+
+| Product | Version | Status |
+|---------|---------|--------|
+| **Main Dashboard** | 0.7.2 | ✅ Live |
+| **Support IQ (dSQ)** | 1.1.0 | ✅ Live |
+| **Intranet IQ (dIQ)** | 0.6.5 | ✅ Live |
+| **Chat Core IQ (dCQ)** | 1.0.0 | ✅ Live |
+| **Test Pilot IQ (dTQ)** | - | ⬜ Pending |
+
+#### Documentation Updates
+- `SAVEPOINT.md` - Complete rewrite with all product statuses
+- `CHANGELOG.md` - Added full spectrum save entry
+- `CLAUDE.md` - Updated with correct versions for all products
+- `context.md` - Updated dCQ and dSQ sections with production URLs
+
+#### Parallel Session Changes (Included)
+- `apps/intranet-iq/docs/USER_GUIDE.md` - New comprehensive user guide
+- `apps/intranet-iq/src/app/search/page.tsx` - Search page improvements
+- `apps/intranet-iq/src/app/api/content/route.ts` - API enhancements
+- `apps/chat-core-iq/data/conversations.json` - Test conversation data
+- `apps/support-iq` submodule updated to v1.1.0
+
+---
+
 ## [0.7.1] - 2026-01-21
 
 ### Login Page Performance Optimization

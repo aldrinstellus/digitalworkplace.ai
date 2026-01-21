@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FacetedSidebar } from "@/components/search/FacetedSidebar";
 import { SearchResultCard } from "@/components/search/SearchResultCard";
@@ -83,6 +84,8 @@ export default function SearchPage() {
   const { results, loading, error, search } = useSearch();
   const { departments } = useDepartments();
   const { log } = useActivityLog();
+  const searchParams = useSearchParams();
+  const urlQueryProcessed = useRef(false);
 
   // Add to search history when a new search is performed
   const addToHistory = useCallback((searchQuery: string, resultCount: number) => {
@@ -212,6 +215,16 @@ export default function SearchPage() {
   const handleSearch = useCallback(async () => {
     await handleSearchWithQuery(query);
   }, [query, handleSearchWithQuery]);
+
+  // Auto-execute search from URL query parameter (e.g., ?q=topic from dashboard trending)
+  useEffect(() => {
+    const urlQuery = searchParams.get("q");
+    if (urlQuery && !urlQueryProcessed.current) {
+      urlQueryProcessed.current = true;
+      setQuery(urlQuery);
+      handleSearchWithQuery(urlQuery);
+    }
+  }, [searchParams, handleSearchWithQuery]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {

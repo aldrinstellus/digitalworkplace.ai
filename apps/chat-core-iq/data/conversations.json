@@ -2059,7 +2059,79 @@
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768978463669_vfzuzmfsh",
+      "sessionId": "test-local-123",
+      "startTime": "2026-01-21T06:54:23.669Z",
+      "endTime": "2026-01-21T06:54:23.669Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what is Chat Core IQ?",
+          "timestamp": "2026-01-21T06:54:23.669Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a brief overview of Chat Core IQ.\n\n**About:**\n• City in Florida\n• Established 20 years ago\n• Community-focused and innovative\n• Offers various public services\n• Hosts community events and markets\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Police: (305) 593-6699\n• Emergency: 911",
+          "timestamp": "2026-01-21T06:54:23.669Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768978647502_rspwacm10",
+      "sessionId": "local-test",
+      "startTime": "2026-01-21T06:57:27.502Z",
+      "endTime": "2026-01-21T06:57:27.502Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is Chat Core IQ?",
+          "timestamp": "2026-01-21T06:57:27.502Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a brief overview of Chat Core IQ.\n\n**Overview:**\n• Premier city in Florida  \n• Established for community growth  \n• Focus on quality of life  \n• Offers various city services  \n• Celebrating 20 years in 2023  \n\n**Location:**\n• 8401 NW 53rd Terrace  \n• Chat Core IQ, FL 33166  \n\n**Contact:**\n• City Hall: (305) 593-6725  \n• Info: infochatcoreiq@chatcoreiq.com  ",
+          "timestamp": "2026-01-21T06:57:27.502Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1768980729456_uwy0rx2dn",
+      "sessionId": "test-local-1768980727",
+      "startTime": "2026-01-21T07:32:09.456Z",
+      "endTime": "2026-01-21T07:32:09.456Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the city hall phone number?",
+          "timestamp": "2026-01-21T07:32:09.456Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the City Hall contact.\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-21T07:32:09.456Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-19T19:22:08.641Z"
+  "lastUpdated": "2026-01-21T07:32:09.466Z"
 }

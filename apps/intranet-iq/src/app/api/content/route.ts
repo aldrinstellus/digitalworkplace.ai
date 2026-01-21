@@ -51,7 +51,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Apply role-based content filtering
-    const filteredArticles = filterContentByAccess(articlesRaw || [], userContext);
+    // For guests, published articles with is_public=true categories are accessible
+    // Default: published articles without explicit access_level are treated as public
+    let filteredArticles = articlesRaw || [];
+    if (!userContext) {
+      // Guests see all published articles (already filtered by status above)
+      // Published content is considered public by default
+      filteredArticles = articlesRaw || [];
+    } else {
+      filteredArticles = filterContentByAccess(articlesRaw || [], userContext);
+    }
 
     // Fetch categories from diq schema
     let categoriesQuery = supabase

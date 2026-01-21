@@ -282,13 +282,14 @@ npm run dev:intranet     # Start dIQ on port 3001
 
 ---
 
-### dCQ - Chat Core IQ (v0.1.0)
+### dCQ - Chat Core IQ (v1.0.0) - PRODUCTION LIVE
 
 | Property | Value |
 |----------|-------|
 | **Location** | `apps/chat-core-iq/` |
 | **Port** | 3002 |
-| **URL** | http://localhost:3002/dcq/Home/index.html |
+| **Local URL** | http://localhost:3002/dcq/Home/index.html |
+| **Production URL** | https://chat-core-iq.vercel.app/dcq/Home/index.html |
 | **basePath** | `/dcq` |
 | **Documentation** | `apps/chat-core-iq/CLAUDE.md` |
 
@@ -299,17 +300,25 @@ npm run dev:chatcore     # Start dCQ on port 3002
 ```
 
 **Pages:**
-- `/dcq/Home/index.html` - Main static homepage with chatbot (PRIMARY)
-- `/dcq/admin` - Admin dashboard
-- `/dcq/admin/content` - FAQ & content management
-- `/dcq/admin/analytics` - Usage analytics
-- `/dcq/demo/ivr` - IVR demo
+| Page | Local | Production |
+|------|-------|------------|
+| Homepage | http://localhost:3002/dcq/Home/index.html | https://chat-core-iq.vercel.app/dcq/Home/index.html |
+| Admin | http://localhost:3002/dcq/admin | https://chat-core-iq.vercel.app/dcq/admin |
+| Content | http://localhost:3002/dcq/admin/content | https://chat-core-iq.vercel.app/dcq/admin/content |
+| IVR Demo | http://localhost:3002/dcq/demo/ivr | https://chat-core-iq.vercel.app/dcq/demo/ivr |
 
 **Features:**
-- AI Chatbot (Claude/OpenAI)
-- FAQ management
-- Multi-language (EN/ES)
-- Admin portal
+- AI Chatbot: Claude (primary) + OpenAI (fallback) LLM integration
+- Semantic Search: 348 knowledge items with 100% vector embedding coverage
+- FAQ Widget: Homepage displays FAQs from admin portal
+- Admin Portal: Full CRUD for FAQs, knowledge base, announcements
+- Multi-language: English/Spanish support
+- Demo IVR: Interactive Voice Response demo
+
+**Database (Supabase):**
+- Schema: `dcq` with 28 tables
+- 348 knowledge items with 100% embedding coverage
+- pgvector v0.8.0 for semantic search
 
 ---
 

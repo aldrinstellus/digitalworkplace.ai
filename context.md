@@ -286,7 +286,19 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Support IQ | Green (#10b981) | Intelligent customer support automation | ✅ Active |
 | Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network | ✅ Active |
 | Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
-| Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Active |
+| Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://chat-core-iq.vercel.app |
+
+### dCQ - Chat Core IQ (v1.0.0)
+- **Port**: 3002
+- **Production**: https://chat-core-iq.vercel.app
+- **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
+- **Features**:
+  - AI Chatbot: Claude (primary) + OpenAI (fallback)
+  - 348 knowledge items with 100% embedding coverage
+  - FAQ widget with admin management
+  - Multi-language support (EN/ES)
+  - Interactive Voice Response (IVR) demo
+  - 28 Supabase tables in dcq schema
 
 ### dSQ - Support IQ (v1.1.0)
 - **Port**: 3003

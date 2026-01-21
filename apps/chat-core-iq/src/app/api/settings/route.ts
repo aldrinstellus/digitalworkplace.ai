@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
         showFeedback: true,
       },
       llm: {
-        primaryLLM: "claude-sonnet-4-20250514",
+        primaryLLM: "claude-3-sonnet",
         backupLLM: "gpt-4o-mini",
         temperature: 0.7,
         maxTokens: 1024,

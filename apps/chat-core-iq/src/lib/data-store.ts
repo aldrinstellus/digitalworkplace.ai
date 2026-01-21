@@ -282,7 +282,7 @@ const DEFAULT_SETTINGS: Settings = {
     showFeedback: true,
   },
   llm: {
-    primaryLLM: 'claude-sonnet-4-20250514',
+    primaryLLM: 'claude-3-sonnet',
     backupLLM: 'gpt-4o-mini',
     temperature: 0.7,
     maxTokens: 1024,
@@ -559,7 +559,7 @@ export async function getSettings(): Promise<Settings> {
       showFeedback: data.chatbot?.showFeedback !== false,
     },
     llm: {
-      primaryLLM: data.llm?.model || data.llm?.primaryLLM || 'claude-sonnet-4-20250514',
+      primaryLLM: data.llm?.model || data.llm?.primaryLLM || 'claude-3-sonnet',
       backupLLM: data.llm?.backupLLM || 'gpt-4o-mini',
       temperature: data.llm?.temperature || 0.7,
       maxTokens: data.llm?.maxTokens || 1024,
@@ -1251,7 +1251,7 @@ export async function getWorkflowTypes(): Promise<WorkflowType[]> {
     return getDefaultWorkflowTypes();
   }
 
-  return data.map(mapWorkflowTypeFromDb);
+  return (data as unknown as Record<string, unknown>[]).map(mapWorkflowTypeFromDb);
 }
 
 export async function saveWorkflowTypes(types: WorkflowType[]): Promise<void> {

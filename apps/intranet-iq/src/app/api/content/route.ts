@@ -1,7 +1,9 @@
 /**
- * Content API Route
- * Fetches articles with author and category data using direct queries
- * Includes role-based access control filtering
+ * Content API Route - OPTIMIZED
+ * - Query-level filtering (category, status, limit)
+ * - Parallel queries with Promise.all()
+ * - Manual join for cross-schema author data
+ * - Pagination support
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,11 +13,22 @@ import { getUserContext, filterContentByAccess, buildAccessFilter } from '@/lib/
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Cache duration in seconds
+const CACHE_DURATION = 30;
 
 export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+
+    // Query parameters for filtering
+    const categoryId = searchParams.get('categoryId');
+    const status = searchParams.get('status');
+    const limit = parseInt(searchParams.get('limit') || '0'); // 0 = no limit
+    const offset = parseInt(searchParams.get('offset') || '0');
+    const departmentId = searchParams.get('departmentId');
+
     // Get user context for role-based filtering
     let userContext = null;
     try {
@@ -24,14 +37,12 @@ export async function GET(request: NextRequest) {
         userContext = await getUserContext(userId);
       }
     } catch (authError) {
-      // Continue without auth - will apply public access only
       console.warn('Auth check failed, applying public access:', authError);
     }
 
-    // Build access filter based on user role
     const accessFilter = buildAccessFilter(userContext);
 
-    // Fetch articles from diq schema
+    // Build articles query with server-side filtering
     let articlesQuery = supabase
       .schema('diq')
       .from('articles')
@@ -41,93 +52,120 @@ export async function GET(request: NextRequest) {
     // Apply status filter - only published for non-admins
     if (!userContext?.isAdmin) {
       articlesQuery = articlesQuery.eq('status', 'published');
+    } else if (status) {
+      articlesQuery = articlesQuery.eq('status', status);
     }
 
-    const { data: articlesRaw, error: artError } = await articlesQuery;
-
-    if (artError) {
-      console.error('Error fetching articles:', artError);
-      return NextResponse.json({ error: artError.message }, { status: 500 });
+    // Apply category filter at query level (not client-side!)
+    if (categoryId) {
+      articlesQuery = articlesQuery.eq('category_id', categoryId);
     }
 
-    // Apply role-based content filtering
-    // For guests, published articles with is_public=true categories are accessible
-    // Default: published articles without explicit access_level are treated as public
-    let filteredArticles = articlesRaw || [];
-    if (!userContext) {
-      // Guests see all published articles (already filtered by status above)
-      // Published content is considered public by default
-      filteredArticles = articlesRaw || [];
-    } else {
-      filteredArticles = filterContentByAccess(articlesRaw || [], userContext);
+    // Apply pagination
+    if (limit > 0) {
+      articlesQuery = articlesQuery.range(offset, offset + limit - 1);
     }
 
-    // Fetch categories from diq schema
+    // Build categories query (same schema - direct query works)
     let categoriesQuery = supabase
       .schema('diq')
       .from('kb_categories')
       .select('*')
       .order('name', { ascending: true });
 
-    // Filter categories by visible departments if user has limited access
-    if (accessFilter.departmentIds.length > 0 && !userContext?.isAdmin) {
+    // Filter categories by department if specified
+    if (departmentId) {
+      categoriesQuery = categoriesQuery.eq('department_id', departmentId);
+    } else if (accessFilter.departmentIds.length > 0 && !userContext?.isAdmin) {
       categoriesQuery = categoriesQuery.or(
         `department_id.is.null,department_id.in.(${accessFilter.departmentIds.join(',')})`
       );
     }
 
-    const { data: categoriesRaw, error: catError } = await categoriesQuery;
+    // Execute both queries in parallel
+    const [articlesResult, categoriesResult] = await Promise.all([
+      articlesQuery,
+      categoriesQuery,
+    ]);
 
-    if (catError) {
-      console.error('Error fetching categories:', catError);
-      return NextResponse.json({ error: catError.message }, { status: 500 });
+    if (articlesResult.error) {
+      console.error('Error fetching articles:', articlesResult.error);
+      return NextResponse.json({ error: articlesResult.error.message }, { status: 500 });
     }
 
-    // Get unique author IDs to fetch user data
-    const authorIds = [...new Set((filteredArticles || []).map((a: any) => a.author_id).filter(Boolean))];
+    if (categoriesResult.error) {
+      console.error('Error fetching categories:', categoriesResult.error);
+      return NextResponse.json({ error: categoriesResult.error.message }, { status: 500 });
+    }
+
+    const articles = articlesResult.data || [];
+    const categories = categoriesResult.data || [];
+
+    // Get unique author IDs and category IDs
+    const authorIds = [...new Set(articles.map((a: any) => a.author_id).filter(Boolean))];
+
+    // Create categories lookup map
+    const categoriesMap = new Map<string, any>();
+    for (const cat of categories) {
+      categoriesMap.set(cat.id, cat);
+    }
 
     // Fetch authors from public schema
-    let authors: any[] = [];
+    let authorsMap = new Map<string, any>();
     if (authorIds.length > 0) {
-      const { data: authorsData } = await supabase
+      const authorsResult = await supabase
         .from('users')
         .select('id, full_name, email, avatar_url')
         .in('id', authorIds);
-      authors = authorsData || [];
+
+      if (!authorsResult.error && authorsResult.data) {
+        for (const author of authorsResult.data) {
+          authorsMap.set(author.id, author);
+        }
+      }
     }
 
-    // Create author lookup map
-    const authorMap = new Map(authors.map((a: any) => [a.id, a]));
+    // Join data
+    let transformedArticles = articles.map((a: any) => {
+      const author = authorsMap.get(a.author_id);
+      const category = categoriesMap.get(a.category_id);
 
-    // Create category lookup map
-    const categoryMap = new Map((categoriesRaw || []).map((c: any) => [c.id, c]));
-
-    // Transform articles with joined data
-    const articles = (filteredArticles || []).map((a: any) => {
-      const author = authorMap.get(a.author_id);
-      const category = categoryMap.get(a.category_id);
       return {
         ...a,
-        author: author ? {
-          id: author.id,
-          full_name: author.full_name,
-          email: author.email,
-          avatar_url: author.avatar_url,
-        } : null,
-        category: category ? {
-          id: category.id,
-          name: category.name,
-          slug: category.slug,
-        } : null,
+        author: author || {
+          id: a.author_id,
+          full_name: 'Unknown',
+          email: '',
+          avatar_url: null,
+        },
+        category: category || null,
       };
     });
 
-    return NextResponse.json({
-      articles,
-      categories: categoriesRaw || [],
+    // Apply role-based content filtering if needed
+    if (userContext && !userContext.isAdmin) {
+      transformedArticles = filterContentByAccess(transformedArticles, userContext);
+    }
+
+    const response = NextResponse.json({
+      articles: transformedArticles,
+      categories,
       userRole: userContext?.role || 'guest',
       isAdmin: userContext?.isAdmin || false,
+      pagination: {
+        offset,
+        limit: limit || transformedArticles.length,
+        total: transformedArticles.length,
+      },
     });
+
+    // Add cache headers
+    response.headers.set(
+      'Cache-Control',
+      `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate=${CACHE_DURATION * 2}`
+    );
+
+    return response;
   } catch (error) {
     console.error('Error in content API:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

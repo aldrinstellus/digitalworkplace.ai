@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo, useRef, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import { useKBCategories, useArticles, useDepartments } from "@/lib/hooks/useSupabase";
 import { ArticleEditor } from "@/components/content/ArticleEditor";
 import { CreateContentModal } from "@/components/content/CreateContentModal";
@@ -66,11 +69,13 @@ function TreeNode({
 
   return (
     <div>
-      <div
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
           isSelected
-            ? "bg-blue-500/20 text-blue-400"
-            : "hover:bg-white/5 text-white/70"
+            ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+            : "hover:bg-[var(--bg-slate)] text-[var(--text-secondary)]"
         }`}
         style={{ paddingLeft: `${12 + level * 16}px` }}
         onClick={() => {
@@ -79,53 +84,64 @@ function TreeNode({
           }
           onSelectItem(item.id, item);
         }}
+        whileHover={{ x: 2 }}
       >
         {isFolder ? (
           <>
             {isExpanded ? (
-              <ChevronDown className="w-4 h-4 text-white/40 flex-shrink-0" />
+              <ChevronDown className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
             ) : (
-              <ChevronRight className="w-4 h-4 text-white/40 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
             )}
             <FolderOpen
               className={`w-4 h-4 flex-shrink-0 ${
-                isExpanded ? "text-blue-400" : "text-yellow-400"
+                isExpanded ? "text-[var(--accent-ember)]" : "text-[var(--accent-gold)]"
               }`}
             />
           </>
         ) : (
           <>
             <span className="w-4" />
-            <FileText className="w-4 h-4 text-white/40 flex-shrink-0" />
+            <FileText className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
           </>
         )}
         <span className="truncate text-sm">{item.name}</span>
         {item.article?.status === "draft" && (
-          <span className="px-1.5 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-400">
+          <span className="px-1.5 py-0.5 rounded text-xs bg-[var(--warning)]/20 text-[var(--warning)]">
             Draft
           </span>
         )}
-      </div>
-      {isFolder && isExpanded && item.children && (
-        <div>
-          {item.children.map((child) => (
-            <TreeNode
-              key={child.id}
-              item={child}
-              level={level + 1}
-              expandedFolders={expandedFolders}
-              selectedItem={selectedItem}
-              onToggleFolder={onToggleFolder}
-              onSelectItem={onSelectItem}
-            />
-          ))}
-        </div>
-      )}
+      </motion.div>
+      <AnimatePresence>
+        {isFolder && isExpanded && item.children && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {item.children.map((child) => (
+              <TreeNode
+                key={child.id}
+                item={child}
+                level={level + 1}
+                expandedFolders={expandedFolders}
+                selectedItem={selectedItem}
+                onToggleFolder={onToggleFolder}
+                onSelectItem={onSelectItem}
+              />
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-export default function ContentPage() {
+function ContentPageInner() {
+  const searchParams = useSearchParams();
+  const urlView = searchParams.get("view");
+  const [viewMode, setViewMode] = useState<"browse" | "recent">(urlView === "recent" ? "recent" : "browse");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
@@ -141,6 +157,13 @@ export default function ContentPage() {
   const { categories, loading: categoriesLoading } = useKBCategories();
   const { articles, loading: articlesLoading } = useArticles();
   const { departments, loading: departmentsLoading } = useDepartments();
+
+  // Get recent articles (sorted by updated_at)
+  const recentArticles = useMemo(() => {
+    return [...articles]
+      .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      .slice(0, 20);
+  }, [articles]);
 
   // Handle article save
   const handleSaveArticle = async (data: {
@@ -254,12 +277,14 @@ export default function ContentPage() {
     );
   }, [categories, articles, departments]);
 
-  // Auto-expand first folder (sync during render)
+  // Auto-expand first folder (using useEffect to avoid state update during render)
   const hasExpandedFirstFolderRef = useRef(false);
-  if (treeData.length > 0 && expandedFolders.size === 0 && !hasExpandedFirstFolderRef.current) {
-    hasExpandedFirstFolderRef.current = true;
-    setExpandedFolders(new Set([treeData[0].id]));
-  }
+  useEffect(() => {
+    if (treeData.length > 0 && expandedFolders.size === 0 && !hasExpandedFirstFolderRef.current) {
+      hasExpandedFirstFolderRef.current = true;
+      setExpandedFolders(new Set([treeData[0].id]));
+    }
+  }, [treeData, expandedFolders.size]);
 
   const toggleFolder = (id: string) => {
     setExpandedFolders((prev) => {
@@ -307,106 +332,193 @@ export default function ContentPage() {
   }, [treeData, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 h-screen flex">
         {/* Left Panel - Tree View */}
-        <div className="w-80 border-r border-white/10 flex flex-col">
+        <FadeIn className="w-80 border-r border-[var(--border-subtle)] flex flex-col bg-[var(--bg-charcoal)] flex-shrink-0 overflow-hidden">
           {/* Header */}
-          <div className="p-4 border-b border-white/10">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-white flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-blue-400" />
-                Knowledge Base
-              </h2>
+          <div className="p-4 border-b border-[var(--border-subtle)]">
+            {/* Title Row */}
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <button
+                <BookOpen className="w-5 h-5 text-[var(--accent-ember)] flex-shrink-0" />
+                <h2 className="text-sm font-medium text-[var(--text-primary)]">
+                  {viewMode === "recent" ? "Recent" : "Knowledge Base"}
+                </h2>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <motion.button
                   onClick={() => setShowApprovalPanel(true)}
-                  className="p-2 rounded-lg bg-yellow-500/20 border border-yellow-500/30 hover:bg-yellow-500/30 text-yellow-400 transition-colors"
+                  className="p-1.5 rounded-lg bg-[var(--warning)]/20 border border-[var(--warning)]/30 hover:bg-[var(--warning)]/30 text-[var(--warning)] transition-colors"
                   title="Pending Approvals"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <ClipboardCheck className="w-4 h-4" />
-                </button>
+                  <ClipboardCheck className="w-3.5 h-3.5" />
+                </motion.button>
                 <div className="relative">
-                <button
-                  onClick={() => setShowNewMenu(!showNewMenu)}
-                  className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
-                {showNewMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowNewMenu(false)} />
-                    <div className="absolute right-0 top-10 w-48 bg-[#1a1a1f] border border-white/10 rounded-lg shadow-xl z-50">
-                      <button
-                        onClick={() => {
-                          setShowNewMenu(false);
-                          setShowCreateModal("category");
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                      >
-                        <FolderOpen className="w-4 h-4" />
-                        New Category
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowNewMenu(false);
-                          setShowCreateModal("article");
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                      >
-                        <FileText className="w-4 h-4" />
-                        New Article
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowNewMenu(false);
-                          // In production, open file upload dialog
-                          const input = document.createElement("input");
-                          input.type = "file";
-                          input.accept = ".pdf,.doc,.docx,.txt,.md";
-                          input.onchange = (e) => {
-                            const file = (e.target as HTMLInputElement).files?.[0];
-                            if (file) console.log("Uploading file:", file.name);
-                          };
-                          input.click();
-                        }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-white/70 hover:bg-white/5 hover:text-white"
-                      >
-                        <File className="w-4 h-4" />
-                        Upload File
-                      </button>
-                    </div>
-                  </>
-                )}
+                  <motion.button
+                    onClick={() => setShowNewMenu(!showNewMenu)}
+                    className="p-1.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white transition-colors"
+                    title="Create New"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </motion.button>
+                  <AnimatePresence>
+                    {showNewMenu && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setShowNewMenu(false)} />
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute right-0 top-9 w-44 bg-[var(--bg-charcoal)] border border-[var(--border-default)] rounded-lg shadow-xl z-50 overflow-hidden"
+                        >
+                          <button
+                            onClick={() => {
+                              setShowNewMenu(false);
+                              setShowCreateModal("category");
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] hover:text-[var(--text-primary)] transition-colors"
+                          >
+                            <FolderOpen className="w-4 h-4" />
+                            New Category
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowNewMenu(false);
+                              setShowCreateModal("article");
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] hover:text-[var(--text-primary)] transition-colors"
+                          >
+                            <FileText className="w-4 h-4" />
+                            New Article
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowNewMenu(false);
+                              const input = document.createElement("input");
+                              input.type = "file";
+                              input.accept = ".pdf,.doc,.docx,.txt,.md";
+                              input.onchange = (e) => {
+                                const file = (e.target as HTMLInputElement).files?.[0];
+                                if (file) console.log("Uploading file:", file.name);
+                              };
+                              input.click();
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] hover:text-[var(--text-primary)] transition-colors"
+                          >
+                            <File className="w-4 h-4" />
+                            Upload File
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
-              </div>
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="flex items-center gap-1 bg-[var(--bg-slate)] rounded-lg p-0.5 mb-3">
+              <motion.button
+                onClick={() => setViewMode("browse")}
+                className={`flex-1 px-3 py-1.5 text-xs rounded-md transition-colors ${
+                  viewMode === "browse"
+                    ? "bg-[var(--accent-ember)] text-white"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                }`}
+                whileTap={{ scale: 0.98 }}
+              >
+                Browse
+              </motion.button>
+              <motion.button
+                onClick={() => setViewMode("recent")}
+                className={`flex-1 px-3 py-1.5 text-xs rounded-md transition-colors flex items-center justify-center gap-1 ${
+                  viewMode === "recent"
+                    ? "bg-[var(--accent-ember)] text-white"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                }`}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Clock className="w-3 h-3" />
+                Recent
+              </motion.button>
             </div>
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search knowledge base..."
-                className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/40 outline-none focus:border-blue-500/50 transition-colors"
+                placeholder="Search..."
+                className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg pl-9 pr-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-all"
               />
             </div>
           </div>
 
-          {/* Tree View */}
+          {/* Tree View or Recent List */}
           <div className="flex-1 overflow-y-auto py-2">
             {loading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
+                <Loader2 className="w-6 h-6 animate-spin text-[var(--accent-ember)]" />
               </div>
+            ) : viewMode === "recent" ? (
+              /* Recent Documents List */
+              recentArticles.length === 0 ? (
+                <div className="text-center py-8">
+                  <Clock className="w-8 h-8 text-[var(--text-muted)] mx-auto mb-2" />
+                  <p className="text-sm text-[var(--text-muted)]">No recent documents</p>
+                </div>
+              ) : (
+                <StaggerContainer className="px-2">
+                  {recentArticles.map((article) => (
+                    <StaggerItem key={article.id}>
+                      <motion.div
+                        onClick={() => {
+                          setSelectedItem(`article-${article.id}`);
+                          setSelectedData({
+                            id: `article-${article.id}`,
+                            name: article.title,
+                            type: "article",
+                            slug: article.slug,
+                            article,
+                          });
+                        }}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors mb-1 ${
+                          selectedItem === `article-${article.id}`
+                            ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                            : "hover:bg-[var(--bg-slate)] text-[var(--text-secondary)]"
+                        }`}
+                        whileHover={{ x: 2 }}
+                      >
+                        <FileText className="w-4 h-4 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm truncate">{article.title}</div>
+                          <div className="text-xs text-[var(--text-muted)] flex items-center gap-2">
+                            <span>{new Date(article.updated_at).toLocaleDateString()}</span>
+                            {article.status === "draft" && (
+                              <span className="px-1 py-0.5 rounded text-xs bg-[var(--warning)]/20 text-[var(--warning)]">
+                                Draft
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    </StaggerItem>
+                  ))}
+                </StaggerContainer>
+              )
             ) : filteredTree.length === 0 ? (
               <div className="text-center py-8">
-                <BookOpen className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                <p className="text-sm text-white/40">No content found</p>
+                <BookOpen className="w-8 h-8 text-[var(--text-muted)] mx-auto mb-2" />
+                <p className="text-sm text-[var(--text-muted)]">No content found</p>
               </div>
             ) : (
               filteredTree.map((item) => (
@@ -422,38 +534,42 @@ export default function ContentPage() {
               ))
             )}
           </div>
-        </div>
+        </FadeIn>
 
         {/* Right Panel - Content View */}
-        <div className="flex-1 flex flex-col">
+        <FadeIn className="flex-1 flex flex-col">
           {selectedData && selectedData.type === "article" && selectedData.article ? (
             <>
               {/* Article Header */}
-              <div className="border-b border-white/10 p-6">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="border-b border-[var(--border-subtle)] p-6"
+              >
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <h1 className="text-2xl font-medium text-white">
+                      <h1 className="text-2xl font-medium text-[var(--text-primary)]">
                         {selectedData.article.title}
                       </h1>
                       {selectedData.article.status === "published" && (
-                        <span className="px-2 py-0.5 rounded-full text-xs bg-green-500/20 text-green-400 flex items-center gap-1">
+                        <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--success)]/20 text-[var(--success)] flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
                           Published
                         </span>
                       )}
                       {selectedData.article.status === "draft" && (
-                        <span className="px-2 py-0.5 rounded-full text-xs bg-yellow-500/20 text-yellow-400">
+                        <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--warning)]/20 text-[var(--warning)]">
                           Draft
                         </span>
                       )}
                       {selectedData.article.status === "pending_review" && (
-                        <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                        <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]">
                           Pending Review
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-white/50">
+                    <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
                         {new Date(selectedData.article.updated_at).toLocaleDateString()}
@@ -470,153 +586,183 @@ export default function ContentPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button
+                    <motion.button
                       onClick={handleBookmark}
-                      className={`p-2 rounded-lg hover:bg-white/5 transition-colors ${
-                        isBookmarked ? "text-yellow-400" : "text-white/50 hover:text-white"
+                      className={`p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors ${
+                        isBookmarked ? "text-[var(--accent-gold)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                       }`}
                       title={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                     >
-                      <Star className={`w-5 h-5 ${isBookmarked ? "fill-yellow-400" : ""}`} />
-                    </button>
-                    <button
+                      <Star className={`w-5 h-5 ${isBookmarked ? "fill-[var(--accent-gold)]" : ""}`} />
+                    </motion.button>
+                    <motion.button
                       onClick={handleShare}
-                      className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors relative"
+                      className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors relative"
                       title="Copy link"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                     >
-                      {showShareToast ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
-                    </button>
-                    <button
+                      {showShareToast ? <Check className="w-5 h-5 text-[var(--success)]" /> : <Share2 className="w-5 h-5" />}
+                    </motion.button>
+                    <motion.button
                       onClick={() => setShowVersionHistory(true)}
-                      className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white transition-colors"
+                      className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                       title="Version history"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
                     >
                       <History className="w-5 h-5" />
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                       onClick={() => setShowArticleEditor(true)}
-                      className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 transition-colors"
+                      className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white flex items-center gap-2 transition-colors shadow-lg shadow-[var(--accent-ember)]/20"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       <Edit className="w-4 h-4" />
                       Edit
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
 
                 {/* Tags */}
                 {selectedData.article.tags && selectedData.article.tags.length > 0 && (
                   <div className="flex items-center gap-2 mt-4">
-                    <Tag className="w-4 h-4 text-white/40" />
+                    <Tag className="w-4 h-4 text-[var(--text-muted)]" />
                     {(selectedData.article.tags as string[]).map((tag: string) => (
-                      <span
+                      <motion.span
                         key={tag}
-                        className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/60"
+                        className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-ember)]/10 text-[var(--accent-ember-soft)] border border-[var(--accent-ember)]/20"
+                        whileHover={{ scale: 1.05 }}
                       >
                         {tag}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {/* Article Content */}
-              <div className="flex-1 overflow-y-auto p-6">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="flex-1 overflow-y-auto p-6"
+              >
                 <div className="max-w-3xl">
                   <div className="prose prose-invert prose-sm">
                     {selectedData.article.summary && (
-                      <p className="text-lg text-white/70 mb-6 italic">
+                      <p className="text-lg text-[var(--text-secondary)] mb-6 italic">
                         {selectedData.article.summary}
                       </p>
                     )}
                     <div
-                      className="text-white/70 leading-relaxed"
+                      className="text-[var(--text-secondary)] leading-relaxed"
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(selectedData.article.content || "<p>No content available.</p>"),
                       }}
                     />
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </>
           ) : selectedData && selectedData.type === "folder" ? (
-            <div className="flex-1 p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex-1 p-6"
+            >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center">
-                  <FolderOpen className="w-6 h-6 text-yellow-400" />
-                </div>
+                <motion.div
+                  className="w-12 h-12 rounded-xl bg-[var(--accent-gold)]/20 flex items-center justify-center"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                >
+                  <FolderOpen className="w-6 h-6 text-[var(--accent-gold)]" />
+                </motion.div>
                 <div>
-                  <h1 className="text-xl font-medium text-white">
+                  <h1 className="text-xl font-medium text-[var(--text-primary)]">
                     {selectedData.name}
                   </h1>
-                  <p className="text-sm text-white/50">
+                  <p className="text-sm text-[var(--text-muted)]">
                     {selectedData.children?.length || 0} items
                   </p>
                 </div>
               </div>
 
               {selectedData.children && selectedData.children.length > 0 ? (
-                <div className="grid grid-cols-3 gap-4">
+                <StaggerContainer className="grid grid-cols-3 gap-4">
                   {selectedData.children.map((child) => (
-                    <div
-                      key={child.id}
-                      onClick={() => {
-                        handleSelectItem(child.id, child);
-                        if (child.type === "folder") {
-                          setExpandedFolders((prev) => new Set([...prev, child.id]));
-                        }
-                      }}
-                      className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 cursor-pointer hover:border-blue-500/30 transition-colors"
-                    >
-                      <div className="flex items-center gap-3 mb-3">
-                        {child.type === "folder" ? (
-                          <FolderOpen className="w-8 h-8 text-yellow-400" />
-                        ) : (
-                          <FileText className="w-8 h-8 text-blue-400" />
+                    <StaggerItem key={child.id}>
+                      <motion.div
+                        onClick={() => {
+                          handleSelectItem(child.id, child);
+                          if (child.type === "folder") {
+                            setExpandedFolders((prev) => new Set([...prev, child.id]));
+                          }
+                        }}
+                        className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4 cursor-pointer hover:border-[var(--accent-ember)]/30 transition-all"
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className="flex items-center gap-3 mb-3">
+                          {child.type === "folder" ? (
+                            <FolderOpen className="w-8 h-8 text-[var(--accent-gold)]" />
+                          ) : (
+                            <FileText className="w-8 h-8 text-[var(--accent-ember)]" />
+                          )}
+                        </div>
+                        <h3 className="text-[var(--text-primary)] font-medium mb-1 truncate">
+                          {child.name}
+                        </h3>
+                        {child.type === "article" && child.article && (
+                          <p className="text-xs text-[var(--text-muted)]">
+                            Updated {new Date(child.article.updated_at).toLocaleDateString()}
+                          </p>
                         )}
-                      </div>
-                      <h3 className="text-white font-medium mb-1 truncate">
-                        {child.name}
-                      </h3>
-                      {child.type === "article" && child.article && (
-                        <p className="text-xs text-white/40">
-                          Updated {new Date(child.article.updated_at).toLocaleDateString()}
-                        </p>
-                      )}
-                      {child.type === "folder" && (
-                        <p className="text-xs text-white/40">
-                          {child.children?.length || 0} items
-                        </p>
-                      )}
-                    </div>
+                        {child.type === "folder" && (
+                          <p className="text-xs text-[var(--text-muted)]">
+                            {child.children?.length || 0} items
+                          </p>
+                        )}
+                      </motion.div>
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
               ) : (
                 <div className="text-center py-12">
-                  <FolderOpen className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                  <p className="text-white/40">This folder is empty</p>
-                  <button
+                  <FolderOpen className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-4" />
+                  <p className="text-[var(--text-muted)]">This folder is empty</p>
+                  <motion.button
                     onClick={() => setShowCreateModal("article")}
-                    className="mt-4 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm transition-colors"
+                    className="mt-4 px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white text-sm transition-colors shadow-lg shadow-[var(--accent-ember)]/20"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Add Content
-                  </button>
+                  </motion.button>
                 </div>
               )}
-            </div>
+            </motion.div>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex-1 flex items-center justify-center"
+            >
               <div className="text-center">
-                <BookOpen className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-white/50 mb-2">
+                <BookOpen className="w-16 h-16 text-[var(--border-subtle)] mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">
                   Select an item
                 </h3>
-                <p className="text-sm text-white/30">
+                <p className="text-sm text-[var(--text-muted)]">
                   Choose a folder or article from the tree view
                 </p>
               </div>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </FadeIn>
       </main>
 
       {/* Article Editor Modal */}
@@ -677,12 +823,43 @@ export default function ContentPage() {
       />
 
       {/* Share Toast */}
-      {showShareToast && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-50">
-          <Check className="w-4 h-4" />
-          Link copied to clipboard
-        </div>
-      )}
+      <AnimatePresence>
+        {showShareToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, x: 20 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-4 right-4 bg-[var(--success)] text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-50"
+          >
+            <Check className="w-4 h-4" />
+            Link copied to clipboard
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function ContentPageLoading() {
+  return (
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
+      <Sidebar />
+      <main className="ml-16 h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
+          <p className="text-[var(--text-muted)]">Loading content...</p>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// Export with Suspense wrapper for useSearchParams
+export default function ContentPage() {
+  return (
+    <Suspense fallback={<ContentPageLoading />}>
+      <ContentPageInner />
+    </Suspense>
   );
 }

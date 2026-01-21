@@ -11,8 +11,8 @@ export default function IntegrationsRedirect() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-      <div className="text-white/50">Redirecting to Integrations Hub...</div>
+    <div className="min-h-screen bg-[var(--bg-obsidian)] flex items-center justify-center">
+      <div className="text-[var(--text-muted)]">Redirecting to Integrations Hub...</div>
     </div>
   );
 }

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import { CreateChannelModal } from "@/components/channels/CreateChannelModal";
 import { EmojiPicker } from "@/components/channels/EmojiPicker";
 import {
@@ -303,23 +305,23 @@ export default function ChannelsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 h-screen flex">
         {/* Channels Sidebar */}
-        <div className="w-64 border-r border-white/10 bg-[#0f0f14] flex flex-col">
+        <div className="w-64 border-r border-[var(--border-subtle)] bg-[var(--bg-charcoal)] flex flex-col">
           {/* Header */}
-          <div className="p-4 border-b border-white/10">
-            <h2 className="text-lg font-medium text-white mb-3">Channels</h2>
+          <div className="p-4 border-b border-[var(--border-subtle)]">
+            <h2 className="text-lg font-medium text-[var(--text-primary)] mb-3">Channels</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search channels..."
-                className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder-white/40 outline-none focus:border-blue-500/50"
+                className="w-full pl-9 pr-3 py-2 rounded-lg bg-white/5 border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50"
               />
             </div>
           </div>
@@ -329,7 +331,7 @@ export default function ChannelsPage() {
             {/* Pinned Channels */}
             {pinnedChannels.length > 0 && (
               <div className="mb-4">
-                <div className="flex items-center gap-2 px-2 py-1 text-xs text-white/40 uppercase tracking-wider">
+                <div className="flex items-center gap-2 px-2 py-1 text-xs text-[var(--text-muted)] uppercase tracking-wider">
                   <Pin className="w-3 h-3" />
                   Pinned
                 </div>
@@ -352,8 +354,8 @@ export default function ChannelsPage() {
             {/* Other Channels */}
             <div>
               <div className="flex items-center justify-between px-2 py-1">
-                <span className="text-xs text-white/40 uppercase tracking-wider">Channels</span>
-                <button className="p-1 rounded hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+                <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider">Channels</span>
+                <button className="p-1 rounded hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                   <Plus className="w-3 h-3" />
                 </button>
               </div>
@@ -374,10 +376,10 @@ export default function ChannelsPage() {
           </div>
 
           {/* Create Channel */}
-          <div className="p-3 border-t border-white/10">
+          <div className="p-3 border-t border-[var(--border-subtle)]">
             <button
               onClick={() => setShowCreateChannel(true)}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] text-sm font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
               Create Channel
@@ -388,32 +390,32 @@ export default function ChannelsPage() {
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Channel Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                 {activeChannel.isPrivate ? (
-                  <Lock className="w-5 h-5 text-white/60" />
+                  <Lock className="w-5 h-5 text-[var(--text-secondary)]" />
                 ) : (
-                  <Hash className="w-5 h-5 text-white/60" />
+                  <Hash className="w-5 h-5 text-[var(--text-secondary)]" />
                 )}
               </div>
               <div>
-                <h3 className="text-lg font-medium text-white flex items-center gap-2">
+                <h3 className="text-lg font-medium text-[var(--text-primary)] flex items-center gap-2">
                   {activeChannel.name}
-                  {activeChannel.isMuted && <BellOff className="w-4 h-4 text-white/30" />}
+                  {activeChannel.isMuted && <BellOff className="w-4 h-4 text-[var(--text-primary)]/30" />}
                 </h3>
-                <p className="text-sm text-white/50">{activeChannel.description}</p>
+                <p className="text-sm text-[var(--text-muted)]">{activeChannel.description}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/5 text-white/60 transition-colors">
+              <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/5 text-[var(--text-secondary)] transition-colors">
                 <Users className="w-4 h-4" />
                 <span className="text-sm">{activeChannel.memberCount}</span>
               </button>
-              <button className="p-2 rounded-lg hover:bg-white/5 text-white/60 transition-colors">
+              <button className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-secondary)] transition-colors">
                 <Pin className="w-5 h-5" />
               </button>
-              <button className="p-2 rounded-lg hover:bg-white/5 text-white/60 transition-colors">
+              <button className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-secondary)] transition-colors">
                 <Settings2 className="w-5 h-5" />
               </button>
             </div>
@@ -428,8 +430,8 @@ export default function ChannelsPage() {
           </div>
 
           {/* Message Input */}
-          <div className="px-6 py-4 border-t border-white/10">
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-3 focus-within:border-blue-500/50 transition-colors">
+          <div className="px-6 py-4 border-t border-[var(--border-subtle)]">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-3 focus-within:border-[var(--accent-ember)]/50 transition-colors">
               <div className="flex items-end gap-3">
                 <div className="relative">
                   <input
@@ -441,7 +443,7 @@ export default function ChannelsPage() {
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors"
+                    className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                   >
                     <Paperclip className="w-5 h-5" />
                   </button>
@@ -457,18 +459,18 @@ export default function ChannelsPage() {
                       }
                     }}
                     placeholder={`Message #${activeChannel.name}`}
-                    className="w-full bg-transparent text-white placeholder-white/40 outline-none resize-none text-sm min-h-[24px] max-h-[120px]"
+                    className="w-full bg-transparent text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none resize-none text-sm min-h-[24px] max-h-[120px]"
                     rows={1}
                   />
                 </div>
                 <div className="flex items-center gap-1">
-                  <button className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+                  <button className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                     <AtSign className="w-5 h-5" />
                   </button>
                   <div className="relative">
                     <button
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors"
+                      className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                     >
                       <Smile className="w-5 h-5" />
                     </button>
@@ -482,14 +484,14 @@ export default function ChannelsPage() {
                   <button
                     onClick={handleSendMessage}
                     disabled={!messageInput.trim()}
-                    className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:hover:bg-blue-500 text-white transition-colors"
+                    className="p-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:opacity-50 disabled:hover:bg-[var(--accent-ember)] text-[var(--text-primary)] transition-colors"
                   >
                     <Send className="w-5 h-5" />
                   </button>
                 </div>
               </div>
             </div>
-            <p className="mt-2 text-xs text-white/30">
+            <p className="mt-2 text-xs text-[var(--text-primary)]/30">
               Press Enter to send, Shift+Enter for new line. Use @username to mention someone.
             </p>
           </div>
@@ -532,7 +534,7 @@ function ChannelItem({
       <button
         onClick={onClick}
         className={`w-full flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${
-          isActive ? "bg-blue-500/20 text-blue-400" : "hover:bg-white/5 text-white/60"
+          isActive ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]" : "hover:bg-white/5 text-[var(--text-secondary)]"
         }`}
       >
         <div className="flex items-center gap-2 min-w-0">
@@ -542,11 +544,11 @@ function ChannelItem({
             <Hash className="w-4 h-4 flex-shrink-0" />
           )}
           <span className="truncate text-sm">{channel.name}</span>
-          {channel.isMuted && <BellOff className="w-3 h-3 text-white/30" />}
+          {channel.isMuted && <BellOff className="w-3 h-3 text-[var(--text-primary)]/30" />}
         </div>
         <div className="flex items-center gap-1">
           {channel.unreadCount > 0 && (
-            <span className="px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-xs min-w-[20px] text-center">
+            <span className="px-1.5 py-0.5 rounded-full bg-[var(--accent-ember)] text-[var(--text-primary)] text-xs min-w-[20px] text-center">
               {channel.unreadCount}
             </span>
           )}
@@ -566,22 +568,22 @@ function ChannelItem({
       {showMenu && (
         <>
           <div className="fixed inset-0 z-40" onClick={onMenuToggle} />
-          <div className="absolute left-full top-0 ml-1 w-48 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="absolute left-full top-0 ml-1 w-48 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl shadow-xl z-50 overflow-hidden">
             <button
               onClick={(e) => { e.stopPropagation(); onPin(channel.id); }}
-              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/5 text-white/70 text-sm transition-colors"
+              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/5 text-[var(--text-secondary)] text-sm transition-colors"
             >
               {channel.isPinned ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}
               {channel.isPinned ? "Unpin" : "Pin"} channel
             </button>
             <button
               onClick={(e) => { e.stopPropagation(); onMute(channel.id); }}
-              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/5 text-white/70 text-sm transition-colors"
+              className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/5 text-[var(--text-secondary)] text-sm transition-colors"
             >
               {channel.isMuted ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
               {channel.isMuted ? "Unmute" : "Mute"} channel
             </button>
-            <div className="border-t border-white/10" />
+            <div className="border-t border-[var(--border-subtle)]" />
             <button
               onClick={(e) => { e.stopPropagation(); onLeave(channel.id); }}
               className="w-full flex items-center gap-2 px-3 py-2 hover:bg-white/5 text-red-400 text-sm transition-colors"
@@ -609,7 +611,7 @@ function MessageItem({ message, onAddReaction }: { message: Message; onAddReacti
     >
       {/* Pinned Badge */}
       {message.isPinned && (
-        <div className="flex items-center gap-1 text-xs text-yellow-400/70 mb-1">
+        <div className="flex items-center gap-1 text-xs text-[var(--accent-gold)]/70 mb-1">
           <Pin className="w-3 h-3" />
           Pinned message
         </div>
@@ -617,18 +619,18 @@ function MessageItem({ message, onAddReaction }: { message: Message; onAddReacti
 
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-          <span className="text-white text-sm font-medium">{message.author.avatar}</span>
+        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center flex-shrink-0">
+          <span className="text-[var(--text-primary)] text-sm font-medium">{message.author.avatar}</span>
         </div>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline gap-2">
-            <span className="font-medium text-white">{message.author.name}</span>
-            <span className="text-xs text-white/40">{message.author.role}</span>
-            <span className="text-xs text-white/30">{message.timestamp}</span>
+            <span className="font-medium text-[var(--text-primary)]">{message.author.name}</span>
+            <span className="text-xs text-[var(--text-muted)]">{message.author.role}</span>
+            <span className="text-xs text-[var(--text-primary)]/30">{message.timestamp}</span>
           </div>
-          <p className="text-white/80 text-sm mt-1">{message.content}</p>
+          <p className="text-[var(--text-primary)]/80 text-sm mt-1">{message.content}</p>
 
           {/* Reactions */}
           {message.reactions.length > 0 && (
@@ -641,18 +643,18 @@ function MessageItem({ message, onAddReaction }: { message: Message; onAddReacti
                   title={reaction.users.join(", ")}
                 >
                   <span>{reaction.emoji}</span>
-                  <span className="text-white/50">{reaction.count}</span>
+                  <span className="text-[var(--text-muted)]">{reaction.count}</span>
                 </button>
               ))}
               <div className="relative">
                 <button
                   onClick={() => setShowReactionPicker(!showReactionPicker)}
-                  className="p-1 rounded-full hover:bg-white/5 text-white/30 hover:text-white/50 transition-colors"
+                  className="p-1 rounded-full hover:bg-white/5 text-[var(--text-primary)]/30 hover:text-[var(--text-muted)] transition-colors"
                 >
                   <Smile className="w-4 h-4" />
                 </button>
                 {showReactionPicker && (
-                  <div className="absolute bottom-full left-0 mb-2 bg-[#0f0f14] border border-white/10 rounded-lg p-2 flex gap-1 z-50">
+                  <div className="absolute bottom-full left-0 mb-2 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-lg p-2 flex gap-1 z-50">
                     {["👍", "❤️", "😀", "🎉", "🚀", "✅"].map((emoji) => (
                       <button
                         key={emoji}
@@ -673,7 +675,7 @@ function MessageItem({ message, onAddReaction }: { message: Message; onAddReacti
 
           {/* Replies */}
           {message.replies && message.replies > 0 && (
-            <button className="mt-2 text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1">
+            <button className="mt-2 text-sm text-[var(--accent-ember)] hover:text-blue-300 flex items-center gap-1">
               <Reply className="w-4 h-4" />
               {message.replies} {message.replies === 1 ? "reply" : "replies"}
             </button>
@@ -682,22 +684,22 @@ function MessageItem({ message, onAddReaction }: { message: Message; onAddReacti
 
         {/* Actions */}
         {showActions && (
-          <div className="absolute right-0 top-0 flex items-center gap-1 bg-[#0f0f14] border border-white/10 rounded-lg p-1">
+          <div className="absolute right-0 top-0 flex items-center gap-1 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-lg p-1">
             <div className="relative">
               <button
                 onClick={() => setShowReactionPicker(!showReactionPicker)}
-                className="p-1.5 rounded hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors"
+                className="p-1.5 rounded hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
               >
                 <Smile className="w-4 h-4" />
               </button>
             </div>
-            <button className="p-1.5 rounded hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+            <button className="p-1.5 rounded hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
               <Reply className="w-4 h-4" />
             </button>
-            <button className="p-1.5 rounded hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+            <button className="p-1.5 rounded hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
               <Pin className="w-4 h-4" />
             </button>
-            <button className="p-1.5 rounded hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors">
+            <button className="p-1.5 rounded hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
               <MoreHorizontal className="w-4 h-4" />
             </button>
           </div>

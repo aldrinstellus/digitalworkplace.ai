@@ -617,7 +617,46 @@ export function DrillDownModal({ data, onClose }: DrillDownModalProps) {
     const featureKey = featureName === "aichat" ? "chat" :
                        featureName === "contentbrowse" ? "content" :
                        featureName === "peopledirectory" ? "people" : "search";
-    const featureStats = featureBreakdown[featureKey as keyof typeof featureBreakdown];
+
+    // Get total activity based on feature type
+    const getTotalActivity = () => {
+      if (featureKey === "search") return featureBreakdown.search.totalQueries;
+      if (featureKey === "chat") return featureBreakdown.chat.totalConversations;
+      if (featureKey === "content") return featureBreakdown.content.totalViews;
+      return featureBreakdown.people.totalSearches;
+    };
+
+    // Get unique users based on feature type
+    const getUniqueUsers = () => {
+      if (featureKey === "search") return featureBreakdown.search.uniqueUsers;
+      if (featureKey === "chat") return featureBreakdown.chat.uniqueUsers;
+      if (featureKey === "content") return featureBreakdown.content.uniqueViewers;
+      return featureBreakdown.people.uniqueUsers;
+    };
+
+    // Get avg per user based on feature type
+    const getAvgPerUser = () => {
+      if (featureKey === "search") return featureBreakdown.search.avgQueriesPerUser;
+      if (featureKey === "chat") return featureBreakdown.chat.avgConvosPerUser;
+      if (featureKey === "content") return featureBreakdown.content.avgViewsPerUser;
+      return featureBreakdown.people.avgSearchesPerUser;
+    };
+
+    // Get peak hour based on feature type
+    const getPeakHour = () => {
+      if (featureKey === "search") return featureBreakdown.search.peakHour;
+      if (featureKey === "chat") return featureBreakdown.chat.peakHour;
+      if (featureKey === "content") return featureBreakdown.content.peakHour;
+      return featureBreakdown.people.peakHour;
+    };
+
+    // Get top department based on feature type
+    const getTopDepartment = () => {
+      if (featureKey === "search") return featureBreakdown.search.topDepartment;
+      if (featureKey === "chat") return featureBreakdown.chat.topDepartment;
+      if (featureKey === "content") return featureBreakdown.content.topDepartment;
+      return featureBreakdown.people.topDepartment;
+    };
 
     return (
       <div className="space-y-6">
@@ -625,37 +664,31 @@ export function DrillDownModal({ data, onClose }: DrillDownModalProps) {
           <div className="p-4 rounded-lg bg-white/5">
             <p className="text-xs text-white/50 mb-1">Total Activity</p>
             <p className="text-xl font-medium text-white">
-              {featureKey === "search" ? featureStats.totalQueries.toLocaleString() :
-               featureKey === "chat" ? featureStats.totalConversations.toLocaleString() :
-               featureKey === "content" ? featureStats.totalViews.toLocaleString() :
-               featureStats.totalSearches.toLocaleString()}
+              {getTotalActivity().toLocaleString()}
             </p>
           </div>
           <div className="p-4 rounded-lg bg-white/5">
             <p className="text-xs text-white/50 mb-1">Unique Users</p>
             <p className="text-xl font-medium text-white">
-              {featureStats.uniqueUsers.toLocaleString()}
+              {getUniqueUsers().toLocaleString()}
             </p>
           </div>
           <div className="p-4 rounded-lg bg-white/5">
             <p className="text-xs text-white/50 mb-1">Avg Per User</p>
             <p className="text-xl font-medium text-white">
-              {featureKey === "search" ? featureStats.avgQueriesPerUser :
-               featureKey === "chat" ? featureStats.avgConvosPerUser :
-               featureKey === "content" ? featureStats.avgViewsPerUser :
-               featureStats.avgSearchesPerUser}
+              {getAvgPerUser()}
             </p>
           </div>
           <div className="p-4 rounded-lg bg-white/5">
             <p className="text-xs text-white/50 mb-1">Peak Hour</p>
-            <p className="text-xl font-medium text-white">{featureStats.peakHour}</p>
+            <p className="text-xl font-medium text-white">{getPeakHour()}</p>
           </div>
         </div>
 
         <div className="p-4 rounded-lg bg-white/5">
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-sm font-medium text-white">Top Department</h4>
-            <span className="text-blue-400">{featureStats.topDepartment}</span>
+            <span className="text-blue-400">{getTopDepartment()}</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
             <div

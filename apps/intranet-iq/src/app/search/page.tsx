@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FacetedSidebar } from "@/components/search/FacetedSidebar";
 import { SearchResultCard } from "@/components/search/SearchResultCard";
 import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
 import { useSearch, useDepartments, useActivityLog } from "@/lib/hooks/useSupabase";
+import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import {
   Search,
   FileText,
@@ -45,16 +47,16 @@ const typeIcons: Record<string, typeof FileText> = {
 };
 
 const typeColors: Record<string, string> = {
-  article: "bg-blue-500/20 text-blue-400",
-  employee: "bg-green-500/20 text-green-400",
-  event: "bg-orange-500/20 text-orange-400",
-  document: "bg-purple-500/20 text-purple-400",
-  channel: "bg-cyan-500/20 text-cyan-400",
+  article: "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]",
+  employee: "bg-[var(--success)]/20 text-[var(--success)]",
+  event: "bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]",
+  document: "bg-[var(--accent-copper)]/20 text-[var(--accent-copper)]",
+  channel: "bg-[var(--accent-ember-soft)]/20 text-[var(--accent-ember-soft)]",
 };
 
 const RESULTS_PER_PAGE = 20;
 
-export default function SearchPage() {
+function SearchPageInner() {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -246,24 +248,24 @@ export default function SearchPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 p-8">
         <div className="max-w-5xl mx-auto">
           {/* Search Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-medium text-white mb-2">
+          <FadeIn className="mb-8">
+            <h1 className="text-2xl font-medium text-[var(--text-primary)] mb-2">
               Enterprise Search
             </h1>
-            <p className="text-white/50">
+            <p className="text-[var(--text-muted)]">
               Search across articles, knowledge bases, people, and more
             </p>
-          </div>
+          </FadeIn>
 
           {/* Search Bar with Autocomplete */}
-          <div className="relative mb-6">
-            <div className="bg-[#0f0f14] border border-white/10 rounded-2xl p-4 focus-within:border-blue-500/50 transition-colors">
+          <FadeIn delay={0.1} className="relative mb-6">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl p-4 focus-within:border-[var(--accent-ember)]/50 focus-within:shadow-lg focus-within:shadow-[var(--accent-ember)]/5 transition-all">
               <div className="flex items-center gap-3">
                 <div className="flex-1">
                   <SearchAutocomplete
@@ -274,128 +276,150 @@ export default function SearchPage() {
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
+                  <motion.button
                     onClick={() => setShowAdvanced(!showAdvanced)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                       showAdvanced
-                        ? "bg-blue-500/20 text-blue-400"
-                        : "text-white/50 hover:text-white/70 hover:bg-white/5"
+                        ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-slate)]"
                     }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <SlidersHorizontal className="w-4 h-4" />
                     Advanced
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     onClick={handleSearch}
                     disabled={loading || !query.trim()}
-                    className="px-4 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors flex items-center gap-2"
+                    className="px-4 py-1.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-[var(--accent-ember)]/20"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                     Search
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
               {/* Advanced Filters */}
-              {showAdvanced && (
-                <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
-                      Date Range
-                    </label>
-                    <select
-                      value={dateRange}
-                      onChange={(e) => setDateRange(e.target.value)}
-                      className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-blue-500/50"
-                    >
-                      <option value="any">Any time</option>
-                      <option value="day">Past 24 hours</option>
-                      <option value="week">Past week</option>
-                      <option value="month">Past month</option>
-                      <option value="year">Past year</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
-                      Sort By
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-blue-500/50"
-                    >
-                      <option value="relevance">Relevance</option>
-                      <option value="date">Most recent</option>
-                      <option value="modified">Last modified</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
-                      Content Type
-                    </label>
-                    <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-blue-500/50">
-                      <option value="all">All types</option>
-                      <option value="text">Text</option>
-                      <option value="pdf">PDF</option>
-                      <option value="spreadsheet">Spreadsheet</option>
-                    </select>
-                  </div>
-                </div>
-              )}
+              <AnimatePresence>
+                {showAdvanced && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="mt-4 pt-4 border-t border-[var(--border-subtle)] grid grid-cols-3 gap-4 overflow-hidden"
+                  >
+                    <div>
+                      <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                        Date Range
+                      </label>
+                      <select
+                        value={dateRange}
+                        onChange={(e) => setDateRange(e.target.value)}
+                        className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50"
+                      >
+                        <option value="any">Any time</option>
+                        <option value="day">Past 24 hours</option>
+                        <option value="week">Past week</option>
+                        <option value="month">Past month</option>
+                        <option value="year">Past year</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                        Sort By
+                      </label>
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50"
+                      >
+                        <option value="relevance">Relevance</option>
+                        <option value="date">Most recent</option>
+                        <option value="modified">Last modified</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                        Content Type
+                      </label>
+                      <select className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50">
+                        <option value="all">All types</option>
+                        <option value="text">Text</option>
+                        <option value="pdf">PDF</option>
+                        <option value="spreadsheet">Spreadsheet</option>
+                      </select>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
+          </FadeIn>
 
           {/* AI Suggestion - show when there are results */}
-          {filteredResults.length > 0 && (
-            <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-4 h-4 text-white" />
+          <AnimatePresence>
+            {filteredResults.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-6 p-4 bg-gradient-to-r from-[var(--accent-ember)]/10 to-[var(--accent-copper)]/10 border border-[var(--accent-ember)]/20 rounded-xl"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[var(--accent-ember)]/20">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-[var(--text-primary)]/90">
+                      <strong className="text-[var(--accent-ember)]">AI Summary:</strong> Found{" "}
+                      {filteredResults.length} results for &quot;{query}&quot;.
+                      {filteredResults.some((r) => r.type === "article") &&
+                        " Includes knowledge base articles."}
+                      {filteredResults.some((r) => r.type === "employee") &&
+                        " Found matching people in the directory."}
+                    </p>
+                    <button className="mt-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      Ask AI for more details →
+                    </button>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm text-white/90">
-                    <strong className="text-blue-400">AI Summary:</strong> Found{" "}
-                    {filteredResults.length} results for &quot;{query}&quot;.
-                    {filteredResults.some((r) => r.type === "article") &&
-                      " Includes knowledge base articles."}
-                    {filteredResults.some((r) => r.type === "employee") &&
-                      " Found matching people in the directory."}
-                  </p>
-                  <button className="mt-2 text-sm text-blue-400 hover:text-blue-300">
-                    Ask AI for more details →
-                  </button>
-                </div>
-              </div>
 
-              {/* Feedback buttons */}
-              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/10">
-                <span className="text-xs text-white/40">Was this helpful?</span>
-                <button
-                  onClick={() => handleFeedback("positive")}
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    feedbackGiven === "positive"
-                      ? "bg-green-500/20 text-green-400"
-                      : "hover:bg-white/5 text-white/40 hover:text-white/60"
-                  }`}
-                >
-                  <ThumbsUp className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleFeedback("negative")}
-                  className={`p-1.5 rounded-lg transition-colors ${
-                    feedbackGiven === "negative"
-                      ? "bg-red-500/20 text-red-400"
-                      : "hover:bg-white/5 text-white/40 hover:text-white/60"
-                  }`}
-                >
-                  <ThumbsDown className="w-4 h-4" />
-                </button>
-                {feedbackGiven && (
-                  <span className="text-xs text-white/40 ml-2">Thanks for your feedback!</span>
-                )}
-              </div>
-            </div>
-          )}
+                {/* Feedback buttons */}
+                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                  <span className="text-xs text-[var(--text-muted)]">Was this helpful?</span>
+                  <motion.button
+                    onClick={() => handleFeedback("positive")}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      feedbackGiven === "positive"
+                        ? "bg-[var(--success)]/20 text-[var(--success)]"
+                        : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <ThumbsUp className="w-4 h-4" />
+                  </motion.button>
+                  <motion.button
+                    onClick={() => handleFeedback("negative")}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      feedbackGiven === "negative"
+                        ? "bg-[var(--error)]/20 text-[var(--error)]"
+                        : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    <ThumbsDown className="w-4 h-4" />
+                  </motion.button>
+                  {feedbackGiven && (
+                    <span className="text-xs text-[var(--text-muted)] ml-2">Thanks for your feedback!</span>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="flex gap-6">
             {/* Faceted Sidebar with counts */}
@@ -412,123 +436,142 @@ export default function SearchPage() {
             {/* Results */}
             <div className="flex-1">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-white/50">
+                <span className="text-sm text-[var(--text-muted)]">
                   {filteredResults.length} results
                   {query && ` for "${query}"`}
                 </span>
                 <div className="relative">
-                  <button
+                  <motion.button
                     onClick={() => setShowSearchHistory(!showSearchHistory)}
-                    className="text-sm text-white/50 hover:text-white flex items-center gap-1"
+                    className="text-sm text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
                     <Clock className="w-4 h-4" />
                     Search history
-                  </button>
+                  </motion.button>
 
                   {/* Search History Dropdown */}
-                  {showSearchHistory && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setShowSearchHistory(false)}
-                      />
-                      <div className="absolute right-0 top-full mt-2 w-80 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
-                        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-                          <span className="text-sm font-medium text-white">Recent Searches</span>
-                          {searchHistory.length > 0 && (
-                            <button
-                              onClick={clearAllHistory}
-                              className="text-xs text-white/40 hover:text-red-400 flex items-center gap-1 transition-colors"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                              Clear all
-                            </button>
-                          )}
-                        </div>
-                        <div className="max-h-64 overflow-y-auto">
-                          {searchHistory.length === 0 ? (
-                            <div className="py-8 text-center text-white/40 text-sm">
-                              No search history yet
-                            </div>
-                          ) : (
-                            searchHistory.map((item, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-center justify-between px-4 py-2 hover:bg-white/5 transition-colors group"
+                  <AnimatePresence>
+                    {showSearchHistory && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40"
+                          onClick={() => setShowSearchHistory(false)}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute right-0 top-full mt-2 w-80 bg-[var(--bg-charcoal)] border border-[var(--border-default)] rounded-xl shadow-xl z-50 overflow-hidden"
+                        >
+                          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border-subtle)]">
+                            <span className="text-sm font-medium text-[var(--text-primary)]">Recent Searches</span>
+                            {searchHistory.length > 0 && (
+                              <button
+                                onClick={clearAllHistory}
+                                className="text-xs text-[var(--text-muted)] hover:text-[var(--error)] flex items-center gap-1 transition-colors"
                               >
-                                <button
-                                  onClick={() => useHistoryItem(item.query)}
-                                  className="flex-1 text-left"
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <Clock className="w-3.5 h-3.5 text-white/30" />
-                                    <span className="text-sm text-white/80">{item.query}</span>
-                                  </div>
-                                  <div className="ml-5.5 text-xs text-white/40">
-                                    {item.resultCount} results •{" "}
-                                    {new Date(item.timestamp).toLocaleDateString()}
-                                  </div>
-                                </button>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeFromHistory(item.query);
-                                  }}
-                                  className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-white/10 text-white/30 hover:text-white/60 transition-all"
-                                >
-                                  <X className="w-3.5 h-3.5" />
-                                </button>
+                                <Trash2 className="w-3 h-3" />
+                                Clear all
+                              </button>
+                            )}
+                          </div>
+                          <div className="max-h-64 overflow-y-auto">
+                            {searchHistory.length === 0 ? (
+                              <div className="py-8 text-center text-[var(--text-muted)] text-sm">
+                                No search history yet
                               </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </>
-                  )}
+                            ) : (
+                              searchHistory.map((item, idx) => (
+                                <motion.div
+                                  key={idx}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: idx * 0.05 }}
+                                  className="flex items-center justify-between px-4 py-2 hover:bg-[var(--bg-slate)] transition-colors group"
+                                >
+                                  <button
+                                    onClick={() => useHistoryItem(item.query)}
+                                    className="flex-1 text-left"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+                                      <span className="text-sm text-[var(--text-secondary)]">{item.query}</span>
+                                    </div>
+                                    <div className="ml-5.5 text-xs text-[var(--text-muted)]">
+                                      {item.resultCount} results •{" "}
+                                      {new Date(item.timestamp).toLocaleDateString()}
+                                    </div>
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      removeFromHistory(item.query);
+                                    }}
+                                    className="p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-[var(--bg-obsidian)] text-[var(--text-muted)] hover:text-[var(--error)] transition-all"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
+                                </motion.div>
+                              ))
+                            )}
+                          </div>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
 
               {error && (
-                <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 p-4 bg-[var(--error)]/10 border border-[var(--error)]/20 rounded-xl text-[var(--error)] text-sm"
+                >
                   Error: {error}
-                </div>
+                </motion.div>
               )}
 
               {loading ? (
                 <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+                  <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
                 </div>
               ) : filteredResults.length === 0 ? (
-                <div className="text-center py-12">
-                  <Search className="w-12 h-12 text-white/10 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white/50 mb-2">
+                <FadeIn className="text-center py-12">
+                  <div className="w-16 h-16 rounded-2xl bg-[var(--bg-charcoal)] flex items-center justify-center mx-auto mb-4">
+                    <Search className="w-8 h-8 text-[var(--text-muted)]" />
+                  </div>
+                  <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">
                     {query ? "No results found" : "Start searching"}
                   </h3>
-                  <p className="text-sm text-white/30">
+                  <p className="text-sm text-[var(--text-muted)]/70">
                     {query
                       ? "Try different keywords or filters"
                       : "Enter a search term to find articles, people, and more"}
                   </p>
-                </div>
+                </FadeIn>
               ) : (
-                <div className="space-y-4">
-                  {filteredResults.map((result) => (
-                    <SearchResultCard
-                      key={result.id}
-                      result={{
-                        id: result.id,
-                        title: result.title,
-                        summary: result.summary || "",
-                        type: result.type,
-                        source: result.project_code || "dIQ",
-                        relevance: result.relevance || 0,
-                        updatedAt: result.created_at,
-                      }}
-                      onSummarize={() => handleSummarize(result.id)}
-                      isSummarizing={summarizingId === result.id}
-                    />
+                <StaggerContainer className="space-y-4">
+                  {filteredResults.map((result, index) => (
+                    <StaggerItem key={result.id}>
+                      <SearchResultCard
+                        result={{
+                          id: result.id,
+                          title: result.title,
+                          summary: result.summary || "",
+                          type: result.type,
+                          source: result.project_code || "dIQ",
+                          relevance: result.relevance || 0,
+                          updatedAt: result.created_at,
+                        }}
+                        onSummarize={() => handleSummarize(result.id)}
+                        isSummarizing={summarizingId === result.id}
+                      />
+                    </StaggerItem>
                   ))}
-                </div>
+                </StaggerContainer>
               )}
 
               {/* Infinite Scroll Trigger */}
@@ -536,18 +579,20 @@ export default function SearchPage() {
                 <div ref={loadMoreRef} className="mt-6 text-center">
                   {isLoadingMore ? (
                     <div className="flex items-center justify-center py-4">
-                      <Loader2 className="w-6 h-6 animate-spin text-blue-400 mr-2" />
-                      <span className="text-white/50">Loading more results...</span>
+                      <Loader2 className="w-6 h-6 animate-spin text-[var(--accent-ember)] mr-2" />
+                      <span className="text-[var(--text-muted)]">Loading more results...</span>
                     </div>
                   ) : hasMore ? (
-                    <button
+                    <motion.button
                       onClick={loadMoreResults}
-                      className="px-6 py-2 rounded-lg border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-colors"
+                      className="px-6 py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-default)] transition-colors"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
                       Load more results
-                    </button>
+                    </motion.button>
                   ) : (
-                    <p className="text-white/40 text-sm py-4">
+                    <p className="text-[var(--text-muted)] text-sm py-4">
                       No more results to load
                     </p>
                   )}
@@ -558,5 +603,31 @@ export default function SearchPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function SearchPageLoading() {
+  return (
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
+      <Sidebar />
+      <main className="ml-16 p-8">
+        <div className="max-w-5xl mx-auto flex items-center justify-center h-64">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
+            <p className="text-[var(--text-muted)]">Loading search...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// Export with Suspense wrapper for useSearchParams
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageLoading />}>
+      <SearchPageInner />
+    </Suspense>
   );
 }

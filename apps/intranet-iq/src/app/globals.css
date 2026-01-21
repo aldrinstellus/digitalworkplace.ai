@@ -11,69 +11,267 @@
 }
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #fafafa;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --card: #0f0f14;
-  --card-foreground: #fafafa;
-  --popover: #0f0f14;
-  --popover-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --primary: #3b82f6;
-  --primary-foreground: #fafafa;
-  --secondary: #1f1f23;
-  --secondary-foreground: #fafafa;
-  --accent: #1f1f23;
-  --accent-foreground: #fafafa;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --ring: #3b82f6;
-  --radius: 0.5rem;
+  /* Midnight Ember Design System */
 
-  /* Intranet IQ specific - Blue theme */
-  --intranet-primary: #3b82f6;
-  --intranet-secondary: #8b5cf6;
-  --intranet-accent: #06b6d4;
+  /* Backgrounds */
+  --bg-obsidian: #08080c;
+  --bg-charcoal: #121218;
+  --bg-slate: #1c1c24;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.12);
+
+  /* Accent Colors - Ember */
+  --accent-ember: #f97316;
+  --accent-ember-soft: #fb923c;
+  --accent-copper: #ea580c;
+  --accent-gold: #fbbf24;
+
+  /* Text */
+  --text-primary: #fafafa;
+  --text-secondary: rgba(250, 250, 250, 0.7);
+  --text-muted: rgba(250, 250, 250, 0.5);
+
+  /* Semantic Colors */
+  --success: #22c55e;
+  --warning: #eab308;
+  --error: #ef4444;
+
+  /* Legacy mappings for compatibility */
+  --background: var(--bg-obsidian);
+  --foreground: var(--text-primary);
+  --muted: var(--bg-slate);
+  --muted-foreground: var(--text-muted);
+  --card: var(--bg-charcoal);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-charcoal);
+  --popover-foreground: var(--text-primary);
+  --border: var(--border-default);
+  --input: var(--bg-slate);
+  --primary: var(--accent-ember);
+  --primary-foreground: var(--text-primary);
+  --secondary: var(--bg-slate);
+  --secondary-foreground: var(--text-primary);
+  --accent: var(--bg-slate);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--error);
+  --destructive-foreground: var(--text-primary);
+  --ring: var(--accent-ember);
+  --radius: 0.5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg-obsidian);
+  color: var(--text-primary);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Ember theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muted);
+  background: var(--bg-charcoal);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--border-default);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: rgba(249, 115, 22, 0.3);
+}
+
+/* Focus styles - WCAG 2.1 AA compliant */
+:focus-visible {
+  outline: 2px solid var(--accent-ember);
+  outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Search input focus styles */
 .search-input:focus {
-  box-shadow: 0 0 0 2px var(--intranet-primary);
+  box-shadow: 0 0 0 2px var(--accent-ember);
 }
 
-/* Card hover effects */
+/* Card hover effects - Ember glow */
 .card-hover {
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 30px rgba(249, 115, 22, 0.15);
+}
+
+/* Button base styles */
+.btn-ember {
+  background: linear-gradient(135deg, var(--accent-ember) 0%, var(--accent-copper) 100%);
+  color: white;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-ember:hover {
+  background: linear-gradient(135deg, var(--accent-ember-soft) 0%, var(--accent-ember) 100%);
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+}
+
+.btn-ember:active {
+  transform: scale(0.98);
+}
+
+/* Input glow animation */
+.input-glow {
+  transition: all 0.2s ease;
+}
+
+.input-glow:focus {
+  border-color: var(--accent-ember);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-charcoal) 0%,
+    var(--bg-slate) 50%,
+    var(--bg-charcoal) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Tooltip entrance */
+@keyframes tooltip-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.tooltip-animate {
+  animation: tooltip-enter 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Toast notifications */
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.toast-enter {
+  animation: toast-slide-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Ember gradient text */
+.text-ember-gradient {
+  background: linear-gradient(135deg, var(--accent-ember) 0%, var(--accent-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-ember {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+}
+
+.glow-ember-strong {
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.35);
+}
+
+/* Badge styles */
+.badge-ember {
+  background: rgba(249, 115, 22, 0.15);
+  color: var(--accent-ember-soft);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.badge-gold {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.badge-success {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* Active indicator bar */
+.active-indicator {
+  background: linear-gradient(180deg, var(--accent-ember) 0%, var(--accent-copper) 100%);
+}
+
+/* Subtle border utility */
+.border-subtle {
+  border-color: var(--border-subtle);
+}
+
+.border-ember {
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+/* Background utilities */
+.bg-obsidian {
+  background-color: var(--bg-obsidian);
+}
+
+.bg-charcoal {
+  background-color: var(--bg-charcoal);
+}
+
+.bg-slate-dark {
+  background-color: var(--bg-slate);
 }

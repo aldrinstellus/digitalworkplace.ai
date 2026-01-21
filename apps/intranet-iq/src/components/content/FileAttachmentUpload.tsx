@@ -95,6 +95,9 @@ export function FileAttachmentUpload({
   const [isDragging, setIsDragging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Use ref to track current attachments for async operations
+  const attachmentsRef = useRef(attachments);
+  attachmentsRef.current = attachments;
 
   const maxSizeBytes = maxSizeMB * 1024 * 1024;
 
@@ -148,8 +151,8 @@ export function FileAttachmentUpload({
         // Simulate upload
         for (let progress = 0; progress <= 100; progress += 20) {
           await new Promise((resolve) => setTimeout(resolve, 200));
-          onAttachmentsChange((prev) =>
-            prev.map((a) =>
+          onAttachmentsChange(
+            attachmentsRef.current.map((a) =>
               a.id === fileId ? { ...a, progress } : a
             )
           );
@@ -161,8 +164,8 @@ export function FileAttachmentUpload({
         //   .upload(`${articleId}/${file.name}`, file);
 
         // Simulate success with mock URL
-        onAttachmentsChange((prev) =>
-          prev.map((a) =>
+        onAttachmentsChange(
+          attachmentsRef.current.map((a) =>
             a.id === fileId
               ? {
                   ...a,
@@ -174,8 +177,8 @@ export function FileAttachmentUpload({
           )
         );
       } catch (err) {
-        onAttachmentsChange((prev) =>
-          prev.map((a) =>
+        onAttachmentsChange(
+          attachmentsRef.current.map((a) =>
             a.id === fileId
               ? {
                   ...a,

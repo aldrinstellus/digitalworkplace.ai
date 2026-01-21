@@ -261,7 +261,7 @@ export default function AnalyticsPage() {
   }, [dateRange]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 p-8">
@@ -269,17 +269,17 @@ export default function AnalyticsPage() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-medium text-white flex items-center gap-3">
-                <BarChart3 className="w-7 h-7 text-blue-400" />
+              <h1 className="text-2xl font-medium text-[var(--text-primary)] flex items-center gap-3">
+                <BarChart3 className="w-7 h-7 text-[var(--accent-ember)]" />
                 Analytics Dashboard
               </h1>
-              <p className="text-white/50 mt-1">Monitor usage patterns and content performance</p>
+              <p className="text-[var(--text-muted)] mt-1">Monitor usage patterns and content performance</p>
             </div>
             <div className="flex items-center gap-3">
               <select
                 value={dateRange}
                 onChange={(e) => setDateRange(e.target.value)}
-                className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm outline-none focus:border-blue-500/50"
+                className="px-4 py-2 rounded-lg bg-white/5 border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm outline-none focus:border-[var(--accent-ember)]/50"
               >
                 <option value="24h">Last 24 hours</option>
                 <option value="7d">Last 7 days</option>
@@ -290,7 +290,7 @@ export default function AnalyticsPage() {
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
                   disabled={exporting}
-                  className="px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 text-white flex items-center gap-2 transition-colors disabled:opacity-50"
+                  className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] hover:bg-white/5 text-[var(--text-primary)] flex items-center gap-2 transition-colors disabled:opacity-50"
                 >
                   <Download className="w-4 h-4" />
                   Export
@@ -303,25 +303,25 @@ export default function AnalyticsPage() {
                       className="fixed inset-0 z-40"
                       onClick={() => setShowExportMenu(false)}
                     />
-                    <div className="absolute right-0 top-12 w-48 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+                    <div className="absolute right-0 top-12 w-48 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl shadow-xl z-50 overflow-hidden">
                       <button
                         onClick={exportToCSV}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-white/70 hover:text-white transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                       >
-                        <FileDown className="w-4 h-4 text-green-400" />
+                        <FileDown className="w-4 h-4 text-[var(--success)]" />
                         <div className="text-left">
                           <p className="text-sm font-medium">Export CSV</p>
-                          <p className="text-xs text-white/40">Spreadsheet format</p>
+                          <p className="text-xs text-[var(--text-muted)]">Spreadsheet format</p>
                         </div>
                       </button>
                       <button
                         onClick={exportToPDF}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-white/70 hover:text-white transition-colors border-t border-white/10"
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors border-t border-[var(--border-subtle)]"
                       >
-                        <FileText className="w-4 h-4 text-red-400" />
+                        <FileText className="w-4 h-4 text-[var(--error)]" />
                         <div className="text-left">
                           <p className="text-sm font-medium">Export PDF</p>
-                          <p className="text-xs text-white/40">Printable report</p>
+                          <p className="text-xs text-[var(--text-muted)]">Printable report</p>
                         </div>
                       </button>
                     </div>
@@ -337,22 +337,22 @@ export default function AnalyticsPage() {
               <div
                 key={metric.title}
                 onClick={() => handleMetricClick(metric)}
-                className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 cursor-pointer hover:bg-white/5 hover:border-white/20 transition-all group"
+                className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4 cursor-pointer hover:bg-white/5 hover:border-white/20 transition-all group"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-white/50 text-sm">{metric.title}</span>
+                  <span className="text-[var(--text-muted)] text-sm">{metric.title}</span>
                   <div className="flex items-center gap-2">
-                    <metric.icon className="w-4 h-4 text-white/40" />
-                    <ExternalLink className="w-3 h-3 text-white/0 group-hover:text-white/40 transition-colors" />
+                    <metric.icon className="w-4 h-4 text-[var(--text-muted)]" />
+                    <ExternalLink className="w-3 h-3 text-transparent group-hover:text-[var(--text-muted)] transition-colors" />
                   </div>
                 </div>
-                <div className="text-2xl font-medium text-white mb-1">{metric.value}</div>
-                <div className={`flex items-center gap-1 text-sm ${metric.trend === "up" ? "text-green-400" : "text-red-400"}`}>
+                <div className="text-2xl font-medium text-[var(--text-primary)] mb-1">{metric.value}</div>
+                <div className={`flex items-center gap-1 text-sm ${metric.trend === "up" ? "text-[var(--success)]" : "text-[var(--error)]"}`}>
                   {metric.trend === "up" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
                   {Math.abs(metric.change)}%
-                  <span className="text-white/40 ml-1">vs last period</span>
+                  <span className="text-[var(--text-muted)] ml-1">vs last period</span>
                 </div>
-                <p className="text-xs text-white/0 group-hover:text-white/30 mt-2 transition-colors">
+                <p className="text-xs text-transparent group-hover:text-[var(--text-muted)]/70 mt-2 transition-colors">
                   Click for detailed breakdown
                 </p>
               </div>
@@ -361,21 +361,21 @@ export default function AnalyticsPage() {
 
           <div className="grid grid-cols-3 gap-6 mb-8">
             {/* Activity Chart */}
-            <div className="col-span-2 bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+            <div className="col-span-2 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-medium text-white">Weekly Activity</h3>
+                <h3 className="text-lg font-medium text-[var(--text-primary)]">Weekly Activity</h3>
                 <div className="flex items-center gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500" />
-                    <span className="text-white/50">Searches</span>
+                    <div className="w-3 h-3 rounded-full bg-[var(--accent-ember)]" />
+                    <span className="text-[var(--text-muted)]">Searches</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-purple-500" />
-                    <span className="text-white/50">Views</span>
+                    <div className="w-3 h-3 rounded-full bg-[var(--accent-copper)]" />
+                    <span className="text-[var(--text-muted)]">Views</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                    <span className="text-white/50">Chats</span>
+                    <div className="w-3 h-3 rounded-full bg-[var(--success)]" />
+                    <span className="text-[var(--text-muted)]">Chats</span>
                   </div>
                 </div>
               </div>
@@ -388,28 +388,28 @@ export default function AnalyticsPage() {
                   >
                     <div className="w-full flex items-end gap-0.5 h-40 group-hover:opacity-80 transition-opacity">
                       <div
-                        className="flex-1 bg-blue-500 rounded-t group-hover:bg-blue-400 transition-colors"
+                        className="flex-1 bg-[var(--accent-ember)] rounded-t group-hover:bg-blue-400 transition-colors"
                         style={{ height: `${(day.searches / maxActivity) * 100}%` }}
                       />
                       <div
-                        className="flex-1 bg-purple-500 rounded-t group-hover:bg-purple-400 transition-colors"
+                        className="flex-1 bg-[var(--accent-copper)] rounded-t group-hover:bg-purple-400 transition-colors"
                         style={{ height: `${(day.views / maxActivity) * 100}%` }}
                       />
                       <div
-                        className="flex-1 bg-green-500 rounded-t group-hover:bg-green-400 transition-colors"
+                        className="flex-1 bg-[var(--success)] rounded-t group-hover:bg-green-400 transition-colors"
                         style={{ height: `${(day.chats / maxActivity) * 20}%` }}
                       />
                     </div>
-                    <span className="text-xs text-white/40 group-hover:text-white/70 transition-colors">{day.day}</span>
+                    <span className="text-xs text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] transition-colors">{day.day}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-white/30 mt-3 text-center">Click on any day to see detailed breakdown</p>
+              <p className="text-xs text-[var(--text-muted)]/70 mt-3 text-center">Click on any day to see detailed breakdown</p>
             </div>
 
             {/* Usage Distribution - Clickable for Drill-Down */}
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
-              <h3 className="text-lg font-medium text-white mb-6">Usage by Feature</h3>
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
+              <h3 className="text-lg font-medium text-[var(--text-primary)] mb-6">Usage by Feature</h3>
               <div className="space-y-4">
                 {[
                   { name: "Search", percentage: 45, color: "blue" },
@@ -423,10 +423,10 @@ export default function AnalyticsPage() {
                     className="cursor-pointer group p-2 -mx-2 rounded-lg hover:bg-white/5 transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm text-white/70 group-hover:text-white transition-colors">{feature.name}</span>
+                      <span className="text-sm text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] transition-colors">{feature.name}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-white/50">{feature.percentage}%</span>
-                        <ExternalLink className="w-3 h-3 text-white/0 group-hover:text-white/40 transition-colors" />
+                        <span className="text-sm text-[var(--text-muted)]">{feature.percentage}%</span>
+                        <ExternalLink className="w-3 h-3 text-transparent group-hover:text-[var(--text-muted)] transition-colors" />
                       </div>
                     </div>
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -438,21 +438,21 @@ export default function AnalyticsPage() {
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-white/30 mt-4 text-center">Click on any feature for details</p>
+              <p className="text-xs text-[var(--text-muted)]/70 mt-4 text-center">Click on any feature for details</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             {/* Top Search Queries */}
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-white">Top Search Queries</h3>
-                <button className="text-sm text-blue-400 hover:text-blue-300">View all</button>
+                <h3 className="text-lg font-medium text-[var(--text-primary)]">Top Search Queries</h3>
+                <button className="text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)]">View all</button>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-xs text-white/50 border-b border-white/10">
+                    <tr className="text-left text-xs text-[var(--text-muted)] border-b border-[var(--border-subtle)]">
                       <th className="pb-3 font-medium">Query</th>
                       <th className="pb-3 font-medium text-right">Count</th>
                       <th className="pb-3 font-medium text-right">Avg Results</th>
@@ -461,12 +461,12 @@ export default function AnalyticsPage() {
                   </thead>
                   <tbody>
                     {topSearchQueries.map((query, idx) => (
-                      <tr key={idx} className="border-b border-white/5">
-                        <td className="py-3 text-white text-sm">{query.query}</td>
-                        <td className="py-3 text-white/70 text-sm text-right">{query.count}</td>
-                        <td className="py-3 text-white/70 text-sm text-right">{query.avgResults}</td>
+                      <tr key={idx} className="border-b border-[var(--border-subtle)]/50">
+                        <td className="py-3 text-[var(--text-primary)] text-sm">{query.query}</td>
+                        <td className="py-3 text-[var(--text-secondary)] text-sm text-right">{query.count}</td>
+                        <td className="py-3 text-[var(--text-secondary)] text-sm text-right">{query.avgResults}</td>
                         <td className="py-3 text-right">
-                          <span className={`text-sm ${query.clickThrough >= 80 ? "text-green-400" : query.clickThrough >= 60 ? "text-yellow-400" : "text-red-400"}`}>
+                          <span className={`text-sm ${query.clickThrough >= 80 ? "text-[var(--success)]" : query.clickThrough >= 60 ? "text-[var(--warning)]" : "text-[var(--error)]"}`}>
                             {query.clickThrough}%
                           </span>
                         </td>
@@ -478,10 +478,10 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Top Content */}
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-6">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-white">Top Content</h3>
-                <button className="text-sm text-blue-400 hover:text-blue-300">View all</button>
+                <h3 className="text-lg font-medium text-[var(--text-primary)]">Top Content</h3>
+                <button className="text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)]">View all</button>
               </div>
               <div className="space-y-3">
                 {topContent.map((content, idx) => (
@@ -490,13 +490,13 @@ export default function AnalyticsPage() {
                     className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-lg font-medium text-white/40 w-6">{idx + 1}</span>
+                      <span className="text-lg font-medium text-[var(--text-muted)] w-6">{idx + 1}</span>
                       <div>
-                        <h4 className="text-white text-sm">{content.title}</h4>
-                        <span className="text-xs text-white/40 capitalize">{content.type}</span>
+                        <h4 className="text-[var(--text-primary)] text-sm">{content.title}</h4>
+                        <span className="text-xs text-[var(--text-muted)] capitalize">{content.type}</span>
                       </div>
                     </div>
-                    <span className="text-sm text-white/50">{content.views.toLocaleString()} views</span>
+                    <span className="text-sm text-[var(--text-muted)]">{content.views.toLocaleString()} views</span>
                   </div>
                 ))}
               </div>
@@ -504,8 +504,8 @@ export default function AnalyticsPage() {
           </div>
 
           {/* AI Performance */}
-          <div className="mt-6 bg-[#0f0f14] border border-white/10 rounded-xl p-6">
-            <h3 className="text-lg font-medium text-white mb-4">AI Assistant Performance</h3>
+          <div className="mt-6 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
+            <h3 className="text-lg font-medium text-[var(--text-primary)] mb-4">AI Assistant Performance</h3>
             <div className="grid grid-cols-4 gap-6">
               <div
                 onClick={() => setDrillDownData({
@@ -517,8 +517,8 @@ export default function AnalyticsPage() {
                 })}
                 className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
               >
-                <div className="text-3xl font-medium text-white mb-1 group-hover:text-blue-400 transition-colors">87%</div>
-                <div className="text-sm text-white/50">Answer Accuracy</div>
+                <div className="text-3xl font-medium text-[var(--text-primary)] mb-1 group-hover:text-[var(--accent-ember)] transition-colors">87%</div>
+                <div className="text-sm text-[var(--text-muted)]">Answer Accuracy</div>
               </div>
               <div
                 onClick={() => setDrillDownData({
@@ -530,8 +530,8 @@ export default function AnalyticsPage() {
                 })}
                 className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
               >
-                <div className="text-3xl font-medium text-white mb-1 group-hover:text-green-400 transition-colors">1.2s</div>
-                <div className="text-sm text-white/50">Avg Response Time</div>
+                <div className="text-3xl font-medium text-[var(--text-primary)] mb-1 group-hover:text-[var(--success)] transition-colors">1.2s</div>
+                <div className="text-sm text-[var(--text-muted)]">Avg Response Time</div>
               </div>
               <div
                 onClick={() => setDrillDownData({
@@ -543,8 +543,8 @@ export default function AnalyticsPage() {
                 })}
                 className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
               >
-                <div className="text-3xl font-medium text-white mb-1 group-hover:text-purple-400 transition-colors">92%</div>
-                <div className="text-sm text-white/50">User Satisfaction</div>
+                <div className="text-3xl font-medium text-[var(--text-primary)] mb-1 group-hover:text-[var(--accent-gold)] transition-colors">92%</div>
+                <div className="text-sm text-[var(--text-muted)]">User Satisfaction</div>
               </div>
               <div
                 onClick={() => setDrillDownData({
@@ -556,11 +556,11 @@ export default function AnalyticsPage() {
                 })}
                 className="text-center cursor-pointer p-4 rounded-lg hover:bg-white/5 transition-colors group"
               >
-                <div className="text-3xl font-medium text-white mb-1 group-hover:text-orange-400 transition-colors">78%</div>
-                <div className="text-sm text-white/50">Source Citation Rate</div>
+                <div className="text-3xl font-medium text-[var(--text-primary)] mb-1 group-hover:text-[var(--accent-ember)] transition-colors">78%</div>
+                <div className="text-sm text-[var(--text-muted)]">Source Citation Rate</div>
               </div>
             </div>
-            <p className="text-xs text-white/30 mt-4 text-center">Click on any metric for detailed breakdown</p>
+            <p className="text-xs text-[var(--text-muted)]/70 mt-4 text-center">Click on any metric for detailed breakdown</p>
           </div>
         </div>
       </main>

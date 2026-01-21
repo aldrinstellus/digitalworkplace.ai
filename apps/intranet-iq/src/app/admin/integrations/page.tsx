@@ -132,10 +132,10 @@ const categoryLabels: Record<string, string> = {
 };
 
 const statusConfig = {
-  connected: { icon: CheckCircle, color: "text-green-400", bg: "bg-green-500/20", label: "Connected" },
-  disconnected: { icon: XCircle, color: "text-gray-400", bg: "bg-gray-500/20", label: "Disconnected" },
-  syncing: { icon: RefreshCw, color: "text-blue-400", bg: "bg-blue-500/20", label: "Syncing" },
-  error: { icon: AlertCircle, color: "text-red-400", bg: "bg-red-500/20", label: "Error" },
+  connected: { icon: CheckCircle, color: "text-[var(--success)]", bg: "bg-[var(--success)]/20", label: "Connected" },
+  disconnected: { icon: XCircle, color: "text-[var(--text-muted)]", bg: "bg-[var(--text-muted)]/20", label: "Disconnected" },
+  syncing: { icon: RefreshCw, color: "text-[var(--accent-ember)]", bg: "bg-[var(--accent-ember)]/20", label: "Syncing" },
+  error: { icon: AlertCircle, color: "text-[var(--error)]", bg: "bg-[var(--error)]/20", label: "Error" },
 };
 
 export default function IntegrationsPage() {
@@ -236,7 +236,7 @@ export default function IntegrationsPage() {
   const totalItems = integrationList.reduce((sum, i) => sum + (i.itemsIndexed || 0), 0);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 p-8">
@@ -244,17 +244,17 @@ export default function IntegrationsPage() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-medium text-white flex items-center gap-3">
-                <Plug className="w-7 h-7 text-blue-400" />
+              <h1 className="text-2xl font-medium text-[var(--text-primary)] flex items-center gap-3">
+                <Plug className="w-7 h-7 text-[var(--accent-ember)]" />
                 Integrations Hub
               </h1>
-              <p className="text-white/50 mt-1">
+              <p className="text-[var(--text-muted)] mt-1">
                 Connect external data sources to enrich your knowledge base
               </p>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 transition-colors"
+              className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] flex items-center gap-2 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Integration
@@ -263,21 +263,21 @@ export default function IntegrationsPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
-              <div className="text-sm text-white/50 mb-1">Connected Integrations</div>
-              <div className="text-2xl font-medium text-white">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
+              <div className="text-sm text-[var(--text-muted)] mb-1">Connected Integrations</div>
+              <div className="text-2xl font-medium text-[var(--text-primary)]">
                 {connectedCount} / {integrations.length}
               </div>
             </div>
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
-              <div className="text-sm text-white/50 mb-1">Total Items Indexed</div>
-              <div className="text-2xl font-medium text-white">{totalItems.toLocaleString()}</div>
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
+              <div className="text-sm text-[var(--text-muted)] mb-1">Total Items Indexed</div>
+              <div className="text-2xl font-medium text-[var(--text-primary)]">{totalItems.toLocaleString()}</div>
             </div>
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
-              <div className="text-sm text-white/50 mb-1">Sync Status</div>
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
+              <div className="text-sm text-[var(--text-muted)] mb-1">Sync Status</div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-medium text-green-400">Healthy</span>
-                <CheckCircle className="w-5 h-5 text-green-400" />
+                <span className="text-2xl font-medium text-[var(--success)]">Healthy</span>
+                <CheckCircle className="w-5 h-5 text-[var(--success)]" />
               </div>
             </div>
           </div>
@@ -285,13 +285,13 @@ export default function IntegrationsPage() {
           {/* Filters */}
           <div className="flex items-center gap-4 mb-6">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search integrations..."
-                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 outline-none focus:border-blue-500/50"
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-white/5 border border-[var(--border-subtle)] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -301,8 +301,8 @@ export default function IntegrationsPage() {
                   onClick={() => setCategoryFilter(category)}
                   className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
                     categoryFilter === category
-                      ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                      : "bg-white/5 text-white/60 border border-white/10 hover:bg-white/10"
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] border border-[var(--accent-ember)]/30"
+                      : "bg-white/5 text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-white/10"
                   }`}
                 >
                   {category === "all" ? "All" : categoryLabels[category] || category}
@@ -321,16 +321,16 @@ export default function IntegrationsPage() {
               return (
                 <div
                   key={integration.id}
-                  className="bg-[#0f0f14] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors"
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 hover:border-white/20 transition-colors"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
-                        <IntegrationIcon className="w-6 h-6 text-white/70" />
+                        <IntegrationIcon className="w-6 h-6 text-[var(--text-secondary)]" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-medium text-white">{integration.name}</h3>
-                        <p className="text-sm text-white/50">{integration.description}</p>
+                        <h3 className="text-lg font-medium text-[var(--text-primary)]">{integration.name}</h3>
+                        <p className="text-sm text-[var(--text-muted)]">{integration.description}</p>
                       </div>
                     </div>
                     <div
@@ -347,29 +347,29 @@ export default function IntegrationsPage() {
                   {integration.status !== "disconnected" && (
                     <div className="grid grid-cols-3 gap-4 mb-4 p-3 bg-white/5 rounded-lg">
                       <div>
-                        <div className="text-xs text-white/40 mb-0.5">Last Sync</div>
-                        <div className="text-sm text-white/70">{integration.lastSync || "Never"}</div>
+                        <div className="text-xs text-[var(--text-muted)] mb-0.5">Last Sync</div>
+                        <div className="text-sm text-[var(--text-secondary)]">{integration.lastSync || "Never"}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-white/40 mb-0.5">Items Indexed</div>
-                        <div className="text-sm text-white/70">
+                        <div className="text-xs text-[var(--text-muted)] mb-0.5">Items Indexed</div>
+                        <div className="text-sm text-[var(--text-secondary)]">
                           {integration.itemsIndexed?.toLocaleString() || "0"}
                         </div>
                       </div>
                       <div>
-                        <div className="text-xs text-white/40 mb-0.5">Sync Frequency</div>
-                        <div className="text-sm text-white/70">{integration.syncFrequency}</div>
+                        <div className="text-xs text-[var(--text-muted)] mb-0.5">Sync Frequency</div>
+                        <div className="text-sm text-[var(--text-secondary)]">{integration.syncFrequency}</div>
                       </div>
                     </div>
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                  <div className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]">
                     <div className="flex items-center gap-2">
                       {integration.status === "connected" && (
                         <button
                           onClick={() => handleSync(integration.id)}
-                          className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-blue-400 transition-colors"
+                          className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--accent-ember)] transition-colors"
                           title="Sync now"
                         >
                           <RefreshCw className="w-4 h-4" />
@@ -377,14 +377,14 @@ export default function IntegrationsPage() {
                       )}
                       <button
                         onClick={() => setShowSettingsModal(integration.id)}
-                        className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white/70 transition-colors"
+                        className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                         title="Settings"
                       >
                         <Settings2 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleOpenDocs(integration.name)}
-                        className="p-2 rounded-lg hover:bg-white/5 text-white/50 hover:text-white/70 transition-colors"
+                        className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
                         title="Documentation"
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -394,7 +394,7 @@ export default function IntegrationsPage() {
                       <button
                         onClick={() => handleConnect(integration.id)}
                         disabled={connectingId === integration.id}
-                        className="px-4 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-sm font-medium transition-colors flex items-center gap-2"
+                        className="px-4 py-1.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:opacity-50 text-[var(--text-primary)] text-sm font-medium transition-colors flex items-center gap-2"
                       >
                         {connectingId === integration.id && <RefreshCw className="w-3 h-3 animate-spin" />}
                         {connectingId === integration.id ? "Connecting..." : "Connect"}
@@ -403,20 +403,20 @@ export default function IntegrationsPage() {
                       <button
                         onClick={() => handleRetry(integration.id)}
                         disabled={connectingId === integration.id}
-                        className="px-4 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 disabled:opacity-50 text-red-400 text-sm font-medium transition-colors flex items-center gap-2"
+                        className="px-4 py-1.5 rounded-lg bg-[var(--error)]/20 hover:bg-[var(--error)]/30 disabled:opacity-50 text-[var(--error)] text-sm font-medium transition-colors flex items-center gap-2"
                       >
                         {connectingId === integration.id && <RefreshCw className="w-3 h-3 animate-spin" />}
                         {connectingId === integration.id ? "Retrying..." : "Retry"}
                       </button>
                     ) : integration.status === "syncing" ? (
-                      <span className="px-4 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 text-sm flex items-center gap-2">
+                      <span className="px-4 py-1.5 rounded-lg bg-[var(--accent-ember)]/10 text-[var(--accent-ember)] text-sm flex items-center gap-2">
                         <RefreshCw className="w-3 h-3 animate-spin" />
                         Syncing...
                       </span>
                     ) : (
                       <button
                         onClick={() => handlePause(integration.id)}
-                        className="px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/60 text-sm transition-colors flex items-center gap-2"
+                        className="px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[var(--text-secondary)] text-sm transition-colors flex items-center gap-2"
                       >
                         <Pause className="w-3 h-3" />
                         Pause
@@ -431,9 +431,9 @@ export default function IntegrationsPage() {
           {/* Empty State */}
           {filteredIntegrations.length === 0 && (
             <div className="text-center py-16">
-              <Plug className="w-16 h-16 text-white/10 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-white/50 mb-2">No integrations found</h3>
-              <p className="text-sm text-white/30">
+              <Plug className="w-16 h-16 text-[var(--text-muted)]/30 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">No integrations found</h3>
+              <p className="text-sm text-[var(--text-muted)]/70">
                 Try adjusting your search or filter criteria
               </p>
             </div>
@@ -444,18 +444,18 @@ export default function IntegrationsPage() {
       {/* Add Integration Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-[600px] max-h-[80vh] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-white/10">
-              <h2 className="text-lg font-medium text-white">Add Integration</h2>
+          <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl w-[600px] max-h-[80vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
+              <h2 className="text-lg font-medium text-[var(--text-primary)]">Add Integration</h2>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="p-2 rounded-lg hover:bg-white/5 text-white/50 transition-colors"
+                className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] transition-colors"
               >
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
             <div className="p-4">
-              <p className="text-sm text-white/50 mb-4">
+              <p className="text-sm text-[var(--text-muted)] mb-4">
                 Select an integration to connect to your dIQ instance.
               </p>
               <div className="grid grid-cols-2 gap-3">
@@ -470,23 +470,23 @@ export default function IntegrationsPage() {
                   <button
                     key={item.name}
                     onClick={() => handleAddIntegration(item.name, item.category)}
-                    className="flex items-center gap-3 p-4 rounded-xl border border-white/10 hover:border-blue-500/30 hover:bg-blue-500/5 transition-colors text-left"
+                    className="flex items-center gap-3 p-4 rounded-xl border border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/30 hover:bg-[var(--accent-ember)]/5 transition-colors text-left"
                   >
                     <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                      <item.icon className="w-5 h-5 text-white/60" />
+                      <item.icon className="w-5 h-5 text-[var(--text-secondary)]" />
                     </div>
                     <div>
-                      <p className="text-white font-medium">{item.name}</p>
-                      <p className="text-xs text-white/40">{item.category}</p>
+                      <p className="text-[var(--text-primary)] font-medium">{item.name}</p>
+                      <p className="text-xs text-[var(--text-muted)]">{item.category}</p>
                     </div>
                   </button>
                 ))}
               </div>
             </div>
-            <div className="flex items-center justify-end gap-3 p-4 border-t border-white/10">
+            <div className="flex items-center justify-end gap-3 p-4 border-t border-[var(--border-subtle)]">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                className="px-4 py-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 transition-colors"
               >
                 Cancel
               </button>
@@ -498,22 +498,22 @@ export default function IntegrationsPage() {
       {/* Settings Modal */}
       {showSettingsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-[500px] overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-white/10">
-              <h2 className="text-lg font-medium text-white">Integration Settings</h2>
+          <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl w-[500px] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
+              <h2 className="text-lg font-medium text-[var(--text-primary)]">Integration Settings</h2>
               <button
                 onClick={() => setShowSettingsModal(null)}
-                className="p-2 rounded-lg hover:bg-white/5 text-white/50 transition-colors"
+                className="p-2 rounded-lg hover:bg-white/5 text-[var(--text-muted)] transition-colors"
               >
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
+                <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
                   Sync Frequency
                 </label>
-                <select className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500/50">
+                <select className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50">
                   <option>Real-time</option>
                   <option>Every 15 minutes</option>
                   <option>Every 30 minutes</option>
@@ -523,12 +523,12 @@ export default function IntegrationsPage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
+                <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
                   Content Types to Index
                 </label>
                 <div className="space-y-2">
                   {["Documents", "Messages", "Comments", "Files"].map((type) => (
-                    <label key={type} className="flex items-center gap-2 text-white/70">
+                    <label key={type} className="flex items-center gap-2 text-[var(--text-secondary)]">
                       <input type="checkbox" defaultChecked className="rounded border-white/30" />
                       {type}
                     </label>
@@ -536,24 +536,24 @@ export default function IntegrationsPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-white/50 uppercase tracking-wider block mb-2">
+                <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
                   Exclude Patterns
                 </label>
                 <input
                   type="text"
                   placeholder="e.g., /private/*, *.log"
-                  className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-white placeholder-white/30 outline-none focus:border-blue-500/50"
+                  className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50"
                 />
               </div>
             </div>
-            <div className="flex items-center justify-between p-4 border-t border-white/10">
+            <div className="flex items-center justify-between p-4 border-t border-[var(--border-subtle)]">
               <button
                 onClick={() => {
                   const integration = integrationList.find((i) => i.id === showSettingsModal);
                   if (integration) handlePause(integration.id);
                   setShowSettingsModal(null);
                 }}
-                className="px-4 py-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors flex items-center gap-2"
+                className="px-4 py-2 rounded-lg text-[var(--error)] hover:bg-[var(--error)]/10 transition-colors flex items-center gap-2"
               >
                 <Trash2 className="w-4 h-4" />
                 Disconnect
@@ -561,13 +561,13 @@ export default function IntegrationsPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowSettingsModal(null)}
-                  className="px-4 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+                  className="px-4 py-2 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => setShowSettingsModal(null)}
-                  className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+                  className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] transition-colors"
                 >
                   Save Changes
                 </button>

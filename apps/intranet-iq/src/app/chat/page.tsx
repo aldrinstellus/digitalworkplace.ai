@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TransparencyPane } from "@/components/chat/TransparencyPane";
 import { ChatSpaces, type ChatSpace } from "@/components/chat/ChatSpaces";
 import { FileUploadModal } from "@/components/chat/FileUploadModal";
 import { SearchScopeToggle, type SearchScope } from "@/components/chat/SearchScopeToggle";
 import { MentionInput } from "@/components/chat/MentionInput";
+import { FadeIn, ScaleOnHover } from "@/lib/motion";
 import {
   Send,
   Sparkles,
@@ -363,25 +365,26 @@ export default function ChatPage() {
   }, [lastUserQuery, isTyping, messages, setMessages, addMessage, responseStyle.id, selectedLLM.id, activeThreadId]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 h-screen flex">
         {/* Chat Area */}
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <div className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-white" />
+          <FadeIn>
+            <div className="border-b border-[var(--border-subtle)] px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center shadow-lg shadow-[var(--accent-ember)]/20">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-medium text-[var(--text-primary)]">AI Assistant</h1>
+                  <p className="text-sm text-[var(--text-muted)]">
+                    Powered by {selectedLLM.name} ({selectedLLM.provider})
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-lg font-medium text-white">AI Assistant</h1>
-                <p className="text-sm text-white/50">
-                  Powered by {selectedLLM.name} ({selectedLLM.provider})
-                </p>
-              </div>
-            </div>
 
             <div className="flex items-center gap-2">
               {/* Search Scope Toggle */}
@@ -392,297 +395,355 @@ export default function ChatPage() {
               />
 
               {/* Show Work Button */}
-              <button
+              <motion.button
                 onClick={() => setShowTransparency(!showTransparency)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
                   showTransparency
-                    ? "bg-blue-500/20 text-blue-400 border-blue-500/30"
-                    : "bg-white/5 hover:bg-white/10 text-white/70"
+                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] border-[var(--accent-ember)]/30"
+                    : "bg-[var(--bg-slate)] hover:bg-[var(--bg-slate)]/80 text-[var(--text-secondary)] border-[var(--border-subtle)]"
                 }`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Eye className="w-4 h-4" />
                 Show work
-              </button>
+              </motion.button>
 
               {/* LLM Selector */}
               <div className="relative">
-                <button
+                <motion.button
                   onClick={() => setShowSettings(!showSettings)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm text-white/70 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg-slate)] hover:bg-[var(--bg-slate)]/80 border border-[var(--border-subtle)] text-sm text-[var(--text-secondary)] transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <Settings2 className="w-4 h-4" />
                   Settings
                   <ChevronDown className="w-4 h-4" />
-                </button>
+                </motion.button>
 
-                {showSettings && (
-                  <div className="absolute right-0 top-12 w-72 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 p-4">
-                    <div className="mb-4">
-                      <label className="text-xs text-white/50 uppercase tracking-wider">
-                        Model
-                      </label>
-                      <div className="mt-2 space-y-1">
-                        {llmOptions.map((llm) => (
-                          <button
-                            key={llm.id}
-                            onClick={() => setSelectedLLM(llm)}
-                            className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
-                              selectedLLM.id === llm.id
-                                ? "bg-blue-500/20 text-blue-400"
-                                : "text-white/70 hover:bg-white/5"
-                            }`}
-                          >
-                            <span>{llm.name}</span>
-                            <span className="text-xs text-white/40">{llm.provider}</span>
-                          </button>
-                        ))}
+                <AnimatePresence>
+                  {showSettings && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute right-0 top-12 w-72 bg-[var(--bg-charcoal)] border border-[var(--border-default)] rounded-xl shadow-xl z-50 p-4"
+                    >
+                      <div className="mb-4">
+                        <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+                          Model
+                        </label>
+                        <div className="mt-2 space-y-1">
+                          {llmOptions.map((llm) => (
+                            <button
+                              key={llm.id}
+                              onClick={() => setSelectedLLM(llm)}
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
+                                selectedLLM.id === llm.id
+                                  ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                  : "text-[var(--text-secondary)] hover:bg-[var(--bg-slate)]"
+                              }`}
+                            >
+                              <span>{llm.name}</span>
+                              <span className="text-xs text-[var(--text-muted)]">{llm.provider}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <label className="text-xs text-white/50 uppercase tracking-wider">
-                        Response Style
-                      </label>
-                      <div className="mt-2 space-y-1">
-                        {responseStyles.map((style) => (
-                          <button
-                            key={style.id}
-                            onClick={() => setResponseStyle(style)}
-                            className={`w-full flex flex-col items-start px-3 py-2 rounded-lg text-sm transition-colors ${
-                              responseStyle.id === style.id
-                                ? "bg-blue-500/20 text-blue-400"
-                                : "text-white/70 hover:bg-white/5"
-                            }`}
-                          >
-                            <span>{style.name}</span>
-                            <span className="text-xs text-white/40">{style.description}</span>
-                          </button>
-                        ))}
+                      <div>
+                        <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider">
+                          Response Style
+                        </label>
+                        <div className="mt-2 space-y-1">
+                          {responseStyles.map((style) => (
+                            <button
+                              key={style.id}
+                              onClick={() => setResponseStyle(style)}
+                              className={`w-full flex flex-col items-start px-3 py-2 rounded-lg text-sm transition-colors ${
+                                responseStyle.id === style.id
+                                  ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                  : "text-[var(--text-secondary)] hover:bg-[var(--bg-slate)]"
+                              }`}
+                            >
+                              <span>{style.name}</span>
+                              <span className="text-xs text-[var(--text-muted)]">{style.description}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              <button className="p-2 rounded-lg hover:bg-white/5 text-white/60 transition-colors">
+              <motion.button
+                className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <Clock className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
           </div>
+          </FadeIn>
 
           {/* Transparency Pane */}
-          {showTransparency && (
-            <div className="border-b border-white/10">
-              <TransparencyPane
-                sources={transparencyData.sources}
-                steps={transparencyData.steps}
-                isProcessing={transparencyData.isProcessing}
-                totalTokens={transparencyData.totalTokens}
-                responseTime={transparencyData.responseTime}
-              />
-            </div>
-          )}
+          <AnimatePresence>
+            {showTransparency && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="border-b border-[var(--border-subtle)] overflow-hidden"
+              >
+                <TransparencyPane
+                  sources={transparencyData.sources}
+                  steps={transparencyData.steps}
+                  isProcessing={transparencyData.isProcessing}
+                  totalTokens={transparencyData.totalTokens}
+                  responseTime={transparencyData.responseTime}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
             {messagesLoading ? (
               <div className="flex justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--accent-ember)]" />
               </div>
             ) : messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center">
-                <Bot className="w-16 h-16 text-white/10 mb-4" />
-                <h3 className="text-lg font-medium text-white/50 mb-2">Start a conversation</h3>
-                <p className="text-sm text-white/30 max-w-md">
+              <FadeIn className="flex flex-col items-center justify-center h-full text-center">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-[var(--accent-copper)]/10 flex items-center justify-center mb-4">
+                  <Bot className="w-8 h-8 text-[var(--accent-ember)]" />
+                </div>
+                <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">Start a conversation</h3>
+                <p className="text-sm text-[var(--text-muted)]/70 max-w-md">
                   Ask questions about your organization, search knowledge bases, or get help with tasks.
                 </p>
-              </div>
+              </FadeIn>
             ) : (
-              messages.map((message: ChatMessage) => (
-                <div
-                  key={message.id}
-                  className={`flex gap-4 ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  {message.role === "assistant" && (
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-4 h-4 text-white" />
-                    </div>
-                  )}
-
-                  <div
-                    className={`max-w-2xl ${
-                      message.role === "user"
-                        ? "bg-blue-500/20 border border-blue-500/30"
-                        : "bg-[#0f0f14] border border-white/10"
-                    } rounded-2xl px-4 py-3`}
+              <AnimatePresence mode="popLayout">
+                {messages.map((message: ChatMessage, index: number) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ delay: index * 0.05, type: "spring", stiffness: 300, damping: 25 }}
+                    className={`flex gap-4 ${
+                      message.role === "user" ? "justify-end" : "justify-start"
+                    }`}
                   >
-                    <div className="text-white/90 whitespace-pre-wrap text-sm leading-relaxed">
-                      {message.content}
-                    </div>
-
-                    {/* Sources & Confidence */}
-                    {message.role === "assistant" && message.sources && message.sources.length > 0 && (
-                      <div className="mt-3 pt-3 border-t border-white/10">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs text-white/40">Sources</span>
-                          {message.confidence && (
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
-                              {message.confidence}% confidence
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {message.sources.map((source: any, idx: number) => (
-                            <a
-                              key={idx}
-                              href={source.url || "#"}
-                              className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 text-xs text-blue-400 transition-colors"
-                            >
-                              <FileText className="w-3 h-3" />
-                              {source.title}
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Actions */}
                     {message.role === "assistant" && (
-                      <div className="mt-3 flex items-center gap-2">
-                        <button
-                          onClick={() => navigator.clipboard.writeText(message.content)}
-                          className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors"
-                          title="Copy response"
-                        >
-                          <Copy className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleRegenerate(message.id)}
-                          disabled={isTyping}
-                          className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          title="Regenerate response"
-                        >
-                          <RefreshCw className={`w-4 h-4 ${isTyping ? "animate-spin" : ""}`} />
-                        </button>
-                        <div className="flex items-center gap-1 ml-2">
-                          <button className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-green-400 transition-colors">
-                            <ThumbsUp className="w-4 h-4" />
-                          </button>
-                          <button className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors">
-                            <ThumbsDown className="w-4 h-4" />
-                          </button>
-                        </div>
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[var(--accent-ember)]/20">
+                        <Bot className="w-4 h-4 text-white" />
                       </div>
                     )}
 
-                    <div className="mt-2 text-xs text-white/30">
-                      {new Date(message.created_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                  </div>
+                    <div
+                      className={`max-w-2xl ${
+                        message.role === "user"
+                          ? "bg-[var(--accent-ember)]/15 border border-[var(--accent-ember)]/30"
+                          : "bg-[var(--bg-charcoal)] border border-[var(--border-subtle)]"
+                      } rounded-2xl px-4 py-3`}
+                    >
+                      <div className="text-[var(--text-primary)]/90 whitespace-pre-wrap text-sm leading-relaxed">
+                        {message.content}
+                      </div>
 
-                  {message.role === "user" && (
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4 text-white/70" />
+                      {/* Sources & Confidence */}
+                      {message.role === "assistant" && message.sources && message.sources.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-[var(--text-muted)]">Sources</span>
+                            {message.confidence && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--success)]/20 text-[var(--success)]">
+                                {message.confidence}% confidence
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {message.sources.map((source: any, idx: number) => (
+                              <a
+                                key={idx}
+                                href={source.url || "#"}
+                                className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--bg-slate)] hover:bg-[var(--bg-slate)]/80 text-xs text-[var(--accent-ember)] transition-colors"
+                              >
+                                <FileText className="w-3 h-3" />
+                                {source.title}
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Actions */}
+                      {message.role === "assistant" && (
+                        <div className="mt-3 flex items-center gap-2">
+                          <motion.button
+                            onClick={() => navigator.clipboard.writeText(message.content)}
+                            className="p-1.5 rounded hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                            title="Copy response"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <Copy className="w-4 h-4" />
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleRegenerate(message.id)}
+                            disabled={isTyping}
+                            className="p-1.5 rounded hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--accent-ember)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            title="Regenerate response"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <RefreshCw className={`w-4 h-4 ${isTyping ? "animate-spin" : ""}`} />
+                          </motion.button>
+                          <div className="flex items-center gap-1 ml-2">
+                            <motion.button
+                              className="p-1.5 rounded hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--success)] transition-colors"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <ThumbsUp className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              className="p-1.5 rounded hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--error)] transition-colors"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <ThumbsDown className="w-4 h-4" />
+                            </motion.button>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-2 text-xs text-[var(--text-muted)]">
+                        {new Date(message.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))
+
+                    {message.role === "user" && (
+                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center flex-shrink-0">
+                        <User className="w-4 h-4 text-[var(--text-secondary)]" />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             )}
 
             {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-                <div className="bg-[#0f0f14] border border-white/10 rounded-2xl px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" />
-                      <span
-                        className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.1s" }}
-                      />
-                      <span
-                        className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
-                        style={{ animationDelay: "0.2s" }}
-                      />
-                    </div>
-                    <span className="text-sm text-white/50">Thinking...</span>
+            <AnimatePresence>
+              {isTyping && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex gap-4"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center flex-shrink-0 shadow-lg shadow-[var(--accent-ember)]/20">
+                    <Bot className="w-4 h-4 text-white" />
                   </div>
-                </div>
-              </div>
-            )}
+                  <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        <span className="w-2 h-2 bg-[var(--accent-ember)] rounded-full animate-bounce" />
+                        <span
+                          className="w-2 h-2 bg-[var(--accent-ember)] rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        />
+                        <span
+                          className="w-2 h-2 bg-[var(--accent-ember)] rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        />
+                      </div>
+                      <span className="text-sm text-[var(--text-muted)]">Thinking...</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-white/10 px-6 py-4">
-            <div className="max-w-4xl mx-auto">
-              <div className="bg-[#0f0f14] border border-white/10 rounded-2xl p-3 focus-within:border-blue-500/50 transition-colors">
-                <div className="flex items-end gap-3">
-                  <div className="flex-1">
-                    <MentionInput
-                      value={input}
-                      onChange={setInput}
-                      onSend={handleSend}
-                      placeholder="Ask anything about your organization... Use @ to mention people or docs"
-                    />
-                  </div>
+          <FadeIn delay={0.2}>
+            <div className="border-t border-[var(--border-subtle)] px-6 py-4">
+              <div className="max-w-4xl mx-auto">
+                <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl p-3 focus-within:border-[var(--accent-ember)]/50 focus-within:shadow-lg focus-within:shadow-[var(--accent-ember)]/5 transition-all">
+                  <div className="flex items-end gap-3">
+                    <div className="flex-1">
+                      <MentionInput
+                        value={input}
+                        onChange={setInput}
+                        onSend={handleSend}
+                        placeholder="Ask anything about your organization... Use @ to mention people or docs"
+                      />
+                    </div>
 
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setShowFileUpload(true)}
-                      className="p-2 rounded-lg hover:bg-white/5 text-white/40 hover:text-white/70 transition-colors"
-                    >
-                      <Paperclip className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={toggleVoiceInput}
-                      disabled={!voiceSupported}
-                      className={`p-2 rounded-lg transition-colors ${
-                        isListening
-                          ? "bg-red-500/20 text-red-400 hover:bg-red-500/30"
-                          : "hover:bg-white/5 text-white/40 hover:text-white/70"
-                      } ${!voiceSupported ? "opacity-50 cursor-not-allowed" : ""}`}
-                      title={voiceSupported ? (isListening ? "Stop listening" : "Start voice input") : "Voice input not supported"}
-                    >
-                      <Mic className={`w-5 h-5 ${isListening ? "animate-pulse" : ""}`} />
-                    </button>
-                    <button
-                      onClick={handleSend}
-                      disabled={!input.trim()}
-                      className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-50 disabled:hover:bg-blue-500 text-white transition-colors"
-                    >
-                      <Send className="w-5 h-5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        onClick={() => setShowFileUpload(true)}
+                        className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <Paperclip className="w-5 h-5" />
+                      </motion.button>
+                      <motion.button
+                        onClick={toggleVoiceInput}
+                        disabled={!voiceSupported}
+                        className={`p-2 rounded-lg transition-colors ${
+                          isListening
+                            ? "bg-[var(--error)]/20 text-[var(--error)] hover:bg-[var(--error)]/30"
+                            : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                        } ${!voiceSupported ? "opacity-50 cursor-not-allowed" : ""}`}
+                        title={voiceSupported ? (isListening ? "Stop listening" : "Start voice input") : "Voice input not supported"}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <Mic className={`w-5 h-5 ${isListening ? "animate-pulse" : ""}`} />
+                      </motion.button>
+                      <motion.button
+                        onClick={handleSend}
+                        disabled={!input.trim()}
+                        className="p-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:opacity-50 disabled:hover:bg-[var(--accent-ember)] text-white transition-colors shadow-lg shadow-[var(--accent-ember)]/20"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <Send className="w-5 h-5" />
+                      </motion.button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="mt-2 flex items-center justify-between text-xs text-white/30">
-                <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
-                    Grounded in your knowledge base
-                  </span>
-                  <span>Press Enter to send, Shift+Enter for new line</span>
+                <div className="mt-2 flex items-center justify-between text-xs text-[var(--text-muted)]">
+                  <div className="flex items-center gap-4">
+                    <span className="flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-[var(--accent-gold)]" />
+                      Grounded in your knowledge base
+                    </span>
+                    <span>Press Enter to send, Shift+Enter for new line</span>
+                  </div>
+                  <span className="text-[var(--accent-ember)]">{selectedLLM.name}</span>
                 </div>
-                <span>{selectedLLM.name}</span>
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
 
         {/* Right Panel - Chat History & Spaces */}
-        <div className="w-72 border-l border-white/10 bg-[#0f0f14] p-4 hidden lg:flex flex-col">
+        <FadeIn delay={0.1} className="w-72 border-l border-[var(--border-subtle)] bg-[var(--bg-charcoal)] p-4 hidden lg:flex flex-col">
           {/* Spaces Section */}
           <ChatSpaces
             spaces={spaces}
@@ -700,55 +761,61 @@ export default function ChatPage() {
           />
 
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-white">Chat History</h3>
-            <button
+            <h3 className="text-sm font-medium text-[var(--text-primary)]">Chat History</h3>
+            <motion.button
               onClick={handleNewChat}
-              className="p-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+              className="p-1.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white transition-colors shadow-md shadow-[var(--accent-ember)]/20"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               <Plus className="w-4 h-4" />
-            </button>
+            </motion.button>
           </div>
 
           {threadsLoading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="h-10 bg-white/5 rounded-lg" />
+                  <div className="h-10 bg-[var(--bg-slate)] rounded-lg" />
                 </div>
               ))}
             </div>
           ) : threads.length > 0 ? (
             <div className="space-y-2 flex-1 overflow-y-auto">
-              {threads.map((thread: ChatThread) => (
-                <button
+              {threads.map((thread: ChatThread, index: number) => (
+                <motion.button
                   key={thread.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
                   onClick={() => setActiveThreadId(thread.id)}
                   className={`w-full text-left px-3 py-2 rounded-lg transition-colors group ${
                     activeThreadId === thread.id
-                      ? "bg-blue-500/20 text-blue-400"
-                      : "hover:bg-white/5 text-white/60"
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                      : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)]"
                   }`}
+                  whileHover={{ x: 4 }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="text-sm truncate flex-1">
                       {thread.title || "New conversation"}
                     </div>
-                    <Trash2 className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 hover:opacity-100 transition-opacity" />
+                    <Trash2 className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 hover:opacity-100 hover:text-[var(--error)] transition-all" />
                   </div>
-                  <div className="text-xs text-white/40 mt-0.5">
+                  <div className="text-xs text-[var(--text-muted)] mt-0.5">
                     {new Date(thread.updated_at).toLocaleDateString()}
                   </div>
-                </button>
+                </motion.button>
               ))}
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <p className="text-sm text-white/40 text-center">
+              <p className="text-sm text-[var(--text-muted)] text-center">
                 No chat history yet.<br />Start a new conversation!
               </p>
             </div>
           )}
-        </div>
+        </FadeIn>
       </main>
 
       {/* File Upload Modal */}

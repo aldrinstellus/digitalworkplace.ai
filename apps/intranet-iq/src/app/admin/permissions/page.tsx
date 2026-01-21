@@ -163,7 +163,7 @@ export default function PermissionsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       <main className="ml-16 p-8">
@@ -171,11 +171,11 @@ export default function PermissionsPage() {
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-medium text-white flex items-center gap-3">
-                <Shield className="w-7 h-7 text-blue-400" />
+              <h1 className="text-2xl font-medium text-[var(--text-primary)] flex items-center gap-3">
+                <Shield className="w-7 h-7 text-[var(--accent-ember)]" />
                 Permissions & Access Control
               </h1>
-              <p className="text-white/50 mt-1">Manage roles, permissions, and user access</p>
+              <p className="text-[var(--text-muted)] mt-1">Manage roles, permissions, and user access</p>
             </div>
           </div>
 
@@ -185,8 +185,8 @@ export default function PermissionsPage() {
               onClick={() => setActiveTab("roles")}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                 activeTab === "roles"
-                  ? "bg-blue-500 text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
+                  ? "bg-[var(--accent-ember)] text-[var(--text-primary)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5"
               }`}
             >
               <Shield className="w-4 h-4" />
@@ -196,8 +196,8 @@ export default function PermissionsPage() {
               onClick={() => setActiveTab("users")}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                 activeTab === "users"
-                  ? "bg-blue-500 text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
+                  ? "bg-[var(--accent-ember)] text-[var(--text-primary)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5"
               }`}
             >
               <Users className="w-4 h-4" />
@@ -209,12 +209,12 @@ export default function PermissionsPage() {
             <div className="flex gap-6">
               {/* Roles List */}
               <div className="w-80 flex-shrink-0">
-                <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4">
+                <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-medium text-white">Roles</h3>
+                    <h3 className="text-sm font-medium text-[var(--text-primary)]">Roles</h3>
                     <button
                       onClick={() => setShowCreateRole(true)}
-                      className="p-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition-colors"
+                      className="p-1.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] transition-colors"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -226,18 +226,18 @@ export default function PermissionsPage() {
                         onClick={() => setSelectedRole(role)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           selectedRole?.id === role.id
-                            ? "bg-blue-500/20 border border-blue-500/30"
+                            ? "bg-[var(--accent-ember)]/20 border border-[var(--accent-ember)]/30"
                             : "hover:bg-white/5 border border-transparent"
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-white font-medium text-sm">{role.name}</span>
+                          <span className="text-[var(--text-primary)] font-medium text-sm">{role.name}</span>
                           {role.isSystem && (
-                            <Lock className="w-3 h-3 text-white/40" />
+                            <Lock className="w-3 h-3 text-[var(--text-muted)]" />
                           )}
                         </div>
-                        <p className="text-xs text-white/50 mb-2">{role.description}</p>
-                        <div className="flex items-center gap-2 text-xs text-white/40">
+                        <p className="text-xs text-[var(--text-muted)] mb-2">{role.description}</p>
+                        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
                           <Users className="w-3 h-3" />
                           {role.userCount} users
                         </div>
@@ -250,26 +250,26 @@ export default function PermissionsPage() {
               {/* Permissions Editor */}
               <div className="flex-1">
                 {selectedRole && (
-                  <div className="bg-[#0f0f14] border border-white/10 rounded-xl">
-                    <div className="p-6 border-b border-white/10">
+                  <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl">
+                    <div className="p-6 border-b border-[var(--border-subtle)]">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h2 className="text-xl font-medium text-white flex items-center gap-2">
+                          <h2 className="text-xl font-medium text-[var(--text-primary)] flex items-center gap-2">
                             {selectedRole.name}
                             {selectedRole.isSystem && (
-                              <span className="px-2 py-0.5 rounded text-xs bg-white/10 text-white/50">System</span>
+                              <span className="px-2 py-0.5 rounded text-xs bg-white/10 text-[var(--text-muted)]">System</span>
                             )}
                           </h2>
-                          <p className="text-sm text-white/50 mt-1">{selectedRole.description}</p>
+                          <p className="text-sm text-[var(--text-muted)] mt-1">{selectedRole.description}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           {!selectedRole.isSystem && (
                             <>
-                              <button className="px-4 py-2 rounded-lg border border-white/10 hover:bg-white/5 text-white flex items-center gap-2 transition-colors">
+                              <button className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] hover:bg-white/5 text-[var(--text-primary)] flex items-center gap-2 transition-colors">
                                 <Edit className="w-4 h-4" />
                                 Edit
                               </button>
-                              <button className="px-4 py-2 rounded-lg border border-red-500/30 hover:bg-red-500/10 text-red-400 flex items-center gap-2 transition-colors">
+                              <button className="px-4 py-2 rounded-lg border border-[var(--error)]/30 hover:bg-[var(--error)]/10 text-[var(--error)] flex items-center gap-2 transition-colors">
                                 <Trash2 className="w-4 h-4" />
                                 Delete
                               </button>
@@ -280,7 +280,7 @@ export default function PermissionsPage() {
                     </div>
 
                     <div className="p-6">
-                      <h3 className="text-sm font-medium text-white/70 uppercase tracking-wider mb-4">
+                      <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
                         Permissions
                       </h3>
                       <div className="space-y-4">
@@ -290,41 +290,41 @@ export default function PermissionsPage() {
                           const enabledCount = category.permissions.filter(p => hasPermission(p.id)).length;
 
                           return (
-                            <div key={category.name} className="border border-white/10 rounded-xl overflow-hidden">
+                            <div key={category.name} className="border border-[var(--border-subtle)] rounded-xl overflow-hidden">
                               <button
                                 onClick={() => toggleCategory(category.name)}
                                 className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
                               >
                                 <div className="flex items-center gap-3">
-                                  <CategoryIcon className="w-5 h-5 text-white/60" />
-                                  <span className="text-white font-medium">{category.name}</span>
-                                  <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-white/50">
+                                  <CategoryIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                                  <span className="text-[var(--text-primary)] font-medium">{category.name}</span>
+                                  <span className="px-2 py-0.5 rounded-full text-xs bg-white/10 text-[var(--text-muted)]">
                                     {enabledCount}/{category.permissions.length}
                                   </span>
                                 </div>
                                 {isExpanded ? (
-                                  <ChevronDown className="w-4 h-4 text-white/40" />
+                                  <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />
                                 ) : (
-                                  <ChevronRight className="w-4 h-4 text-white/40" />
+                                  <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
                                 )}
                               </button>
 
                               {isExpanded && (
-                                <div className="border-t border-white/10 p-4 space-y-3">
+                                <div className="border-t border-[var(--border-subtle)] p-4 space-y-3">
                                   {category.permissions.map((permission) => (
                                     <div
                                       key={permission.id}
                                       className="flex items-center justify-between"
                                     >
                                       <div>
-                                        <div className="text-sm text-white">{permission.name}</div>
-                                        <div className="text-xs text-white/40">{permission.description}</div>
+                                        <div className="text-sm text-[var(--text-primary)]">{permission.name}</div>
+                                        <div className="text-xs text-[var(--text-muted)]">{permission.description}</div>
                                       </div>
                                       <button
                                         disabled={selectedRole.isSystem}
                                         className={`w-10 h-6 rounded-full transition-colors ${
                                           hasPermission(permission.id)
-                                            ? "bg-blue-500"
+                                            ? "bg-[var(--accent-ember)]"
                                             : "bg-white/20"
                                         } ${selectedRole.isSystem ? "opacity-50 cursor-not-allowed" : ""}`}
                                       >
@@ -350,20 +350,20 @@ export default function PermissionsPage() {
           )}
 
           {activeTab === "users" && (
-            <div className="bg-[#0f0f14] border border-white/10 rounded-xl">
-              <div className="p-6 border-b border-white/10">
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl">
+              <div className="p-6 border-b border-[var(--border-subtle)]">
                 <div className="flex items-center justify-between">
                   <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search users..."
-                      className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-white/40 outline-none focus:border-blue-500/50 transition-colors"
+                      className="w-full bg-white/5 border border-[var(--border-subtle)] rounded-lg pl-10 pr-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
                     />
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2 transition-colors">
+                  <button className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] flex items-center gap-2 transition-colors">
                     <UserPlus className="w-4 h-4" />
                     Add User
                   </button>
@@ -373,7 +373,7 @@ export default function PermissionsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-left text-sm text-white/50 border-b border-white/10">
+                    <tr className="text-left text-sm text-[var(--text-muted)] border-b border-[var(--border-subtle)]">
                       <th className="px-6 py-3 font-medium">User</th>
                       <th className="px-6 py-3 font-medium">Role</th>
                       <th className="px-6 py-3 font-medium">Department</th>
@@ -383,20 +383,20 @@ export default function PermissionsPage() {
                   </thead>
                   <tbody>
                     {filteredUsers.map((user) => (
-                      <tr key={user.id} className="border-b border-white/5 hover:bg-white/5">
+                      <tr key={user.id} className="border-b border-[var(--border-subtle)]/50 hover:bg-white/5">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-medium">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-[var(--text-primary)] font-medium">
                               {user.name.charAt(0)}
                             </div>
                             <div>
-                              <div className="text-white font-medium">{user.name}</div>
-                              <div className="text-xs text-white/40">{user.email}</div>
+                              <div className="text-[var(--text-primary)] font-medium">{user.name}</div>
+                              <div className="text-xs text-[var(--text-muted)]">{user.email}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white outline-none focus:border-blue-500/50">
+                          <select className="bg-white/5 border border-[var(--border-subtle)] rounded-lg px-3 py-1.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50">
                             {mockRoles.map((role) => (
                               <option key={role.id} value={role.id} selected={role.name === user.role}>
                                 {role.name}
@@ -404,17 +404,17 @@ export default function PermissionsPage() {
                             ))}
                           </select>
                         </td>
-                        <td className="px-6 py-4 text-white/70">{user.department}</td>
-                        <td className="px-6 py-4 text-white/50 text-sm">{user.lastActive}</td>
+                        <td className="px-6 py-4 text-[var(--text-secondary)]">{user.department}</td>
+                        <td className="px-6 py-4 text-[var(--text-muted)] text-sm">{user.lastActive}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-1">
-                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors">
+                            <button className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                               <Eye className="w-4 h-4" />
                             </button>
-                            <button className="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/70 transition-colors">
+                            <button className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                               <Edit className="w-4 h-4" />
                             </button>
-                            <button className="p-2 rounded-lg hover:bg-red-500/20 text-white/40 hover:text-red-400 transition-colors">
+                            <button className="p-2 rounded-lg hover:bg-[var(--error)]/20 text-[var(--text-muted)] hover:text-[var(--error)] transition-colors">
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
@@ -426,21 +426,21 @@ export default function PermissionsPage() {
               </div>
 
               {/* Pagination */}
-              <div className="p-4 border-t border-white/10 flex items-center justify-between">
-                <span className="text-sm text-white/50">
+              <div className="p-4 border-t border-[var(--border-subtle)] flex items-center justify-between">
+                <span className="text-sm text-[var(--text-muted)]">
                   Showing {filteredUsers.length} of {mockUsers.length} users
                 </span>
                 <div className="flex items-center gap-2">
-                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 hover:text-white hover:bg-white/5 text-sm transition-colors">
+                  <button className="px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5 text-sm transition-colors">
                     Previous
                   </button>
-                  <button className="px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-400 text-sm">
+                  <button className="px-3 py-1.5 rounded-lg bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] text-sm">
                     1
                   </button>
-                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 hover:text-white hover:bg-white/5 text-sm transition-colors">
+                  <button className="px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5 text-sm transition-colors">
                     2
                   </button>
-                  <button className="px-3 py-1.5 rounded-lg border border-white/10 text-white/50 hover:text-white hover:bg-white/5 text-sm transition-colors">
+                  <button className="px-3 py-1.5 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5 text-sm transition-colors">
                     Next
                   </button>
                 </div>

@@ -3,6 +3,7 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import {
   playChatBubbleSound,
   playDataPacketSound,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/sounds";
 
 // Pre-generate random particle data to avoid Math.random during render
+// PERFORMANCE: Reduced initial particle count, more added after LCP
 const generateBackgroundParticles = (count: number) => {
   return Array.from({ length: count }, (_, i) => {
     const depth = i % 3;
@@ -28,35 +30,40 @@ const generateBackgroundParticles = (count: number) => {
   });
 };
 
-const BACKGROUND_PARTICLES = generateBackgroundParticles(40);
+// PERFORMANCE: Start with fewer particles, add more after paint
+const INITIAL_PARTICLES = generateBackgroundParticles(20);
 
 // 24 unique avatar photos - diverse professional headshots
+// PERFORMANCE: Using smaller images (80x80) for faster loading
 const uniqueAvatars = [
-  { id: 1, src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face", name: "Sarah" },
-  { id: 2, src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face", name: "Marcus" },
-  { id: 3, src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", name: "Emily" },
-  { id: 4, src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face", name: "David" },
-  { id: 5, src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face", name: "Sophia" },
-  { id: 6, src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face", name: "James" },
-  { id: 7, src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face", name: "Olivia" },
-  { id: 8, src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face", name: "Michael" },
-  { id: 9, src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face", name: "Ava" },
-  { id: 10, src: "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=150&h=150&fit=crop&crop=face", name: "Robert" },
-  { id: 11, src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&h=150&fit=crop&crop=face", name: "Isabella" },
-  { id: 12, src: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=150&h=150&fit=crop&crop=face", name: "Daniel" },
-  { id: 13, src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face", name: "Luna" },
-  { id: 14, src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&h=150&fit=crop&crop=face", name: "Nathan" },
-  { id: 15, src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face", name: "Grace" },
-  { id: 16, src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face", name: "William" },
-  { id: 17, src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&h=150&fit=crop&crop=face", name: "Chloe" },
-  { id: 18, src: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&h=150&fit=crop&crop=face", name: "Ethan" },
-  { id: 19, src: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=150&h=150&fit=crop&crop=face", name: "Maya" },
-  { id: 20, src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=150&h=150&fit=crop&crop=face", name: "Lucas" },
-  { id: 21, src: "https://images.unsplash.com/photo-1548142813-c348350df52b?w=150&h=150&fit=crop&crop=face", name: "Zoe" },
-  { id: 22, src: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face", name: "Oliver" },
-  { id: 23, src: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face", name: "Emma" },
-  { id: 24, src: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=150&h=150&fit=crop&crop=face", name: "Liam" },
+  { id: 1, src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=75", name: "Sarah" },
+  { id: 2, src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=75", name: "Marcus" },
+  { id: 3, src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=75", name: "Emily" },
+  { id: 4, src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face&q=75", name: "David" },
+  { id: 5, src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face&q=75", name: "Sophia" },
+  { id: 6, src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face&q=75", name: "James" },
+  { id: 7, src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&h=80&fit=crop&crop=face&q=75", name: "Olivia" },
+  { id: 8, src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face&q=75", name: "Michael" },
+  { id: 9, src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=75", name: "Ava" },
+  { id: 10, src: "https://images.unsplash.com/photo-1552058544-f2b08422138a?w=80&h=80&fit=crop&crop=face&q=75", name: "Robert" },
+  { id: 11, src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face&q=75", name: "Isabella" },
+  { id: 12, src: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=80&h=80&fit=crop&crop=face&q=75", name: "Daniel" },
+  { id: 13, src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face&q=75", name: "Luna" },
+  { id: 14, src: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop&crop=face&q=75", name: "Nathan" },
+  { id: 15, src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face&q=75", name: "Grace" },
+  { id: 16, src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face&q=75", name: "William" },
+  { id: 17, src: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&h=80&fit=crop&crop=face&q=75", name: "Chloe" },
+  { id: 18, src: "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=80&h=80&fit=crop&crop=face&q=75", name: "Ethan" },
+  { id: 19, src: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=80&h=80&fit=crop&crop=face&q=75", name: "Maya" },
+  { id: 20, src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=80&h=80&fit=crop&crop=face&q=75", name: "Lucas" },
+  { id: 21, src: "https://images.unsplash.com/photo-1548142813-c348350df52b?w=80&h=80&fit=crop&crop=face&q=75", name: "Zoe" },
+  { id: 22, src: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=80&h=80&fit=crop&crop=face&q=75", name: "Oliver" },
+  { id: 23, src: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=80&h=80&fit=crop&crop=face&q=75", name: "Emma" },
+  { id: 24, src: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=80&h=80&fit=crop&crop=face&q=75", name: "Liam" },
 ];
+
+// PERFORMANCE: Placeholder blur data URL for avatars (tiny gray circle)
+const avatarBlurDataURL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect fill='%231a1a2e' width='80' height='80' rx='8'/%3E%3C/svg%3E";
 
 // Expanded chat messages for lots of real-time communication
 const chatMessages = [
@@ -167,6 +174,31 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
   const focusTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  // PERFORMANCE: Track when LCP has occurred to defer non-critical animations
+  const [isLCPComplete, setIsLCPComplete] = useState(false);
+  const [particles, setParticles] = useState(INITIAL_PARTICLES);
+  const [animationsEnabled, setAnimationsEnabled] = useState(false);
+
+  // PERFORMANCE: Defer animations and add more particles after LCP
+  useEffect(() => {
+    // Mark LCP as complete after a short delay to allow initial paint
+    const lcpTimer = setTimeout(() => {
+      setIsLCPComplete(true);
+      // Add remaining particles after LCP
+      setParticles(generateBackgroundParticles(40));
+    }, 100);
+
+    // Enable complex animations after paint
+    const animTimer = setTimeout(() => {
+      setAnimationsEnabled(true);
+    }, 300);
+
+    return () => {
+      clearTimeout(lcpTimer);
+      clearTimeout(animTimer);
+    };
+  }, []);
+
   // Detect mobile screen size
   useEffect(() => {
     const checkMobile = () => {
@@ -244,7 +276,10 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
   }, [enableSound]);
 
   // GSAP floating animation for each avatar with 3D depth
+  // PERFORMANCE: Only start after animations are enabled (post-LCP)
   useEffect(() => {
+    if (!animationsEnabled) return;
+
     avatarRefs.current.forEach((avatarEl, index) => {
       if (!avatarEl) return;
 
@@ -301,10 +336,13 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
     return () => {
       animations.forEach((anim) => anim.kill());
     };
-  }, []);
+  }, [animationsEnabled]);
 
   // Random chat bubbles appearing - reduced by 40% from original speed
+  // PERFORMANCE: Only start after animations are enabled (post-LCP)
   useEffect(() => {
+    if (!animationsEnabled) return;
+
     const showRandomBubble = () => {
       // ALL avatars can have messages - pick any random avatar
       const randomAvatarIndex = Math.floor(Math.random() * uniqueAvatars.length);
@@ -337,7 +375,7 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
     const interval = setInterval(showRandomBubble, 210 + Math.random() * 190);
 
     return () => clearInterval(interval);
-  }, [enableSound]);
+  }, [enableSound, animationsEnabled]);
 
   return (
     <div
@@ -540,8 +578,8 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
         style={{ zIndex: 1 }}
       />
 
-      {/* Floating particles - MORE particles - low z-index */}
-      {BACKGROUND_PARTICLES.map((particle, i) => (
+      {/* Floating particles - dynamically loaded for performance */}
+      {particles.map((particle, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute rounded-full pointer-events-none"
@@ -734,11 +772,15 @@ const LoginBackground: FC<LoginBackgroundProps> = ({ className = "", enableSound
                         : "1px solid rgba(255,255,255,0.05)",
                   }}
                 >
+                  {/* PERFORMANCE: Priority loading for first 6 avatars, lazy for rest */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={avatar.src}
                     alt={avatar.name}
                     className="w-full h-full object-cover"
-                    loading="lazy"
+                    loading={index < 6 ? "eager" : "lazy"}
+                    decoding="async"
+                    fetchPriority={index < 6 ? "high" : "low"}
                   />
                 </motion.div>
 

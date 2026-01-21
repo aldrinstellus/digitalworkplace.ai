@@ -11,10 +11,21 @@ import {
 import type { SemanticSearchResult, HybridSearchResult } from '@/lib/database.types';
 
 /**
- * Generate embedding for search query using local model
+ * Generate embedding for search query using OpenAI
+ * Returns null if embedding cannot be generated (missing API key, etc.)
  */
-async function generateQueryEmbedding(text: string): Promise<number[]> {
-  return generateEmbedding(text);
+async function generateQueryEmbedding(text: string): Promise<number[] | null> {
+  try {
+    // Check if API key is available before attempting
+    if (!process.env.OPENAI_API_KEY) {
+      console.warn('[Search] OPENAI_API_KEY not set, skipping embedding generation');
+      return null;
+    }
+    return await generateEmbedding(text);
+  } catch (error) {
+    console.warn('[Search] Embedding generation failed:', error);
+    return null;
+  }
 }
 
 /**

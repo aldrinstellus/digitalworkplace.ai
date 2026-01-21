@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           // Generate embedding for semantic/hybrid search
           try {
             const embedding = await generateQueryEmbedding(query);
-            searchOptions.embedding = embedding;
+            searchOptions.embedding = embedding ?? undefined;
             searchOptions.hybridWeight = searchType === 'semantic' ? 0.9 : hybridWeight;
 
             const esResults = await elasticSearchHybrid(searchOptions);

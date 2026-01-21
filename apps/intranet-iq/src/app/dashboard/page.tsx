@@ -131,7 +131,7 @@ export default function Dashboard() {
                   <Newspaper className="w-5 h-5 text-purple-400" />
                   Company News
                 </h2>
-                <Link href="/content" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
+                <Link href="/news" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
               </div>
 
               {postsLoading ? (
@@ -184,7 +184,7 @@ export default function Dashboard() {
                   <Calendar className="w-5 h-5 text-green-400" />
                   Upcoming Events
                 </h2>
-                <Link href="/content?tab=events" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
+                <Link href="/events" className="text-sm text-blue-400 hover:text-blue-300">View all</Link>
               </div>
 
               {eventsLoading ? (

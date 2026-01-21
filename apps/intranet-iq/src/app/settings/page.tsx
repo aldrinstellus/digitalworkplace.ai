@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useUserSettings, useCurrentUser, useDepartments } from "@/lib/hooks/useSupabase";
 import {
@@ -95,8 +96,16 @@ export default function SettingsPage() {
   const { user: dbUser } = useCurrentUser();
   const { settings, loading: settingsLoading, updateSettings } = useUserSettings();
   const { departments } = useDepartments();
+  const searchParams = useSearchParams();
 
-  const [activeSection, setActiveSection] = useState("profile");
+  // Get initial tab from URL parameter
+  const urlTab = searchParams.get("tab");
+  const validTabs = ["profile", "notifications", "appearance", "privacy", "integrations", "users", "roles", "audit", "system", "activity"];
+  const initialTab = urlTab && validTabs.includes(urlTab) ? urlTab : "profile";
+  // Map 'activity' to 'audit' since that's where activity logs are
+  const mappedInitialTab = initialTab === "activity" ? "audit" : initialTab;
+
+  const [activeSection, setActiveSection] = useState(mappedInitialTab);
   const [theme, setTheme] = useState<"dark" | "light" | "system">("dark");
   const [language, setLanguage] = useState("en");
   const [notifications, setNotifications] = useState(defaultNotificationSettings);

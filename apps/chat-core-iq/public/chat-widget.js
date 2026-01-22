@@ -17,8 +17,17 @@
   'use strict';
 
   // Configuration - will be overridden by admin settings
-  // API Base URL - for cross-origin requests when widget is embedded on different port
-  const API_BASE = window.CHAT_WIDGET_API_BASE || 'http://localhost:3002/dcq';
+  // API Base URL - auto-detect production vs localhost
+  function getApiBase() {
+    if (window.CHAT_WIDGET_API_BASE) return window.CHAT_WIDGET_API_BASE;
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:3002/dcq';
+    }
+    // Production: use current origin + basePath
+    return window.location.origin + '/dcq';
+  }
+  const API_BASE = getApiBase();
 
   const CONFIG = {
     apiUrl: API_BASE + '/api/chat',

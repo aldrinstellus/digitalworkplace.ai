@@ -8,6 +8,11 @@ const isPublicRoute = createRouteMatcher([
   '/sso-callback(.*)',
   '/icon(.*)',
   '/apple-icon(.*)',
+  // Analytics tracking endpoint for sendBeacon (can't set auth headers)
+  '/api/tracking/session/end',
+  // Allow cross-origin tracking from sub-apps
+  '/api/tracking/pageview',
+  '/api/tracking/navigation',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

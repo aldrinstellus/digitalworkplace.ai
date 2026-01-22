@@ -1,12 +1,15 @@
 "use client";
 
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
-import { WorkflowCanvas, type WorkflowNode } from "@/components/workflow/WorkflowCanvas";
+import { WorkflowCanvas, type WorkflowNode as LegacyWorkflowNode } from "@/components/workflow/WorkflowCanvas";
+import { WorkflowBuilder } from "@/components/workflow";
 import { ExecutionView } from "@/components/workflow/ExecutionView";
 import { useWorkflows } from "@/lib/hooks/useSupabase";
+import { workflowToReactFlow, reactFlowToDatabase, convertLegacyWorkflow } from "@/lib/workflow/serialization";
+import type { WorkflowNode, WorkflowEdge, WorkflowResponse } from "@/lib/workflow/types";
 import {
   Bot,
   Plus,
@@ -86,7 +89,10 @@ export default function AgentsPage() {
   const [viewMode, setViewMode] = useState<"list" | "canvas">("list");
   const [showExecution, setShowExecution] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [canvasNodes, setCanvasNodes] = useState<WorkflowNode[]>([]);
+  const [canvasNodes, setCanvasNodes] = useState<LegacyWorkflowNode[]>([]);
+  const [reactFlowNodes, setReactFlowNodes] = useState<WorkflowNode[]>([]);
+  const [reactFlowEdges, setReactFlowEdges] = useState<WorkflowEdge[]>([]);
+  const [useNewBuilder, setUseNewBuilder] = useState(true); // Toggle between old and new builder
   const [executionSteps, setExecutionSteps] = useState<{
     id: string;
     name: string;
@@ -140,18 +146,81 @@ export default function AgentsPage() {
   const handleEditWorkflow = (workflow: Workflow) => {
     setShowEditMode(true);
     setViewMode("canvas");
-    // Convert steps to canvas nodes for editing
-    const steps = getWorkflowSteps(workflow);
-    const nodes: WorkflowNode[] = steps.map((step, index) => ({
-      id: step.id,
-      type: step.type as WorkflowNode["type"],
-      name: step.name,
-      description: step.description,
-      position: { x: 50 + index * 300, y: 100 },
-      connections: index < steps.length - 1 ? { success: steps[index + 1].id } : {},
-    }));
-    setCanvasNodes(nodes);
+
+    if (useNewBuilder) {
+      // Check if workflow has steps array from database (WorkflowResponse format)
+      const workflowWithSteps = workflow as unknown as WorkflowResponse;
+
+      if (workflowWithSteps.steps && Array.isArray(workflowWithSteps.steps) && workflowWithSteps.steps.length > 0) {
+        // Database format: use workflowToReactFlow
+        const { nodes, edges } = workflowToReactFlow(workflowWithSteps);
+        setReactFlowNodes(nodes);
+        setReactFlowEdges(edges);
+      } else {
+        // Legacy format: use convertLegacyWorkflow (handles trigger_config.steps)
+        const { nodes, edges } = convertLegacyWorkflow(workflow, { layout: 'vertical' });
+        setReactFlowNodes(nodes);
+        setReactFlowEdges(edges);
+      }
+    } else {
+      // Convert steps to canvas nodes for legacy editing
+      const steps = getWorkflowSteps(workflow);
+      const nodes: LegacyWorkflowNode[] = steps.map((step, index) => ({
+        id: step.id,
+        type: step.type as LegacyWorkflowNode["type"],
+        name: step.name,
+        description: step.description,
+        position: { x: 50 + index * 300, y: 100 },
+        connections: index < steps.length - 1 ? { success: steps[index + 1].id } : {},
+      }));
+      setCanvasNodes(nodes);
+    }
   };
+
+  // Save workflow from new ReactFlow builder
+  const handleSaveWorkflow = useCallback(async (nodes: WorkflowNode[], edges: WorkflowEdge[]) => {
+    if (!selectedWorkflow) return;
+
+    try {
+      // Convert ReactFlow format back to database format
+      const { steps, edges: dbEdges } = reactFlowToDatabase(
+        nodes,
+        edges,
+        selectedWorkflow.id
+      );
+
+      // Update workflow via API
+      const response = await fetch('/diq/api/workflows', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: selectedWorkflow.id,
+          steps,
+          edges: dbEdges,
+          updated_at: new Date().toISOString(),
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.error || `Failed to save workflow (${response.status})`;
+        throw new Error(errorMessage);
+      }
+
+      const updatedWorkflow = await response.json();
+
+      // Update local state
+      setWorkflowList(prev =>
+        prev.map(w => w.id === selectedWorkflow.id ? { ...w, ...updatedWorkflow } : w)
+      );
+      setSelectedWorkflow({ ...selectedWorkflow, ...updatedWorkflow });
+
+      console.log('Workflow saved successfully');
+    } catch (error) {
+      console.error('Failed to save workflow:', error);
+      throw error;
+    }
+  }, [selectedWorkflow]);
 
   // Add new step to workflow
   const handleAddStep = () => {
@@ -206,6 +275,11 @@ export default function AgentsPage() {
       updated_at: new Date().toISOString(),
     };
 
+    // Convert workflow steps to ReactFlow nodes/edges (vertical layout)
+    const { nodes, edges } = convertLegacyWorkflow(newWorkflow, { layout: 'vertical' });
+    setReactFlowNodes(nodes);
+    setReactFlowEdges(edges);
+
     setWorkflowList(prev => [newWorkflow, ...prev]);
     setSelectedWorkflow(newWorkflow);
     setShowTemplates(false);
@@ -220,17 +294,16 @@ export default function AgentsPage() {
 
   // Create workflow from template
   const handleCreateFromTemplate = async (template: typeof workflowTemplates[0]) => {
+    // Build template-specific steps based on template type
+    const templateSteps = getTemplateSteps(template);
+
     const newWorkflow: Workflow = {
       id: `wf-${Date.now()}`,
       name: template.name,
       description: `${template.name} workflow`,
       trigger_type: "scheduled",
       trigger_config: {
-        steps: [
-          { id: "1", type: "trigger", name: "Trigger", description: `${template.category} trigger` },
-          { id: "2", type: "action", name: template.name, description: `Execute ${template.name}` },
-          { id: "3", type: "output", name: "Complete", description: "Workflow complete" },
-        ],
+        steps: templateSteps,
       },
       is_template: false,
       template_category: template.category,
@@ -240,15 +313,81 @@ export default function AgentsPage() {
       updated_at: new Date().toISOString(),
     };
 
+    // Convert workflow steps to ReactFlow nodes/edges (vertical layout)
+    const { nodes, edges } = convertLegacyWorkflow(newWorkflow, { layout: 'vertical' });
+    setReactFlowNodes(nodes);
+    setReactFlowEdges(edges);
+
     setWorkflowList(prev => [newWorkflow, ...prev]);
     setSelectedWorkflow(newWorkflow);
     setShowTemplates(false);
     setShowEditMode(true);
+    setViewMode("canvas");
 
     // In production, persist to Supabase
     if (createWorkflow) {
       await createWorkflow(newWorkflow);
     }
+  };
+
+  // Get template-specific steps for rich workflow templates
+  const getTemplateSteps = (template: typeof workflowTemplates[0]) => {
+    const templateConfigs: Record<string, Array<{ id: string; type: string; name: string; description: string }>> = {
+      "Employee Onboarding": [
+        { id: "1", type: "trigger", name: "New Employee Added", description: "Triggered when HR adds a new employee" },
+        { id: "2", type: "action", name: "Create Accounts", description: "Set up email, Slack, and system access" },
+        { id: "3", type: "condition", name: "Check Department", description: "Route based on department needs" },
+        { id: "4", type: "action", name: "Assign Equipment", description: "Request laptop and equipment" },
+        { id: "5", type: "action", name: "Schedule Training", description: "Book onboarding sessions" },
+        { id: "6", type: "output", name: "Complete", description: "Onboarding workflow complete" },
+      ],
+      "Document Approval": [
+        { id: "1", type: "trigger", name: "Document Submitted", description: "Triggered when a document is submitted for review" },
+        { id: "2", type: "search", name: "Find Reviewers", description: "Identify appropriate reviewers" },
+        { id: "3", type: "action", name: "Request Review", description: "Send document to reviewers" },
+        { id: "4", type: "condition", name: "Approved?", description: "Check if all reviews are positive" },
+        { id: "5", type: "action", name: "Notify Submitter", description: "Send approval/rejection notification" },
+        { id: "6", type: "output", name: "Complete", description: "Document workflow complete" },
+      ],
+      "Data Sync": [
+        { id: "1", type: "trigger", name: "Schedule Trigger", description: "Run on schedule or data change" },
+        { id: "2", type: "search", name: "Fetch Source Data", description: "Query source system" },
+        { id: "3", type: "transform", name: "Transform Data", description: "Map and transform fields" },
+        { id: "4", type: "condition", name: "Validate Data", description: "Check data integrity" },
+        { id: "5", type: "action", name: "Update Target", description: "Push to target system" },
+        { id: "6", type: "output", name: "Sync Complete", description: "Data sync completed" },
+      ],
+      "Report Generation": [
+        { id: "1", type: "trigger", name: "Report Request", description: "Manual or scheduled trigger" },
+        { id: "2", type: "search", name: "Gather Data", description: "Query all data sources" },
+        { id: "3", type: "transform", name: "Aggregate Data", description: "Calculate metrics and summaries" },
+        { id: "4", type: "action", name: "Generate Report", description: "Create formatted report" },
+        { id: "5", type: "action", name: "Distribute Report", description: "Email or publish report" },
+        { id: "6", type: "output", name: "Complete", description: "Report generation complete" },
+      ],
+      "Email Campaign": [
+        { id: "1", type: "trigger", name: "Campaign Start", description: "Manual trigger or schedule" },
+        { id: "2", type: "search", name: "Build Audience", description: "Query contact database" },
+        { id: "3", type: "condition", name: "Segment Audience", description: "Apply targeting rules" },
+        { id: "4", type: "action", name: "Personalize Content", description: "Generate personalized emails" },
+        { id: "5", type: "action", name: "Send Campaign", description: "Dispatch emails" },
+        { id: "6", type: "output", name: "Campaign Sent", description: "Email campaign completed" },
+      ],
+      "Ticket Routing": [
+        { id: "1", type: "trigger", name: "New Ticket", description: "Triggered when ticket is created" },
+        { id: "2", type: "search", name: "Analyze Content", description: "AI analysis of ticket content" },
+        { id: "3", type: "condition", name: "Priority Check", description: "Determine ticket priority" },
+        { id: "4", type: "search", name: "Find Agent", description: "Match to available agent" },
+        { id: "5", type: "action", name: "Assign Ticket", description: "Assign to selected agent" },
+        { id: "6", type: "output", name: "Ticket Routed", description: "Ticket routing complete" },
+      ],
+    };
+
+    return templateConfigs[template.name] || [
+      { id: "1", type: "trigger", name: "Trigger", description: `${template.category} trigger` },
+      { id: "2", type: "action", name: template.name, description: `Execute ${template.name}` },
+      { id: "3", type: "output", name: "Complete", description: "Workflow complete" },
+    ];
   };
 
   const runWorkflow = (_workflow: Workflow) => {
@@ -667,19 +806,48 @@ export default function AgentsPage() {
                   />
                 ) : viewMode === "canvas" ? (
                   /* Canvas View */
-                  <div>
-                    <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
-                      Visual Workflow Builder
-                    </h3>
-                    <WorkflowCanvas
-                      nodes={canvasNodes.length > 0 ? canvasNodes : [
-                        { id: "1", type: "trigger", name: "Trigger", description: "Start workflow", position: { x: 50, y: 100 }, connections: { success: "2" } },
-                        { id: "2", type: "search", name: "Search KB", description: "Search knowledge base", position: { x: 350, y: 100 }, connections: { success: "3" } },
-                        { id: "3", type: "think", name: "AI Analysis", description: "Process with AI", position: { x: 650, y: 100 }, connections: { success: "4" } },
-                        { id: "4", type: "output", name: "Output", description: "Return result", position: { x: 950, y: 100 }, connections: {} },
-                      ]}
-                      onNodesChange={setCanvasNodes}
-                    />
+                  <div className="h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">
+                        Visual Workflow Builder
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-[var(--text-muted)]">Builder:</span>
+                        <motion.button
+                          onClick={() => setUseNewBuilder(!useNewBuilder)}
+                          className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+                            useNewBuilder
+                              ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                              : "bg-[var(--bg-slate)] text-[var(--text-muted)]"
+                          }`}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          {useNewBuilder ? "ReactFlow (New)" : "Legacy"}
+                        </motion.button>
+                      </div>
+                    </div>
+                    {useNewBuilder ? (
+                      <div className="h-[calc(100%-2rem)] min-h-[500px] rounded-xl overflow-hidden">
+                        <WorkflowBuilder
+                          workflowId={selectedWorkflow.id}
+                          initialNodes={reactFlowNodes}
+                          initialEdges={reactFlowEdges}
+                          onSave={handleSaveWorkflow}
+                          readOnly={false}
+                        />
+                      </div>
+                    ) : (
+                      <WorkflowCanvas
+                        nodes={canvasNodes.length > 0 ? canvasNodes : [
+                          { id: "1", type: "trigger", name: "Trigger", description: "Start workflow", position: { x: 50, y: 100 }, connections: { success: "2" } },
+                          { id: "2", type: "search", name: "Search KB", description: "Search knowledge base", position: { x: 350, y: 100 }, connections: { success: "3" } },
+                          { id: "3", type: "think", name: "AI Analysis", description: "Process with AI", position: { x: 650, y: 100 }, connections: { success: "4" } },
+                          { id: "4", type: "output", name: "Output", description: "Return result", position: { x: 950, y: 100 }, connections: {} },
+                        ]}
+                        onNodesChange={setCanvasNodes}
+                      />
+                    )}
                   </div>
                 ) : (
                   /* List View */

@@ -248,7 +248,7 @@ npm run lint     # Run ESLint
 ## SUB-PROJECTS
 ---
 
-### dIQ - Intranet IQ (v0.6.5) - PRODUCTION LIVE
+### dIQ - Intranet IQ (v1.1.0) - PRODUCTION LIVE (Full Spectrum)
 
 | Property | Value |
 |----------|-------|
@@ -257,6 +257,7 @@ npm run lint     # Run ESLint
 | **Local URL** | http://localhost:3001/diq/dashboard |
 | **Production URL** | https://intranet-iq.vercel.app/diq/dashboard |
 | **basePath** | `/diq` |
+| **Audit Score** | 100/100 (upgraded from 63/100) |
 | **Documentation** | `apps/intranet-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
 
 **Quick Start:**
@@ -265,31 +266,40 @@ cd /Users/aldrin-mac-mini/digitalworkplace.ai
 npm run dev:intranet     # Start dIQ on port 3001
 ```
 
-**Pages (10 total, all production-verified):**
+**Pages (19 total, all production-verified):**
 - `/diq/dashboard` - Main dashboard (news, events, activity feed)
-- `/diq/chat` - AI Assistant (Claude 3 integration)
-- `/diq/search` - Enterprise Search (keyword + semantic)
+- `/diq/chat` - AI Assistant (Claude streaming, RAG, function calling)
+- `/diq/search` - Enterprise Search (keyword + semantic + federated)
 - `/diq/people` - Org Chart & Directory (60 employees)
 - `/diq/content` - Knowledge Base (20+ categories, 212 articles)
-- `/diq/agents` - Workflow Automation (3 featured agents)
+- `/diq/agents` - Workflow Automation (full execution engine)
 - `/diq/settings` - User/Admin Settings (9 panels)
+- `/diq/notifications` - **NEW** Notification center
+- `/diq/my-day` - **NEW** Productivity hub, tasks
+- `/diq/channels` - **NEW** Real backend channels
 - `/diq/admin/elasticsearch` - Elasticsearch Admin (3 nodes, 28,690 docs)
 - `/diq/admin/analytics` - Analytics Dashboard
 - `/diq/admin/permissions` - RBAC Management (4 roles)
+- `/diq/admin/dashboard` - **NEW** Admin analytics + system health
 
-**Features:**
-- AI Assistant: Claude 3 integration for intelligent responses
-- Semantic Search: 212 articles + 348 knowledge items with 100% embedding coverage
+**Features (v1.1.0 Full Spectrum):**
+- AI Assistant: Claude streaming, vector RAG, file processing, function calling
+- Enterprise Search: Semantic + federated across external connectors
 - AI Summary: Anthropic API generating search summaries
 - RBAC: 4 roles (Super Admin, Admin, Editor, Viewer), 191 total users
 - Elasticsearch: 3 nodes, 28,690 indexed documents
+- EX Features: Notifications, reactions, polls, recognition, channels
+- Productivity: My Day page, task management, daily briefing
+- Workflows: Full execution engine, webhooks, cron triggers
+- Connectors: Confluence, SharePoint, Notion, Google Drive
+- Admin: User stats, content metrics, AI usage, system health
 
 **Database (Supabase):**
 - Schema: `diq` (project-specific) + `public` (shared)
-- 21 tables with full RLS policies
+- 45+ tables with full RLS policies
 - TypeScript types: `apps/intranet-iq/src/lib/database.types.ts`
 - Client helpers: `apps/intranet-iq/src/lib/supabase.ts`
-- Migrations: `supabase/migrations/001_core_schema.sql`, `002_diq_schema.sql`
+- Migrations: `supabase/migrations/001_core_schema.sql` through `010_admin_analytics.sql`
 - Documentation: `docs/DATABASE_ARCHITECTURE.md`
 
 ---

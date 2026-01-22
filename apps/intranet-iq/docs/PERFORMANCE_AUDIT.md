@@ -273,4 +273,4 @@ curl -s "http://localhost:3001/diq/api/content?status=published&limit=20"
 ---
 
 *Last Updated: 2026-01-21*
-*Commit: 2ff9026*
+*Commit: bc65405*

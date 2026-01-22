@@ -275,3 +275,119 @@ body {
 .bg-slate-dark {
   background-color: var(--bg-slate);
 }
+
+/* =============================================================================
+   WORKFLOW BUILDER STYLES
+   ============================================================================= */
+
+/* ReactFlow Canvas */
+.workflow-canvas {
+  --xy-background-color: var(--bg-obsidian);
+}
+
+.workflow-canvas .react-flow__node {
+  cursor: grab;
+}
+
+.workflow-canvas .react-flow__node:active {
+  cursor: grabbing;
+}
+
+/* Connection line while dragging */
+.workflow-canvas .react-flow__connection-line {
+  stroke: var(--accent-ember);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  animation: dash 0.5s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+/* Edge flow animation */
+@keyframes flowAnimation {
+  from {
+    stroke-dashoffset: 16;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Handle hover states */
+.workflow-canvas .react-flow__handle {
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.workflow-canvas .react-flow__handle:hover {
+  transform: scale(1.4);
+}
+
+/* Selection box */
+.workflow-canvas .react-flow__selection {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px dashed var(--accent-ember);
+  border-radius: 4px;
+}
+
+/* Minimap styles */
+.workflow-canvas .react-flow__minimap {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.workflow-canvas .react-flow__minimap-mask {
+  fill: rgba(0, 0, 0, 0.85);
+}
+
+/* Controls styles */
+.workflow-canvas .react-flow__controls {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.workflow-canvas .react-flow__controls-button {
+  background: var(--bg-charcoal);
+  border-color: var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.workflow-canvas .react-flow__controls-button:hover {
+  background: var(--bg-slate);
+  color: var(--text-primary);
+}
+
+/* Node selection highlight */
+.workflow-canvas .react-flow__node.selected {
+  z-index: 100;
+}
+
+/* Edge interaction */
+.workflow-canvas .react-flow__edge {
+  cursor: pointer;
+}
+
+.workflow-canvas .react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3;
+}
+
+/* Attribution hide (pro license) */
+.workflow-canvas .react-flow__attribution {
+  display: none;
+}
+
+/* Panel transitions */
+.workflow-canvas .react-flow__panel {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Pane background pattern */
+.workflow-canvas .react-flow__pane {
+  cursor: grab;
+}
+
+.workflow-canvas .react-flow__pane:active {
+  cursor: grabbing;
+}

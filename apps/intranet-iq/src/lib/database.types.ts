@@ -239,6 +239,11 @@ export interface Workflow {
   trigger_config: Record<string, unknown>;
   is_template: boolean;
   template_category: string | null;
+  canvas_settings?: {
+    viewport?: { x: number; y: number; zoom: number };
+    gridEnabled?: boolean;
+    snapToGrid?: boolean;
+  };
   created_at: string;
   updated_at: string;
 }
@@ -248,10 +253,27 @@ export interface WorkflowStep {
   workflow_id: string;
   step_number: number;
   name: string;
-  type: 'llm' | 'search' | 'condition' | 'action' | 'human';
+  type: 'trigger' | 'search' | 'action' | 'condition' | 'transform' | 'output' | 'llm' | 'human';
   config: Record<string, unknown>;
   next_step_on_success: string | null;
   next_step_on_failure: string | null;
+  position_x: number;
+  position_y: number;
+  ui_config: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface WorkflowEdge {
+  id: string;
+  workflow_id: string;
+  source_step_id: string;
+  target_step_id: string;
+  source_handle: string;
+  target_handle: string;
+  label: string | null;
+  edge_type: string;
+  animated: boolean;
+  style: Record<string, unknown>;
   created_at: string;
 }
 

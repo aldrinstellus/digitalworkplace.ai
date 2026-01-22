@@ -36,7 +36,7 @@ import {
   Bot,
   DollarSign,
 } from 'lucide-react';
-import Sidebar from '@/components/layout/Sidebar';
+import { Sidebar } from '@/components/layout/Sidebar';
 
 // =============================================================================
 // TYPES

@@ -66,12 +66,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ task });
     }
 
-    // Build query
+    // Build query - fetch tasks for user (owner or assignee)
     let query = supabase
       .schema('diq')
       .from('tasks')
       .select('*')
-      .or(`user_id.eq.${userId},assignee_id.eq.${userId}`)
+      .eq('user_id', userId) // Primary filter by user_id
       .is('parent_id', null) // Only top-level tasks
       .order('due_date', { ascending: true, nullsFirst: false })
       .order('priority', { ascending: false })

@@ -24,7 +24,7 @@ import {
   Filter,
   Search,
 } from 'lucide-react';
-import Sidebar from '@/components/layout/Sidebar';
+import { Sidebar } from '@/components/layout/Sidebar';
 
 interface Task {
   id: string;

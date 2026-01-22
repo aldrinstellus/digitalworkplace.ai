@@ -64,6 +64,13 @@ export interface ConnectorConfig {
     content_types?: string[];
     max_depth?: number;
     batch_size?: number;
+    // OAuth2 configuration
+    client_id?: string;
+    client_secret?: string;
+    redirect_uri?: string;
+    // SharePoint specific
+    tenant_id?: string;
+    drive_id?: string;
   };
 
   // Sync settings

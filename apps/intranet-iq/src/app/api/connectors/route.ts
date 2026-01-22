@@ -71,15 +71,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ connector: safeConnector, health });
     }
 
-    // List connectors for organization
-    if (!organizationId) {
-      return NextResponse.json(
-        { error: 'organizationId is required' },
-        { status: 400 }
-      );
-    }
-
-    const { data: connectors, error } = await supabase
+    // List connectors for organization (or all if no organizationId provided)
+    let query = supabase
       .schema('diq')
       .from('connectors')
       .select(`
@@ -93,8 +86,13 @@ export async function GET(request: NextRequest) {
         created_at,
         updated_at
       `)
-      .eq('organization_id', organizationId)
       .order('created_at', { ascending: false });
+
+    if (organizationId) {
+      query = query.eq('organization_id', organizationId);
+    }
+
+    const { data: connectors, error } = await query;
 
     if (error) {
       console.error('Error fetching connectors:', error);

@@ -58,10 +58,7 @@ export async function GET(request: NextRequest) {
       let query = supabase
         .schema('diq')
         .from('celebrations')
-        .select(`
-          *,
-          user:user_id(id, full_name, avatar_url)
-        `)
+        .select('*')
         .gte('date', todayStr)
         .lte('date', endDateStr)
         .eq('visibility', 'public')
@@ -79,15 +76,27 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Failed to fetch celebrations' }, { status: 500 });
       }
 
-      // Add days_until calculation
-      const enrichedCelebrations = celebrations?.map(c => ({
+      // Fetch user data from public.users (cross-schema enrichment)
+      const userIds = [...new Set((celebrations || []).map(c => c.user_id).filter(Boolean))];
+      let usersMap = new Map();
+      if (userIds.length > 0) {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, full_name, avatar_url')
+          .in('id', userIds);
+        usersMap = new Map((users || []).map(u => [u.id, u]));
+      }
+
+      // Add days_until calculation and user data
+      const enrichedCelebrations = (celebrations || []).map(c => ({
         ...c,
+        user: usersMap.get(c.user_id) || null,
         days_until: Math.ceil(
           (new Date(c.date).getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
         ),
       }));
 
-      return NextResponse.json({ celebrations: enrichedCelebrations || [] });
+      return NextResponse.json({ celebrations: enrichedCelebrations });
     }
 
     // Get celebrations for a specific user
@@ -111,10 +120,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .schema('diq')
       .from('celebrations')
-      .select(`
-        *,
-        user:user_id(id, full_name, avatar_url)
-      `)
+      .select('*')
       .order('date', { ascending: false })
       .limit(limit);
 
@@ -129,7 +135,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch celebrations' }, { status: 500 });
     }
 
-    return NextResponse.json({ celebrations: celebrations || [] });
+    // Fetch user data from public.users (cross-schema enrichment)
+    const userIds = [...new Set((celebrations || []).map(c => c.user_id).filter(Boolean))];
+    let usersMap = new Map();
+    if (userIds.length > 0) {
+      const { data: users } = await supabase
+        .from('users')
+        .select('id, full_name, avatar_url')
+        .in('id', userIds);
+      usersMap = new Map((users || []).map(u => [u.id, u]));
+    }
+
+    const enrichedCelebrations = (celebrations || []).map(c => ({
+      ...c,
+      user: usersMap.get(c.user_id) || null,
+    }));
+
+    return NextResponse.json({ celebrations: enrichedCelebrations });
   } catch (error) {
     console.error('Celebrations API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -253,17 +275,23 @@ export async function PUT(request: NextRequest) {
       const { data: employees, error: empError } = await supabase
         .schema('diq')
         .from('employees')
-        .select(`
-          id,
-          user_id,
-          birth_date,
-          user:user_id(id, full_name)
-        `)
+        .select('id, user_id, birth_date')
         .not('birth_date', 'is', null);
 
       if (empError) {
         console.error('Error fetching employees:', empError);
         return NextResponse.json({ error: 'Failed to fetch employees' }, { status: 500 });
+      }
+
+      // Fetch user names from public.users (cross-schema)
+      const userIds = [...new Set((employees || []).map(e => e.user_id).filter(Boolean))];
+      let usersMap = new Map<string, { id: string; full_name: string }>();
+      if (userIds.length > 0) {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, full_name')
+          .in('id', userIds);
+        usersMap = new Map((users || []).map(u => [u.id, u]));
       }
 
       const today = new Date();
@@ -288,12 +316,13 @@ export async function PUT(request: NextRequest) {
         );
 
         if (daysUntil <= days) {
+          const user = usersMap.get(emp.user_id);
           celebrations.push({
             user_id: emp.user_id,
             type: 'birthday',
             date: nextBirthday.toISOString().split('T')[0],
             recurring: true,
-            title: `${(emp.user as { full_name: string })?.full_name || 'Team member'}'s Birthday`,
+            title: `${user?.full_name || 'Team member'}'s Birthday`,
           });
         }
       }
@@ -324,17 +353,23 @@ export async function PUT(request: NextRequest) {
       const { data: employees, error: empError } = await supabase
         .schema('diq')
         .from('employees')
-        .select(`
-          id,
-          user_id,
-          hire_date,
-          user:user_id(id, full_name)
-        `)
+        .select('id, user_id, hire_date')
         .not('hire_date', 'is', null);
 
       if (empError) {
         console.error('Error fetching employees:', empError);
         return NextResponse.json({ error: 'Failed to fetch employees' }, { status: 500 });
+      }
+
+      // Fetch user names from public.users (cross-schema)
+      const userIds = [...new Set((employees || []).map(e => e.user_id).filter(Boolean))];
+      let usersMap = new Map<string, { id: string; full_name: string }>();
+      if (userIds.length > 0) {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, full_name')
+          .in('id', userIds);
+        usersMap = new Map((users || []).map(u => [u.id, u]));
       }
 
       const today = new Date();
@@ -362,12 +397,13 @@ export async function PUT(request: NextRequest) {
         );
 
         if (daysUntil <= days) {
+          const user = usersMap.get(emp.user_id);
           celebrations.push({
             user_id: emp.user_id,
             type: 'work_anniversary',
             date: nextAnniversary.toISOString().split('T')[0],
             recurring: true,
-            title: `${(emp.user as { full_name: string })?.full_name || 'Team member'}'s ${years}-Year Work Anniversary`,
+            title: `${user?.full_name || 'Team member'}'s ${years}-Year Work Anniversary`,
             metadata: { years },
           });
         }

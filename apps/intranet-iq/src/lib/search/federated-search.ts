@@ -261,7 +261,8 @@ export async function federatedSearch(
  * Search articles in the KB
  */
 async function searchArticles(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   query: string,
   embedding: number[] | null,
   params: FederatedSearchParams
@@ -367,7 +368,8 @@ async function searchArticles(
  * Search unified knowledge items
  */
 async function searchKnowledgeItems(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   query: string,
   embedding: number[] | null,
   params: FederatedSearchParams
@@ -447,7 +449,8 @@ async function searchKnowledgeItems(
  * Search news posts
  */
 async function searchNews(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   query: string,
   params: FederatedSearchParams
 ): Promise<SearchResult[]> {
@@ -507,7 +510,8 @@ async function searchNews(
  * Search employees
  */
 async function searchEmployees(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   query: string,
   params: FederatedSearchParams
 ): Promise<SearchResult[]> {
@@ -589,7 +593,8 @@ async function searchEmployees(
  * Search connected external sources
  */
 async function searchConnectors(
-  supabase: ReturnType<typeof createClient>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   query: string,
   params: FederatedSearchParams
 ): Promise<SearchResult[]> {
@@ -616,7 +621,7 @@ async function searchConnectors(
     .limit(params.limit || 20);
 
   for (const item of items || []) {
-    const connector = connectors.find(c => c.id === item.connector_id);
+    const connector = connectors.find((c: ConnectorConfig) => c.id === item.connector_id);
 
     results.push({
       id: `connector-${item.id}`,

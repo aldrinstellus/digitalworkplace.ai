@@ -135,8 +135,11 @@ async function extractPdfContent(file: File | Blob): Promise<{
 
     // Try to use pdf-parse if available
     try {
-      const pdfParse = (await import('pdf-parse')).default;
-      const data = await pdfParse(buffer);
+      // Handle both CJS and ESM module formats
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pdfParseModule = await import('pdf-parse') as any;
+      const pdfParse = pdfParseModule.default || pdfParseModule;
+      const data = await pdfParse(buffer) as { text: string; numpages: number };
 
       return {
         content: data.text || '',

@@ -45,15 +45,23 @@ export async function GET(request: NextRequest) {
       const { data: space, error } = await supabase
         .schema('diq')
         .from('kb_spaces')
-        .select(`
-          *,
-          creator:created_by(id, full_name, avatar_url)
-        `)
+        .select('*')
         .eq('id', spaceId)
         .single();
 
       if (error || !space) {
         return NextResponse.json({ error: 'Space not found' }, { status: 404 });
+      }
+
+      // Fetch creator from public.users (cross-schema manual enrichment)
+      let creator = null;
+      if (space.created_by) {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('id, full_name, avatar_url')
+          .eq('id', space.created_by)
+          .single();
+        creator = userData;
       }
 
       // Get member count and item count
@@ -74,13 +82,14 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           space: {
             ...space,
+            creator,
             member_count: membersResult.count || 0,
             item_count: itemsResult.count || 0,
           },
         });
       }
 
-      return NextResponse.json({ space });
+      return NextResponse.json({ space: { ...space, creator } });
     }
 
     // Get space by slug
@@ -145,21 +154,19 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ spaces: enrichedSpaces || [] });
     }
 
-    // List spaces for organization
-    if (!organizationId) {
-      return NextResponse.json(
-        { error: 'organizationId or userId is required' },
-        { status: 400 }
-      );
-    }
-
-    const { data: spaces, error } = await supabase
+    // List spaces for organization (or all if no organizationId provided)
+    let query = supabase
       .schema('diq')
       .from('kb_spaces')
       .select('*')
-      .eq('organization_id', organizationId)
       .eq('status', 'active')
       .order('name');
+
+    if (organizationId) {
+      query = query.eq('organization_id', organizationId);
+    }
+
+    const { data: spaces, error } = await query;
 
     if (error) {
       console.error('Error fetching spaces:', error);

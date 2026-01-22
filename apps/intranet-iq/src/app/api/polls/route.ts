@@ -58,7 +58,6 @@ export async function GET(request: NextRequest) {
         .from('polls')
         .select(`
           *,
-          creator:creator_id(id, full_name, avatar_url),
           options:poll_options(*)
         `)
         .eq('id', pollId)
@@ -67,6 +66,18 @@ export async function GET(request: NextRequest) {
       if (pollError || !poll) {
         return NextResponse.json({ error: 'Poll not found' }, { status: 404 });
       }
+
+      // Fetch creator from public.users (cross-schema manual enrichment)
+      let creator = null;
+      if (poll.creator_id) {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('id, full_name, avatar_url')
+          .eq('id', poll.creator_id)
+          .single();
+        creator = userData;
+      }
+      (poll as Record<string, unknown>).creator = creator;
 
       // Get vote counts for each option
       const { data: votes } = await supabase
@@ -115,10 +126,7 @@ export async function GET(request: NextRequest) {
     let query = supabase
       .schema('diq')
       .from('polls')
-      .select(`
-        *,
-        creator:creator_id(id, full_name, avatar_url)
-      `)
+      .select('*')
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -133,7 +141,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch polls' }, { status: 500 });
     }
 
-    return NextResponse.json({ polls: polls || [] });
+    // Enrich with creator data from public.users (cross-schema)
+    const creatorIds = [...new Set((polls || []).map(p => p.creator_id).filter(Boolean))];
+    let creatorsMap = new Map();
+    if (creatorIds.length > 0) {
+      const { data: creators } = await supabase
+        .from('users')
+        .select('id, full_name, avatar_url')
+        .in('id', creatorIds);
+      creatorsMap = new Map((creators || []).map(c => [c.id, c]));
+    }
+
+    const enrichedPolls = (polls || []).map(poll => ({
+      ...poll,
+      creator: creatorsMap.get(poll.creator_id) || null,
+    }));
+
+    return NextResponse.json({ polls: enrichedPolls });
   } catch (error) {
     console.error('Polls API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

@@ -17,7 +17,7 @@ import {
   Settings,
   X,
 } from 'lucide-react';
-import Sidebar from '@/components/layout/Sidebar';
+import { Sidebar } from '@/components/layout/Sidebar';
 
 interface Notification {
   id: string;

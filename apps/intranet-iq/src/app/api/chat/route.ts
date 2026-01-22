@@ -37,7 +37,7 @@ const tools = [
     name: 'search_knowledge_base',
     description: 'Search the company knowledge base for articles, policies, and documentation',
     input_schema: {
-      type: 'object',
+      type: 'object' as const,
       properties: {
         query: {
           type: 'string',
@@ -55,7 +55,7 @@ const tools = [
     name: 'get_employee_info',
     description: 'Look up information about an employee by name, email, or department',
     input_schema: {
-      type: 'object',
+      type: 'object' as const,
       properties: {
         name: {
           type: 'string',
@@ -66,14 +66,14 @@ const tools = [
           description: 'Department to filter by',
         },
       },
-      required: [],
+      required: [] as string[],
     },
   },
   {
     name: 'create_task',
     description: 'Create a personal task or reminder for the user',
     input_schema: {
-      type: 'object',
+      type: 'object' as const,
       properties: {
         title: {
           type: 'string',

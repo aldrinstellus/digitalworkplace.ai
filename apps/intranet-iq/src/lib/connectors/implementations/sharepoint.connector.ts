@@ -329,15 +329,16 @@ export class SharePointConnector extends BaseConnector {
         let nextLink: string | undefined = deltaUrl;
 
         while (nextLink) {
-          const response = await this.makeRequest<{
+          type DeltaResponse = {
             value: Array<SharePointDriveItem & { deleted?: { state: string } }>;
             '@odata.nextLink'?: string;
             '@odata.deltaLink'?: string;
-          }>(nextLink);
+          };
+          const deltaResponse: DeltaResponse = await this.makeRequest<DeltaResponse>(nextLink);
 
-          totalDiscovered += response.value.length;
+          totalDiscovered += deltaResponse.value.length;
 
-          for (const item of response.value) {
+          for (const item of deltaResponse.value) {
             if (item.deleted) {
               deletedItems++;
               continue;
@@ -367,9 +368,9 @@ export class SharePointConnector extends BaseConnector {
             }
           }
 
-          nextLink = response['@odata.nextLink'];
-          if (response['@odata.deltaLink']) {
-            newCursor = response['@odata.deltaLink'];
+          nextLink = deltaResponse['@odata.nextLink'];
+          if (deltaResponse['@odata.deltaLink']) {
+            newCursor = deltaResponse['@odata.deltaLink'];
           }
         }
       }
@@ -477,18 +478,18 @@ export class SharePointConnector extends BaseConnector {
     let nextLink: string | undefined = `${this.graphBaseUrl}/drives/${driveId}/root/children`;
 
     while (nextLink) {
-      const response = await this.makeRequest<GraphResponse<SharePointDriveItem>>(nextLink);
-      items.push(...response.value);
+      const itemsResponse: GraphResponse<SharePointDriveItem> = await this.makeRequest<GraphResponse<SharePointDriveItem>>(nextLink);
+      items.push(...itemsResponse.value);
 
       // Recursively get children of folders
-      for (const item of response.value) {
+      for (const item of itemsResponse.value) {
         if (item.folder && item.folder.childCount > 0) {
           const childItems = await this.getFolderItems(driveId, item.id);
           items.push(...childItems);
         }
       }
 
-      nextLink = response['@odata.nextLink'];
+      nextLink = itemsResponse['@odata.nextLink'];
     }
 
     return items;
@@ -499,18 +500,18 @@ export class SharePointConnector extends BaseConnector {
     let nextLink: string | undefined = `${this.graphBaseUrl}/drives/${driveId}/items/${folderId}/children`;
 
     while (nextLink) {
-      const response = await this.makeRequest<GraphResponse<SharePointDriveItem>>(nextLink);
-      items.push(...response.value);
+      const folderResponse: GraphResponse<SharePointDriveItem> = await this.makeRequest<GraphResponse<SharePointDriveItem>>(nextLink);
+      items.push(...folderResponse.value);
 
       // Recursive
-      for (const item of response.value) {
+      for (const item of folderResponse.value) {
         if (item.folder && item.folder.childCount > 0) {
           const childItems = await this.getFolderItems(driveId, item.id);
           items.push(...childItems);
         }
       }
 
-      nextLink = response['@odata.nextLink'];
+      nextLink = folderResponse['@odata.nextLink'];
     }
 
     return items;

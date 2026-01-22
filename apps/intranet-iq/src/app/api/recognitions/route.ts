@@ -20,17 +20,13 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20');
     const offset = parseInt(searchParams.get('offset') || '0');
 
-    // Build query
+    // Build query - fetch recognitions without cross-schema joins
     let query = supabase
       .schema('diq')
       .from('recognitions')
       .select(`
         *,
-        author:author_id(id, full_name, avatar_url),
-        recipients:recognition_recipients(
-          user:user_id(id, full_name, avatar_url),
-          acknowledged_at
-        )
+        recipients:recognition_recipients(user_id, acknowledged_at)
       `)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
@@ -50,17 +46,44 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch recognitions' }, { status: 500 });
     }
 
+    // Collect all user IDs for cross-schema enrichment
+    const authorIds = [...new Set((recognitions || []).map(r => r.author_id).filter(Boolean))];
+    const recipientUserIds = [...new Set((recognitions || []).flatMap(r =>
+      (r.recipients || []).map((rec: { user_id: string }) => rec.user_id)
+    ).filter(Boolean))];
+    const allUserIds = [...new Set([...authorIds, ...recipientUserIds])];
+
+    // Fetch user data from public.users
+    let usersMap = new Map();
+    if (allUserIds.length > 0) {
+      const { data: users } = await supabase
+        .from('users')
+        .select('id, full_name, avatar_url')
+        .in('id', allUserIds);
+      usersMap = new Map((users || []).map(u => [u.id, u]));
+    }
+
+    // Enrich recognitions with user data
+    const enrichedRecognitions = (recognitions || []).map(r => ({
+      ...r,
+      author: usersMap.get(r.author_id) || null,
+      recipients: (r.recipients || []).map((rec: { user_id: string; acknowledged_at: string }) => ({
+        ...rec,
+        user: usersMap.get(rec.user_id) || null,
+      })),
+    }));
+
     // If filtering by recipient, filter in memory
-    let filteredRecognitions = recognitions;
+    let filteredRecognitions = enrichedRecognitions;
     if (userId) {
-      filteredRecognitions = recognitions?.filter(r =>
-        r.recipients?.some((rec: { user: { id: string } }) => rec.user?.id === userId)
+      filteredRecognitions = enrichedRecognitions.filter(r =>
+        r.recipients?.some((rec: { user: { id: string } | null }) => rec.user?.id === userId)
       );
     }
 
     return NextResponse.json({
-      recognitions: filteredRecognitions || [],
-      total: filteredRecognitions?.length || 0,
+      recognitions: filteredRecognitions,
+      total: filteredRecognitions.length,
     });
   } catch (error) {
     console.error('Recognitions API error:', error);

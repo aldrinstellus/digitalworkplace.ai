@@ -221,8 +221,9 @@ export class WorkflowExecutor {
         this.log(context, 'error', `Step failed: ${stepResult.error}`);
 
         // Check for failure edge
-        const failureEdge = edgeMap.get(currentStepId)?.find(
-          e => e.source_handle === 'false' || e.label === 'failure'
+        const currentEdges: WorkflowEdgeDB[] = edgeMap.get(currentStepId) || [];
+        const failureEdge: WorkflowEdgeDB | undefined = currentEdges.find(
+          (e: WorkflowEdgeDB) => e.source_handle === 'false' || e.label === 'failure'
         );
 
         if (failureEdge) {
@@ -244,9 +245,9 @@ export class WorkflowExecutor {
         currentStepId = stepResult.nextStepId;
       } else {
         // Use edges to find next step
-        const outgoingEdges = edgeMap.get(currentStepId) || [];
-        const nextEdge = outgoingEdges.find(
-          e => e.source_handle === 'output' || e.source_handle === 'true' || !e.source_handle
+        const outgoingEdges: WorkflowEdgeDB[] = edgeMap.get(currentStepId) || [];
+        const nextEdge: WorkflowEdgeDB | undefined = outgoingEdges.find(
+          (e: WorkflowEdgeDB) => e.source_handle === 'output' || e.source_handle === 'true' || !e.source_handle
         );
         currentStepId = nextEdge?.target_step_id || null;
       }
@@ -1141,7 +1142,7 @@ Answer (yes/no):`;
     }
   }
 
-  private interpolateTemplate(template: string, context: Record<string, unknown>): string {
+  private interpolateTemplate(template: string, context: ExecutionContext | Record<string, unknown>): string {
     return template.replace(/\{\{([^}]+)\}\}/g, (_, path) => {
       const value = this.getNestedValue(context, path.trim());
       return value !== undefined ? String(value) : '';

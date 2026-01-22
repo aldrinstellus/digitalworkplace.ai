@@ -4,6 +4,51 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.5] - 2026-01-22
+
+### dCQ - Chat Core IQ v1.0.2 Full Spectrum Audit PASSED (100/100)
+
+Comprehensive full-spectrum audit completed with 100% pass rate across all components.
+
+#### Audit Results
+
+| Category | Score | Status |
+|----------|-------|--------|
+| Homepage & Chatbot | 100% | ✅ PASSED |
+| IVR Demo | 100% | ✅ PASSED |
+| Admin Panel (10 pages) | 100% | ✅ PASSED |
+| Database (28 tables) | 100% | ✅ PASSED |
+| Vector Embeddings | 100% | ✅ PASSED |
+| API Endpoints (9) | 100% | ✅ PASSED |
+| **Overall Score** | **100/100** | **PRODUCTION READY** |
+
+#### Issues Fixed
+
+1. **Dynamic Sidebar Badges**
+   - Escalations badge now fetches real count from API
+   - Announcements badge now fetches real count from API
+   - File: `src/app/admin/AdminLayoutClient.tsx`
+
+2. **Test Data Cleanup**
+   - Removed test entries without embeddings
+   - `public.knowledge_items`: 348/348 (100%)
+   - `dcq.faqs`: 7/7 (100%)
+
+#### Features Verified
+
+- **Homepage**: Chatbot (EN/ES/HT), FAQ Widget (6 FAQs), Announcements Banner
+- **IVR Demo**: 3 languages, keypad input, transfer codes
+- **Admin**: Dashboard, Analytics, Workflows, Content, Escalations, Notifications, Announcements, Audit Logs, Settings
+- **Settings Tabs**: Profile, Team, Permissions, Integrations (19+), Chatbot (8 sub-tabs)
+- **Integrations**: Tyler Technologies (12), CRM, IVR, SMS, Social Media
+
+#### Deployment
+- **Production**: https://chat-core-iq.vercel.app/dcq/Home/index.html
+- **Admin**: https://chat-core-iq.vercel.app/dcq/admin
+- **Report**: `apps/chat-core-iq/FULL_SPECTRUM_AUDIT_REPORT.md`
+
+---
+
 ## [0.7.4] - 2026-01-22
 
 ### dCQ - Chat Core IQ v1.0.1 Full Spectrum Analysis

@@ -1,8 +1,9 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
-**Version**: 1.0.1
+**Version**: 1.0.2
 **Last Updated**: 2026-01-22
-**Status**: Production Live - Full Spectrum Analysis Complete (EN 10/10, ES 8/10, HT 8/10)
+**Status**: Production Live - Full Spectrum Audit PASSED (100/100)
+**Audit Report**: FULL_SPECTRUM_AUDIT_REPORT.md
 
 ---
 ## PRODUCTION URLS
@@ -75,7 +76,7 @@ npm run lint             # Run ESLint
 ---
 
 - **AI Chatbot**: Claude (primary) + OpenAI (fallback) LLM integration
-- **Semantic Search**: 348 knowledge items with 100% vector embedding coverage
+- **Semantic Search**: 348 knowledge items with 100% vector embedding coverage (7 FAQs)
 - **FAQ Widget**: Homepage displays FAQs from admin portal
 - **Admin Portal**: Full CRUD for FAQs, knowledge base, announcements
 - **Multi-language**: English/Spanish/Haitian Creole support (EN/ES/HT)

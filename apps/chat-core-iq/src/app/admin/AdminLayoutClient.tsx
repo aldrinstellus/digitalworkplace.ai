@@ -96,6 +96,8 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [pendingEscalations, setPendingEscalations] = useState(0);
+  const [activeAnnouncements, setActiveAnnouncements] = useState(0);
   const { language, t } = useLanguage();
 
   const breadcrumbLabels =
@@ -116,16 +118,55 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Poll for notifications every 30 seconds
+  // Fetch pending escalations count
+  const fetchEscalationsCount = useCallback(async () => {
+    try {
+      const res = await fetch(apiUrl("/api/escalations?status=pending"));
+      if (res.ok) {
+        const data = await res.json();
+        // Count pending escalations from the array
+        const pending = Array.isArray(data) ? data.length : (data.escalations?.length || 0);
+        setPendingEscalations(pending);
+      }
+    } catch (error) {
+      console.error("Failed to fetch escalations count:", error);
+    }
+  }, []);
+
+  // Fetch active announcements count
+  const fetchAnnouncementsCount = useCallback(async () => {
+    try {
+      const res = await fetch(apiUrl("/api/announcements"));
+      if (res.ok) {
+        const data = await res.json();
+        // Count active announcements
+        const announcements = Array.isArray(data) ? data : (data.announcements || []);
+        const active = announcements.filter((a: { isActive?: boolean }) => a.isActive).length;
+        setActiveAnnouncements(active);
+      }
+    } catch (error) {
+      console.error("Failed to fetch announcements count:", error);
+    }
+  }, []);
+
+  // Poll for counts every 30 seconds
   useEffect(() => {
     // Initial fetch with slight delay to avoid hydration issues
-    const timeoutId = setTimeout(fetchNotificationsCount, 100);
-    const interval = setInterval(fetchNotificationsCount, 30000);
+    const timeoutId = setTimeout(() => {
+      fetchNotificationsCount();
+      fetchEscalationsCount();
+      fetchAnnouncementsCount();
+    }, 100);
+    const interval = setInterval(() => {
+      fetchNotificationsCount();
+      fetchEscalationsCount();
+      fetchAnnouncementsCount();
+    }, 30000);
     return () => {
       clearTimeout(timeoutId);
       clearInterval(interval);
     };
-  }, [fetchNotificationsCount]);
+  }, [fetchNotificationsCount, fetchEscalationsCount, fetchAnnouncementsCount]);
 
   const isActive = (item: typeof navItems[0]) => {
     if (item.exact) return pathname === item.href;
@@ -308,13 +349,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                     <span className="text-sm">{label}</span>
                   )}
                   {/* Notification badges */}
-                  {item.labelKey === "nav.escalations" && !sidebarCollapsed && (
+                  {item.labelKey === "nav.escalations" && pendingEscalations > 0 && !sidebarCollapsed && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-full shadow-lg"
                     >
-                      3
+                      {pendingEscalations}
                     </motion.span>
                   )}
                   {item.labelKey === "nav.notifications" && unreadNotifications > 0 && !sidebarCollapsed && (
@@ -335,13 +376,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
                       {unreadNotifications > 9 ? "9+" : unreadNotifications}
                     </motion.span>
                   )}
-                  {item.labelKey === "nav.announcements" && !sidebarCollapsed && (
+                  {item.labelKey === "nav.announcements" && activeAnnouncements > 0 && !sidebarCollapsed && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="ml-auto px-2 py-0.5 text-[10px] font-bold bg-gradient-to-r from-amber-700 to-orange-700 text-white rounded-full shadow-lg"
                     >
-                      2
+                      {activeAnnouncements}
                     </motion.span>
                   )}
                 </Link>

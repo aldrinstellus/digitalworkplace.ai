@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] - 2026-01-22
+
+### Post-Audit TypeScript Cleanup
+
+#### API Fixes
+- **kb-spaces API**: Fixed cross-schema FK join with manual enrichment (diq → public.users)
+- **connectors API**: Made organizationId optional, returns empty array when not provided
+- **workflow execute routes**: Fixed type annotations to resolve circular reference errors
+
+#### TypeScript Compilation Fixes (11 total)
+- Fixed Sidebar imports: changed to named export `{ Sidebar }`
+- Fixed Anthropic tools: added `as const` to input_schema.type literals
+- Fixed ConnectorConfig types: added OAuth fields (client_id, client_secret, tenant_id, redirect_uri, drive_id)
+- Fixed SharePoint connector: explicit response type annotations (DeltaResponse, GraphResponse)
+- Fixed pdf-parse dynamic import: CJS/ESM compatibility handling
+- Fixed federated-search Supabase client types: used `any` for schema compatibility
+- Fixed federated-search callback parameters: added ConnectorConfig type annotation
+- Fixed workflow executor edge map: added explicit WorkflowEdgeDB[] type annotations
+- Fixed workflow executor interpolateTemplate: updated to accept ExecutionContext | Record<string, unknown>
+
+### Verified
+- Build passes with 51 pages (static + dynamic)
+- All 16 page routes return 200 OK
+- All 14 API endpoints respond correctly
+- Production deployment: https://intranet-iq.vercel.app/diq/dashboard
+
+---
+
 ## [1.1.0] - 2026-01-22
 
 ### Full Spectrum Implementation - 100% Feature Coverage

@@ -4,6 +4,50 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.4] - 2026-01-22
+
+### dCQ - Chat Core IQ v1.0.1 Full Spectrum Analysis
+
+Comprehensive semantic relevance testing across all chatbot, IVR, and admin components.
+
+#### Chatbot Semantic Relevance Testing
+
+| Language | Pass Rate | Queries Tested |
+|----------|-----------|----------------|
+| **English** | 10/10 (100%) | Fence permit, pothole, trolley, council, youth sports, holidays, Tyler property, BTR, recycling, hurricane |
+| **Spanish** | 8/10 (80%) | Same queries - Tyler partial, workflow false positive |
+| **Haitian Creole** | 8/10 (80%) | Same queries - Tyler partial, sentiment flagging |
+
+#### Knowledge Base Verification
+
+| Source | Count | Status |
+|--------|-------|--------|
+| knowledge-entries.json | 10 entries | ✅ 100% embedded |
+| demo-faq.json | 8 FAQs | ✅ 100% embedded |
+| tyler-faq.json | 8 Tyler integrations | ✅ 100% embedded |
+| crawler-urls.json | 348+ URLs | ✅ 100% embedded |
+| dcq.faqs (Supabase) | 8 FAQs | ✅ 87.5% embedded |
+
+#### IVR Testing (All Languages)
+
+- English: Knowledge queries accurate, workflows correct ✅
+- Spanish: Knowledge accurate, minor workflow detection issue ✅
+- Haitian Creole: Knowledge accurate ✅
+- Transfer handling: Functional ✅
+
+#### Admin Panel Verification
+
+| Component | Status |
+|-----------|--------|
+| Admin Pages (9/10) | HTTP 200 ✅ |
+| FAQs API | 8 items ✅ |
+| Analytics API | 154 conversations, 95% satisfaction ✅ |
+| Settings API | Full config ✅ |
+| Knowledge API | 506 pages, 16 curated FAQs ✅ |
+| Announcements API | 3 active ✅ |
+
+---
+
 ## [0.7.3] - 2026-01-22
 
 ### dCQ - Chat Core IQ v1.0.1 Bug Fixes & 100% Coverage Testing

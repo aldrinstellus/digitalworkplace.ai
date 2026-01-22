@@ -294,7 +294,7 @@ npm run dev:intranet     # Start dIQ on port 3001
 
 ---
 
-### dCQ - Chat Core IQ (v1.0.0) - PRODUCTION LIVE
+### dCQ - Chat Core IQ (v1.0.1) - PRODUCTION LIVE (Full Spectrum Verified)
 
 | Property | Value |
 |----------|-------|

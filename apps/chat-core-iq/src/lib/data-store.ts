@@ -1209,8 +1209,8 @@ export async function getBannerSettings(): Promise<BannerSettings> {
   }
 
   return {
-    rotationEnabled: data.is_enabled as boolean,
-    rotationInterval: 8000,
+    rotationEnabled: data.rotation_enabled as boolean,
+    rotationInterval: (data.rotation_interval as number) || 8000,
     pauseOnHover: true,
     showNavigation: true,
     showDismiss: true,
@@ -1222,7 +1222,8 @@ export async function saveBannerSettings(settings: BannerSettings): Promise<void
   const { error } = await supabase
     .from('dcq_banner_settings')
     .upsert({
-      is_enabled: settings.rotationEnabled,
+      rotation_enabled: settings.rotationEnabled,
+      rotation_interval: settings.rotationInterval,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'id' });
 

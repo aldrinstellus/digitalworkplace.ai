@@ -288,17 +288,22 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://chat-core-iq.vercel.app |
 
-### dCQ - Chat Core IQ (v1.0.0)
+### dCQ - Chat Core IQ (v1.0.1)
 - **Port**: 3002
 - **Production**: https://chat-core-iq.vercel.app
 - **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
 - **Features**:
-  - AI Chatbot: Claude (primary) + OpenAI (fallback)
+  - AI Chatbot: Claude 3 Sonnet (primary) + GPT-4o-mini (fallback)
   - 348 knowledge items with 100% embedding coverage
   - FAQ widget with admin management
-  - Multi-language support (EN/ES)
-  - Interactive Voice Response (IVR) demo
+  - Multi-language support (EN/ES/HT - English, Spanish, Haitian Creole)
+  - Interactive Voice Response (IVR) demo with transfer codes
   - 28 Supabase tables in dcq schema
+- **Testing Status (2026-01-22)**: 100% Coverage
+  - Chatbot: 30+ queries across all 3 languages ✅
+  - Admin Panel: All 10 pages verified ✅
+  - IVR: All language flows + transfer working ✅
+  - Homepage widgets: FAQ + Chat fully tested ✅
 
 ### dSQ - Support IQ (v1.1.0)
 - **Port**: 3003

@@ -2323,7 +2323,142 @@
           "timestamp": "2026-01-19T13:46:40.208Z"
         }
       ]
+    },
+    "ivr:+1-demo-1769062196524": {
+      "sessionId": "ivr_1769062196778_68iydayn3",
+      "channel": "ivr",
+      "userId": "+1-demo-1769062196524",
+      "startTime": "2026-01-22T06:09:56.778Z",
+      "lastActivity": "2026-01-22T06:10:27.230Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T06:09:56.786Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T06:10:14.689Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday to Friday.\n\n**Hours:**\n• 8 AM to 5 PM  \n• Closed on weekends  \n• Closed on federal holidays  \n\nI hope this helps!",
+          "timestamp": "2026-01-22T06:10:27.230Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769063475810": {
+      "sessionId": "ivr_1769063475826_78pvi4wet",
+      "channel": "ivr",
+      "userId": "+1-demo-1769063475810",
+      "startTime": "2026-01-22T06:31:15.826Z",
+      "lastActivity": "2026-01-22T06:31:53.049Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T06:31:15.839Z"
+        },
+        {
+          "role": "user",
+          "content": "what are the parks in Doral",
+          "timestamp": "2026-01-22T06:31:32.118Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a list of parks in Doral.\n\n**Parks:**\n• Doral Central Park\n• Doral Meadow Park\n• Doral Legacy Park\n• Prince George's Park\n• Downtown Doral Park\n• Costa del Sol Park\n\nEnjoy exploring the parks!",
+          "timestamp": "2026-01-22T06:31:53.049Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769067479758": {
+      "sessionId": "ivr_1769067479851_xwj4q60s9",
+      "channel": "ivr",
+      "userId": "+1-demo-1769067479758",
+      "startTime": "2026-01-22T07:37:59.851Z",
+      "lastActivity": "2026-01-22T07:37:59.857Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T07:37:59.857Z"
+        }
+      ]
+    },
+    "web:sess_1769067524605_w4h6kg54f": {
+      "sessionId": "web_1769067525211_5tv2pvs9r",
+      "channel": "web",
+      "userId": "sess_1769067524605_w4h6kg54f",
+      "startTime": "2026-01-22T07:38:45.211Z",
+      "lastActivity": "2026-01-22T07:38:45.211Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T07:38:12.055Z"
+        },
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-22T07:38:12.055Z"
+        },
+        {
+          "role": "assistant",
+          "content": "You can ask me questions about our services, policies, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+          "timestamp": "2026-01-22T07:38:12.055Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769068502634": {
+      "sessionId": "ivr_1769068502649_gaoy4pqwa",
+      "channel": "ivr",
+      "userId": "+1-demo-1769068502634",
+      "startTime": "2026-01-22T07:55:02.649Z",
+      "lastActivity": "2026-01-22T07:55:02.658Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T07:55:02.658Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769068527099": {
+      "sessionId": "ivr_1769068527115_ns7qkkmfe",
+      "channel": "ivr",
+      "userId": "+1-demo-1769068527099",
+      "startTime": "2026-01-22T07:55:27.115Z",
+      "lastActivity": "2026-01-22T07:55:27.123Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T07:55:27.123Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769068545182": {
+      "sessionId": "ivr_1769068545198_1j2f97vx4",
+      "channel": "ivr",
+      "userId": "+1-demo-1769068545182",
+      "startTime": "2026-01-22T07:55:45.198Z",
+      "lastActivity": "2026-01-22T07:55:45.204Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T07:55:45.204Z"
+        }
+      ]
     }
   },
-  "lastUpdated": "2026-01-19T13:46:40.208Z"
+  "lastUpdated": "2026-01-22T07:55:45.204Z"
 }

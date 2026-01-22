@@ -686,7 +686,7 @@ export default function IVRDemoPage() {
                   });
                   // Safe base64 encode: UTF-8 → percent-encoded → binary string → base64
                   const historyParam = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
-                  const websiteUrl = `/Home/index.html?transfer=${state.transferCode}&history=${historyParam}`;
+                  const websiteUrl = `${BASE_PATH}/Home/index.html?transfer=${state.transferCode}&history=${historyParam}`;
                   window.open(websiteUrl, '_blank');
                 }}
                 className="mt-3 w-full py-2.5 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"

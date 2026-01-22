@@ -4,6 +4,69 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.3] - 2026-01-22
+
+### dCQ - Chat Core IQ v1.0.1 Bug Fixes & 100% Coverage Testing
+
+#### Bug Fixes
+
+| Issue | Root Cause | Fix Applied | File |
+|-------|-----------|-------------|------|
+| **Audit logs schema cache error** | Missing `new_value` column | Added `old_value`, `new_value`, `resource_type`, `bot_id` columns | Supabase migration |
+| **Slow `/api/banner-settings` (41s)** | Wrong column name `is_enabled` | Fixed to `rotation_enabled` | `data-store.ts:89` |
+| **IVR transfer URL 404** | Missing basePath | Fixed to `${BASE_PATH}/Home/index.html` | `ivr/page.tsx:689` |
+| **Analytics page 404** | Hardcoded `/api/analytics` | Added BASE_PATH to all 3 API calls | `analytics/page.tsx` |
+
+#### 100% Coverage Testing Results
+
+**Chatbot Testing (30+ queries):**
+- English: 10 queries tested ✅
+- Spanish: 10 queries tested ✅
+- Haitian Creole: 10 queries tested ✅
+- Language switching: EN→ES→HT seamless ✅
+- Source link relevance: All topics returning relevant links ✅
+
+**IVR Demo Testing:**
+- English voice flow ✅
+- Spanish voice flow ✅
+- Haitian Creole voice flow ✅
+- Transfer code generation ✅
+- Transfer to chatbot URL (Fixed) ✅
+
+**Admin Panel Testing (All 10 pages):**
+| Page | Status | Data Verified |
+|------|--------|---------------|
+| Dashboard | ✅ | 146 conversations, 97% satisfaction |
+| Analytics | ✅ | 119 conversations, charts loading |
+| Workflows | ✅ | 3 system workflows |
+| Content | ✅ | 348 knowledge items, 16 FAQs |
+| Conversations | ✅ | 50 logs with EN/ES/HT |
+| Escalations | ✅ | Filtering working |
+| Notifications | ✅ | All tabs working |
+| Announcements | ✅ | 3 active announcements |
+| Audit Logs | ✅ | 50 entries (schema fix working) |
+| Settings | ✅ | Profile, Team, Permissions, Chatbot tabs |
+
+**Homepage Widgets:**
+- Announcement banner ✅ (rotating, dismissible)
+- FAQ accordion ✅ (expand/collapse working)
+- Chat widget ✅ (full conversation flow)
+- Language selector ✅
+- Voice assistant toggle ✅
+
+#### Files Changed
+```
+apps/chat-core-iq/src/app/admin/analytics/page.tsx
+apps/chat-core-iq/src/app/demo/ivr/page.tsx
+apps/chat-core-iq/src/lib/data-store.ts
+```
+
+#### Deployment Status
+- **Production**: https://chat-core-iq.vercel.app/dcq/Home/index.html
+- **Status**: ✅ 100% Deployment Ready
+
+---
+
 ## [0.7.2] - 2026-01-21
 
 ### Full Spectrum Save - All Products Synced

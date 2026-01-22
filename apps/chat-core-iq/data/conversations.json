@@ -2131,7 +2131,1789 @@
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769061280222_usw17opql",
+      "sessionId": "session_1769061278926",
+      "startTime": "2026-01-22T05:54:40.222Z",
+      "endTime": "2026-01-22T05:54:40.222Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hello",
+          "timestamp": "2026-01-22T05:54:40.222Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Hello! How can I assist you?",
+          "timestamp": "2026-01-22T05:54:40.222Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769061394854_w5k1ayy00",
+      "sessionId": "sess_1769061348435_oghc0rbwg",
+      "startTime": "2026-01-22T05:56:34.853Z",
+      "endTime": "2026-01-22T05:56:34.853Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T05:56:34.853Z"
+        },
+        {
+          "role": "user",
+          "content": "hello, what are the city hall hours?",
+          "timestamp": "2026-01-22T05:56:34.853Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are City Hall hours.\n\n**Hours:**\n• Monday to Friday\n• 8:00 AM - 5:00 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T05:56:34.853Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769061395854_24q3xmppc",
+      "sessionId": "sess_1769061348435_oghc0rbwg",
+      "startTime": "2026-01-22T05:55:48.437Z",
+      "endTime": "2026-01-22T05:56:34.885Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T05:55:48.437Z"
+        },
+        {
+          "role": "user",
+          "content": "hello, what are the city hall hours?",
+          "timestamp": "2026-01-22T05:56:31.808Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are City Hall hours.\n\n**Hours:**\n• Monday to Friday\n• 8:00 AM - 5:00 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T05:56:34.885Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769062155229_w2wtckokd",
+      "sessionId": "session_1769062155226",
+      "startTime": "2026-01-22T06:09:15.229Z",
+      "endTime": "2026-01-22T06:09:15.229Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-22T06:09:15.229Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T06:09:15.229Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769062216854_pvhszs6pf",
+      "sessionId": "ivr-demo-1769062214697",
+      "startTime": "2026-01-22T06:10:16.854Z",
+      "endTime": "2026-01-22T06:10:16.854Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T06:10:16.854Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall is open Monday to Friday.\n\n**Hours:**\n• 8 AM to 5 PM  \n• Closed on weekends  \n• Closed on federal holidays  \n\nI hope this helps!",
+          "timestamp": "2026-01-22T06:10:16.854Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/demo/ivr"
+    },
+    {
+      "id": "conv_1769063326350_nanc9qbxa",
+      "sessionId": "session_1769063326347",
+      "startTime": "2026-01-22T06:28:46.350Z",
+      "endTime": "2026-01-22T06:28:46.350Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a building permit?",
+          "timestamp": "2026-01-22T06:28:46.350Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T06:28:46.350Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063340948_pcq5xo3cx",
+      "sessionId": "session_1769063338689",
+      "startTime": "2026-01-22T06:29:00.948Z",
+      "endTime": "2026-01-22T06:29:00.948Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T06:29:00.948Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information on City Hall hours.\n\n**Hours:**\n• Monday to Friday\n• 8:00 AM to 5:00 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T06:29:00.948Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063341798_wu5w295yh",
+      "sessionId": "session_1769063341792",
+      "startTime": "2026-01-22T06:29:01.798Z",
+      "endTime": "2026-01-22T06:29:01.798Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a building permit?",
+          "timestamp": "2026-01-22T06:29:01.798Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T06:29:01.798Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063345867_5tggxo62l",
+      "sessionId": "session_1769063342651",
+      "startTime": "2026-01-22T06:29:05.867Z",
+      "endTime": "2026-01-22T06:29:05.867Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Donde esta la oficina de policia?",
+          "timestamp": "2026-01-22T06:29:05.867Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información de la policía.\n\n**Oficina de Policía:**\n• Dirección: Chat Core IQ\n• Teléfono: (305) 593-6699\n\n**Contacto Emergencias:**\n• Llamar: 911\n\n**Nota:**\n• No emergencia: 305-593-6699",
+          "timestamp": "2026-01-22T06:29:05.867Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063350794_xv8q681dv",
+      "sessionId": "session_1769063346700",
+      "startTime": "2026-01-22T06:29:10.794Z",
+      "endTime": "2026-01-22T06:29:10.794Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What parks programs are available?",
+          "timestamp": "2026-01-22T06:29:10.794Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the available parks programs.\n\n**Sports Leagues:**\n• Basketball (Ages 6-14)  \n• Soccer (Ages 4-16)  \n• Baseball/Softball (Ages 5-14)  \n• Flag Football (Ages 5-14)  \n• Cheerleading (Ages 5-14)  \n\n**Swim Lessons:**\n• Various classes for all ages  \n• Cost: $150-$185 per session  \n\n**Enrichment Programs:**\n• Coding and Robotics  \n• Science Labs  \n• Arts and Crafts  \n• Karate and Aikido  \n\n**Camps:**\n• Summer, Winter, Spring Break, Holiday  \n\n**Contact:**\n• Parks & Recreation: (305) 593-6600  ",
+          "timestamp": "2026-01-22T06:29:10.794Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063355612_zxu00oaae",
+      "sessionId": "session_1769063352152",
+      "startTime": "2026-01-22T06:29:15.612Z",
+      "endTime": "2026-01-22T06:29:15.612Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about the Doral trolley service",
+          "timestamp": "2026-01-22T06:29:15.612Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's an overview of the Doral trolley service.\n\n**Routes:**\n- Route 1: Crosstown Connector\n- Route 2: Metrorail Connector\n- Route 3: Residential Connector\n- Route 4: FIU Connector\n\n**Service Hours:**\n- Weekdays: 6 AM - 10 PM\n- Saturdays: 7 AM - 8 PM\n- Sundays: 7 AM - 8 PM\n\n**Real-Time Tracking:**\n- Use Trolley Tracker app\n\n**Contact:**\n- Phone: (305) 891-3131\n- Website: cityofdoral.com/trolley",
+          "timestamp": "2026-01-22T06:29:15.612Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063368098_8raa0qejx",
+      "sessionId": "session_1769063366364",
+      "startTime": "2026-01-22T06:29:28.098Z",
+      "endTime": "2026-01-22T06:29:28.098Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Contact info for the police department",
+          "timestamp": "2026-01-22T06:29:28.098Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the police department contact info.\n\n**Contact:**\n• Phone: (305) 593-6699  \n• Address: 8401 NW 53rd Terrace  \n• Hours: 24/7 availability",
+          "timestamp": "2026-01-22T06:29:28.098Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063371588_5czi1toz7",
+      "sessionId": "session_1769063369022",
+      "startTime": "2026-01-22T06:29:31.588Z",
+      "endTime": "2026-01-22T06:29:31.588Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How can I apply for a city job?",
+          "timestamp": "2026-01-22T06:29:31.588Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a city job.\n\n**Requirements:**\n• Complete online application\n• Attach required documents\n• Update NEOGOV profile\n\n**Steps:**\n1. Visit Job Opportunities section\n2. Select desired position\n3. Submit application and attachments\n\n**Contact:**\n• NEOGOV support: 1-877-204-4442\n• Human Resources: (305) 593-6760",
+          "timestamp": "2026-01-22T06:29:31.588Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063375559_6mxopq0vw",
+      "sessionId": "session_1769063373570",
+      "startTime": "2026-01-22T06:29:35.559Z",
+      "endTime": "2026-01-22T06:29:35.559Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are coming up in Doral?",
+          "timestamp": "2026-01-22T06:29:35.559Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Check local listings for updates.\n\n**Upcoming Events:**\n• Concerts\n• Festivals\n• Races\n• Exhibitions\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Police: (305) 593-6699",
+          "timestamp": "2026-01-22T06:29:35.559Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063379112_p0er8s4bi",
+      "sessionId": "session_1769063376415",
+      "startTime": "2026-01-22T06:29:39.112Z",
+      "endTime": "2026-01-22T06:29:39.112Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I pay my utility bill?",
+          "timestamp": "2026-01-22T06:29:39.112Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to pay your utility bill.\n\n**Payment Options:**\n• Online: miamidade.county-taxes.com  \n• Phone: (305) 270-4916  \n• In Person: Tax Collector's Office  \n\n**Contact:**\n• Tax Collector: (305) 270-4916  \n• City Hall: (305) 593-6725  ",
+          "timestamp": "2026-01-22T06:29:39.112Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063382090_yo6t36bdc",
+      "sessionId": "session_1769063379906",
+      "startTime": "2026-01-22T06:29:42.090Z",
+      "endTime": "2026-01-22T06:29:42.090Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a business license?",
+          "timestamp": "2026-01-22T06:29:42.090Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to get a business license.\n\n**Steps:**\n1. Choose legal structure type\n2. Check zoning regulations first\n3. Obtain additional permits if needed\n4. Apply for Local Business Tax Receipt\n5. Obtain Miami-Dade County license\n\n**Contact:**\n- Business Licensing Division: (305) 593-6631\n- Email: btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-22T06:29:42.090Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063394620_le5fz72yx",
+      "sessionId": "session_1769063391499",
+      "startTime": "2026-01-22T06:29:54.620Z",
+      "endTime": "2026-01-22T06:29:54.620Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about flood zones in Doral",
+          "timestamp": "2026-01-22T06:29:54.620Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's information on flood zones in Doral.\n\n**Flood Zone Types:**\n• Special Flood Hazard Area (SFHA)  \n• Moderate Flood Risk Areas  \n• Minimal Flood Risk Areas  \n\n**Insurance Requirements:**\n• Flood insurance for SFHA properties  \n• Optional for minimal risk areas  \n\n**How to Check Zone:**\n• Call Floodplain Manager: (305) 593-6725  \n• Provide address or folio number  \n\n**Resources:**\n• FEMA flood maps online  \n• Community Rating System discounts  \n\nNeed further assistance? I can connect you with a representative.",
+          "timestamp": "2026-01-22T06:29:54.620Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063396611_6g3m8obj5",
+      "sessionId": "session_1769063395479",
+      "startTime": "2026-01-22T06:29:56.611Z",
+      "endTime": "2026-01-22T06:29:56.611Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Who is the mayor of Doral?",
+          "timestamp": "2026-01-22T06:29:56.611Z"
+        },
+        {
+          "role": "assistant",
+          "content": "The current mayor is Christi Fraga.",
+          "timestamp": "2026-01-22T06:29:56.611Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063397455_axxi95dap",
+      "sessionId": "session_1769063397453",
+      "startTime": "2026-01-22T06:29:57.455Z",
+      "endTime": "2026-01-22T06:29:57.455Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I report a code violation?",
+          "timestamp": "2026-01-22T06:29:57.455Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with code violations. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T06:29:57.455Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063402294_eokfn9se3",
+      "sessionId": "session_1769063398292",
+      "startTime": "2026-01-22T06:30:02.294Z",
+      "endTime": "2026-01-22T06:30:02.294Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What zoning is my property?",
+          "timestamp": "2026-01-22T06:30:02.294Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to check your property's zoning.\n\n**Search Methods:**\n• Use property address\n• Request folio number details\n• Ask about building restrictions\n\n**Contact:**\n• Planning & Zoning: (305) 593-6680\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T06:30:02.294Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063405617_khdqjjin0",
+      "sessionId": "session_1769063403695",
+      "startTime": "2026-01-22T06:30:05.617Z",
+      "endTime": "2026-01-22T06:30:05.617Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Emergency contact numbers for Doral",
+          "timestamp": "2026-01-22T06:30:05.617Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are important emergency contacts for Doral.\n\n**City Hall:**\n• (305) 593-6725\n\n**Police:**\n• (305) 593-6699\n\n**Emergency:**\n• 911",
+          "timestamp": "2026-01-22T06:30:05.617Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063421181_5npfmekrm",
+      "sessionId": "session_1769063418609",
+      "startTime": "2026-01-22T06:30:21.181Z",
+      "endTime": "2026-01-22T06:30:21.181Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a parking permit?",
+          "timestamp": "2026-01-22T06:30:21.181Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to get a parking permit.\n\n**Requirements:**\n• Chat Core IQ residency\n• Vehicle registration copy needed\n\n**Steps:**\n1. Register online for discount\n2. Provide required vehicle information\n3. Contact for questions\n\n**Contact:**\n• Miami Parking Authority: (305) 938-0072\n• parkchatcoreiq@miamiparking.com",
+          "timestamp": "2026-01-22T06:30:21.181Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063426013_ip7l0v615",
+      "sessionId": "session_1769063422118",
+      "startTime": "2026-01-22T06:30:26.013Z",
+      "endTime": "2026-01-22T06:30:26.013Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I request public records?",
+          "timestamp": "2026-01-22T06:30:26.013Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to request public records.\n\n**Methods:**\n• In person at City Hall  \n• Submit online request  \n• Email request to City Clerk  \n\n**Contact:**\n• Phone: (305) 593-6730  \n• Email: cityclerk@chatcoreiq.com  \n\n**Fees:**\n• $0.15 per page (single-sided)  \n• $0.20 per page (double-sided)  ",
+          "timestamp": "2026-01-22T06:30:26.013Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063431813_qe313sy15",
+      "sessionId": "session_1769063426980",
+      "startTime": "2026-01-22T06:30:31.813Z",
+      "endTime": "2026-01-22T06:30:31.813Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki jan mwen ka kontakte meri a?",
+          "timestamp": "2026-01-22T06:30:31.813Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou kontakte meri a.\n\n**Kondisyon:**\n• Biwo Meri a \n• Repons rapid \n• Apwobasyon nesesè\n\n**Etap:**\n1. Rele biwo: (305) 593-6725\n2. Voye imèl: mayor@cityofdoral.com\n3. Vizite sit entènèt: cityofdoral.com\n\n**Kontak:**\n• Adrès: 8401 NW 53rd Terrace, Doral, FL 33166\n• Orè: Lendi jiska Vandredi, 8:00 AM - 5:00 PM",
+          "timestamp": "2026-01-22T06:30:31.813Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063435885_v0v45s0sr",
+      "sessionId": "session_1769063432935",
+      "startTime": "2026-01-22T06:30:35.885Z",
+      "endTime": "2026-01-22T06:30:35.885Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What programs are available for seniors?",
+          "timestamp": "2026-01-22T06:30:35.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are programs for seniors.\n\n**Emergency Preparedness:**\n• Personal support network recommended  \n• Wellness checks during emergencies  \n\n**Hurricane Tips:**\n• Create a family emergency plan  \n• Prepare for evacuation scenarios  \n\n**Information Resources:**\n• Access to educational materials  \n• Special assistance for seniors  \n\n**Pet Preparedness:**\n• Plan for pets during emergencies  \n\n**Contact Support:**\n• Local resources available for seniors  \n\n**Further Information:**\n• Visit city website for details  ",
+          "timestamp": "2026-01-22T06:30:35.885Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063440919_5l2aw2yvs",
+      "sessionId": "session_1769063437896",
+      "startTime": "2026-01-22T06:30:40.919Z",
+      "endTime": "2026-01-22T06:30:40.919Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I need to schedule a meeting with the city manager and also want to know about upcoming council meetings",
+          "timestamp": "2026-01-22T06:30:40.919Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to schedule and find meetings.\n\n**Schedule Meeting:**\n• Contact City Manager's Office\n• Call: (305) 593-6730\n• Provide your details and request\n\n**Upcoming Council Meetings:**\n- January 15, 2026\n- February 5, 2026\n- February 19, 2026\n- March 5, 2026\n- March 19, 2026\n\n**Location:**\n• Doral Government Center\n• 8401 NW 53rd Terrace, Doral",
+          "timestamp": "2026-01-22T06:30:40.919Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063461877_1uj7dry30",
+      "sessionId": "session_1769063460356",
+      "startTime": "2026-01-22T06:31:01.877Z",
+      "endTime": "2026-01-22T06:31:01.877Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "what time does city hall close today",
+          "timestamp": "2026-01-22T06:31:01.877Z"
+        },
+        {
+          "role": "assistant",
+          "content": "City Hall usually closes at 5 PM.\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T06:31:01.877Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063465685_oxomciale",
+      "sessionId": "session_1769063462981",
+      "startTime": "2026-01-22T06:31:05.685Z",
+      "endTime": "2026-01-22T06:31:05.685Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "a que hora abre el ayuntamiento",
+          "timestamp": "2026-01-22T06:31:05.685Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información.\n\n**Horario:**\n• Lunes a viernes\n• 8:00 AM - 5:00 PM\n\n**Contacto:**\n• City Hall: (305) 593-6725\n\n**Ubicación:**\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T06:31:05.685Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769063494873_gv2x2ttjt",
+      "sessionId": "ivr-demo-1769063492127",
+      "startTime": "2026-01-22T06:31:34.873Z",
+      "endTime": "2026-01-22T06:31:34.873Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "what are the parks in Doral",
+          "timestamp": "2026-01-22T06:31:34.873Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a list of parks in Doral.\n\n**Parks:**\n• Doral Central Park\n• Doral Meadow Park\n• Doral Legacy Park\n• Prince George's Park\n• Downtown Doral Park\n• Costa del Sol Park\n\nEnjoy exploring the parks!",
+          "timestamp": "2026-01-22T06:31:34.873Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/demo/ivr"
+    },
+    {
+      "id": "conv_1769063871203_ei49fzs5d",
+      "sessionId": "session_1769063869669",
+      "startTime": "2026-01-22T06:37:51.203Z",
+      "endTime": "2026-01-22T06:37:51.203Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "hello",
+          "timestamp": "2026-01-22T06:37:51.203Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Hello! How can I assist you today?",
+          "timestamp": "2026-01-22T06:37:51.203Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769064136581_focx0v8xj",
+      "sessionId": "session_1769064134052",
+      "startTime": "2026-01-22T06:42:16.581Z",
+      "endTime": "2026-01-22T06:42:16.581Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you help me with?",
+          "timestamp": "2026-01-22T06:42:16.581Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can assist with various inquiries.\n\n**Topics I Cover:**\n• Property zoning information  \n• Property tax details  \n• Hurricane preparedness tips  \n• Roadside assistance resources  \n• City services and contacts  \n• General city information  \n\nLet me know what you need!",
+          "timestamp": "2026-01-22T06:42:16.581Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067326766_nyaszgsee",
+      "sessionId": "session_1769067323299",
+      "startTime": "2026-01-22T07:35:26.766Z",
+      "endTime": "2026-01-22T07:35:26.766Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What parks are available in Doral for families?",
+          "timestamp": "2026-01-22T07:35:26.766Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are family-friendly parks in Doral.\n\n**Parks:**\n• Chat Core IQ Aquatic Center  \n• Chat Core IQ Central Park  \n• Chat Core IQ Cultural Arts Center  \n• Chat Core IQ Glades Park  \n• Downtown Chat Core IQ Park  \n• Veterans Park  \n\n**Contact:**\n• Parks & Recreation: (305) 593-6600  \n• Location: 3005 NW 92nd Avenue",
+          "timestamp": "2026-01-22T07:35:26.766Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067332499_cinf419oe",
+      "sessionId": "session_1769067329363",
+      "startTime": "2026-01-22T07:35:32.499Z",
+      "endTime": "2026-01-22T07:35:32.499Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I prepare for a hurricane in Doral?",
+          "timestamp": "2026-01-22T07:35:32.499Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to prepare for a hurricane.\n\n**Preparation Tips:**\n• Create an emergency plan\n• Stock non-perishable food supplies\n• Store one gallon water per person\n• Ensure hurricane shutters are functional\n• Trim trees near structures\n• Prepare a pet disaster kit\n\n**Resources:**\n• Visit ready.gov for guidance\n• Contact City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T07:35:32.499Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067344458_ol0ih6bak",
+      "sessionId": "session_1769067344450",
+      "startTime": "2026-01-22T07:35:44.458Z",
+      "endTime": "2026-01-22T07:35:44.458Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the property tax rates in Doral?",
+          "timestamp": "2026-01-22T07:35:44.458Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with tax information. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:35:44.458Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067346197_ye7kxhfzg",
+      "sessionId": "session_1769067346194",
+      "startTime": "2026-01-22T07:35:46.197Z",
+      "endTime": "2026-01-22T07:35:46.197Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a building permit?",
+          "timestamp": "2026-01-22T07:35:46.197Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:35:46.197Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067352307_4pvw9kgvz",
+      "sessionId": "session_1769067349295",
+      "startTime": "2026-01-22T07:35:52.307Z",
+      "endTime": "2026-01-22T07:35:52.307Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where can I pay my water bill?",
+          "timestamp": "2026-01-22T07:35:52.307Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to pay your water bill.\n\n**Payment Options:**\n• Online: miamidade.county-taxes.com  \n• Phone: (305) 270-4916  \n• In Person: Tax Collector's Office  \n\n**Contact:**\n• Tax Collector: (305) 270-4916  \n• Water & Sewer: (305) 593-6740  ",
+          "timestamp": "2026-01-22T07:35:52.307Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067357554_hzx68y7wl",
+      "sessionId": "session_1769067354261",
+      "startTime": "2026-01-22T07:35:57.554Z",
+      "endTime": "2026-01-22T07:35:57.554Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the zoning for residential areas?",
+          "timestamp": "2026-01-22T07:35:57.554Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the zoning for residential areas.\n\n**Zoning Classifications:**\n• **R-1** - Single Family Residential  \n• **R-2** - Two-Family Residential  \n• **R-3** - Multi-Family Residential  \n\n**Permitted Uses:**\n• Homes, parks, schools  \n• Community facilities allowed  \n\n**Contact:**\n• Planning & Zoning: (305) 593-6680  ",
+          "timestamp": "2026-01-22T07:35:57.554Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067374060_7vnvkqr2j",
+      "sessionId": "session_1769067371208",
+      "startTime": "2026-01-22T07:36:14.060Z",
+      "endTime": "2026-01-22T07:36:14.060Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are happening in Doral this month?",
+          "timestamp": "2026-01-22T07:36:14.060Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are Doral's events this month.\n\n**Special Events:**\n• Emergency Hardship Grant assistance\n• Full Moon Yoga class\n• Seasonal Farmers Market\n• Cast and Connect fishing event\n• Paint Like Masters workshop\n• Zumba with Julie Richetelli\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Government Center: 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T07:36:14.060Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067380154_dlla8w9u4",
+      "sessionId": "session_1769067377277",
+      "startTime": "2026-01-22T07:36:20.154Z",
+      "endTime": "2026-01-22T07:36:20.154Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como puedo registrar mi negocio en Doral?",
+          "timestamp": "2026-01-22T07:36:20.154Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes los pasos para registrar tu negocio.\n\n**Requisitos:**\n• Licencia comercial\n• Nombre de la empresa\n• Documentación fiscal\n\n**Pasos:**\n1. Visitar el sitio web de Doral\n2. Completar el formulario de registro\n3. Pagar la tarifa correspondiente\n\n**Contacto:**\n• City Hall: (305) 593-6725\n• Email: info@chatcoreiq.com",
+          "timestamp": "2026-01-22T07:36:20.154Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067383596_nlnsc8ex0",
+      "sessionId": "session_1769067381610",
+      "startTime": "2026-01-22T07:36:23.596Z",
+      "endTime": "2026-01-22T07:36:23.596Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the trash pickup days?",
+          "timestamp": "2026-01-22T07:36:23.596Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's info on trash pickup days.\n\n**Pickup Schedule:**\n• Varies by neighborhood\n• Check local calendar\n\n**Contact:**\n• Miami-Dade County: 311\n• Phone: (305) 468-5900",
+          "timestamp": "2026-01-22T07:36:23.596Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769067387106_mqnss9uod",
+      "sessionId": "session_1769067385215",
+      "startTime": "2026-01-22T07:36:27.106Z",
+      "endTime": "2026-01-22T07:36:27.106Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Who is the mayor of Doral?",
+          "timestamp": "2026-01-22T07:36:27.106Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the current Doral mayor information.\n\n**Mayor:**\n• Christi Fraga\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-22T07:36:27.106Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068219484_sikhs8s5l",
+      "sessionId": "session_1769068215839",
+      "startTime": "2026-01-22T07:50:19.484Z",
+      "endTime": "2026-01-22T07:50:19.484Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a business license?",
+          "timestamp": "2026-01-22T07:50:19.484Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to apply for a business license.\n\n**Steps:**\n1. Email licensing division: btrlicensing@chatcoreiq.com\n2. Obtain DERM approval\n3. Get Fire Inspection Report\n4. Create user account online\n5. Submit application through portal\n\n**Contact:**\n- Licensing Division: (305) 593-6631\n- Email: btrlicensing@chatcoreiq.com\n- Portal: https://energovcss.cityofdoral.com",
+          "timestamp": "2026-01-22T07:50:19.484Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068243920_re108mp1u",
+      "sessionId": "session_1769068241718",
+      "startTime": "2026-01-22T07:50:43.920Z",
+      "endTime": "2026-01-22T07:50:43.920Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T07:50:43.920Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the City Hall hours information.\n\n**Hours:**\n• Monday to Friday\n• 8 AM to 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725\n• Address: 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T07:50:43.920Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068250733_25yx6lwjz",
+      "sessionId": "session_1769068246333",
+      "startTime": "2026-01-22T07:50:50.733Z",
+      "endTime": "2026-01-22T07:50:50.733Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where is Doral Central Park?",
+          "timestamp": "2026-01-22T07:50:50.733Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the location of Doral Central Park.\n\n**Address:**\n• 3005 NW 92nd Avenue  \n• Chat Core IQ, FL 33172  \n\n**Contact:**\n• Phone: (305) 593-6677  \n• Email: chatcoreiqcentralpark@chatcoreiq.com",
+          "timestamp": "2026-01-22T07:50:50.733Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068256704_873jg84gs",
+      "sessionId": "session_1769068253018",
+      "startTime": "2026-01-22T07:50:56.704Z",
+      "endTime": "2026-01-22T07:50:56.704Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I register for youth sports programs?",
+          "timestamp": "2026-01-22T07:50:56.704Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here’s how to register for youth sports.\n\n**Online Registration:**\n1. Visit: cityofdoral.com/parks\n2. Click 'Program Registration'\n3. Create an account or log in\n4. Browse available programs\n5. Select program and session\n6. Complete registration and pay online\n\n**In-Person Registration:**\n- Doral Central Park\n- Doral Legacy Park\n- Morgan Levy Park\n\n**Documents Needed:**\n- Child's birth certificate\n- Proof of residency\n- Payment information",
+          "timestamp": "2026-01-22T07:50:56.704Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068260654_ziip5kwvf",
+      "sessionId": "session_1769068258750",
+      "startTime": "2026-01-22T07:51:00.654Z",
+      "endTime": "2026-01-22T07:51:00.654Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What is the phone number for Doral Police?",
+          "timestamp": "2026-01-22T07:51:00.654Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the Doral Police contact.\n\n**Contact:**\n• Phone: (305) 593-6699",
+          "timestamp": "2026-01-22T07:51:00.654Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068263493_7kkflei47",
+      "sessionId": "session_1769068263489",
+      "startTime": "2026-01-22T07:51:03.493Z",
+      "endTime": "2026-01-22T07:51:03.493Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a building permit in Doral?",
+          "timestamp": "2026-01-22T07:51:03.493Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with permit history. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:51:03.493Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068280309_v3rww4j3j",
+      "sessionId": "session_1769068277342",
+      "startTime": "2026-01-22T07:51:20.309Z",
+      "endTime": "2026-01-22T07:51:20.309Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What events are happening in Doral?",
+          "timestamp": "2026-01-22T07:51:20.309Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to find events in Doral.\n\n**Event Information:**\n• Concerts\n• Festivals\n• Races\n• Exhibitions\n• City Council meetings\n\n**How to Find:**\n1. Visit cityofdoral.com/events\n2. Call City Hall: (305) 593-6725\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Police: (305) 593-6699",
+          "timestamp": "2026-01-22T07:51:20.309Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068282871_w8069gh4z",
+      "sessionId": "session_1769068282863",
+      "startTime": "2026-01-22T07:51:22.871Z",
+      "endTime": "2026-01-22T07:51:22.871Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I report a code violation?",
+          "timestamp": "2026-01-22T07:51:22.871Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with code violations. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:51:22.871Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068287494_bm6m7kkhe",
+      "sessionId": "session_1769068285034",
+      "startTime": "2026-01-22T07:51:27.494Z",
+      "endTime": "2026-01-22T07:51:27.494Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What recycling services are available?",
+          "timestamp": "2026-01-22T07:51:27.494Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's information on recycling services.\n\n**Services Offered:**\n• Curbside recycling collection\n• Drop-off recycling centers\n• Bulk item recycling pickup\n• Yard waste recycling\n\n**Contact:**\n• Miami-Dade County: (311)\n• Snapper Creek Center: (2200 SW 117 Ave)",
+          "timestamp": "2026-01-22T07:51:27.494Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068292030_pkrf2rz2f",
+      "sessionId": "session_1769068290072",
+      "startTime": "2026-01-22T07:51:32.030Z",
+      "endTime": "2026-01-22T07:51:32.030Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Where can I find job openings with the city?",
+          "timestamp": "2026-01-22T07:51:32.030Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to find job openings.\n\n**Job Opportunities:**\n• Visit Job Opportunities Section\n• Check current listings online\n• Subscribe for email notifications\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Email: hr@chatcoreiq.com",
+          "timestamp": "2026-01-22T07:51:32.030Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068294585_dcmsmxit0",
+      "sessionId": "session_1769068294583",
+      "startTime": "2026-01-22T07:51:34.585Z",
+      "endTime": "2026-01-22T07:51:34.585Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What flood zone is my property in?",
+          "timestamp": "2026-01-22T07:51:34.585Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with zoning info. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:51:34.585Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068312072_5jo7fbfya",
+      "sessionId": "session_1769068308430",
+      "startTime": "2026-01-22T07:51:52.072Z",
+      "endTime": "2026-01-22T07:51:52.072Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como pago mi factura de agua",
+          "timestamp": "2026-01-22T07:51:52.072Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información de pago.\n\n**Opciones de pago:**\n• En línea en el sitio web\n• Por teléfono al (305) 593-6725\n• En persona en la oficina\n\n**Requisitos:**\n• Número de cuenta necesario\n• Identificación personal requerida\n\n**Contacto:**\n• (305) 593-6725\n• Email: billing@chatcoreiq.com",
+          "timestamp": "2026-01-22T07:51:52.072Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068317328_ald6mp3uh",
+      "sessionId": "session_1769068314528",
+      "startTime": "2026-01-22T07:51:57.328Z",
+      "endTime": "2026-01-22T07:51:57.328Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Donde estan los parques",
+          "timestamp": "2026-01-22T07:51:57.328Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes información sobre parques.\n\n**Parques en Chat Core IQ:**\n• Parque Doral Meadow\n• Parque Central\n• Parque de la Ciudad\n• Parque de la Comunidad\n• Parque de los Niños\n\n**Contactos:**\n- City Hall: (305) 593-6725\n- Información adicional: cityofdoral.com",
+          "timestamp": "2026-01-22T07:51:57.328Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068321642_n29cuaufx",
+      "sessionId": "session_1769068319864",
+      "startTime": "2026-01-22T07:52:01.642Z",
+      "endTime": "2026-01-22T07:52:01.642Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Numero de telefono de la policia",
+          "timestamp": "2026-01-22T07:52:01.642Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes el número de la policía.\n\n**Contacto:**\n• Policía: (305) 593-6699",
+          "timestamp": "2026-01-22T07:52:01.642Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068327333_dt2fh3nd0",
+      "sessionId": "session_1769068324132",
+      "startTime": "2026-01-22T07:52:07.333Z",
+      "endTime": "2026-01-22T07:52:07.333Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Como obtener licencia de negocio",
+          "timestamp": "2026-01-22T07:52:07.333Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo obtener una licencia de negocio.\n\n**Requisitos:**\n• Formulario de solicitud completado  \n• Identificación del solicitante  \n• Pago de tarifas correspondientes  \n• Comprobante de ubicación comercial  \n\n**Pasos:**\n1. Visitar el sitio web municipal  \n2. Completar el formulario de solicitud  \n3. Pagar las tarifas necesarias  \n4. Esperar aprobación de la solicitud  \n\n**Contacto:**\n• City Hall: (305) 593-6725  \n• Departamento de Licencias: (305) 593-6680  ",
+          "timestamp": "2026-01-22T07:52:07.333Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068344674_12zmz171b",
+      "sessionId": "session_1769068340942",
+      "startTime": "2026-01-22T07:52:24.674Z",
+      "endTime": "2026-01-22T07:52:24.674Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Eventos este mes",
+          "timestamp": "2026-01-22T07:52:24.674Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí están los eventos de este mes.\n\n**Las Paredes Oyen:**\n- Fechas: 14 junio - 6 julio\n- Ubicación: Cultural Arts Center\n- Experiencia inmersiva de teatro\n\n**The Nutcracker:**\n- Fechas: 30 noviembre - 3 enero\n- Ubicación: Paseo Boulevard\n- Evento navideño familiar\n\n**Boleto:**\n- Compra en línea disponible\n\n**Contacto:**\n- Cultural Arts Center: (305) 593-6725\n- Más información en lasparedesoyen.com",
+          "timestamp": "2026-01-22T07:52:24.674Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068352078_anq5n4bhm",
+      "sessionId": "session_1769068347257",
+      "startTime": "2026-01-22T07:52:32.078Z",
+      "endTime": "2026-01-22T07:52:32.078Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Preparacion para huracanes",
+          "timestamp": "2026-01-22T07:52:32.078Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes cómo prepararte para huracanes.\n\n**Planificación:**\n• Establecer un plan familiar\n• Designar un lugar seguro\n• Mantener contactos de emergencia\n\n**Suministros:**\n• Agua potable (1 galón por persona)\n• Alimentos no perecederos\n• Linternas y baterías\n\n**Documentos:**\n• Copias de documentos importantes\n• Identificaciones y pólizas de seguro\n\n**Seguridad:**\n• Asegurar ventanas y puertas\n• Revisar generador eléctrico\n\n**Información:**\n• Seguir pronósticos de clima\n• Escuchar instrucciones de autoridades\n\n**Contacto:**\n• (305) 593-6699 - Policía\n• 911 - Emergencias",
+          "timestamp": "2026-01-22T07:52:32.078Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068358211_utllr3r7v",
+      "sessionId": "session_1769068355073",
+      "startTime": "2026-01-22T07:52:38.211Z",
+      "endTime": "2026-01-22T07:52:38.211Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki le vil la ouvri",
+          "timestamp": "2026-01-22T07:52:38.211Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men orè ouvèti vil la.\n\n**Orè:**\n• Dimanch: 11:00 AM - 05:00 PM  \n• Lendi: Fèmen  \n• Madi: Fèmen  \n• Mèkredi: Fèmen  \n• Jedi: Fèmen  \n• Vann: Fèmen  \n• Samdi: 12:00 PM - 06:00 PM  \n\n**Kontak:**\n• City Hall: (305) 593-6725  \n• Lapolis: (305) 593-6699  \n• Ijans: 911  ",
+          "timestamp": "2026-01-22T07:52:38.211Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068364540_hn5ir85pi",
+      "sessionId": "session_1769068360846",
+      "startTime": "2026-01-22T07:52:44.540Z",
+      "endTime": "2026-01-22T07:52:44.540Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan mwen ka peye bwat dlo",
+          "timestamp": "2026-01-22T07:52:44.540Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou peye bwat dlo ou.\n\n**Kondisyon:**\n• Gen yon bòdwo aktyèl\n• Fè demann sou entènèt\n• Peye sou entènèt oswa pa chèk\n\n**Etap:**\n1. Vizite sit entènèt konpayi a\n2. Kreye yon kont oswa konekte\n3. Chwazi opsyon pou peye\n\n**Kontak:**\n• Konpayi Dlo: (305) 123-4567\n• Sipò Kliyan: (305) 987-6543",
+          "timestamp": "2026-01-22T07:52:44.540Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068370253_q7xilo306",
+      "sessionId": "session_1769068367489",
+      "startTime": "2026-01-22T07:52:50.253Z",
+      "endTime": "2026-01-22T07:52:50.253Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kote pak yo ye",
+          "timestamp": "2026-01-22T07:52:50.253Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men kèk kote pak yo ye.\n\n**Pak nasyonal:**\n• Everglades National Park\n• Biscayne National Park\n\n**Pak lokal:**\n• Bayfront Park\n• Tropical Park\n\n**Pak zòn:**\n• Amelia Earhart Park\n• Oleta River State Park\n\n**Pak vil:**\n• Margaret Pace Park\n• Lummus Park\n\n**Kontak:**\n- City Hall: (305) 593-6725\n- Lapolis: (305) 593-6699\n- Ijans: 911",
+          "timestamp": "2026-01-22T07:52:50.253Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068386057_0zd63y504",
+      "sessionId": "session_1769068384646",
+      "startTime": "2026-01-22T07:53:06.057Z",
+      "endTime": "2026-01-22T07:53:06.057Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Nimewo telefon polis la",
+          "timestamp": "2026-01-22T07:53:06.057Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men nimewo telefon pou lapolis.\n\n**Kontak:**\n• Lapolis: (305) 593-6699\n\n**Ijans:**\n• 911",
+          "timestamp": "2026-01-22T07:53:06.057Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068394483_ohu1ooiqz",
+      "sessionId": "session_1769068388614",
+      "startTime": "2026-01-22T07:53:14.483Z",
+      "endTime": "2026-01-22T07:53:14.483Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Preparasyon pou siklòn",
+          "timestamp": "2026-01-22T07:53:14.483Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou prepare pou yon siklòn.\n\n**Kondisyon:**\n• Tcheke avni meteo\n• Rasanble ekipman nesesè\n• Fè yon plan evakyasyon\n\n**Etap:**\n1. Pran dlo ak manje\n2. Prepare yon valiz ac premye swen\n3. Fè yon lis kontak\n4. Tcheke batri ak lanp\n5. Fèmen pòt ak fenèt\n6. Rete enfòme atravè medya\n\n**Kontak:**\n• Lapolis: (305) 593-6699\n• Ijans: 911\n• Nasyonal Siklòn Sant: 1-888-532-9997",
+          "timestamp": "2026-01-22T07:53:14.483Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068400758_b4u30c70q",
+      "sessionId": "session_1769068397252",
+      "startTime": "2026-01-22T07:53:20.758Z",
+      "endTime": "2026-01-22T07:53:20.758Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou jwenn pèmi konstriksyon",
+          "timestamp": "2026-01-22T07:53:20.758Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou jwenn yon pèmi konstriksyon.\n\n**Kondisyon:**\n• Soumèt aplikasyon\n• Peye frè yo\n• Respekte règleman lokal\n\n**Etap:**\n1. Ranpli aplikasyon sou entènèt\n2. Peye frè ki nesesè\n3. Soumèt plan ak dokiman\n\n**Kontak:**\n• Building Dept: (305) 593-6700\n• Email: PermitClerk@chatcoreiq.com",
+          "timestamp": "2026-01-22T07:53:20.758Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068408354_ktaweludj",
+      "sessionId": "session_1769068403616",
+      "startTime": "2026-01-22T07:53:28.354Z",
+      "endTime": "2026-01-22T07:53:28.354Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Evènman semèn sa",
+          "timestamp": "2026-01-22T07:53:28.354Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men kèk evènman ki ka fèt semèn sa a.\n\n**Evènman:**\n• Festival manje lokal\n• Konser mizik gratis\n• Atelye atizay pou timoun\n• Fwa literè ak otè\n• Egzibisyon atizay modèn\n• Maraton kominotè\n\n**Dat ak lè:**\n• 15-20 oktòb\n• 10:00 AM - 6:00 PM\n\n**Lokal:**\n• Sant Kiltirèl Vil la\n• Pati Laj la\n• Bibliyotèk Kominotè\n\n**Kontak:**\n- Sant Kiltirèl: (305) 123-4567\n- Bibliyotèk: (305) 987-6543\n\nKONTAK:\n- City Hall: (305) 593-6725\n- Lapolis: (305) 593-6699\n- Ijans: 911",
+          "timestamp": "2026-01-22T07:53:28.354Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068415031_ghhhwlc7c",
+      "sessionId": "session_1769068411282",
+      "startTime": "2026-01-22T07:53:35.031Z",
+      "endTime": "2026-01-22T07:53:35.031Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki moun ki majistra Doral",
+          "timestamp": "2026-01-22T07:53:35.031Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Majistra Doral la se Christi Fraga.\n\n**Enfòmasyon:**\n• Eleksyon 2020\n• Premye fwa kòm majistra\n• Angaje nan devlopman kominote\n\n**Kontak:**\n• Biwo: (305) 593-6725\n• Imèl: cityhall@cityofdoral.com\n\n",
+          "timestamp": "2026-01-22T07:53:35.031Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068455574_dfku6ws4r",
+      "sessionId": "session_1769068453593",
+      "startTime": "2026-01-22T07:54:15.574Z",
+      "endTime": "2026-01-22T07:54:15.574Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the park hours?",
+          "timestamp": "2026-01-22T07:54:15.574Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Parks are open from 6am to 10pm.",
+          "timestamp": "2026-01-22T07:54:15.574Z"
+        },
+        {
+          "role": "user",
+          "content": "Ahora en espanol por favor",
+          "timestamp": "2026-01-22T07:54:15.574Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Los parques abren de 6am a 10pm.",
+          "timestamp": "2026-01-22T07:54:15.574Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068461637_4fq0jwc3j",
+      "sessionId": "session_1769068458561",
+      "startTime": "2026-01-22T07:54:21.637Z",
+      "endTime": "2026-01-22T07:54:21.637Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Tell me about hurricane preparedness",
+          "timestamp": "2026-01-22T07:54:21.637Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to prepare for hurricanes.\n\n**Preparation:**\n• Create a personal emergency plan  \n• Stock non-perishable food and water  \n• Have prescription medications ready  \n• Prepare for pets' needs too  \n• Check hurricane shutters and panels  \n• Trim trees before hurricane season  \n\n**Resources:**\n• Visit www.ready.gov for tips  \n• Check local emergency management websites  \n\n**Contacts:**\n- Emergency: 911  \n- City Hall: (305) 593-6725  \n- Public Safety: (305) 593-6700  ",
+          "timestamp": "2026-01-22T07:54:21.637Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068467736_nm33puq1z",
+      "sessionId": "session_1769068464237",
+      "startTime": "2026-01-22T07:54:27.736Z",
+      "endTime": "2026-01-22T07:54:27.736Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Zoning regulations info",
+          "timestamp": "2026-01-22T07:54:27.736Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a quick overview of zoning regulations.\n\n**Zoning Classifications:**\n• R-1: Single Family Residential  \n• R-2: Two-Family Residential  \n• R-3: Multi-Family Residential  \n• MU-1/2/3: Mixed Use  \n• C-1/2/3: Commercial  \n• I-1/I-2: Industrial  \n\n**Information Available:**\n• Zoning code & description  \n• Future land use designation  \n• Development restrictions  \n• Permitted uses  \n• Parcel details  \n\n**Contact:**\n• Planning & Zoning: (305) 593-6680  \n• Zoning Map: cityofdoral.com/planning  ",
+          "timestamp": "2026-01-22T07:54:27.736Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068473541_0w1af2olx",
+      "sessionId": "session_1769068470574",
+      "startTime": "2026-01-22T07:54:33.541Z",
+      "endTime": "2026-01-22T07:54:33.541Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Parks and recreation programs",
+          "timestamp": "2026-01-22T07:54:33.541Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Explore Doral Parks & Recreation programs.\n\n**Current Programs:**\n- Youth Sports Leagues available\n- Swim lessons at Aquatic Center\n- Enrichment programs for kids\n- Seasonal camps: summer, winter, spring\n- Adult and teen fitness classes\n\n**Registration:**\n1. Online via cityofdoral.com/parks\n2. In-person at specified parks\n\n**Contact:**\n- Parks & Recreation: (305) 593-6600\n- Email: doralparksinfo@cityofdoral.com",
+          "timestamp": "2026-01-22T07:54:33.541Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068476238_sr88j5isd",
+      "sessionId": "session_1769068476236",
+      "startTime": "2026-01-22T07:54:36.238Z",
+      "endTime": "2026-01-22T07:54:36.238Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Property tax information",
+          "timestamp": "2026-01-22T07:54:36.238Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with tax information. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-22T07:54:36.238Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769068769538_hr0ygv68t",
+      "sessionId": "sess_1769067524605_w4h6kg54f",
+      "startTime": "2026-01-22T07:59:29.538Z",
+      "endTime": "2026-01-22T07:59:29.538Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-22T07:59:29.538Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the trolley hours?",
+          "timestamp": "2026-01-22T07:59:29.538Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the trolley service hours.\n\n**Route 1:**\n• Weekdays: 6:00 am - 10:00 pm  \n• Saturdays: 7:00 am - 8:00 pm  \n• Sundays: 7:00 am - 8:00 pm  \n\n**Route 2:**\n• Weekdays: 6:10 am - 9:20 pm  \n• Saturdays: 7:00 am - 7:30 pm  \n• No service on Sundays  \n\n**Route 3:**\n• Weekdays: 5:50 am - 9:30 pm  \n• Saturdays: 6:50 am - 7:00 pm  \n• No service on Sundays  \n\n**Route 4:**\n• Weekdays: 6:00 am - 11:00 pm  \n• No service on weekends  ",
+          "timestamp": "2026-01-22T07:59:29.538Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769068769609_x7npacag2",
+      "sessionId": "sess_1769067524605_w4h6kg54f",
+      "startTime": "2026-01-22T07:38:12.055Z",
+      "endTime": "2026-01-22T07:59:29.546Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Pressed: 1",
+          "timestamp": "2026-01-22T07:38:12.055Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the trolley hours?",
+          "timestamp": "2026-01-22T07:59:24.687Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the trolley service hours.\n\n**Route 1:**\n• Weekdays: 6:00 am - 10:00 pm  \n• Saturdays: 7:00 am - 8:00 pm  \n• Sundays: 7:00 am - 8:00 pm  \n\n**Route 2:**\n• Weekdays: 6:10 am - 9:20 pm  \n• Saturdays: 7:00 am - 7:30 pm  \n• No service on Sundays  \n\n**Route 3:**\n• Weekdays: 5:50 am - 9:30 pm  \n• Saturdays: 6:50 am - 7:00 pm  \n• No service on Sundays  \n\n**Route 4:**\n• Weekdays: 6:00 am - 11:00 pm  \n• No service on weekends  ",
+          "timestamp": "2026-01-22T07:59:29.546Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-21T07:32:09.466Z"
+  "lastUpdated": "2026-01-22T07:59:29.612Z"
 }

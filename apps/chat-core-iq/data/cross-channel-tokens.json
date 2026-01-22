@@ -142,23 +142,28 @@
   "EYJJIJ": {
     "token": "EYJJIJ",
     "sourceChannel": "ivr",
-    "sourceUserId": " 15551234567",
-    "sessionId": "ivr_1768826378151_iwyj6xshl",
+    "sourceUserId": "+1-demo-1769068502634",
+    "sessionId": "ivr_1769068514720",
     "language": "en",
-    "createdAt": "2026-01-19T12:39:46.357Z",
-    "expiresAt": "2026-01-19T13:09:46.354Z",
-    "used": true,
-    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2ODgyODE4NjM1NCwidiI6MX0",
+    "createdAt": "2026-01-22T07:55:14.720Z",
+    "expiresAt": "2026-01-22T08:25:14.717Z",
+    "used": false,
+    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2OTA3MDMxNDcxNywidiI6MX0",
     "messages": [
       {
+        "role": "assistant",
+        "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+        "timestamp": "2026-01-22T07:55:14.720Z"
+      },
+      {
         "role": "user",
-        "content": "What are your hours",
-        "timestamp": "2026-01-19T12:39:38.166Z"
+        "content": "Pressed: 1",
+        "timestamp": "2026-01-22T07:55:14.720Z"
       },
       {
         "role": "assistant",
-        "content": "**Hours:**\n• Monday-Thursday: 10am - 7pm\n• Friday-Saturday: 10am - 12am\n• Sunday: 12pm - 7pm",
-        "timestamp": "2026-01-19T12:39:40.427Z"
+        "content": "You can ask me questions about our services, policies, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
+        "timestamp": "2026-01-22T07:55:14.720Z"
       }
     ]
   }

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "/dcq";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
@@ -90,7 +92,7 @@ export default function AnalyticsPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/analytics?days=${days}`);
+      const response = await fetch(`${BASE_PATH}/api/analytics?days=${days}`);
       if (!response.ok) throw new Error("Failed to fetch analytics");
       const data = await response.json();
       setAnalytics(data);
@@ -106,11 +108,11 @@ export default function AnalyticsPage() {
   }, [fetchAnalytics]);
 
   const handleExportJSON = () => {
-    window.open(`/api/analytics?days=${days}&format=json`, "_blank");
+    window.open(`${BASE_PATH}/api/analytics?days=${days}&format=json`, "_blank");
   };
 
   const handleExportCSV = () => {
-    window.open(`/api/analytics?days=${days}&format=csv`, "_blank");
+    window.open(`${BASE_PATH}/api/analytics?days=${days}&format=csv`, "_blank");
   };
 
   // Chart data

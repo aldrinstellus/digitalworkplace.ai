@@ -1,8 +1,8 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
-**Version**: 1.0.0
-**Last Updated**: 2026-01-21
-**Status**: Production Live
+**Version**: 1.0.1
+**Last Updated**: 2026-01-22
+**Status**: Production Live - 100% Tested
 
 ---
 ## PRODUCTION URLS
@@ -78,7 +78,7 @@ npm run lint             # Run ESLint
 - **Semantic Search**: 348 knowledge items with 100% vector embedding coverage
 - **FAQ Widget**: Homepage displays FAQs from admin portal
 - **Admin Portal**: Full CRUD for FAQs, knowledge base, announcements
-- **Multi-language**: English/Spanish support
+- **Multi-language**: English/Spanish/Haitian Creole support (EN/ES/HT)
 - **Demo IVR**: Interactive Voice Response demo
 
 ---

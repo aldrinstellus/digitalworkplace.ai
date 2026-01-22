@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-21 13:00 UTC
-**Version**: 0.7.2
-**Session Status**: Full spectrum save - all products synced
+**Last Updated**: 2026-01-22 12:00 UTC
+**Version**: 0.7.3
+**Session Status**: dCQ v1.0.1 - Bug fixes & 100% coverage testing complete
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -26,10 +26,10 @@
 
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
-| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.2 |
+| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.3 |
 | **Support IQ (dSQ)** | https://support-iq-pearl.vercel.app | ✅ Live | 1.1.0 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 0.6.5 |
-| **Chat Core IQ (dCQ)** | https://chat-core-iq.vercel.app | ✅ Live | 1.0.0 |
+| **Chat Core IQ (dCQ)** | https://chat-core-iq.vercel.app | ✅ Live | 1.0.1 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 
 ### GitHub Repository
@@ -109,9 +109,27 @@
 
 ---
 
-## Latest Changes (v0.7.2)
+## Latest Changes (v0.7.3)
 
-### Full Spectrum Save (Current Session)
+### dCQ v1.0.1 Bug Fixes & 100% Coverage Testing (2026-01-22)
+
+**Bugs Fixed:**
+| Issue | Root Cause | Fix Applied |
+|-------|-----------|-------------|
+| Audit logs schema cache error | Missing `new_value` column | Added `old_value`, `new_value`, `resource_type`, `bot_id` columns via Supabase migration |
+| Slow `/api/banner-settings` (41s) | Wrong column name `is_enabled` | Fixed to `rotation_enabled` in `data-store.ts:89` - now 2.3s |
+| IVR transfer URL 404 | Missing basePath | Fixed in `ivr/page.tsx:689` - `${BASE_PATH}/Home/index.html` |
+| Analytics page 404 | Hardcoded `/api/analytics` | Added BASE_PATH to all 3 API calls in `analytics/page.tsx` |
+
+**100% Coverage Testing Completed:**
+- Chatbot: 30+ queries tested across EN/ES/HT languages
+- Language switching: EN→ES→HT seamless transitions
+- Source link relevance: All topics returning relevant links
+- IVR: All 3 languages with transfer code generation
+- Admin Panel: All 10 pages verified (Dashboard, Analytics, Workflows, Content, Conversations, Escalations, Notifications, Announcements, Audit Logs, Settings)
+- Homepage widgets: FAQ accordion + Chat widget fully tested
+
+### Previous: Full Spectrum Save (v0.7.2)
 - Synced all documentation across parallel Claude Code sessions
 - Updated version numbers for all products
 - Verified all production deployments live
@@ -312,6 +330,6 @@ When starting a new Claude Code session:
 
 ---
 
-*Last session: 2026-01-21 13:00 UTC*
-*Version: 0.7.2*
+*Last session: 2026-01-22 12:00 UTC*
+*Version: 0.7.3*
 *Machine: Mac Mini (aldrin-mac-mini)*

@@ -22,7 +22,7 @@ const products = [
     title: "AI Support",
     description: "Intelligent customer support automation",
     localHref: "http://localhost:3003/dsq/demo/cor",
-    prodHref: "https://support-iq-pearl.vercel.app/dsq/demo/cor",
+    prodHref: "https://dsq.digitalworkplace.ai/dsq/demo/cor",
     disabled: false,
     colors: {
       primary: "#10b981",

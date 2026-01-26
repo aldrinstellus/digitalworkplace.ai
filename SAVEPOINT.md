@@ -27,7 +27,7 @@
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.5 |
-| **Support IQ (dSQ)** | https://support-iq-pearl.vercel.app | ✅ Live | 1.1.0 |
+| **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 1.1.0 |
 | **Chat Core IQ (dCQ)** | https://chat-core-iq.vercel.app/dcq/Home/index.html | ✅ Live | 1.0.2 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |

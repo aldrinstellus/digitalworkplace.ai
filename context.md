@@ -310,9 +310,9 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
   - Vector Embeddings: 100% ✅
   - API Endpoints (9): 100% ✅
 
-### dSQ - Support IQ (v1.1.0)
+### dSQ - Support IQ (v1.2.5)
 - **Port**: 3003
-- **Production**: https://support-iq-pearl.vercel.app
+- **Production**: https://dsq.digitalworkplace.ai
 - **GitHub**: https://github.com/aldrinstellus/support-iq
 - **Features**:
   - 3 Modes: Government, Project, ATC (SME)

@@ -2,7 +2,7 @@
 
 **Version**: 1.0.0
 **Last Updated**: January 26, 2026
-**Production URL**: https://support-iq-pearl.vercel.app/dsq
+**Production URL**: https://dsq.digitalworkplace.ai/dsq
 **Test Status**: 117/117 Tests Passing (100%)
 
 ---
@@ -112,8 +112,8 @@ Government mode focuses on federal contracting, program oversight, and stakehold
 | 1 | "Show program overview" | `program-health-dashboard` | Program health dashboard shows portfolio status and key metrics |
 | 2 | "Show program health dashboard" | `program-health-dashboard` | Program health dashboard shows portfolio status and key metrics |
 | 3 | "Program health" | `program-health-dashboard` | Program health dashboard shows portfolio status and key metrics |
-| 4 | "Show milestone status" | `program-health-dashboard` | Milestone progress tracking toward key phases |
-| 5 | "Milestone status" | `program-health-dashboard` | Milestone progress tracking toward key phases |
+| 4 | "Show milestone status" | `milestone-tracking-dashboard` | Milestone progress tracking toward key phases |
+| 5 | "Milestone status" | `milestone-tracking-dashboard` | Milestone progress tracking toward key phases |
 | 6 | "Show risk register" | `program-health-dashboard` | Risk register shows active risks and mitigation plans |
 | 7 | "Critical risk" | `change-request-dashboard` | Change requests and risk items requiring attention |
 | 8 | "Show resource allocation" | `resource-capacity-dashboard` | Resource capacity and utilization across the team |
@@ -490,16 +490,16 @@ These queries work across ALL personas:
 
 | Persona | URL |
 |---------|-----|
-| COR | https://support-iq-pearl.vercel.app/dsq/demo/cor |
-| Program Manager | https://support-iq-pearl.vercel.app/dsq/demo/program-manager |
-| Stakeholder Lead | https://support-iq-pearl.vercel.app/dsq/demo/stakeholder-lead |
-| Project Manager | https://support-iq-pearl.vercel.app/dsq/demo/project-manager |
-| Service Team Lead | https://support-iq-pearl.vercel.app/dsq/demo/service-team-lead |
-| Service Team Member | https://support-iq-pearl.vercel.app/dsq/demo/service-team-member |
-| C-Level Executive | https://support-iq-pearl.vercel.app/dsq/demo/atc-executive |
-| CS Manager | https://support-iq-pearl.vercel.app/dsq/demo/atc-manager |
-| Support Agent | https://support-iq-pearl.vercel.app/dsq/demo/atc-support |
-| CSM | https://support-iq-pearl.vercel.app/dsq/demo/atc-csm |
+| COR | https://dsq.digitalworkplace.ai/dsq/demo/cor |
+| Program Manager | https://dsq.digitalworkplace.ai/dsq/demo/program-manager |
+| Stakeholder Lead | https://dsq.digitalworkplace.ai/dsq/demo/stakeholder-lead |
+| Project Manager | https://dsq.digitalworkplace.ai/dsq/demo/project-manager |
+| Service Team Lead | https://dsq.digitalworkplace.ai/dsq/demo/service-team-lead |
+| Service Team Member | https://dsq.digitalworkplace.ai/dsq/demo/service-team-member |
+| C-Level Executive | https://dsq.digitalworkplace.ai/dsq/demo/atc-executive |
+| CS Manager | https://dsq.digitalworkplace.ai/dsq/demo/atc-manager |
+| Support Agent | https://dsq.digitalworkplace.ai/dsq/demo/atc-support |
+| CSM | https://dsq.digitalworkplace.ai/dsq/demo/atc-csm |
 
 ---
 

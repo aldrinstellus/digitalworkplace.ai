@@ -13,7 +13,7 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: "https://support-iq-pearl.vercel.app",
+    href: "https://support-iq-pearl.vercel.app/dsq/demo/cor",
     disabled: false,
     colors: {
       primary: "#10b981",

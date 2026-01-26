@@ -6,6 +6,14 @@ import { useRouter } from "next/navigation";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { getUserByEmail, syncUserWithClerk, UserData } from "@/lib/userRole";
 
+// Product URLs - local vs production
+const getProductUrl = (localUrl: string, prodUrl: string) => {
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return localUrl;
+  }
+  return prodUrl;
+};
+
 // Product data - 4 core products with rich theming
 const products = [
   {
@@ -13,7 +21,8 @@ const products = [
     name: "Support IQ",
     title: "AI Support",
     description: "Intelligent customer support automation",
-    href: "https://support-iq-pearl.vercel.app/dsq/demo/cor",
+    localHref: "http://localhost:3003/dsq/demo/cor",
+    prodHref: "https://support-iq-pearl.vercel.app/dsq/demo/cor",
     disabled: false,
     colors: {
       primary: "#10b981",
@@ -26,7 +35,8 @@ const products = [
     name: "Intranet IQ",
     title: "AI Intranet",
     description: "Smart internal knowledge network",
-    href: "https://intranet-iq.vercel.app/diq/dashboard",
+    localHref: "http://localhost:3001/diq/dashboard",
+    prodHref: "https://intranet-iq.vercel.app/diq/dashboard",
     disabled: false,
     colors: {
       primary: "#3b82f6",
@@ -39,7 +49,8 @@ const products = [
     name: "Chat Core IQ",
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
-    href: "https://chat-core-iq.vercel.app/dcq/Home/index.html",
+    localHref: "http://localhost:3002/dcq/Home/index.html",
+    prodHref: "https://chat-core-iq.vercel.app/dcq/Home/index.html",
     disabled: false,
     colors: {
       primary: "#a855f7",
@@ -52,7 +63,8 @@ const products = [
     name: "Test Pilot IQ",
     title: "AI Testing",
     description: "Automated QA & testing intelligence",
-    href: "#",
+    localHref: "#",
+    prodHref: "#",
     disabled: true, // Coming soon
     colors: {
       primary: "#f59e0b",
@@ -761,7 +773,9 @@ function ProductCard({
   const handleLaunchApp = () => {
     if (isDisabled) return;
     // Open all product apps in a new tab - they are self-contained projects
-    window.open(product.href, '_blank', 'noopener,noreferrer');
+    // Use local URL when running locally, production URL otherwise
+    const href = getProductUrl(product.localHref, product.prodHref);
+    window.open(href, '_blank', 'noopener,noreferrer');
   };
 
   // 3D Tilt effect

@@ -388,42 +388,26 @@ npm run dev:support      # Start dSQ on port 3003
 
 **CRITICAL: These standards MUST be followed across all apps (dIQ, dCQ, dSQ)**
 
-#### 1. Match Threshold
-- **Minimum threshold: 0.50 (50%)** - Never use lower thresholds (e.g., 0.35)
-- Lower thresholds cause false positives and query collision
+**CANONICAL DOCUMENT:** `/docs/QUERY_DETECTION_STANDARDS.md` - Full specification
 
-#### 2. Compound Words
-All domain-specific multi-word phrases must be treated as compound words to prevent word-level collision:
-```typescript
-const COMPOUND_WORDS = {
-  'team budget': 'teambudget',
-  'budget overview': 'budgetoverview',
-  'executive summary': 'executivesummary',
-  // Add domain-specific compounds for each app
-};
-```
+#### Quick Reference
+| Standard | Value |
+|----------|-------|
+| **Match Threshold** | 0.50 (50%) minimum |
+| **Compound Words** | 75+ domain-specific phrases |
+| **Key Term Bonus** | +0.12 match, -0.08 mismatch |
+| **Stop Words** | KEEP: show, me, my, get, find |
+| **Algorithm** | jaccard(0.35) + levenshtein(0.15) + bonuses |
 
-#### 3. Key Term Handling
-- Define domain-specific key terms
-- Apply **PENALTY** when query has a key term that target doesn't have
-- Apply **BONUS** when ALL query key terms are matched
-
-#### 4. Stop Words
-- Do NOT remove meaningful action words like 'show', 'me' from stop words
-- Only remove true grammatical stop words (the, a, an, is, are, etc.)
-
-#### 5. Algorithm Weights (Reference)
-```typescript
-finalScore = (jaccard × 0.35) + (levenshtein × 0.15) + containment + keyTerms + coverage
-```
-
-#### 6. Vector Embeddings (Preferred)
-When available, prefer real vector embeddings (OpenAI text-embedding-3-small) over text similarity:
-- **dIQ**: Uses real embeddings ✅
-- **dCQ**: Uses real embeddings ✅
-- **dSQ**: Uses enhanced text matching (v1.2.4 fixed)
+#### App Status
+| App | Method | Status |
+|-----|--------|--------|
+| **dIQ** | OpenAI embeddings | Real embeddings |
+| **dCQ** | OpenAI embeddings | Real embeddings |
+| **dSQ** | Enhanced text matching | v1.2.4 fixed |
 
 **Reference Implementation:** `apps/support-iq/src/lib/semantic-matcher.ts`
+**Full Documentation:** `docs/QUERY_DETECTION_STANDARDS.md`
 
 ---
 

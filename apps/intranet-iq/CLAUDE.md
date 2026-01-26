@@ -75,10 +75,27 @@
 ## GLOBAL STANDARDS REFERENCE
 ---
 
-**IMPORTANT**: This app follows global standards defined in the root CLAUDE.md file:
-- **Query Detection Standards**: Match threshold 50%, compound words, key term penalties
-- **Semantic Search**: Uses real OpenAI embeddings (text-embedding-3-small)
-- **Reference**: `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` → "GLOBAL STANDARDS" section
+**IMPORTANT**: This app follows global standards for Digital Workplace AI:
+
+### Query Detection Standards
+**Canonical Document**: `/docs/QUERY_DETECTION_STANDARDS.md`
+
+| Standard | Value |
+|----------|-------|
+| Match Threshold | 0.50 (50%) minimum |
+| Compound Words | 75+ domain-specific phrases |
+| Key Terms | Bonus/penalty system |
+| Stop Words | KEEP action words (show, me, my) |
+
+### Semantic Search
+- **Method**: Real OpenAI embeddings (text-embedding-3-small)
+- **Dimensions**: 1536
+- **Status**: Production ready
+
+### References
+- Full Standards: `/docs/QUERY_DETECTION_STANDARDS.md`
+- Root Instructions: `/CLAUDE.md` → "GLOBAL STANDARDS"
+- Vector Practices: `/docs/PGVECTOR_BEST_PRACTICES.md`
 
 ---
 ## TECH STACK

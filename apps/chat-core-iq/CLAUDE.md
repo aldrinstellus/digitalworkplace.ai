@@ -55,6 +55,15 @@
 **Note:** All routes use `basePath: "/dcq"` configured in `next.config.ts`
 
 ---
+## GLOBAL STANDARDS REFERENCE
+---
+
+**IMPORTANT**: This app follows global standards defined in the root CLAUDE.md file:
+- **Query Detection Standards**: Match threshold 50%, compound words, key term penalties
+- **Semantic Search**: Uses real OpenAI embeddings (text-embedding-3-small)
+- **Reference**: `/Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md` → "GLOBAL STANDARDS" section
+
+---
 ## QUICK START
 ---
 

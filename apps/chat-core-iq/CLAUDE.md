@@ -12,8 +12,8 @@
 
 | Environment | URL |
 |-------------|-----|
-| **Production Homepage** | https://chat-core-iq.vercel.app/dcq/Home/index.html |
-| **Production Admin** | https://chat-core-iq.vercel.app/dcq/admin |
+| **Production Homepage** | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
+| **Production Admin** | https://dcq.digitalworkplace.ai/dcq/admin |
 | **Vercel Dashboard** | https://vercel.com/aldos-projects-8cf34b67/chat-core-iq |
 | **GitHub Repository** | https://github.com/aldrinstellus/digitalworkplace.ai |
 
@@ -48,10 +48,10 @@
 ### URLs
 | Page | Local Dev | Production |
 |------|-----------|------------|
-| **Homepage** | http://localhost:3002/dcq/Home/index.html | https://chat-core-iq.vercel.app/dcq/Home/index.html |
-| **Admin** | http://localhost:3002/dcq/admin | https://chat-core-iq.vercel.app/dcq/admin |
-| **Admin Content** | http://localhost:3002/dcq/admin/content | https://chat-core-iq.vercel.app/dcq/admin/content |
-| **Demo IVR** | http://localhost:3002/dcq/demo/ivr | https://chat-core-iq.vercel.app/dcq/demo/ivr |
+| **Homepage** | http://localhost:3002/dcq/Home/index.html | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
+| **Admin** | http://localhost:3002/dcq/admin | https://dcq.digitalworkplace.ai/dcq/admin |
+| **Admin Content** | http://localhost:3002/dcq/admin/content | https://dcq.digitalworkplace.ai/dcq/admin/content |
+| **Demo IVR** | http://localhost:3002/dcq/demo/ivr | https://dcq.digitalworkplace.ai/dcq/demo/ivr |
 
 **Note:** All routes use `basePath: "/dcq"` configured in `next.config.ts`
 
@@ -174,7 +174,7 @@ All 7 environment variables configured:
 - `ANTHROPIC_API_KEY`
 - `OPENAI_API_KEY`
 - `ELEVENLABS_API_KEY`
-- `NEXT_PUBLIC_BASE_URL` (https://chat-core-iq.vercel.app/dcq)
+- `NEXT_PUBLIC_BASE_URL` (https://dcq.digitalworkplace.ai/dcq)
 
 ---
 ## PROJECT STRUCTURE
@@ -230,7 +230,7 @@ apps/chat-core-iq/
 
 - **Port:** 3002 (main app on 3000, intranet-iq on 3001)
 - **BasePath:** /dcq
-- **Dashboard Link:** https://chat-core-iq.vercel.app/dcq/Home/index.html
+- **Dashboard Link:** https://dcq.digitalworkplace.ai/dcq/Home/index.html
 - **Identity:** Standalone Chat Core IQ branding
 
 ---
@@ -277,4 +277,4 @@ npm run type-check       # TypeScript check
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/chat-core-iq*
 *Port: 3002 | BasePath: /dcq*
-*Production: https://chat-core-iq.vercel.app*
+*Production: https://dcq.digitalworkplace.ai*

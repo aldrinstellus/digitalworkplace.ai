@@ -385,12 +385,12 @@ export async function getActivityTimeline(
       .order('started_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    sessions?.forEach((session: { id: string; started_at: string; ended_at: string | null; users?: { email?: string; full_name?: string } }) => {
+    sessions?.forEach((session: { id: string; started_at: string; ended_at: string | null; users?: { email?: string; full_name?: string }[] }) => {
       activities.push({
         id: `session-start-${session.id}`,
         type: 'session_start',
-        user_email: session.users?.email || 'Unknown',
-        user_name: session.users?.full_name || 'Unknown',
+        user_email: session.users?.[0]?.email || 'Unknown',
+        user_name: session.users?.[0]?.full_name || 'Unknown',
         description: 'Started a new session',
         timestamp: session.started_at,
       });
@@ -399,8 +399,8 @@ export async function getActivityTimeline(
         activities.push({
           id: `session-end-${session.id}`,
           type: 'session_end',
-          user_email: session.users?.email || 'Unknown',
-          user_name: session.users?.full_name || 'Unknown',
+          user_email: session.users?.[0]?.email || 'Unknown',
+          user_name: session.users?.[0]?.full_name || 'Unknown',
           description: 'Ended session',
           timestamp: session.ended_at,
         });
@@ -421,12 +421,12 @@ export async function getActivityTimeline(
       .order('entered_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    pageViews?.forEach((pv: { id: string; project_code: string; page_path: string; entered_at: string; users?: { email?: string; full_name?: string } }) => {
+    pageViews?.forEach((pv: { id: string; project_code: string; page_path: string; entered_at: string; users?: { email?: string; full_name?: string }[] }) => {
       activities.push({
         id: `pageview-${pv.id}`,
         type: 'page_view',
-        user_email: pv.users?.email || 'Unknown',
-        user_name: pv.users?.full_name || 'Unknown',
+        user_email: pv.users?.[0]?.email || 'Unknown',
+        user_name: pv.users?.[0]?.full_name || 'Unknown',
         description: `Viewed ${pv.page_path}`,
         timestamp: pv.entered_at,
         project_code: pv.project_code,
@@ -447,12 +447,12 @@ export async function getActivityTimeline(
       .order('navigated_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    navigations?.forEach((nav: { id: string; from_project_code: string; to_project_code: string; navigated_at: string; users?: { email?: string; full_name?: string } }) => {
+    navigations?.forEach((nav: { id: string; from_project_code: string; to_project_code: string; navigated_at: string; users?: { email?: string; full_name?: string }[] }) => {
       activities.push({
         id: `nav-${nav.id}`,
         type: 'cross_app_nav',
-        user_email: nav.users?.email || 'Unknown',
-        user_name: nav.users?.full_name || 'Unknown',
+        user_email: nav.users?.[0]?.email || 'Unknown',
+        user_name: nav.users?.[0]?.full_name || 'Unknown',
         description: `Navigated from ${nav.from_project_code} to ${nav.to_project_code}`,
         timestamp: nav.navigated_at,
         project_code: nav.to_project_code,

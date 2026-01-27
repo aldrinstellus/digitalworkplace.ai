@@ -1,10 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Allow builds to proceed with ESLint warnings
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Disable Next.js dev tools icon
   devIndicators: false,
 

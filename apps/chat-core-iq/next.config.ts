@@ -1,10 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Allow builds to proceed with ESLint warnings
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   // Base path for all routes - makes URLs like /dcq/homepage
   basePath: "/dcq",
   // Disable Next.js dev tools icon

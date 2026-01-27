@@ -130,7 +130,25 @@ nextjs-portal,
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* CRITICAL: Ensure full viewport coverage on all devices */
+  html {
+    width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-color: #0f0f1a;
+  }
+
   body {
     @apply bg-background text-foreground;
+    width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    /* Fallback dark background to prevent white gaps */
+    background-color: #0f0f1a;
   }
 }

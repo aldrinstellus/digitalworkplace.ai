@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-27 UTC
-**Version**: 0.7.6
-**Session Status**: Full Spectrum Testing PASSED - dCQ v1.0.2, dIQ v1.1.0 (100/100)
+**Version**: 0.7.7
+**Session Status**: Session-Based Settings Isolation DEPLOYED - dCQ v1.1.0
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -29,12 +29,12 @@
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 1.1.0 |
-| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.0.2 |
+| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.1.0 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 0667ef8 - v0.7.6: Full spectrum testing passed
+- **Latest Commit**: 431ded6 - feat(dCQ): Implement session-based settings isolation
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -64,7 +64,46 @@
 
 ---
 
-## Latest Changes (v0.7.5)
+## Latest Changes (v0.7.7)
+
+### dCQ v1.1.0 - Session-Based Settings Isolation (2026-01-27)
+
+**New feature enabling isolated admin changes per user session.**
+
+When users login via main dashboard and access dCQ, their admin changes only affect their session - not the global public site.
+
+#### Key Components
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| SessionContext | `src/contexts/SessionContext.tsx` | Capture & store session params |
+| Layout | `src/app/layout.tsx` | SessionProvider wrapper |
+| Admin Announcements | `src/app/admin/announcements/page.tsx` | Session-aware saves |
+| Widget | `public/announcements-widget.js` | Session override support |
+| Dashboard | `apps/main/src/app/dashboard/page.tsx` | Pass session params |
+
+#### How It Works
+
+1. Main dashboard passes `clerk_id` + `session_id` in URL when launching dCQ
+2. SessionContext captures params and stores in localStorage
+3. Admin saves to localStorage with session prefix instead of database
+4. Widget checks localStorage first, falls back to API for public users
+5. Visual "Session Only" badge in admin panel
+
+#### Storage Keys
+
+- `dcq_session_info` - Session state
+- `dcq_session_{sessionId}_banner_settings` - Session-specific settings
+
+#### Deployment
+
+- GitHub: Commit 431ded6
+- Vercel: Deployed to production
+- Production URL: https://dcq.digitalworkplace.ai/dcq/Home/index.html
+
+---
+
+## Previous Changes (v0.7.5)
 
 ### dCQ v1.0.2 Full Spectrum Audit PASSED (2026-01-22)
 
@@ -204,6 +243,7 @@ vercel --prod
 ### Short Term
 - [x] dCQ v1.0.2 Full Spectrum Audit - COMPLETED
 - [x] Fix embedding coverage to 100% - COMPLETED
+- [x] dCQ v1.1.0 Session-Based Settings Isolation - COMPLETED
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -214,5 +254,5 @@ vercel --prod
 ---
 
 *Last session: 2026-01-27 UTC*
-*Version: 0.7.6*
+*Version: 0.7.7*
 *Machine: Mac Mini (aldrin-mac-mini)*

@@ -1,10 +1,11 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
-**Version**: 1.0.3
+**Version**: 1.1.0
 **Last Updated**: 2026-01-27
 **Status**: Production Live - Full Spectrum Audit PASSED (100/100)
 **Audit Report**: FULL_SPECTRUM_AUDIT_REPORT.md
 **Cache Prevention**: ✅ Configured (no-store, must-revalidate)
+**Session Isolation**: ✅ Enabled (v1.1.0)
 
 ---
 ## PRODUCTION URLS
@@ -135,6 +136,51 @@ npm run lint             # Run ESLint
 - **Admin Portal**: Full CRUD for FAQs, knowledge base, announcements
 - **Multi-language**: English/Spanish/Haitian Creole support (EN/ES/HT)
 - **Demo IVR**: Interactive Voice Response demo
+- **Session Isolation**: Admin changes only affect user's session, not global site (v1.1.0)
+
+---
+## SESSION-BASED SETTINGS ISOLATION (v1.1.0)
+---
+
+When users access dCQ via the main dashboard (digitalworkplace.ai), their admin changes are isolated to their session and don't affect the public site.
+
+### How It Works
+
+1. **Main App Launch**: When user clicks "Launch App" on Chat Core IQ card, URL includes session params
+   - `clerk_id` - User's Clerk authentication ID
+   - `session_id` - Unique session identifier (e.g., `session_1737987654321_abc123def`)
+
+2. **SessionContext**: React context captures URL params and stores in localStorage
+   - File: `src/contexts/SessionContext.tsx`
+   - Storage key: `dcq_session_info`
+
+3. **Admin Portal**: When in a session, settings save to localStorage instead of database
+   - Storage prefix: `dcq_session_{sessionId}_banner_settings`
+   - Visual "Session Only" badge indicates changes are session-scoped
+   - Toast confirms: "Display settings saved (session only)"
+
+4. **Widget Override**: Announcements widget checks localStorage before API
+   - If session settings exist → uses session settings
+   - Otherwise → fetches global settings from API
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `src/contexts/SessionContext.tsx` | Session state management |
+| `src/app/layout.tsx` | SessionProvider wrapper |
+| `src/app/admin/announcements/page.tsx` | Session-aware admin saves |
+| `public/announcements-widget.js` | Session override support |
+
+### Testing Session Isolation
+
+1. Login to https://www.digitalworkplace.ai
+2. Click "Launch App" on Chat Core IQ card
+3. Go to Admin → Announcements → Banner Display Settings
+4. Note the "Session Only" badge
+5. Change settings → see "session only" toast
+6. Navigate to homepage → verify changes appear
+7. Open incognito browser → verify public site shows original settings
 
 ---
 ## TECH STACK

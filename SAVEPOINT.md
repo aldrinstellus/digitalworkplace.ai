@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-27 UTC
-**Version**: 0.7.7
-**Session Status**: Session-Based Settings Isolation DEPLOYED - dCQ v1.1.0
+**Last Updated**: 2026-01-27 17:30 UTC
+**Version**: 0.7.8
+**Session Status**: Chat Core IQ Link Fixed - Doral Homepage
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -34,7 +34,7 @@
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 431ded6 - feat(dCQ): Implement session-based settings isolation
+- **Latest Commit**: 329adb3 - fix: Update Chat Core IQ link to Doral homepage
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -64,7 +64,32 @@
 
 ---
 
-## Latest Changes (v0.7.7)
+## Latest Changes (v0.7.8)
+
+### Chat Core IQ Link Fix (2026-01-27)
+
+**Fixed incorrect URL for Chat Core IQ product card on main dashboard.**
+
+The "Launch App" button for Chat Core IQ was linking to the wrong page. Now correctly opens the City of Doral homepage.
+
+#### Fix Details
+
+| | Before (Wrong) | After (Correct) |
+|---|----------------|-----------------|
+| **Local** | `http://localhost:3002/dcq/homepage` | `http://localhost:3002/dcq/Home/index.html` |
+| **Production** | `https://chat-core-iq.vercel.app/dcq/homepage` | `https://dcq.digitalworkplace.ai/dcq/Home/index.html` |
+
+#### File Changed
+- `apps/main/src/app/dashboard/page.tsx` (lines 52-53)
+
+#### Deployment
+- GitHub: Commit 329adb3
+- Vercel: Deployed to production
+- Verified: Working correctly
+
+---
+
+## Previous Changes (v0.7.7)
 
 ### dCQ v1.1.0 - Session-Based Settings Isolation (2026-01-27)
 
@@ -244,6 +269,7 @@ vercel --prod
 - [x] dCQ v1.0.2 Full Spectrum Audit - COMPLETED
 - [x] Fix embedding coverage to 100% - COMPLETED
 - [x] dCQ v1.1.0 Session-Based Settings Isolation - COMPLETED
+- [x] Fix Chat Core IQ link to Doral homepage - COMPLETED
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -253,6 +279,6 @@ vercel --prod
 
 ---
 
-*Last session: 2026-01-27 UTC*
-*Version: 0.7.7*
+*Last session: 2026-01-27 17:30 UTC*
+*Version: 0.7.8*
 *Machine: Mac Mini (aldrin-mac-mini)*

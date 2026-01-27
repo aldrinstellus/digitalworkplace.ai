@@ -4,6 +4,31 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.8] - 2026-01-27
+
+### Chat Core IQ Link Fix
+
+**Fixed incorrect URL for Chat Core IQ product card on main dashboard.**
+
+#### Issue
+The "Launch App" button for Chat Core IQ was linking to the wrong page (`chat-core-iq.vercel.app/dcq/homepage`).
+
+#### Fix
+Updated to correct City of Doral homepage URL (`dcq.digitalworkplace.ai/dcq/Home/index.html`).
+
+| | Before (Wrong) | After (Correct) |
+|---|----------------|-----------------|
+| **Local** | `http://localhost:3002/dcq/homepage` | `http://localhost:3002/dcq/Home/index.html` |
+| **Production** | `https://chat-core-iq.vercel.app/dcq/homepage` | `https://dcq.digitalworkplace.ai/dcq/Home/index.html` |
+
+#### File Changed
+- `apps/main/src/app/dashboard/page.tsx` (lines 52-53)
+
+#### Commit
+- `329adb3` - fix: Update Chat Core IQ link to Doral homepage
+
+---
+
 ## [0.7.6] - 2026-01-27
 
 ### Global Cache Prevention Configuration (ALL APPS)
@@ -35,7 +60,7 @@ async headers() {
 | **Main** | `apps/main/next.config.ts` | ✅ Configured | https://www.digitalworkplace.ai |
 | **dSQ** | `apps/support-iq/next.config.ts` | ✅ Configured | https://dsq.digitalworkplace.ai |
 | **dIQ** | `apps/intranet-iq/next.config.ts` | ✅ Configured | https://intranet-iq.vercel.app |
-| **dCQ** | `apps/chat-core-iq/next.config.ts` | ✅ Configured | https://chat-core-iq.vercel.app |
+| **dCQ** | `apps/chat-core-iq/next.config.ts` | ✅ Configured | https://dcq.digitalworkplace.ai |
 
 #### What This Prevents
 
@@ -102,8 +127,8 @@ Comprehensive full-spectrum audit completed with 100% pass rate across all compo
 - **Integrations**: Tyler Technologies (12), CRM, IVR, SMS, Social Media
 
 #### Deployment
-- **Production**: https://chat-core-iq.vercel.app/dcq/Home/index.html
-- **Admin**: https://chat-core-iq.vercel.app/dcq/admin
+- **Production**: https://dcq.digitalworkplace.ai/dcq/Home/index.html
+- **Admin**: https://dcq.digitalworkplace.ai/dcq/admin
 - **Report**: `apps/chat-core-iq/FULL_SPECTRUM_AUDIT_REPORT.md`
 
 ---

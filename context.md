@@ -317,10 +317,10 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://dcq.digitalworkplace.ai |
 
-### dCQ - Chat Core IQ (v1.0.2) - PRODUCTION LIVE (Full Spectrum Audit PASSED)
+### dCQ - Chat Core IQ (v1.1.0) - PRODUCTION LIVE (Full Spectrum Audit PASSED)
 - **Port**: 3002
-- **Production**: https://chat-core-iq.vercel.app/dcq/Home/index.html
-- **Admin**: https://chat-core-iq.vercel.app/dcq/admin
+- **Production**: https://dcq.digitalworkplace.ai/dcq/Home/index.html
+- **Admin**: https://dcq.digitalworkplace.ai/dcq/admin
 - **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
 - **Audit Score**: 100/100 ✅
 - **Features**:

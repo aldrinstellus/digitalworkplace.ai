@@ -1,9 +1,10 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
-**Version**: 1.0.2
-**Last Updated**: 2026-01-22
+**Version**: 1.0.3
+**Last Updated**: 2026-01-27
 **Status**: Production Live - Full Spectrum Audit PASSED (100/100)
 **Audit Report**: FULL_SPECTRUM_AUDIT_REPORT.md
+**Cache Prevention**: ✅ Configured (no-store, must-revalidate)
 
 ---
 ## PRODUCTION URLS
@@ -79,6 +80,33 @@
 - Full Standards: `/docs/QUERY_DETECTION_STANDARDS.md`
 - Root Instructions: `/CLAUDE.md` → "GLOBAL STANDARDS"
 - Vector Practices: `/docs/PGVECTOR_BEST_PRACTICES.md`
+
+### Cache Prevention (v1.0.3 - CRITICAL)
+
+**Permanent cache-busting is configured to prevent stale deployments.**
+
+```typescript
+// next.config.ts
+generateBuildId: async () => {
+  return `build-${Date.now()}`;
+},
+
+async headers() {
+  return [{
+    source: '/((?!_next/static|_next/image|favicon.ico).*)',
+    headers: [
+      { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+    ],
+  }];
+}
+```
+
+**What This Prevents:**
+- Stale JavaScript after deployments
+- Browser showing old content after code changes
+- Need for users to hard-refresh manually
+
+**Full Documentation:** `/docs/QUERY_DETECTION_STANDARDS.md` (Section 10)
 
 ---
 ## QUICK START

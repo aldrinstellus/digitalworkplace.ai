@@ -1,9 +1,9 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, useOrganization } from "@clerk/nextjs";
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Search, Sparkles, Clock, TrendingUp, FileText, Users, Calendar, MessageSquare, Newspaper, Bell, ChevronRight } from "lucide-react";
+import { Search, Sparkles, Clock, TrendingUp, FileText, Users, Calendar, MessageSquare, Newspaper, Bell, ChevronRight, ListTodo } from "lucide-react";
 import { useNewsPosts, useUpcomingEvents, useRecentActivity } from "@/lib/hooks/useSupabase";
 import { useDashboardWidgets } from "@/lib/hooks/useDashboardWidgets";
 import type { NewsPost, Event } from "@/lib/database.types";
@@ -17,8 +17,12 @@ import { Skeleton, TextSkeleton, ListItemSkeleton } from "@/components/ui/Skelet
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
+  const { organization } = useOrganization();
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const { visibleWidgets, loading: widgetsLoading } = useDashboardWidgets();
+
+  // Get organization name with fallback
+  const organizationName = organization?.name || "Your Organization";
 
   // Get display name from Clerk user
   const getDisplayName = (): string | null => {
@@ -67,7 +71,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                   <span className="text-[var(--accent-ember)]">For you</span>
                   <span>|</span>
-                  <span>Company</span>
+                  <span>{organizationName}</span>
                 </div>
               </div>
               <DashboardCustomizeButton onClick={() => setIsCustomizerOpen(true)} />
@@ -108,14 +112,24 @@ export default function Dashboard() {
           {/* Quick Actions */}
           {isWidgetVisible("quick-actions") && (
             <FadeIn delay={0.2}>
-              <StaggerContainer className="grid grid-cols-3 gap-4 mb-8">
+              <StaggerContainer className="grid grid-cols-4 gap-4 mb-8">
+                <StaggerItem>
+                  <Link href="/my-day">
+                    <QuickActionCard
+                      icon={<ListTodo className="w-5 h-5" />}
+                      title="My Tasks"
+                      description="View and manage your daily tasks"
+                      color="ember"
+                    />
+                  </Link>
+                </StaggerItem>
                 <StaggerItem>
                   <Link href="/content?view=recent">
                     <QuickActionCard
                       icon={<FileText className="w-5 h-5" />}
                       title="Recent Documents"
                       description="View your recently accessed files"
-                      color="ember"
+                      color="gold"
                     />
                   </Link>
                 </StaggerItem>
@@ -124,8 +138,8 @@ export default function Dashboard() {
                     <QuickActionCard
                       icon={<Newspaper className="w-5 h-5" />}
                       title="Team Updates"
-                      description="Latest company news and announcements"
-                      color="gold"
+                      description="Latest company news"
+                      color="copper"
                     />
                   </Link>
                 </StaggerItem>
@@ -135,7 +149,7 @@ export default function Dashboard() {
                       icon={<MessageSquare className="w-5 h-5" />}
                       title="AI Assistant"
                       description="Ask questions and get answers"
-                      color="copper"
+                      color="ember"
                     />
                   </Link>
                 </StaggerItem>
@@ -175,28 +189,30 @@ export default function Dashboard() {
                       <StaggerContainer className="space-y-3">
                         {newsPosts.map((post: NewsPost) => (
                           <StaggerItem key={post.id}>
-                            <motion.div
-                              className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer"
-                              whileHover={{ x: 4 }}
-                            >
-                              <div className="flex items-start gap-3">
-                                {post.pinned && (
-                                  <Bell className="w-4 h-4 text-[var(--accent-gold)] mt-0.5 flex-shrink-0" />
-                                )}
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="text-[var(--text-primary)] font-medium text-sm truncate">
-                                    {post.title || post.content.slice(0, 50)}
-                                  </h4>
-                                  <p className="text-xs text-[var(--text-muted)] line-clamp-2 mt-1">
-                                    {post.content}
-                                  </p>
-                                  <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
-                                    <span>{post.likes_count} likes</span>
-                                    <span>{post.comments_count} comments</span>
+                            <Link href={`/news/${post.id}`}>
+                              <motion.div
+                                className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer"
+                                whileHover={{ x: 4 }}
+                              >
+                                <div className="flex items-start gap-3">
+                                  {post.pinned && (
+                                    <Bell className="w-4 h-4 text-[var(--accent-gold)] mt-0.5 flex-shrink-0" />
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="text-[var(--text-primary)] font-medium text-sm truncate">
+                                      {post.title || post.content.slice(0, 50)}
+                                    </h4>
+                                    <p className="text-xs text-[var(--text-muted)] line-clamp-2 mt-1">
+                                      {post.content}
+                                    </p>
+                                    <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
+                                      <span>{post.likes_count} likes</span>
+                                      <span>{post.comments_count} comments</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </motion.div>
+                              </motion.div>
+                            </Link>
                           </StaggerItem>
                         ))}
                       </StaggerContainer>
@@ -234,35 +250,37 @@ export default function Dashboard() {
                       <StaggerContainer className="space-y-3">
                         {events.map((event: Event) => (
                           <StaggerItem key={event.id}>
-                            <motion.div
-                              className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer border-l-2 border-[var(--success)]"
-                              whileHover={{ x: 4 }}
-                            >
-                              <h4 className="text-[var(--text-primary)] font-medium text-sm">{event.title}</h4>
-                              <p className="text-xs text-[var(--text-muted)] mt-1">
-                                {new Date(event.start_time).toLocaleDateString("en-US", {
-                                  weekday: "short",
-                                  month: "short",
-                                  day: "numeric",
-                                  hour: "numeric",
-                                  minute: "2-digit",
-                                })}
-                              </p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <span className={`px-2 py-0.5 rounded text-xs ${
-                                  event.location_type === "virtual"
-                                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                                    : event.location_type === "hybrid"
-                                    ? "bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]"
-                                    : "bg-[var(--success)]/20 text-[var(--success)]"
-                                }`}>
-                                  {event.location_type}
-                                </span>
-                                {event.location && (
-                                  <span className="text-xs text-[var(--text-muted)] truncate">{event.location}</span>
-                                )}
-                              </div>
-                            </motion.div>
+                            <Link href={`/events/${event.id}`}>
+                              <motion.div
+                                className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer border-l-2 border-[var(--success)]"
+                                whileHover={{ x: 4 }}
+                              >
+                                <h4 className="text-[var(--text-primary)] font-medium text-sm">{event.title}</h4>
+                                <p className="text-xs text-[var(--text-muted)] mt-1">
+                                  {new Date(event.start_time).toLocaleDateString("en-US", {
+                                    weekday: "short",
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                  })}
+                                </p>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <span className={`px-2 py-0.5 rounded text-xs ${
+                                    event.location_type === "virtual"
+                                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                      : event.location_type === "hybrid"
+                                      ? "bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]"
+                                      : "bg-[var(--success)]/20 text-[var(--success)]"
+                                  }`}>
+                                    {event.location_type}
+                                  </span>
+                                  {event.location && (
+                                    <span className="text-xs text-[var(--text-muted)] truncate">{event.location}</span>
+                                  )}
+                                </div>
+                              </motion.div>
+                            </Link>
                           </StaggerItem>
                         ))}
                       </StaggerContainer>

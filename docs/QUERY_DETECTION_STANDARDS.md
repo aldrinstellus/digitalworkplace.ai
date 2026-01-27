@@ -1,6 +1,6 @@
 # Query Detection Standards
 
-**Version**: 1.0.0
+**Version**: 1.1.0
 **Last Updated**: 2026-01-26
 **Applies To**: ALL Digital Workplace AI Apps (dIQ, dCQ, dSQ)
 **Status**: MANDATORY - These standards MUST be followed
@@ -155,6 +155,18 @@ const COMPOUND_WORDS: Record<string, string> = {
   // Customer
   'customer health': 'customerhealth',
   'customer success': 'customersuccess',
+
+  // NPS & Sentiment (v1.1.0)
+  'nps score': 'npsscore',
+  'net promoter': 'netpromoter',
+  'net promoter score': 'netpromoterscore',
+  'sentiment analysis': 'sentimentanalysis',
+  'customer sentiment': 'customersentiment',
+  'customer feedback': 'customerfeedback',
+  'promoter score': 'promoterscore',
+  'survey results': 'surveyresults',
+  'nps survey': 'npssurvey',
+  'satisfaction score': 'satisfactionscore',
 };
 ```
 
@@ -217,6 +229,9 @@ const KEY_TERMS = [
 
   // Analytics (lower priority than specific terms)
   'analytics', 'summary', 'executive',
+
+  // NPS & Sentiment (v1.1.0)
+  'nps', 'promoter', 'sentiment', 'feedback', 'survey', 'satisfaction',
 ];
 ```
 
@@ -431,10 +446,78 @@ function debugSemanticMatch(
 
 ---
 
-## 10. Version History
+## 10. Deployment & Cache Configuration
+
+### Cache Prevention (CRITICAL)
+
+**Problem**: After deploying code changes, users may see stale content due to browser caching.
+
+**Solution**: All Digital Workplace AI apps MUST configure cache-busting headers.
+
+### Required Configuration (`next.config.ts`)
+
+```typescript
+const nextConfig: NextConfig = {
+  // Force cache busting on each build - prevents stale JavaScript
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
+
+  // Cache control headers - prevent browser caching of HTML pages
+  async headers() {
+    return [
+      // ... other headers (security, etc.)
+      {
+        source: '/((?!_next/static|_next/image|favicon.ico).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+        ],
+      },
+    ];
+  },
+};
+```
+
+### What Gets Cached (Intentionally)
+| Path Pattern | Caching | Reason |
+|--------------|---------|--------|
+| `_next/static/*` | ✅ Cached | Hashed JS/CSS bundles (content-addressable) |
+| `_next/image/*` | ✅ Cached | Optimized images |
+| `favicon.ico` | ✅ Cached | Static icon |
+
+### What Does NOT Get Cached
+| Path Pattern | Caching | Reason |
+|--------------|---------|--------|
+| All other routes | ❌ No cache | Fresh content on every request |
+| HTML pages | ❌ No cache | Always get latest deployment |
+| API routes | ❌ No cache | Real-time data |
+
+### App Status
+| App | Config File | Status |
+|-----|-------------|--------|
+| **Main** | `apps/main/next.config.ts` | ✅ Configured |
+| **dSQ** | `apps/support-iq/next.config.ts` | ✅ Configured |
+| **dIQ** | `apps/intranet-iq/next.config.ts` | ✅ Configured |
+| **dCQ** | `apps/chat-core-iq/next.config.ts` | ✅ Configured |
+
+### Verification
+```bash
+# Check response headers for no-cache
+curl -I https://dsq.digitalworkplace.ai/dsq/demo/atc-executive
+
+# Expected header:
+# cache-control: no-store, must-revalidate
+# or: cache-control: public, max-age=0, must-revalidate
+```
+
+---
+
+## 11. Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-01-26 | Added Section 10: Deployment & Cache Configuration |
+| 1.1.0 | 2026-01-26 | Added NPS & Sentiment compound words and key terms (dSQ v1.2.5) |
 | 1.0.0 | 2026-01-26 | Initial release - extracted from dSQ v1.2.4 fix |
 
 ---

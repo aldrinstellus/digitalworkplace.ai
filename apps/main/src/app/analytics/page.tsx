@@ -19,6 +19,37 @@ const projectColors: Record<string, { primary: string; glow: string; name: strin
 
 type ModalType = "users" | "active" | "sessions" | "pageviews" | null;
 
+interface ActiveUserDetail {
+  user_id: string;
+  user_email: string;
+  user_name: string;
+  avatar_url: string | null;
+  role: string;
+  session_id: string;
+  session_started_at: string;
+  last_heartbeat_at: string;
+  session_duration_seconds: number;
+  device_type: string;
+  browser: string;
+  os: string;
+  ip_address: string | null;
+  current_app: string | null;
+  current_page: string | null;
+  total_page_views_session: number;
+  is_active: boolean;
+  idle_seconds: number;
+  status: 'online' | 'idle' | 'away';
+}
+
+interface ActiveUsersSummary {
+  total_active: number;
+  online_now: number;
+  idle: number;
+  away: number;
+  by_device: { desktop: number; mobile: number; tablet: number };
+  by_app: Record<string, number>;
+}
+
 export default function AnalyticsPage() {
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
@@ -29,6 +60,10 @@ export default function AnalyticsPage() {
   const [avatarError, setAvatarError] = useState(false);
   const [dateRangeLabel, setDateRangeLabel] = useState("Last 30 days");
   const [activeModal, setActiveModal] = useState<ModalType>(null);
+  const [activeUsersData, setActiveUsersData] = useState<ActiveUserDetail[]>([]);
+  const [activeUsersSummary, setActiveUsersSummary] = useState<ActiveUsersSummary | null>(null);
+  const [activeUsersLoading, setActiveUsersLoading] = useState(false);
+  const [activeUsersWindow, setActiveUsersWindow] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
 
   const {
     overview,
@@ -92,6 +127,43 @@ export default function AnalyticsPage() {
 
   const handleSignOut = () => {
     signOut({ redirectUrl: "/sign-in" });
+  };
+
+  // Fetch active users with full details
+  const fetchActiveUsers = async (window: '1h' | '24h' | '7d' | '30d' = '24h') => {
+    setActiveUsersLoading(true);
+    try {
+      const res = await fetch(`/api/analytics/active-users?window=${window}`);
+      if (res.ok) {
+        const json = await res.json();
+        setActiveUsersData(json.data || []);
+        setActiveUsersSummary(json.summary || null);
+      }
+    } catch (err) {
+      console.error('Error fetching active users:', err);
+    } finally {
+      setActiveUsersLoading(false);
+    }
+  };
+
+  // Fetch active users when modal opens
+  useEffect(() => {
+    if (activeModal === 'active') {
+      fetchActiveUsers(activeUsersWindow);
+    }
+  }, [activeModal, activeUsersWindow]);
+
+  // Format relative time
+  const formatRelativeTime = (timestamp: string) => {
+    const diff = Date.now() - new Date(timestamp).getTime();
+    const seconds = Math.floor(diff / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
   };
 
   if (!isLoaded || loading) {
@@ -470,56 +542,166 @@ export default function AnalyticsPage() {
         )}
 
         {activeModal === "active" && (
-          <Modal title="Active Users" subtitle={`${overview?.active24h ?? 0} active in last 24 hours`} onClose={() => setActiveModal(null)}>
-            <div className="space-y-4 mb-6">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-cyan-400">{overview?.active24h ?? 0}</p>
-                  <p className="text-white/60 text-sm">Last 24h</p>
+          <Modal title="Active Users Breakdown" subtitle={`Comprehensive view of all logged-in users`} onClose={() => setActiveModal(null)}>
+            {/* Time Window Selector */}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-white/40 text-sm">Time window:</span>
+              {(['1h', '24h', '7d', '30d'] as const).map((w) => (
+                <button
+                  key={w}
+                  onClick={() => setActiveUsersWindow(w)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    activeUsersWindow === w
+                      ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 border border-transparent'
+                  }`}
+                >
+                  {w === '1h' ? '1 Hour' : w === '24h' ? '24 Hours' : w === '7d' ? '7 Days' : '30 Days'}
+                </button>
+              ))}
+              <button
+                onClick={() => fetchActiveUsers(activeUsersWindow)}
+                className="ml-auto p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <svg className={`w-4 h-4 text-white/60 ${activeUsersLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Summary Stats */}
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-green-400">{activeUsersSummary?.online_now ?? 0}</p>
+                <p className="text-white/50 text-xs">Online Now</p>
+              </div>
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-yellow-400">{activeUsersSummary?.idle ?? 0}</p>
+                <p className="text-white/50 text-xs">Idle (5-15m)</p>
+              </div>
+              <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-orange-400">{activeUsersSummary?.away ?? 0}</p>
+                <p className="text-white/50 text-xs">Away (15m+)</p>
+              </div>
+              <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-cyan-400">{activeUsersSummary?.total_active ?? 0}</p>
+                <p className="text-white/50 text-xs">Total Active</p>
+              </div>
+            </div>
+
+            {/* Device & App Breakdown */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="bg-white/5 rounded-lg p-3">
+                <p className="text-white/60 text-xs mb-2 font-medium">By Device</p>
+                <div className="flex gap-3">
+                  <span className="text-sm"><span className="text-white/80">💻</span> <span className="text-white/60">{activeUsersSummary?.by_device?.desktop ?? 0}</span></span>
+                  <span className="text-sm"><span className="text-white/80">📱</span> <span className="text-white/60">{activeUsersSummary?.by_device?.mobile ?? 0}</span></span>
+                  <span className="text-sm"><span className="text-white/80">📲</span> <span className="text-white/60">{activeUsersSummary?.by_device?.tablet ?? 0}</span></span>
                 </div>
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-blue-400">{overview?.active7d ?? 0}</p>
-                  <p className="text-white/60 text-sm">Last 7 days</p>
-                </div>
-                <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
-                  <p className="text-2xl font-bold text-purple-400">{overview?.active30d ?? 0}</p>
-                  <p className="text-white/60 text-sm">Last 30 days</p>
+              </div>
+              <div className="bg-white/5 rounded-lg p-3">
+                <p className="text-white/60 text-xs mb-2 font-medium">By App</p>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(activeUsersSummary?.by_app || {}).map(([app, count]) => (
+                    <span key={app} className="px-2 py-0.5 rounded text-xs" style={{
+                      backgroundColor: `${projectColors[app]?.primary || '#6b7280'}20`,
+                      color: projectColors[app]?.primary || '#6b7280'
+                    }}>
+                      {projectColors[app]?.name || app}: {count}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
-            <div className="overflow-y-auto max-h-[40vh]">
-              <table className="w-full">
-                <thead className="sticky top-0 bg-[#1a1a2e]">
-                  <tr className="text-left text-xs text-white/40 border-b border-white/10">
-                    <th className="pb-3 pt-2 font-medium">User</th>
-                    <th className="pb-3 pt-2 font-medium">Last Active</th>
-                    <th className="pb-3 pt-2 font-medium">Favorite App</th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm">
-                  {userMetrics.filter((u: any) => u.total_sessions > 0).slice(0, 20).map((u: any) => (
-                    <tr key={u.user_id} className="border-b border-white/5">
-                      <td className="py-3">
-                        <div className="flex items-center gap-2">
-                          {u.is_active && <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"/>}
-                          <div>
-                            <p className="text-white/90 font-medium">{u.user_name}</p>
-                            <p className="text-white/40 text-xs">{u.user_email}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3 text-white/60 text-sm">{new Date(u.last_active).toLocaleString()}</td>
-                      <td className="py-3">
-                        {u.favorite_app !== "N/A" && (
-                          <span className="px-2 py-1 rounded text-xs" style={{ backgroundColor: `${projectColors[u.favorite_app]?.primary}20`, color: projectColors[u.favorite_app]?.primary }}>
-                            {projectColors[u.favorite_app]?.name || u.favorite_app}
-                          </span>
-                        )}
-                      </td>
+
+            {/* All Users Table */}
+            <div className="overflow-y-auto max-h-[45vh] border border-white/10 rounded-lg">
+              {activeUsersLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="w-8 h-8 border-2 border-white/10 border-t-cyan-500 rounded-full animate-spin" />
+                </div>
+              ) : activeUsersData.length === 0 ? (
+                <div className="text-center py-12 text-white/40">No active users in this time window</div>
+              ) : (
+                <table className="w-full">
+                  <thead className="sticky top-0 bg-[#1a1a2e] z-10">
+                    <tr className="text-left text-xs text-white/40 border-b border-white/10">
+                      <th className="px-3 pb-3 pt-3 font-medium">User</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Status</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Session Started</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Last Activity</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Duration</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Current App</th>
+                      <th className="px-3 pb-3 pt-3 font-medium">Device</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="text-sm">
+                    {activeUsersData.map((u) => (
+                      <tr key={u.session_id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td className="px-3 py-3">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-2.5 h-2.5 rounded-full ${
+                              u.status === 'online' ? 'bg-green-400 animate-pulse' :
+                              u.status === 'idle' ? 'bg-yellow-400' : 'bg-orange-400/60'
+                            }`} />
+                            <div>
+                              <p className="text-white/90 font-medium">{u.user_name}</p>
+                              <p className="text-white/40 text-xs">{u.user_email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            u.status === 'online' ? 'bg-green-500/20 text-green-400' :
+                            u.status === 'idle' ? 'bg-yellow-500/20 text-yellow-400' :
+                            'bg-orange-500/20 text-orange-400'
+                          }`}>
+                            {u.status === 'online' ? 'Online' : u.status === 'idle' ? 'Idle' : 'Away'}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div>
+                            <p className="text-white/70 text-xs">{new Date(u.session_started_at).toLocaleString()}</p>
+                            <p className="text-white/40 text-xs">{formatRelativeTime(u.session_started_at)}</p>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3">
+                          <div>
+                            <p className="text-white/70 text-xs">{new Date(u.last_heartbeat_at).toLocaleString()}</p>
+                            <p className="text-white/40 text-xs">{formatRelativeTime(u.last_heartbeat_at)}</p>
+                          </div>
+                        </td>
+                        <td className="px-3 py-3 text-white/60">{formatDuration(u.session_duration_seconds)}</td>
+                        <td className="px-3 py-3">
+                          {u.current_app ? (
+                            <div>
+                              <span className="px-2 py-0.5 rounded text-xs" style={{
+                                backgroundColor: `${projectColors[u.current_app]?.primary || '#6b7280'}20`,
+                                color: projectColors[u.current_app]?.primary || '#6b7280'
+                              }}>
+                                {projectColors[u.current_app]?.name || u.current_app}
+                              </span>
+                              {u.current_page && (
+                                <p className="text-white/30 text-xs mt-0.5 truncate max-w-[120px]" title={u.current_page}>
+                                  {u.current_page}
+                                </p>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-white/30 text-xs">—</span>
+                          )}
+                        </td>
+                        <td className="px-3 py-3">
+                          <div className="text-white/50 text-xs">
+                            <p className="capitalize">{u.device_type}</p>
+                            <p>{u.browser} / {u.os}</p>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </Modal>
         )}

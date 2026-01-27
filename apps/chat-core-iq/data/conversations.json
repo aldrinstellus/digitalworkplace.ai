@@ -3913,7 +3913,1267 @@
       "feedbackGiven": false,
       "userAgent": "unknown",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076585600_gqag5houe",
+      "sessionId": "test-en-001",
+      "startTime": "2026-01-22T10:09:45.600Z",
+      "endTime": "2026-01-22T10:09:45.600Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I get a fence permit?",
+          "timestamp": "2026-01-22T10:09:45.600Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to get a fence permit.\n\n**Requirements:**\n• Max 6ft rear, 4ft front  \n• Must be within property lines  \n• Materials: wood, vinyl, aluminum, etc.  \n• DERM approval needed, call (305) 372-6502  \n\n**Steps:**\n1. Get DERM approval  \n2. Prepare required documents  \n3. Submit online via CSS Portal  \n4. Schedule inspections after installation  \n\n**Contact:**\n• Building Department: (305) 593-6700  \n• 8401 NW 53rd Terrace  ",
+          "timestamp": "2026-01-22T10:09:45.600Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076601571_d2l9y7758",
+      "sessionId": "test-en-003",
+      "startTime": "2026-01-22T10:10:01.571Z",
+      "endTime": "2026-01-22T10:10:01.571Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the trolley hours?",
+          "timestamp": "2026-01-22T10:10:01.571Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the trolley service hours.\n\n**Route 1: Crosstown Connector**\n• Weekdays: 6:00 am - 10:00 pm  \n• Saturdays: 7:00 am - 8:00 pm  \n• Sundays: 7:00 am - 8:00 pm  \n\n**Route 2: Commercial Connector**\n• Weekdays: 6:10 am - 9:20 pm  \n• Saturdays: 7:00 am - 7:30 pm  \n• No service on Sundays  \n\n**Route 3: Residential Connector**\n• Weekdays: 5:50 am - 9:30 pm  \n• Saturdays: 6:50 am - 7:00 pm  \n• No service on Sundays  \n\n**Route 4: FIU Connector**\n• Weekdays: 6:00 am - 11:00 pm  \n• No service on weekends  ",
+          "timestamp": "2026-01-22T10:10:01.571Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076604487_rvz9w3vqs",
+      "sessionId": "test-en-004",
+      "startTime": "2026-01-22T10:10:04.487Z",
+      "endTime": "2026-01-22T10:10:04.487Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "When is the next city council meeting?",
+          "timestamp": "2026-01-22T10:10:04.487Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the next city council meeting details.\n\n**Date and Time:**\n- January 15, 2026\n- 10:00 AM, 6:00 PM\n\n**Location:**\n- Doral Government Center\n- Council Chambers\n- 8401 NW 53rd Terrace, Doral, FL 33166",
+          "timestamp": "2026-01-22T10:10:04.487Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076620706_z0z1rmrtm",
+      "sessionId": "test-en-005",
+      "startTime": "2026-01-22T10:10:20.706Z",
+      "endTime": "2026-01-22T10:10:20.706Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I register my child for youth sports?",
+          "timestamp": "2026-01-22T10:10:20.706Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to register for youth sports.\n\n**Online Registration:**\n1. Visit: cityofdoral.com/parks\n2. Click 'Program Registration'\n3. Create account or log in\n4. Browse available programs\n5. Select program and session\n6. Complete registration and payment\n\n**In-Person Registration:**\n- Doral Central Park\n- Doral Legacy Park\n- Morgan Levy Park\n\n**Documents Needed:**\n- Child's birth certificate\n- Proof of residency\n- Payment method\n\n**Contact:**\n- Parks & Recreation: (305) 593-6600",
+          "timestamp": "2026-01-22T10:10:20.706Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076624119_87hlhvnlj",
+      "sessionId": "test-en-006",
+      "startTime": "2026-01-22T10:10:24.119Z",
+      "endTime": "2026-01-22T10:10:24.119Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "When is City Hall closed for holidays?",
+          "timestamp": "2026-01-22T10:10:24.119Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's City Hall holiday closure information.\n\n**Holidays Closed:**\n• New Year's Day\n• Martin Luther King Jr. Day\n• Memorial Day\n• Independence Day\n• Labor Day\n• Thanksgiving Day\n• Christmas Day\n\n**Contact:**\n• (305) 593-6725",
+          "timestamp": "2026-01-22T10:10:24.119Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076624971_333qo8y9i",
+      "sessionId": "test-en-007",
+      "startTime": "2026-01-22T10:10:24.971Z",
+      "endTime": "2026-01-22T10:10:24.971Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Who owns 8350 NW 52nd Terrace?",
+          "timestamp": "2026-01-22T10:10:24.971Z"
+        },
+        {
+          "role": "assistant",
+          "content": "**Property Ownership Record**\n\n**Address:** 8350 NW 52nd Terrace, Doral, FL 33166\n**Folio:** 35-2014-001-0010\n\n**Current Owner:**\n- Name: RODRIGUEZ, MARIA C & CARLOS A\n- Ownership Type: Joint Tenants\n- Acquired: June 15, 2019\n- Purchase Price: $485,000.00\n- Deed: Warranty Deed (Book 31245, Page 1892)\n\n**Ownership History:**\n- CHEN, DAVID W (2012-03-20 to 2019-06-14) - Sold for $380,000.00\n- DORAL HOMES LLC (2008-01-15 to 2012-03-19) - Sold for $425,000.00\n",
+          "timestamp": "2026-01-22T10:10:24.971Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076640007_0gfuplz1r",
+      "sessionId": "test-en-008",
+      "startTime": "2026-01-22T10:10:40.007Z",
+      "endTime": "2026-01-22T10:10:40.007Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I renew my business tax receipt?",
+          "timestamp": "2026-01-22T10:10:40.007Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to renew your BTR.\n\n**Requirements:**\n• DERM approval needed\n• Fire inspection report required\n• Current state license (if needed)\n• Updated liability insurance certificate\n\n**Steps:**\n1. Email Licensing Division \n2. Obtain DERM and fire approvals\n3. Create account online\n4. Apply for your BTR\n\n**Contact:**\n• (305) 593-6631\n• btrlicensing@cityofdoral.com",
+          "timestamp": "2026-01-22T10:10:40.007Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076643375_rs81iiq92",
+      "sessionId": "test-en-009",
+      "startTime": "2026-01-22T10:10:43.375Z",
+      "endTime": "2026-01-22T10:10:43.375Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What recycling items are accepted?",
+          "timestamp": "2026-01-22T10:10:43.375Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a list of accepted recycling items.\n\n**Accepted Items:**\n• Paper products (newspapers, magazines)  \n• Cardboard (flattened, clean)  \n• Plastics (types 1 and 2)  \n• Aluminum cans (clean)  \n• Glass bottles (clear, green, brown)  \n• Steel cans (empty, clean)  \n\n**Contact:**\n• City Hall: (305) 593-6725  \n• Waste Management: (305) 594-1500",
+          "timestamp": "2026-01-22T10:10:43.375Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076647480_f8rhkpy5c",
+      "sessionId": "test-en-010",
+      "startTime": "2026-01-22T10:10:47.480Z",
+      "endTime": "2026-01-22T10:10:47.480Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I prepare for a hurricane?",
+          "timestamp": "2026-01-22T10:10:47.480Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to prepare for a hurricane.\n\n**Personal Plan:**\n• Create an emergency kit\n• Include non-perishable food\n• Stock water (1 gallon/day)\n• Prepare for pets' needs\n• Plan for seniors and disabilities\n\n**Home Preparations:**\n• Check hurricane shutters\n• Trim trees before season\n• Secure outdoor items\n• Review insurance policies\n\n**Stay Informed:**\n• Follow local alerts\n• Use reliable weather sources\n\n**Contact:**\n• City Hall: (305) 593-6725\n• Emergency: 911",
+          "timestamp": "2026-01-22T10:10:47.480Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076671040_3i6tl8ryt",
+      "sessionId": "test-es-001",
+      "startTime": "2026-01-22T10:11:11.040Z",
+      "endTime": "2026-01-22T10:11:11.040Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo obtengo un permiso para una cerca?",
+          "timestamp": "2026-01-22T10:11:11.040Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes los pasos para obtener un permiso.\n\n**Requisitos:**\n• Dimensiones de la cerca\n• Aprobación de DERM\n• Límite de propiedad\n\n**Pasos:**\n1. Llamar a DERM: (305) 372-6502\n2. Obtener aprobación escrita\n3. Presentar en Construcción\n\n**Contacto:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T10:11:11.040Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076674978_xr1thwu41",
+      "sessionId": "test-es-003",
+      "startTime": "2026-01-22T10:11:14.978Z",
+      "endTime": "2026-01-22T10:11:14.978Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cuándo es la próxima reunión del concejo municipal?",
+          "timestamp": "2026-01-22T10:11:14.978Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información solicitada.\n\n**Próxima reunión:**\n• Fecha: Consulta en City Hall  \n• Hora: Generalmente a las 6 PM  \n• Ubicación: Sala de reuniones, City Hall  \n\n**Contacto:**\n• City Hall: (305) 593-6725  \n• Verifique el calendario en línea  ",
+          "timestamp": "2026-01-22T10:11:14.978Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076692637_ob0gulxl2",
+      "sessionId": "test-es-004",
+      "startTime": "2026-01-22T10:11:32.637Z",
+      "endTime": "2026-01-22T10:11:32.637Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo registro a mi hijo para deportes juveniles?",
+          "timestamp": "2026-01-22T10:11:32.637Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes el proceso para registrar.\n\n**Requisitos:**\n• Edad del niño: 5-17 años  \n• Formulario de inscripción completo  \n• Pago de la cuota requerida  \n\n**Pasos:**\n1. Visitar la oficina de deportes  \n2. Completar formulario de inscripción  \n3. Presentar documentos necesarios  \n4. Realizar pago correspondiente  \n\n**Contacto:**\n• Oficina de Deportes: (305) 593-6725  \n• Dirección: 8401 NW 53rd Terrace  ",
+          "timestamp": "2026-01-22T10:11:32.637Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076696780_sj28mkw07",
+      "sessionId": "test-es-005",
+      "startTime": "2026-01-22T10:11:36.780Z",
+      "endTime": "2026-01-22T10:11:36.780Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Quién es el dueño de la propiedad en 8350 NW 52nd Terrace?",
+          "timestamp": "2026-01-22T10:11:36.780Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes cómo encontrar al dueño.\n\n**Información disponible:**\n• Nombre y dirección actual\n• Tipo de propiedad\n• Fecha y precio de adquisición\n• Información de la escritura\n• Cadena de título\n\n**Cómo buscar:**\n1. Pregunta: \"¿Quién es el dueño de 8350 NW 52nd Terrace?\"\n2. Usa folio: \"folio 35-2014-001-0010\"\n3. Información en línea disponible\n\n**Contacto:**\n• Tyler Eagle Land Records\n• (305) 593-6725",
+          "timestamp": "2026-01-22T10:11:36.780Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076700226_gm8n04ewi",
+      "sessionId": "test-es-006",
+      "startTime": "2026-01-22T10:11:40.226Z",
+      "endTime": "2026-01-22T10:11:40.226Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo reporto un bache en la calle?",
+          "timestamp": "2026-01-22T10:11:40.226Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes cómo reportar un bache.\n\n**Contacto:**\n• Llamar a Obras Públicas:  \n  (305) 593-6740\n\n**Pasos:**\n1. Describir ubicación exacta.\n2. Proveer detalles del bache.\n3. Esperar respuesta de seguimiento.",
+          "timestamp": "2026-01-22T10:11:40.226Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076716790_btezeorut",
+      "sessionId": "test-es-007",
+      "startTime": "2026-01-22T10:11:56.790Z",
+      "endTime": "2026-01-22T10:11:56.790Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo renuevo mi licencia de negocio?",
+          "timestamp": "2026-01-22T10:11:56.790Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes el proceso para renovar.\n\n**Requisitos:**\n• Licencia actual en vigor\n• Documentación de impuestos\n• Pago de tarifas\n\n**Pasos:**\n1. Visitar sitio web oficial\n2. Completar formulario de renovación\n3. Pagar tarifas correspondientes\n4. Esperar confirmación de renovación\n\n**Contacto:**\n• City Hall: (305) 593-6725\n• Policía: (305) 593-6699",
+          "timestamp": "2026-01-22T10:11:56.790Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076722066_ir3aor6hy",
+      "sessionId": "test-es-008",
+      "startTime": "2026-01-22T10:12:02.066Z",
+      "endTime": "2026-01-22T10:12:02.066Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Qué se puede reciclar?",
+          "timestamp": "2026-01-22T10:12:02.066Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes información sobre reciclaje.\n\n**Materiales Reciclables:**\n• Papel y cartón\n• Plástico tipo 1 y 2\n• Vidrio (botellas y frascos)\n• Metales (latas de aluminio)\n• Electrónicos (en centros específicos)\n\n**No reciclables:**\n• Plásticos tipo 3-7\n• Comida y residuos orgánicos\n• Contenedores sucios\n• Productos mixtos (ej. envases)\n  \n**Contacto:**\n• Reciclaje: (305) 593-6680\n• Información adicional: www.chatcoreiq.com",
+          "timestamp": "2026-01-22T10:12:02.066Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076727126_2h0xepm2c",
+      "sessionId": "test-es-009",
+      "startTime": "2026-01-22T10:12:07.126Z",
+      "endTime": "2026-01-22T10:12:07.126Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo me preparo para un huracán?",
+          "timestamp": "2026-01-22T10:12:07.126Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí te explico cómo prepararte.\n\n**Antes del Huracán:**\n• Revisa el pronóstico meteorológico  \n• Crea un plan de evacuación  \n• Almacena agua y alimentos no perecederos  \n• Consigue medicinas y suministros esenciales  \n• Asegura ventanas y puertas  \n\n**Durante el Huracán:**\n• Permanece en un lugar seguro  \n• Escucha la radio para actualizaciones  \n• No salgas hasta que sea seguro  \n\n**Después del Huracán:**\n• Verifica daños en la propiedad  \n• Evita áreas inundadas y caídas de cables  \n• Informa a las autoridades sobre peligros  \n\n**Contacto:**\n• Emergencia: 911  \n• Policía: (305) 593-6699  ",
+          "timestamp": "2026-01-22T10:12:07.126Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076733863_t8jnvlvow",
+      "sessionId": "test-es-010",
+      "startTime": "2026-01-22T10:12:13.863Z",
+      "endTime": "2026-01-22T10:12:13.863Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo reporto vandalismo?",
+          "timestamp": "2026-01-22T10:12:13.863Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes cómo reportar vandalismo.\n\n**Opciones Rápidas:**\n\n**Opción 1: En línea Doral 311**\n- Visita: https://cityofdoral.com/311\n- Selecciona 'Reportar Vandalismo'\n- Completa el formulario\n- Sube fotos si es posible\n- Envía y recibe número de seguimiento\n\n**Opción 2: Llamar Policía**\n- Teléfono: (305) 593-6699\n- Disponible 24/7\n- Oficiales tomarán tu reporte\n\n**Opción 3: Visitar en Persona**\n- Ubicación: Doral Police Department\n- Dirección: 6100 NW 99th Avenue\n- Lleva identificación y evidencia\n\n**Contacto:**\n- Policía No Emergencia: (305) 593-6699\n- Doral 311: https://cityofdoral.com/311\n- Emergencia: 911",
+          "timestamp": "2026-01-22T10:12:13.863Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076762391_f9umb5key",
+      "sessionId": "test-ht-001",
+      "startTime": "2026-01-22T10:12:42.391Z",
+      "endTime": "2026-01-22T10:12:42.391Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen jwenn yon pèmi pou yon kloti?",
+          "timestamp": "2026-01-22T10:12:42.391Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou jwenn yon pemis kloti.\n\n**Kondisyon:**\n• Limit 6ft dèyè, 4ft devan\n• Apwobasyon DERM nesesè\n• Nan limit pwopriyete\n\n**Etap:**\n1. Rele DERM: (305) 372-6502\n2. Jwenn apwobasyon ekri\n3. Soumèt nan Building Dept\n\n**Kontak:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T10:12:42.391Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076768502_kdsj80nl0",
+      "sessionId": "test-ht-002",
+      "startTime": "2026-01-22T10:12:48.502Z",
+      "endTime": "2026-01-22T10:12:48.502Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki lè twolè a ap mache?",
+          "timestamp": "2026-01-22T10:12:48.502Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki lè twolè a ap mache.\n\n**Orè:**\n• Lendi rive Vandredi: 6:00 am - 10:00 pm\n• Samdi: 8:00 am - 10:00 pm\n• Dimanch: 8:00 am - 8:00 pm\n\n**Kondisyon:**\n• Orè ka varye nan fèt\n• Tanpri verifye orè sou sit entènèt\n\n**Kontak:**\n• Trolley Operations Manager: Diana Arenas\n• Telefòn: (305) 593-6740 ex 6013",
+          "timestamp": "2026-01-22T10:12:48.502Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076773489_1ent83sh3",
+      "sessionId": "test-ht-003",
+      "startTime": "2026-01-22T10:12:53.489Z",
+      "endTime": "2026-01-22T10:12:53.489Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki lè pwochen reyinyon konsèy vil la?",
+          "timestamp": "2026-01-22T10:12:53.489Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Reyinyon konsèy vil la fèt chak mwa.\n\n**Dat:**\n• Premye Mèkredi chak mwa\n• Tan: 7:00 PM\n\n**Kontak:**\n• City Hall: (305) 593-6725\n\n**Lokalizasyon:**\n• 3005 NW 92nd Avenue, Chat Core IQ, FL 33172\n\n**Referans:**\n• Tcheke sit entènèt vil la.",
+          "timestamp": "2026-01-22T10:12:53.489Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076791711_z18u1tdtk",
+      "sessionId": "test-ht-004",
+      "startTime": "2026-01-22T10:13:11.711Z",
+      "endTime": "2026-01-22T10:13:11.711Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen enskri pitit mwen nan espò jèn?",
+          "timestamp": "2026-01-22T10:13:11.711Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou enskri pitit ou nan espò jèn.\n\n**Kondisyon:**\n• Gen yon fòma enskripsyon\n• Peye frè enskripsyon\n• Pran dat limit yo an konsiderasyon\n\n**Etap:**\n1. Vizite sit entènèt lokal la\n2. Konplete fòma enskripsyon\n3. Peye frè yo\n\n**Kontak:**\n• Doral Recreation: (305) 593-6630\n• Adrès: 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T10:13:11.711Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076797094_hds7qz7y8",
+      "sessionId": "test-ht-005",
+      "startTime": "2026-01-22T10:13:17.094Z",
+      "endTime": "2026-01-22T10:13:17.094Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen rapòte yon twou nan lari a?",
+          "timestamp": "2026-01-22T10:13:17.094Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men kijan pou rapòte yon twou nan lari a.\n\n**Kondisyon:**\n• Detaye lokalizasyon twou a\n• Bay non ou ak kontak\n• Dekri gravite pwoblèm nan\n\n**Etap:**\n1. Ale sou sit Doral 311\n2. Ranpli fòm rapò a\n3. Kontakte sèvis kliyan si nesesè\n\n**Kontak:**\n• Doral 311: cityofdoral.com/311\n• Telefòn: (305) 593-6680\n• Imèl: codecompliance@cityofdoral.com",
+          "timestamp": "2026-01-22T10:13:17.094Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076801700_05ge20ewt",
+      "sessionId": "test-ht-006",
+      "startTime": "2026-01-22T10:13:21.700Z",
+      "endTime": "2026-01-22T10:13:21.700Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen renouvle lisans biznis mwen?",
+          "timestamp": "2026-01-22T10:13:21.700Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou renouvle lisans biznis ou.\n\n**Kondisyon:**\n• Dokiman idantite\n• Fòm renouvèlman\n• Peman frè yo\n\n**Etap:**\n1. Vizite sit entènèt ofisyèl\n2. Ranpli fòm renouvèlman\n3. Soumèt dokiman yo\n\n**Kontak:**\n• Biwo Lisans: (305) 593-6700\n• Adrès: 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-22T10:13:21.700Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076820254_0brqzu2zx",
+      "sessionId": "test-ht-007",
+      "startTime": "2026-01-22T10:13:40.254Z",
+      "endTime": "2026-01-22T10:13:40.254Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki sa mwen ka resikle?",
+          "timestamp": "2026-01-22T10:13:40.254Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki sa ou ka resikle.\n\n**Materyèl resiklabl:**\n• Papye ak karton\n• Plasik (#1 ak #2)\n• Metal (aluminium, fè)\n• Vè (boutey, jar)\n• Elektwonik (aparèy, batri)\n• Dechè òganik (manje, jaden)\n\n**Pwosesis:**\n1. Separa materyèl yo\n2. Netwaye kontaminasyon\n3. Plase nan bwat resiklaj\n\n**Kontak:**\n- Biwo resiklaj lokal: (ajoute nimewo)\n- Sant resiklaj: (ajoute adrès)",
+          "timestamp": "2026-01-22T10:13:40.254Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076825588_4ogs5za4j",
+      "sessionId": "test-ht-008",
+      "startTime": "2026-01-22T10:13:45.588Z",
+      "endTime": "2026-01-22T10:13:45.588Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen prepare pou yon siklòn?",
+          "timestamp": "2026-01-22T10:13:45.588Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou prepare pou yon siklòn.\n\n**Kondisyon:**\n• Plan ijans prepare\n• Founi manje ak dlo\n• Konfime asirans pwopriyete\n\n**Etap:**\n1. Fè yon plan fanmi\n2. Rasanble ekipman ijans\n3. Verifye sistèm drenaj\n4. Enspekte pòt ak fenèt\n5. Prepare yon kit pou bèt kay\n\n**Kontak:**\n• City Hall: (305) 593-6725\n• Lapolis: (305) 593-6699\n• Ijans: 911",
+          "timestamp": "2026-01-22T10:13:45.588Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076832592_7jux2o9t1",
+      "sessionId": "test-ht-009",
+      "startTime": "2026-01-22T10:13:52.592Z",
+      "endTime": "2026-01-22T10:13:52.592Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen rapòte vandalism?",
+          "timestamp": "2026-01-22T10:13:52.592Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men kijan pou rapòte vandalism.\n\n**Opsyon:**\n1. Doral 311 sou entènèt\n2. Rele Lapolis (non-ijans)\n3. Vizite Doral Police Department\n\n**Etap:**\n1. Ranpli fòm sou https://cityofdoral.com/311\n2. Bay detay ensidan an\n3. Soumèt rapò a ak prèv\n\n**Kontak:**\n- Lapolis: (305) 593-6699\n- Doral 311: https://cityofdoral.com/311\n- Ijans: 911",
+          "timestamp": "2026-01-22T10:13:52.592Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076837497_xjmsyn5iz",
+      "sessionId": "test-ht-010",
+      "startTime": "2026-01-22T10:13:57.497Z",
+      "endTime": "2026-01-22T10:13:57.497Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kilès ki pwopriyetè 8350 NW 52nd Terrace?",
+          "timestamp": "2026-01-22T10:13:57.497Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou jwenn enfòmasyon sou pwopriyetè a.\n\n**Kondisyon:**\n• Sèvi ak sistèm Tyler Eagle\n• Rechèch adrès pwopriyete a\n• Disponib sou entènèt\n\n**Etap:**\n1. Rele City Hall: (305) 593-6725\n2. Vizite sit entènèt: www.miamidade.gov\n3. Fè demann pou pwopriyetè a\n\n**Kontak:**\n• Tyler Eagle: (305) 593-6730\n• City Clerk: cityclerk@chatcoreiq.com",
+          "timestamp": "2026-01-22T10:13:57.497Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076872572_oevqqx7hy",
+      "sessionId": "test-ivr-en-003",
+      "startTime": "2026-01-22T10:14:32.572Z",
+      "endTime": "2026-01-22T10:14:32.572Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Transfer me to a live agent",
+          "timestamp": "2026-01-22T10:14:32.572Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can't assist with that. Please hold for a moment.",
+          "timestamp": "2026-01-22T10:14:32.572Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076891899_fpx214sgr",
+      "sessionId": "test-ivr-en-004",
+      "startTime": "2026-01-22T10:14:51.899Z",
+      "endTime": "2026-01-22T10:14:51.899Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are the trolley hours?",
+          "timestamp": "2026-01-22T10:14:51.899Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the trolley hours for Chat Core IQ:\n\n**Route 1:**\n• Weekdays: 6 AM to 10 PM  \n• Saturdays: 7 AM to 8 PM  \n• Sundays: 7 AM to 8 PM  \n\n**Route 2:**\n• Weekdays: 6:10 AM to 9:20 PM  \n• Saturdays: 7 AM to 7:30 PM  \n• No service on Sundays  \n\n**Route 3:**\n• Weekdays: 5:50 AM to 9:30 PM  \n• Saturdays: 6:50 AM to 7 PM  \n• No service on Sundays  \n\n**Route 4:**\n• Weekdays: 6 AM to 11 PM  \n• No service on weekends  \n\nI hope that helps!",
+          "timestamp": "2026-01-22T10:14:51.899Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076896863_u234yg04i",
+      "sessionId": "test-ivr-es-001",
+      "startTime": "2026-01-22T10:14:56.863Z",
+      "endTime": "2026-01-22T10:14:56.863Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo obtengo un permiso para una cerca?",
+          "timestamp": "2026-01-22T10:14:56.863Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo obtener un permiso para una cerca.\n\n**Requisitos:**\n• Max 6ft atrás, 4ft frente  \n• Aprobación DERM necesaria  \n• Dentro de propiedad  \n\n**Pasos:**\n1. Llamar DERM: (305) 372-6502  \n2. Obtener aprobación escrita  \n3. Entregar en Construcción  \n\n**Contacto:**\n• (305) 593-6740  \n• 8401 NW 53rd Terrace  ",
+          "timestamp": "2026-01-22T10:14:56.863Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076901983_8kfpnwy69",
+      "sessionId": "test-ivr-ht-001",
+      "startTime": "2026-01-22T10:15:01.983Z",
+      "endTime": "2026-01-22T10:15:01.983Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan pou mwen jwenn yon pèmi pou yon kloti?",
+          "timestamp": "2026-01-22T10:15:01.983Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki jan pou jwenn yon pemis kloti.\n\n**Kondisyon:**\n• Max 6ft dèyè, 4ft devan\n• Apwobasyon DERM nesesè\n• Nan limit pwopriyete\n\n**Etap:**\n1. Rele DERM: (305) 372-6502\n2. Jwenn apwobasyon ekri\n3. Soumèt nan Building Dept\n\n**Kontak:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace\n\nMwen espere sa ede!",
+          "timestamp": "2026-01-22T10:15:01.983Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "urgent",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769076921874_56nq8z6vk",
+      "sessionId": "test-ivr-ht-002",
+      "startTime": "2026-01-22T10:15:21.874Z",
+      "endTime": "2026-01-22T10:15:21.874Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Ki lè twolè a ap mache?",
+          "timestamp": "2026-01-22T10:15:21.874Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki lè twolè a ap mache.\n\n**Orè:**\n• Lendi a Vandredi: 6 AM - 10 PM\n• Samdi: 8 AM - 10 PM\n• Dimanch: 8 AM - 8 PM\n\n**Siyal:**\n• Tanpri tcheke siyal yo pou orè chanjman.\n\nMwen espere sa ede!",
+          "timestamp": "2026-01-22T10:15:21.874Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769080201689_y5atqzmeu",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:10:01.689Z",
+      "endTime": "2026-01-22T11:10:01.689Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:10:01.689Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:10:01.689Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:01.689Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769080201720_bugsbf0vo",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:09:31.720Z",
+      "endTime": "2026-01-22T11:10:01.691Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:09:31.720Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:09:59.311Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:01.691Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769080230020_r5ipdpray",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:10:30.020Z",
+      "endTime": "2026-01-22T11:10:30.020Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:10:30.020Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:10:30.020Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:30.020Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-22T11:10:30.020Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información.\n\n**Opciones de Pago:**\n• En línea: Sitio web de la ciudad  \n• Por teléfono: Número de servicio  \n• En persona: Oficina del Ayuntamiento  \n\n**Contacto:**\n• Ayuntamiento: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:30.020Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769080230050_eujib3ma8",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:09:31.720Z",
+      "endTime": "2026-01-22T11:10:30.025Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:09:31.720Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:09:59.311Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:01.691Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-22T11:10:26.914Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información.\n\n**Opciones de Pago:**\n• En línea: Sitio web de la ciudad  \n• Por teléfono: Número de servicio  \n• En persona: Oficina del Ayuntamiento  \n\n**Contacto:**\n• Ayuntamiento: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:30.025Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769080276555_2szbj7rjz",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:11:16.555Z",
+      "endTime": "2026-01-22T11:11:16.555Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información.\n\n**Opciones de Pago:**\n• En línea: Sitio web de la ciudad  \n• Por teléfono: Número de servicio  \n• En persona: Oficina del Ayuntamiento  \n\n**Contacto:**\n• Ayuntamiento: (305) 593-6725",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki kote pak yo ye?",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men enfòmasyon sou pak yo.\n\n**Lokalizasyon Pak yo:**\n• Pak Doral: 3000 NW 87th Ave  \n• Pak Treetop: 1020 NW 87th Ave  \n• Park Doral Meadow: 11300 NW 48th Ter  \n\n**Kontak:**\n• Biwo Pak: (305) 593-6740",
+          "timestamp": "2026-01-22T11:11:16.555Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769080276579_x1tb9gstf",
+      "sessionId": "sess_1769080171717_vwg1pvo22",
+      "startTime": "2026-01-22T11:09:31.720Z",
+      "endTime": "2026-01-22T11:11:16.558Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-22T11:09:31.720Z"
+        },
+        {
+          "role": "user",
+          "content": "What are the city hall hours?",
+          "timestamp": "2026-01-22T11:09:59.311Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the information you need.\n\n**City Hall Hours:**\n• Monday to Friday: 8 AM - 5 PM\n\n**Contact:**\n• Phone: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:01.691Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo pago mi factura de agua?",
+          "timestamp": "2026-01-22T11:10:26.914Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información.\n\n**Opciones de Pago:**\n• En línea: Sitio web de la ciudad  \n• Por teléfono: Número de servicio  \n• En persona: Oficina del Ayuntamiento  \n\n**Contacto:**\n• Ayuntamiento: (305) 593-6725",
+          "timestamp": "2026-01-22T11:10:30.025Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki kote pak yo ye?",
+          "timestamp": "2026-01-22T11:11:13.462Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men enfòmasyon sou pak yo.\n\n**Lokalizasyon Pak yo:**\n• Pak Doral: 3000 NW 87th Ave  \n• Pak Treetop: 1020 NW 87th Ave  \n• Park Doral Meadow: 11300 NW 48th Ter  \n\n**Kontak:**\n• Biwo Pak: (305) 593-6740",
+          "timestamp": "2026-01-22T11:11:16.558Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769460216757_6npskx7fp",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:43:36.757Z",
+      "endTime": "2026-01-26T20:43:36.757Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:43:36.757Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:43:36.757Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:43:36.757Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769460216943_kwmjm3uxw",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:30:26.855Z",
+      "endTime": "2026-01-26T20:43:36.760Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:30:26.855Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:43:32.489Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:43:36.760Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769460250508_u5jqvxdcf",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:44:10.508Z",
+      "endTime": "2026-01-26T20:44:10.508Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:44:10.508Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:44:10.508Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:44:10.508Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo solicito un permiso de construcción?",
+          "timestamp": "2026-01-26T20:44:10.508Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo solicitar un permiso.\n\n**Requisitos:**\n• Planos del proyecto\n• Identificación válida\n• Pago de tarifas\n\n**Pasos:**\n1. Visitar oficina de construcción\n2. Presentar documentos requeridos\n3. Esperar aprobación\n\n**Contacto:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-26T20:44:10.508Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769460250563_h68qndmut",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:30:26.855Z",
+      "endTime": "2026-01-26T20:44:10.513Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:30:26.855Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:43:32.489Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:43:36.760Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo solicito un permiso de construcción?",
+          "timestamp": "2026-01-26T20:44:06.266Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo solicitar un permiso.\n\n**Requisitos:**\n• Planos del proyecto\n• Identificación válida\n• Pago de tarifas\n\n**Pasos:**\n1. Visitar oficina de construcción\n2. Presentar documentos requeridos\n3. Esperar aprobación\n\n**Contacto:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-26T20:44:10.513Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769460282988_36jdrs9bn",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:44:42.988Z",
+      "endTime": "2026-01-26T20:44:42.988Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo solicito un permiso de construcción?",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo solicitar un permiso.\n\n**Requisitos:**\n• Planos del proyecto\n• Identificación válida\n• Pago de tarifas\n\n**Pasos:**\n1. Visitar oficina de construcción\n2. Presentar documentos requeridos\n3. Esperar aprobación\n\n**Contacto:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè biwo ou ouvè?",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki lè biwo a ouvè.\n\n**Orè Biwo:**\n• Lendi a Vandredi\n• 8 AM - 5 PM\n\n**Kontak:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:44:42.988Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769460283047_9snd6q82i",
+      "sessionId": "sess_1769459426853_ogyh0fmxh",
+      "startTime": "2026-01-26T20:30:26.855Z",
+      "endTime": "2026-01-26T20:44:42.992Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-26T20:30:26.855Z"
+        },
+        {
+          "role": "user",
+          "content": "What are your office hours?",
+          "timestamp": "2026-01-26T20:43:32.489Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's the office hours information.\n\n**Office Hours:**\n• Monday to Friday\n• 8 AM - 5 PM\n\n**Contact:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:43:36.760Z"
+        },
+        {
+          "role": "user",
+          "content": "¿Cómo solicito un permiso de construcción?",
+          "timestamp": "2026-01-26T20:44:06.266Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí está cómo solicitar un permiso.\n\n**Requisitos:**\n• Planos del proyecto\n• Identificación válida\n• Pago de tarifas\n\n**Pasos:**\n1. Visitar oficina de construcción\n2. Presentar documentos requeridos\n3. Esperar aprobación\n\n**Contacto:**\n• (305) 593-6740\n• 8401 NW 53rd Terrace",
+          "timestamp": "2026-01-26T20:44:10.513Z"
+        },
+        {
+          "role": "user",
+          "content": "Ki lè biwo ou ouvè?",
+          "timestamp": "2026-01-26T20:44:40.779Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men ki lè biwo a ouvè.\n\n**Orè Biwo:**\n• Lendi a Vandredi\n• 8 AM - 5 PM\n\n**Kontak:**\n• City Hall: (305) 593-6725",
+          "timestamp": "2026-01-26T20:44:42.992Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-22T07:59:29.612Z"
+  "lastUpdated": "2026-01-26T20:44:43.055Z"
 }

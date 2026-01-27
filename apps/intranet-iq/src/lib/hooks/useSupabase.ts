@@ -256,18 +256,26 @@ export function useSearch() {
 
         const data = await response.json();
 
-        const transformedResults: SearchResult[] = (data.results || []).map((item: any) => ({
-          id: item.id,
-          title: item.title,
-          content: item.content,
-          summary: item.summary || item.highlights?.[0] || '',
-          type: item.type || 'article',
-          source: item.source || 'knowledge_base',
-          url: item.url,
-          score: item.score,
-          created_at: item.created_at,
-          metadata: item.metadata,
-        }));
+        const transformedResults: SearchResult[] = (data.results || []).map((item: any) => {
+          // Normalize relevance score to 0-1 range
+          // API returns relevanceScore as integer (0-100), or similarity as decimal (0-1)
+          const rawScore = item.relevanceScore || item.score || item.similarity || item.combined_score || 0;
+          const normalizedRelevance = rawScore > 1 ? rawScore / 100 : rawScore;
+
+          return {
+            id: item.id,
+            title: item.title,
+            content: item.content,
+            summary: item.summary || item.highlights?.[0] || '',
+            type: item.type || 'article',
+            source: item.source || 'knowledge_base',
+            url: item.url,
+            score: rawScore,
+            relevance: normalizedRelevance,
+            created_at: item.created_at,
+            metadata: item.metadata,
+          };
+        });
 
         setResults(transformedResults);
       } catch (err) {

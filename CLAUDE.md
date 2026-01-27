@@ -409,6 +409,52 @@ npm run dev:support      # Start dSQ on port 3003
 **Reference Implementation:** `apps/support-iq/src/lib/semantic-matcher.ts`
 **Full Documentation:** `docs/QUERY_DETECTION_STANDARDS.md`
 
+### Cache Prevention Configuration (v1.2.7)
+
+**CRITICAL: All apps MUST configure cache-busting to prevent stale deployments.**
+
+**CANONICAL DOCUMENT:** `/docs/QUERY_DETECTION_STANDARDS.md` (Section 10)
+
+#### Required Configuration (`next.config.ts`)
+
+Every Next.js app MUST include:
+
+```typescript
+const nextConfig: NextConfig = {
+  // Force unique build ID on each deployment
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
+
+  // Prevent browser caching of HTML pages
+  async headers() {
+    return [
+      {
+        source: '/((?!_next/static|_next/image|favicon.ico).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+        ],
+      },
+    ];
+  },
+};
+```
+
+#### App Status
+| App | Config File | Status |
+|-----|-------------|--------|
+| **Main** | `apps/main/next.config.ts` | ✅ Configured |
+| **dSQ** | `apps/support-iq/next.config.ts` | ✅ Configured |
+| **dIQ** | `apps/intranet-iq/next.config.ts` | ✅ Configured |
+| **dCQ** | `apps/chat-core-iq/next.config.ts` | ✅ Configured |
+
+#### What This Prevents
+- Stale JavaScript after deployments
+- Browser showing old content after code changes
+- Need for users to hard-refresh manually
+
+**Full Documentation:** `docs/QUERY_DETECTION_STANDARDS.md` (Section 10)
+
 ---
 
 ## Code Conventions

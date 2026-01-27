@@ -75,6 +75,35 @@ useEffect(() => {
   - CDN distribution
   - Environment variable management
 
+### Cache Prevention (v0.7.6 - CRITICAL)
+
+**All apps have permanent cache-busting configured to prevent stale deployments.**
+
+| App | Config | Cache Headers |
+|-----|--------|---------------|
+| **Main** | `apps/main/next.config.ts` | `no-store, must-revalidate` |
+| **dSQ** | `apps/support-iq/next.config.ts` | `no-store, must-revalidate` |
+| **dIQ** | `apps/intranet-iq/next.config.ts` | `no-store, must-revalidate` |
+| **dCQ** | `apps/chat-core-iq/next.config.ts` | `no-store, must-revalidate` |
+
+**Required Configuration** (in every `next.config.ts`):
+```typescript
+generateBuildId: async () => {
+  return `build-${Date.now()}`;
+},
+
+async headers() {
+  return [{
+    source: '/((?!_next/static|_next/image|favicon.ico).*)',
+    headers: [
+      { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+    ],
+  }];
+}
+```
+
+**Full Documentation**: `/docs/QUERY_DETECTION_STANDARDS.md` (Section 10)
+
 ## Login Page Design (v0.3.0)
 
 ### Design Philosophy

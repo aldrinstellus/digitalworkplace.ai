@@ -598,7 +598,7 @@ export default function AgentsPage() {
                     <StaggerItem key={workflow.id}>
                       <motion.div
                         onClick={() => setSelectedWorkflow(workflow)}
-                        className={`p-4 rounded-xl cursor-pointer transition-all mb-2 ${
+                        className={`group p-4 rounded-xl cursor-pointer transition-all mb-2 ${
                           selectedWorkflow?.id === workflow.id
                             ? "bg-[var(--accent-ember)]/10 border border-[var(--accent-ember)]/30"
                             : "hover:bg-[var(--bg-slate)] border border-transparent"
@@ -649,14 +649,24 @@ export default function AgentsPage() {
                             {workflow.description}
                           </p>
                         )}
-                        <div className="flex items-center gap-4 text-xs text-[var(--text-muted)]">
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {new Date(workflow.updated_at).toLocaleDateString()}
+                        <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+                          <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {new Date(workflow.updated_at).toLocaleDateString()}
+                            </span>
+                            {workflow.is_template && (
+                              <span className="text-[var(--accent-ember)]">Template</span>
+                            )}
+                          </div>
+                          <span className={`flex items-center gap-1 transition-colors ${
+                            selectedWorkflow?.id === workflow.id
+                              ? "text-[var(--accent-ember)]"
+                              : "group-hover:text-[var(--text-secondary)]"
+                          }`}>
+                            <Eye className="w-3 h-3" />
+                            View details
                           </span>
-                          {workflow.is_template && (
-                            <span className="text-[var(--accent-ember)]">Template</span>
-                          )}
                         </div>
                       </motion.div>
                     </StaggerItem>

@@ -61,6 +61,62 @@
   --radius: 0.5rem;
 }
 
+/* Light Mode - WCAG 2.1 AA Compliant Contrast */
+.light, [data-theme="light"] {
+  /* Backgrounds */
+  --bg-obsidian: #f8f9fa;
+  --bg-charcoal: #ffffff;
+  --bg-slate: #f1f3f5;
+
+  /* Borders */
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-default: rgba(0, 0, 0, 0.15);
+
+  /* Accent Colors - Darker ember for light mode contrast */
+  --accent-ember: #ea580c;
+  --accent-ember-soft: #f97316;
+  --accent-copper: #c2410c;
+  --accent-gold: #d97706;
+
+  /* Text - High contrast for accessibility */
+  --text-primary: #111827;
+  --text-secondary: rgba(17, 24, 39, 0.8);
+  --text-muted: rgba(17, 24, 39, 0.6);
+
+  /* Semantic Colors */
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --error: #dc2626;
+
+  /* Legacy mappings */
+  --background: var(--bg-obsidian);
+  --foreground: var(--text-primary);
+  --muted: var(--bg-slate);
+  --muted-foreground: var(--text-muted);
+  --card: var(--bg-charcoal);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-charcoal);
+  --popover-foreground: var(--text-primary);
+  --border: var(--border-default);
+  --input: var(--bg-slate);
+  --primary: var(--accent-ember);
+  --primary-foreground: #ffffff;
+  --secondary: var(--bg-slate);
+  --secondary-foreground: var(--text-primary);
+  --accent: var(--bg-slate);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--error);
+  --destructive-foreground: #ffffff;
+  --ring: var(--accent-ember);
+}
+
+/* Light mode body override */
+.light body, [data-theme="light"] body,
+body.light, body[data-theme="light"] {
+  background: var(--bg-obsidian);
+  color: var(--text-primary);
+}
+
 body {
   background: var(--bg-obsidian);
   color: var(--text-primary);

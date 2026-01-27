@@ -6,10 +6,11 @@
 
 This document contains design specifications, UI/UX guidelines, and brand identity details for **dIQ (Intranet IQ)** - the AI-powered internal knowledge network.
 
-**Version:** 1.1.1
+**Version:** 1.1.2
 **Design System:** Midnight Ember
-**Last Updated:** January 22, 2026
+**Last Updated:** January 27, 2026
 **Audit Score:** 100/100 (Full Spectrum Implementation - Post-Audit TypeScript Cleanup)
+**Cache Prevention:** ✅ Configured (no-store, must-revalidate)
 
 ---
 

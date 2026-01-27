@@ -18,11 +18,20 @@ import {
   Grid3X3,
   List,
   Network,
+  ArrowUpDown,
 } from "lucide-react";
 import { useDepartments, useEmployees } from "@/lib/hooks/useSupabase";
 import type { Employee, Department } from "@/lib/database.types";
 
 type ViewMode = "grid" | "list" | "org";
+type SortOption = "name-asc" | "name-desc" | "department" | "title";
+
+const sortOptions = [
+  { value: "name-asc", label: "Name (A-Z)" },
+  { value: "name-desc", label: "Name (Z-A)" },
+  { value: "department", label: "Department" },
+  { value: "title", label: "Title" },
+];
 
 const statusColors = {
   online: "bg-[var(--success)]",
@@ -43,6 +52,7 @@ export default function PeoplePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [sortBy, setSortBy] = useState<SortOption>("name-asc");
   const [selectedPerson, setSelectedPerson] = useState<any | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [employeeStatuses, setEmployeeStatuses] = useState<Record<string, "online" | "away" | "offline">>({});
@@ -112,15 +122,35 @@ export default function PeoplePage() {
     return { childrenByManager: childrenMap, ceo: ceoNode };
   }, [transformedEmployees]);
 
-  const filteredPeople = transformedEmployees.filter((person: any) => {
-    const matchesSearch =
-      person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      person.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      person.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDepartment =
-      selectedDepartment === "all" || person.departmentId === selectedDepartment;
-    return matchesSearch && matchesDepartment;
-  });
+  const filteredPeople = useMemo(() => {
+    const filtered = transformedEmployees.filter((person: any) => {
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch =
+        person.name.toLowerCase().includes(searchLower) ||
+        person.title.toLowerCase().includes(searchLower) ||
+        person.email.toLowerCase().includes(searchLower) ||
+        person.department.toLowerCase().includes(searchLower);
+      const matchesDepartment =
+        selectedDepartment === "all" || person.departmentId === selectedDepartment;
+      return matchesSearch && matchesDepartment;
+    });
+
+    // Sort the results
+    return filtered.sort((a: any, b: any) => {
+      switch (sortBy) {
+        case "name-asc":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name);
+        case "department":
+          return a.department.localeCompare(b.department) || a.name.localeCompare(b.name);
+        case "title":
+          return a.title.localeCompare(b.title) || a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+  }, [transformedEmployees, searchQuery, selectedDepartment, sortBy]);
 
   const toggleNode = (id: string) => {
     setExpandedNodes((prev) => {
@@ -245,43 +275,65 @@ export default function PeoplePage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <motion.button
-                onClick={() => setViewMode("grid")}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Grid3X3 className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                onClick={() => setViewMode("list")}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === "list"
-                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <List className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                onClick={() => setViewMode("org")}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === "org"
-                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
-                }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Network className="w-5 h-5" />
-              </motion.button>
+            <div className="flex items-center gap-4">
+              {/* Sort Dropdown */}
+              <div className="flex items-center gap-2">
+                <ArrowUpDown className="w-4 h-4 text-[var(--text-muted)]" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors cursor-pointer"
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* View Mode Buttons */}
+              <div className="flex items-center gap-1 border-l border-[var(--border-subtle)] pl-4">
+                <motion.button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === "grid"
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Grid view"
+                >
+                  <Grid3X3 className="w-5 h-5" />
+                </motion.button>
+                <motion.button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === "list"
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="List view"
+                >
+                  <List className="w-5 h-5" />
+                </motion.button>
+                <motion.button
+                  onClick={() => setViewMode("org")}
+                  className={`p-2 rounded-lg transition-colors ${
+                    viewMode === "org"
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title="Org chart"
+                >
+                  <Network className="w-5 h-5" />
+                </motion.button>
+              </div>
             </div>
           </FadeIn>
 
@@ -293,7 +345,7 @@ export default function PeoplePage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by name, title, or email..."
+                placeholder="Search by name, title, department, or email..."
                 className="w-full bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl pl-12 pr-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 focus:shadow-lg focus:shadow-[var(--accent-ember)]/5 transition-all"
               />
             </div>
@@ -324,8 +376,20 @@ export default function PeoplePage() {
                 <Network className="w-5 h-5 text-[var(--accent-ember)]" />
                 Organization Chart
               </h2>
-              <div className="flex justify-center">
-                {orgTree && renderOrgNode(orgTree)}
+              <div className="flex justify-center min-h-[200px]">
+                {orgTree ? (
+                  renderOrgNode(orgTree)
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-12">
+                    <Network className="w-12 h-12 text-[var(--text-muted)]/30 mb-4" />
+                    <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">
+                      Organization chart unavailable
+                    </h3>
+                    <p className="text-sm text-[var(--text-muted)]/70 max-w-md">
+                      Unable to build the organization tree. Ensure there is a top-level employee (CEO/Manager) without a manager assigned.
+                    </p>
+                  </div>
+                )}
               </div>
             </FadeIn>
           ) : (

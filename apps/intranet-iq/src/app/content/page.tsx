@@ -391,7 +391,8 @@ function ContentPageInner() {
                           <button
                             onClick={() => {
                               setShowNewMenu(false);
-                              setShowCreateModal("article");
+                              setSelectedData(null);
+                              setShowArticleEditor(true);
                             }}
                             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] hover:text-[var(--text-primary)] transition-colors"
                           >

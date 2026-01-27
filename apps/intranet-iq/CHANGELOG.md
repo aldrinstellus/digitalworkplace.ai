@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.2] - 2026-01-27
+
+### Cache Prevention Configuration
+
+Added permanent cache-busting to prevent stale deployments.
+
+#### What's Configured
+
+```typescript
+// next.config.ts
+generateBuildId: async () => {
+  return `build-${Date.now()}`;
+},
+
+async headers() {
+  return [{
+    source: '/((?!_next/static|_next/image|favicon.ico).*)',
+    headers: [
+      { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+    ],
+  }];
+}
+```
+
+#### What This Prevents
+- Stale JavaScript after deployments
+- Browser showing old content after code changes
+- Need for users to hard-refresh manually
+
+#### Files Modified
+- `next.config.ts` - Added generateBuildId and Cache-Control headers
+- `CLAUDE.md` - Added cache prevention documentation
+- `context.md` - Added cache prevention section
+
+#### Verification
+```bash
+curl -I https://intranet-iq.vercel.app/diq/dashboard
+# Should see: cache-control: no-store, must-revalidate
+```
+
+---
+
 ## [1.1.1] - 2026-01-22
 
 ### Post-Audit TypeScript Cleanup

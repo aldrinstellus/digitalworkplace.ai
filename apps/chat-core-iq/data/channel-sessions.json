@@ -2458,7 +2458,82 @@
           "timestamp": "2026-01-22T07:55:45.204Z"
         }
       ]
+    },
+    "ivr:+1-demo-1769080348977": {
+      "sessionId": "ivr_1769080348990_mdq68gte2",
+      "channel": "ivr",
+      "userId": "+1-demo-1769080348977",
+      "startTime": "2026-01-22T11:12:28.990Z",
+      "lastActivity": "2026-01-22T11:12:28.997Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T11:12:28.997Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769080374690": {
+      "sessionId": "ivr_1769080374703_uvd8gdhqb",
+      "channel": "ivr",
+      "userId": "+1-demo-1769080374690",
+      "startTime": "2026-01-22T11:12:54.703Z",
+      "lastActivity": "2026-01-22T11:12:54.714Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T11:12:54.714Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769080395556": {
+      "sessionId": "ivr_1769080395567_83i2e72kw",
+      "channel": "ivr",
+      "userId": "+1-demo-1769080395556",
+      "startTime": "2026-01-22T11:13:15.567Z",
+      "lastActivity": "2026-01-22T11:13:15.575Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-22T11:13:15.575Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769461063974": {
+      "sessionId": "ivr_1769461064075_4hzujlhfz",
+      "channel": "ivr",
+      "userId": "+1-demo-1769461063974",
+      "startTime": "2026-01-26T20:57:44.075Z",
+      "lastActivity": "2026-01-26T20:57:44.083Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-26T20:57:44.083Z"
+        }
+      ]
+    },
+    "ivr:+1-demo-1769461115405": {
+      "sessionId": "ivr_1769461115436_iof9jpcyg",
+      "channel": "ivr",
+      "userId": "+1-demo-1769461115405",
+      "startTime": "2026-01-26T20:58:35.436Z",
+      "lastActivity": "2026-01-26T20:58:35.456Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-26T20:58:35.456Z"
+        }
+      ]
     }
   },
-  "lastUpdated": "2026-01-22T07:55:45.204Z"
+  "lastUpdated": "2026-01-26T20:58:35.456Z"
 }

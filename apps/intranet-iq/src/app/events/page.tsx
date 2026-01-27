@@ -16,13 +16,49 @@ import {
   Video,
   Building,
   Globe,
+  List,
+  Grid3X3,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import type { Event } from "@/lib/database.types";
+
+type ViewMode = "list" | "calendar";
 
 export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "virtual" | "in-person" | "hybrid">("all");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const { events, loading } = useUpcomingEvents({ limit: 50 });
+
+  // Calendar helpers
+  const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const getEventsForDay = (day: number) => {
+    return events.filter((event: Event) => {
+      const eventDate = new Date(event.start_time);
+      return (
+        eventDate.getDate() === day &&
+        eventDate.getMonth() === currentMonth.getMonth() &&
+        eventDate.getFullYear() === currentMonth.getFullYear()
+      );
+    });
+  };
+
+  const navigateMonth = (direction: number) => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
+  };
+
+  const daysInMonth = getDaysInMonth(currentMonth);
+  const firstDayOfMonth = getFirstDayOfMonth(currentMonth);
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const filteredEvents = events.filter((event: Event) => {
     const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -70,7 +106,7 @@ export default function EventsPage() {
             </p>
           </div>
 
-          {/* Search and Filter */}
+          {/* Search, Filter, and View Toggle */}
           <div className="flex gap-4 mb-6">
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" />
@@ -95,12 +131,127 @@ export default function EventsPage() {
                 <option value="hybrid">Hybrid</option>
               </select>
             </div>
+            {/* View Mode Toggle */}
+            <div className="flex items-center gap-1 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-1">
+              <motion.button
+                onClick={() => setViewMode("list")}
+                className={`p-2 rounded-lg transition-colors ${
+                  viewMode === "list"
+                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="List view"
+              >
+                <List className="w-5 h-5" />
+              </motion.button>
+              <motion.button
+                onClick={() => setViewMode("calendar")}
+                className={`p-2 rounded-lg transition-colors ${
+                  viewMode === "calendar"
+                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title="Calendar view"
+              >
+                <Grid3X3 className="w-5 h-5" />
+              </motion.button>
+            </div>
           </div>
 
-          {/* Events List */}
+          {/* Events Content */}
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
+            </div>
+          ) : viewMode === "calendar" ? (
+            /* Calendar View */
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl overflow-hidden">
+              {/* Calendar Header */}
+              <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
+                <motion.button
+                  onClick={() => navigateMonth(-1)}
+                  className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </motion.button>
+                <h3 className="text-lg font-medium text-[var(--text-primary)]">
+                  {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                </h3>
+                <motion.button
+                  onClick={() => navigateMonth(1)}
+                  className="p-2 rounded-lg hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </motion.button>
+              </div>
+
+              {/* Week Days Header */}
+              <div className="grid grid-cols-7 border-b border-[var(--border-subtle)]">
+                {weekDays.map((day) => (
+                  <div key={day} className="p-3 text-center text-sm font-medium text-[var(--text-muted)]">
+                    {day}
+                  </div>
+                ))}
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7">
+                {/* Empty cells for days before the first day of month */}
+                {Array.from({ length: firstDayOfMonth }).map((_, index) => (
+                  <div key={`empty-${index}`} className="min-h-[100px] p-2 border-b border-r border-[var(--border-subtle)] bg-[var(--bg-slate)]/30" />
+                ))}
+
+                {/* Days of the month */}
+                {Array.from({ length: daysInMonth }).map((_, index) => {
+                  const day = index + 1;
+                  const dayEvents = getEventsForDay(day);
+                  const isToday =
+                    day === new Date().getDate() &&
+                    currentMonth.getMonth() === new Date().getMonth() &&
+                    currentMonth.getFullYear() === new Date().getFullYear();
+
+                  return (
+                    <div
+                      key={day}
+                      className={`min-h-[100px] p-2 border-b border-r border-[var(--border-subtle)] ${
+                        isToday ? "bg-[var(--accent-ember)]/5" : ""
+                      }`}
+                    >
+                      <div className={`text-sm mb-1 ${
+                        isToday
+                          ? "w-6 h-6 rounded-full bg-[var(--accent-ember)] text-white flex items-center justify-center font-medium"
+                          : "text-[var(--text-muted)]"
+                      }`}>
+                        {day}
+                      </div>
+                      <div className="space-y-1">
+                        {dayEvents.slice(0, 3).map((event: Event) => (
+                          <div
+                            key={event.id}
+                            className="text-xs p-1 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] truncate cursor-pointer hover:bg-[var(--accent-ember)]/30 transition-colors"
+                            title={event.title}
+                          >
+                            {event.title}
+                          </div>
+                        ))}
+                        {dayEvents.length > 3 && (
+                          <div className="text-xs text-[var(--text-muted)]">
+                            +{dayEvents.length - 3} more
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           ) : filteredEvents.length === 0 ? (
             <div className="text-center py-12">
@@ -111,6 +262,7 @@ export default function EventsPage() {
               </p>
             </div>
           ) : (
+            /* List View */
             <StaggerContainer className="space-y-4">
               {filteredEvents.map((event: Event) => (
                 <StaggerItem key={event.id}>

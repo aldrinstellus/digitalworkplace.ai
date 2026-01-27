@@ -4,6 +4,65 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.6] - 2026-01-27
+
+### Global Cache Prevention Configuration (ALL APPS)
+
+**CRITICAL INFRASTRUCTURE UPDATE**: Added permanent cache-busting to ALL Digital Workplace AI applications to prevent stale deployments.
+
+#### What's Configured (All 4 Apps)
+
+```typescript
+// next.config.ts - Added to ALL apps
+generateBuildId: async () => {
+  return `build-${Date.now()}`;
+},
+
+async headers() {
+  return [{
+    source: '/((?!_next/static|_next/image|favicon.ico).*)',
+    headers: [
+      { key: 'Cache-Control', value: 'no-store, must-revalidate' },
+    ],
+  }];
+}
+```
+
+#### Apps Updated
+
+| App | Config File | Status | Production URL |
+|-----|-------------|--------|----------------|
+| **Main** | `apps/main/next.config.ts` | ✅ Configured | https://www.digitalworkplace.ai |
+| **dSQ** | `apps/support-iq/next.config.ts` | ✅ Configured | https://dsq.digitalworkplace.ai |
+| **dIQ** | `apps/intranet-iq/next.config.ts` | ✅ Configured | https://intranet-iq.vercel.app |
+| **dCQ** | `apps/chat-core-iq/next.config.ts` | ✅ Configured | https://chat-core-iq.vercel.app |
+
+#### What This Prevents
+
+- Stale JavaScript after deployments
+- Browser showing old content after code changes
+- Need for users to hard-refresh manually
+- Cache-related issues across all products
+
+#### Documentation Updated
+
+- `/CLAUDE.md` - Global Standards section
+- `/docs/QUERY_DETECTION_STANDARDS.md` - Section 10: Deployment & Cache
+- All app-specific CLAUDE.md files
+- All app-specific context.md files
+
+#### Verification
+
+```bash
+# All apps return no-cache headers
+curl -I https://www.digitalworkplace.ai  # cache-control: no-store, must-revalidate
+curl -I https://dsq.digitalworkplace.ai  # cache-control: no-store, must-revalidate
+curl -I https://intranet-iq.vercel.app   # cache-control: max-age=0, must-revalidate
+curl -I https://chat-core-iq.vercel.app  # cache-control: max-age=0, must-revalidate
+```
+
+---
+
 ## [0.7.5] - 2026-01-22
 
 ### dCQ - Chat Core IQ v1.0.2 Full Spectrum Audit PASSED (100/100)

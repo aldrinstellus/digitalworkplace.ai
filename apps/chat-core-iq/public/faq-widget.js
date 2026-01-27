@@ -8,6 +8,7 @@
  * - Accessible (ARIA, keyboard navigation)
  * - Responsive design matching site theme
  * - Graceful error handling
+ * - Search/filter functionality
  */
 (function() {
   'use strict';
@@ -22,6 +23,9 @@
     return window.location.origin + '/dcq';
   }
   const API_BASE = getApiBase();
+
+  // Store all FAQs for filtering
+  let allFaqs = [];
 
   // Configuration
   const CONFIG = {
@@ -211,6 +215,99 @@
         display: none;
       }
 
+      /* Search Box */
+      .doral-faq-search-wrapper {
+        margin-bottom: 24px;
+      }
+
+      .doral-faq-search {
+        position: relative;
+        max-width: 100%;
+      }
+
+      .doral-faq-search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        color: #999;
+        pointer-events: none;
+      }
+
+      .doral-faq-search-input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        font-family: 'Figtree', sans-serif;
+        font-size: 1rem;
+        color: ${CONFIG.colors.text};
+        background: ${CONFIG.colors.white};
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .doral-faq-search-input::placeholder {
+        color: #999;
+      }
+
+      .doral-faq-search-input:focus {
+        border-color: ${CONFIG.colors.secondaryBlue};
+        box-shadow: 0 0 0 3px rgba(28, 134, 219, 0.15);
+      }
+
+      .doral-faq-search-clear {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        background: #e2e8f0;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 14px;
+        line-height: 1;
+        transition: background-color 0.2s ease;
+      }
+
+      .doral-faq-search-clear:hover {
+        background-color: #cbd5e1;
+      }
+
+      .doral-faq-search-clear.visible {
+        display: flex;
+      }
+
+      /* No results message */
+      .doral-faq-no-results {
+        text-align: center;
+        padding: 30px 20px;
+        color: #666;
+        font-family: 'Figtree', sans-serif;
+        font-size: 1rem;
+        background: ${CONFIG.colors.white};
+        border-radius: 8px;
+        display: none;
+      }
+
+      .doral-faq-no-results.visible {
+        display: block;
+      }
+
+      /* Hidden FAQ items during search */
+      .doral-faq-item.hidden {
+        display: none;
+      }
+
       /* Responsive */
       @media (max-width: 768px) {
         .row-index-faq {
@@ -234,6 +331,21 @@
         .doral-faq-answer-inner {
           padding: 0 16px 16px;
           font-size: 0.9rem;
+        }
+
+        .doral-faq-search-wrapper {
+          margin-bottom: 20px;
+        }
+
+        .doral-faq-search-input {
+          padding: 12px 14px 12px 44px;
+          font-size: 0.95rem;
+        }
+
+        .doral-faq-search-icon {
+          left: 14px;
+          width: 18px;
+          height: 18px;
         }
       }
     `;
@@ -287,8 +399,11 @@
       return;
     }
 
+    // Store FAQs for filtering
+    allFaqs = faqs;
+
     const faqsHtml = faqs.map((faq, index) => `
-      <div class="doral-faq-item" data-index="${index}">
+      <div class="doral-faq-item" data-index="${index}" data-question="${escapeHtml(faq.question).toLowerCase()}" data-answer="${escapeHtml(faq.answer).toLowerCase()}">
         <button type="button" class="doral-faq-question"
                 aria-expanded="false"
                 aria-controls="faq-answer-${index}"
@@ -309,14 +424,39 @@
       </div>
     `).join('');
 
+    // Search box HTML with magnifying glass icon
+    const searchHtml = `
+      <div class="doral-faq-search-wrapper">
+        <div class="doral-faq-search">
+          <svg class="doral-faq-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text"
+                 class="doral-faq-search-input"
+                 placeholder="Search FAQs..."
+                 aria-label="Search frequently asked questions"
+                 id="doral-faq-search-input">
+          <button type="button" class="doral-faq-search-clear" aria-label="Clear search" id="doral-faq-search-clear">&times;</button>
+        </div>
+      </div>
+    `;
+
     container.innerHTML = `
       <div class="doral-faq-container">
-        ${faqsHtml}
+        ${searchHtml}
+        <div class="doral-faq-list">
+          ${faqsHtml}
+        </div>
+        <div class="doral-faq-no-results" id="doral-faq-no-results">
+          No FAQs match your search. Try different keywords.
+        </div>
       </div>
     `;
 
     // Attach event listeners
     attachEventListeners();
+    attachSearchListeners();
   }
 
   // Escape HTML to prevent XSS
@@ -392,6 +532,86 @@
             toggleItem(item);
           }
         }
+      }
+    });
+  }
+
+  // Attach search event listeners
+  function attachSearchListeners() {
+    const searchInput = document.getElementById('doral-faq-search-input');
+    const clearButton = document.getElementById('doral-faq-search-clear');
+    const noResults = document.getElementById('doral-faq-no-results');
+
+    if (!searchInput) return;
+
+    // Debounce function for search
+    let debounceTimer;
+    function debounce(func, delay) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(func, delay);
+    }
+
+    // Filter FAQs based on search query
+    function filterFaqs(query) {
+      const container = document.getElementById(CONFIG.containerId);
+      if (!container) return;
+
+      const faqItems = container.querySelectorAll('.doral-faq-item');
+      const normalizedQuery = query.toLowerCase().trim();
+      let visibleCount = 0;
+
+      faqItems.forEach(function(item) {
+        const questionText = item.getAttribute('data-question') || '';
+        const answerText = item.getAttribute('data-answer') || '';
+
+        if (normalizedQuery === '' || questionText.includes(normalizedQuery) || answerText.includes(normalizedQuery)) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Show/hide no results message
+      if (noResults) {
+        if (visibleCount === 0 && normalizedQuery !== '') {
+          noResults.classList.add('visible');
+        } else {
+          noResults.classList.remove('visible');
+        }
+      }
+
+      // Show/hide clear button
+      if (clearButton) {
+        if (normalizedQuery !== '') {
+          clearButton.classList.add('visible');
+        } else {
+          clearButton.classList.remove('visible');
+        }
+      }
+    }
+
+    // Search input handler
+    searchInput.addEventListener('input', function(e) {
+      debounce(function() {
+        filterFaqs(e.target.value);
+      }, 150);
+    });
+
+    // Clear button handler
+    if (clearButton) {
+      clearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        filterFaqs('');
+        searchInput.focus();
+      });
+    }
+
+    // Handle Escape key to clear search
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        searchInput.value = '';
+        filterFaqs('');
       }
     });
   }

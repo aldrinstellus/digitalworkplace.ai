@@ -50,7 +50,7 @@ const products = [
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
     localHref: "http://localhost:3002/dcq/Home/index.html",
-    prodHref: "https://chat-core-iq.vercel.app/dcq/Home/index.html",
+    prodHref: "https://dcq.digitalworkplace.ai/dcq/Home/index.html",
     disabled: false,
     colors: {
       primary: "#a855f7",

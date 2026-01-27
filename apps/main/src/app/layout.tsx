@@ -27,6 +27,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          {/* PERFORMANCE: Preconnect to external domains for faster resource loading */}
+          <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+          <link rel="dns-prefetch" href="https://images.unsplash.com" />
+          <link rel="preconnect" href="https://clerk.digitalworkplace.ai" crossOrigin="anonymous" />
+          <link rel="dns-prefetch" href="https://clerk.digitalworkplace.ai" />
+        </head>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

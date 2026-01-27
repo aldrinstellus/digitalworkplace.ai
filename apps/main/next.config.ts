@@ -44,6 +44,20 @@ const nextConfig: NextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
+      // PERFORMANCE: Long cache for immutable static assets (JS/CSS with hashes)
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // PERFORMANCE: Cache optimized images
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
       // Prevent caching of HTML pages - users always get fresh content
       {
         source: '/((?!_next/static|_next/image|favicon.ico).*)',

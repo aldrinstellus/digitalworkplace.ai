@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react";
 
 interface SessionInfo {
   clerkId: string | null;
@@ -19,36 +19,63 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 const SESSION_STORAGE_KEY = "dcq_session_info";
 const SESSION_PREFIX = "dcq_session_";
 
-export function SessionProvider({ children }: { children: ReactNode }) {
-  const [sessionInfo, setSessionInfo] = useState<SessionInfo>({
-    clerkId: null,
-    sessionId: null,
-    isSessionActive: false,
-  });
+// Get initial session from URL or localStorage (runs once during SSR/hydration)
+function getInitialSession(): SessionInfo {
+  if (typeof window === "undefined") {
+    return { clerkId: null, sessionId: null, isSessionActive: false };
+  }
 
+  // Check URL params first (highest priority - fresh navigation from main app)
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlClerkId = urlParams.get("clerk_id");
+  const urlSessionId = urlParams.get("session_id");
+
+  if (urlClerkId && urlSessionId) {
+    return {
+      clerkId: urlClerkId,
+      sessionId: urlSessionId,
+      isSessionActive: true,
+    };
+  }
+
+  // Check localStorage for existing session (page reload scenario)
+  try {
+    const stored = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored) as SessionInfo;
+      if (parsed.clerkId && parsed.sessionId) {
+        return parsed;
+      }
+    }
+  } catch {
+    // Ignore localStorage errors during initialization
+  }
+
+  return { clerkId: null, sessionId: null, isSessionActive: false };
+}
+
+export function SessionProvider({ children }: { children: ReactNode }) {
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo>(() => getInitialSession());
+  const initialized = useRef(false);
+
+  // Handle side effects (URL cleanup, localStorage persistence, logging)
   useEffect(() => {
-    // Check URL params first (highest priority - fresh navigation from main app)
+    if (initialized.current) return;
+    initialized.current = true;
+
     const urlParams = new URLSearchParams(window.location.search);
     const urlClerkId = urlParams.get("clerk_id");
     const urlSessionId = urlParams.get("session_id");
 
     if (urlClerkId && urlSessionId) {
-      // Fresh session from URL - store it
-      const newSession: SessionInfo = {
-        clerkId: urlClerkId,
-        sessionId: urlSessionId,
-        isSessionActive: true,
-      };
-      setSessionInfo(newSession);
-
       // Persist to localStorage for page reloads within same session
       try {
-        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(newSession));
+        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionInfo));
       } catch (e) {
         console.warn("[SessionContext] Could not persist session to localStorage:", e);
       }
 
-      // Clean URL params after capturing them (optional - keeps URL cleaner)
+      // Clean URL params after capturing them (keeps URL cleaner)
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, "", cleanUrl);
 
@@ -56,30 +83,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         clerkId: urlClerkId,
         sessionId: urlSessionId,
       });
-      return;
+    } else if (sessionInfo.isSessionActive) {
+      console.log("[SessionContext] Session restored from localStorage:", {
+        clerkId: sessionInfo.clerkId,
+        sessionId: sessionInfo.sessionId,
+      });
+    } else {
+      console.log("[SessionContext] No active session - public mode");
     }
-
-    // Check localStorage for existing session (page reload scenario)
-    try {
-      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as SessionInfo;
-        if (parsed.clerkId && parsed.sessionId) {
-          setSessionInfo(parsed);
-          console.log("[SessionContext] Session restored from localStorage:", {
-            clerkId: parsed.clerkId,
-            sessionId: parsed.sessionId,
-          });
-          return;
-        }
-      }
-    } catch (e) {
-      console.warn("[SessionContext] Could not read session from localStorage:", e);
-    }
-
-    // No session found - this is a public/anonymous user
-    console.log("[SessionContext] No active session - public mode");
-  }, []);
+  }, [sessionInfo]);
 
   /**
    * Get a storage key prefixed with session info for isolation.

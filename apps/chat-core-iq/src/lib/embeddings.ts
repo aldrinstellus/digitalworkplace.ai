@@ -9,7 +9,7 @@
 
 const OPENAI_EMBEDDING_MODEL = 'text-embedding-3-small';
 const EMBEDDING_DIMENSIONS = 1536;
-const MAX_INPUT_TOKENS = 8191; // Model limit
+// MAX_INPUT_TOKENS: 8191 (model limit) - kept for reference
 const MAX_TEXT_LENGTH = 8000; // Safe character limit (~2 tokens per char)
 
 interface OpenAIEmbeddingResponse {

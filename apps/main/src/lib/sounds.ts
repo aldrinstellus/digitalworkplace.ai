@@ -90,7 +90,7 @@ export const initAudio = (): void => {
 };
 
 // Check if audio context is ready to play
-const isAudioReady = (): boolean => {
+export const isAudioReady = (): boolean => {
   const ctx = getAudioContext();
   return ctx !== null && ctx.state === "running";
 };

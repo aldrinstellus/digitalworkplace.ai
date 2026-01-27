@@ -185,7 +185,7 @@ export async function getSessionHistory(
       return [];
     }
 
-    return (data || []).map((session: any) => ({
+    return (data || []).map((session: { id: string; user_id: string; started_at: string; ended_at: string | null; duration_seconds: number | null; device_type: string | null; browser: string | null; os: string | null; is_active: boolean | null; users?: { email?: string; full_name?: string } }) => ({
       id: session.id,
       user_id: session.user_id,
       user_email: session.users?.email || 'Unknown',
@@ -385,7 +385,7 @@ export async function getActivityTimeline(
       .order('started_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    sessions?.forEach((session: any) => {
+    sessions?.forEach((session: { id: string; started_at: string; ended_at: string | null; users?: { email?: string; full_name?: string } }) => {
       activities.push({
         id: `session-start-${session.id}`,
         type: 'session_start',
@@ -421,7 +421,7 @@ export async function getActivityTimeline(
       .order('entered_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    pageViews?.forEach((pv: any) => {
+    pageViews?.forEach((pv: { id: string; project_code: string; page_path: string; entered_at: string; users?: { email?: string; full_name?: string } }) => {
       activities.push({
         id: `pageview-${pv.id}`,
         type: 'page_view',
@@ -447,7 +447,7 @@ export async function getActivityTimeline(
       .order('navigated_at', { ascending: false })
       .limit(Math.floor(limit / 3));
 
-    navigations?.forEach((nav: any) => {
+    navigations?.forEach((nav: { id: string; from_project_code: string; to_project_code: string; navigated_at: string; users?: { email?: string; full_name?: string } }) => {
       activities.push({
         id: `nav-${nav.id}`,
         type: 'cross_app_nav',
@@ -470,7 +470,7 @@ export async function getActivityTimeline(
 }
 
 // Export data to CSV format
-export function exportToCSV(data: any[], filename: string): string {
+export function exportToCSV(data: Record<string, unknown>[]): string {
   if (!data.length) return '';
 
   const headers = Object.keys(data[0]);

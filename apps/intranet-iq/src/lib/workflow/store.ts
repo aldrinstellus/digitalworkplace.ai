@@ -13,7 +13,7 @@ import type {
   WorkflowNodeType,
   WorkflowBuilderState,
 } from './types';
-import { createDefaultNodeData, NODE_TYPE_CONFIG, isValidConnection } from './constants';
+import { createDefaultNodeData, isValidConnection } from './constants';
 
 // =============================================================================
 // HELPERS
@@ -21,7 +21,7 @@ import { createDefaultNodeData, NODE_TYPE_CONFIG, isValidConnection } from './co
 
 // Generate proper UUIDs for database compatibility
 const generateId = () => crypto.randomUUID();
-const generateEdgeId = (source: string, target: string) => crypto.randomUUID();
+const generateEdgeId = (_source: string, _target: string) => crypto.randomUUID();
 
 // =============================================================================
 // INITIAL STATE
@@ -145,7 +145,6 @@ export const useWorkflowStore = create<WorkflowBuilderState>()(
         state.saveToHistory();
 
         const edgeId = generateEdgeId(source, target);
-        const isConditionEdge = sourceHandle === 'true' || sourceHandle === 'false';
         // Condition nodes use 'true'/'false' handles, others use 'output'
         const defaultSourceHandle = sourceNode.data.type === 'condition' ? 'true' : 'output';
         const resolvedSourceHandle = sourceHandle || defaultSourceHandle;

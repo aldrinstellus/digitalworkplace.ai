@@ -4,7 +4,7 @@
  */
 
 import type { Connection } from '@xyflow/react';
-import type { WorkflowNode, WorkflowEdge, WorkflowNodeType } from './types';
+import type { WorkflowNode, WorkflowEdge } from './types';
 import { CONNECTION_RULES, NODE_TYPE_CONFIG } from './constants';
 
 // =============================================================================

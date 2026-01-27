@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useCallback, useEffect, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useCallback, useEffect, useRef, useState, ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 
 const SESSION_KEY = 'dw_analytics_session';
@@ -24,13 +24,26 @@ const TrackingContext = createContext<TrackingContextType | null>(null);
 
 export function TrackingWrapper({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const stateRef = useRef<TrackingState>({
+  // Use useState for values that need to be rendered
+  const [trackingState, setTrackingState] = useState<TrackingState>({
     sessionId: null,
     userId: null,
     isTracking: false,
   });
+  // Keep ref in sync for use in callbacks
+  const stateRef = useRef<TrackingState>(trackingState);
   const lastPathRef = useRef<string | null>(null);
-  const pageEnteredAtRef = useRef<number>(Date.now());
+  const pageEnteredAtRef = useRef<number>(0);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    stateRef.current = trackingState;
+  }, [trackingState]);
+
+  // Initialize page entered time
+  useEffect(() => {
+    pageEnteredAtRef.current = Date.now();
+  }, []);
 
   // Initialize session from shared storage
   useEffect(() => {
@@ -41,7 +54,9 @@ export function TrackingWrapper({ children }: { children: ReactNode }) {
       try {
         const { sessionId, userId, expiresAt } = JSON.parse(storedSession);
         if (new Date(expiresAt) > new Date()) {
-          stateRef.current = { sessionId, userId, isTracking: true };
+          const newState = { sessionId, userId, isTracking: true };
+          stateRef.current = newState;
+          setTrackingState(newState);
         }
       } catch {
         // Invalid session, will be created by main app
@@ -112,9 +127,9 @@ export function TrackingWrapper({ children }: { children: ReactNode }) {
   return (
     <TrackingContext.Provider
       value={{
-        sessionId: stateRef.current.sessionId,
-        userId: stateRef.current.userId,
-        isTracking: stateRef.current.isTracking,
+        sessionId: trackingState.sessionId,
+        userId: trackingState.userId,
+        isTracking: trackingState.isTracking,
         trackNavigation,
       }}
     >

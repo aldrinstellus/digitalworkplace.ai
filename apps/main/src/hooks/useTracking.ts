@@ -1,16 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import {
-  startSession,
   endSession,
-  trackPageView,
   endPageView,
-  trackCrossAppNavigation,
   setupBeaconTracking,
-  getCurrentSessionId,
   setCurrentSessionId,
   CrossAppNavigation,
 } from '@/lib/tracking';
@@ -31,14 +27,22 @@ const SESSION_KEY = 'dw_analytics_session';
 export function useTracking({ projectCode, enabled = true }: UseTrackingOptions) {
   const { user, isLoaded } = useUser();
   const pathname = usePathname();
-  const stateRef = useRef<TrackingState>({
+  // Use useState for values returned to components (must not access ref during render)
+  const [trackingState, setTrackingState] = useState<TrackingState>({
     sessionId: null,
     userId: null,
     isTracking: false,
   });
+  // Use refs for internal state that doesn't need to trigger re-renders
+  const stateRef = useRef<TrackingState>(trackingState);
   const lastPathRef = useRef<string | null>(null);
   const scrollDepthRef = useRef<number>(0);
   const clickCountRef = useRef<number>(0);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    stateRef.current = trackingState;
+  }, [trackingState]);
 
   // Track scroll depth
   useEffect(() => {
@@ -80,7 +84,9 @@ export function useTracking({ projectCode, enabled = true }: UseTrackingOptions)
           if (new Date(expiresAt) > new Date() && userId === user.id) {
             // Resume existing session
             setCurrentSessionId(sessionId);
-            stateRef.current = { sessionId, userId, isTracking: true };
+            const newState = { sessionId, userId, isTracking: true };
+            stateRef.current = newState;
+            setTrackingState(newState);
             return;
           }
         } catch {
@@ -101,11 +107,13 @@ export function useTracking({ projectCode, enabled = true }: UseTrackingOptions)
       if (response.ok) {
         const data = await response.json();
         if (data.sessionId && data.userId) {
-          stateRef.current = {
+          const newState = {
             sessionId: data.sessionId,
             userId: data.userId,
             isTracking: true,
           };
+          stateRef.current = newState;
+          setTrackingState(newState);
 
           // Store session with 24h expiry
           const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -192,13 +200,15 @@ export function useTracking({ projectCode, enabled = true }: UseTrackingOptions)
     await endPageView(scrollDepthRef.current, clickCountRef.current);
     await endSession(stateRef.current.sessionId);
     localStorage.removeItem(SESSION_KEY);
-    stateRef.current = { sessionId: null, userId: null, isTracking: false };
+    const newState = { sessionId: null, userId: null, isTracking: false };
+    stateRef.current = newState;
+    setTrackingState(newState);
   }, []);
 
   return {
-    sessionId: stateRef.current.sessionId,
-    userId: stateRef.current.userId,
-    isTracking: stateRef.current.isTracking,
+    sessionId: trackingState.sessionId,
+    userId: trackingState.userId,
+    isTracking: trackingState.isTracking,
     trackNavigation,
     endSession: endCurrentSession,
   };

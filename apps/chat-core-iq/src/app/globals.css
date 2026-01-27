@@ -119,8 +119,23 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* CRITICAL: Ensure full viewport coverage on all devices */
+  html {
+    width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
   body {
     @apply bg-background text-foreground;
+    width: 100%;
+    min-height: 100%;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
   }
 }
 

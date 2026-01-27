@@ -50,7 +50,7 @@ const products = [
     title: "AI Chat Bot",
     description: "Conversational AI for your business",
     localHref: "http://localhost:3002/dcq/Home/index.html",
-    prodHref: "https://dcq.digitalworkplace.ai/dcq/Home/index.html",
+    prodHref: "https://chat-core-iq.vercel.app/dcq/Home/index.html",
     disabled: false,
     colors: {
       primary: "#a855f7",
@@ -786,7 +786,9 @@ function ProductCard({
       href = `${href}${separator}clerk_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`;
     }
 
-    window.open(href, '_blank', 'noopener,noreferrer');
+    // Use window.open without features string to ensure full-sized new tab (not popup)
+    // The rel="noopener noreferrer" is handled automatically by modern browsers for _blank targets
+    window.open(href, '_blank');
   };
 
   // 3D Tilt effect

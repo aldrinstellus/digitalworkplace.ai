@@ -23,9 +23,9 @@
 
 | Environment | URL |
 |-------------|-----|
-| **Production Homepage** | https://chat-core-iq.vercel.app/dcq/Home/index.html |
-| **Production Admin** | https://chat-core-iq.vercel.app/dcq/admin |
-| **IVR Demo** | https://chat-core-iq.vercel.app/dcq/demo/ivr |
+| **Production Homepage** | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
+| **Production Admin** | https://dcq.digitalworkplace.ai/dcq/admin |
+| **IVR Demo** | https://dcq.digitalworkplace.ai/dcq/demo/ivr |
 | **Local Homepage** | http://localhost:3002/dcq/Home/index.html |
 | **Local Admin** | http://localhost:3002/dcq/admin |
 
@@ -157,7 +157,7 @@ After each response:
 
 ### 3.1 Accessing the IVR Demo
 
-**URL**: https://chat-core-iq.vercel.app/dcq/demo/ivr
+**URL**: https://dcq.digitalworkplace.ai/dcq/demo/ivr
 
 ### 3.2 IVR Demo Walkthrough
 

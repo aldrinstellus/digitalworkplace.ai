@@ -379,9 +379,9 @@ The Chat Core IQ (dCQ) platform has undergone comprehensive full-spectrum testin
 
 | Environment | URL |
 |-------------|-----|
-| Production Homepage | https://chat-core-iq.vercel.app/dcq/Home/index.html |
-| Production Admin | https://chat-core-iq.vercel.app/dcq/admin |
-| Production IVR Demo | https://chat-core-iq.vercel.app/dcq/demo/ivr |
+| Production Homepage | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
+| Production Admin | https://dcq.digitalworkplace.ai/dcq/admin |
+| Production IVR Demo | https://dcq.digitalworkplace.ai/dcq/demo/ivr |
 
 ---
 

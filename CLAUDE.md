@@ -311,7 +311,7 @@ npm run dev:intranet     # Start dIQ on port 3001
 | **Location** | `apps/chat-core-iq/` |
 | **Port** | 3002 |
 | **Local URL** | http://localhost:3002/dcq/Home/index.html |
-| **Production URL** | https://chat-core-iq.vercel.app/dcq/Home/index.html |
+| **Production URL** | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
 | **basePath** | `/dcq` |
 | **Documentation** | `apps/chat-core-iq/CLAUDE.md` |
 
@@ -324,10 +324,10 @@ npm run dev:chatcore     # Start dCQ on port 3002
 **Pages:**
 | Page | Local | Production |
 |------|-------|------------|
-| Homepage | http://localhost:3002/dcq/Home/index.html | https://chat-core-iq.vercel.app/dcq/Home/index.html |
-| Admin | http://localhost:3002/dcq/admin | https://chat-core-iq.vercel.app/dcq/admin |
-| Content | http://localhost:3002/dcq/admin/content | https://chat-core-iq.vercel.app/dcq/admin/content |
-| IVR Demo | http://localhost:3002/dcq/demo/ivr | https://chat-core-iq.vercel.app/dcq/demo/ivr |
+| Homepage | http://localhost:3002/dcq/Home/index.html | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
+| Admin | http://localhost:3002/dcq/admin | https://dcq.digitalworkplace.ai/dcq/admin |
+| Content | http://localhost:3002/dcq/admin/content | https://dcq.digitalworkplace.ai/dcq/admin/content |
+| IVR Demo | http://localhost:3002/dcq/demo/ivr | https://dcq.digitalworkplace.ai/dcq/demo/ivr |
 
 **Features:**
 - AI Chatbot: Claude (primary) + OpenAI (fallback) LLM integration

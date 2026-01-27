@@ -45,6 +45,51 @@
 - List any pending tasks
 
 ---
+## ⚡ AUTO-MAINTENANCE PROTOCOL (MANDATORY)
+---
+
+**WHENEVER USER SAYS ANY OF THESE, RUN FULL MAINTENANCE:**
+- "push to GitHub", "push to Vercel", "deploy", "make it live"
+- "commit and push", "ship it", "deploy all"
+- "maintenance", "audit", "health check"
+
+**MAINTENANCE STEPS (in order):**
+1. **ESLint Check** - Run for all 4 apps, fix any errors
+   ```bash
+   cd apps/main && npx eslint src 2>&1 | grep -E "✖|error"
+   cd apps/chat-core-iq && npx eslint src 2>&1 | grep -E "✖|error"
+   cd apps/intranet-iq && npx eslint src 2>&1 | grep -E "✖|error"
+   cd apps/support-iq && npx eslint src 2>&1 | grep -E "✖|error"
+   ```
+
+2. **Git Commit & Push**
+   ```bash
+   git add -A && git commit -m "fix: [description]" && git push origin main
+   ```
+
+3. **Deploy All Apps**
+   ```bash
+   cd apps/main && vercel --prod --yes
+   cd apps/chat-core-iq && vercel --prod --yes
+   cd apps/intranet-iq && vercel --prod --yes
+   cd apps/support-iq && vercel --prod --yes
+   ```
+
+4. **Verify Live**
+   ```bash
+   curl -s -o /dev/null -w "%{http_code}" https://www.digitalworkplace.ai/sign-in
+   curl -s -o /dev/null -w "%{http_code}" https://dcq.digitalworkplace.ai/dcq/Home/index.html
+   curl -s -o /dev/null -w "%{http_code}" https://intranet-iq.vercel.app/diq/dashboard
+   curl -s -o /dev/null -w "%{http_code}" https://dsq.digitalworkplace.ai/dsq/demo/atc-executive
+   ```
+
+5. **Report Summary** to user with table showing all statuses
+
+**ALWAYS UPDATE AUDIT REPORT:**
+- File: `VERCEL_DEPLOYMENT_AUDIT_REPORT.md`
+- Update scores, fix dates, and status
+
+---
 ## SESSION END PROTOCOL (Before User Closes)
 ---
 

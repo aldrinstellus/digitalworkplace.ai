@@ -496,7 +496,7 @@
     lastActivity: null,
     activeWorkflow: null, // Track active workflow state
     workflowStep: 0,
-    voiceEnabled: true, // Voice assistant enabled by default
+    voiceEnabled: false, // Voice assistant disabled by default
     isSpeaking: false,  // Currently speaking
     currentAudio: null  // Current audio element for stopping
   };
@@ -1657,7 +1657,7 @@
     } else if (state.language === 'ht' && CONFIG.welcomeMessageHt) {
       welcomeMessage = CONFIG.welcomeMessageHt;
     }
-    addMessage('assistant', welcomeMessage, {}, false);
+    addMessage('assistant', welcomeMessage, { skipVoice: true }, false);
   }
 
   function addMessage(role, content, data = {}, save = true) {

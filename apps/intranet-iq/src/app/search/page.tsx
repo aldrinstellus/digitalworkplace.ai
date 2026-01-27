@@ -122,6 +122,22 @@ function SearchPageInner() {
     return selectedDepartments.includes(result.department_id);
   });
 
+  // Define loadMoreResults before useEffect that uses it
+  const loadMoreResults = useCallback(async () => {
+    if (isLoadingMore || !hasMore) return;
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    setPage(nextPage);
+
+    await search(query, {
+      itemTypes: activeFilter === "all" ? undefined : [activeFilter],
+      maxResults: RESULTS_PER_PAGE,
+      offset: (nextPage - 1) * RESULTS_PER_PAGE,
+    });
+
+    setIsLoadingMore(false);
+  }, [isLoadingMore, hasMore, page, query, activeFilter, search]);
+
   // Set up intersection observer for infinite scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -138,7 +154,7 @@ function SearchPageInner() {
     }
 
     return () => observer.disconnect();
-  }, [hasMore, loading, isLoadingMore, query, page]);
+  }, [hasMore, loading, isLoadingMore, query, page, loadMoreResults]);
 
   // Update allResults when new search results come in
   useEffect(() => {
@@ -150,21 +166,6 @@ function SearchPageInner() {
       setHasMore(results.length >= RESULTS_PER_PAGE);
     }
   }, [results]);
-
-  const loadMoreResults = useCallback(async () => {
-    if (isLoadingMore || !hasMore) return;
-    setIsLoadingMore(true);
-    const nextPage = page + 1;
-    setPage(nextPage);
-
-    await search(query, {
-      itemTypes: activeFilter === "all" ? undefined : [activeFilter],
-      maxResults: RESULTS_PER_PAGE,
-      offset: (nextPage - 1) * RESULTS_PER_PAGE,
-    });
-
-    setIsLoadingMore(false);
-  }, [isLoadingMore, hasMore, page, query, activeFilter, search]);
 
   // Compute faceted counts from department-filtered results
   const facetCounts = [

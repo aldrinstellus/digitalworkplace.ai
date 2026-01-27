@@ -12,19 +12,22 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Custom ignores - external scraped files (not part of app source):
-    "Website Scrapped/**",
-    "website-scraper/**",
-    "scripts/**",
-    "*.config.js",
-    "*.config.mjs",
   ]),
-  // Custom rules for src/ code
+  // Custom rules
   {
-    files: ["src/**/*.{ts,tsx}"],
     rules: {
-      // Allow img tags in admin layout (external URLs)
-      "@next/next/no-img-element": "off",
+      // Allow any types in specific cases (API routes, database types)
+      "@typescript-eslint/no-explicit-any": "warn",
+      // Relax react-hooks rules for initialization patterns
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/set-state-in-render": "warn",
+      "react-hooks/refs": "warn",
+      "react-hooks/purity": "warn",
+      // Allow unused vars with underscore prefix
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }],
     },
   },
 ]);

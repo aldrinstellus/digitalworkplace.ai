@@ -14,35 +14,7 @@ export function IQLogo({ size = "md", showText = false, className = "" }: IQLogo
   const logoRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {
-    // Initial glitch
-    setTimeout(() => {
-      triggerGlitch();
-    }, 500);
-
-    // Periodic subtle glitch
-    const interval = setInterval(() => {
-      triggerGlitch();
-    }, 4000);
-
-    // Idle pulse animation - subtle breathing effect
-    let pulseAnimation: gsap.core.Tween | null = null;
-    if (logoRef.current) {
-      pulseAnimation = gsap.to(logoRef.current, {
-        boxShadow: "0 4px 30px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-    }
-
-    return () => {
-      clearInterval(interval);
-      if (pulseAnimation) pulseAnimation.kill();
-    };
-  }, []);
-
+  // Define triggerGlitch before useEffect that references it
   const triggerGlitch = () => {
     setGlitch(true);
 
@@ -93,6 +65,35 @@ export function IQLogo({ size = "md", showText = false, className = "" }: IQLogo
       }, 50);
     }
   };
+
+  useEffect(() => {
+    // Initial glitch
+    setTimeout(() => {
+      triggerGlitch();
+    }, 500);
+
+    // Periodic subtle glitch
+    const interval = setInterval(() => {
+      triggerGlitch();
+    }, 4000);
+
+    // Idle pulse animation - subtle breathing effect
+    let pulseAnimation: gsap.core.Tween | null = null;
+    if (logoRef.current) {
+      pulseAnimation = gsap.to(logoRef.current, {
+        boxShadow: "0 4px 30px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (pulseAnimation) pulseAnimation.kill();
+    };
+  }, []);
 
   // Unified sizing system - now with Ember colors
   const sizes = {

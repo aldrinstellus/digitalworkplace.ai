@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TrackingWrapper } from "@/components/providers/TrackingWrapper";
+import { SessionProvider } from "@/contexts/SessionContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,9 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <TrackingWrapper>
-          {children}
-        </TrackingWrapper>
+        <SessionProvider>
+          <TrackingWrapper>
+            {children}
+          </TrackingWrapper>
+        </SessionProvider>
       </body>
     </html>
   );

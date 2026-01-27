@@ -278,7 +278,7 @@ export default function DashboardPage() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
         >
           {products.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
+            <ProductCard key={product.id} product={product} index={index} userId={user?.id} />
           ))}
         </motion.div>
       </main>
@@ -762,9 +762,11 @@ const ProductIllustrations = {
 function ProductCard({
   product,
   index,
+  userId,
 }: {
   product: (typeof products)[0];
   index: number;
+  userId?: string;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -774,7 +776,16 @@ function ProductCard({
     if (isDisabled) return;
     // Open all product apps in a new tab - they are self-contained projects
     // Use local URL when running locally, production URL otherwise
-    const href = getProductUrl(product.localHref, product.prodHref);
+    let href = getProductUrl(product.localHref, product.prodHref);
+
+    // For Chat Core IQ, pass session params for settings isolation
+    // This ensures admin changes only affect the user's session, not global settings
+    if (product.id === 3 && userId) {
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const separator = href.includes('?') ? '&' : '?';
+      href = `${href}${separator}clerk_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`;
+    }
+
     window.open(href, '_blank', 'noopener,noreferrer');
   };
 

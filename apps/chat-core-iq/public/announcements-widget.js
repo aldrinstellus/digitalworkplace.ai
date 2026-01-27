@@ -22,6 +22,11 @@
   }
   const API_BASE = getApiBase();
 
+  // Session storage keys (must match SessionContext.tsx)
+  const SESSION_STORAGE_KEY = 'dcq_session_info';
+  const SESSION_PREFIX = 'dcq_session_';
+  const SESSION_BANNER_SETTINGS_KEY = 'banner_settings';
+
   const CONFIG = {
     apiUrl: API_BASE + '/api/announcements',
     settingsUrl: API_BASE + '/api/banner-settings',
@@ -214,6 +219,37 @@
     document.head.appendChild(style);
   }
 
+  /**
+   * Get current session info from localStorage (if any).
+   * Returns null if not in an active session.
+   */
+  function getSessionInfo() {
+    try {
+      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.isSessionActive && parsed.sessionId) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('[DoralAnnouncements] Could not read session info:', e);
+    }
+    return null;
+  }
+
+  /**
+   * Get session-specific storage key for a base key.
+   * Returns null if not in an active session.
+   */
+  function getSessionStorageKey(baseKey) {
+    const session = getSessionInfo();
+    if (session && session.sessionId) {
+      return SESSION_PREFIX + session.sessionId + '_' + baseKey;
+    }
+    return null;
+  }
+
   function getDismissed() {
     try {
       return JSON.parse(localStorage.getItem(CONFIG.storageKey) || '[]');
@@ -231,6 +267,22 @@
   }
 
   async function fetchSettings() {
+    // First, check for session-specific settings in localStorage
+    const sessionStorageKey = getSessionStorageKey(SESSION_BANNER_SETTINGS_KEY);
+    if (sessionStorageKey) {
+      try {
+        const stored = localStorage.getItem(sessionStorageKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          console.log('[DoralAnnouncements] Using session-specific settings:', sessionStorageKey);
+          return { ...CONFIG.defaults, ...parsed };
+        }
+      } catch (e) {
+        console.warn('[DoralAnnouncements] Could not read session settings:', e);
+      }
+    }
+
+    // Fall back to API for global settings
     try {
       const res = await fetch(CONFIG.settingsUrl, {
         method: 'GET',

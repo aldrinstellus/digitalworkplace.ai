@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSession } from "@/contexts/SessionContext";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
 import { apiUrl } from "@/lib/utils";
 import {
@@ -136,8 +137,12 @@ interface APIAnnouncement {
   updatedAt: string;
 }
 
+// Storage key for session-specific banner settings
+const SESSION_BANNER_SETTINGS_KEY = "banner_settings";
+
 export default function Announcements() {
   const { t } = useLanguage();
+  const { isSessionActive, sessionId, getSessionStorageKey } = useSession();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -189,8 +194,25 @@ export default function Announcements() {
     }
   }, []);
 
-  // Fetch banner display settings
+  // Fetch banner display settings - checks localStorage for session overrides first
   const fetchBannerSettings = useCallback(async () => {
+    // If in a session, check localStorage first for session-specific overrides
+    if (isSessionActive && sessionId) {
+      try {
+        const storageKey = getSessionStorageKey(SESSION_BANNER_SETTINGS_KEY);
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          console.log("[Announcements] Using session-specific banner settings:", storageKey);
+          setBannerSettings(parsed);
+          return;
+        }
+      } catch (e) {
+        console.warn("[Announcements] Could not read session settings from localStorage:", e);
+      }
+    }
+
+    // Fall back to API for global settings
     try {
       const response = await fetch(apiUrl("/api/banner-settings"));
       if (response.ok) {
@@ -200,17 +222,41 @@ export default function Announcements() {
     } catch (error) {
       console.error("Failed to fetch banner settings:", error);
     }
-  }, []);
+  }, [isSessionActive, sessionId, getSessionStorageKey]);
 
   useEffect(() => {
     fetchAnnouncements();
     fetchBannerSettings();
   }, [fetchAnnouncements, fetchBannerSettings]);
 
-  // Save banner settings
+  // Save banner settings - saves to localStorage when in session, API otherwise
   const saveBannerSettings = async () => {
     if (!bannerSettings) return;
     setSavingSettings(true);
+
+    // If in a session, save to localStorage instead of the database
+    if (isSessionActive && sessionId) {
+      try {
+        const storageKey = getSessionStorageKey(SESSION_BANNER_SETTINGS_KEY);
+        const settingsWithTimestamp = {
+          ...bannerSettings,
+          updatedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(storageKey, JSON.stringify(settingsWithTimestamp));
+        setBannerSettings(settingsWithTimestamp);
+        setSettingsChanged(false);
+        toast.success("Display settings saved (session only)");
+        console.log("[Announcements] Saved session-specific banner settings:", storageKey);
+      } catch (error) {
+        console.error("Failed to save session banner settings:", error);
+        toast.error("An error occurred while saving settings");
+      } finally {
+        setSavingSettings(false);
+      }
+      return;
+    }
+
+    // Not in a session - save to database via API
     try {
       const response = await fetch(apiUrl("/api/banner-settings"), {
         method: "PUT",
@@ -569,13 +615,24 @@ export default function Announcements() {
               <Settings2 className="h-5 w-5 text-white" />
             </div>
             <div className="text-left">
-              <h3 className="font-semibold text-[#000034]">Banner Display Settings</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-[#000034]">Banner Display Settings</h3>
+                {isSessionActive && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full border border-amber-200">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H8m4-6V4" />
+                    </svg>
+                    Session Only
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-[#666666]">
                 {bannerSettings?.rotationEnabled
                   ? `Auto-rotation every ${(bannerSettings.rotationInterval / 1000)}s`
                   : "Auto-rotation disabled"
                 }
                 {bannerSettings?.showNavigation && " • Navigation visible"}
+                {isSessionActive && " • Changes won't affect public site"}
               </p>
             </div>
           </div>

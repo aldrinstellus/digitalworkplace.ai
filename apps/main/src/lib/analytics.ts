@@ -185,11 +185,11 @@ export async function getSessionHistory(
       return [];
     }
 
-    return (data || []).map((session: { id: string; user_id: string; started_at: string; ended_at: string | null; duration_seconds: number | null; device_type: string | null; browser: string | null; os: string | null; is_active: boolean | null; users?: { email?: string; full_name?: string } }) => ({
+    return (data || []).map((session: { id: string; user_id: string; started_at: string; ended_at: string | null; duration_seconds: number | null; device_type: string | null; browser: string | null; os: string | null; is_active: boolean | null; users?: { email?: string; full_name?: string }[] }) => ({
       id: session.id,
       user_id: session.user_id,
-      user_email: session.users?.email || 'Unknown',
-      user_name: session.users?.full_name || 'Unknown',
+      user_email: session.users?.[0]?.email || 'Unknown',
+      user_name: session.users?.[0]?.full_name || 'Unknown',
       started_at: session.started_at,
       ended_at: session.ended_at,
       duration_seconds: session.duration_seconds || 0,

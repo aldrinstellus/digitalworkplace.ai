@@ -2,17 +2,26 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 
 export default function Home() {
   const router = useRouter();
+  const { isSignedIn, isLoaded } = useUser();
 
   useEffect(() => {
-    // Always redirect to sign-in as the default landing page
-    router.replace("/sign-in");
-  }, [router]);
+    if (isLoaded) {
+      if (isSignedIn) {
+        // Authenticated users go to dashboard
+        router.replace("/dashboard");
+      } else {
+        // Unauthenticated users go to sign-in
+        router.replace("/sign-in");
+      }
+    }
+  }, [isLoaded, isSignedIn, router]);
 
-  // Show loading spinner while redirecting
+  // Show loading spinner while checking auth and redirecting
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f0f1a]">
       <motion.div
@@ -30,4 +39,3 @@ export default function Home() {
     </div>
   );
 }
-// Cache bust: 1769456872

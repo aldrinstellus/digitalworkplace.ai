@@ -4,7 +4,7 @@
 **Version**: 0.8.2
 **Session Status**: Clerk OAuth FULLY FIXED - Direct to Dashboard
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 581b78f → [pending new commit]
+**Git Commit**: 89d0724 - docs: Add learning.md for permanent OAuth troubleshooting reference
 
 ---
 

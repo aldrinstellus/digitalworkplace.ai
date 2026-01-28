@@ -220,6 +220,18 @@ export async function GET(request: NextRequest) {
       });
     }
 
+    // If format=json explicitly requested, trigger download
+    if (format === 'json') {
+      return new NextResponse(JSON.stringify(analytics, null, 2), {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json',
+          'Content-Disposition': `attachment; filename="chatbot-analytics-${days}days.json"`,
+        },
+      });
+    }
+
+    // Default: return JSON for API consumption (no download)
     return NextResponse.json(analytics, {
       headers: {
         ...corsHeaders,

@@ -32,7 +32,7 @@ const AnimatedLoginForm = () => {
 
       if (result.status === "complete") {
         await setActive({ session: result.createdSessionId });
-        router.push("/");
+        router.push("/dashboard");
       } else {
         setError("Something went wrong. Please try again.");
       }
@@ -51,7 +51,7 @@ const AnimatedLoginForm = () => {
       await signIn.authenticateWithRedirect({
         strategy: provider,
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: "/",
+        redirectUrlComplete: "/dashboard",
       });
     } catch (err: unknown) {
       const clerkError = err as { errors?: Array<{ message: string }> };

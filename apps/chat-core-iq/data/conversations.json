@@ -33,9 +33,9 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -82,7 +82,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -131,7 +131,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -190,7 +190,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -249,7 +249,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -389,7 +389,7 @@
       "language": "ht",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -411,7 +411,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -437,7 +437,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -461,7 +461,7 @@
       "language": "ht",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -508,7 +508,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -557,7 +557,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -586,9 +586,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -635,7 +635,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -684,9 +684,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -743,7 +743,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -802,7 +802,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -873,7 +873,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/Home/index.html"
     },
@@ -942,7 +942,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -1019,7 +1019,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -1108,7 +1108,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -1212,9 +1212,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/Home/index.html"
     },
@@ -1316,7 +1316,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -1430,7 +1430,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -1544,9 +1544,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "unknown",
       "referrer": "unknown"
     },
@@ -1592,9 +1592,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -1618,7 +1618,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -1642,7 +1642,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -1664,7 +1664,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -1688,7 +1688,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -1712,7 +1712,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -1770,7 +1770,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -1794,9 +1794,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3000/demo/ivr"
     },
@@ -1878,7 +1878,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -1926,7 +1926,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -1953,7 +1953,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -2006,7 +2006,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
@@ -2056,7 +2056,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2102,7 +2102,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2128,7 +2128,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2152,7 +2152,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2181,7 +2181,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3002/dcq/Home/index.html"
     },
@@ -2232,7 +2232,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2256,7 +2256,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
@@ -2282,7 +2282,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2354,7 +2354,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2376,9 +2376,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2400,7 +2400,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2448,7 +2448,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2520,7 +2520,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2544,9 +2544,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2570,7 +2570,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2592,9 +2592,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2640,7 +2640,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2688,9 +2688,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2712,9 +2712,9 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2738,7 +2738,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2760,7 +2760,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2808,7 +2808,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2856,9 +2856,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2880,7 +2880,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2906,7 +2906,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2928,7 +2928,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -2954,7 +2954,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -2976,7 +2976,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3048,7 +3048,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3072,9 +3072,9 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3144,7 +3144,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3168,9 +3168,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3218,7 +3218,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3266,7 +3266,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3312,7 +3312,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3384,9 +3384,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3410,7 +3410,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3432,7 +3432,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3482,7 +3482,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3504,7 +3504,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3554,7 +3554,7 @@
       "language": "ht",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3576,7 +3576,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3624,7 +3624,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3648,7 +3648,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3672,7 +3672,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3696,7 +3696,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3720,7 +3720,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -3756,7 +3756,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3802,9 +3802,9 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -3908,7 +3908,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -3980,7 +3980,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4004,7 +4004,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4078,7 +4078,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4126,7 +4126,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4148,7 +4148,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4196,7 +4196,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4220,7 +4220,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4244,9 +4244,9 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4292,7 +4292,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4316,9 +4316,9 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4342,7 +4342,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4364,7 +4364,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4388,9 +4388,9 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4412,7 +4412,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4436,9 +4436,9 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4460,7 +4460,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4484,9 +4484,9 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4508,7 +4508,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4532,7 +4532,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4556,7 +4556,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4580,7 +4580,7 @@
         }
       ],
       "language": "ht",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4652,7 +4652,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "curl/8.7.1",
@@ -4676,9 +4676,9 @@
         }
       ],
       "language": "ht",
-      "sentiment": "urgent",
+      "sentiment": "negative",
       "escalated": true,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "curl/8.7.1",
       "referrer": "unknown"
     },
@@ -4731,7 +4731,7 @@
       "language": "en",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3002/dcq/Home/index.html"
     },
@@ -4836,7 +4836,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -4963,7 +4963,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "negative",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
@@ -4992,7 +4992,7 @@
         }
       ],
       "language": "en",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -5033,7 +5033,7 @@
       "language": "es",
       "sentiment": "neutral",
       "escalated": false,
-      "feedbackGiven": false,
+      "feedbackGiven": true,
       "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
       "referrer": "http://localhost:3002/dcq/Home/index.html"
     },
@@ -5070,7 +5070,7 @@
         }
       ],
       "language": "es",
-      "sentiment": "neutral",
+      "sentiment": "positive",
       "escalated": false,
       "feedbackGiven": false,
       "userAgent": "unknown",
@@ -5173,7 +5173,161 @@
       "feedbackGiven": false,
       "userAgent": "unknown",
       "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769505100682_hzon2ly2s",
+      "sessionId": "test-123",
+      "startTime": "2026-01-27T09:11:40.682Z",
+      "endTime": "2026-01-27T09:11:40.682Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "How do I reset my password?",
+          "timestamp": "2026-01-27T09:11:40.682Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here's how to reset your password.\n\n**Steps:**\n1. Visit the login page\n2. Click \"Forgot Password?\"\n3. Enter your email address\n4. Check your email for instructions\n5. Follow the reset link provided\n\n**Contact:**\n- Support: 1-855-524-5627\n- Hours: 8 AM - 5 PM",
+          "timestamp": "2026-01-27T09:11:40.682Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "negative",
+      "escalated": false,
+      "feedbackGiven": true,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769505111591_zlxud0uka",
+      "sessionId": "test-456",
+      "startTime": "2026-01-27T09:11:51.591Z",
+      "endTime": "2026-01-27T09:11:51.591Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "What are your business hours?",
+          "timestamp": "2026-01-27T09:11:51.591Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Here are the business hours.\n\n**City Hall:**\n• Monday-Friday, 8:00 AM - 5:00 PM\n\n**Business Licensing Division:**\n• Monday-Friday, 8:00 AM - 5:00 PM\n\n**Emergency Services:**\n• 24/7 availability for emergencies",
+          "timestamp": "2026-01-27T09:11:51.591Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "positive",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769505131885_uqi02mpje",
+      "sessionId": "test-es2",
+      "startTime": "2026-01-27T09:12:11.885Z",
+      "endTime": "2026-01-27T09:12:11.885Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "¿Cómo puedo contactar al soporte?",
+          "timestamp": "2026-01-27T09:12:11.885Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Aquí tienes la información de contacto.\n\n**Teléfonos:**\n• City Hall: (305) 593-6725  \n• Policía: (305) 593-6699  \n• Emergencia: 911  \n\n**Correo Electrónico:**\n• soporte@chatcoreiq.city  \n\n**Dirección:**\n• 8401 NW 53rd Terrace  ",
+          "timestamp": "2026-01-27T09:12:11.885Z"
+        }
+      ],
+      "language": "es",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769505143546_7lc0qr7zz",
+      "sessionId": "test-ht",
+      "startTime": "2026-01-27T09:12:23.546Z",
+      "endTime": "2026-01-27T09:12:23.546Z",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Kijan mwen ka kontakte sipò?",
+          "timestamp": "2026-01-27T09:12:23.546Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Men kijan pou kontakte sipò.\n\n**Kondisyon:**\n• Rele nimewo sipò\n• Voye imel sipò\n• Soumèt demann sou entènèt\n\n**Etap:**\n1. Rele: (XXX) XXX-XXXX\n2. Voye imel: support@example.com\n3. Vizite sit entènèt\n\n**Kontak:**\n• Sipò: (XXX) XXX-XXXX\n• Imèl: support@example.com\n• Sit entènèt: www.example.com",
+          "timestamp": "2026-01-27T09:12:23.546Z"
+        }
+      ],
+      "language": "ht",
+      "sentiment": "negative",
+      "escalated": true,
+      "feedbackGiven": false,
+      "userAgent": "curl/8.7.1",
+      "referrer": "unknown"
+    },
+    {
+      "id": "conv_1769505409225_gu0r2kty3",
+      "sessionId": "sess_1769505375877_ev0q9k9tu",
+      "startTime": "2026-01-27T09:16:49.225Z",
+      "endTime": "2026-01-27T09:16:49.225Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-27T09:16:49.225Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my property taxes?",
+          "timestamp": "2026-01-27T09:16:49.225Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with tax information. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-27T09:16:49.225Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "neutral",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+      "referrer": "http://localhost:3002/dcq/Home/index.html"
+    },
+    {
+      "id": "conv_1769505409331_gbxxntcqq",
+      "sessionId": "sess_1769505375877_ev0q9k9tu",
+      "startTime": "2026-01-27T09:16:15.880Z",
+      "endTime": "2026-01-27T09:16:49.230Z",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! How can I help you?",
+          "timestamp": "2026-01-27T09:16:15.880Z"
+        },
+        {
+          "role": "user",
+          "content": "How do I pay my property taxes?",
+          "timestamp": "2026-01-27T09:16:48.857Z"
+        },
+        {
+          "role": "assistant",
+          "content": "I can help you with tax information. Please provide a property address or folio number.\n\n**Example queries:**\n- \"Who owns 8350 NW 52nd Terrace?\"\n- \"Show taxes for folio 35-2014-001-0010\"\n- \"Permits at 10305 NW 41st Street\"",
+          "timestamp": "2026-01-27T09:16:49.230Z"
+        }
+      ],
+      "language": "en",
+      "sentiment": "negative",
+      "escalated": false,
+      "feedbackGiven": false,
+      "userAgent": "unknown",
+      "referrer": "unknown"
     }
   ],
-  "lastUpdated": "2026-01-26T20:44:43.055Z"
+  "lastUpdated": "2026-01-27T09:16:49.337Z"
 }

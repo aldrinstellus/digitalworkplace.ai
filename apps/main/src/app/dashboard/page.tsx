@@ -278,7 +278,7 @@ export default function DashboardPage() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
         >
           {products.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} userId={user?.id} />
+            <ProductCard key={product.id} product={product} index={index} userId={user?.id} userEmail={user?.primaryEmailAddress?.emailAddress} userName={user?.fullName || undefined} />
           ))}
         </motion.div>
       </main>
@@ -763,10 +763,14 @@ function ProductCard({
   product,
   index,
   userId,
+  userEmail,
+  userName,
 }: {
   product: (typeof products)[0];
   index: number;
   userId?: string;
+  userEmail?: string;
+  userName?: string;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -783,7 +787,13 @@ function ProductCard({
     if (product.id === 3 && userId) {
       const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const separator = href.includes('?') ? '&' : '?';
-      href = `${href}${separator}clerk_id=${encodeURIComponent(userId)}&session_id=${encodeURIComponent(sessionId)}`;
+      const params = new URLSearchParams({
+        clerk_id: userId,
+        session_id: sessionId,
+        ...(userEmail && { user_email: userEmail }),
+        ...(userName && { user_name: userName }),
+      });
+      href = `${href}${separator}${params.toString()}`;
     }
 
     // Use window.open without features string to ensure full-sized new tab (not popup)

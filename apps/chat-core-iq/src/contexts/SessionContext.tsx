@@ -5,6 +5,8 @@ import React, { createContext, useContext, useState, useEffect, useRef, ReactNod
 interface SessionInfo {
   clerkId: string | null;
   sessionId: string | null;
+  userEmail: string | null;
+  userName: string | null;
   isSessionActive: boolean;
 }
 
@@ -22,18 +24,22 @@ const SESSION_PREFIX = "dcq_session_";
 // Get initial session from URL or localStorage (runs once during SSR/hydration)
 function getInitialSession(): SessionInfo {
   if (typeof window === "undefined") {
-    return { clerkId: null, sessionId: null, isSessionActive: false };
+    return { clerkId: null, sessionId: null, userEmail: null, userName: null, isSessionActive: false };
   }
 
   // Check URL params first (highest priority - fresh navigation from main app)
   const urlParams = new URLSearchParams(window.location.search);
   const urlClerkId = urlParams.get("clerk_id");
   const urlSessionId = urlParams.get("session_id");
+  const urlUserEmail = urlParams.get("user_email");
+  const urlUserName = urlParams.get("user_name");
 
   if (urlClerkId && urlSessionId) {
     return {
       clerkId: urlClerkId,
       sessionId: urlSessionId,
+      userEmail: urlUserEmail,
+      userName: urlUserName,
       isSessionActive: true,
     };
   }
@@ -51,7 +57,7 @@ function getInitialSession(): SessionInfo {
     // Ignore localStorage errors during initialization
   }
 
-  return { clerkId: null, sessionId: null, isSessionActive: false };
+  return { clerkId: null, sessionId: null, userEmail: null, userName: null, isSessionActive: false };
 }
 
 export function SessionProvider({ children }: { children: ReactNode }) {
@@ -115,6 +121,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setSessionInfo({
       clerkId: null,
       sessionId: null,
+      userEmail: null,
+      userName: null,
       isSessionActive: false,
     });
     try {

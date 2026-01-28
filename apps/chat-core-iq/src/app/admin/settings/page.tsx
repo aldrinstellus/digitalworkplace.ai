@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useSession } from "@/contexts/SessionContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -265,6 +266,35 @@ const defaultSettings: ChatbotSettings = {
 
 export default function SettingsPage() {
   const { t } = useLanguage();
+  const { userEmail, userName, isSessionActive } = useSession();
+
+  // Compute user profile from session or fallback to defaults
+  const userProfile = useMemo(() => {
+    if (isSessionActive && (userEmail || userName)) {
+      const nameParts = userName?.split(' ') || [];
+      const firstName = nameParts[0] || 'Admin';
+      const lastName = nameParts.slice(1).join(' ') || 'User';
+      const initials = `${firstName[0] || 'A'}${lastName[0] || 'U'}`.toUpperCase();
+      return {
+        firstName,
+        lastName,
+        fullName: userName || 'Admin User',
+        email: userEmail || 'admin@example.com',
+        initials,
+        role: 'Administrator',
+      };
+    }
+    // Fallback for public/demo mode
+    return {
+      firstName: 'Demo',
+      lastName: 'User',
+      fullName: 'Demo User',
+      email: 'demo@chatcoreiq.com',
+      initials: 'DU',
+      role: 'Administrator',
+    };
+  }, [userEmail, userName, isSessionActive]);
+
   const [settings, setSettings] = useState<ChatbotSettings>(defaultSettings);
   const [originalSettings, setOriginalSettings] = useState<ChatbotSettings>(defaultSettings);
   const [saving, setSaving] = useState(false);
@@ -899,10 +929,10 @@ export default function SettingsPage() {
               {/* Avatar Section */}
               <div className="flex flex-col items-center p-6 bg-gradient-to-br from-[#F5F9FD] to-blue-50/50 rounded-xl border border-[#E7EBF0]">
                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#000080] to-[#1D4F91] flex items-center justify-center text-white text-3xl font-bold mb-4">
-                  MR
+                  {userProfile.initials}
                 </div>
-                <h3 className="font-semibold text-[#000034]">Maria Rodriguez</h3>
-                <p className="text-sm text-[#666666]">Administrator</p>
+                <h3 className="font-semibold text-[#000034]">{userProfile.fullName}</h3>
+                <p className="text-sm text-[#666666]">{userProfile.role}</p>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -918,11 +948,11 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className={labelClass}>First Name</label>
-                    <input type="text" defaultValue="Maria" className={inputClass} />
+                    <input type="text" defaultValue={userProfile.firstName} className={inputClass} />
                   </div>
                   <div>
                     <label className={labelClass}>Last Name</label>
-                    <input type="text" defaultValue="Rodriguez" className={inputClass} />
+                    <input type="text" defaultValue={userProfile.lastName} className={inputClass} />
                   </div>
                 </div>
 
@@ -930,7 +960,7 @@ export default function SettingsPage() {
                   <label className={labelClass}>Email Address</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6b6b6b]" />
-                    <input type="email" defaultValue="mrodriguez@cityofdoral.com" className={`${inputClass} pl-10`} />
+                    <input type="email" defaultValue={userProfile.email} className={`${inputClass} pl-10`} readOnly={isSessionActive} />
                   </div>
                 </div>
 

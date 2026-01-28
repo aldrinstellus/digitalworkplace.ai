@@ -195,11 +195,11 @@ export default function NotificationsPage() {
   };
 
   const filterTabs: { key: FilterType; label: string; icon?: React.ReactNode }[] = [
-    { key: "all", label: t("notifications.all") },
+    { key: "all", label: `${t("notifications.all")}${stats?.total ? ` (${stats.total})` : ""}` },
     { key: "unread", label: `${t("notifications.unread")}${stats?.unread ? ` (${stats.unread})` : ""}` },
-    { key: "system", label: t("notifications.system"), icon: <Server className="h-3.5 w-3.5" /> },
-    { key: "activity", label: t("notifications.activity"), icon: <Activity className="h-3.5 w-3.5" /> },
-    { key: "reminder", label: t("notifications.scheduled"), icon: <Clock className="h-3.5 w-3.5" /> },
+    { key: "system", label: `${t("notifications.system")}${stats?.byType?.system ? ` (${stats.byType.system})` : ""}`, icon: <Server className="h-3.5 w-3.5" /> },
+    { key: "activity", label: `${t("notifications.activity")}${stats?.byType?.activity ? ` (${stats.byType.activity})` : ""}`, icon: <Activity className="h-3.5 w-3.5" /> },
+    { key: "reminder", label: `${t("notifications.scheduled")}${stats?.byType?.reminder ? ` (${stats.byType.reminder})` : ""}`, icon: <Clock className="h-3.5 w-3.5" /> },
   ];
 
   return (

@@ -1,9 +1,72 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-28 UTC
-**Version**: 0.8.0
-**Session Status**: Full Spectrum Data Sync & City of Doral Import COMPLETE
+**Version**: 0.8.1
+**Session Status**: Security Audit COMPLETE + Clerk OAuth Bulletproofed
 **Machine**: Mac Mini (aldrin-mac-mini)
+
+---
+
+## ⚠️ CRITICAL: CLERK OAUTH CONFIGURATION (BULLETPROOF)
+
+**NEVER let users see Clerk hosted pages. All OAuth must be seamless.**
+
+### Required Configuration (ALL must be set)
+
+#### 1. ClerkProvider in `layout.tsx`
+```typescript
+<ClerkProvider
+  signInUrl="/sign-in"
+  signUpUrl="/sign-up"
+  signInFallbackRedirectUrl="/dashboard"
+  signUpFallbackRedirectUrl="/dashboard"
+  afterSignOutUrl="/sign-in"
+>
+```
+
+#### 2. Environment Variables (Vercel + .env.local)
+```
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+```
+
+#### 3. OAuth Redirect in `AnimatedLoginForm.tsx`
+```typescript
+await signIn.authenticateWithRedirect({
+  strategy: "oauth_google",
+  redirectUrl: "/sso-callback",
+  redirectUrlComplete: "/dashboard",  // NOT "/" - must be /dashboard
+});
+```
+
+#### 4. SSO Callback Handler in `sso-callback/page.tsx`
+```typescript
+<AuthenticateWithRedirectCallback
+  signInForceRedirectUrl="/dashboard"
+  signUpForceRedirectUrl="/dashboard"
+/>
+```
+
+#### 5. Middleware `proxy.ts` - Protected Routes
+```typescript
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/sso-callback(.*)',
+  // DO NOT add /dashboard, /admin, /analytics here!
+]);
+```
+
+### Verification Checklist
+- [ ] Click "Sign In with SSO" → Google account picker appears (NOT Clerk.ai)
+- [ ] Select account → Redirects to /dashboard (NOT /)
+- [ ] No Clerk branded pages visible at any point
+- [ ] Sign out → Returns to /sign-in
 
 ---
 
@@ -64,7 +127,58 @@
 
 ---
 
-## Latest Changes (v0.8.0)
+## Latest Changes (v0.8.1)
+
+### Security Audit & Clerk OAuth Bulletproofing (2026-01-28)
+
+**Comprehensive security audit completed with all critical vulnerabilities fixed.**
+
+#### Security Vulnerabilities Fixed
+
+| Severity | Issue | App | Fix Applied |
+|----------|-------|-----|-------------|
+| **CRITICAL** | Unauthenticated `/api/embeddings` | dCQ | Added origin/referer validation |
+| **CRITICAL** | Unauthenticated `/api/documents` | dCQ | Added strict admin auth |
+| **CRITICAL** | Unauthenticated `/api/admin/stats` | dIQ | Added origin/referer validation |
+| **HIGH** | Overly permissive CORS (`*`) | dCQ | Restricted to allowed origins |
+| **HIGH** | XSS in ticket description | dSQ | Added DOMPurify sanitization |
+| **MEDIUM** | Clerk OAuth fallback to hosted pages | Main | Bulletproof configuration |
+
+#### Files Changed
+
+**Chat Core IQ (dCQ):**
+- `src/lib/api-auth.ts` - NEW: Auth helper with origin validation
+- `src/app/api/embeddings/route.ts` - Added auth checks
+- `src/app/api/documents/route.ts` - Added auth checks
+- `src/app/api/chat/route.ts` - Dynamic CORS with allowed origins
+
+**Intranet IQ (dIQ):**
+- `src/lib/api-auth.ts` - NEW: Auth helper with origin validation
+- `src/app/api/admin/stats/route.ts` - Added auth checks
+
+**Support IQ (dSQ):**
+- `src/components/widgets/LiveTicketDetailWidget.tsx` - DOMPurify XSS fix
+
+**Main Dashboard:**
+- `src/app/layout.tsx` - ClerkProvider with explicit redirect URLs
+- `src/app/sso-callback/page.tsx` - OAuth error handling
+- `src/components/login/AnimatedLoginForm.tsx` - Fixed redirect to /dashboard
+- `src/proxy.ts` - Removed protected routes from public list
+
+#### Vercel Environment Variables Added
+```
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+```
+
+#### Deployment
+- All 4 apps deployed to Vercel production
+- Verified: API endpoints return 401 for unauthorized requests
+- Verified: Google OAuth flows directly without Clerk hosted pages
+
+---
 
 ### dCQ v1.2.0 - Full Spectrum Data Sync & City of Doral Import (2026-01-28)
 
@@ -328,6 +442,8 @@ vercel --prod
 - [x] Fix Chat Core IQ link to Doral homepage - COMPLETED
 - [x] Full Spectrum Semantic Search & Sync Test - COMPLETED (100/100)
 - [x] dCQ v1.2.0 City of Doral Data Import - COMPLETED
+- [x] Security Audit - All critical vulnerabilities fixed - COMPLETED
+- [x] Clerk OAuth Bulletproofing - COMPLETED
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -338,5 +454,5 @@ vercel --prod
 ---
 
 *Last session: 2026-01-28 UTC*
-*Version: 0.8.0*
+*Version: 0.8.1*
 *Machine: Mac Mini (aldrin-mac-mini)*

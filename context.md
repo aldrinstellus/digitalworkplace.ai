@@ -54,6 +54,36 @@ useEffect(() => {
   - Session management
   - Server-side route protection via `proxy.ts`
 
+### ⚠️ CLERK OAUTH BULLETPROOF CONFIGURATION (v0.8.1)
+
+**CRITICAL: Never let users see Clerk hosted pages. All OAuth must be seamless.**
+
+#### Required Configuration Checklist
+
+| Component | File | Required Setting |
+|-----------|------|------------------|
+| **ClerkProvider** | `layout.tsx` | `signInUrl="/sign-in"`, `signInFallbackRedirectUrl="/dashboard"` |
+| **OAuth Redirect** | `AnimatedLoginForm.tsx` | `redirectUrlComplete: "/dashboard"` (NOT "/") |
+| **SSO Callback** | `sso-callback/page.tsx` | `signInForceRedirectUrl="/dashboard"` |
+| **Middleware** | `proxy.ts` | Do NOT add `/dashboard`, `/admin` to public routes |
+| **Env Variables** | Vercel + .env.local | All `NEXT_PUBLIC_CLERK_*` redirect URLs set |
+
+#### Environment Variables (MUST be set in Vercel)
+```
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+```
+
+#### Verification Flow
+1. Open incognito → `www.digitalworkplace.ai/sign-in`
+2. Click "Sign In with SSO" → **Google account picker appears** (NOT Clerk.ai)
+3. Select account → **Redirects to /dashboard** (NOT /)
+4. No Clerk branded pages visible at any point
+
 ### Branding
 - **Favicon** (`icon.tsx`): Dynamic 32x32 PNG with "d." design
   - Dark background (#0f0f1a)

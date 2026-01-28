@@ -4,6 +4,111 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.8.1] - 2026-01-28
+
+### Security Audit & Clerk OAuth Bulletproofing
+
+**Comprehensive security audit with all critical vulnerabilities fixed + bulletproof Clerk OAuth configuration.**
+
+#### Security Vulnerabilities Fixed
+
+| Severity | Issue | App | Fix |
+|----------|-------|-----|-----|
+| **CRITICAL** | Unauthenticated `/api/embeddings` | dCQ | Origin/referer validation |
+| **CRITICAL** | Unauthenticated `/api/documents` | dCQ | Strict admin auth |
+| **CRITICAL** | Unauthenticated `/api/admin/stats` | dIQ | Origin/referer validation |
+| **HIGH** | Overly permissive CORS (`*`) | dCQ | Allowed origins whitelist |
+| **HIGH** | XSS in ticket description | dSQ | DOMPurify sanitization |
+| **MEDIUM** | Clerk OAuth fallback to hosted pages | Main | Bulletproof config |
+
+#### New Files Created
+
+**Chat Core IQ:**
+```
+apps/chat-core-iq/src/lib/api-auth.ts
+```
+- `validateAdminRequest()` - Checks origin/referer against allowed list
+- `validateStrictAdminRequest()` - Requires admin page referer
+- Allowed origins: dcq.digitalworkplace.ai, www.digitalworkplace.ai, localhost
+
+**Intranet IQ:**
+```
+apps/intranet-iq/src/lib/api-auth.ts
+```
+- Same pattern as Chat Core IQ
+- Allowed origins: intranet-iq.vercel.app, www.digitalworkplace.ai, localhost
+
+#### Files Modified
+
+**Chat Core IQ (dCQ):**
+- `src/app/api/embeddings/route.ts` - Added `validateAdminRequest` / `validateStrictAdminRequest`
+- `src/app/api/documents/route.ts` - Added auth checks to POST/GET/DELETE
+- `src/app/api/chat/route.ts` - Dynamic CORS with `getCorsHeaders()` function
+
+**Intranet IQ (dIQ):**
+- `src/app/api/admin/stats/route.ts` - Added `validateAdminRequest`
+
+**Support IQ (dSQ):**
+- `src/components/widgets/LiveTicketDetailWidget.tsx` - Added `DOMPurify.sanitize()` for XSS prevention
+
+**Main Dashboard:**
+- `src/app/layout.tsx` - ClerkProvider with 5 explicit redirect URLs
+- `src/app/sso-callback/page.tsx` - OAuth error handling + force redirect URLs
+- `src/components/login/AnimatedLoginForm.tsx` - `redirectUrlComplete: "/dashboard"`
+- `src/proxy.ts` - Removed `/dashboard`, `/admin`, `/analytics` from public routes
+
+#### Clerk OAuth Bulletproof Configuration
+
+**ClerkProvider (layout.tsx):**
+```typescript
+<ClerkProvider
+  signInUrl="/sign-in"
+  signUpUrl="/sign-up"
+  signInFallbackRedirectUrl="/dashboard"
+  signUpFallbackRedirectUrl="/dashboard"
+  afterSignOutUrl="/sign-in"
+>
+```
+
+**SSO Callback (sso-callback/page.tsx):**
+```typescript
+<AuthenticateWithRedirectCallback
+  signInForceRedirectUrl="/dashboard"
+  signUpForceRedirectUrl="/dashboard"
+/>
+```
+
+**OAuth Redirect (AnimatedLoginForm.tsx):**
+```typescript
+await signIn.authenticateWithRedirect({
+  strategy: "oauth_google",
+  redirectUrl: "/sso-callback",
+  redirectUrlComplete: "/dashboard",  // Fixed: was "/"
+});
+```
+
+#### Vercel Environment Variables Added
+```
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+```
+
+#### Verification Results
+- ✅ `/api/embeddings` returns 401 for unauthorized requests
+- ✅ `/api/admin/stats` returns 401 for unauthorized requests
+- ✅ Chat API works with valid origins
+- ✅ Health endpoint still public
+- ✅ Google OAuth flows directly without Clerk hosted pages
+
+#### Deployment
+- GitHub: Pushed to main
+- Vercel: All 4 apps deployed to production
+- Production URLs verified working
+
+---
+
 ## [0.8.0] - 2026-01-28
 
 ### dCQ v1.2.0 - Full Spectrum Data Sync & City of Doral Import

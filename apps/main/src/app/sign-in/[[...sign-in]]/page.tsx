@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useSignIn, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useSignIn, useUser, SignIn } from "@clerk/nextjs";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import LoginBackground from "@/components/login/LoginBackground";
 import WordmarkGlitch from "@/components/brand/WordmarkGlitch";
 import SoundToggle from "@/components/audio/SoundToggle";
@@ -14,15 +14,21 @@ export default function SignInPage() {
   const { isLoaded, signIn } = useSignIn();
   const { isSignedIn, isLoaded: userLoaded, user } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Check if this is a Clerk internal route (like /sign-in/tasks, /sign-in/factor-one, etc.)
+  const isClerkInternalRoute = pathname !== "/sign-in" && pathname?.startsWith("/sign-in/");
+  const hasRedirectUrl = searchParams?.get("redirect_url");
+
   // Auto-redirect to dashboard if already signed in - NO exceptions
   useEffect(() => {
-    if (userLoaded && isSignedIn && user) {
+    if (userLoaded && isSignedIn && user && !isClerkInternalRoute) {
       router.replace("/dashboard");
     }
-  }, [userLoaded, isSignedIn, user, router]);
+  }, [userLoaded, isSignedIn, user, router, isClerkInternalRoute]);
 
   const handleGoogleSignIn = async () => {
     if (!isLoaded || !signIn) {
@@ -46,6 +52,31 @@ export default function SignInPage() {
     }
   };
 
+  // For Clerk internal routes (tasks, factor-one, etc.), use Clerk's SignIn component
+  if (isClerkInternalRoute || hasRedirectUrl) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-[#0f0f1a]">
+        <SignIn
+          afterSignInUrl="/dashboard"
+          afterSignUpUrl="/dashboard"
+          signUpUrl="/sign-up"
+          appearance={{
+            elements: {
+              rootBox: "mx-auto",
+              card: "bg-[#1a1a2e] border border-white/10",
+              headerTitle: "text-white",
+              headerSubtitle: "text-white/60",
+              formFieldLabel: "text-white/80",
+              formFieldInput: "bg-[#0f0f1a] border-white/20 text-white",
+              formButtonPrimary: "bg-green-500 hover:bg-green-600",
+              footerActionLink: "text-green-400 hover:text-green-300",
+            },
+          }}
+        />
+      </div>
+    );
+  }
+
   // Show loading while checking auth status OR if user is signed in (redirecting)
   if (!userLoaded || (isSignedIn && user)) {
     return (
@@ -59,7 +90,7 @@ export default function SignInPage() {
     );
   }
 
-  // Only show sign-in page if user is NOT signed in
+  // Only show custom sign-in page if user is NOT signed in and on main /sign-in route
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#0f0f1a]">
       {/* Sound Effects Toggle */}

@@ -325,12 +325,16 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 - **Audit Score**: 100/100 ✅
 - **Features**:
   - AI Chatbot: Claude (primary) + GPT-4o-mini (fallback)
-  - 348 knowledge items + 7 FAQs with 100% embedding coverage
+  - 357 knowledge items + 8 FAQs with 100% embedding coverage
   - 10 Admin pages with 150+ features
   - Multi-language support (EN/ES/HT - English, Spanish, Haitian Creole)
   - Interactive Voice Response (IVR) demo with transfer codes
   - 28 Supabase tables in dcq schema
   - 19+ external integrations (Tyler Technologies, CRM, IVR, SMS, Social)
+- **Semantic Search Verified (2026-01-27)**:
+  - Query variations correctly matched ✅
+  - Multi-language (EN/ES/HT) working ✅
+  - Admin → Website → Chatbot → IVR sync verified ✅
 - **Audit Results (2026-01-22)**:
   - Homepage & Chatbot: 100% ✅
   - IVR Demo: 100% ✅

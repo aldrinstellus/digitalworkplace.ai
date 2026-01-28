@@ -4,6 +4,62 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.7.9] - 2026-01-27
+
+### Full Spectrum Semantic Search & Sync Test PASSED
+
+Comprehensive verification of semantic search, embeddings, and cross-component synchronization with 100% pass rate.
+
+#### Embedding Coverage Fixed
+
+| Table | Before | After | Coverage |
+|-------|--------|-------|----------|
+| **dcq.faqs** | 7/8 (87.5%) | 8/8 | **100%** ✅ |
+| **public.knowledge_items** | 356/357 (99.7%) | 357/357 | **100%** ✅ |
+
+**Fix Applied**: Generated missing embedding for pothole FAQ using `/api/embeddings` batch endpoint.
+
+#### Semantic Search Verification
+
+Tested query variations to verify semantic matching:
+
+| Query | Semantic Variation | Result |
+|-------|-------------------|--------|
+| "How do I get a building permit?" | "I need to apply for a construction permit" | ✅ Same intent recognized |
+| "What are the office hours?" | "When is city hall open?" | ✅ Correct answers with sources |
+| "How do I start a business in Doral?" | - | ✅ Business licensing info returned |
+| "Where can I report a pothole?" | - | ✅ Triggers service request workflow |
+
+#### Multi-Language Support Verified
+
+| Language | Code | Test Query | Status |
+|----------|------|------------|--------|
+| **English** | EN | "What are the office hours?" | ✅ Working |
+| **Spanish** | ES | "¿Cuáles son los horarios de oficina?" | ✅ Working |
+| **Haitian Creole** | HT | "Ki lè biwo yo ouvri?" | ✅ Working |
+
+#### Cross-Component Sync Verified
+
+| Component | Test | Status |
+|-----------|------|--------|
+| **Admin Panel** | Create pothole FAQ | ✅ Created |
+| **Database** | Embedding generated | ✅ 100% coverage |
+| **Website FAQ Widget** | Pothole FAQ visible | ✅ Displayed with category |
+| **FAQ Accordion** | Answer expands | ✅ Shows "PUBLIC WORKS" + answer |
+| **Chatbot** | Semantic search finds FAQ | ✅ Working |
+| **IVR Demo** | Transfer code generation | ✅ Working (EYJJIJ) |
+
+#### Database Stats Updated
+
+- **public.knowledge_items**: 357 items (100% embedded)
+- **dcq.faqs**: 8 FAQs (100% embedded)
+- **pgvector**: v0.8.0 enabled
+- **Embedding model**: text-embedding-3-small (1536 dimensions)
+
+#### Final Score: **100/100** ✅
+
+---
+
 ## [0.7.8] - 2026-01-27
 
 ### Chat Core IQ Link Fix

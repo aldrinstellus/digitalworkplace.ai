@@ -16,7 +16,7 @@
 
 **There is NO separate landing/home page. The root URL (`/`) always redirects.**
 
-*Last verified: 2026-01-19*
+*Last verified: 2026-01-27*
 
 ---
 ## AUTO-READ TRIGGER (MANDATORY)

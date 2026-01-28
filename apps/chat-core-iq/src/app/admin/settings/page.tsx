@@ -284,13 +284,14 @@ export default function SettingsPage() {
         role: 'Administrator',
       };
     }
-    // Fallback for public/demo mode
+    // Fallback for direct access - use admin defaults
+    // When accessed directly (not via main dashboard), show admin identity
     return {
-      firstName: 'Demo',
-      lastName: 'User',
-      fullName: 'Demo User',
-      email: 'demo@chatcoreiq.com',
-      initials: 'DU',
+      firstName: 'Aldrin',
+      lastName: '',
+      fullName: 'Aldrin',
+      email: 'aldrin@atc.xyz',
+      initials: 'A',
       role: 'Administrator',
     };
   }, [userEmail, userName, isSessionActive]);

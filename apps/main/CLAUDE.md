@@ -127,6 +127,47 @@ async headers() {
 | **GSAP** | 3.x | Complex animations |
 
 ---
+## ⚠️ CLERK OAUTH CONFIGURATION (v0.8.2)
+---
+
+**OAuth flow: Sign-in → Google → Dashboard (no intermediate screens)**
+
+### Clerk Dashboard Settings (CRITICAL)
+```
+dashboard.clerk.com → digitalworkplace.ai → Configure → Organizations → Settings:
+✅ "Membership optional" (allows personal accounts)
+❌ NOT "Membership required" (causes /sign-in/tasks redirect loop)
+```
+
+### ClerkProvider Configuration (`src/app/layout.tsx`)
+```typescript
+<ClerkProvider
+  signInForceRedirectUrl="/dashboard"
+  signUpForceRedirectUrl="/dashboard"
+>
+```
+
+### Environment Variables (`.env.local` + Vercel)
+```bash
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/dashboard"
+```
+
+### OAuth Flow
+1. User clicks "Continue with Google" on `/sign-in`
+2. Google OAuth authenticates user
+3. User redirects directly to `/dashboard`
+4. **No intermediate `/sign-in/tasks` page**
+
+### Key Files
+- `src/app/layout.tsx` - ClerkProvider with force redirect URLs
+- `src/app/sign-in/[[...sign-in]]/page.tsx` - Custom Google OAuth button
+- `src/app/sign-in/tasks/page.tsx` - Handler for Clerk internal tasks
+- `src/proxy.ts` - Middleware with public routes
+
+---
 ## QUICK START
 ---
 

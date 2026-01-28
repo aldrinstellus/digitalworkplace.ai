@@ -574,6 +574,36 @@ npx shadcn@latest add [component-name]
 2. Add button in sign-in page
 3. Use `signIn.authenticateWithRedirect()` with appropriate strategy
 
+### ⚠️ Clerk OAuth Configuration (CRITICAL - v0.8.2)
+
+**OAuth flow: Sign-in → Google → Dashboard (no intermediate screens)**
+
+#### Clerk Dashboard Settings (MUST BE SET)
+```
+dashboard.clerk.com → [app] → Configure → Organizations → Settings:
+✅ "Membership optional" (allows personal accounts)
+❌ NOT "Membership required" (causes /sign-in/tasks redirect loop)
+```
+
+#### ClerkProvider in layout.tsx
+```typescript
+<ClerkProvider
+  signInForceRedirectUrl="/dashboard"
+  signUpForceRedirectUrl="/dashboard"
+>
+```
+
+#### Environment Variables
+```bash
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/dashboard"
+```
+
+#### Verification
+- Click "Continue with Google" → Google picker → Dashboard
+- No `/sign-in/tasks` intermediate page
+- No Clerk branded pages visible
+
 ### Modifying Sound Effects
 1. Edit `src/lib/sounds.ts` for sound generation
 2. Edit `src/components/audio/SoundToggle.tsx` for toggle UI

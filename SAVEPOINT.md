@@ -1,72 +1,82 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-01-28 UTC
-**Version**: 0.8.1
-**Session Status**: Security Audit COMPLETE + Clerk OAuth Bulletproofed
+**Version**: 0.8.2
+**Session Status**: Clerk OAuth FULLY FIXED - Direct to Dashboard
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
 
-## ⚠️ CRITICAL: CLERK OAUTH CONFIGURATION (BULLETPROOF)
+## ⚠️ CRITICAL: CLERK OAUTH CONFIGURATION (FULLY FIXED)
 
-**NEVER let users see Clerk hosted pages. All OAuth must be seamless.**
+**OAuth now works seamlessly: Sign-in → Google → Dashboard (no intermediate screens)**
+
+### Root Cause & Fix (2026-01-28)
+
+**Problem:** Users were getting stuck at `/sign-in/tasks` with endless spinner after Google OAuth.
+
+**Root Cause:** Clerk Dashboard had "Organizations → Membership required" enabled, forcing users to create/join an organization.
+
+**Solution:** Changed Clerk Dashboard setting:
+- **Navigate to:** dashboard.clerk.com → digitalworkplace.ai → Configure → Organizations → Settings
+- **Changed:** "Membership required" → **"Membership optional"**
 
 ### Required Configuration (ALL must be set)
 
-#### 1. ClerkProvider in `layout.tsx`
+#### 1. Clerk Dashboard Settings (CRITICAL)
+```
+Organizations → Settings → Membership options:
+✅ "Membership optional" (Users can work with personal account)
+❌ NOT "Membership required" (This causes /sign-in/tasks redirect)
+```
+
+#### 2. ClerkProvider in `layout.tsx`
 ```typescript
 <ClerkProvider
-  signInUrl="/sign-in"
-  signUpUrl="/sign-up"
-  signInFallbackRedirectUrl="/dashboard"
-  signUpFallbackRedirectUrl="/dashboard"
-  afterSignOutUrl="/sign-in"
+  signInForceRedirectUrl="/dashboard"
+  signUpForceRedirectUrl="/dashboard"
 >
 ```
 
-#### 2. Environment Variables (Vercel + .env.local)
+#### 3. Environment Variables (Vercel + .env.local)
 ```
 NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
 NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/dashboard"
 ```
 
-#### 3. OAuth Redirect in `AnimatedLoginForm.tsx`
+#### 4. OAuth Redirect in `sign-in/[[...sign-in]]/page.tsx`
 ```typescript
 await signIn.authenticateWithRedirect({
   strategy: "oauth_google",
   redirectUrl: "/sso-callback",
-  redirectUrlComplete: "/dashboard",  // NOT "/" - must be /dashboard
+  redirectUrlComplete: "/dashboard",
 });
 ```
 
-#### 4. SSO Callback Handler in `sso-callback/page.tsx`
-```typescript
-<AuthenticateWithRedirectCallback
-  signInForceRedirectUrl="/dashboard"
-  signUpForceRedirectUrl="/dashboard"
-/>
-```
-
-#### 5. Middleware `proxy.ts` - Protected Routes
+#### 5. Middleware `proxy.ts` - Public Routes
 ```typescript
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/sso-callback(.*)',
-  // DO NOT add /dashboard, /admin, /analytics here!
+  '/icon(.*)',
+  '/apple-icon(.*)',
+  '/api/tracking/session/end',
+  '/api/tracking/pageview',
+  '/api/tracking/navigation',
+  '/api/analytics(.*)',
 ]);
 ```
 
-### Verification Checklist
-- [ ] Click "Sign In with SSO" → Google account picker appears (NOT Clerk.ai)
-- [ ] Select account → Redirects to /dashboard (NOT /)
-- [ ] No Clerk branded pages visible at any point
-- [ ] Sign out → Returns to /sign-in
+### Verification Checklist (ALL PASSING ✅)
+- [x] Click "Continue with Google" → Google account picker appears
+- [x] Select account → Redirects directly to /dashboard
+- [x] No `/sign-in/tasks` intermediate page
+- [x] No Clerk branded pages visible
+- [x] Sign out → Returns to /sign-in
 
 ---
 
@@ -127,9 +137,40 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.8.1)
+## Latest Changes (v0.8.2)
 
-### Security Audit & Clerk OAuth Bulletproofing (2026-01-28)
+### Clerk OAuth Organization Fix (2026-01-28)
+
+**Fixed OAuth flow getting stuck at `/sign-in/tasks` - users now go directly to dashboard.**
+
+#### Problem
+After Google OAuth authentication, users were redirected to `/sign-in/tasks?redirect_url=...` showing an endless spinner instead of reaching the dashboard.
+
+#### Root Cause
+Clerk Dashboard had "Organizations → Membership required" enabled, which forced users through an organization creation/join flow before accessing the app.
+
+#### Solution
+Changed Clerk Dashboard configuration:
+- **Setting:** Organizations → Settings → Membership options
+- **Changed from:** "Membership required"
+- **Changed to:** "Membership optional"
+
+#### Files Changed
+
+**Main Dashboard:**
+- `src/app/layout.tsx` - Updated ClerkProvider with force redirect URLs
+- `src/app/sign-in/[[...sign-in]]/page.tsx` - Added redirect_url handling, mounted state
+- `src/app/sign-in/tasks/page.tsx` - NEW: Handler for Clerk internal task route
+- `.env.local` - Updated to use FORCE redirect URLs
+
+#### Verification (ALL PASSING ✅)
+- Google OAuth → Dashboard redirect: ✅ Working
+- No intermediate `/sign-in/tasks` page: ✅ Fixed
+- No Clerk hosted pages visible: ✅ Confirmed
+
+---
+
+### Previous: Security Audit & Clerk OAuth Bulletproofing (v0.8.1)
 
 **Comprehensive security audit completed with all critical vulnerabilities fixed.**
 
@@ -143,40 +184,6 @@ const isPublicRoute = createRouteMatcher([
 | **HIGH** | Overly permissive CORS (`*`) | dCQ | Restricted to allowed origins |
 | **HIGH** | XSS in ticket description | dSQ | Added DOMPurify sanitization |
 | **MEDIUM** | Clerk OAuth fallback to hosted pages | Main | Bulletproof configuration |
-
-#### Files Changed
-
-**Chat Core IQ (dCQ):**
-- `src/lib/api-auth.ts` - NEW: Auth helper with origin validation
-- `src/app/api/embeddings/route.ts` - Added auth checks
-- `src/app/api/documents/route.ts` - Added auth checks
-- `src/app/api/chat/route.ts` - Dynamic CORS with allowed origins
-
-**Intranet IQ (dIQ):**
-- `src/lib/api-auth.ts` - NEW: Auth helper with origin validation
-- `src/app/api/admin/stats/route.ts` - Added auth checks
-
-**Support IQ (dSQ):**
-- `src/components/widgets/LiveTicketDetailWidget.tsx` - DOMPurify XSS fix
-
-**Main Dashboard:**
-- `src/app/layout.tsx` - ClerkProvider with explicit redirect URLs
-- `src/app/sso-callback/page.tsx` - OAuth error handling
-- `src/components/login/AnimatedLoginForm.tsx` - Fixed redirect to /dashboard
-- `src/proxy.ts` - Removed protected routes from public list
-
-#### Vercel Environment Variables Added
-```
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
-```
-
-#### Deployment
-- All 4 apps deployed to Vercel production
-- Verified: API endpoints return 401 for unauthorized requests
-- Verified: Google OAuth flows directly without Clerk hosted pages
 
 ---
 
@@ -444,6 +451,7 @@ vercel --prod
 - [x] dCQ v1.2.0 City of Doral Data Import - COMPLETED
 - [x] Security Audit - All critical vulnerabilities fixed - COMPLETED
 - [x] Clerk OAuth Bulletproofing - COMPLETED
+- [x] Clerk OAuth Organization Fix - COMPLETED (v0.8.2)
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -454,5 +462,5 @@ vercel --prod
 ---
 
 *Last session: 2026-01-28 UTC*
-*Version: 0.8.1*
+*Version: 0.8.2*
 *Machine: Mac Mini (aldrin-mac-mini)*

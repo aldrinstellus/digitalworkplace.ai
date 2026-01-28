@@ -54,35 +54,42 @@ useEffect(() => {
   - Session management
   - Server-side route protection via `proxy.ts`
 
-### ⚠️ CLERK OAUTH BULLETPROOF CONFIGURATION (v0.8.1)
+### ⚠️ CLERK OAUTH CONFIGURATION (v0.8.2) - FULLY FIXED
 
-**CRITICAL: Never let users see Clerk hosted pages. All OAuth must be seamless.**
+**OAuth now works seamlessly: Sign-in → Google → Dashboard (no intermediate screens)**
 
-#### Required Configuration Checklist
+#### Clerk Dashboard Configuration (CRITICAL)
+
+**Must be set in dashboard.clerk.com:**
+```
+Organizations → Settings → Membership options:
+✅ "Membership optional" (Users can work with personal account)
+❌ NOT "Membership required" (Causes /sign-in/tasks redirect loop)
+```
+
+#### Required Code Configuration
 
 | Component | File | Required Setting |
 |-----------|------|------------------|
-| **ClerkProvider** | `layout.tsx` | `signInUrl="/sign-in"`, `signInFallbackRedirectUrl="/dashboard"` |
-| **OAuth Redirect** | `AnimatedLoginForm.tsx` | `redirectUrlComplete: "/dashboard"` (NOT "/") |
-| **SSO Callback** | `sso-callback/page.tsx` | `signInForceRedirectUrl="/dashboard"` |
-| **Middleware** | `proxy.ts` | Do NOT add `/dashboard`, `/admin` to public routes |
-| **Env Variables** | Vercel + .env.local | All `NEXT_PUBLIC_CLERK_*` redirect URLs set |
+| **ClerkProvider** | `layout.tsx` | `signInForceRedirectUrl="/dashboard"`, `signUpForceRedirectUrl="/dashboard"` |
+| **OAuth Redirect** | `sign-in/[[...sign-in]]/page.tsx` | `redirectUrlComplete: "/dashboard"` |
+| **Middleware** | `proxy.ts` | `/sign-in(.*)` in public routes (includes /sign-in/tasks) |
+| **Env Variables** | Vercel + .env.local | `NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"` |
 
 #### Environment Variables (MUST be set in Vercel)
 ```
 NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
 NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL="/dashboard"
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/dashboard"
 ```
 
-#### Verification Flow
+#### Verification Flow (ALL PASSING ✅)
 1. Open incognito → `www.digitalworkplace.ai/sign-in`
-2. Click "Sign In with SSO" → **Google account picker appears** (NOT Clerk.ai)
-3. Select account → **Redirects to /dashboard** (NOT /)
-4. No Clerk branded pages visible at any point
+2. Click "Continue with Google" → **Google account picker appears**
+3. Select account → **Redirects directly to /dashboard**
+4. No `/sign-in/tasks` intermediate page
+5. No Clerk branded pages visible at any point
 
 ### Branding
 - **Favicon** (`icon.tsx`): Dynamic 32x32 PNG with "d." design

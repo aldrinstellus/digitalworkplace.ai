@@ -4,6 +4,60 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.8.2] - 2026-01-28
+
+### Clerk OAuth Organization Fix - Direct to Dashboard
+
+**Fixed critical issue where OAuth flow got stuck at `/sign-in/tasks` instead of redirecting to dashboard.**
+
+#### Problem
+After Google OAuth authentication, users were redirected to `/sign-in/tasks?redirect_url=...` showing an endless spinner. This prevented users from reaching the dashboard.
+
+#### Root Cause
+Clerk Dashboard had **"Organizations → Membership required"** enabled, which forced users through an organization creation/join flow before accessing the app.
+
+#### Solution
+Changed Clerk Dashboard configuration:
+```
+dashboard.clerk.com → digitalworkplace.ai → Configure → Organizations → Settings
+Changed: "Membership required" → "Membership optional"
+```
+
+#### Files Changed
+
+**Main Dashboard:**
+- `src/app/layout.tsx` - ClerkProvider with `signInForceRedirectUrl` and `signUpForceRedirectUrl`
+- `src/app/sign-in/[[...sign-in]]/page.tsx` - Added redirect_url handling from searchParams, mounted state for hydration
+- `src/app/sign-in/tasks/page.tsx` - NEW: Dedicated handler for Clerk internal task route
+- `.env.local` - Updated to use FORCE redirect URLs instead of deprecated AFTER URLs
+
+#### Environment Variables Updated
+```bash
+# Changed from deprecated:
+# NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/dashboard"
+
+# To current:
+NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="/dashboard"
+NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="/dashboard"
+```
+
+#### Verification Results
+| Test | Result |
+|------|--------|
+| Click "Continue with Google" | ✅ Google account picker appears |
+| Select Google account | ✅ Redirects directly to /dashboard |
+| No intermediate pages | ✅ No /sign-in/tasks visible |
+| Sign out flow | ✅ Returns to /sign-in |
+
+#### Documentation Updated
+- `SAVEPOINT.md` - v0.8.2 with full configuration checklist
+- `CHANGELOG.md` - This entry
+- `context.md` - Clerk OAuth section updated
+- `CLAUDE.md` - Clerk configuration section updated
+- `apps/main/CLAUDE.md` - OAuth configuration documented
+
+---
+
 ## [0.8.1] - 2026-01-28
 
 ### Security Audit & Clerk OAuth Bulletproofing

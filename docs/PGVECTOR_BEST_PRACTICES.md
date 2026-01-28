@@ -858,6 +858,35 @@ If you need to switch embedding providers:
 
 ---
 
-*Last Updated: January 19, 2025*
-*Version: 1.0.0*
+## Current Implementation Status (2026-01-28)
+
+### App-Specific Embedding Coverage
+
+| App | Embedding Model | Dimensions | Coverage | Items |
+|-----|-----------------|------------|----------|-------|
+| **dIQ** (Intranet IQ) | all-MiniLM-L6-v2 (local) | 384 | 100% | 212 articles |
+| **dCQ** (Chat Core IQ) | text-embedding-3-small (OpenAI) | 1536 | 100% | 7 FAQs, 1,066 pages |
+| **dSQ** (Support IQ) | text-embedding-3-small (OpenAI) | 1536 | 100% | 356 knowledge items |
+
+### dCQ Database Tables with Embeddings
+
+| Table | Count | Embedding Status |
+|-------|-------|------------------|
+| `dcq_faqs` | 7 | ✅ 100% embedded |
+| `dcq_crawler_urls` | 60 | No embeddings (URL metadata) |
+| `dcq_documents` | 18 | No embeddings (file metadata) |
+| `dcq_knowledge_entries` | 8 | Custom entries |
+
+### Knowledge Base Files (dCQ)
+
+| Language | File | Pages | Sections |
+|----------|------|-------|----------|
+| English | `knowledge-base.json` | 506 | 15 |
+| Spanish | `knowledge-base-es.json` | 560 | 23 |
+| Haitian Creole | `knowledge-base-ht.json` | 0 | 0 (placeholder) |
+
+---
+
+*Last Updated: January 28, 2026*
+*Version: 1.1.0*
 *Applies to: Digital Workplace AI (dIQ, dSQ, dTQ, dCQ)*

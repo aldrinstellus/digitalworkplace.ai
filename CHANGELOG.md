@@ -4,6 +4,74 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.8.0] - 2026-01-28
+
+### dCQ v1.2.0 - Full Spectrum Data Sync & City of Doral Import
+
+**Comprehensive data import from scraped City of Doral website with full admin panel synchronization.**
+
+#### Data Import Summary
+
+| Component | Count | Status |
+|-----------|-------|--------|
+| **FAQs** | 7 | ✅ 100% embeddings |
+| **Crawler URLs** | 60 (50 EN + 10 ES) | ✅ Imported |
+| **Documents** | 18 | ✅ Imported |
+| **Knowledge Entries** | 8 custom | ✅ Imported |
+| **Knowledge Base (EN)** | 506 pages, 15 sections | ✅ JSON loaded |
+| **Knowledge Base (ES)** | 560 pages, 23 sections | ✅ JSON loaded |
+| **Languages** | 3 (EN, ES, HT) | ✅ All active |
+
+#### Database Tables Verified (18 total)
+
+| Table | Count | Purpose |
+|-------|-------|---------|
+| dcq_faqs | 7 | FAQ management |
+| dcq_documents | 18 | Document storage |
+| dcq_crawler_urls | 60 | Web crawler URLs |
+| dcq_knowledge_entries | 8 | Custom knowledge |
+| dcq_announcements | 3 | Site announcements |
+| dcq_escalations | 8 | Chat escalations |
+| dcq_notifications | 8 | User notifications |
+| dcq_languages | 3 | Language config |
+| dcq_settings | 1 | App settings |
+| dcq_banner_settings | 1 | Banner display |
+| dcq_channels | 2 | Chat channels |
+| dcq_workflow_categories | 5 | Workflow types |
+| dcq_conversations | 0 | Starts empty |
+| dcq_messages | 0 | Starts empty |
+| dcq_feedback | 0 | Starts empty |
+| dcq_audit_logs | 0 | Created on actions |
+| dcq_workflow_types | 0 | Uses API defaults |
+| dcq_cross_channel_tokens | - | Ready |
+
+#### Admin Panel Full Sync Verified
+
+- Dashboard: Analytics showing real data
+- Workflows: 3 types with 5 categories
+- Content: Knowledge base displaying 506+ pages
+- Escalations: 8 entries with filtering
+- Notifications: 8 entries across 5 tabs
+- Announcements: 3 active with banner rotation
+- Settings: All tabs configured
+
+#### Documentation Updated
+
+- `apps/chat-core-iq/CLAUDE.md` - v1.2.0 with new data stats
+- `context.md` - dCQ section with full database coverage
+- `docs/QUERY_DETECTION_STANDARDS.md` - v1.2.0 with app coverage table
+- `docs/PGVECTOR_BEST_PRACTICES.md` - v1.1.0 with dCQ implementation status
+- `CHANGELOG.md` - This entry
+- `SAVEPOINT.md` - Updated current state
+
+#### Deployment
+
+- GitHub: Pushed to main
+- Vercel: Deployed to production
+- Production URL: https://dcq.digitalworkplace.ai/dcq/Home/index.html
+
+---
+
 ## [0.7.9] - 2026-01-27
 
 ### Full Spectrum Semantic Search & Sync Test PASSED

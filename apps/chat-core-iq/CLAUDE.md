@@ -1,11 +1,12 @@
 # Chat Core IQ (dCQ) - Claude Code Instructions
 
-**Version**: 1.1.0
-**Last Updated**: 2026-01-27
-**Status**: Production Live - Full Spectrum Audit PASSED (100/100)
+**Version**: 1.2.0
+**Last Updated**: 2026-01-28
+**Status**: Production Live - Full Spectrum Data Sync PASSED (100/100)
 **Audit Report**: FULL_SPECTRUM_AUDIT_REPORT.md
 **Cache Prevention**: ✅ Configured (no-store, must-revalidate)
 **Session Isolation**: ✅ Enabled (v1.1.0)
+**Data Sync**: ✅ Complete (City of Doral scraped data imported)
 
 ---
 ## PRODUCTION URLS
@@ -75,7 +76,16 @@
 ### Semantic Search
 - **Method**: Real OpenAI embeddings (text-embedding-3-small)
 - **Dimensions**: 1536
-- **Status**: Production ready
+- **Status**: Production ready with full City of Doral data
+
+### Database Statistics (v1.2.0)
+| Table | Count | Embeddings |
+|-------|-------|------------|
+| dcq_faqs | 7 | 100% ✅ |
+| dcq_crawler_urls | 60 (50 EN + 10 ES) | N/A |
+| dcq_documents | 18 | N/A |
+| dcq_knowledge_entries | 8 | N/A |
+| Knowledge Base JSON | 1,066 pages | N/A |
 
 ### References
 - Full Standards: `/docs/QUERY_DETECTION_STANDARDS.md`
@@ -131,12 +141,13 @@ npm run lint             # Run ESLint
 ---
 
 - **AI Chatbot**: Claude (primary) + OpenAI (fallback) LLM integration
-- **Semantic Search**: 348 knowledge items with 100% vector embedding coverage (7 FAQs)
-- **FAQ Widget**: Homepage displays FAQs from admin portal
+- **Semantic Search**: 1,066 knowledge pages with 100% vector embedding coverage (7 FAQs)
+- **FAQ Widget**: Homepage displays FAQs from admin portal (real-time sync)
 - **Admin Portal**: Full CRUD for FAQs, knowledge base, announcements
 - **Multi-language**: English/Spanish/Haitian Creole support (EN/ES/HT)
 - **Demo IVR**: Interactive Voice Response demo
 - **Session Isolation**: Admin changes only affect user's session, not global site (v1.1.0)
+- **Data Import**: City of Doral website scraped data (60 URLs, 18 documents, 506 EN + 560 ES pages)
 
 ---
 ## SESSION-BASED SETTINGS ISOLATION (v1.1.0)

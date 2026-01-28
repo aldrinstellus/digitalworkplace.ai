@@ -317,7 +317,7 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://dcq.digitalworkplace.ai |
 
-### dCQ - Chat Core IQ (v1.1.0) - PRODUCTION LIVE (Full Spectrum Audit PASSED)
+### dCQ - Chat Core IQ (v1.2.0) - PRODUCTION LIVE (Full Spectrum Data Sync PASSED)
 - **Port**: 3002
 - **Production**: https://dcq.digitalworkplace.ai/dcq/Home/index.html
 - **Admin**: https://dcq.digitalworkplace.ai/dcq/admin
@@ -325,21 +325,29 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 - **Audit Score**: 100/100 ✅
 - **Features**:
   - AI Chatbot: Claude (primary) + GPT-4o-mini (fallback)
-  - 357 knowledge items + 8 FAQs with 100% embedding coverage
+  - 1,066 knowledge pages + 7 FAQs with 100% embedding coverage
   - 10 Admin pages with 150+ features
   - Multi-language support (EN/ES/HT - English, Spanish, Haitian Creole)
   - Interactive Voice Response (IVR) demo with transfer codes
-  - 28 Supabase tables in dcq schema
+  - 18 Supabase tables in dcq schema
   - 19+ external integrations (Tyler Technologies, CRM, IVR, SMS, Social)
-- **Semantic Search Verified (2026-01-27)**:
-  - Query variations correctly matched ✅
-  - Multi-language (EN/ES/HT) working ✅
+- **Database Stats (2026-01-28)**:
+  - FAQs: 7 (100% embeddings)
+  - Crawler URLs: 60 (50 EN + 10 ES)
+  - Documents: 18
+  - Knowledge Entries: 8 custom
+  - Knowledge Base: 506 EN pages + 560 ES pages
+  - Languages: EN, ES, HT (all active)
+- **Full Spectrum Data Sync (2026-01-28)**:
+  - City of Doral scraped data imported ✅
   - Admin → Website → Chatbot → IVR sync verified ✅
+  - Multi-language (EN/ES/HT) working ✅
+  - All 18 database tables populated ✅
 - **Audit Results (2026-01-22)**:
   - Homepage & Chatbot: 100% ✅
   - IVR Demo: 100% ✅
   - Admin Panel (10 pages): 100% ✅
-  - Database (28 tables): 100% ✅
+  - Database (18 tables): 100% ✅
   - Vector Embeddings: 100% ✅
   - API Endpoints (9): 100% ✅
 

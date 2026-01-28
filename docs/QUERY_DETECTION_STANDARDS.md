@@ -1,7 +1,7 @@
 # Query Detection Standards
 
-**Version**: 1.1.0
-**Last Updated**: 2026-01-26
+**Version**: 1.2.0
+**Last Updated**: 2026-01-28
 **Applies To**: ALL Digital Workplace AI Apps (dIQ, dCQ, dSQ)
 **Status**: MANDATORY - These standards MUST be followed
 
@@ -344,11 +344,11 @@ return Math.min(finalScore, 1.0);
 When available, prefer real vector embeddings over text similarity.
 
 ### Current App Status
-| App | Method | Status |
-|-----|--------|--------|
-| **dIQ** (Intranet IQ) | OpenAI text-embedding-3-small | Real embeddings |
-| **dCQ** (Chat Core IQ) | OpenAI text-embedding-3-small | Real embeddings |
-| **dSQ** (Support IQ) | Enhanced text matching | v1.2.4 fixed |
+| App | Method | Status | Data Coverage |
+|-----|--------|--------|---------------|
+| **dIQ** (Intranet IQ) | OpenAI text-embedding-3-small | Real embeddings | 212 articles |
+| **dCQ** (Chat Core IQ) | OpenAI text-embedding-3-small | Real embeddings | 7 FAQs (100%), 1,066 pages |
+| **dSQ** (Support IQ) | Enhanced text matching | v1.2.4 fixed | 356 knowledge items |
 
 ### Embedding Configuration
 ```typescript
@@ -516,7 +516,8 @@ curl -I https://dsq.digitalworkplace.ai/dsq/demo/atc-executive
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.2.0 | 2026-01-26 | Added Section 10: Deployment & Cache Configuration |
+| 1.2.0 | 2026-01-28 | Updated dCQ data coverage (7 FAQs, 1,066 pages with full City of Doral import) |
+| 1.1.1 | 2026-01-26 | Added Section 10: Deployment & Cache Configuration |
 | 1.1.0 | 2026-01-26 | Added NPS & Sentiment compound words and key terms (dSQ v1.2.5) |
 | 1.0.0 | 2026-01-26 | Initial release - extracted from dSQ v1.2.4 fix |
 

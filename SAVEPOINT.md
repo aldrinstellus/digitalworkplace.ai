@@ -1,8 +1,8 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-27 19:45 UTC
-**Version**: 0.7.9
-**Session Status**: Full Spectrum Semantic Search & Sync Test PASSED
+**Last Updated**: 2026-01-28 UTC
+**Version**: 0.8.0
+**Session Status**: Full Spectrum Data Sync & City of Doral Import COMPLETE
 **Machine**: Mac Mini (aldrin-mac-mini)
 
 ---
@@ -29,7 +29,7 @@
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 1.1.0 |
-| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.1.0 |
+| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.0 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 
 ### GitHub Repository
@@ -64,48 +64,57 @@
 
 ---
 
-## Latest Changes (v0.7.9)
+## Latest Changes (v0.8.0)
 
-### Full Spectrum Semantic Search & Sync Test PASSED (2026-01-27)
+### dCQ v1.2.0 - Full Spectrum Data Sync & City of Doral Import (2026-01-28)
 
-**Comprehensive semantic search, embedding, and cross-component sync verification completed with 100% pass rate.**
+**Comprehensive data import from scraped City of Doral website with full admin panel synchronization.**
 
-#### Embedding Coverage (Fixed)
+#### Data Import Summary
 
-| Table | Before | After | Coverage |
-|-------|--------|-------|----------|
-| **dcq.faqs** | 7/8 (87.5%) | 8/8 | **100%** ✅ |
-| **public.knowledge_items** | 356/357 (99.7%) | 357/357 | **100%** ✅ |
+| Component | Count | Status |
+|-----------|-------|--------|
+| **FAQs** | 7 | ✅ 100% embeddings |
+| **Crawler URLs** | 60 (50 EN + 10 ES) | ✅ Imported |
+| **Documents** | 18 | ✅ Imported |
+| **Knowledge Entries** | 8 custom | ✅ Imported |
+| **Knowledge Base (EN)** | 506 pages, 15 sections | ✅ JSON loaded |
+| **Knowledge Base (ES)** | 560 pages, 23 sections | ✅ JSON loaded |
+| **Languages** | 3 (EN, ES, HT) | ✅ All active |
 
-Fixed: Generated missing embedding for pothole FAQ using `/api/embeddings` batch endpoint.
+#### Database Tables (18 dcq_* tables)
 
-#### Semantic Search Verification
+| Table | Count | Purpose |
+|-------|-------|---------|
+| dcq_faqs | 7 | FAQ management |
+| dcq_documents | 18 | Document storage |
+| dcq_crawler_urls | 60 | Web crawler URLs |
+| dcq_knowledge_entries | 8 | Custom knowledge |
+| dcq_announcements | 3 | Site announcements |
+| dcq_escalations | 8 | Chat escalations |
+| dcq_notifications | 8 | User notifications |
+| dcq_languages | 3 | Language config |
+| dcq_settings | 1 | App settings |
 
-| Query | Semantic Variation | Result |
-|-------|-------------------|--------|
-| "How do I get a building permit?" | "I need to apply for a construction permit" | ✅ Same intent recognized |
-| "What are the office hours?" | "When is city hall open?" | ✅ Correct answers |
-| "How do I start a business in Doral?" | - | ✅ Business licensing info with sources |
-| "Where can I report a pothole?" | - | ✅ Triggers service request workflow |
+#### Admin Panel Full Sync Verified
 
-#### Multi-Language Support Verified
+| Component | Local Files | Database | API | Status |
+|-----------|-------------|----------|-----|--------|
+| FAQs | ✅ | 7 (100% embedded) | ✅ | **SYNCED** |
+| Documents | ✅ | 18 | ✅ | **SYNCED** |
+| Crawler URLs | ✅ | 60 | ✅ | **SYNCED** |
+| Knowledge Base | 1,066 pages | 8 custom | ✅ | **SYNCED** |
+| Languages | 3 files | 3 rows | ✅ | **SYNCED** |
+| Settings | - | 1 | ✅ | **SYNCED** |
 
-| Language | Code | Status |
-|----------|------|--------|
-| **English** | EN | ✅ Working |
-| **Spanish** | ES | ✅ Working |
-| **Haitian Creole** | HT | ✅ Working |
+#### Documentation Updated
 
-#### Cross-Component Sync Verified
-
-| Component | Test | Status |
-|-----------|------|--------|
-| **Admin Panel** | Create pothole FAQ | ✅ Created |
-| **Database** | Embedding generated | ✅ 100% coverage |
-| **Website FAQ Widget** | Pothole FAQ visible | ✅ Displayed |
-| **FAQ Accordion** | Answer expands | ✅ Shows "PUBLIC WORKS" category + answer |
-| **Chatbot** | Semantic search finds FAQ | ✅ Working |
-| **IVR Demo** | Transfer code generation | ✅ Working (EYJJIJ) |
+- `apps/chat-core-iq/CLAUDE.md` - v1.2.0
+- `context.md` - dCQ section updated
+- `docs/QUERY_DETECTION_STANDARDS.md` - v1.2.0
+- `docs/PGVECTOR_BEST_PRACTICES.md` - v1.1.0
+- `CHANGELOG.md` - v0.8.0 entry
+- `SAVEPOINT.md` - This file
 
 #### Final Score: **100/100** ✅
 
@@ -318,6 +327,7 @@ vercel --prod
 - [x] dCQ v1.1.0 Session-Based Settings Isolation - COMPLETED
 - [x] Fix Chat Core IQ link to Doral homepage - COMPLETED
 - [x] Full Spectrum Semantic Search & Sync Test - COMPLETED (100/100)
+- [x] dCQ v1.2.0 City of Doral Data Import - COMPLETED
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
@@ -327,6 +337,6 @@ vercel --prod
 
 ---
 
-*Last session: 2026-01-27 19:45 UTC*
-*Version: 0.7.9*
+*Last session: 2026-01-28 UTC*
+*Version: 0.8.0*
 *Machine: Mac Mini (aldrin-mac-mini)*

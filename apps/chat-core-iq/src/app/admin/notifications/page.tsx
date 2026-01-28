@@ -114,7 +114,7 @@ export default function NotificationsPage() {
         params.set("type", filter);
       }
 
-      const response = await fetch(`/api/admin/notifications?${params}`);
+      const response = await fetch(apiUrl(`/api/admin/notifications?${params}`));
       if (response.ok) {
         const data = await response.json();
         setNotifications(data.notifications || []);
@@ -134,7 +134,7 @@ export default function NotificationsPage() {
 
   const handleMarkAsRead = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/notifications/${id}`, {
+      const response = await fetch(apiUrl(`/api/admin/notifications/${id}`), {
         method: "PUT",
       });
       if (response.ok) {
@@ -173,7 +173,7 @@ export default function NotificationsPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/notifications/${id}`, {
+      const response = await fetch(apiUrl(`/api/admin/notifications/${id}`), {
         method: "DELETE",
       });
       if (response.ok) {

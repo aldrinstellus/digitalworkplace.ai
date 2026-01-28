@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useConfirmDialog } from "@/components/ui/confirm-dialog";
+import { apiUrl } from "@/lib/utils";
 import {
   AlertTriangle,
   Search,
@@ -186,7 +187,7 @@ export default function EscalationsPage() {
       if (statusFilter !== "all") params.set("status", statusFilter);
       if (searchQuery) params.set("search", searchQuery);
 
-      const response = await fetch(`/api/escalations?${params}`);
+      const response = await fetch(apiUrl(`/api/escalations?${params}`));
       if (response.ok) {
         const data = await response.json();
         setEscalations(data.escalations || []);
@@ -209,7 +210,7 @@ export default function EscalationsPage() {
 
   const updateStatus = async (id: string, newStatus: string, notes?: string) => {
     try {
-      const response = await fetch(`/api/escalations/${id}`, {
+      const response = await fetch(apiUrl(`/api/escalations/${id}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus, notes }),
@@ -236,7 +237,7 @@ export default function EscalationsPage() {
       variant: "danger",
       onConfirm: async () => {
         try {
-          const response = await fetch(`/api/escalations/${escalation.id}`, {
+          const response = await fetch(apiUrl(`/api/escalations/${escalation.id}`), {
             method: "DELETE",
           });
           if (response.ok) {

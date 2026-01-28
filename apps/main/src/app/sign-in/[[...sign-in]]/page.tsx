@@ -12,17 +12,20 @@ import { cn } from "@/lib/utils";
 
 export default function SignInPage() {
   const { isLoaded, signIn } = useSignIn();
-  const { isSignedIn, isLoaded: userLoaded } = useUser();
+  const { isSignedIn, isLoaded: userLoaded, user } = useUser();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Explicit check: user is truly signed in only if isSignedIn is true AND user object exists
+  const isActuallySignedIn = isSignedIn === true && user !== null && user !== undefined;
+
   // Auto-redirect to dashboard if already signed in
   useEffect(() => {
-    if (userLoaded && isSignedIn) {
+    if (userLoaded && isActuallySignedIn) {
       router.replace("/dashboard");
     }
-  }, [userLoaded, isSignedIn, router]);
+  }, [userLoaded, isActuallySignedIn, router]);
 
   const handleGoogleSignIn = async () => {
     if (!isLoaded || !signIn) {
@@ -101,7 +104,7 @@ export default function SignInPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            {isSignedIn ? (
+            {isActuallySignedIn ? (
               <Button
                 onClick={handleGoToDashboard}
                 size="lg"

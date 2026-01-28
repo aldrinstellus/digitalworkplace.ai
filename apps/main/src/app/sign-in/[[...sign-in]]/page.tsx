@@ -1,28 +1,66 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { useSignIn, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useSignIn, useUser, useAuth } from "@clerk/nextjs";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import LoginBackground from "@/components/login/LoginBackground";
 import WordmarkGlitch from "@/components/brand/WordmarkGlitch";
 import SoundToggle from "@/components/audio/SoundToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export default function SignInPage() {
+function SignInContent() {
   const { isLoaded, signIn } = useSignIn();
   const { isSignedIn, isLoaded: userLoaded } = useUser();
+  const { userId } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Auto-redirect to dashboard if already signed in
+  // Mark as mounted on client
   useEffect(() => {
-    if (userLoaded && isSignedIn) {
-      router.replace("/dashboard");
+    setMounted(true);
+  }, []);
+
+  // Handle redirect logic
+  useEffect(() => {
+    if (!mounted) return;
+
+    // Standard redirect for authenticated users
+    if (userId) {
+      const redirectUrl = searchParams.get("redirect_url");
+      if (redirectUrl) {
+        try {
+          const url = new URL(redirectUrl);
+          router.replace(url.pathname || "/dashboard");
+        } catch {
+          router.replace("/dashboard");
+        }
+      } else {
+        router.replace("/dashboard");
+      }
+      return;
     }
-  }, [userLoaded, isSignedIn, router]);
+
+    // Also check the standard isSignedIn state
+    if (userLoaded && isSignedIn) {
+      const redirectUrl = searchParams.get("redirect_url");
+      if (redirectUrl) {
+        try {
+          const url = new URL(redirectUrl);
+          router.replace(url.pathname || "/dashboard");
+        } catch {
+          router.replace("/dashboard");
+        }
+      } else {
+        router.replace("/dashboard");
+      }
+    }
+  }, [mounted, pathname, userId, userLoaded, isSignedIn, router, searchParams]);
 
   const handleGoogleSignIn = async () => {
     if (!isLoaded || !signIn) {
@@ -46,7 +84,7 @@ export default function SignInPage() {
   };
 
   // Show loading while checking auth status OR if signed in (redirecting to dashboard)
-  if (!userLoaded || isSignedIn) {
+  if (!mounted || !userLoaded || isSignedIn) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-[#0f0f1a]">
         <motion.div
@@ -148,5 +186,23 @@ export default function SignInPage() {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen w-screen flex items-center justify-center bg-[#0f0f1a]">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="w-12 h-12 border-4 border-green-500/20 border-t-green-500 rounded-full"
+          />
+        </div>
+      }
+    >
+      <SignInContent />
+    </Suspense>
   );
 }

@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { validateStrictAdminRequest, validateAdminRequest } from '@/lib/api-auth';
 import {
   parseDocument,
   chunkDocument,
@@ -51,6 +52,10 @@ async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
 
 // POST: Upload and parse document
 export async function POST(request: NextRequest) {
+  // Require strict admin access for document uploads
+  const authError = validateStrictAdminRequest(request);
+  if (authError) return authError;
+
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
@@ -137,7 +142,11 @@ export async function POST(request: NextRequest) {
 }
 
 // GET: List indexed documents
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Require admin access to list documents
+  const authError = validateAdminRequest(request);
+  if (authError) return authError;
+
   try {
     const kb = await loadKnowledgeBase();
 
@@ -177,6 +186,10 @@ export async function GET() {
 
 // DELETE: Remove document from knowledge base
 export async function DELETE(request: NextRequest) {
+  // Require strict admin access to delete documents
+  const authError = validateStrictAdminRequest(request);
+  if (authError) return authError;
+
   try {
     const { searchParams } = new URL(request.url);
     const filePrefix = searchParams.get('file');

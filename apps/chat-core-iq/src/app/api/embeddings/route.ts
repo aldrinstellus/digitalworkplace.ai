@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateEmbedding, getEmbeddingDimensions } from '@/lib/embeddings';
+import { validateAdminRequest, validateStrictAdminRequest } from '@/lib/api-auth';
 
 /**
  * POST /api/embeddings
@@ -13,6 +14,10 @@ import { generateEmbedding, getEmbeddingDimensions } from '@/lib/embeddings';
  * - query: Generate embedding for a search query
  */
 export async function POST(request: NextRequest) {
+  // Require strict admin access for embedding generation (write operations)
+  const authError = validateStrictAdminRequest(request);
+  if (authError) return authError;
+
   try {
     const { action, faqId, text } = await request.json();
 
@@ -181,7 +186,11 @@ export async function POST(request: NextRequest) {
  * GET /api/embeddings
  * Get embedding coverage statistics for dCQ and master knowledge base
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Require admin access to view embedding stats
+  const authError = validateAdminRequest(request);
+  if (authError) return authError;
+
   try {
     // Get FAQ stats using public schema view
     const { data: faqStats, error: faqError } = await supabase

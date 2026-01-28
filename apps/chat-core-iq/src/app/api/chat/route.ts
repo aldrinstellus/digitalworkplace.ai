@@ -43,16 +43,48 @@ import {
   TylerQueryResult
 } from '@/lib/tyler-integration';
 
-// CORS headers for cross-origin widget requests
+// Allowed origins for chat widget
+const ALLOWED_ORIGINS = [
+  'https://dcq.digitalworkplace.ai',
+  'https://www.digitalworkplace.ai',
+  'https://digitalworkplace-ai.vercel.app',
+  'https://www.cityofdoral.com',
+  'https://cityofdoral.com',
+  'http://localhost:3000',
+  'http://localhost:3002',
+];
+
+// Get CORS headers with dynamic origin validation
+function getCorsHeaders(request: NextRequest): Record<string, string> {
+  const origin = request.headers.get('origin');
+
+  // Check if origin is in allowed list
+  const isAllowed = origin && ALLOWED_ORIGINS.some(allowed =>
+    origin === allowed || origin.startsWith(allowed)
+  );
+
+  // In development or if origin is allowed, reflect the origin
+  // Otherwise use the first allowed origin (prevents open CORS)
+  const allowedOrigin = isAllowed && origin ? origin : ALLOWED_ORIGINS[0];
+
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Credentials': 'true',
+  };
+}
+
+// Legacy static headers for backwards compatibility
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': ALLOWED_ORIGINS[0],
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
 // Handle OPTIONS preflight request
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
+export async function OPTIONS(request: NextRequest) {
+  return NextResponse.json({}, { headers: getCorsHeaders(request) });
 }
 
 // Lazy initialization to avoid build-time errors
@@ -414,7 +446,7 @@ export async function POST(request: NextRequest) {
       const workflowResponse = await processWorkflowCommand(sessionId, command, detectedLanguage);
       if (workflowResponse) {
         workflowResponse.conversationId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        return NextResponse.json(workflowResponse, { headers: corsHeaders });
+        return NextResponse.json(workflowResponse, { headers: getCorsHeaders(request) });
       }
     }
 
@@ -434,7 +466,7 @@ export async function POST(request: NextRequest) {
           conversationId: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           actions: result.actions,
           workflowState: result.workflowState
-        }, { headers: corsHeaders });
+        }, { headers: getCorsHeaders(request) });
       }
 
       if (workflowType === 'service-request') {
@@ -449,7 +481,7 @@ export async function POST(request: NextRequest) {
           conversationId: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           actions: result.actions,
           workflowState: result.workflowState
-        }, { headers: corsHeaders });
+        }, { headers: getCorsHeaders(request) });
       }
     }
 
@@ -470,7 +502,7 @@ export async function POST(request: NextRequest) {
           conversationId: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           actions: result.actions,
           workflowState: result.workflowState
-        }, { headers: corsHeaders });
+        }, { headers: getCorsHeaders(request) });
       }
 
       // Handle service request intent (with routing rule match)
@@ -506,7 +538,7 @@ export async function POST(request: NextRequest) {
           conversationId: `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           actions: result.actions,
           workflowState: result.workflowState
-        }, { headers: corsHeaders });
+        }, { headers: getCorsHeaders(request) });
       }
     }
 
@@ -577,7 +609,7 @@ export async function POST(request: NextRequest) {
           };
           logConversation(logEntry).catch(console.error);
 
-          return NextResponse.json(response, { headers: corsHeaders });
+          return NextResponse.json(response, { headers: getCorsHeaders(request) });
         }
       } catch (tylerError) {
         console.error('[Tyler] Query handling error:', tylerError);
@@ -820,7 +852,7 @@ I hope that helps!"
       response.workflowState = { active: false, type: 'none', step: 0 };
     }
 
-    return NextResponse.json(response, { headers: corsHeaders });
+    return NextResponse.json(response, { headers: getCorsHeaders(request) });
   } catch (error) {
     console.error('Chat API error:', error);
 

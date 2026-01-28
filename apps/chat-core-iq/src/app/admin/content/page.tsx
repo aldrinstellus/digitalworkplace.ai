@@ -289,7 +289,7 @@ export default function ContentManagement() {
         ht: "/knowledge-base-ht.json"
       };
       const file = kbFiles[lang] || "/knowledge-base.json";
-      const response = await fetch(file);
+      const response = await fetch(apiUrl(file));
       if (response.ok) {
         const data = await response.json();
         setKnowledgeItems(data.pages || []);

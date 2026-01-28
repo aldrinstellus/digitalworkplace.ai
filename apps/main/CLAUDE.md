@@ -30,10 +30,11 @@
 **FILES TO READ (in this order):**
 ```
 1. /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md (Global state)
-2. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - REQUIRED)
-3. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
-4. /Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md (Global instructions)
-5. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/main/CLAUDE.md (This file)
+2. /Users/aldrin-mac-mini/digitalworkplace.ai/.claude/learning.md (CRITICAL - Auth fixes & troubleshooting)
+3. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - REQUIRED)
+4. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
+5. /Users/aldrin-mac-mini/digitalworkplace.ai/CLAUDE.md (Global instructions)
+6. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/main/CLAUDE.md (This file)
 ```
 
 **THEN:**

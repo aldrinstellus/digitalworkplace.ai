@@ -4,6 +4,22 @@
 **Version**: 0.8.2
 **Session Status**: Clerk OAuth FULLY FIXED - Direct to Dashboard
 **Machine**: Mac Mini (aldrin-mac-mini)
+**Git Commit**: 581b78f → [pending new commit]
+
+---
+
+## CRITICAL REFERENCE FILE
+
+**For OAuth troubleshooting and permanent fixes, ALWAYS read:**
+```
+/Users/aldrin-mac-mini/digitalworkplace.ai/.claude/learning.md
+```
+
+This file contains:
+- Clerk OAuth configuration details
+- Troubleshooting guide for auth issues
+- Deployment checklist
+- Common issues & fixes registry
 
 ---
 

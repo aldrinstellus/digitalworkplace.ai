@@ -126,5 +126,148 @@
     "autoAssign": false,
     "isActive": true,
     "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "route-008",
+    "name": "Graffiti Removal",
+    "category": "public-works",
+    "keywords": [
+      "graffiti",
+      "vandalism",
+      "tagging",
+      "spray paint",
+      "defacement",
+      "mural damage"
+    ],
+    "targetDepartment": "Public Works",
+    "priority": "medium",
+    "slaHours": 48,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-009",
+    "name": "Abandoned Vehicle",
+    "category": "police",
+    "keywords": [
+      "abandoned",
+      "vehicle",
+      "car",
+      "towed",
+      "junk car",
+      "derelict",
+      "inoperable"
+    ],
+    "targetDepartment": "Police Department",
+    "priority": "medium",
+    "slaHours": 72,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-010",
+    "name": "Tree Trimming",
+    "category": "parks",
+    "keywords": [
+      "tree",
+      "trimming",
+      "overgrown",
+      "branch",
+      "hazard",
+      "falling branch",
+      "dead tree",
+      "tree removal"
+    ],
+    "targetDepartment": "Parks & Recreation",
+    "priority": "medium",
+    "slaHours": 72,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-011",
+    "name": "Flooding & Drainage",
+    "category": "public-works",
+    "keywords": [
+      "flood",
+      "flooding",
+      "drainage",
+      "storm",
+      "standing water",
+      "clogged drain",
+      "stormwater",
+      "canal"
+    ],
+    "targetDepartment": "Public Works",
+    "priority": "high",
+    "slaHours": 24,
+    "autoAssign": true,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-012",
+    "name": "Animal Control",
+    "category": "police",
+    "keywords": [
+      "animal",
+      "stray",
+      "dog",
+      "cat",
+      "wildlife",
+      "raccoon",
+      "snake",
+      "bite",
+      "loose animal"
+    ],
+    "targetDepartment": "Police Department",
+    "priority": "high",
+    "slaHours": 12,
+    "autoAssign": true,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-013",
+    "name": "Noise Complaint",
+    "category": "code-compliance",
+    "keywords": [
+      "noise",
+      "loud",
+      "music",
+      "party",
+      "construction noise",
+      "barking",
+      "disturbance"
+    ],
+    "targetDepartment": "Code Compliance",
+    "priority": "medium",
+    "slaHours": 24,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "route-014",
+    "name": "Trash & Recycling",
+    "category": "public-works",
+    "keywords": [
+      "trash",
+      "garbage",
+      "recycling",
+      "missed pickup",
+      "bulk pickup",
+      "dumpster",
+      "waste"
+    ],
+    "targetDepartment": "Public Works",
+    "priority": "medium",
+    "slaHours": 48,
+    "autoAssign": false,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z"
   }
 ]

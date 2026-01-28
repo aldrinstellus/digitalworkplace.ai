@@ -109,5 +109,149 @@
     "isActive": false,
     "createdAt": "2026-01-01T00:00:00.000Z",
     "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "apt-005",
+    "department": "Parks & Recreation",
+    "serviceName": "Parks Program Registration",
+    "description": "Schedule an appointment to register for parks programs, youth sports leagues, swim lessons, fitness classes, or summer camps.",
+    "duration": 30,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday"
+    ],
+    "timeSlots": [
+      {
+        "start": "09:00",
+        "end": "12:00"
+      },
+      {
+        "start": "13:00",
+        "end": "17:00"
+      }
+    ],
+    "maxPerSlot": 2,
+    "leadTimeHours": 24,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z",
+    "updatedAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "apt-006",
+    "department": "Public Works",
+    "serviceName": "Utility Account Services",
+    "description": "Schedule an appointment for utility billing questions, account setup, payment plans, or service transfers.",
+    "duration": 20,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "08:00",
+        "end": "11:30"
+      },
+      {
+        "start": "13:00",
+        "end": "16:30"
+      }
+    ],
+    "maxPerSlot": 4,
+    "leadTimeHours": 24,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z",
+    "updatedAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "apt-007",
+    "department": "Police Department",
+    "serviceName": "Police Records Request",
+    "description": "Schedule an appointment to request police reports, accident reports, or background checks.",
+    "duration": 15,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "09:00",
+        "end": "12:00"
+      },
+      {
+        "start": "13:00",
+        "end": "16:00"
+      }
+    ],
+    "maxPerSlot": 3,
+    "leadTimeHours": 48,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z",
+    "updatedAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "apt-008",
+    "department": "Finance",
+    "serviceName": "Property Tax Consultation",
+    "description": "Schedule an appointment to discuss property tax assessments, exemptions, payment options, or appeals.",
+    "duration": 30,
+    "availableDays": [
+      "monday",
+      "wednesday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "09:00",
+        "end": "11:30"
+      },
+      {
+        "start": "14:00",
+        "end": "16:00"
+      }
+    ],
+    "maxPerSlot": 2,
+    "leadTimeHours": 48,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z",
+    "updatedAt": "2026-01-28T00:00:00.000Z"
+  },
+  {
+    "id": "apt-009",
+    "department": "City Clerk",
+    "serviceName": "Notary Services",
+    "description": "Schedule an appointment for notary public services, document certification, or official city records.",
+    "duration": 15,
+    "availableDays": [
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday"
+    ],
+    "timeSlots": [
+      {
+        "start": "08:30",
+        "end": "11:30"
+      },
+      {
+        "start": "13:30",
+        "end": "16:30"
+      }
+    ],
+    "maxPerSlot": 4,
+    "leadTimeHours": 24,
+    "isActive": true,
+    "createdAt": "2026-01-28T00:00:00.000Z",
+    "updatedAt": "2026-01-28T00:00:00.000Z"
   }
 ]

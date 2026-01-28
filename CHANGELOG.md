@@ -4,6 +4,48 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.8.3] - 2026-01-28
+
+### dCQ Workflow Expansion - 12 New Workflows
+
+**Added 12 realistic workflows for City of Doral chatbot admin portal - all deployed and live.**
+
+#### New Service Request Routing Rules (7)
+
+| Rule | Department | Priority | SLA |
+|------|------------|----------|-----|
+| Graffiti Removal | Public Works | Medium | 48h |
+| Abandoned Vehicle | Police Department | Medium | 72h |
+| Tree Trimming | Parks & Recreation | Medium | 72h |
+| Flooding & Drainage | Public Works | High | 24h |
+| Animal Control | Police Department | High | 12h |
+| Noise Complaint | Code Compliance | Medium | 24h |
+| Trash & Recycling | Public Works | Medium | 48h |
+
+#### New Appointment Services (5)
+
+| Service | Department | Duration |
+|---------|------------|----------|
+| Parks Program Registration | Parks & Recreation | 30 min |
+| Utility Account Services | Public Works | 20 min |
+| Police Records Request | Police Department | 15 min |
+| Property Tax Consultation | Finance | 30 min |
+| Notary Services | City Clerk | 15 min |
+
+#### Files Changed
+
+- `apps/chat-core-iq/data/workflow-routing.json` - 7 new routing rules
+- `apps/chat-core-iq/data/appointment-config.json` - 5 new appointment services
+
+#### Stats After Deployment
+
+- Service Request Rules: 14 total (13 active)
+- Appointment Services: 9 total (8 active)
+- Auto-Assign Rules: 4 enabled
+- Departments: 9 covered
+
+---
+
 ## [0.8.2] - 2026-01-28
 
 ### Clerk OAuth Organization Fix - Direct to Dashboard

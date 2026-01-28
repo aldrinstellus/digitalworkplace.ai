@@ -354,10 +354,11 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://dcq.digitalworkplace.ai |
 
-### dCQ - Chat Core IQ (v1.2.0) - PRODUCTION LIVE (Full Spectrum Data Sync PASSED)
+### dCQ - Chat Core IQ (v1.2.1) - PRODUCTION LIVE (Full Spectrum + Workflows)
 - **Port**: 3002
 - **Production**: https://dcq.digitalworkplace.ai/dcq/Home/index.html
 - **Admin**: https://dcq.digitalworkplace.ai/dcq/admin
+- **Workflows**: https://dcq.digitalworkplace.ai/dcq/admin/workflows
 - **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
 - **Audit Score**: 100/100 ✅
 - **Features**:
@@ -368,6 +369,11 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
   - Interactive Voice Response (IVR) demo with transfer codes
   - 18 Supabase tables in dcq schema
   - 19+ external integrations (Tyler Technologies, CRM, IVR, SMS, Social)
+- **Workflow Stats (2026-01-28 v0.8.3)**:
+  - Service Request Routing: 14 rules (13 active)
+  - Appointment Services: 9 services (8 active)
+  - Auto-Assign Rules: 4 enabled
+  - Departments Covered: 9
 - **Database Stats (2026-01-28)**:
   - FAQs: 7 (100% embeddings)
   - Crawler URLs: 60 (50 EN + 10 ES)

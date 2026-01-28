@@ -350,7 +350,7 @@ npm run dev:intranet     # Start dIQ on port 3001
 
 ---
 
-### dCQ - Chat Core IQ (v1.0.1) - PRODUCTION LIVE (Full Spectrum Verified)
+### dCQ - Chat Core IQ (v1.2.1) - PRODUCTION LIVE (Full Spectrum + Workflows)
 
 | Property | Value |
 |----------|-------|
@@ -372,20 +372,28 @@ npm run dev:chatcore     # Start dCQ on port 3002
 |------|-------|------------|
 | Homepage | http://localhost:3002/dcq/Home/index.html | https://dcq.digitalworkplace.ai/dcq/Home/index.html |
 | Admin | http://localhost:3002/dcq/admin | https://dcq.digitalworkplace.ai/dcq/admin |
+| Workflows | http://localhost:3002/dcq/admin/workflows | https://dcq.digitalworkplace.ai/dcq/admin/workflows |
 | Content | http://localhost:3002/dcq/admin/content | https://dcq.digitalworkplace.ai/dcq/admin/content |
 | IVR Demo | http://localhost:3002/dcq/demo/ivr | https://dcq.digitalworkplace.ai/dcq/demo/ivr |
 
 **Features:**
 - AI Chatbot: Claude (primary) + OpenAI (fallback) LLM integration
-- Semantic Search: 348 knowledge items with 100% vector embedding coverage
+- Semantic Search: 1,066 knowledge pages with 100% vector embedding coverage
 - FAQ Widget: Homepage displays FAQs from admin portal
 - Admin Portal: Full CRUD for FAQs, knowledge base, announcements
-- Multi-language: English/Spanish support
+- Multi-language: English/Spanish/Haitian Creole support
 - Demo IVR: Interactive Voice Response demo
+- Workflows: 14 service request rules + 9 appointment services
+
+**Workflow Stats (v0.8.3):**
+- Service Request Routing: 14 rules (13 active)
+- Appointment Services: 9 services (8 active)
+- Auto-Assign Rules: 4 enabled
+- Departments: 9 covered
 
 **Database (Supabase):**
 - Schema: `dcq` with 28 tables
-- 348 knowledge items with 100% embedding coverage
+- 1,066 knowledge pages with 100% embedding coverage
 - pgvector v0.8.0 for semantic search
 
 ---

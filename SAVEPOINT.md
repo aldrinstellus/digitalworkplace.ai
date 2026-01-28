@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-28 UTC
-**Version**: 0.8.2
-**Session Status**: Clerk OAuth FULLY FIXED - Direct to Dashboard
+**Last Updated**: 2026-01-28 19:45 UTC
+**Version**: 0.8.3
+**Session Status**: dCQ Workflows Expanded - 12 New Workflows Live
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 89d0724 - docs: Add learning.md for permanent OAuth troubleshooting reference
+**Git Commit**: 4a4283f - feat(dCQ): Add 12 new workflows for City of Doral
 
 ---
 
@@ -118,7 +118,7 @@ const isPublicRoute = createRouteMatcher([
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 1.1.0 |
-| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.0 |
+| **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 
 ### GitHub Repository
@@ -153,7 +153,66 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.8.2)
+## Latest Changes (v0.8.3)
+
+### dCQ Workflow Expansion (2026-01-28)
+
+**Added 12 new realistic workflows for City of Doral chatbot - All LIVE on production.**
+
+#### Service Request Routing Rules (7 NEW)
+
+| Rule | Department | Priority | SLA | Auto-Assign | Keywords |
+|------|------------|----------|-----|-------------|----------|
+| **Graffiti Removal** | Public Works | Medium | 48h | No | graffiti, vandalism, tagging, spray paint |
+| **Abandoned Vehicle** | Police Department | Medium | 72h | No | abandoned, vehicle, car, towed, junk car |
+| **Tree Trimming** | Parks & Recreation | Medium | 72h | No | tree, trimming, overgrown, branch, hazard |
+| **Flooding & Drainage** | Public Works | High | 24h | ✅ Yes | flood, drainage, storm, standing water |
+| **Animal Control** | Police Department | High | 12h | ✅ Yes | animal, stray, dog, cat, wildlife, snake |
+| **Noise Complaint** | Code Compliance | Medium | 24h | No | noise, loud, music, party, barking |
+| **Trash & Recycling** | Public Works | Medium | 48h | No | trash, garbage, recycling, missed pickup |
+
+**Total Service Request Rules: 14 (was 7) - 13 Active**
+
+#### Appointment Services (5 NEW)
+
+| Service | Department | Duration | Days | Lead Time |
+|---------|------------|----------|------|-----------|
+| **Parks Program Registration** | Parks & Recreation | 30 min | Mon-Sat | 24h |
+| **Utility Account Services** | Public Works | 20 min | Mon-Fri | 24h |
+| **Police Records Request** | Police Department | 15 min | Mon-Fri | 48h |
+| **Property Tax Consultation** | Finance | 30 min | Mon/Wed/Fri | 48h |
+| **Notary Services** | City Clerk | 15 min | Mon-Fri | 24h |
+
+**Total Appointment Services: 9 (was 4) - 8 Active**
+
+#### Files Changed
+
+- `apps/chat-core-iq/data/workflow-routing.json` - Added 7 new routing rules
+- `apps/chat-core-iq/data/appointment-config.json` - Added 5 new appointment services
+
+#### Deployment
+
+- **Git Commit**: 4a4283f
+- **Vercel**: Deployed to production via `vercel --prod`
+- **Production URL**: https://dcq.digitalworkplace.ai/dcq/admin/workflows
+
+#### Admin Portal Stats (Post-Deployment)
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Service Request Rules | 6/7 Active | 13/14 Active |
+| Departments (SR) | 6 | 7 |
+| Auto-Assign Rules | 2 | 4 |
+| Appointment Services | 3/4 Active | 8/9 Active |
+| Departments (Appt) | 4 | 9 |
+
+#### Note on Workflow Builder UI
+
+The admin portal workflow builder forms (Add Rule, Add Service) are display-only demo interfaces. Workflows were added by directly editing JSON data files and deploying to production. All 12 new workflows are fully functional in the chatbot.
+
+---
+
+## Previous Changes (v0.8.2)
 
 ### Clerk OAuth Organization Fix (2026-01-28)
 
@@ -468,15 +527,17 @@ vercel --prod
 - [x] Security Audit - All critical vulnerabilities fixed - COMPLETED
 - [x] Clerk OAuth Bulletproofing - COMPLETED
 - [x] Clerk OAuth Organization Fix - COMPLETED (v0.8.2)
+- [x] dCQ Workflow Expansion - 12 new workflows LIVE (v0.8.3)
 - [ ] dTQ (Test Pilot IQ) implementation
 
 ### Medium Term
 - [ ] Cross-project search UI
 - [ ] User profile page
 - [ ] Settings page
+- [ ] Make workflow builder UI functional (currently demo-only)
 
 ---
 
-*Last session: 2026-01-28 UTC*
-*Version: 0.8.2*
+*Last session: 2026-01-28 19:45 UTC*
+*Version: 0.8.3*
 *Machine: Mac Mini (aldrin-mac-mini)*

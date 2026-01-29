@@ -7,20 +7,20 @@
 This document contains design specifications, UI/UX guidelines, and brand identity details for **dIQ (Intranet IQ)** - the AI-powered internal knowledge network.
 
 **Version:** 1.1.2
-**Design System:** Midnight Ember
+**Design System:** Midnight Green
 **Last Updated:** January 27, 2026
 **Audit Score:** 100/100 (Full Spectrum Implementation - Post-Audit TypeScript Cleanup)
 **Cache Prevention:** ✅ Configured (no-store, must-revalidate)
 
 ---
 
-## DESIGN SYSTEM: MIDNIGHT EMBER
+## DESIGN SYSTEM: MIDNIGHT GREEN
 
 ### Overview
-Midnight Ember is a warm, distinctive dark theme that avoids the generic "AI-generated" blue/purple aesthetic. It features:
+Midnight Green is a distinctive dark theme that avoids the generic "AI-generated" blue/purple aesthetic. It features:
 - Deep obsidian backgrounds
-- Warm ember/orange accent colors
-- Gold highlights for emphasis
+- Emerald/teal accent colors
+- Light green highlights for emphasis
 - Subtle animations throughout
 - WCAG 2.1 AA compliant contrast ratios
 
@@ -41,13 +41,13 @@ Midnight Ember is a warm, distinctive dark theme that avoids the generic "AI-gen
 | `--border-default` | rgba(255,255,255,0.12) | Default borders |
 | `--border-strong` | rgba(255,255,255,0.20) | Emphasized borders |
 
-#### Accent Colors (Ember Palette)
+#### Accent Colors (Green Palette)
 | Token | Hex | Usage |
 |-------|-----|-------|
-| `--accent-ember` | #f97316 | Primary accent (buttons, links) |
-| `--accent-ember-soft` | #fb923c | Hover states |
-| `--accent-copper` | #ea580c | Active/pressed states |
-| `--accent-gold` | #fbbf24 | Highlights, badges, emphasis |
+| `--accent-ember` | #10b981 | Primary accent (buttons, links) |
+| `--accent-ember-soft` | #34d399 | Hover states |
+| `--accent-copper` | #059669 | Active/pressed states |
+| `--accent-gold` | #6ee7b7 | Highlights, badges, emphasis |
 
 #### Semantic Colors
 | Token | Hex | Usage |
@@ -88,7 +88,7 @@ dCQ·  -> Digital Chat Core IQ
 |                                     |
 |    d I Q .                          |
 |    ^ ^ ^ ^                          |
-|    | | | +-- Orange dot (#f97316)   |
+|    | | | +-- Green dot (#10b981)    |
 |    | | +---- Q (regular, 85% opacity)|
 |    | +------ I (regular, 85% opacity)|
 |    +-------- d (bold, 100% opacity)  |
@@ -103,9 +103,9 @@ dCQ·  -> Digital Chat Core IQ
 | **"d"** | Bold (fontWeight 700), 100% opacity |
 | **"I"** | Regular (fontWeight 400), 85% opacity |
 | **"Q"** | Regular (fontWeight 400), 85% opacity |
-| **Dot** | Orange circle (#f97316) with glow |
+| **Dot** | Green circle (#10b981) with glow |
 | **Alignment** | All elements on same baseline |
-| **Background** | Ember gradient or transparent |
+| **Background** | Green gradient or transparent |
 | **Font** | ui-monospace, SF Mono, Menlo, Monaco, Consolas |
 | **Animation** | Subtle pulse effect |
 | **Rendering** | SVG-based for pixel-perfect alignment |
@@ -116,7 +116,7 @@ dCQ·  -> Digital Chat Core IQ
   <text x="0" y="14" fill="white" fontSize="18" fontWeight="700">d</text>
   <text x="11" y="14" fill="white" fillOpacity="0.85" fontSize="10" fontWeight="400">I</text>
   <text x="16.5" y="14" fill="white" fillOpacity="0.85" fontSize="10" fontWeight="400">Q</text>
-  <circle cx="27" cy="13" r="2.5" fill="#f97316" />
+  <circle cx="27" cy="13" r="2.5" fill="#10b981" />
 </svg>
 ```
 

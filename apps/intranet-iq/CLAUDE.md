@@ -34,15 +34,15 @@
 
 **Version:** 1.1.2 (Cache Prevention Added)
 **Audit Score:** 100/100
-**Design System:** Midnight Ember (warm orange accents, not blue/purple)
+**Design System:** Midnight Green (emerald/teal accents)
 **Production:** https://intranet-iq.vercel.app/diq/dashboard
 **Cache Prevention:** ✅ Configured
 
 ### Brand Identity
-- **Logo:** Bold "d" + regular "IQ" + orange dot (all on same baseline)
+- **Logo:** Bold "d" + regular "IQ" + green dot (all on same baseline)
 - **Favicon:** "d." with green dot on dark background
 - **Page Title:** "dIQ - Intranet IQ"
-- **Color Theme:** Midnight Ember (orange #f97316 accent)
+- **Color Theme:** Midnight Green (#10b981 emerald accent)
 
 ### Core Features (v1.1.0)
 - Enterprise Search (Elasticsearch + Semantic + Federated)
@@ -142,7 +142,7 @@ async headers() {
 | **Lucide React** | 0.562.x | Icons |
 
 ---
-## DESIGN SYSTEM: MIDNIGHT EMBER
+## DESIGN SYSTEM: MIDNIGHT GREEN
 ---
 
 ### Color Palette
@@ -153,10 +153,10 @@ async headers() {
 | `--bg-slate` | #1c1c24 | Inputs, hover states |
 | `--border-subtle` | rgba(255,255,255,0.06) | Subtle borders |
 | `--border-default` | rgba(255,255,255,0.12) | Default borders |
-| `--accent-ember` | #f97316 | Primary accent (orange) |
-| `--accent-ember-soft` | #fb923c | Hover state |
-| `--accent-copper` | #ea580c | Active/pressed state |
-| `--accent-gold` | #fbbf24 | Highlights, badges |
+| `--accent-ember` | #10b981 | Primary accent (emerald green) |
+| `--accent-ember-soft` | #34d399 | Hover state |
+| `--accent-copper` | #059669 | Active/pressed state |
+| `--accent-gold` | #6ee7b7 | Highlights, badges |
 | `--text-primary` | #fafafa | Primary text |
 | `--text-secondary` | rgba(250,250,250,0.7) | Secondary text |
 | `--text-muted` | rgba(250,250,250,0.5) | Muted text |
@@ -164,7 +164,7 @@ async headers() {
 ### Navigation
 - **Sidebar Width:** 64px (collapsed)
 - **Icons:** Lucide React
-- **Active State:** Ember gradient bg + left indicator bar
+- **Active State:** Green gradient bg + left indicator bar
 - **Hover:** Subtle glow effect
 
 ---

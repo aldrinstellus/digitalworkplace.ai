@@ -77,9 +77,9 @@ const nodeTypeConfig: Record<
   },
   condition: {
     icon: GitBranch,
-    color: "text-orange-400",
-    bgColor: "bg-orange-500/20",
-    borderColor: "border-orange-500/50",
+    color: "text-teal-400",
+    bgColor: "bg-teal-500/20",
+    borderColor: "border-teal-500/50",
     label: "Condition",
   },
   output: {

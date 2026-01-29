@@ -15,7 +15,7 @@
 | **API Endpoints** | PASS | 33/35 functional |
 | **Vector Embeddings** | PASS | 100% coverage (212/212 articles) |
 | **Pages** | PASS | 19/19 implemented |
-| **Production Status** | LIVE | https://intranet-iq.vercel.app |
+| **Production Status** | LIVE | https://diq.digitalworkplace.ai |
 
 ---
 
@@ -320,7 +320,7 @@
 | Item | Status |
 |------|--------|
 | Repository | https://github.com/aldrinstellus/digitalworkplace.ai |
-| Production URL | https://intranet-iq.vercel.app/diq/dashboard |
+| Production URL | https://diq.digitalworkplace.ai/diq/dashboard |
 | Local Dev URL | http://localhost:3001/diq/dashboard |
 | Vercel Auto-Deploy | ✅ Enabled |
 | Last Commit | ae3ea32 (v1.1.0 Full Spectrum) |

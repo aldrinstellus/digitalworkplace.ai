@@ -476,8 +476,8 @@ interface Workflow {
 
 | Service | URL |
 |---------|-----|
-| **dIQ Production** | https://intranet-iq.vercel.app |
-| **dIQ Dashboard** | https://intranet-iq.vercel.app/diq/dashboard |
+| **dIQ Production** | https://diq.digitalworkplace.ai |
+| **dIQ Dashboard** | https://diq.digitalworkplace.ai/diq/dashboard |
 | **Main App** | https://digitalworkplace-ai.vercel.app |
 | **Main App Link** | `apps/main/src/app/dashboard/page.tsx:29` |
 

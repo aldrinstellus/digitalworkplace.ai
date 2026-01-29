@@ -159,7 +159,7 @@ async headers() {
 
 #### Verification
 ```bash
-curl -I https://intranet-iq.vercel.app/diq/dashboard
+curl -I https://diq.digitalworkplace.ai/diq/dashboard
 # Should see: cache-control: no-store, must-revalidate
 ```
 
@@ -189,7 +189,7 @@ curl -I https://intranet-iq.vercel.app/diq/dashboard
 - Build passes with 51 pages (static + dynamic)
 - All 16 page routes return 200 OK
 - All 14 API endpoints respond correctly
-- Production deployment: https://intranet-iq.vercel.app/diq/dashboard
+- Production deployment: https://diq.digitalworkplace.ai/diq/dashboard
 
 ---
 

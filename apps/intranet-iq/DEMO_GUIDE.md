@@ -1,7 +1,7 @@
 # dIQ - Intranet IQ | Demo Guide
 
 **Version:** 1.1.1
-**Production URL:** https://intranet-iq.vercel.app/diq/dashboard
+**Production URL:** https://diq.digitalworkplace.ai/diq/dashboard
 **Last Updated:** January 22, 2026
 
 ---
@@ -902,4 +902,4 @@ For technical issues or feature requests:
 ---
 
 *Part of Digital Workplace AI Product Suite*
-*https://intranet-iq.vercel.app/diq/dashboard*
+*https://diq.digitalworkplace.ai/diq/dashboard*

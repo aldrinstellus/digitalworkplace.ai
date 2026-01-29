@@ -24,11 +24,11 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 | **Session** | Calendar Widget Redesign - Gmail-Style with 6 Months Data |
 | **Version** | 2.1.0 |
 | **Audit Score** | 100/100 |
-| **Git Commit** | 49f5f96 (latest) |
+| **Git Commit** | 30b208d (latest) |
 | **Vercel Status** | ✅ LIVE |
 | **Build Status** | ✅ 58 pages compiled |
 | **Local URL** | http://localhost:3001/diq/dashboard |
-| **Production URL** | https://intranet-iq.vercel.app/diq/dashboard |
+| **Production URL** | https://diq.digitalworkplace.ai/diq/dashboard |
 
 ---
 
@@ -177,7 +177,7 @@ npm run build
 cd apps/intranet-iq && vercel --prod --yes
 
 # Verify
-curl -s -o /dev/null -w "%{http_code}" https://intranet-iq.vercel.app/diq/dashboard
+curl -s -o /dev/null -w "%{http_code}" https://diq.digitalworkplace.ai/diq/dashboard
 ```
 
 ---
@@ -389,8 +389,8 @@ apps/intranet-iq/
 - [x] Production verified - All pages 200 OK
 - [x] Calendar Widget Redesign - Gmail-style with event pills - COMPLETE
 - [x] Extended demo data to 6 months (Jan-Jun 2026) - COMPLETE
-- [ ] **Git commit calendar changes** (uncommitted: my-day/page.tsx, SAVEPOINT.md)
-- [ ] Deploy calendar changes to Vercel (optional)
+- [x] Git commit calendar changes: 30b208d - PUSHED to main
+- [x] Deploy calendar changes to Vercel - LIVE
 
 ---
 
@@ -480,13 +480,13 @@ cd /Users/aldrin-mac-mini/digitalworkplace.ai && npm run dev:intranet
 open http://localhost:3001/diq/dashboard
 
 # 3. Check production
-open https://intranet-iq.vercel.app/diq/dashboard
+open https://diq.digitalworkplace.ai/diq/dashboard
 ```
 
 ---
 
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
-*Production: https://intranet-iq.vercel.app/diq/dashboard*
+*Production: https://diq.digitalworkplace.ai/diq/dashboard*
 *Version: 2.1.0*
 *Last Updated: January 29, 2026 @ 11:45 PM*

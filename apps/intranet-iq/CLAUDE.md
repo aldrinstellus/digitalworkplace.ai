@@ -46,7 +46,7 @@ READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 **Version:** 2.1.0 (PRD Compliance Enhancements)
 **Audit Score:** 100/100
 **Design System:** Midnight Green (emerald/teal accents)
-**Production:** https://intranet-iq.vercel.app/diq/dashboard
+**Production:** https://diq.digitalworkplace.ai/diq/dashboard
 **Cache Prevention:** ✅ Configured
 **Session Management:** Full Spectrum (SAVEPOINT.md is master reference)
 
@@ -74,13 +74,13 @@ READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 
 | Page | Route | Local Dev | Production |
 |------|-------|-----------|------------|
-| **Dashboard** | `/diq/dashboard` | http://localhost:3001/diq/dashboard | https://intranet-iq.vercel.app/diq/dashboard |
-| **Chat** | `/diq/chat` | http://localhost:3001/diq/chat | https://intranet-iq.vercel.app/diq/chat |
-| **Search** | `/diq/search` | http://localhost:3001/diq/search | https://intranet-iq.vercel.app/diq/search |
-| **People** | `/diq/people` | http://localhost:3001/diq/people | https://intranet-iq.vercel.app/diq/people |
-| **Content** | `/diq/content` | http://localhost:3001/diq/content | https://intranet-iq.vercel.app/diq/content |
-| **Agents** | `/diq/agents` | http://localhost:3001/diq/agents | https://intranet-iq.vercel.app/diq/agents |
-| **Settings** | `/diq/settings` | http://localhost:3001/diq/settings | https://intranet-iq.vercel.app/diq/settings |
+| **Dashboard** | `/diq/dashboard` | http://localhost:3001/diq/dashboard | https://diq.digitalworkplace.ai/diq/dashboard |
+| **Chat** | `/diq/chat` | http://localhost:3001/diq/chat | https://diq.digitalworkplace.ai/diq/chat |
+| **Search** | `/diq/search` | http://localhost:3001/diq/search | https://diq.digitalworkplace.ai/diq/search |
+| **People** | `/diq/people` | http://localhost:3001/diq/people | https://diq.digitalworkplace.ai/diq/people |
+| **Content** | `/diq/content` | http://localhost:3001/diq/content | https://diq.digitalworkplace.ai/diq/content |
+| **Agents** | `/diq/agents` | http://localhost:3001/diq/agents | https://diq.digitalworkplace.ai/diq/agents |
+| **Settings** | `/diq/settings` | http://localhost:3001/diq/settings | https://diq.digitalworkplace.ai/diq/settings |
 
 **Note:** All routes use `basePath: "/diq"` configured in `next.config.ts`
 
@@ -394,7 +394,7 @@ docker compose -f docker-compose.elasticsearch.yml up -d
 ---
 
 - **Main App Dashboard:** `apps/main/src/app/dashboard/page.tsx:29`
-- **Production Link:** https://intranet-iq.vercel.app/diq/dashboard
+- **Production Link:** https://diq.digitalworkplace.ai/diq/dashboard
 - **Authentication:** Shared Clerk instance
 - **Database:** Shared Supabase (public + diq schemas)
 - **Port:** 3001 (main app on 3000)

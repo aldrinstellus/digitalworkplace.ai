@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
     const authorIds = [...new Set(articles.map((a: any) => a.author_id).filter(Boolean))];
 
     // Fetch authors (only if we have IDs)
-    let authorsMap = new Map<string, any>();
+    const authorsMap = new Map<string, any>();
     if (authorIds.length > 0) {
       const authorsResult = await supabase
         .from('users')

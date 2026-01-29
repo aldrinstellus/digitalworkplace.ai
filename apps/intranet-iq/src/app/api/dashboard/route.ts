@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
     const allUserIds = [...new Set([...authorIds, ...organizerIds])];
 
     // Fetch users from public schema if we have IDs
-    let usersMap = new Map<string, any>();
+    const usersMap = new Map<string, any>();
     if (allUserIds.length > 0) {
       const usersResult = await supabase
         .from('users')

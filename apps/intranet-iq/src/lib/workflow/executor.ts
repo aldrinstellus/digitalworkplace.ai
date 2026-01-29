@@ -17,9 +17,11 @@ import type {
   ConditionConfig,
   TransformConfig,
   OutputConfig,
+  ApprovalConfig,
   WorkflowStepDB,
   WorkflowEdgeDB,
 } from './types';
+import { createApprovalRequest } from './approval';
 
 // =============================================================================
 // TYPES
@@ -49,7 +51,7 @@ export interface ExecutionLog {
 export interface ExecutionResult {
   executionId: string;
   workflowId: string;
-  status: 'completed' | 'failed' | 'cancelled' | 'timeout';
+  status: 'completed' | 'failed' | 'cancelled' | 'timeout' | 'waiting_approval';
   output?: unknown;
   error?: string;
   startedAt: Date;
@@ -57,6 +59,9 @@ export interface ExecutionResult {
   duration: number;
   stepsExecuted: number;
   logs: ExecutionLog[];
+  // V2.0: Approval info
+  pendingApprovalId?: string;
+  pendingApprovalStepId?: string;
 }
 
 export interface StepResult {
@@ -65,6 +70,9 @@ export interface StepResult {
   error?: string;
   nextStepId?: string | null;
   shouldContinue: boolean;
+  // V2.0: Approval handling
+  waitingForApproval?: boolean;
+  approvalId?: string;
 }
 
 export interface WorkflowDefinition {
@@ -319,12 +327,64 @@ export class WorkflowExecutor {
         return this.executeTransform(context, config as TransformConfig, input);
       case 'output':
         return this.executeOutput(context, config as OutputConfig, input);
+      case 'approval':
+        return this.executeApproval(context, step, config as ApprovalConfig, input);
       default:
         return {
           success: false,
           error: `Unknown step type: ${stepType}`,
           shouldContinue: false,
         };
+    }
+  }
+
+  /**
+   * Execute approval step - pauses workflow for human approval
+   * V2.0 Feature: Human-in-the-loop approval nodes
+   */
+  private async executeApproval(
+    context: ExecutionContext,
+    step: WorkflowStepDB,
+    config: ApprovalConfig,
+    input: unknown
+  ): Promise<StepResult> {
+    this.log(context, 'info', `Creating approval request for step: ${step.step_name || step.id}`);
+
+    try {
+      // Create approval request
+      const approval = await createApprovalRequest({
+        executionId: context.executionId,
+        workflowId: context.workflowId,
+        stepId: step.id,
+        config,
+        inputData: input as Record<string, unknown>,
+      });
+
+      this.log(context, 'info', `Approval request created: ${approval.id}`, {
+        approvers: approval.approvers.length,
+        required: approval.required_approvals,
+      });
+
+      // Return waiting status - execution will pause here
+      return {
+        success: true,
+        output: {
+          approvalId: approval.id,
+          status: 'pending',
+          approvers: approval.approvers,
+          required: approval.required_approvals,
+        },
+        waitingForApproval: true,
+        approvalId: approval.id,
+        shouldContinue: false, // Stop execution until approval
+      };
+    } catch (error) {
+      this.log(context, 'error', `Failed to create approval request: ${error}`);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to create approval',
+        shouldContinue: false,
+      };
     }
   }
 

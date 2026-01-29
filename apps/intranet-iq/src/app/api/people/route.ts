@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     const userIds = [...new Set(employees.map((e: any) => e.user_id).filter(Boolean))];
 
     // Fetch users from public schema if we have user IDs
-    let usersMap = new Map<string, any>();
+    const usersMap = new Map<string, any>();
     if (userIds.length > 0) {
       const usersResult = await supabase
         .from('users')

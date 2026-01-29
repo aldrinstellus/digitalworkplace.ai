@@ -14,6 +14,7 @@ import {
   Play,
   Shuffle,
   CheckCircle,
+  UserCheck,
 } from "lucide-react";
 import type { WorkflowNodeType } from "@/lib/workflow/types";
 import { NODE_TYPE_CONFIG } from "@/lib/workflow/constants";
@@ -46,6 +47,7 @@ const nodeTypeIcons: Record<WorkflowNodeType, React.ElementType> = {
   condition: GitBranch,
   transform: Shuffle,
   output: CheckCircle,
+  approval: UserCheck,
 };
 
 function ContextMenuComponent({

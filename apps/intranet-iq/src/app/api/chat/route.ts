@@ -524,7 +524,7 @@ export async function POST(request: NextRequest) {
 
         // Handle tool use if Claude wants to use tools
         let assistantMessage = '';
-        let toolResults: string[] = [];
+        const toolResults: string[] = [];
 
         // Process tool calls in a loop (max 3 iterations to prevent infinite loops)
         let iterations = 0;

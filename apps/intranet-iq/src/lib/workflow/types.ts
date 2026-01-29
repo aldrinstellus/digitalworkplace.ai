@@ -15,7 +15,8 @@ export type WorkflowNodeType =
   | 'action'
   | 'condition'
   | 'transform'
-  | 'output';
+  | 'output'
+  | 'approval'; // V2.0: Human-in-the-loop approval node
 
 export interface WorkflowNodeData {
   label: string;
@@ -145,6 +146,36 @@ export interface OutputConfig {
   [key: string]: unknown;
 }
 
+/**
+ * V2.0: Human Approval Node Configuration
+ * Pauses workflow execution until a human approves or rejects
+ */
+export interface ApprovalConfig {
+  approvalType: 'single' | 'multiple' | 'any';
+  approvers: {
+    type: 'user' | 'role' | 'department';
+    ids: string[];
+  };
+  title?: string;
+  description?: string;
+  instructions?: string;
+  requiredApprovals?: number; // For 'multiple' type
+  timeout?: {
+    duration: number; // in hours
+    action: 'approve' | 'reject' | 'escalate';
+    escalateTo?: string[];
+  };
+  notifications?: {
+    onRequest?: boolean;
+    onApprove?: boolean;
+    onReject?: boolean;
+    onTimeout?: boolean;
+    channels?: ('email' | 'in_app' | 'slack')[];
+  };
+  metadata?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
 export type NodeConfig =
   | TriggerConfig
   | SearchConfig
@@ -152,6 +183,7 @@ export type NodeConfig =
   | ConditionConfig
   | TransformConfig
   | OutputConfig
+  | ApprovalConfig
   | Record<string, unknown>;
 
 // =============================================================================

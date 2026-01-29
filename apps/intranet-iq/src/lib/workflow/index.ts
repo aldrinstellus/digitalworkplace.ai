@@ -58,3 +58,21 @@ export type {
   StepResult,
   WorkflowDefinition,
 } from './executor';
+
+// V2.0: Approval System
+export {
+  createApprovalRequest,
+  submitApprovalResponse,
+  processApprovalTimeout,
+  cancelApproval,
+  getPendingApprovalsForUser,
+  getApproval,
+  getExecutionApprovals,
+} from './approval';
+export type {
+  ApprovalStatus,
+  WorkflowApproval,
+  ApprovalResponse,
+  CreateApprovalInput,
+  ApprovalResult,
+} from './approval';

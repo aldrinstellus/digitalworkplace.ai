@@ -179,7 +179,7 @@ export class ConfluenceConnector extends BaseConnector {
     const errors: SyncResult['errors'] = [];
     let totalDiscovered = 0;
     let newItems = 0;
-    let updatedItems = 0;
+    const updatedItems = 0;
 
     try {
       // Get all spaces or specified spaces

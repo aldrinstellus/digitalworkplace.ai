@@ -1,6 +1,11 @@
 /**
  * Workflow Builder Constants
  * Node configurations, colors, and defaults for the workflow builder
+ *
+ * COLORS: These colors are also defined in @/lib/theme/colors.ts (WORKFLOW_NODES)
+ * Keep both in sync. The theme file is the single source of truth for color values.
+ *
+ * @see /docs/COLOR_SYSTEM.md for color usage guidelines
  */
 
 import {

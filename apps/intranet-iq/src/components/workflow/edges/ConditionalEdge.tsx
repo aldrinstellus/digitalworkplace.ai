@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useWorkflowStore } from "@/lib/workflow/store";
 import type { WorkflowEdgeData } from "@/lib/workflow/types";
+import { SEMANTIC } from "@/lib/theme";
 
 type ConditionalEdgeProps = EdgeProps & {
   data?: WorkflowEdgeData;
@@ -42,7 +43,7 @@ function ConditionalEdgeComponent({
 
   // Determine color based on condition type
   const isSuccess = data?.condition === "true" || data?.condition === "success";
-  const edgeColor = isSuccess ? "#22c55e" : "#ef4444";
+  const edgeColor = isSuccess ? SEMANTIC.success : SEMANTIC.error;
   const label = isSuccess ? "Yes" : "No";
 
   const handleDelete = (e: React.MouseEvent) => {

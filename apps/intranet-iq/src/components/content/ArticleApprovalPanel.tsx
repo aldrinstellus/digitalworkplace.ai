@@ -98,7 +98,7 @@ export function ArticleApprovalPanel({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl w-full max-w-3xl max-h-[80vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ export function ArticleApprovalPanel({
                                 value={expandedArticle === article.id ? actionComment : ""}
                                 onChange={(e) => setActionComment(e.target.value)}
                                 placeholder="Add feedback or comments (optional)..."
-                                className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg p-3 text-sm text-white placeholder-white/30 outline-none resize-none"
+                                className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg p-3 text-sm text-white placeholder-white/30 outline-none resize-none"
                                 rows={2}
                               />
                             </div>

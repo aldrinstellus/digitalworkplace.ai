@@ -153,7 +153,7 @@ export function MentionInput({
 
       {/* Mention Suggestions */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute bottom-full left-0 mb-2 w-72 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute bottom-full left-0 mb-2 w-72 bg-[var(--bg-charcoal)] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
           <div className="p-2">
             <p className="text-xs text-white/40 px-2 py-1 mb-1">
               {mentionSearch ? `Matching "${mentionSearch}"` : "Suggestions"}

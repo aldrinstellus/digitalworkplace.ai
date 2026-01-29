@@ -102,10 +102,10 @@ export function DashboardConfigPanel() {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [draggedWidget, setDraggedWidget] = useState<string | null>(null);
 
-  // Appearance settings
+  // Appearance settings - default to app's primary theme color (emerald green)
   const [appearance, setAppearance] = useState({
     theme: "dark",
-    primaryColor: "#3b82f6",
+    primaryColor: "#10b981" as string, // Emerald green - matches Midnight Green theme
     cardStyle: "rounded",
     density: "comfortable",
     showWelcome: true,
@@ -155,7 +155,7 @@ export function DashboardConfigPanel() {
     setSelectedPreset("default");
     setAppearance({
       theme: "dark",
-      primaryColor: "#3b82f6",
+      primaryColor: "#10b981", // Reset to emerald green - matches Midnight Green theme
       cardStyle: "rounded",
       density: "comfortable",
       showWelcome: true,
@@ -197,7 +197,7 @@ export function DashboardConfigPanel() {
   ];
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-2xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-2xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-6 border-b border-white/10">
         <div className="flex items-center gap-3">

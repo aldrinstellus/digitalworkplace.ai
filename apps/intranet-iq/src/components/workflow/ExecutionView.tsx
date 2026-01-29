@@ -62,7 +62,7 @@ export function ExecutionView({
   };
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
         <div className="flex items-center gap-3">

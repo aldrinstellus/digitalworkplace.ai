@@ -222,7 +222,7 @@ export function SearchAutocomplete({
 
       {/* Suggestions Dropdown */}
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--bg-charcoal)] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
           <div className="max-h-80 overflow-y-auto">
             {/* Recent Searches */}
             {suggestions.some((s) => s.type === "recent") && (

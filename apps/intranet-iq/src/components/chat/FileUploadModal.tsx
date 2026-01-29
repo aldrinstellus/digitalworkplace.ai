@@ -178,7 +178,7 @@ export function FileUploadModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-[500px] max-h-[80vh] overflow-hidden">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-2xl w-[500px] max-h-[80vh] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <h2 className="text-lg font-medium text-white">Attach Files</h2>

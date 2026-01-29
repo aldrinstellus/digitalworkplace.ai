@@ -7,6 +7,7 @@ import { Settings, Trash2, GripVertical } from "lucide-react";
 import type { WorkflowNodeData, WorkflowNodeType } from "@/lib/workflow/types";
 import { NODE_TYPE_CONFIG } from "@/lib/workflow/constants";
 import { useWorkflowStore } from "@/lib/workflow/store";
+import { SEMANTIC } from "@/lib/theme";
 
 type BaseNodeProps = NodeProps & {
   data: WorkflowNodeData;
@@ -185,8 +186,8 @@ function BaseNodeComponent({ id, data, selected }: BaseNodeProps) {
             id="true"
             className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5 transition-all hover:!scale-150 !cursor-crosshair"
             style={{
-              backgroundColor: "#22c55e",
-              borderColor: "#22c55e",
+              backgroundColor: SEMANTIC.success,
+              borderColor: SEMANTIC.success,
               left: "30%",
             }}
           />
@@ -202,8 +203,8 @@ function BaseNodeComponent({ id, data, selected }: BaseNodeProps) {
             id="false"
             className="!w-3 !h-3 !rounded-full !border-2 !-bottom-1.5 transition-all hover:!scale-150 !cursor-crosshair"
             style={{
-              backgroundColor: "#ef4444",
-              borderColor: "#ef4444",
+              backgroundColor: SEMANTIC.error,
+              borderColor: SEMANTIC.error,
               left: "70%",
             }}
           />

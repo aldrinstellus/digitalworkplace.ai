@@ -302,6 +302,18 @@ export const CHART_COLORS = {
   quaternary: '#f59e0b', // Amber
   quinary: '#ec4899',   // Pink
 
+  // Named color keys for easy lookup
+  emerald: '#10b981',
+  blue: '#3b82f6',
+  purple: '#a855f7',
+  green: '#22c55e',
+  orange: '#f59e0b',
+  cyan: '#06b6d4',
+  yellow: '#eab308',
+  red: '#ef4444',
+  pink: '#ec4899',
+  teal: '#14b8a6',
+
   // For multi-series charts
   series: [
     '#10b981', // Emerald

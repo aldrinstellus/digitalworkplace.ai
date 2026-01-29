@@ -66,7 +66,7 @@ export function SearchScopeToggle({
           />
 
           {/* Dropdown */}
-          <div className="absolute bottom-full left-0 mb-2 w-64 bg-[#0f0f14] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+          <div className="absolute bottom-full left-0 mb-2 w-64 bg-[var(--bg-charcoal)] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
             <div className="p-2">
               {(Object.keys(scopeConfig) as SearchScope[]).map((key) => {
                 const config = scopeConfig[key];

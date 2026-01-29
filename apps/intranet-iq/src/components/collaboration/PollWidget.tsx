@@ -140,7 +140,7 @@ export function PollWidget({
   };
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl overflow-hidden">
       {/* Header */}
       <div
         className={`flex items-center justify-between p-4 ${compact ? "cursor-pointer hover:bg-white/5" : ""}`}
@@ -406,7 +406,7 @@ export function CreatePollModal({ onClose, onCreate }: CreatePollProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -433,7 +433,7 @@ export function CreatePollModal({ onClose, onCreate }: CreatePollProps) {
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="What would you like to ask?"
-              className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors"
+              className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors"
             />
           </div>
 
@@ -450,7 +450,7 @@ export function CreatePollModal({ onClose, onCreate }: CreatePollProps) {
                     value={option}
                     onChange={(e) => updateOption(index, e.target.value)}
                     placeholder={`Option ${index + 1}`}
-                    className="flex-1 bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors text-sm"
+                    className="flex-1 bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2 text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors text-sm"
                   />
                   {options.length > 2 && (
                     <button
@@ -502,7 +502,7 @@ export function CreatePollModal({ onClose, onCreate }: CreatePollProps) {
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-purple-500/50 transition-colors text-sm"
+              className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-purple-500/50 transition-colors text-sm"
             >
               <option value="1">1 day</option>
               <option value="3">3 days</option>

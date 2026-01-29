@@ -71,7 +71,7 @@ export function CreateContentModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-[480px] overflow-hidden">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-2xl w-[480px] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -109,7 +109,7 @@ export function CreateContentModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={type === "category" ? "e.g., HR Policies" : "e.g., Getting Started Guide"}
-              className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-white/30 outline-none focus:border-blue-500/50 transition-colors"
+              className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-white/30 outline-none focus:border-blue-500/50 transition-colors"
               autoFocus
             />
             {name && (
@@ -128,7 +128,7 @@ export function CreateContentModal({
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description..."
               rows={3}
-              className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-white/30 outline-none focus:border-blue-500/50 transition-colors resize-none"
+              className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder-white/30 outline-none focus:border-blue-500/50 transition-colors resize-none"
             />
           </div>
 
@@ -140,7 +140,7 @@ export function CreateContentModal({
               <select
                 value={selectedDepartment}
                 onChange={(e) => setSelectedDepartment(e.target.value)}
-                className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2.5 text-white outline-none focus:border-blue-500/50 transition-colors"
+                className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2.5 text-white outline-none focus:border-blue-500/50 transition-colors"
               >
                 <option value="">No department (General)</option>
                 {departments.map((dept) => (
@@ -160,7 +160,7 @@ export function CreateContentModal({
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg px-4 py-2.5 text-white outline-none focus:border-blue-500/50 transition-colors"
+                className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg px-4 py-2.5 text-white outline-none focus:border-blue-500/50 transition-colors"
               >
                 <option value="">Select a category...</option>
                 {categories.map((cat) => (

@@ -20,9 +20,9 @@ export default function Home() {
   }, [isLoaded, isSignedIn, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--bg-obsidian)]">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
         <p className="text-white/60">Loading Intranet IQ...</p>
       </div>
     </div>

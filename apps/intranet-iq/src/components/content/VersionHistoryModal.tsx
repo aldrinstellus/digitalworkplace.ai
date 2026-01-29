@@ -88,7 +88,7 @@ export function VersionHistoryModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-[800px] max-h-[80vh] overflow-hidden flex">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-2xl w-[800px] max-h-[80vh] overflow-hidden flex">
         {/* Version List */}
         <div className="w-72 border-r border-white/10 flex flex-col">
           <div className="p-4 border-b border-white/10">

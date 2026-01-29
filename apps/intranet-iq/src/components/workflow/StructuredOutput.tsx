@@ -255,7 +255,7 @@ function JsonView({ data }: { data: any }) {
       >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
       </button>
-      <pre className="p-4 rounded-lg bg-[#1a1a1f] text-sm text-green-400/80 overflow-x-auto font-mono">
+      <pre className="p-4 rounded-lg bg-[var(--bg-slate)] text-sm text-green-400/80 overflow-x-auto font-mono">
         {jsonString}
       </pre>
     </div>
@@ -383,7 +383,7 @@ export function StructuredOutput({
   };
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl overflow-hidden">
       {/* Header */}
       <div
         className="flex items-center justify-between p-4 border-b border-white/10 cursor-pointer hover:bg-white/5 transition-colors"

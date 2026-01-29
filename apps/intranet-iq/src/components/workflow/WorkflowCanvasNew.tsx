@@ -29,6 +29,7 @@ import type { WorkflowNode, WorkflowEdge, WorkflowNodeType } from "@/lib/workflo
 import { useWorkflowStore } from "@/lib/workflow/store";
 import { validateConnection } from "@/lib/workflow/validation";
 import { CANVAS_DEFAULTS, NODE_TYPE_CONFIG } from "@/lib/workflow/constants";
+import { SEMANTIC } from "@/lib/theme";
 
 interface WorkflowCanvasNewProps {
   onSave?: () => void;
@@ -37,7 +38,7 @@ interface WorkflowCanvasNewProps {
   isSaving?: boolean;
 }
 
-// Custom SVG markers for edges
+// Custom SVG markers for edges - using theme colors
 const EdgeMarkers = () => (
   <svg style={{ position: "absolute", width: 0, height: 0 }}>
     <defs>
@@ -66,7 +67,7 @@ const EdgeMarkers = () => (
       >
         <path
           d="M2,2 L10,6 L2,10 L4,6 Z"
-          fill="#22c55e"
+          fill={SEMANTIC.success}
         />
       </marker>
       <marker
@@ -80,7 +81,7 @@ const EdgeMarkers = () => (
       >
         <path
           d="M2,2 L10,6 L2,10 L4,6 Z"
-          fill="#ef4444"
+          fill={SEMANTIC.error}
         />
       </marker>
     </defs>

@@ -309,7 +309,7 @@ export function AccessLogsViewer({
   const uniqueEntities = [...new Set(logs.map((l) => l.entity_type))];
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-white/10">
         <div className="flex items-center gap-3">
@@ -362,7 +362,7 @@ export function AccessLogsViewer({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search logs..."
-                className="w-full bg-[#1a1a1f] border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-blue-500/50"
+                className="w-full bg-[var(--bg-slate)] border border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-white placeholder-white/30 outline-none focus:border-blue-500/50"
               />
             </div>
 
@@ -370,7 +370,7 @@ export function AccessLogsViewer({
             <select
               value={selectedAction}
               onChange={(e) => setSelectedAction(e.target.value)}
-              className="bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none"
+              className="bg-[var(--bg-slate)] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none"
             >
               <option value="">All Actions</option>
               {uniqueActions.map((action) => (
@@ -384,7 +384,7 @@ export function AccessLogsViewer({
             <select
               value={selectedEntity}
               onChange={(e) => setSelectedEntity(e.target.value)}
-              className="bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none"
+              className="bg-[var(--bg-slate)] border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none"
             >
               <option value="">All Entities</option>
               {uniqueEntities.map((entity) => (
@@ -406,7 +406,7 @@ export function AccessLogsViewer({
                 onChange={(e) =>
                   setDateRange((prev) => ({ ...prev, start: e.target.value }))
                 }
-                className="bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none"
+                className="bg-[var(--bg-slate)] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -417,7 +417,7 @@ export function AccessLogsViewer({
                 onChange={(e) =>
                   setDateRange((prev) => ({ ...prev, end: e.target.value }))
                 }
-                className="bg-[#1a1a1f] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none"
+                className="bg-[var(--bg-slate)] border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white outline-none"
               />
             </div>
             {(searchQuery || selectedAction || selectedEntity || dateRange.start || dateRange.end) && (
@@ -529,7 +529,7 @@ export function AccessLogsViewer({
       {/* Log Detail Modal */}
       {selectedLog && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0f0f14] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden">
+          <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl w-full max-w-lg overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-white/10">
               <h3 className="text-white font-medium">Log Details</h3>
               <button

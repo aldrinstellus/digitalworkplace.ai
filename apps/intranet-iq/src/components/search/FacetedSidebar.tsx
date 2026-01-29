@@ -72,7 +72,7 @@ export function FacetedSidebar({
 
   return (
     <div className="w-56 flex-shrink-0">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 sticky top-8">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl p-4 sticky top-8">
         <h3 className="text-sm font-medium text-white mb-3">Filter Results</h3>
 
         {/* All Results */}

@@ -36,7 +36,7 @@ export default function Icon() {
             width: 6,
             height: 6,
             borderRadius: "50%",
-            background: "#3b82f6",
+            background: "#10b981", // Emerald green - matches Midnight Green theme
             marginTop: 8,
           }}
         />

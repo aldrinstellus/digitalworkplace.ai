@@ -270,12 +270,12 @@ export function WorkflowCanvas({
 
   return (
     <div
-      className={`relative bg-[#0a0a0f] rounded-xl border border-white/10 overflow-hidden ${
+      className={`relative bg-[var(--bg-obsidian)] rounded-xl border border-white/10 overflow-hidden ${
         isFullscreen ? "fixed inset-0 z-50 rounded-none" : "h-[500px]"
       }`}
     >
       {/* Toolbar */}
-      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-[#0f0f14]/90 backdrop-blur rounded-lg p-2 border border-white/10">
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-[var(--bg-charcoal)]/90 backdrop-blur rounded-lg p-2 border border-white/10">
         {!readOnly && (
           <>
             <span className="text-xs text-white/40 px-2">Add:</span>
@@ -449,7 +449,7 @@ export function WorkflowCanvas({
                 <div
                   className={`${config.bgColor} ${config.borderColor} border-2 rounded-xl p-4 transition-all ${
                     isSelected
-                      ? "ring-2 ring-blue-500 ring-offset-2 ring-offset-[#0a0a0f]"
+                      ? "ring-2 ring-emerald-500 ring-offset-2 ring-offset-[var(--bg-obsidian)]"
                       : ""
                   } ${isDragging ? "shadow-xl scale-105" : "hover:scale-[1.02]"}`}
                 >

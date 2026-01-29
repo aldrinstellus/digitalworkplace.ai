@@ -288,7 +288,7 @@ export default function MyDayPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#08080c] text-white flex">
+    <div className="min-h-screen bg-[var(--bg-obsidian)] text-white flex">
       <Sidebar />
 
       <main className="flex-1 ml-16 p-8">
@@ -408,7 +408,7 @@ export default function MyDayPage() {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.95, opacity: 0 }}
                   onClick={e => e.stopPropagation()}
-                  className="w-full max-w-lg bg-[#12121a] rounded-2xl border border-white/10 p-6"
+                  className="w-full max-w-lg bg-[var(--bg-charcoal)] rounded-2xl border border-white/10 p-6"
                 >
                   <h3 className="text-lg font-semibold mb-4">Quick Add Task</h3>
 

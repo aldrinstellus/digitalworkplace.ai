@@ -75,7 +75,7 @@ export function SearchResultCard({
   const displayDate = result.updatedAt || result.created_at;
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl p-4 hover:border-blue-500/30 transition-all cursor-pointer group">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl p-4 hover:border-blue-500/30 transition-all cursor-pointer group">
       <div className="flex gap-4">
         {/* Thumbnail */}
         {result.thumbnail ? (

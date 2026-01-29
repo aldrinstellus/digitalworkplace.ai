@@ -78,7 +78,7 @@ export function DashboardCustomizer({ isOpen, onClose }: DashboardCustomizerProp
       />
 
       {/* Modal */}
-      <div className="fixed right-4 top-20 z-50 w-80 bg-[#0f0f14] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+      <div className="fixed right-4 top-20 z-50 w-80 bg-[var(--bg-charcoal)] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <h3 className="text-white font-medium flex items-center gap-2">

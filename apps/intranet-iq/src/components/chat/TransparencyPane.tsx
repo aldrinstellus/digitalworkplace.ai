@@ -51,7 +51,7 @@ export function TransparencyPane({
   const runningStep = steps.find((s) => s.status === "running");
 
   return (
-    <div className="bg-[#0f0f14] border border-white/10 rounded-xl overflow-hidden">
+    <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl overflow-hidden">
       {/* Header - Always Visible */}
       <button
         onClick={() => setExpanded(!expanded)}

@@ -143,7 +143,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-8">
-      <div className="bg-[#0f0f14] border border-white/10 rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-[var(--bg-charcoal)] border border-white/10 rounded-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -333,7 +333,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="bg-[#1a1a1f] border border-white/10 rounded px-2 py-1 text-xs text-white outline-none"
+              className="bg-[var(--bg-slate)] border border-white/10 rounded px-2 py-1 text-xs text-white outline-none"
             >
               <option value="draft">Draft</option>
               <option value="pending_review">Pending Review</option>

@@ -20,8 +20,8 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 
 | Property | Value |
 |----------|-------|
-| **Last Updated** | January 29, 2026 @ 8:15 PM |
-| **Session** | Full Spectrum Session Management - COMPLETE |
+| **Last Updated** | January 29, 2026 @ 11:45 PM |
+| **Session** | Calendar Widget Redesign - Gmail-Style with 6 Months Data |
 | **Version** | 2.1.0 |
 | **Audit Score** | 100/100 |
 | **Git Commit** | 49f5f96 (latest) |
@@ -355,14 +355,22 @@ apps/intranet-iq/
 - Framework detail view with related articles
 - Version display and external docs links
 
-### 3. Calendar Widget (EPIC 8)
+### 3. Calendar Widget (EPIC 8) - REDESIGNED
 **Files:** `my-day/page.tsx`
-- Interactive month calendar in My Day
-- Visual task indicators (dots) on dates
-- Color-coded by priority/overdue status
-- Month navigation (prev/next)
-- Click date to add task
-- Google Calendar / Outlook placeholders
+- **Gmail-style event pill calendar** with colorful task indicators
+- **6 months of comprehensive data** (January - June 2026)
+- ~180 tasks with realistic variety across all priority levels
+- Color-coded priority pills:
+  - Rose/Red = Urgent/Overdue
+  - Amber = High priority
+  - Sky Blue = Medium priority
+  - Emerald = Low priority
+- Event times displayed on each pill (e.g., "10:00 Sprint planning")
+- "+X more" overflow indicator for busy days
+- Month navigation (prev/next/Today)
+- Project legend with color indicators
+- Footer stats: "X events • Y overdue"
+- Connect Calendar button (Google/Outlook placeholders)
 
 ### 4. Session Management
 **Files:** `SAVEPOINT.md`, `CLAUDE.md`
@@ -379,18 +387,40 @@ apps/intranet-iq/
 - [x] Git commit: 49f5f96 - PUSHED to main
 - [x] Vercel deployment - LIVE
 - [x] Production verified - All pages 200 OK
-- [ ] **None pending**
+- [x] Calendar Widget Redesign - Gmail-style with event pills - COMPLETE
+- [x] Extended demo data to 6 months (Jan-Jun 2026) - COMPLETE
+- [ ] **Git commit calendar changes** (uncommitted: my-day/page.tsx, SAVEPOINT.md)
+- [ ] Deploy calendar changes to Vercel (optional)
 
 ---
 
 ## SESSION HISTORY
 
-### January 29, 2026 @ 8:15 PM (Current Session)
+### January 29, 2026 @ 11:45 PM (Current Session)
+**Accomplishments:**
+1. **Calendar Widget Complete Redesign** (EPIC 8)
+   - Redesigned from basic heat map to Gmail-style event pills
+   - Color-coded priority system (rose/amber/sky/emerald)
+   - Event times displayed on each pill
+   - "+X more" overflow indicator for busy days
+   - Project legend with color indicators
+2. **6 Months of Comprehensive Demo Data**
+   - Extended from 2 weeks to full 6 months (Jan-Jun 2026)
+   - ~180 realistic tasks across all priority levels
+   - Covers: engineering, hr, product, marketing, finance, devops, etc.
+   - Includes holidays (Memorial Day, Fathers Day)
+3. **Visual Enhancements**
+   - Today highlighted with green circle
+   - Footer stats showing event count and overdue count
+   - Smooth month navigation with Today button
+   - Responsive layout with proper overflow handling
+
+### January 29, 2026 @ 8:15 PM (Earlier)
 **Accomplishments:**
 1. Implemented PRD compliance enhancements (v2.1.0)
    - AI summarization on search results
    - Framework Hub in Knowledge Base
-   - Calendar widget in My Day
+   - Initial calendar widget in My Day
 2. Created project documentation
    - `docs/QUERY_DETECTION_STANDARDS.md`
    - `docs/MAINTENANCE.md`
@@ -459,4 +489,4 @@ open https://intranet-iq.vercel.app/diq/dashboard
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
 *Production: https://intranet-iq.vercel.app/diq/dashboard*
 *Version: 2.1.0*
-*Last Updated: January 29, 2026 @ 8:15 PM*
+*Last Updated: January 29, 2026 @ 11:45 PM*

@@ -81,7 +81,7 @@ export function IQLogo({ size = "md", showText = false, className = "" }: IQLogo
     let pulseAnimation: gsap.core.Tween | null = null;
     if (logoRef.current) {
       pulseAnimation = gsap.to(logoRef.current, {
-        boxShadow: "0 4px 30px rgba(249, 115, 22, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
+        boxShadow: "0 4px 30px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255,255,255,0.2)",
         duration: 2,
         repeat: -1,
         yoyo: true,
@@ -113,7 +113,7 @@ export function IQLogo({ size = "md", showText = false, className = "" }: IQLogo
         className={`${s.container} rounded-xl bg-gradient-to-br from-[var(--accent-ember)] via-[var(--accent-copper)] to-[var(--accent-ember)] flex items-center justify-center relative overflow-hidden cursor-pointer`}
         style={{
           fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-          boxShadow: "0 4px 20px rgba(249, 115, 22, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)",
+          boxShadow: "0 4px 20px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)",
         }}
         onMouseEnter={triggerGlitch}
       >
@@ -124,13 +124,13 @@ export function IQLogo({ size = "md", showText = false, className = "" }: IQLogo
               className="absolute inset-0 flex items-center justify-center opacity-60"
               style={{ transform: "translate(-1.5px, 0)" }}
             >
-              <LogoText s={s} color="#fbbf24" ref={null} /> {/* Gold glitch */}
+              <LogoText s={s} color="#6ee7b7" ref={null} /> {/* Light green glitch */}
             </span>
             <span
               className="absolute inset-0 flex items-center justify-center opacity-60"
               style={{ transform: "translate(1.5px, 0)" }}
             >
-              <LogoText s={s} color="#fb923c" ref={null} /> {/* Orange glitch */}
+              <LogoText s={s} color="#34d399" ref={null} /> {/* Green glitch */}
             </span>
           </>
         )}
@@ -234,14 +234,14 @@ const LogoText = ({ s, color, glowing = false, ref }: LogoTextProps) => {
         Q
       </text>
 
-      {/* Dot - Ember colored */}
+      {/* Dot - Green colored */}
       <circle
         cx={s.d * 1.48}
         cy={s.d * 0.78 - s.dotOffset}
         r={s.dot / 2}
-        fill="#f97316"
+        fill="#10b981"
         style={{
-          filter: glowing ? "drop-shadow(0 0 6px rgba(249, 115, 22, 0.9))" : "drop-shadow(0 0 4px rgba(249, 115, 22, 0.6))",
+          filter: glowing ? "drop-shadow(0 0 6px rgba(16, 185, 129, 0.9))" : "drop-shadow(0 0 4px rgba(16, 185, 129, 0.6))",
         }}
       />
     </svg>
@@ -257,7 +257,7 @@ export function IQMark({ className = "" }: { className?: string }) {
       className={`h-6 px-1.5 rounded-lg bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center ${className}`}
       style={{
         fontFamily: "'JetBrains Mono', monospace",
-        boxShadow: "0 2px 10px rgba(249, 115, 22, 0.25)",
+        boxShadow: "0 2px 10px rgba(16, 185, 129, 0.25)",
       }}
     >
       <LogoText s={s} color="#ffffff" ref={null} />

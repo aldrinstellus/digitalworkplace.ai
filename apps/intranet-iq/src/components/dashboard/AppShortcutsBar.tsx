@@ -176,7 +176,7 @@ export function AppShortcutsBar() {
                   <motion.div
                     className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center text-lg`}
                     whileHover={{
-                      boxShadow: "0 4px 20px rgba(249, 115, 22, 0.2)",
+                      boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
                     }}
                   >
                     {app.icon}

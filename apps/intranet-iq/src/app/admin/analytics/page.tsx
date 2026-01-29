@@ -432,7 +432,7 @@ export default function AnalyticsPage() {
                     <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-${feature.color}-500 rounded-full group-hover:bg-${feature.color}-400 transition-colors`}
-                        style={{ width: `${feature.percentage}%`, backgroundColor: feature.color === "blue" ? "#3b82f6" : feature.color === "purple" ? "#a855f7" : feature.color === "green" ? "#22c55e" : "#f97316" }}
+                        style={{ width: `${feature.percentage}%`, backgroundColor: feature.color === "blue" ? "#3b82f6" : feature.color === "purple" ? "#a855f7" : feature.color === "green" ? "#22c55e" : "#10b981" }}
                       />
                     </div>
                   </div>

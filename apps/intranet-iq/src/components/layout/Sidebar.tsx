@@ -137,10 +137,10 @@ function NavItem({ item, isActive, isAdmin }: NavItemProps) {
           )}
           initial={false}
           animate={{
-            backgroundColor: isActive ? "rgba(249, 115, 22, 0.15)" : "rgba(255, 255, 255, 0)",
+            backgroundColor: isActive ? "rgba(16, 185, 129, 0.15)" : "rgba(255, 255, 255, 0)",
           }}
           whileHover={{
-            backgroundColor: isActive ? "rgba(249, 115, 22, 0.2)" : "rgba(255, 255, 255, 0.05)",
+            backgroundColor: isActive ? "rgba(16, 185, 129, 0.2)" : "rgba(255, 255, 255, 0.05)",
           }}
           transition={{ duration: 0.2 }}
         />

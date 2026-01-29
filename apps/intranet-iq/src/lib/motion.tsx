@@ -229,7 +229,7 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
         whileHover={{
           scale: hoverScale,
           y: hoverY,
-          boxShadow: "0 20px 40px rgba(249, 115, 22, 0.1)",
+          boxShadow: "0 20px 40px rgba(16, 185, 129, 0.1)",
         }}
         whileTap={{ scale: 0.98 }}
         transition={{

@@ -32,8 +32,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           hover
             ? {
                 y: -4,
-                boxShadow: "0 20px 40px rgba(249, 115, 22, 0.1)",
-                borderColor: "rgba(249, 115, 22, 0.2)",
+                boxShadow: "0 20px 40px rgba(16, 185, 129, 0.1)",
+                borderColor: "rgba(16, 185, 129, 0.2)",
               }
             : undefined
         }

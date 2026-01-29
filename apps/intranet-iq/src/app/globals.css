@@ -22,11 +22,11 @@
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.12);
 
-  /* Accent Colors - Ember */
-  --accent-ember: #f97316;
-  --accent-ember-soft: #fb923c;
-  --accent-copper: #ea580c;
-  --accent-gold: #fbbf24;
+  /* Accent Colors - Green */
+  --accent-ember: #10b981;
+  --accent-ember-soft: #34d399;
+  --accent-copper: #059669;
+  --accent-gold: #6ee7b7;
 
   /* Text */
   --text-primary: #fafafa;
@@ -72,11 +72,11 @@
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-default: rgba(0, 0, 0, 0.15);
 
-  /* Accent Colors - Darker ember for light mode contrast */
-  --accent-ember: #ea580c;
-  --accent-ember-soft: #f97316;
-  --accent-copper: #c2410c;
-  --accent-gold: #d97706;
+  /* Accent Colors - Darker green for light mode contrast */
+  --accent-ember: #059669;
+  --accent-ember-soft: #10b981;
+  --accent-copper: #047857;
+  --accent-gold: #34d399;
 
   /* Text - High contrast for accessibility */
   --text-primary: #111827;
@@ -139,7 +139,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(249, 115, 22, 0.3);
+  background: rgba(16, 185, 129, 0.3);
 }
 
 /* Focus styles - WCAG 2.1 AA compliant */
@@ -172,7 +172,7 @@ body {
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.15);
 }
 
 /* Button base styles */
@@ -184,7 +184,7 @@ body {
 
 .btn-ember:hover {
   background: linear-gradient(135deg, var(--accent-ember-soft) 0%, var(--accent-ember) 100%);
-  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
 }
 
 .btn-ember:active {
@@ -198,7 +198,7 @@ body {
 
 .input-glow:focus {
   border-color: var(--accent-ember);
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
 /* Skeleton shimmer animation */
@@ -279,24 +279,24 @@ body {
 
 /* Glow effects */
 .glow-ember {
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
 .glow-ember-strong {
-  box-shadow: 0 0 30px rgba(249, 115, 22, 0.35);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
 }
 
 /* Badge styles */
 .badge-ember {
-  background: rgba(249, 115, 22, 0.15);
+  background: rgba(16, 185, 129, 0.15);
   color: var(--accent-ember-soft);
-  border: 1px solid rgba(249, 115, 22, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .badge-gold {
-  background: rgba(251, 191, 36, 0.15);
+  background: rgba(110, 231, 183, 0.15);
   color: var(--accent-gold);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(110, 231, 183, 0.3);
 }
 
 .badge-success {
@@ -316,7 +316,7 @@ body {
 }
 
 .border-ember {
-  border-color: rgba(249, 115, 22, 0.3);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 /* Background utilities */
@@ -384,7 +384,7 @@ body {
 
 /* Selection box */
 .workflow-canvas .react-flow__selection {
-  background: rgba(249, 115, 22, 0.08);
+  background: rgba(16, 185, 129, 0.08);
   border: 1px dashed var(--accent-ember);
   border-radius: 4px;
 }

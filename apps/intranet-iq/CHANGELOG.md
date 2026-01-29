@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2026-01-29
+
+### PRD Compliance Enhancements
+
+This release implements high-priority PRD recommendations to achieve ~98% alignment.
+
+#### EPIC 1: Enterprise Search - AI Actions on Results
+- AI-powered result summarization using Claude
+- "Add to Knowledge Base" functionality from search results
+- Copy summary to clipboard
+- Category selection for KB import
+- New API: `/api/search/summarize`
+
+#### EPIC 4: Framework Integration Hub
+- Framework Hub view mode in Knowledge Base
+- 8 sample frameworks (React Patterns, REST API, Microservices, etc.)
+- Framework status filtering (All/Active/Deprecated/Experimental)
+- Framework detail view with related articles
+- Tag-based article association
+- Version display and external docs links
+
+#### EPIC 8: Productivity - Calendar Integration
+- Interactive month calendar widget in My Day
+- Visual task indicators on calendar dates
+- Click-to-add tasks on specific dates
+- Month navigation (prev/next)
+- Google Calendar / Outlook integration placeholders
+- Collapsible calendar design
+
+#### Project Documentation
+- `docs/QUERY_DETECTION_STANDARDS.md` - dIQ-specific search standards
+- `docs/MAINTENANCE.md` - Maintenance procedures and troubleshooting
+
+#### Files Modified
+- `src/components/search/SearchResultCard.tsx` - AI actions
+- `src/app/search/page.tsx` - Summarization and KB handlers
+- `src/app/api/search/summarize/route.ts` - NEW
+- `src/app/api/content/route.ts` - POST method for KB creation
+- `src/app/content/page.tsx` - Framework Hub view
+- `src/app/my-day/page.tsx` - Calendar widget
+- `CLAUDE.md` - Documentation references
+- `SAVEPOINT.md` - Session state
+
+---
+
 ## [2.0.0] - 2026-01-29
 
 ### V2.0 Major Release - 9 EPICs Complete

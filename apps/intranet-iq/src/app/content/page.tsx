@@ -33,8 +33,130 @@ import {
   Link2,
   Check,
   ClipboardCheck,
+  Layers,
+  Box,
+  Zap,
+  GitBranch,
+  Code,
+  ExternalLink,
 } from "lucide-react";
 import type { KBCategory, Article } from "@/lib/database.types";
+
+// Framework type definition
+interface Framework {
+  id: string;
+  name: string;
+  description: string;
+  icon: "code" | "zap" | "gitbranch" | "layers" | "box";
+  color: string;
+  articleCount: number;
+  tags: string[];
+  status: "active" | "deprecated" | "experimental";
+  version?: string;
+  docsUrl?: string;
+}
+
+// Mock frameworks data - in production this would come from the database
+const FRAMEWORKS: Framework[] = [
+  {
+    id: "react-patterns",
+    name: "React Patterns",
+    description: "Best practices and design patterns for React development at scale",
+    icon: "code",
+    color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20",
+    articleCount: 15,
+    tags: ["frontend", "react", "patterns"],
+    status: "active",
+    version: "2.1.0",
+    docsUrl: "https://react.dev",
+  },
+  {
+    id: "api-design",
+    name: "REST API Guidelines",
+    description: "Standards for designing and implementing RESTful APIs",
+    icon: "zap",
+    color: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
+    articleCount: 12,
+    tags: ["backend", "api", "rest"],
+    status: "active",
+    version: "3.0.0",
+  },
+  {
+    id: "microservices",
+    name: "Microservices Architecture",
+    description: "Patterns and practices for building distributed systems",
+    icon: "layers",
+    color: "text-purple-400 bg-purple-400/10 border-purple-400/20",
+    articleCount: 18,
+    tags: ["architecture", "backend", "distributed"],
+    status: "active",
+    version: "1.5.0",
+  },
+  {
+    id: "data-pipeline",
+    name: "Data Pipeline Framework",
+    description: "ETL and data processing pipeline standards",
+    icon: "gitbranch",
+    color: "text-green-400 bg-green-400/10 border-green-400/20",
+    articleCount: 8,
+    tags: ["data", "etl", "analytics"],
+    status: "active",
+    version: "2.0.0",
+  },
+  {
+    id: "testing-framework",
+    name: "Testing Framework",
+    description: "Unit, integration, and E2E testing standards",
+    icon: "box",
+    color: "text-orange-400 bg-orange-400/10 border-orange-400/20",
+    articleCount: 10,
+    tags: ["testing", "quality", "automation"],
+    status: "active",
+    version: "1.3.0",
+  },
+  {
+    id: "security-baseline",
+    name: "Security Baseline",
+    description: "Security standards and compliance requirements",
+    icon: "layers",
+    color: "text-red-400 bg-red-400/10 border-red-400/20",
+    articleCount: 14,
+    tags: ["security", "compliance", "baseline"],
+    status: "active",
+    version: "4.0.0",
+  },
+  {
+    id: "legacy-patterns",
+    name: "Legacy Integration",
+    description: "Patterns for integrating with legacy systems (deprecated)",
+    icon: "code",
+    color: "text-gray-400 bg-gray-400/10 border-gray-400/20",
+    articleCount: 6,
+    tags: ["legacy", "integration"],
+    status: "deprecated",
+    version: "1.0.0",
+  },
+  {
+    id: "ai-ml-ops",
+    name: "AI/ML Operations",
+    description: "MLOps patterns and AI deployment standards (experimental)",
+    icon: "zap",
+    color: "text-pink-400 bg-pink-400/10 border-pink-400/20",
+    articleCount: 5,
+    tags: ["ai", "ml", "mlops"],
+    status: "experimental",
+    version: "0.9.0",
+  },
+];
+
+// Framework icon mapping
+const frameworkIcons = {
+  code: Code,
+  zap: Zap,
+  gitbranch: GitBranch,
+  layers: Layers,
+  box: Box,
+};
 
 interface TreeItem {
   id: string;
@@ -140,7 +262,11 @@ function TreeNode({
 function ContentPageInner() {
   const searchParams = useSearchParams();
   const urlView = searchParams.get("view");
-  const [viewMode, setViewMode] = useState<"browse" | "recent">(urlView === "recent" ? "recent" : "browse");
+  const [viewMode, setViewMode] = useState<"browse" | "recent" | "frameworks">(
+    urlView === "recent" ? "recent" : urlView === "frameworks" ? "frameworks" : "browse"
+  );
+  const [selectedFramework, setSelectedFramework] = useState<Framework | null>(null);
+  const [frameworkFilter, setFrameworkFilter] = useState<"all" | "active" | "deprecated" | "experimental">("all");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -164,6 +290,20 @@ function ContentPageInner() {
       .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
       .slice(0, 20);
   }, [articles]);
+
+  // Filter frameworks based on selected filter
+  const filteredFrameworks = useMemo(() => {
+    if (frameworkFilter === "all") return FRAMEWORKS;
+    return FRAMEWORKS.filter(f => f.status === frameworkFilter);
+  }, [frameworkFilter]);
+
+  // Get articles for a specific framework (by tag matching)
+  const getFrameworkArticles = (framework: Framework) => {
+    return articles.filter(article => {
+      const articleTags = (article.tags as string[]) || [];
+      return framework.tags.some(tag => articleTags.includes(tag));
+    });
+  };
 
   // Handle article save
   const handleSaveArticle = async (data: {
@@ -428,7 +568,7 @@ function ContentPageInner() {
             <div className="flex items-center gap-1 bg-[var(--bg-slate)] rounded-lg p-0.5 mb-3">
               <motion.button
                 onClick={() => setViewMode("browse")}
-                className={`flex-1 px-3 py-1.5 text-xs rounded-md transition-colors ${
+                className={`flex-1 px-2 py-1.5 text-xs rounded-md transition-colors ${
                   viewMode === "browse"
                     ? "bg-[var(--accent-ember)] text-white"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -438,8 +578,20 @@ function ContentPageInner() {
                 Browse
               </motion.button>
               <motion.button
+                onClick={() => setViewMode("frameworks")}
+                className={`flex-1 px-2 py-1.5 text-xs rounded-md transition-colors flex items-center justify-center gap-1 ${
+                  viewMode === "frameworks"
+                    ? "bg-[var(--accent-ember)] text-white"
+                    : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                }`}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Layers className="w-3 h-3" />
+                Frameworks
+              </motion.button>
+              <motion.button
                 onClick={() => setViewMode("recent")}
-                className={`flex-1 px-3 py-1.5 text-xs rounded-md transition-colors flex items-center justify-center gap-1 ${
+                className={`flex-1 px-2 py-1.5 text-xs rounded-md transition-colors flex items-center justify-center gap-1 ${
                   viewMode === "recent"
                     ? "bg-[var(--accent-ember)] text-white"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -464,11 +616,88 @@ function ContentPageInner() {
             </div>
           </div>
 
-          {/* Tree View or Recent List */}
+          {/* Tree View, Frameworks List, or Recent List */}
           <div className="flex-1 overflow-y-auto py-2">
             {loading ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="w-6 h-6 animate-spin text-[var(--accent-ember)]" />
+              </div>
+            ) : viewMode === "frameworks" ? (
+              /* Frameworks List */
+              <div className="px-2">
+                {/* Framework Filter */}
+                <div className="flex items-center gap-1 mb-3 px-2">
+                  {(["all", "active", "deprecated", "experimental"] as const).map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setFrameworkFilter(filter)}
+                      className={`px-2 py-1 text-xs rounded-md transition-colors capitalize ${
+                        frameworkFilter === filter
+                          ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                          : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
+                </div>
+
+                {filteredFrameworks.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Layers className="w-8 h-8 text-[var(--text-muted)] mx-auto mb-2" />
+                    <p className="text-sm text-[var(--text-muted)]">No frameworks found</p>
+                  </div>
+                ) : (
+                  <StaggerContainer>
+                    {filteredFrameworks.map((framework) => {
+                      const IconComponent = frameworkIcons[framework.icon];
+                      return (
+                        <StaggerItem key={framework.id}>
+                          <motion.div
+                            onClick={() => {
+                              setSelectedFramework(framework);
+                              setSelectedItem(null);
+                              setSelectedData(null);
+                            }}
+                            className={`flex items-start gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors mb-1 ${
+                              selectedFramework?.id === framework.id
+                                ? "bg-[var(--accent-ember)]/20 border border-[var(--accent-ember)]/30"
+                                : "hover:bg-[var(--bg-slate)] border border-transparent"
+                            }`}
+                            whileHover={{ x: 2 }}
+                          >
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border ${framework.color}`}>
+                              <IconComponent className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-[var(--text-primary)] truncate">
+                                  {framework.name}
+                                </span>
+                                {framework.status === "deprecated" && (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-gray-500/20 text-gray-400">
+                                    Deprecated
+                                  </span>
+                                )}
+                                {framework.status === "experimental" && (
+                                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-pink-500/20 text-pink-400">
+                                    Beta
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-xs text-[var(--text-muted)] flex items-center gap-2 mt-0.5">
+                                <span>{framework.articleCount} articles</span>
+                                {framework.version && (
+                                  <span className="text-[var(--text-muted)]">v{framework.version}</span>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        </StaggerItem>
+                      );
+                    })}
+                  </StaggerContainer>
+                )}
               </div>
             ) : viewMode === "recent" ? (
               /* Recent Documents List */
@@ -491,6 +720,7 @@ function ContentPageInner() {
                             slug: article.slug,
                             article,
                           });
+                          setSelectedFramework(null);
                         }}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors mb-1 ${
                           selectedItem === `article-${article.id}`
@@ -539,7 +769,180 @@ function ContentPageInner() {
 
         {/* Right Panel - Content View */}
         <FadeIn className="flex-1 flex flex-col">
-          {selectedData && selectedData.type === "article" && selectedData.article ? (
+          {/* Framework Detail View */}
+          {selectedFramework && viewMode === "frameworks" ? (
+            <>
+              {/* Framework Header */}
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="border-b border-[var(--border-subtle)] p-6"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start gap-4">
+                    <motion.div
+                      className={`w-14 h-14 rounded-xl flex items-center justify-center border ${selectedFramework.color}`}
+                      whileHover={{ scale: 1.05, rotate: 5 }}
+                    >
+                      {(() => {
+                        const IconComponent = frameworkIcons[selectedFramework.icon];
+                        return <IconComponent className="w-7 h-7" />;
+                      })()}
+                    </motion.div>
+                    <div>
+                      <div className="flex items-center gap-3 mb-1">
+                        <h1 className="text-2xl font-medium text-[var(--text-primary)]">
+                          {selectedFramework.name}
+                        </h1>
+                        {selectedFramework.version && (
+                          <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--bg-slate)] text-[var(--text-muted)]">
+                            v{selectedFramework.version}
+                          </span>
+                        )}
+                        {selectedFramework.status === "active" && (
+                          <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--success)]/20 text-[var(--success)] flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Active
+                          </span>
+                        )}
+                        {selectedFramework.status === "deprecated" && (
+                          <span className="px-2 py-0.5 rounded-full text-xs bg-gray-500/20 text-gray-400">
+                            Deprecated
+                          </span>
+                        )}
+                        {selectedFramework.status === "experimental" && (
+                          <span className="px-2 py-0.5 rounded-full text-xs bg-pink-500/20 text-pink-400">
+                            Experimental
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[var(--text-secondary)] text-sm max-w-xl">
+                        {selectedFramework.description}
+                      </p>
+                      <div className="flex items-center gap-4 mt-3 text-sm text-[var(--text-muted)]">
+                        <span className="flex items-center gap-1">
+                          <FileText className="w-4 h-4" />
+                          {selectedFramework.articleCount} articles
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {selectedFramework.docsUrl && (
+                      <motion.a
+                        href={selectedFramework.docsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/50 text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-2 transition-colors text-sm"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Docs
+                      </motion.a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div className="flex items-center gap-2 mt-4">
+                  <Tag className="w-4 h-4 text-[var(--text-muted)]" />
+                  {selectedFramework.tags.map((tag) => (
+                    <motion.span
+                      key={tag}
+                      className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-ember)]/10 text-[var(--accent-ember-soft)] border border-[var(--accent-ember)]/20"
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      {tag}
+                    </motion.span>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Framework Articles */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="flex-1 overflow-y-auto p-6"
+              >
+                <h2 className="text-lg font-medium text-[var(--text-primary)] mb-4">
+                  Related Articles
+                </h2>
+                {(() => {
+                  const frameworkArticles = getFrameworkArticles(selectedFramework);
+                  if (frameworkArticles.length === 0) {
+                    return (
+                      <div className="text-center py-12 bg-[var(--bg-charcoal)] rounded-xl border border-[var(--border-subtle)]">
+                        <FileText className="w-12 h-12 text-[var(--text-muted)] mx-auto mb-4" />
+                        <p className="text-[var(--text-muted)] mb-4">No articles tagged with this framework yet</p>
+                        <motion.button
+                          onClick={() => {
+                            setSelectedData(null);
+                            setShowArticleEditor(true);
+                          }}
+                          className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white text-sm transition-colors shadow-lg shadow-[var(--accent-ember)]/20"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          Create Article
+                        </motion.button>
+                      </div>
+                    );
+                  }
+                  return (
+                    <StaggerContainer className="grid grid-cols-2 gap-4">
+                      {frameworkArticles.map((article) => (
+                        <StaggerItem key={article.id}>
+                          <motion.div
+                            onClick={() => {
+                              setSelectedFramework(null);
+                              setSelectedItem(`article-${article.id}`);
+                              setSelectedData({
+                                id: `article-${article.id}`,
+                                name: article.title,
+                                type: "article",
+                                slug: article.slug,
+                                article,
+                              });
+                            }}
+                            className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4 cursor-pointer hover:border-[var(--accent-ember)]/30 transition-all"
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <div className="flex items-center gap-3 mb-3">
+                              <FileText className="w-6 h-6 text-[var(--accent-ember)]" />
+                              {article.status === "published" ? (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--success)]/20 text-[var(--success)]">
+                                  Published
+                                </span>
+                              ) : (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--warning)]/20 text-[var(--warning)]">
+                                  Draft
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="text-[var(--text-primary)] font-medium mb-1 line-clamp-2">
+                              {article.title}
+                            </h3>
+                            {article.summary && (
+                              <p className="text-xs text-[var(--text-muted)] line-clamp-2 mb-2">
+                                {article.summary}
+                              </p>
+                            )}
+                            <p className="text-xs text-[var(--text-muted)]">
+                              Updated {new Date(article.updated_at).toLocaleDateString()}
+                            </p>
+                          </motion.div>
+                        </StaggerItem>
+                      ))}
+                    </StaggerContainer>
+                  );
+                })()}
+              </motion.div>
+            </>
+          ) : selectedData && selectedData.type === "article" && selectedData.article ? (
             <>
               {/* Article Header */}
               <motion.div
@@ -745,6 +1148,39 @@ function ContentPageInner() {
                   </motion.button>
                 </div>
               )}
+            </motion.div>
+          ) : viewMode === "frameworks" && !selectedFramework ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex-1 flex items-center justify-center"
+            >
+              <div className="text-center max-w-md">
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6 border border-[var(--accent-ember)]/20">
+                  <Layers className="w-10 h-10 text-[var(--accent-ember)]" />
+                </div>
+                <h3 className="text-xl font-medium text-[var(--text-primary)] mb-2">
+                  Framework Hub
+                </h3>
+                <p className="text-sm text-[var(--text-muted)] mb-6">
+                  Discover and explore enterprise frameworks, accelerators, and best practices.
+                  Select a framework from the list to view its documentation and related articles.
+                </p>
+                <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1">
+                    <Layers className="w-4 h-4 text-[var(--accent-ember)]" />
+                    {FRAMEWORKS.filter(f => f.status === "active").length} Active
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Zap className="w-4 h-4 text-pink-400" />
+                    {FRAMEWORKS.filter(f => f.status === "experimental").length} Experimental
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FileText className="w-4 h-4 text-[var(--text-muted)]" />
+                    {FRAMEWORKS.reduce((sum, f) => sum + f.articleCount, 0)} Articles
+                  </span>
+                </div>
+              </div>
             </motion.div>
           ) : (
             <motion.div

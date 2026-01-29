@@ -1,267 +1,212 @@
-# dIQ - Intranet IQ | Session Savepoint
+# dIQ - Intranet IQ | SAVEPOINT (Master Reference)
+
+---
+
+## ⚠️ MASTER REFERENCE - READ THIS FILE FIRST
+
+**This is the SINGLE SOURCE OF TRUTH for dIQ development sessions.**
+
+When starting a new session, say **"refer save point"** and Claude will read this file to understand:
+1. Current project state
+2. All documentation context
+3. Key standards and configurations
+4. Pending tasks
+
+When ending a session, say **"do a save point"** and Claude will update this file.
 
 ---
 
 ## CURRENT STATE
-**Last Updated:** January 29, 2026 @ 11:30 AM
-**Session:** V2.0 Implementation Complete
-**Version:** 2.0.0
-**Audit Score:** 100/100 (90/90 V2.0 features passing)
-**V2.0 Test Report:** `apps/intranet-iq/V2.0_TEST_REPORT.md`
-**Git Commit:** Pending (V2.0 implementation complete)
-**Vercel Status:** ✅ LIVE - All 19 pages verified
+
+| Property | Value |
+|----------|-------|
+| **Last Updated** | January 29, 2026 @ 7:30 PM |
+| **Session** | Full Spectrum Session Management Setup |
+| **Version** | 2.1.0 |
+| **Audit Score** | 100/100 |
+| **Git Commit** | Pending |
+| **Vercel Status** | ✅ LIVE |
+| **Local URL** | http://localhost:3001/diq/dashboard |
+| **Production URL** | https://intranet-iq.vercel.app/diq/dashboard |
 
 ---
 
-## V2.0 IMPLEMENTATION COMPLETE
+## DOCUMENTATION INDEX
 
-### V2.0 Test Results (January 29, 2026)
+| File | Path | Purpose |
+|------|------|---------|
+| **SAVEPOINT.md** | `SAVEPOINT.md` | This file - master reference |
+| **CLAUDE.md** | `CLAUDE.md` | Project instructions, commands |
+| **context.md** | `context.md` | Design system, UI specs |
+| **CHANGELOG.md** | `CHANGELOG.md` | Version history |
+| **Query Standards** | `docs/QUERY_DETECTION_STANDARDS.md` | Search algorithm |
+| **Maintenance** | `docs/MAINTENANCE.md` | Health checks, deployment |
 
-| EPIC | Features | Passing | Score |
-|------|----------|---------|-------|
-| EPIC 1: Enterprise Search | 10 | 10 | 100% |
-| EPIC 2: AI Assistant | 9 | 9 | 100% |
-| EPIC 3: Knowledge Base | 11 | 11 | 100% |
-| EPIC 4: Framework Integration | 3 | 3 | 100% |
-| EPIC 5: RBAC | 13 | 13 | 100% |
-| EPIC 6: Workflows | 14 | 14 | 100% |
-| EPIC 7: Dashboard | 9 | 9 | 100% |
-| EPIC 8: Productivity | 3 | 3 | 100% |
-| EPIC 9: EX Features | 18 | 18 | 100% |
-| **Total** | **90** | **90** | **100%** |
+### Full Paths
+```
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CLAUDE.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/context.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CHANGELOG.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/docs/QUERY_DETECTION_STANDARDS.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/docs/MAINTENANCE.md
+```
 
-### New V2.0 Library Files
-
-| File | Lines | Purpose |
-|------|-------|---------|
-| `/src/lib/messaging.ts` | 761 | Direct messaging (EPIC 9) |
-| `/src/lib/content-approval.ts` | 705 | Content approval workflow (EPIC 3) |
-| `/src/lib/access-requests.ts` | 697 | Access request system (EPIC 5) |
-| `/src/lib/workflow/approval.ts` | 540 | Workflow human approvals (EPIC 6) |
-| `/src/lib/indexing-queue.ts` | 436 | Real-time indexing (EPIC 1) |
-| `/src/lib/ai/provider.ts` | 194 | LLM abstraction (EPIC 2) |
-| `/src/lib/ai/types.ts` | 176 | LLM types (EPIC 2) |
-| `/src/app/api/admin/health/route.ts` | 487 | Health monitoring (EPIC 7) |
-| **Total** | **~4,500+** | |
-
-### Key V2.0 Features Implemented
-
-1. **Multi-LLM Support** (EPIC 2 & 6)
-   - 8 models: Claude Sonnet 4, Claude Opus 4, Claude 3.5 Sonnet, Claude 3.5 Haiku, GPT-4o, GPT-4o Mini, GPT-4 Turbo, GPT-3.5 Turbo
-   - Provider abstraction with registry
-   - Confidence scoring algorithm
-
-2. **Real-time Indexing** (EPIC 1)
-   - 1-second batch processing
-   - Priority queuing (high/normal/low)
-   - 3 retries with auto-embedding generation
-
-3. **Access Request Workflow** (EPIC 5)
-   - 4 types: role_upgrade, department_access, content_access, workflow_access
-   - Admin approval with auto-apply on approval
-   - Expiration handling
-
-4. **Content Approval** (EPIC 3)
-   - Multi-stage: Draft → Review → Approve → Publish
-   - Role-based reviewers and approvers
-   - Audit logging
-
-5. **Workflow Human Approvals** (EPIC 6)
-   - Multiple approver types (user/role/department)
-   - Timeout with escalation
-   - Workflow resumption on completion
-
-6. **Direct Messaging** (EPIC 9)
-   - DM and group conversations
-   - Typing indicators and read receipts
-   - Message edit/delete/reply
-
-7. **Admin Health Monitoring** (EPIC 7)
-   - Elasticsearch, AI, Database, Content health
-   - Overall health score (0-100)
+### Global Standards (Monorepo Root)
+```
+/Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md
+/Users/aldrin-mac-mini/digitalworkplace.ai/docs/QUERY_DETECTION_STANDARDS.md
+```
 
 ---
 
-## PRODUCTION DEPLOYMENT
+## QUICK START (from CLAUDE.md)
 
-| Environment | URL | Status |
-|-------------|-----|--------|
-| **Production** | https://intranet-iq.vercel.app/diq/dashboard | ✅ Live v1.1.1 |
-| **Local Dev** | http://localhost:3001/diq/dashboard | Port 3001 |
-| **Main App Link** | `apps/main/src/app/dashboard/page.tsx:29` | ✅ Linked |
+```bash
+# Start dev server
+cd /Users/aldrin-mac-mini/digitalworkplace.ai
+npm run dev:intranet
 
----
+# Open in browser
+open http://localhost:3001/diq/dashboard
 
-## v1.1.0 FULL SPECTRUM IMPLEMENTATION
+# Build for production
+npm run build
 
-### Audit Points Achieved (100/100)
+# Deploy to Vercel
+cd apps/intranet-iq && vercel --prod --yes
+```
 
-| Point | Feature | Score |
-|-------|---------|-------|
-| 1 | Enterprise Search | 100% |
-| 2 | AI Assistant | 100% |
-| 3 | KB Dept Categorization | 100% |
-| 4 | Framework/Accelerator Integration | 100% |
-| 5 | Role-Based Access | 100% |
-| 6 | Agentic Workflows | 100% |
-| 7 | Central Dashboard | 100% |
-| 8 | Productivity Assistant | 100% |
-| 9 | EX Features | 100% |
+### Test API Performance
+```bash
+time curl -s http://localhost:3001/diq/api/dashboard | jq '.stats'
+time curl -s http://localhost:3001/diq/api/people | jq '.employees | length'
+time curl -s http://localhost:3001/diq/api/content | jq '.articles | length'
+```
 
 ---
 
-## WHAT WAS ACCOMPLISHED
+## DESIGN SYSTEM: MIDNIGHT GREEN (from context.md)
 
-### Session: January 22, 2026 (Full Spectrum Implementation)
+### Color Palette
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--bg-obsidian` | #08080c | Primary background |
+| `--bg-charcoal` | #121218 | Cards, surfaces |
+| `--bg-slate` | #1c1c24 | Inputs, hover |
+| `--accent-ember` | #10b981 | Primary accent (emerald) |
+| `--accent-ember-soft` | #34d399 | Hover state |
+| `--accent-gold` | #6ee7b7 | Highlights, badges |
+| `--text-primary` | #fafafa | Primary text |
+| `--text-secondary` | rgba(250,250,250,0.7) | Body text |
 
-#### AI Assistant (Point 2) - 100%
-- Conversation history with full thread context
-- Server-Sent Events for streaming responses
-- Vector RAG with pgvector (1536 dimensions)
-- PDF/text/markdown file processing
-- Function calling for search, employee lookup, workflow triggers
+### Brand Identity
+- **Logo:** Bold "d" + regular "IQ" + green dot (same baseline)
+- **Favicon:** "d." with green dot on dark bg
+- **Page Title:** "dIQ - Intranet IQ"
+- **Font:** ui-monospace, SF Mono, JetBrains Mono
 
-#### EX Features (Point 9) - 100%
-- Notification center with preferences
-- Emoji reactions on posts/comments/messages
-- Recognition/shout-out system with @mentions
-- Threaded comments with nested replies
-- Persistent polls with voting and results
-- Real database-backed channels with members
-- Birthday/anniversary celebrations
-
-#### Framework Integration (Point 4) - 100%
-- Connector framework with abstract base class
-- 4 implementations: Confluence, SharePoint, Notion, Google Drive
-- Multi-tenant KB spaces with isolation levels
-- Federated search across all knowledge sources
-- Framework registry (ITIL 4, Agile, ISO 27001)
-- SaaS product catalog with compliance tracking
-
-#### Productivity Assistant (Point 8) - 100%
-- /my-day personal productivity hub
-- Kanban task management with drag-drop
-- AI-generated daily briefings
-- Quick capture modal
-
-#### Agentic Workflows (Point 6) - 100%
-- Full workflow execution engine
-- LLM actions with Claude integration
-- API call execution with template variables
-- Condition evaluation (simple, script, LLM-based)
-- Transform operations (map, filter, aggregate, merge)
-- Webhook triggers with secret verification and IP whitelisting
-- Scheduled triggers with cron expression parsing
-
-#### Admin Dashboard (Point 7) - 100%
-- User statistics (total, active, new, churn, growth rate)
-- Content metrics (articles, knowledge items, news, events)
-- Search analytics (top queries, zero-results tracking)
-- AI usage and cost tracking
-- Workflow stats (executions, success rate)
-- System health monitoring
+### Animation (Framer Motion)
+- Duration fast: 200ms
+- Duration normal: 300ms
+- Spring stiffness: 400
+- Spring damping: 25
 
 ---
 
-## FILES CREATED (v1.1.0)
+## QUERY DETECTION STANDARDS (from docs/QUERY_DETECTION_STANDARDS.md)
 
-### New API Routes (18+)
-| Route | Purpose |
-|-------|---------|
-| `/api/chat/stream` | SSE streaming AI responses |
-| `/api/notifications` | Notification CRUD |
-| `/api/reactions` | Reaction management |
-| `/api/recognitions` | Recognition/shoutouts |
-| `/api/polls` | Poll management |
-| `/api/channels` | Real channel backend |
-| `/api/tasks` | Task management |
-| `/api/celebrations` | Birthday/anniversary |
-| `/api/connectors` | External connectors |
-| `/api/kb-spaces` | KB space management |
-| `/api/search/federated` | Federated search |
-| `/api/workflows/execute` | Workflow execution |
-| `/api/workflows/webhook/[id]` | Webhook triggers |
-| `/api/workflows/scheduled` | Cron triggers |
-| `/api/admin/stats` | Admin statistics |
+### Configuration
+| Setting | Value |
+|---------|-------|
+| **Match Threshold** | 0.50 (50%) |
+| **Embedding Model** | OpenAI text-embedding-3-small |
+| **Dimensions** | 1536 |
+| **Keyword Weight** | 0.4 |
+| **Semantic Weight** | 0.6 |
 
-### New Pages (3)
-| Page | Route | Features |
-|------|-------|----------|
-| Notifications | `/diq/notifications` | Notification center |
-| My Day | `/diq/my-day` | Productivity hub, tasks |
-| Admin Dashboard | `/diq/admin/dashboard` | Analytics, system health |
+### Key Compound Words
+```
+'knowledge base' → 'knowledgebase'
+'org chart' → 'orgchart'
+'pto request' → 'ptorequest'
+'vacation policy' → 'vacationpolicy'
+'my day' → 'myday'
+```
 
-### New Libraries
-| Library | Purpose |
-|---------|---------|
-| `src/lib/connectors/` | Connector framework (4 implementations) |
-| `src/lib/search/federated-search.ts` | Federated search service |
-| `src/lib/workflow/executor.ts` | Workflow execution engine |
-| `src/lib/fileProcessors.ts` | PDF/text file parsing |
-
-### Database Migrations (6)
-| Migration | Purpose |
-|-----------|---------|
-| `005_workflow_builder_upgrade.sql` | Workflow edges, steps |
-| `006_workflow_rls_policies.sql` | RLS for workflow tables |
-| `007_analytics_schema.sql` | Analytics tables |
-| `008_ex_features.sql` | EX features (notifications, reactions, etc.) |
-| `009_framework_integration.sql` | Connectors, KB spaces, frameworks |
-| `010_admin_analytics.sql` | Search/AI/system logs |
+### Search API Endpoints
+| Endpoint | Purpose |
+|----------|---------|
+| `/api/search` | Main hybrid search |
+| `/api/search/summarize` | Claude AI summarization |
+| `/api/search/federated` | External connectors |
 
 ---
 
-## DATA INVENTORY
+## MAINTENANCE COMMANDS (from docs/MAINTENANCE.md)
 
-### Database Content
-| Entity | Count | Schema |
-|--------|-------|--------|
-| Articles | 212 | diq.articles |
-| KB Categories | 20 | diq.kb_categories |
-| Employees | 60 | diq.employees |
-| Departments | 15 | diq.departments |
-| Workflows | 31 | diq.workflows |
-| Workflow Steps | 66+ | diq.workflow_steps |
-| Workflow Edges | 50+ | diq.workflow_edges |
-| News Posts | 61 | diq.news_posts |
-| Events | 49 | diq.events |
-| Chat Threads | 30 | diq.chat_threads |
-| Chat Messages | 26 | diq.chat_messages |
-| Users | 60+ | public.users |
-| **Total Tables** | **45+** | diq + public |
+### Daily Health Checks
+```bash
+# Check application
+curl -s http://localhost:3001/diq/api/admin/health | jq
 
-### Elasticsearch
-| Metric | Value |
-|--------|-------|
-| Nodes | 3 |
-| Documents | 28,690 |
-| Index | diq-content |
+# Check Elasticsearch
+curl -s http://localhost:9200/_cluster/health | jq '.status'
+
+# Check API response time
+time curl -s http://localhost:3001/diq/api/dashboard > /dev/null
+```
+
+### Expected Results
+| Check | Expected |
+|-------|----------|
+| Application | HTTP 200 |
+| Elasticsearch | "green" or "yellow" |
+| Response Time | < 500ms |
+
+### Deployment
+```bash
+# Pre-deploy checks
+npm run lint
+npm run type-check
+npm run build
+
+# Deploy
+cd apps/intranet-iq && vercel --prod --yes
+
+# Verify
+curl -s -o /dev/null -w "%{http_code}" https://intranet-iq.vercel.app/diq/dashboard
+```
 
 ---
 
-## PAGES STATUS (19 Total)
+## VERSION HISTORY (from CHANGELOG.md)
 
-| Page | Route | Status |
-|------|-------|--------|
-| Dashboard | `/diq/dashboard` | ✅ Working |
-| Chat | `/diq/chat` | ✅ Streaming, RAG, functions |
-| Search | `/diq/search` | ✅ Semantic + federated |
-| People | `/diq/people` | ✅ 60 employees |
-| Content | `/diq/content` | ✅ 212 articles |
-| Agents | `/diq/agents` | ✅ Full execution engine |
-| Settings | `/diq/settings` | ✅ 9 panels |
-| News | `/diq/news` | ✅ With reactions |
-| Events | `/diq/events` | ✅ Calendar |
-| Channels | `/diq/channels` | ✅ Real backend |
-| Integrations | `/diq/integrations` | ✅ Third-party |
-| **Notifications** | `/diq/notifications` | ✅ **NEW** |
-| **My Day** | `/diq/my-day` | ✅ **NEW** |
-| Elasticsearch | `/diq/admin/elasticsearch` | ✅ 3 nodes |
-| Analytics | `/diq/admin/analytics` | ✅ Charts |
-| Permissions | `/diq/admin/permissions` | ✅ RBAC |
-| **Admin Dashboard** | `/diq/admin/dashboard` | ✅ **NEW** |
-| News Detail | `/diq/news/[id]` | ✅ Working |
-| Events Detail | `/diq/events/[id]` | ✅ Working |
+### v2.1.0 (January 29, 2026) - Current
+- EPIC 1: AI summarization + Add to KB on search results
+- EPIC 4: Framework Hub in Knowledge Base
+- EPIC 8: Calendar widget in My Day
+- Project documentation (QUERY_DETECTION_STANDARDS.md, MAINTENANCE.md)
+
+### v2.0.0 (January 29, 2026)
+- 90/90 test points (100%)
+- Multi-LLM support (8 models)
+- Real-time indexing
+- Access request system
+- Content approval workflow
+- Workflow human approvals
+- Admin health monitoring
+- Direct messaging
+
+### v1.1.0 (January 22, 2026)
+- Full Spectrum Implementation (100% feature coverage)
+- AI Assistant with streaming, RAG, function calling
+- EX Features (notifications, reactions, polls, channels)
+- Framework Integration (4 connectors)
+- Productivity Assistant (My Day)
+- Agentic Workflows (execution engine)
+- Admin Dashboard
 
 ---
 
@@ -270,84 +215,137 @@
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | Next.js | 16.1.3 | React framework |
-| React Query | 5.x | Data caching/fetching |
-| ReactFlow | @xyflow/react | Workflow canvas |
-| Zustand | 5.x | Workflow state management |
-| Dagre | 1.x | Auto-layout algorithm |
+| React Query | 5.x | Data caching |
 | TypeScript | 5.x | Type safety |
 | Clerk | @clerk/nextjs | Authentication |
 | Supabase | @supabase/supabase-js | Database |
 | Tailwind CSS | 4.x | Styling |
 | Framer Motion | 12.x | Animations |
-| GSAP | 3.x | Complex animations |
 | Lucide React | 0.562.x | Icons |
 | Anthropic SDK | @anthropic-ai/sdk | Claude AI |
 
 ---
 
-## GIT HISTORY (Recent)
+## PROJECT STRUCTURE
 
-| Commit | Date | Description |
-|--------|------|-------------|
-| ae3ea32 | Jan 22, 2026 | feat(diq): v1.1.0 Full Spectrum Implementation |
-| 3a61376 | Jan 22, 2026 | feat(diq): Workflow Builder Upgrade v0.8.0 |
-| a2c53bf | Jan 22, 2026 | perf: Optimize API routes |
-| bc65405 | Jan 21, 2026 | feat(diq): Performance optimization v0.7.0 |
+```
+apps/intranet-iq/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout
+│   │   ├── page.tsx            # Redirects to /dashboard
+│   │   ├── globals.css         # Midnight Green theme
+│   │   ├── dashboard/          # Main dashboard
+│   │   ├── chat/               # AI Assistant
+│   │   ├── search/             # Enterprise Search
+│   │   ├── people/             # Directory & Org Chart
+│   │   ├── content/            # Knowledge Base + Framework Hub
+│   │   ├── agents/             # Workflows
+│   │   ├── my-day/             # Productivity Hub
+│   │   ├── settings/           # User Settings
+│   │   └── api/                # 35+ API routes
+│   ├── components/
+│   │   ├── brand/IQLogo.tsx    # dIQ logo
+│   │   ├── layout/Sidebar.tsx  # Navigation
+│   │   └── search/             # Search components
+│   └── lib/
+│       ├── ai/                 # LLM providers
+│       ├── workflow/           # Workflow engine
+│       └── supabase.ts         # Database client
+├── docs/
+│   ├── QUERY_DETECTION_STANDARDS.md
+│   └── MAINTENANCE.md
+├── CLAUDE.md
+├── context.md
+├── SAVEPOINT.md                # THIS FILE
+└── CHANGELOG.md
+```
 
 ---
 
-## FULL-SPECTRUM AUDIT (January 22, 2026)
+## DATABASE (Supabase)
 
-### Audit Summary
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Database (46 tables) | ✅ PASS | Migrations 008-010 applied |
-| APIs (35 endpoints) | ✅ PASS | Fixed 4 cross-schema FK join issues |
-| Vector Embeddings | ✅ PASS | 100% coverage (212/212 articles) |
-| Pages (19 total) | ✅ PASS | All rendering correctly |
-| 9 Audit Points | ✅ PASS | All at 100% |
+### Schemas
+- **diq**: Project-specific tables (45+)
+- **public**: Shared tables (users, organizations)
 
-### Fixes Applied This Session
-1. Applied migrations 008_ex_features.sql, 009_framework_integration.sql, 010_admin_analytics.sql
-2. Fixed polls API - cross-schema FK join (diq → public.users)
-3. Fixed celebrations API - cross-schema FK join
-4. Fixed recognitions API - cross-schema FK join
-5. Fixed tasks API - simplified query filter
+### Key Tables
+| Table | Count | Purpose |
+|-------|-------|---------|
+| articles | 212 | Knowledge base |
+| employees | 60 | Directory |
+| departments | 15 | Organization |
+| workflows | 31 | Automation |
+| news_posts | 61 | Company news |
+| events | 49 | Calendar |
 
-### Additional Fixes (Post-Audit TypeScript Cleanup)
-6. Fixed kb-spaces API - cross-schema FK join with manual enrichment
-7. Fixed connectors API - made organizationId optional (returns empty array)
-8. Fixed workflow execute routes - added explicit type annotations
-9. Fixed Sidebar import errors - changed to named import `{ Sidebar }`
-10. Fixed Anthropic tools input_schema types - added `as const` literals
-11. Fixed ConnectorConfig types - added OAuth fields (client_id, client_secret, tenant_id)
-12. Fixed SharePoint connector - explicit response type annotations
-13. Fixed pdf-parse dynamic import - CJS/ESM compatibility
-14. Fixed federated-search Supabase client types
-15. Fixed workflow executor edge map type inference (WorkflowEdgeDB)
-16. Fixed workflow executor interpolateTemplate parameter type
+### Embeddings
+- 100% coverage on articles
+- pgvector v0.8.0
+- 1536 dimensions
 
-### Full Report
-See: `apps/intranet-iq/AUDIT_REPORT.md`
+---
+
+## PAGES (19 Total)
+
+| Page | Route | Status |
+|------|-------|--------|
+| Dashboard | `/diq/dashboard` | ✅ |
+| Chat | `/diq/chat` | ✅ Streaming, RAG |
+| Search | `/diq/search` | ✅ Semantic + federated |
+| People | `/diq/people` | ✅ 60 employees |
+| Content | `/diq/content` | ✅ 212 articles + Framework Hub |
+| Agents | `/diq/agents` | ✅ Full execution |
+| My Day | `/diq/my-day` | ✅ Calendar widget |
+| Settings | `/diq/settings` | ✅ 9 panels |
+| News | `/diq/news` | ✅ Reactions |
+| Events | `/diq/events` | ✅ Calendar |
+| Channels | `/diq/channels` | ✅ Real backend |
+| Notifications | `/diq/notifications` | ✅ |
+| Integrations | `/diq/integrations` | ✅ |
+| Admin Dashboard | `/diq/admin/dashboard` | ✅ |
+| Analytics | `/diq/admin/analytics` | ✅ |
+| Permissions | `/diq/admin/permissions` | ✅ RBAC |
+| Elasticsearch | `/diq/admin/elasticsearch` | ✅ 3 nodes |
 
 ---
 
 ## PENDING TASKS
-- None - v1.1.0 complete, deployed, and audited
+
+- [ ] None - v2.1.0 complete
+- [ ] Git commit pending
 
 ---
 
-## KEY DOCUMENTATION FILES
+## SESSION HISTORY
 
-| File | Purpose | Updated |
-|------|---------|---------|
-| `CLAUDE.md` | Project instructions | v1.1.0 |
-| `context.md` | Design specifications | v1.1.0 |
-| `CHANGELOG.md` | Version history | v1.1.0 |
-| `SAVEPOINT.md` | This file | v1.1.0 |
+### January 29, 2026 (Current)
+- Implemented PRD compliance enhancements (v2.1.0)
+- Added AI summarization to search results
+- Added Framework Hub to Knowledge Base
+- Added Calendar widget to My Day
+- Created project documentation files
+- Set up full spectrum session management
+
+### January 22, 2026
+- Full Spectrum Implementation (v1.1.0)
+- Achieved 100/100 audit score
+- Deployed to production
+
+---
+
+## SESSION END PROTOCOL
+
+When ending session, Claude must:
+1. Update SAVEPOINT.md with accomplishments
+2. Update CHANGELOG.md if version changed
+3. Update context.md if design changed
+4. Remind user to commit git changes
 
 ---
 
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
 *Production: https://intranet-iq.vercel.app/diq/dashboard*
+*Version: 2.1.0*
+*Last Updated: January 29, 2026*

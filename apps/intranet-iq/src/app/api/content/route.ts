@@ -178,3 +178,109 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+/**
+ * POST - Create new article in Knowledge Base
+ * Used by search "Add to KB" feature and content creation
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { title, content, category, source, sourceResultId } = body;
+
+    if (!title || !content) {
+      return NextResponse.json(
+        { error: 'Title and content are required' },
+        { status: 400 }
+      );
+    }
+
+    // Get user context for author info
+    const userContext = await getUserContext(userId);
+
+    // Find category ID from slug/name
+    let categoryId = null;
+    if (category) {
+      const { data: categoryData } = await supabase
+        .schema('diq')
+        .from('kb_categories')
+        .select('id')
+        .ilike('slug', category)
+        .single();
+
+      if (categoryData) {
+        categoryId = categoryData.id;
+      } else {
+        // Try to find by name
+        const { data: categoryByName } = await supabase
+          .schema('diq')
+          .from('kb_categories')
+          .select('id')
+          .ilike('name', `%${category}%`)
+          .limit(1)
+          .single();
+
+        if (categoryByName) {
+          categoryId = categoryByName.id;
+        }
+      }
+    }
+
+    // Generate slug from title
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .substring(0, 100);
+
+    // Create the article
+    const { data: article, error: insertError } = await supabase
+      .schema('diq')
+      .from('articles')
+      .insert({
+        title,
+        slug: `${slug}-${Date.now()}`,
+        content,
+        summary: content.substring(0, 300),
+        category_id: categoryId,
+        author_id: userContext?.userId || null,
+        status: 'draft', // New articles from search are drafts by default
+        tags: source === 'search_import' ? ['imported', 'from-search'] : [],
+        metadata: {
+          source,
+          sourceResultId,
+          importedAt: new Date().toISOString(),
+        },
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('Error creating article:', insertError);
+      return NextResponse.json(
+        { error: 'Failed to create article' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      article,
+      message: 'Article added to Knowledge Base as draft',
+    });
+  } catch (error) {
+    console.error('Error in content POST:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

@@ -4,27 +4,38 @@
 ## AUTO-READ TRIGGER (MANDATORY)
 ---
 
-**ON ANY OF THESE PHRASES, IMMEDIATELY READ ALL 6 DOC FILES BEFORE RESPONDING:**
+**ON ANY OF THESE PHRASES, READ SAVEPOINT.md IMMEDIATELY:**
 - "hey", "hi", "hello", "start", "begin", "let's go", "ready"
+- "refer save point", "savepoint", "where were we", "continue", "resume"
 - "pull latest", "get latest", "check latest", "update"
-- "open dev", "open local", "dev server", "localhost"
-- "where were we", "continue", "resume", "what's next"
+- "open dev", "dev server", "localhost"
 - ANY greeting or session start
 
-**FILES TO READ (in this order):**
+**SINGLE COMMAND - ONE FILE CONTAINS EVERYTHING:**
 ```
-1. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
-2. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/context.md
-3. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CHANGELOG.md
-4. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - all projects)
-5. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
-6. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/CLAUDE.md
+READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 ```
 
+**SAVEPOINT.md is the MASTER REFERENCE containing:**
+- Current state (version, status, pending tasks)
+- Key info from CLAUDE.md (commands, structure)
+- Key info from context.md (design system, colors)
+- Key info from CHANGELOG.md (version history)
+- Key info from docs/QUERY_DETECTION_STANDARDS.md (search config)
+- Key info from docs/MAINTENANCE.md (health checks)
+- All documentation file paths
+- Session history
+
 **THEN:**
-- Open browser to: http://localhost:3001/diq/dashboard
-- Summarize current state from SAVEPOINT.md
-- List any pending tasks
+- Summarize current state
+- List pending tasks
+- Open dev server if requested
+
+**SESSION END - "do a save point":**
+- Update SAVEPOINT.md with accomplishments
+- Update CHANGELOG.md if version changed
+- Update context.md if design changed
+- Remind user to commit git changes
 
 ---
 ## PROJECT OVERVIEW
@@ -32,11 +43,12 @@
 
 **dIQ (Intranet IQ)** is an AI-powered internal knowledge network - part of the Digital Workplace AI product suite.
 
-**Version:** 1.1.2 (Cache Prevention Added)
+**Version:** 2.1.0 (PRD Compliance Enhancements)
 **Audit Score:** 100/100
 **Design System:** Midnight Green (emerald/teal accents)
 **Production:** https://intranet-iq.vercel.app/diq/dashboard
 **Cache Prevention:** ✅ Configured
+**Session Management:** Full Spectrum (SAVEPOINT.md is master reference)
 
 ### Brand Identity
 - **Logo:** Bold "d" + regular "IQ" + green dot (all on same baseline)
@@ -94,7 +106,9 @@
 - **Status**: Production ready
 
 ### References
-- Full Standards: `/docs/QUERY_DETECTION_STANDARDS.md`
+- Global Standards: `/docs/QUERY_DETECTION_STANDARDS.md`
+- dIQ-Specific Standards: `/apps/intranet-iq/docs/QUERY_DETECTION_STANDARDS.md`
+- Maintenance Guide: `/apps/intranet-iq/docs/MAINTENANCE.md`
 - Root Instructions: `/CLAUDE.md` → "GLOBAL STANDARDS"
 - Vector Practices: `/docs/PGVECTOR_BEST_PRACTICES.md`
 
@@ -424,5 +438,5 @@ docker compose -f docker-compose.elasticsearch.yml up -d
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
-*Version: 1.1.1*
-*Last Updated: January 22, 2026*
+*Version: 2.1.0*
+*Last Updated: January 29, 2026*

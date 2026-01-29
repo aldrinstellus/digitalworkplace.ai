@@ -27,6 +27,7 @@ import {
   ThumbsDown,
   X,
   Trash2,
+  CheckCircle,
 } from "lucide-react";
 
 const filterCategories = [
@@ -65,6 +66,13 @@ function SearchPageInner() {
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
   const [summarizingId, setSummarizingId] = useState<string | null>(null);
   const [feedbackGiven, setFeedbackGiven] = useState<"positive" | "negative" | null>(null);
+
+  // AI Summary state - stores summaries for each result
+  const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
+
+  // Add to KB state
+  const [addingToKBId, setAddingToKBId] = useState<string | null>(null);
+  const [kbAddSuccess, setKbAddSuccess] = useState<string | null>(null);
 
   // Pagination state for infinite scroll
   const [page, setPage] = useState(1);
@@ -178,9 +186,81 @@ function SearchPageInner() {
 
   const handleSummarize = async (resultId: string) => {
     setSummarizingId(resultId);
-    // Simulate AI summarization
-    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Find the result to get its content
+    const result = allResults.find(r => r.id === resultId);
+    if (!result) {
+      setSummarizingId(null);
+      return;
+    }
+
+    try {
+      // Call the AI summarization API
+      const response = await fetch("/diq/api/search/summarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: result.title,
+          content: result.summary || result.description || "",
+          type: result.type,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAiSummaries(prev => ({ ...prev, [resultId]: data.summary }));
+      } else {
+        // Fallback to a basic summary if API fails
+        const fallbackSummary = `This ${result.type} titled "${result.title}" contains information that may be relevant to your search. ${result.summary ? result.summary.substring(0, 200) + "..." : ""}`;
+        setAiSummaries(prev => ({ ...prev, [resultId]: fallbackSummary }));
+      }
+    } catch {
+      // Generate a local summary on error
+      const fallbackSummary = `This ${result.type} titled "${result.title}" appears to contain relevant information. ${result.summary ? result.summary.substring(0, 200) + "..." : "No preview available."}`;
+      setAiSummaries(prev => ({ ...prev, [resultId]: fallbackSummary }));
+    }
+
     setSummarizingId(null);
+
+    // Log the summarization action
+    await log("ai_summarize", {
+      entityType: "search_result",
+      entityId: resultId,
+      metadata: { resultTitle: result.title },
+    });
+  };
+
+  const handleAddToKB = async (resultId: string, title: string, summary: string, category?: string) => {
+    setAddingToKBId(resultId);
+
+    try {
+      const response = await fetch("/diq/api/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          content: summary,
+          category: category || "general",
+          source: "search_import",
+          sourceResultId: resultId,
+        }),
+      });
+
+      if (response.ok) {
+        setKbAddSuccess(resultId);
+        setTimeout(() => setKbAddSuccess(null), 3000);
+
+        // Log the action
+        await log("add_to_kb", {
+          entityType: "article",
+          metadata: { title, sourceResultId: resultId, category },
+        });
+      }
+    } catch (error) {
+      console.error("Failed to add to KB:", error);
+    }
+
+    setAddingToKBId(null);
   };
 
   const handleFeedback = async (type: "positive" | "negative") => {
@@ -555,21 +635,40 @@ function SearchPageInner() {
                 </FadeIn>
               ) : (
                 <StaggerContainer className="space-y-4">
-                  {filteredResults.map((result, index) => (
+                  {filteredResults.map((result) => (
                     <StaggerItem key={result.id}>
-                      <SearchResultCard
-                        result={{
-                          id: result.id,
-                          title: result.title,
-                          summary: result.summary || "",
-                          type: result.type,
-                          source: result.project_code || "dIQ",
-                          relevance: result.relevance || 0,
-                          updatedAt: result.created_at,
-                        }}
-                        onSummarize={() => handleSummarize(result.id)}
-                        isSummarizing={summarizingId === result.id}
-                      />
+                      <div className="relative">
+                        <SearchResultCard
+                          result={{
+                            id: result.id,
+                            title: result.title,
+                            summary: result.summary || "",
+                            type: result.type,
+                            source: result.project_code || "dIQ",
+                            relevance: result.relevance || 0,
+                            updatedAt: result.created_at,
+                          }}
+                          onSummarize={() => handleSummarize(result.id)}
+                          onAddToKB={handleAddToKB}
+                          isSummarizing={summarizingId === result.id}
+                          isAddingToKB={addingToKBId === result.id}
+                          aiSummary={aiSummaries[result.id] || null}
+                        />
+                        {/* Success indicator for KB add */}
+                        <AnimatePresence>
+                          {kbAddSuccess === result.id && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 shadow-lg"
+                            >
+                              <CheckCircle className="w-3 h-3" />
+                              Added to KB
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </StaggerItem>
                   ))}
                 </StaggerContainer>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
-import { useNewsPosts } from "@/lib/hooks/useSupabase";
+import { mockNewsPosts, type MockNewsPost } from "@/lib/mockData";
 import {
   Newspaper,
   Bell,
@@ -13,7 +13,6 @@ import {
   MessageSquare,
   Search,
   Filter,
-  Loader2,
   Plus,
   X,
   Pin,
@@ -21,8 +20,9 @@ import {
   UserCheck,
   Tag,
   User,
+  Loader2,
 } from "lucide-react";
-import type { NewsPost } from "@/lib/database.types";
+import Link from "next/link";
 
 // Mock categories and authors for following
 const categories = [
@@ -50,7 +50,9 @@ export default function NewsPage() {
   const [creating, setCreating] = useState(false);
   const [followedCategories, setFollowedCategories] = useState<string[]>(["company", "product"]);
   const [followedAuthors, setFollowedAuthors] = useState<string[]>(["1"]);
-  const { posts, loading } = useNewsPosts({ limit: 50 });
+
+  // Use mock data directly
+  const posts = mockNewsPosts;
 
   const toggleFollowCategory = (categoryId: string) => {
     setFollowedCategories((prev) =>
@@ -92,7 +94,7 @@ export default function NewsPage() {
     }
   };
 
-  const filteredPosts = posts.filter((post: NewsPost) => {
+  const filteredPosts = posts.filter((post: MockNewsPost) => {
     const matchesSearch = post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.content.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesPinned = filter === "pinned" ? post.pinned : true;
@@ -244,11 +246,7 @@ export default function NewsPage() {
           </div>
 
           {/* News Posts */}
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
-            </div>
-          ) : filteredPosts.length === 0 ? (
+          {filteredPosts.length === 0 ? (
             <div className="text-center py-12">
               <Newspaper className="w-12 h-12 text-[var(--text-muted)]/30 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">No news found</h3>
@@ -258,52 +256,54 @@ export default function NewsPage() {
             </div>
           ) : (
             <StaggerContainer className="space-y-4">
-              {filteredPosts.map((post: NewsPost) => (
+              {filteredPosts.map((post: MockNewsPost) => (
                 <StaggerItem key={post.id}>
-                  <motion.div
-                    whileHover={{ scale: 1.01, borderColor: "rgba(249,115,22,0.3)" }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                    className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 cursor-pointer"
-                  >
-                    <div className="flex items-start gap-4">
-                      {post.pinned && (
-                        <div className="flex-shrink-0 mt-1">
-                          <Bell className="w-5 h-5 text-[var(--accent-gold)]" />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
-                          {post.title || post.content.slice(0, 60)}
-                        </h3>
-                        <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
-                          {post.content}
-                        </p>
-                        <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="w-4 h-4" />
-                            {new Date(post.created_at).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <ThumbsUp className="w-4 h-4" />
-                            {post.likes_count} likes
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <MessageSquare className="w-4 h-4" />
-                            {post.comments_count} comments
-                          </span>
-                          {post.pinned && (
-                            <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]">
-                              Pinned
+                  <Link href={`/news/${post.id}`}>
+                    <motion.div
+                      whileHover={{ scale: 1.01, borderColor: "rgba(16,185,129,0.3)" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 cursor-pointer"
+                    >
+                      <div className="flex items-start gap-4">
+                        {post.pinned && (
+                          <div className="flex-shrink-0 mt-1">
+                            <Bell className="w-5 h-5 text-[var(--accent-gold)]" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
+                            {post.title || post.content.slice(0, 60)}
+                          </h3>
+                          <p className="text-[var(--text-secondary)] mb-4 line-clamp-3">
+                            {post.excerpt}
+                          </p>
+                          <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="w-4 h-4" />
+                              {new Date(post.published_at).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
                             </span>
-                          )}
+                            <span className="flex items-center gap-1.5">
+                              <ThumbsUp className="w-4 h-4" />
+                              {post.likes_count} likes
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <MessageSquare className="w-4 h-4" />
+                              {post.comments_count} comments
+                            </span>
+                            {post.pinned && (
+                              <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]">
+                                Pinned
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </Link>
                 </StaggerItem>
               ))}
             </StaggerContainer>

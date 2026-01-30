@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
-import { useKBCategories, useArticles, useDepartments } from "@/lib/hooks/useSupabase";
+import { mockKBCategories, mockArticles, mockDepartments, type MockKBCategory, type MockArticle, type MockDepartment } from "@/lib/mockData";
 import { ArticleEditor } from "@/components/content/ArticleEditor";
 import { CreateContentModal } from "@/components/content/CreateContentModal";
 import { VersionHistoryModal } from "@/components/content/VersionHistoryModal";
@@ -43,7 +43,7 @@ import {
   MessageSquare,
   Building2,
 } from "lucide-react";
-import type { KBCategory, Article } from "@/lib/database.types";
+// Types imported from mockData
 
 // Client type definition for multi-client isolation
 interface Client {
@@ -194,8 +194,8 @@ interface TreeItem {
   type: "folder" | "article";
   slug?: string;
   children?: TreeItem[];
-  article?: Article;
-  category?: KBCategory;
+  article?: MockArticle;
+  category?: MockKBCategory;
 }
 
 interface TreeNodeProps {
@@ -316,9 +316,13 @@ function ContentPageInner() {
   const [selectedForComparison, setSelectedForComparison] = useState<Set<string>>(new Set());
   const [showComparisonModal, setShowComparisonModal] = useState(false);
 
-  const { categories, loading: categoriesLoading } = useKBCategories();
-  const { articles, loading: articlesLoading } = useArticles();
-  const { departments, loading: departmentsLoading } = useDepartments();
+  // Use mock data for consistent IDs across the app
+  const categories = mockKBCategories;
+  const categoriesLoading = false;
+  const articles = mockArticles;
+  const articlesLoading = false;
+  const departments = mockDepartments;
+  const departmentsLoading = false;
 
   // Get recent articles (sorted by updated_at)
   const recentArticles = useMemo(() => {

@@ -33,8 +33,31 @@ import {
   Clipboard,
   Check,
 } from "lucide-react";
-import { useChatThreads, useChatMessages } from "@/lib/hooks/useSupabase";
-import type { ChatThread, ChatMessage, ChatSource } from "@/lib/database.types";
+import { mockChatThreads, mockChatMessages } from "@/lib/mockData";
+import type { ChatSource } from "@/lib/database.types";
+
+// Extended types for chat page that work with mock data
+interface ExtendedChatThread {
+  id: string;
+  title: string | null;
+  created_at: string;
+  updated_at: string;
+  message_count: number;
+  preview: string;
+  model?: string;
+  parent_thread_id?: string | null;
+  branch_point_message_id?: string | null;
+}
+
+interface ExtendedChatMessage {
+  id: string;
+  thread_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+  sources?: ChatSource[];
+  confidence?: number;
+}
 import { ConfidenceBadge } from "@/components/chat/ConfidenceBadge";
 import { MessageContentWithCitations, SourcesFooter } from "@/components/chat/CitationLink";
 
@@ -58,9 +81,82 @@ const demoSpaces: ChatSpace[] = [
 ];
 
 export default function ChatPage() {
-  const { threads, loading: threadsLoading, createThread, createBranch, isBranch, getParentThreadId, setThreads } = useChatThreads();
+  // Use mock data instead of Supabase hooks
+  const [threads, setThreads] = useState<ExtendedChatThread[]>(
+    mockChatThreads.map(t => ({ ...t, title: t.title || null, model: "claude-3", parent_thread_id: null, branch_point_message_id: null }))
+  );
+  const threadsLoading = false;
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
-  const { messages, loading: messagesLoading, addMessage, setMessages } = useChatMessages(activeThreadId);
+  const [messages, setMessages] = useState<ExtendedChatMessage[]>([]);
+  const messagesLoading = false;
+
+  // Mock thread functions
+  const createThread = async (title?: string, model?: string) => {
+    const newThread = {
+      id: `thread-${Date.now()}`,
+      title: title || null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      message_count: 0,
+      preview: "",
+      model: model || "claude-3",
+      parent_thread_id: null,
+      branch_point_message_id: null,
+    };
+    setThreads(prev => [newThread, ...prev]);
+    return newThread;
+  };
+
+  const createBranch = async (parentThreadId: string, messageId: string, model?: string) => {
+    const parentThread = threads.find(t => t.id === parentThreadId);
+    const newThread = {
+      id: `thread-branch-${Date.now()}`,
+      title: `Branch of ${parentThread?.title || "Chat"}`,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      message_count: 0,
+      preview: "",
+      model: model || "claude-3",
+      parent_thread_id: parentThreadId,
+      branch_point_message_id: messageId,
+    };
+    setThreads(prev => [newThread, ...prev]);
+    // Return messages up to the branch point
+    const branchMessages = messages.filter(m => {
+      const msgIndex = messages.findIndex(msg => msg.id === messageId);
+      return messages.indexOf(m) <= msgIndex;
+    });
+    return { thread: newThread, messages: branchMessages };
+  };
+
+  const isBranch = (thread: { parent_thread_id?: string | null }) => !!thread.parent_thread_id;
+  const getParentThreadId = (thread: { parent_thread_id?: string | null }) => thread.parent_thread_id || null;
+
+  // Load messages when active thread changes
+  useEffect(() => {
+    if (activeThreadId) {
+      const threadMessages = mockChatMessages
+        .filter(m => m.thread_id === activeThreadId)
+        .map(m => ({ ...m, sources: [] as ChatSource[], confidence: 85 }));
+      setMessages(threadMessages);
+    } else {
+      setMessages([]);
+    }
+  }, [activeThreadId]);
+
+  const addMessage = async (role: "user" | "assistant", content: string, metadata?: { sources?: ChatSource[]; confidence?: number; llmModel?: string }) => {
+    const newMessage = {
+      id: `msg-${Date.now()}`,
+      thread_id: activeThreadId || "",
+      role,
+      content,
+      created_at: new Date().toISOString(),
+      sources: metadata?.sources || [],
+      confidence: metadata?.confidence || 85,
+    };
+    setMessages(prev => [...prev, newMessage]);
+    return newMessage;
+  };
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [exportSuccess, setExportSuccess] = useState<string | null>(null);
 
@@ -758,7 +854,7 @@ export default function ChatPage() {
               </FadeIn>
             ) : (
               <AnimatePresence mode="popLayout">
-                {messages.map((message: ChatMessage, index: number) => (
+                {messages.map((message: ExtendedChatMessage, index: number) => (
                   <motion.div
                     key={message.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -1022,7 +1118,7 @@ export default function ChatPage() {
             </div>
           ) : threads.length > 0 ? (
             <div className="space-y-2 flex-1 overflow-y-auto">
-              {threads.map((thread: ChatThread, index: number) => {
+              {threads.map((thread: ExtendedChatThread, index: number) => {
                 const threadIsBranch = isBranch(thread);
                 const parentId = getParentThreadId(thread);
                 const parentThread = parentId ? threads.find(t => t.id === parentId) : null;

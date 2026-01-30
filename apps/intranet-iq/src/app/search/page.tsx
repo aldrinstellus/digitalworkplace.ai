@@ -7,7 +7,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { FacetedSidebar } from "@/components/search/FacetedSidebar";
 import { SearchResultCard } from "@/components/search/SearchResultCard";
 import { SearchAutocomplete } from "@/components/search/SearchAutocomplete";
-import { useSearch, useDepartments, useActivityLog } from "@/lib/hooks/useSupabase";
+import { mockSearchResults, mockDepartments, type MockSearchResult, type MockDepartment } from "@/lib/mockData";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import {
   Search,
@@ -288,10 +288,34 @@ function SearchPageInner() {
     { query: "remote work guidelines", timestamp: new Date(Date.now() - 432000000), resultCount: 6 },
   ]);
 
-  const { results, loading, error, search } = useSearch();
-  const { departments } = useDepartments();
-  const { log } = useActivityLog();
+  // Use mock data instead of Supabase hooks
+  const [results, setResults] = useState<MockSearchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error] = useState<string | null>(null);
+  const departments = mockDepartments as MockDepartment[];
   const searchParams = useSearchParams();
+
+  // Mock search function
+  const search = useCallback(async (query: string, _options?: { itemTypes?: string[]; maxResults?: number; offset?: number; mode?: string }) => {
+    setLoading(true);
+    // Simulate search delay
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    const queryLower = query.toLowerCase();
+    const filtered = mockSearchResults.filter(result =>
+      result.title.toLowerCase().includes(queryLower) ||
+      result.description.toLowerCase().includes(queryLower) ||
+      result.highlights.some(h => h.toLowerCase().includes(queryLower))
+    );
+    setResults(filtered);
+    setLoading(false);
+  }, []);
+
+  // Mock activity log function
+  const log = useCallback(async (_action: string, _data: Record<string, unknown>) => {
+    // In production, this would log to the activity log
+    console.log("Activity logged:", _action, _data);
+  }, []);
   const urlQueryProcessed = useRef(false);
 
   // Add to search history when a new search is performed

@@ -8,7 +8,7 @@ import { WorkflowCanvas, type WorkflowNode as LegacyWorkflowNode } from "@/compo
 import { WorkflowBuilder } from "@/components/workflow";
 import { ExecutionView } from "@/components/workflow/ExecutionView";
 import { CodeEditor } from "@/components/workflow/CodeEditor";
-import { useWorkflows } from "@/lib/hooks/useSupabase";
+import { mockWorkflows, type MockWorkflow } from "@/lib/mockData";
 import { workflowToReactFlow, reactFlowToDatabase, convertLegacyWorkflow } from "@/lib/workflow/serialization";
 import {
   workflowToYAML,
@@ -112,7 +112,18 @@ export default function AgentsPage() {
   }[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
-  const { workflows, loading, error, updateWorkflow, createWorkflow } = useWorkflows();
+  // Use mock data instead of Supabase hooks
+  const workflows = mockWorkflows as unknown as Workflow[];
+  const loading = false;
+  const error = null;
+  const updateWorkflow = async (id: string, updates: Partial<Workflow>) => {
+    console.log("Update workflow:", id, updates);
+    return workflows.find(w => w.id === id) || null;
+  };
+  const createWorkflow = async (data: Partial<Workflow>) => {
+    console.log("Create workflow:", data);
+    return { ...data, id: `wf-new-${Date.now()}` } as Workflow;
+  };
   const [showEditMode, setShowEditMode] = useState(false);
   const [editingStep, setEditingStep] = useState<string | null>(null);
   const [workflowList, setWorkflowList] = useState<Workflow[]>([]);

@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
-import { useUpcomingEvents } from "@/lib/hooks/useSupabase";
+import { mockEvents, type MockEvent } from "@/lib/mockData";
 import {
   Calendar,
   Clock,
@@ -12,7 +12,6 @@ import {
   Users,
   Search,
   Filter,
-  Loader2,
   Video,
   Building,
   Globe,
@@ -24,7 +23,7 @@ import {
   HelpCircle,
   X,
 } from "lucide-react";
-import type { Event } from "@/lib/database.types";
+import Link from "next/link";
 
 type ViewMode = "list" | "calendar";
 type RSVPStatus = "going" | "maybe" | "not-going" | null;
@@ -37,10 +36,12 @@ interface EventRSVP {
 
 export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "virtual" | "in-person" | "hybrid">("all");
+  const [filter, setFilter] = useState<"all" | "virtual" | "in_person" | "hybrid">("all");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const { events, loading } = useUpcomingEvents({ limit: 50 });
+
+  // Use mock data directly
+  const events = mockEvents;
   const [rsvps, setRsvps] = useState<Map<string, EventRSVP>>(new Map());
 
   // Generate consistent attendee counts based on event id (deterministic, not random)
@@ -93,7 +94,7 @@ export default function EventsPage() {
   };
 
   const getEventsForDay = (day: number) => {
-    return events.filter((event: Event) => {
+    return events.filter((event: MockEvent) => {
       const eventDate = new Date(event.start_time);
       return (
         eventDate.getDate() === day &&
@@ -111,7 +112,7 @@ export default function EventsPage() {
   const firstDayOfMonth = getFirstDayOfMonth(currentMonth);
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const filteredEvents = events.filter((event: Event) => {
+  const filteredEvents = events.filter((event: MockEvent) => {
     const matchesSearch = event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filter === "all" || event.location_type === filter;
@@ -173,12 +174,12 @@ export default function EventsPage() {
               <Filter className="w-4 h-4 text-[var(--text-muted)]" />
               <select
                 value={filter}
-                onChange={(e) => setFilter(e.target.value as "all" | "virtual" | "in-person" | "hybrid")}
+                onChange={(e) => setFilter(e.target.value as "all" | "virtual" | "in_person" | "hybrid")}
                 className="bg-transparent text-[var(--text-primary)] py-3 pr-2 outline-none cursor-pointer"
               >
                 <option value="all">All Events</option>
                 <option value="virtual">Virtual</option>
-                <option value="in-person">In-Person</option>
+                <option value="in_person">In-Person</option>
                 <option value="hybrid">Hybrid</option>
               </select>
             </div>
@@ -214,11 +215,7 @@ export default function EventsPage() {
           </div>
 
           {/* Events Content */}
-          {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-[var(--accent-ember)]" />
-            </div>
-          ) : viewMode === "calendar" ? (
+          {viewMode === "calendar" ? (
             /* Calendar View */
             <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl overflow-hidden">
               {/* Calendar Header */}
@@ -284,14 +281,15 @@ export default function EventsPage() {
                         {day}
                       </div>
                       <div className="space-y-1">
-                        {dayEvents.slice(0, 3).map((event: Event) => (
-                          <div
+                        {dayEvents.slice(0, 3).map((event: MockEvent) => (
+                          <Link
                             key={event.id}
-                            className="text-xs p-1 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] truncate cursor-pointer hover:bg-[var(--accent-ember)]/30 transition-colors"
+                            href={`/events/${event.id}`}
+                            className="block text-xs p-1 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] truncate cursor-pointer hover:bg-[var(--accent-ember)]/30 transition-colors"
                             title={event.title}
                           >
                             {event.title}
-                          </div>
+                          </Link>
                         ))}
                         {dayEvents.length > 3 && (
                           <div className="text-xs text-[var(--text-muted)]">
@@ -315,67 +313,68 @@ export default function EventsPage() {
           ) : (
             /* List View */
             <StaggerContainer className="space-y-4">
-              {filteredEvents.map((event: Event) => (
+              {filteredEvents.map((event: MockEvent) => (
                 <StaggerItem key={event.id}>
-                  <motion.div
-                    whileHover={{ scale: 1.01, borderColor: "rgba(249,115,22,0.3)" }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                    className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 cursor-pointer"
-                  >
-                    <div className="flex gap-6">
-                      {/* Date Column */}
-                      <div className="flex-shrink-0 w-20 text-center">
-                        <div className="bg-[var(--accent-ember)]/20 rounded-xl p-3">
-                          <div className="text-2xl font-bold text-[var(--accent-ember)]">
-                            {new Date(event.start_time).getDate()}
-                          </div>
-                          <div className="text-xs text-[var(--accent-ember)]/70 uppercase">
-                            {new Date(event.start_time).toLocaleDateString("en-US", { month: "short" })}
+                  <Link href={`/events/${event.id}`}>
+                    <motion.div
+                      whileHover={{ scale: 1.01, borderColor: "rgba(16,185,129,0.3)" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                      className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 cursor-pointer"
+                    >
+                      <div className="flex gap-6">
+                        {/* Date Column */}
+                        <div className="flex-shrink-0 w-20 text-center">
+                          <div className="bg-[var(--accent-ember)]/20 rounded-xl p-3">
+                            <div className="text-2xl font-bold text-[var(--accent-ember)]">
+                              {new Date(event.start_time).getDate()}
+                            </div>
+                            <div className="text-xs text-[var(--accent-ember)]/70 uppercase">
+                              {new Date(event.start_time).toLocaleDateString("en-US", { month: "short" })}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Event Details */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-lg font-medium text-[var(--text-primary)]">{event.title}</h3>
-                          <span className={`px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5 ${getLocationColor(event.location_type)}`}>
-                            {getLocationIcon(event.location_type)}
-                            {event.location_type}
-                          </span>
-                        </div>
+                        {/* Event Details */}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="text-lg font-medium text-[var(--text-primary)]">{event.title}</h3>
+                            <span className={`px-2.5 py-1 rounded-full text-xs flex items-center gap-1.5 ${getLocationColor(event.location_type)}`}>
+                              {getLocationIcon(event.location_type)}
+                              {event.location_type.replace('_', '-')}
+                            </span>
+                          </div>
 
-                        {event.description && (
-                          <p className="text-[var(--text-secondary)] mb-4 line-clamp-2">
-                            {event.description}
-                          </p>
-                        )}
+                          {event.description && (
+                            <p className="text-[var(--text-secondary)] mb-4 line-clamp-2">
+                              {event.description}
+                            </p>
+                          )}
 
-                        <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="w-4 h-4" />
-                            {new Date(event.start_time).toLocaleTimeString("en-US", {
-                              hour: "numeric",
-                              minute: "2-digit",
-                            })}
-                            {event.end_time && (
-                              <> - {new Date(event.end_time).toLocaleTimeString("en-US", {
+                          <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="w-4 h-4" />
+                              {new Date(event.start_time).toLocaleTimeString("en-US", {
                                 hour: "numeric",
                                 minute: "2-digit",
-                              })}</>
-                            )}
-                          </span>
-                          {event.location && (
-                            <span className="flex items-center gap-1.5">
-                              <MapPin className="w-4 h-4" />
-                              {event.location}
+                              })}
+                              {event.end_time && (
+                                <> - {new Date(event.end_time).toLocaleTimeString("en-US", {
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                })}</>
+                              )}
                             </span>
-                          )}
-                          <span className="flex items-center gap-1.5">
-                            <Users className="w-4 h-4" />
-                            {getRSVP(event.id).attendeeCount} attending
-                          </span>
-                        </div>
+                            {event.location && (
+                              <span className="flex items-center gap-1.5">
+                                <MapPin className="w-4 h-4" />
+                                {event.location}
+                              </span>
+                            )}
+                            <span className="flex items-center gap-1.5">
+                              <Users className="w-4 h-4" />
+                              {event.current_attendees} attending
+                            </span>
+                          </div>
 
                         {/* RSVP Buttons */}
                         <div className="flex items-center gap-3 mt-4 pt-4 border-t border-[var(--border-subtle)]">
@@ -400,6 +399,7 @@ export default function EventsPage() {
                           <div className="flex gap-2 ml-auto">
                             <motion.button
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 handleRSVP(event.id, "going");
                               }}
@@ -416,6 +416,7 @@ export default function EventsPage() {
                             </motion.button>
                             <motion.button
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 handleRSVP(event.id, "maybe");
                               }}
@@ -432,6 +433,7 @@ export default function EventsPage() {
                             </motion.button>
                             <motion.button
                               onClick={(e) => {
+                                e.preventDefault();
                                 e.stopPropagation();
                                 handleRSVP(event.id, "not-going");
                               }}
@@ -451,6 +453,7 @@ export default function EventsPage() {
                       </div>
                     </div>
                   </motion.div>
+                </Link>
                 </StaggerItem>
               ))}
             </StaggerContainer>

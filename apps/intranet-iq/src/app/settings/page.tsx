@@ -6,7 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useSearchParams } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
-import { useUserSettings, useCurrentUser, useDepartments } from "@/lib/hooks/useSupabase";
+import { mockUserSettings, mockCurrentUser, mockDepartments, type MockUserSettings, type MockCurrentUser, type MockDepartment } from "@/lib/mockData";
 import {
   Settings,
   User,
@@ -150,9 +150,15 @@ const defaultNotificationSettings: NotificationSetting[] = [
 
 function SettingsPageInner() {
   const { user: clerkUser } = useUser();
-  const { user: dbUser } = useCurrentUser();
-  const { settings, loading: settingsLoading, updateSettings } = useUserSettings();
-  const { departments } = useDepartments();
+  // Use mock data instead of Supabase hooks
+  const dbUser = mockCurrentUser as MockCurrentUser;
+  const settings = mockUserSettings as MockUserSettings;
+  const settingsLoading = false;
+  const updateSettings = async (_updates: Partial<MockUserSettings>) => {
+    // In production, this would update settings in Supabase
+    console.log("Settings update:", _updates);
+  };
+  const departments = mockDepartments as MockDepartment[];
   const searchParams = useSearchParams();
 
   // Get initial tab from URL parameter

@@ -20,8 +20,20 @@ import {
   Network,
   ArrowUpDown,
 } from "lucide-react";
-import { useDepartments, useEmployees } from "@/lib/hooks/useSupabase";
-import type { Employee, Department } from "@/lib/database.types";
+import { mockEmployees, type MockEmployee } from "@/lib/mockData";
+import Link from "next/link";
+
+// Inline mock departments
+const mockDepartments = [
+  { id: "exec", name: "Executive Team" },
+  { id: "eng", name: "Engineering" },
+  { id: "hr", name: "Human Resources" },
+  { id: "product", name: "Product" },
+  { id: "finance", name: "Finance" },
+  { id: "cs", name: "Customer Success" },
+  { id: "sales", name: "Sales" },
+  { id: "marketing", name: "Marketing" },
+];
 
 type ViewMode = "grid" | "list" | "org";
 type SortOption = "name-asc" | "name-desc" | "department" | "title";
@@ -46,8 +58,9 @@ function getRandomStatus(): "online" | "away" | "offline" {
 }
 
 export default function PeoplePage() {
-  const { departments, loading: deptLoading } = useDepartments();
-  const { employees, loading: empLoading } = useEmployees();
+  // Use mock data directly
+  const departments = mockDepartments;
+  const employees = mockEmployees;
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
@@ -64,7 +77,7 @@ export default function PeoplePage() {
     if (employees.length > 0 && !hasInitializedStatusesRef.current) {
       hasInitializedStatusesRef.current = true;
       const statuses: Record<string, "online" | "away" | "offline"> = {};
-      employees.forEach((emp: { id: string }) => {
+      employees.forEach((emp) => {
         statuses[emp.id] = getRandomStatus();
       });
       setEmployeeStatuses(statuses);
@@ -75,27 +88,25 @@ export default function PeoplePage() {
   useEffect(() => {
     if (employees.length > 0 && !hasInitializedNodesRef.current) {
       hasInitializedNodesRef.current = true;
-      const ceo = employees.find((emp: { manager_id?: string | null }) => !emp.manager_id);
+      const ceo = employees.find((emp) => !emp.manager_id);
       if (ceo) {
         setExpandedNodes(new Set([ceo.id]));
       }
     }
   }, [employees]);
 
-  const loading = deptLoading || empLoading;
-
   // Transform employees with user data - MEMOIZED
   const transformedEmployees = useMemo(() =>
-    employees.map((emp: any) => ({
+    employees.map((emp: MockEmployee) => ({
       id: emp.id,
-      name: emp.user?.full_name || "Unknown",
-      title: emp.job_title || "Employee",
-      department: emp.department?.name || "General",
+      name: emp.full_name,
+      title: emp.job_title,
+      department: emp.department_name,
       departmentId: emp.department_id,
-      location: emp.location || "Remote",
-      email: emp.user?.email || "",
+      location: emp.location,
+      email: emp.email,
       phone: emp.phone || "",
-      avatar: (emp.user?.full_name || "U").split(" ").map((n: string) => n[0]).join("").toUpperCase(),
+      avatar: emp.avatar,
       status: employeeStatuses[emp.id] || "offline",
       manager: emp.manager_id,
       managerId: emp.manager_id,
@@ -271,7 +282,7 @@ export default function PeoplePage() {
             <div>
               <h1 className="text-2xl font-medium text-[var(--text-primary)] mb-2">People Directory</h1>
               <p className="text-[var(--text-muted)]">
-                {loading ? "Loading..." : `${transformedEmployees.length} employees across the organization`}
+                {transformedEmployees.length} employees across the organization
               </p>
             </div>
 
@@ -355,7 +366,7 @@ export default function PeoplePage() {
               className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors cursor-pointer"
             >
               <option value="all">All Departments ({transformedEmployees.length})</option>
-              {departments.map((dept: Department) => {
+              {departments.map((dept) => {
                 const count = transformedEmployees.filter((e: any) => e.departmentId === dept.id).length;
                 return (
                   <option key={dept.id} value={dept.id}>
@@ -366,11 +377,7 @@ export default function PeoplePage() {
             </select>
           </FadeIn>
 
-          {loading ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent-ember)]" />
-            </div>
-          ) : viewMode === "org" ? (
+          {viewMode === "org" ? (
             <FadeIn className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-8 overflow-x-auto">
               <h2 className="text-lg font-medium text-[var(--text-primary)] mb-8 flex items-center gap-2">
                 <Network className="w-5 h-5 text-[var(--accent-ember)]" />
@@ -400,61 +407,61 @@ export default function PeoplePage() {
                   <StaggerContainer className="grid grid-cols-3 gap-4">
                     {filteredPeople.map((person: any, index: number) => (
                       <StaggerItem key={person.id}>
-                        <motion.div
-                          onClick={() => setSelectedPerson(person)}
-                          className={`bg-[var(--bg-charcoal)] border rounded-xl p-4 cursor-pointer transition-all ${
-                            selectedPerson?.id === person.id
-                              ? "border-[var(--accent-ember)] shadow-lg shadow-[var(--accent-ember)]/10"
-                              : "border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/30"
-                          }`}
-                          whileHover={{ scale: 1.02, y: -2 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="relative">
-                              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-white font-medium shadow-lg shadow-[var(--accent-ember)]/20">
-                                {person.avatar}
+                        <Link href={`/people/${person.id}`}>
+                          <motion.div
+                            className={`bg-[var(--bg-charcoal)] border rounded-xl p-4 cursor-pointer transition-all ${
+                              selectedPerson?.id === person.id
+                                ? "border-[var(--accent-ember)] shadow-lg shadow-[var(--accent-ember)]/10"
+                                : "border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/30"
+                            }`}
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="relative">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-white font-medium shadow-lg shadow-[var(--accent-ember)]/20">
+                                  {person.avatar}
+                                </div>
+                                <span
+                                  className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[var(--bg-charcoal)] ${
+                                    statusColors[person.status as keyof typeof statusColors] || statusColors.offline
+                                  }`}
+                                />
                               </div>
-                              <span
-                                className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[var(--bg-charcoal)] ${
-                                  statusColors[person.status as keyof typeof statusColors] || statusColors.offline
-                                }`}
-                              />
+                              <div>
+                                <h4 className="text-[var(--text-primary)] font-medium">{person.name}</h4>
+                                <p className="text-sm text-[var(--text-muted)]">{person.title}</p>
+                              </div>
                             </div>
-                            <div>
-                              <h4 className="text-[var(--text-primary)] font-medium">{person.name}</h4>
-                              <p className="text-sm text-[var(--text-muted)]">{person.title}</p>
+                            <div className="space-y-1 text-sm text-[var(--text-muted)]">
+                              <div className="flex items-center gap-2">
+                                <Building2 className="w-4 h-4" />
+                                {person.department}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4" />
+                                {person.location}
+                              </div>
                             </div>
-                          </div>
-                          <div className="space-y-1 text-sm text-[var(--text-muted)]">
-                            <div className="flex items-center gap-2">
-                              <Building2 className="w-4 h-4" />
-                              {person.department}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4" />
-                              {person.location}
-                            </div>
-                          </div>
-                        </motion.div>
+                          </motion.div>
+                        </Link>
                       </StaggerItem>
                     ))}
                   </StaggerContainer>
                 ) : (
                   <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl divide-y divide-[var(--border-subtle)]">
                     {filteredPeople.map((person: any, index: number) => (
-                      <motion.div
-                        key={person.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.03 }}
-                        onClick={() => setSelectedPerson(person)}
-                        className={`flex items-center gap-4 p-4 cursor-pointer transition-colors hover:bg-[var(--bg-slate)] ${
-                          selectedPerson?.id === person.id ? "bg-[var(--accent-ember)]/10" : ""
-                        }`}
-                      >
-                        <div className="relative">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-white font-medium text-sm shadow-md shadow-[var(--accent-ember)]/20">
+                      <Link key={person.id} href={`/people/${person.id}`}>
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.03 }}
+                          className={`flex items-center gap-4 p-4 cursor-pointer transition-colors hover:bg-[var(--bg-slate)] ${
+                            selectedPerson?.id === person.id ? "bg-[var(--accent-ember)]/10" : ""
+                          }`}
+                        >
+                          <div className="relative">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-white font-medium text-sm shadow-md shadow-[var(--accent-ember)]/20">
                             {person.avatar}
                           </div>
                           <span
@@ -470,6 +477,7 @@ export default function PeoplePage() {
                         <div className="text-sm text-[var(--text-muted)]">{person.department}</div>
                         <div className="text-sm text-[var(--text-muted)]">{person.location}</div>
                       </motion.div>
+                    </Link>
                     ))}
                   </div>
                 )}

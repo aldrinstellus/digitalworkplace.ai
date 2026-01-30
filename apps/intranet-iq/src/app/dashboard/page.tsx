@@ -311,6 +311,8 @@ export default function Dashboard() {
                   <span className="text-[var(--accent-ember)]">For you</span>
                   <span>|</span>
                   <span>{organizationName}</span>
+                  <span>|</span>
+                  <span>{new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</span>
                 </div>
               </div>
               <div className="flex items-center gap-2">

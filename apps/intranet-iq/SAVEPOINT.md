@@ -20,16 +20,16 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 
 | Property | Value |
 |----------|-------|
-| **Last Updated** | January 30, 2026 @ 10:00 PM |
-| **Session** | Realistic App Interface Replicas |
-| **Version** | 2.4.0 |
+| **Last Updated** | January 30, 2026 @ 10:45 PM |
+| **Session** | Dashboard Presets & Customize Functional |
+| **Version** | 2.4.1 |
 | **PRD Compliance** | **100%** |
 | **Mock Data Coverage** | **100%** (All pages use centralized mock data) |
 | **Detail Pages** | **100%** (news, events, people, content, channels) |
 | **Navigation** | **100%** (All links work, no 404s) |
 | **Audit Score** | 100/100 |
 | **Git Branch** | main |
-| **Git Commit** | 1711e3c |
+| **Git Commit** | efc692a |
 | **Build Status** | ✅ 58 pages compiled |
 | **Vercel Status** | ✅ LIVE |
 | **Local URL** | http://localhost:3001/diq/dashboard |
@@ -223,7 +223,15 @@ All 9 EPICs from the V2.0 PRD are now at 100% compliance. This was achieved by i
 
 ## VERSION HISTORY (from CHANGELOG.md)
 
-### v2.4.0 (January 30, 2026) - Current
+### v2.4.1 (January 30, 2026) - Current
+- **Dashboard Presets & Customize Fully Functional**
+- Presets dropdown now changes widget visibility immediately
+- Task-Focused, News-Heavy, Minimal, and Default layouts work
+- Customize modal toggles widget visibility correctly
+- Active preset highlighted with badge
+- Dynamic grid columns based on visible widgets
+
+### v2.4.0 (January 30, 2026)
 - **Realistic App Interface Replicas** - All 10 integrated apps with authentic UI
 - SlackApp: Full workspace/channel UI with message threading
 - JiraApp: Sprint board with Kanban columns and ticket cards
@@ -435,17 +443,34 @@ apps/intranet-iq/
 - [x] v2.3.0 Full Spectrum Mock Data - Zero 404 Errors - COMPLETE
 - [x] v2.3.1 Dashboard View All Links Fixed - COMPLETE
 - [x] v2.4.0 Realistic App Interface Replicas - COMPLETE
-- [x] Git commit and push v2.4.0 changes - COMPLETE (1711e3c)
-- [x] Vercel deployment for v2.4.0 - COMPLETE
-- [x] Production verified: All app pages returning 200
+- [x] v2.4.1 Dashboard Presets & Customize Functional - COMPLETE
+- [x] Git commit: efc692a pushed to main
+- [x] Vercel deployment: LIVE
+- [x] Production verified: https://diq.digitalworkplace.ai/diq/dashboard returning 200
 
-**No pending tasks. v2.4.0 is fully deployed and documented.**
+**No pending tasks. v2.4.1 is fully deployed and documented.**
 
 ---
 
 ## SESSION HISTORY
 
-### January 30, 2026 @ 10:00 PM (Current Session)
+### January 30, 2026 @ 10:45 PM (Current Session)
+**Accomplishments:**
+1. **Dashboard Presets Fully Functional** - All 4 presets now work
+   - Task-Focused: Quick Actions, Meeting, Activity only
+   - News-Heavy: News, Trending, Activity only
+   - Minimal: Quick Actions and Meeting only
+   - Default: All widgets visible
+2. **Customize Modal Works** - Toggle widget visibility, drag to reorder
+3. **Active Preset Detection** - Shows "Active" badge on current preset
+4. **Dynamic Grid Layout** - Columns adjust based on visible widgets
+
+**Files Modified:**
+- `src/app/dashboard/page.tsx` - Added conditional rendering for all widgets
+
+---
+
+### January 30, 2026 @ 10:00 PM
 **Accomplishments:**
 1. **Realistic App Interface Replicas** - All 10 integrated apps with authentic dummy data
 2. **SlackApp**: Full workspace with channel sidebar (260px), message threading, reactions, DMs with status indicators, formatting toolbar
@@ -644,6 +669,6 @@ open https://diq.digitalworkplace.ai/diq/dashboard
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/intranet-iq*
 *Production: https://diq.digitalworkplace.ai/diq/dashboard*
-*Version: 2.4.0*
+*Version: 2.4.1*
 *PRD Compliance: 100%*
-*Last Updated: January 30, 2026 @ 10:00 PM*
+*Last Updated: January 30, 2026 @ 10:45 PM*

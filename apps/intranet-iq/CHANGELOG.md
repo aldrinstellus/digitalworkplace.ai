@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.1] - 2026-01-30
+
+### Dashboard Presets & Customize Fully Functional
+
+This patch makes the dashboard presets dropdown and customize settings modal fully functional.
+
+#### Presets Dropdown
+- **Task-Focused**: Shows only Quick Actions, Meeting, and Activity
+- **News-Heavy**: Shows News, Trending, and Activity
+- **Minimal**: Shows only Quick Actions and Meeting
+- **Default**: Shows all widgets (recommended)
+- Active preset is highlighted with "Active" badge
+
+#### Customize Modal
+- Toggle visibility for each widget type
+- Drag to reorder widgets
+- Reset to default button
+- Changes persist to localStorage
+
+#### Technical Changes
+- Added `isWidgetVisible()` helper for conditional rendering
+- Added `getCurrentPreset()` for active state detection
+- Each widget section wrapped with visibility conditionals
+- Dynamic grid columns based on visible widget count
+
+#### Files Modified
+- `src/app/dashboard/page.tsx` - Conditional rendering for all widgets
+
+---
+
 ## [2.4.0] - 2026-01-30
 
 ### Realistic App Interface Replicas

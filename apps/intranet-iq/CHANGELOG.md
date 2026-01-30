@@ -7,6 +7,103 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.2] - 2026-01-30
+
+### Three-Panel Layout Fix (CRITICAL - Sidebar Navigation Visibility)
+
+This release fixes a critical layout issue where sidebar navigation items were being cut off. Only bottom icons (Search, Notifications, Settings) were visible while middle navigation items (Home, Chat, My Day, etc.) were hidden.
+
+#### Root Cause Identified
+The combination of `h-dvh overflow-hidden` on parent elements created viewport calculation issues that prevented the fixed sidebar from rendering correctly:
+- `body` had `h-dvh overflow-hidden` - locking document height
+- Dashboard container had `h-dvh overflow-hidden` - double constraint
+- Main content had `h-dvh overflow-y-auto` - conflicting scroll context
+
+#### Solution: Decoupled Three-Panel Architecture
+```
++----------+---------------------------+----------+
+| Sidebar  |     Main Content          | Apps Bar |
+| (fixed)  |     (scrollable)          | (fixed)  |
+| 64px     |     flex-1                | 80px     |
+| h-dvh    |     min-h-dvh             | h-dvh    |
++----------+---------------------------+----------+
+```
+
+Each panel is now independently positioned and sized:
+- **Sidebar**: `fixed left-0 top-0 h-dvh` - manages own height/scroll
+- **Main**: `min-h-dvh` - content determines height, body handles scroll
+- **Apps Bar**: `fixed top-0 right-0 h-full` - manages own height/scroll
+
+#### Files Modified (3 Critical Changes)
+
+| File | Line | Before | After |
+|------|------|--------|-------|
+| `layout.tsx` | 36 | `h-dvh overflow-hidden` | `min-h-dvh` |
+| `dashboard/page.tsx` | 268 | `h-dvh overflow-hidden` | `min-h-dvh` |
+| `dashboard/page.tsx` | 272 | `h-dvh overflow-y-auto` | `min-h-dvh` |
+
+#### Key Principles (MUST FOLLOW)
+1. **Never use `overflow-hidden` on body** - breaks fixed children
+2. **Use `min-h-dvh` not `h-dvh`** for containers - allows content growth
+3. **Fixed panels manage their own height** - `h-dvh` or `h-full` on the fixed element itself
+4. **Dynamic viewport height** - `dvh` not `vh` for mobile compatibility
+
+#### Verification Checklist
+- [ ] All sidebar items visible (Home, Chat, My Day, News, Events, Channels, People, Content, Agents, Admin items, Search, Notifications, Settings)
+- [ ] Sidebar visible at 1920x1080
+- [ ] Sidebar visible at 1366x768
+- [ ] Sidebar visible at 1280x800
+- [ ] Main content scrolls independently
+- [ ] Apps bar scrolls independently
+
+#### Prevention Notes
+**DO NOT** add `overflow-hidden` to:
+- `<body>` element
+- Root dashboard container
+- Any parent of fixed elements
+
+**ALWAYS** test at multiple viewport sizes before deploying layout changes.
+
+---
+
+## [2.5.1] - 2026-01-30
+
+### Apps Bar Drag-to-Scroll & Responsive Layout Fix
+
+This patch adds premium UX drag-to-scroll functionality to the Apps Bar and fixes viewport responsiveness issues.
+
+#### Apps Bar Enhancements (AppShortcutsBar.tsx)
+- **Drag-to-Scroll**: Click-hold-drag to scroll through apps vertically
+- **Wheel Scroll**: Mouse wheel scrolls apps independently from main content
+- **Hidden Scrollbar**: Clean premium UX with no visible scrollbar
+- **Click Navigation Preserved**: 5px movement threshold differentiates drag vs click
+- **Cursor Feedback**: Shows grab/grabbing cursor during interaction
+- **Click Prevention During Drag**: Uses ref-based tracking to prevent accidental navigation
+
+#### Sidebar Responsiveness Fix (Sidebar.tsx)
+- **Dynamic Viewport Height**: Changed from `h-screen` to `h-dvh` for better mobile browser support
+- **Overflow Handling**: Navigation area now has `overflow-y-auto` with `scrollbar-hide`
+- **Flex Shrink Control**: Logo and bottom actions have `flex-shrink-0` to prevent compression
+- **Minimum Height**: Navigation uses `min-h-0` for proper flex overflow behavior
+
+#### CSS Utilities Added (globals.css)
+- **`.scrollbar-hide`**: Cross-browser scrollbar hiding utility class
+  - `-ms-overflow-style: none` for IE/Edge
+  - `scrollbar-width: none` for Firefox
+  - `::-webkit-scrollbar { display: none }` for Chrome/Safari/Opera
+
+#### Browser Automation Notes
+- **Viewport Initialization**: Always set viewport size explicitly with `page.setViewportSize()`
+- **Recommended Sizes**: 1920x1080 (desktop), 1366x768 (laptop), 1280x800 (small desktop)
+- **Null Viewport Issue**: If viewport is null, browser may show tablet-sized view
+
+#### Files Modified
+- `src/components/dashboard/AppShortcutsBar.tsx` - Drag-to-scroll implementation (+60 lines)
+- `src/components/layout/Sidebar.tsx` - Responsive height and overflow fixes
+- `src/app/globals.css` - Added `.scrollbar-hide` utility class
+
+---
+
 ## [2.5.0] - 2026-01-30
 
 ### Full Widget Catalog & Preset-Customization Interlinking

@@ -20,9 +20,9 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 
 | Property | Value |
 |----------|-------|
-| **Last Updated** | January 30, 2026 @ 11:30 PM |
-| **Session** | Full Widget Catalog + Preset-Customization Interlinking |
-| **Version** | 2.5.0 |
+| **Last Updated** | January 31, 2026 @ 12:50 AM |
+| **Session** | Three-Panel Layout Fix (Sidebar Visibility) |
+| **Version** | 2.5.2 |
 | **PRD Compliance** | **100%** |
 | **Mock Data Coverage** | **100%** (All pages use centralized mock data) |
 | **Detail Pages** | **100%** (news, events, people, content, channels) |
@@ -172,6 +172,64 @@ time curl -s http://localhost:3001/diq/api/content | jq '.articles | length'
 
 ---
 
+## ⚠️ CRITICAL: THREE-PANEL LAYOUT ARCHITECTURE
+
+**DO NOT MODIFY WITHOUT READING THIS SECTION**
+
+The dIQ dashboard uses a three-panel architecture. Any changes to layout/overflow can break sidebar visibility.
+
+### Architecture Diagram
+```
++----------+---------------------------+----------+
+| Sidebar  |     Main Content          | Apps Bar |
+| (fixed)  |     (scrollable)          | (fixed)  |
+| 64px     |     flex-1                | 80px     |
+| h-dvh    |     min-h-dvh             | h-dvh    |
++----------+---------------------------+----------+
+```
+
+### Required CSS Classes
+
+| Element | File | Required Classes |
+|---------|------|------------------|
+| `<body>` | `layout.tsx:36` | `min-h-dvh` (NO overflow-hidden!) |
+| Dashboard container | `dashboard/page.tsx:268` | `min-h-dvh` (NO overflow-hidden!) |
+| Main content | `dashboard/page.tsx:272` | `min-h-dvh` (NO overflow-y-auto!) |
+| Sidebar | `Sidebar.tsx:48` | `fixed left-0 top-0 h-dvh` |
+| Apps Bar | `AppShortcutsBar.tsx:218` | `fixed top-0 right-0 h-full` |
+
+### FORBIDDEN Patterns ⛔
+
+**NEVER add these to body or dashboard container:**
+```css
+/* FORBIDDEN - breaks fixed children */
+overflow-hidden
+overflow-y-hidden
+h-dvh overflow-hidden  /* combination breaks layout */
+```
+
+### WHY This Matters
+
+When `overflow-hidden` is on body:
+1. Fixed elements clip to viewport
+2. Browser may miscalculate heights
+3. Sidebar items get cut off
+4. Only bottom icons remain visible
+
+### Verification After Layout Changes
+
+Always test at these viewports after ANY layout change:
+```bash
+# Test at multiple sizes
+1920x1080  # Desktop
+1366x768   # Laptop
+1280x800   # Small desktop
+```
+
+Check: All 12+ sidebar items visible (Home through Settings)
+
+---
+
 ## v2.2.0 - 100% PRD COMPLIANCE ACHIEVED
 
 ### Summary
@@ -224,7 +282,24 @@ All 9 EPICs from the V2.0 PRD are now at 100% compliance. This was achieved by i
 
 ## VERSION HISTORY (from CHANGELOG.md)
 
-### v2.4.1 (January 30, 2026) - Current
+### v2.5.2 (January 31, 2026) - Current
+- **CRITICAL: Three-Panel Layout Fix** - Sidebar navigation fully visible
+- **Root cause**: `overflow-hidden` on body/container broke fixed positioning
+- **Solution**: `min-h-dvh` on body, container, and main - panels manage own overflow
+- **Prevention**: NEVER add `overflow-hidden` to body or parent of fixed elements
+
+### v2.5.1 (January 30, 2026)
+- **Apps Bar Drag-to-Scroll** - Premium UX click-hold-drag scrolling
+- **Sidebar Responsiveness Fix** - Full viewport height with h-dvh
+- **Hidden Scrollbar** - Clean UI with scrollbar-hide utility
+- **Browser Automation Fix** - Viewport initialization documentation
+
+### v2.5.0 (January 30, 2026)
+- **Full Widget Catalog** - 15 widgets, 4 presets, full interlinking
+- **9 New Widget Components** - Calendar, Bookmarks, Goals, Team Directory, Announcements, Polls, Birthdays, Performance, Weather
+- **Bidirectional Preset-Customization** - Presets ↔ Widgets ↔ Custom
+
+### v2.4.1 (January 30, 2026)
 - **Dashboard Presets & Customize Fully Functional**
 - Presets dropdown now changes widget visibility immediately
 - Task-Focused, News-Heavy, Minimal, and Default layouts work
@@ -455,7 +530,78 @@ apps/intranet-iq/
 
 ## SESSION HISTORY
 
-### January 30, 2026 @ 10:45 PM (Current Session)
+### January 31, 2026 @ 12:50 AM (Current Session)
+**Accomplishments:**
+1. **CRITICAL: Three-Panel Layout Fix** - Sidebar navigation fully visible
+   - **Root Cause**: `h-dvh overflow-hidden` on body/container broke fixed positioning
+   - **Solution**: Changed to `min-h-dvh` (removed overflow-hidden)
+   - All 12+ sidebar navigation items now visible
+   - Works at all viewport sizes
+
+2. **Layout Changes Made:**
+   | File | Line | Before | After |
+   |------|------|--------|-------|
+   | `layout.tsx` | 36 | `h-dvh overflow-hidden` | `min-h-dvh` |
+   | `dashboard/page.tsx` | 268 | `h-dvh overflow-hidden` | `min-h-dvh` |
+   | `dashboard/page.tsx` | 272 | `h-dvh overflow-y-auto` | `min-h-dvh` |
+
+3. **Comprehensive Documentation Added:**
+   - CHANGELOG.md: v2.5.2 with full root cause analysis
+   - SAVEPOINT.md: Three-Panel Architecture section added
+   - Prevention notes: NEVER add overflow-hidden to body
+   - Verification checklist added
+
+4. **Why This Works:**
+   - Fixed elements (sidebar, apps bar) manage their own height with `h-dvh`
+   - Body uses `min-h-dvh` allowing natural document flow
+   - Main content grows with content, browser handles scroll
+   - No parent overflow constraints on fixed children
+
+**Files Modified:**
+- `src/app/layout.tsx:36` - Body class fix
+- `src/app/dashboard/page.tsx:268,272` - Container/main class fix
+- `CHANGELOG.md` - v2.5.2 documentation
+- `SAVEPOINT.md` - Architecture documentation, prevention notes
+
+---
+
+### January 30, 2026 @ 11:55 PM
+**Accomplishments:**
+1. **Apps Bar Drag-to-Scroll** - Premium UX implementation
+   - Click-hold-drag scrolling (vertical)
+   - Mouse wheel scroll support (independent from main content)
+   - Hidden scrollbar (CSS scrollbar-hide utility)
+   - 5px movement threshold to differentiate drag vs click
+   - Click navigation still works for app icons
+   - Cursor feedback (grab/grabbing states)
+2. **Sidebar Responsiveness Fix** - Full viewport height
+   - Changed `h-screen` to `h-dvh` (dynamic viewport height)
+   - Added overflow handling for navigation items
+   - Flex shrink control prevents element compression
+   - Works at all viewport sizes (1920x1080, 1366x768, etc.)
+3. **Browser Automation Fix** - Viewport initialization
+   - Must explicitly set viewport size
+   - Null viewport causes tablet-sized view
+   - Documentation added to prevent recurrence
+4. **CSS Utility Added** - `.scrollbar-hide` class in globals.css
+
+**Files Modified:**
+- `src/components/dashboard/AppShortcutsBar.tsx` - Drag-to-scroll (+60 lines)
+- `src/components/layout/Sidebar.tsx` - Responsive height fixes (`h-dvh`)
+- `src/app/layout.tsx` - Root layout viewport fix (`h-dvh overflow-hidden`)
+- `src/app/dashboard/page.tsx` - Main content viewport fix
+- `src/app/globals.css` - Added `.scrollbar-hide` utility class
+- `CLAUDE.md` - Added browser automation best practices
+
+**Technical Details:**
+- Uses `useRef` for `hasMovedRef` to avoid stale closure issues
+- Framer Motion spring animation for smooth scroll position
+- setTimeout reset of hasMoved after mouseUp (100ms delay)
+- Works with both internal (`/apps/[id]`) and external app links
+
+---
+
+### January 30, 2026 @ 10:45 PM
 **Accomplishments:**
 1. **Dashboard Presets Fully Functional** - All 4 presets now work
    - Task-Focused: Quick Actions, Meeting, Activity only
@@ -670,6 +816,6 @@ open https://diq.digitalworkplace.ai/diq/dashboard
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/intranet-iq*
 *Production: https://diq.digitalworkplace.ai/diq/dashboard*
-*Version: 2.4.1*
+*Version: 2.5.2*
 *PRD Compliance: 100%*
-*Last Updated: January 30, 2026 @ 10:45 PM*
+*Last Updated: January 31, 2026 @ 12:50 AM*

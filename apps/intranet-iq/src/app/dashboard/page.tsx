@@ -265,11 +265,11 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-obsidian)]">
+    <div className="min-h-dvh bg-[var(--bg-obsidian)]">
       <Sidebar />
 
       {/* Main Content - Optimized 3-Column Layout */}
-      <main className="ml-16 mr-20 p-6">
+      <main className="ml-16 mr-20 min-h-dvh p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header Row */}
           <FadeIn delay={0}>

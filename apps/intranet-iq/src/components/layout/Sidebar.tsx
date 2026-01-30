@@ -45,11 +45,11 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-16 bg-[var(--bg-charcoal)] border-r border-[var(--border-subtle)] flex flex-col items-center py-4">
+    <aside className="fixed left-0 top-0 z-40 h-dvh w-16 bg-[var(--bg-charcoal)] border-r border-[var(--border-subtle)] flex flex-col items-center py-4 overflow-hidden">
       {/* Logo */}
       <Link
         href="/dashboard"
-        className="mb-6 group"
+        className="mb-6 group flex-shrink-0"
         title="Intranet IQ"
       >
         <motion.div
@@ -62,7 +62,7 @@ export function Sidebar() {
       </Link>
 
       {/* Navigation */}
-      <nav className="flex-1 flex flex-col items-center gap-1">
+      <nav className="flex-1 flex flex-col items-center gap-1 overflow-y-auto scrollbar-hide min-h-0">
         {navigation.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
           return (
@@ -83,7 +83,7 @@ export function Sidebar() {
       </nav>
 
       {/* Bottom actions */}
-      <div className="flex flex-col items-center gap-1">
+      <div className="flex flex-col items-center gap-1 flex-shrink-0 pb-2">
         <NavItem
           item={{ name: "Search", href: "/search", icon: Search }}
           isActive={pathname === "/search"}

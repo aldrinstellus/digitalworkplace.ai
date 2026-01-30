@@ -591,10 +591,26 @@ export async function POST(request: NextRequest) {
         const responseTime = Date.now() - startTime;
         const totalTokens = (response.usage?.input_tokens || 0) + (response.usage?.output_tokens || 0);
 
-        // Calculate confidence based on sources found and tool use
-        const baseConfidence = sources.length > 0 ? 75 + (sources.length * 4) : 70;
-        const toolBonus = toolResults.length > 0 ? 5 : 0;
-        const confidence = Math.min(98, baseConfidence + toolBonus);
+        // Calculate confidence based on sources found and average relevance
+        // High: sources >= 3 AND avg relevance > 0.7
+        // Medium: sources >= 1 AND avg relevance > 0.5
+        // Low: otherwise
+        const avgRelevance = sources.length > 0
+          ? sources.reduce((sum, s) => sum + s.relevance, 0) / sources.length
+          : 0;
+
+        let confidenceLevel: 'high' | 'medium' | 'low';
+        if (sources.length >= 3 && avgRelevance > 0.7) {
+          confidenceLevel = 'high';
+        } else if (sources.length >= 1 && avgRelevance > 0.5) {
+          confidenceLevel = 'medium';
+        } else {
+          confidenceLevel = 'low';
+        }
+
+        // Map to percentage for backward compatibility
+        const confidenceMap = { high: 95, medium: 75, low: 50 };
+        const confidence = confidenceMap[confidenceLevel];
 
         // Save assistant message to thread if threadId provided
         if (threadId) {
@@ -669,6 +685,23 @@ export async function POST(request: NextRequest) {
       duration: Date.now() - startTime - steps.reduce((sum, s) => sum + s.duration, 0),
     });
 
+    // Calculate confidence for demo mode
+    const demoAvgRelevance = sources.length > 0
+      ? sources.reduce((sum, s) => sum + s.relevance, 0) / sources.length
+      : 0;
+
+    let demoConfidenceLevel: 'high' | 'medium' | 'low';
+    if (sources.length >= 3 && demoAvgRelevance > 0.7) {
+      demoConfidenceLevel = 'high';
+    } else if (sources.length >= 1 && demoAvgRelevance > 0.5) {
+      demoConfidenceLevel = 'medium';
+    } else {
+      demoConfidenceLevel = 'low';
+    }
+
+    const demoConfidenceMap = { high: 95, medium: 75, low: 50 };
+    const demoConfidence = demoConfidenceMap[demoConfidenceLevel];
+
     return NextResponse.json({
       message: finalResponse,
       sources: sources.map(s => ({
@@ -678,7 +711,8 @@ export async function POST(request: NextRequest) {
         url: s.url,
         relevance: s.relevance,
       })),
-      confidence: sources.length > 0 ? 75 : 60,
+      confidence: demoConfidence,
+      confidenceLevel: demoConfidenceLevel,
       model: 'demo-mode',
       tokensUsed: 0,
       demo: true,

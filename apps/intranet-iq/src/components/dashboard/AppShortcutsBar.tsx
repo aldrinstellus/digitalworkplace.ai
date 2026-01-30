@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, Plus, Settings, X, Trash2, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -54,6 +54,14 @@ export function AppShortcutsBar() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Drag-to-scroll state
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startY, setStartY] = useState(0);
+  const [startScrollPosition, setStartScrollPosition] = useState(0);
+  const hasMovedRef = useRef(false); // Use ref to avoid stale closure issues
+  const dragThreshold = 5; // Pixels moved before considering it a drag vs click
+
   // Load apps from localStorage on mount
   // Merge with defaults to ensure hasInternalPage flag is always applied
   useEffect(() => {
@@ -100,6 +108,76 @@ export function AppShortcutsBar() {
       setScrollPosition((prev) => Math.min(apps.length - VISIBLE_APPS, prev + 2));
     }
   };
+
+  // Drag-to-scroll handlers
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    // Only handle left mouse button
+    if (e.button !== 0) return;
+
+    setIsDragging(true);
+    setStartY(e.clientY);
+    setStartScrollPosition(scrollPosition);
+    hasMovedRef.current = false;
+
+    // Prevent text selection during drag
+    e.preventDefault();
+  }, [scrollPosition]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging) return;
+
+    const deltaY = startY - e.clientY;
+    const itemHeight = 68; // Height of each app item including gap
+
+    // Check if user has moved enough to be considered a drag
+    if (Math.abs(deltaY) > dragThreshold) {
+      hasMovedRef.current = true;
+    }
+
+    // Convert pixel delta to scroll position (inverted for natural scroll feel)
+    const scrollDelta = deltaY / itemHeight;
+    const newPosition = Math.max(0, Math.min(apps.length - VISIBLE_APPS, startScrollPosition + scrollDelta));
+
+    setScrollPosition(newPosition);
+  }, [isDragging, startY, startScrollPosition, apps.length, dragThreshold]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    // Snap to nearest integer position for clean alignment
+    setScrollPosition(prev => Math.round(prev));
+    // Reset hasMoved after a small delay to allow click prevention to work
+    setTimeout(() => {
+      hasMovedRef.current = false;
+    }, 100);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (isDragging) {
+      setIsDragging(false);
+      setScrollPosition(prev => Math.round(prev));
+      // Reset hasMoved after a small delay
+      setTimeout(() => {
+        hasMovedRef.current = false;
+      }, 100);
+    }
+  }, [isDragging]);
+
+  // Wheel scroll handler
+  const handleWheel = useCallback((e: React.WheelEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const scrollAmount = e.deltaY > 0 ? 1 : -1;
+    setScrollPosition(prev => {
+      const newPos = prev + scrollAmount;
+      return Math.max(0, Math.min(apps.length - VISIBLE_APPS, newPos));
+    });
+  }, [apps.length]);
+
+  // Check if a click should be allowed (not a drag)
+  const shouldAllowClick = useCallback(() => {
+    return !hasMovedRef.current;
+  }, []);
 
   const addApp = (app: AppShortcut) => {
     if (!apps.find((a) => a.id === app.id)) {
@@ -167,14 +245,30 @@ export function AppShortcutsBar() {
             <ChevronUp className="w-4 h-4" />
           </motion.button>
 
-          {/* Apps Container - Vertical Scroll */}
-          <div className="flex-1 overflow-hidden px-2">
+          {/* Apps Container - Drag-to-Scroll */}
+          <div
+            ref={containerRef}
+            className={`flex-1 overflow-hidden px-2 select-none scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            onWheel={handleWheel}
+          >
             <motion.div
               className="flex flex-col gap-1"
               animate={{ y: -scrollPosition * 68 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               {apps.map((app, index) => {
+                const handleAppClick = (e: React.MouseEvent) => {
+                  // Prevent navigation if user was dragging
+                  if (!shouldAllowClick()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                };
+
                 const AppWrapper = app.hasInternalPage ? Link : "a";
                 const linkProps = app.hasInternalPage
                   ? { href: `/apps/${app.id}` }
@@ -186,19 +280,20 @@ export function AppShortcutsBar() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={!isDragging ? { scale: 1.05 } : undefined}
+                    whileTap={!isDragging ? { scale: 0.95 } : undefined}
                   >
                     <AppWrapper
                       {...linkProps}
+                      onClick={handleAppClick}
                       className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-[var(--bg-slate)] transition-colors group"
                       title={app.name}
                     >
                       <motion.div
                         className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center text-lg`}
-                        whileHover={{
+                        whileHover={!isDragging ? {
                           boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
-                        }}
+                        } : undefined}
                       >
                         {app.icon}
                       </motion.div>

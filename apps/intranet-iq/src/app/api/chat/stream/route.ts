@@ -307,6 +307,26 @@ export async function POST(request: NextRequest) {
             }
           }
 
+          // Calculate confidence based on sources and avg relevance
+          // High: sources >= 3 AND avg relevance > 0.7
+          // Medium: sources >= 1 AND avg relevance > 0.5
+          // Low: otherwise
+          const avgRelevance = sources.length > 0
+            ? sources.reduce((sum, s) => sum + s.relevance, 0) / sources.length
+            : 0;
+
+          let confidenceLevel: 'high' | 'medium' | 'low';
+          if (sources.length >= 3 && avgRelevance > 0.7) {
+            confidenceLevel = 'high';
+          } else if (sources.length >= 1 && avgRelevance > 0.5) {
+            confidenceLevel = 'medium';
+          } else {
+            confidenceLevel = 'low';
+          }
+
+          const confidenceMap = { high: 95, medium: 75, low: 50 };
+          const calculatedConfidence = confidenceMap[confidenceLevel];
+
           // Save to database if threadId provided
           if (threadId && fullResponse) {
             await supabase
@@ -323,7 +343,7 @@ export async function POST(request: NextRequest) {
                   url: s.url,
                   relevance: s.relevance,
                 })),
-                confidence: Math.min(95, 75 + sources.length * 4),
+                confidence: calculatedConfidence,
                 tokens_used: outputTokens,
                 llm_model: model,
                 metadata: {},
@@ -338,7 +358,8 @@ export async function POST(request: NextRequest) {
               totalTokens: inputTokens + outputTokens,
               inputTokens,
               outputTokens,
-              confidence: Math.min(95, 75 + sources.length * 4),
+              confidence: calculatedConfidence,
+              confidenceLevel,
             }
           })));
 

@@ -251,12 +251,25 @@ const prefersReducedMotion = window.matchMedia(
 
 ### Sidebar Navigation
 - **Width:** 64px (collapsed)
+- **Height:** `h-dvh` (dynamic viewport height for mobile browser compatibility)
 - **Background:** #121218
 - **Border:** 1px solid rgba(255,255,255,0.06)
 - **Icon Size:** 20px
-- **Logo:** dIQ logo at top (links to dashboard)
+- **Logo:** dIQ logo at top (links to dashboard, `flex-shrink-0`)
 - **Active State:** Ember gradient bg + left indicator bar
 - **Hover:** Subtle glow effect
+- **Navigation Overflow:** `overflow-y-auto scrollbar-hide min-h-0`
+- **Bottom Actions:** `flex-shrink-0 pb-2`
+
+### Apps Bar (Right Sidebar)
+- **Width:** 80px
+- **Position:** Fixed right-0 top-0
+- **Background:** rgba(18,18,24,0.95) with backdrop-blur
+- **Scrolling:** Drag-to-scroll (click-hold-drag) + mouse wheel
+- **Scrollbar:** Hidden (`scrollbar-hide` utility class)
+- **Click vs Drag:** 5px movement threshold
+- **Cursor:** `cursor-grab` (idle), `cursor-grabbing` (dragging)
+- **Collapse:** Toggle button at center-right edge
 
 ### Cards
 - **Background:** #121218

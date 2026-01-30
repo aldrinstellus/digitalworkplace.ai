@@ -92,33 +92,53 @@ export default function AppDetailPage() {
 }
 
 // ============================================================================
-// SLACK - Authentic Interface Replica
+// SLACK - Authentic Interface Replica (Enhanced)
 // ============================================================================
 function SlackApp() {
   const [selectedChannel, setSelectedChannel] = useState("engineering");
+  const [messageInput, setMessageInput] = useState("");
+  const [showThreads, setShowThreads] = useState(false);
 
-  const workspaces = [{ name: "Digital Workplace", icon: "DW" }];
+  const workspaces = [
+    { name: "Digital Workplace", icon: "DW", active: true },
+    { name: "ATC Partners", icon: "AT", active: false },
+    { name: "Acme Corp", icon: "AC", active: false },
+  ];
   const channels = [
-    { id: "general", name: "general", unread: 3, isPrivate: false },
-    { id: "engineering", name: "engineering", unread: 12, isPrivate: false },
-    { id: "product-launch", name: "product-launch", unread: 0, isPrivate: true },
-    { id: "design", name: "design", unread: 5, isPrivate: false },
-    { id: "random", name: "random", unread: 24, isPrivate: false },
-    { id: "help-requests", name: "help-requests", unread: 0, isPrivate: false },
+    { id: "general", name: "general", unread: 3, isPrivate: false, description: "Company-wide announcements" },
+    { id: "engineering", name: "engineering", unread: 12, isPrivate: false, description: "Engineering team discussions" },
+    { id: "product-launch", name: "product-launch", unread: 0, isPrivate: true, description: "Q1 product launch planning" },
+    { id: "design", name: "design", unread: 5, isPrivate: false, description: "Design system and UX" },
+    { id: "random", name: "random", unread: 24, isPrivate: false, description: "Non-work banter" },
+    { id: "help-requests", name: "help-requests", unread: 0, isPrivate: false, description: "IT support requests" },
+    { id: "sales-wins", name: "sales-wins", unread: 2, isPrivate: false, description: "Celebrate closed deals" },
+    { id: "frontend", name: "frontend", unread: 8, isPrivate: false, description: "React, Next.js, UI/UX" },
+    { id: "backend", name: "backend", unread: 3, isPrivate: false, description: "APIs, databases, infra" },
+    { id: "devops", name: "devops", unread: 1, isPrivate: true, description: "CI/CD, deployments" },
   ];
   const dms = [
-    { id: "sarah", name: "Sarah Chen", status: "online", unread: 2 },
-    { id: "mike", name: "Mike Johnson", status: "away", unread: 0 },
-    { id: "alex", name: "Alex Kim", status: "dnd", unread: 0 },
-    { id: "emily", name: "Emily Rodriguez", status: "offline", unread: 1 },
+    { id: "sarah", name: "Sarah Chen", status: "online", unread: 2, title: "VP of Engineering" },
+    { id: "mike", name: "Mike Johnson", status: "away", unread: 0, title: "Senior Developer" },
+    { id: "alex", name: "Alex Kim", status: "dnd", unread: 0, title: "DevOps Lead" },
+    { id: "emily", name: "Emily Rodriguez", status: "offline", unread: 1, title: "Product Manager" },
+    { id: "james", name: "James Wilson", status: "online", unread: 0, title: "UI/UX Designer" },
+    { id: "lisa", name: "Lisa Park", status: "online", unread: 3, title: "QA Engineer" },
+  ];
+  const apps = [
+    { name: "GitHub", icon: "🐙" },
+    { name: "Jira", icon: "🎯" },
+    { name: "Google Drive", icon: "📁" },
+    { name: "Zoom", icon: "📹" },
   ];
 
   const messages = [
-    { id: 1, user: "Sarah Chen", avatar: "SC", time: "9:42 AM", content: "Good morning team! 👋 Just pushed the latest updates to the staging environment. Please take a look when you get a chance.", reactions: [{ emoji: "👍", count: 5 }, { emoji: "🎉", count: 3 }] },
-    { id: 2, user: "Mike Johnson", avatar: "MJ", time: "9:45 AM", content: "Awesome! I'll review it right after standup. Quick question - did you include the fix for the notification bug?", thread: { count: 4, lastReply: "10:12 AM" } },
-    { id: 3, user: "Sarah Chen", avatar: "SC", time: "9:47 AM", content: "Yes! That's in there. Here's the PR for reference:", attachment: { type: "link", title: "fix: notification timing issue #2847", url: "github.com/..." } },
-    { id: 4, user: "Alex Kim", avatar: "AK", time: "10:15 AM", content: "```\nconst handleNotification = async (event) => {\n  await processQueue(event.data);\n  dispatch({ type: 'NOTIFICATION_RECEIVED' });\n};\n```\nThis is the updated handler - much cleaner now!", reactions: [{ emoji: "💯", count: 2 }] },
-    { id: 5, user: "Emily Rodriguez", avatar: "ER", time: "10:32 AM", content: "@channel Reminder: Sprint planning in 30 minutes! Please review the backlog items before the meeting.", reactions: [{ emoji: "✅", count: 8 }, { emoji: "👀", count: 4 }], mention: true },
+    { id: 1, user: "Sarah Chen", avatar: "SC", time: "9:42 AM", content: "Good morning team! 👋 Just pushed the latest updates to the staging environment. Please take a look when you get a chance. The main changes include:\n\n• Real-time notification system\n• WebSocket connection pooling\n• Performance optimizations for the dashboard", reactions: [{ emoji: "👍", count: 5 }, { emoji: "🎉", count: 3 }, { emoji: "🚀", count: 7 }] },
+    { id: 2, user: "Mike Johnson", avatar: "MJ", time: "9:45 AM", content: "Awesome! I'll review it right after standup. Quick question - did you include the fix for the notification bug?", thread: { count: 4, lastReply: "10:12 AM", participants: ["SC", "AK"] } },
+    { id: 3, user: "Sarah Chen", avatar: "SC", time: "9:47 AM", content: "Yes! That's in there. Here's the PR for reference:", attachment: { type: "link", title: "fix: notification timing issue #2847", url: "github.com/digitalworkplace/intranet-iq/pull/2847", preview: "Fixes race condition in notification queue processing" } },
+    { id: 4, user: "Alex Kim", avatar: "AK", time: "10:15 AM", content: "```typescript\nconst handleNotification = async (event: NotificationEvent) => {\n  await processQueue(event.data);\n  dispatch({ type: 'NOTIFICATION_RECEIVED', payload: event });\n  analytics.track('notification_received', { type: event.type });\n};\n```\nThis is the updated handler - much cleaner now! Added TypeScript types and analytics tracking.", reactions: [{ emoji: "💯", count: 2 }, { emoji: "🔥", count: 4 }] },
+    { id: 5, user: "Emily Rodriguez", avatar: "ER", time: "10:32 AM", content: "@channel Reminder: Sprint planning in 30 minutes! Please review the backlog items before the meeting. Here's the agenda:\n\n1. Sprint 14 retrospective (10 min)\n2. Velocity review (5 min)\n3. Sprint 15 planning (30 min)\n4. Open discussion (15 min)", reactions: [{ emoji: "✅", count: 8 }, { emoji: "👀", count: 4 }], mention: true, pinned: true },
+    { id: 6, user: "James Wilson", avatar: "JW", time: "10:45 AM", content: "Just finished the new dashboard mockups! Check out the Figma link:", attachment: { type: "figma", title: "Dashboard v3.0 - Final Designs", url: "figma.com/file/abc123", preview: "12 frames • Updated 2 hours ago" }, reactions: [{ emoji: "😍", count: 6 }, { emoji: "💜", count: 3 }] },
+    { id: 7, user: "Lisa Park", avatar: "LP", time: "11:02 AM", content: "QA update: All regression tests passing ✅\n\n• Unit tests: 847/847 passed\n• Integration tests: 124/124 passed\n• E2E tests: 56/56 passed\n• Performance benchmarks: Within thresholds\n\nReady for release when you are!", reactions: [{ emoji: "🎉", count: 9 }, { emoji: "💪", count: 5 }], thread: { count: 2, lastReply: "11:15 AM", participants: ["SC"] } },
   ];
 
   return (
@@ -304,36 +324,60 @@ function SlackApp() {
 // JIRA - Sprint Board Interface
 // ============================================================================
 function JiraApp() {
+  const [activeView, setActiveView] = useState("board");
+  const [filterAssignee, setFilterAssignee] = useState("all");
+
   const columns = [
-    { id: "todo", name: "TO DO", count: 4, color: "bg-gray-500" },
-    { id: "inprogress", name: "IN PROGRESS", count: 3, color: "bg-blue-500" },
-    { id: "review", name: "IN REVIEW", count: 2, color: "bg-purple-500" },
-    { id: "done", name: "DONE", count: 5, color: "bg-green-500" },
+    { id: "todo", name: "TO DO", count: 6, color: "bg-gray-500" },
+    { id: "inprogress", name: "IN PROGRESS", count: 4, color: "bg-blue-500" },
+    { id: "review", name: "IN REVIEW", count: 3, color: "bg-purple-500" },
+    { id: "done", name: "DONE", count: 8, color: "bg-green-500" },
+  ];
+
+  const epics = [
+    { key: "DIQ-100", name: "Real-time Notifications", color: "#36B37E" },
+    { key: "DIQ-101", name: "Search Enhancement", color: "#6554C0" },
+    { key: "DIQ-102", name: "Dashboard Redesign", color: "#FF5630" },
+    { key: "DIQ-103", name: "Mobile Optimization", color: "#00B8D9" },
   ];
 
   const tickets = {
     todo: [
-      { key: "DIQ-1240", title: "Add keyboard shortcuts for power users", type: "task", priority: "medium", assignee: "JW", points: 5 },
-      { key: "DIQ-1241", title: "Implement dark mode toggle", type: "story", priority: "low", assignee: "AK", points: 3 },
-      { key: "DIQ-1242", title: "Update API documentation", type: "task", priority: "low", assignee: null, points: 2 },
-      { key: "DIQ-1243", title: "Performance optimization for search", type: "story", priority: "high", assignee: "MJ", points: 8 },
+      { key: "DIQ-1240", title: "Add keyboard shortcuts for power users", type: "task", priority: "medium", assignee: "JW", points: 5, labels: ["UX"], epic: "DIQ-102", comments: 3 },
+      { key: "DIQ-1241", title: "Implement dark mode toggle", type: "story", priority: "low", assignee: "AK", points: 3, labels: ["Frontend"], epic: "DIQ-102", comments: 7 },
+      { key: "DIQ-1242", title: "Update API documentation", type: "task", priority: "low", assignee: null, points: 2, labels: ["Docs"], comments: 0 },
+      { key: "DIQ-1243", title: "Performance optimization for search", type: "story", priority: "high", assignee: "MJ", points: 8, labels: ["Backend", "Performance"], epic: "DIQ-101", comments: 12 },
+      { key: "DIQ-1250", title: "Add export to PDF feature", type: "story", priority: "medium", assignee: "SC", points: 5, labels: ["Feature"], comments: 2 },
+      { key: "DIQ-1251", title: "Implement rate limiting for API", type: "task", priority: "high", assignee: "AK", points: 3, labels: ["Security", "Backend"], comments: 5 },
     ],
     inprogress: [
-      { key: "DIQ-1234", title: "Implement real-time notification system", type: "story", priority: "high", assignee: "MJ", points: 8 },
-      { key: "DIQ-1238", title: "Integrate with Microsoft 365 Calendar", type: "story", priority: "high", assignee: "LP", points: 13, blocked: true },
-      { key: "DIQ-1239", title: "Create onboarding flow for new users", type: "story", priority: "medium", assignee: "ER", points: 5 },
+      { key: "DIQ-1234", title: "Implement real-time notification system", type: "story", priority: "high", assignee: "MJ", points: 8, labels: ["Feature", "WebSocket"], epic: "DIQ-100", comments: 24, subtasks: { done: 6, total: 8 } },
+      { key: "DIQ-1238", title: "Integrate with Microsoft 365 Calendar", type: "story", priority: "high", assignee: "LP", points: 13, blocked: true, blockedBy: "DIQ-1252", labels: ["Integration"], comments: 8 },
+      { key: "DIQ-1239", title: "Create onboarding flow for new users", type: "story", priority: "medium", assignee: "ER", points: 5, labels: ["UX", "Onboarding"], comments: 15, subtasks: { done: 3, total: 5 } },
+      { key: "DIQ-1246", title: "Mobile responsive navigation", type: "story", priority: "high", assignee: "JW", points: 5, labels: ["Mobile", "Frontend"], epic: "DIQ-103", comments: 9 },
     ],
     review: [
-      { key: "DIQ-1235", title: "[BUG] Search results not updating after deletion", type: "bug", priority: "highest", assignee: "AK", points: 3 },
-      { key: "DIQ-1237", title: "Add user activity analytics dashboard", type: "story", priority: "medium", assignee: "SC", points: 8 },
+      { key: "DIQ-1235", title: "[BUG] Search results not updating after deletion", type: "bug", priority: "highest", assignee: "AK", points: 3, labels: ["Bug", "Critical"], comments: 18, flagged: true },
+      { key: "DIQ-1237", title: "Add user activity analytics dashboard", type: "story", priority: "medium", assignee: "SC", points: 8, labels: ["Analytics", "Dashboard"], epic: "DIQ-102", comments: 6 },
+      { key: "DIQ-1248", title: "Implement SSO with Okta", type: "story", priority: "high", assignee: "MJ", points: 8, labels: ["Security", "Integration"], comments: 11 },
     ],
     done: [
-      { key: "DIQ-1230", title: "Set up CI/CD pipeline", type: "task", priority: "high", assignee: "AK", points: 5 },
-      { key: "DIQ-1231", title: "Create component library documentation", type: "task", priority: "medium", assignee: "JW", points: 3 },
-      { key: "DIQ-1232", title: "Implement user authentication", type: "story", priority: "highest", assignee: "MJ", points: 13 },
-      { key: "DIQ-1233", title: "Design system color tokens", type: "task", priority: "medium", assignee: "JW", points: 2 },
-      { key: "DIQ-1229", title: "Database schema migration", type: "task", priority: "high", assignee: "AK", points: 5 },
+      { key: "DIQ-1230", title: "Set up CI/CD pipeline", type: "task", priority: "high", assignee: "AK", points: 5, labels: ["DevOps"], comments: 14 },
+      { key: "DIQ-1231", title: "Create component library documentation", type: "task", priority: "medium", assignee: "JW", points: 3, labels: ["Docs"], comments: 5 },
+      { key: "DIQ-1232", title: "Implement user authentication", type: "story", priority: "highest", assignee: "MJ", points: 13, labels: ["Auth", "Security"], epic: "DIQ-100", comments: 31 },
+      { key: "DIQ-1233", title: "Design system color tokens", type: "task", priority: "medium", assignee: "JW", points: 2, labels: ["Design"], comments: 8 },
+      { key: "DIQ-1229", title: "Database schema migration", type: "task", priority: "high", assignee: "AK", points: 5, labels: ["Backend", "Database"], comments: 12 },
+      { key: "DIQ-1244", title: "Add Elasticsearch integration", type: "story", priority: "high", assignee: "MJ", points: 13, labels: ["Search", "Backend"], epic: "DIQ-101", comments: 22 },
+      { key: "DIQ-1245", title: "Implement file upload with S3", type: "story", priority: "medium", assignee: "AK", points: 8, labels: ["Feature", "AWS"], comments: 9 },
+      { key: "DIQ-1247", title: "Add unit tests for auth module", type: "task", priority: "medium", assignee: "LP", points: 5, labels: ["Testing"], comments: 4 },
     ],
+  };
+
+  const sprintStats = {
+    totalPoints: 94,
+    completedPoints: 54,
+    daysRemaining: 8,
+    velocity: 42,
   };
 
   const getTypeIcon = (type: string) => {
@@ -447,37 +491,71 @@ function JiraApp() {
 // ============================================================================
 function GitHubApp() {
   const [activeTab, setActiveTab] = useState("files");
+  const [expandedFile, setExpandedFile] = useState("src/lib/websocket/client.ts");
 
   const prData = {
     title: "feat: implement WebSocket-based real-time notifications",
     number: 2846,
     state: "open",
     author: "mikejohnson",
+    authorAvatar: "MJ",
     branch: { from: "feature/realtime-notifications", to: "main" },
     commits: 12,
     additions: 1847,
     deletions: 234,
     files: 28,
+    createdAt: "3 days ago",
+    updatedAt: "2 hours ago",
+    labels: [
+      { name: "feature", color: "0e8a16" },
+      { name: "priority: high", color: "d93f0b" },
+      { name: "needs-review", color: "fbca04" },
+    ],
     reviewers: [
-      { name: "alexkim", status: "approved" },
-      { name: "emilyrodriguez", status: "approved" },
+      { name: "alexkim", status: "approved", avatar: "AK" },
+      { name: "emilyrodriguez", status: "approved", avatar: "ER" },
+      { name: "sarahchen", status: "pending", avatar: "SC" },
     ],
     checks: [
-      { name: "CI / Build", status: "success" },
-      { name: "CI / Unit Tests", status: "success" },
-      { name: "CI / Integration Tests", status: "success" },
-      { name: "Security Scan", status: "success" },
-      { name: "Code Coverage (87%)", status: "success" },
+      { name: "CI / Build", status: "success", time: "2m 34s" },
+      { name: "CI / Unit Tests (847 tests)", status: "success", time: "4m 12s" },
+      { name: "CI / Integration Tests", status: "success", time: "6m 45s" },
+      { name: "CI / E2E Tests", status: "success", time: "8m 21s" },
+      { name: "Security Scan (Snyk)", status: "success", time: "1m 12s" },
+      { name: "Code Coverage (87%)", status: "success", time: "32s" },
+      { name: "Lint & Format", status: "success", time: "45s" },
+      { name: "Type Check", status: "success", time: "1m 8s" },
+    ],
+    comments: [
+      { user: "alexkim", avatar: "AK", time: "2 days ago", content: "Great implementation! The connection pooling logic looks solid. Just a few minor suggestions." },
+      { user: "emilyrodriguez", avatar: "ER", time: "1 day ago", content: "LGTM! Tested locally and notifications are working perfectly." },
     ],
   };
 
   const files = [
-    { name: "src/lib/websocket/client.ts", additions: 245, deletions: 0, status: "added" },
-    { name: "src/lib/websocket/server.ts", additions: 312, deletions: 0, status: "added" },
-    { name: "src/hooks/useNotifications.ts", additions: 89, deletions: 23, status: "modified" },
-    { name: "src/components/NotificationBell.tsx", additions: 156, deletions: 45, status: "modified" },
-    { name: "src/app/api/notifications/route.ts", additions: 67, deletions: 12, status: "modified" },
-    { name: "package.json", additions: 3, deletions: 1, status: "modified" },
+    { name: "src/lib/websocket/client.ts", additions: 245, deletions: 0, status: "added", comments: 3 },
+    { name: "src/lib/websocket/server.ts", additions: 312, deletions: 0, status: "added", comments: 1 },
+    { name: "src/lib/websocket/types.ts", additions: 67, deletions: 0, status: "added", comments: 0 },
+    { name: "src/hooks/useNotifications.ts", additions: 89, deletions: 23, status: "modified", comments: 2 },
+    { name: "src/hooks/useWebSocket.ts", additions: 134, deletions: 0, status: "added", comments: 0 },
+    { name: "src/components/NotificationBell.tsx", additions: 156, deletions: 45, status: "modified", comments: 4 },
+    { name: "src/components/NotificationPanel.tsx", additions: 234, deletions: 0, status: "added", comments: 1 },
+    { name: "src/components/NotificationItem.tsx", additions: 89, deletions: 0, status: "added", comments: 0 },
+    { name: "src/app/api/notifications/route.ts", additions: 67, deletions: 12, status: "modified", comments: 0 },
+    { name: "src/app/api/notifications/stream/route.ts", additions: 145, deletions: 0, status: "added", comments: 2 },
+    { name: "package.json", additions: 3, deletions: 1, status: "modified", comments: 0 },
+    { name: "package-lock.json", additions: 286, deletions: 152, status: "modified", comments: 0 },
+  ];
+
+  const commits = [
+    { sha: "a1b2c3d", message: "feat: add WebSocket client with reconnection logic", author: "mikejohnson", time: "3 days ago" },
+    { sha: "e4f5g6h", message: "feat: implement notification server endpoints", author: "mikejohnson", time: "3 days ago" },
+    { sha: "i7j8k9l", message: "feat: add useWebSocket hook for React integration", author: "mikejohnson", time: "2 days ago" },
+    { sha: "m0n1o2p", message: "feat: create NotificationPanel component", author: "mikejohnson", time: "2 days ago" },
+    { sha: "q3r4s5t", message: "fix: handle edge case in connection pooling", author: "mikejohnson", time: "2 days ago" },
+    { sha: "u6v7w8x", message: "test: add unit tests for WebSocket client", author: "mikejohnson", time: "1 day ago" },
+    { sha: "y9z0a1b", message: "docs: update README with WebSocket configuration", author: "mikejohnson", time: "1 day ago" },
+    { sha: "c2d3e4f", message: "refactor: extract types to separate file", author: "mikejohnson", time: "2 hours ago" },
   ];
 
   return (
@@ -628,22 +706,43 @@ function GitHubApp() {
 // ============================================================================
 function DriveApp() {
   const [view, setView] = useState<"list" | "grid">("list");
+  const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState("modified");
 
   const folders = [
-    { name: "Engineering", items: 24, color: "#4285f4" },
-    { name: "Product", items: 18, color: "#ea4335" },
-    { name: "Design", items: 12, color: "#fbbc04" },
-    { name: "Marketing", items: 31, color: "#34a853" },
+    { name: "Engineering", items: 24, color: "#4285f4", shared: true },
+    { name: "Product", items: 18, color: "#ea4335", shared: true },
+    { name: "Design", items: 12, color: "#fbbc04", shared: false },
+    { name: "Marketing", items: 31, color: "#34a853", shared: true },
+    { name: "Finance", items: 8, color: "#9334e6", shared: false },
+    { name: "HR Documents", items: 15, color: "#ff6d01", shared: false },
+    { name: "Legal", items: 6, color: "#185abc", shared: false },
+    { name: "Client Projects", items: 42, color: "#137333", shared: true },
+  ];
+
+  const recentFolders = [
+    { name: "Sprint 14 Assets", parent: "Engineering", modified: "2 hours ago" },
+    { name: "Brand Refresh 2026", parent: "Marketing", modified: "Yesterday" },
+    { name: "API Specs v3", parent: "Engineering", modified: "2 days ago" },
   ];
 
   const files = [
-    { name: "Q1 2026 Product Roadmap.pptx", type: "presentation", size: "24.5 MB", modified: "Jan 28, 2026", owner: "Emily R.", starred: true },
-    { name: "Engineering OKRs.xlsx", type: "spreadsheet", size: "1.2 MB", modified: "Jan 27, 2026", owner: "Sarah C.", starred: true },
-    { name: "API Documentation v3.docx", type: "document", size: "856 KB", modified: "Jan 26, 2026", owner: "Mike J.", starred: false },
-    { name: "Brand Guidelines.pdf", type: "pdf", size: "45.2 MB", modified: "Jan 25, 2026", owner: "James W.", starred: true },
-    { name: "Architecture Diagram.png", type: "image", size: "2.1 MB", modified: "Jan 24, 2026", owner: "Alex K.", starred: false },
-    { name: "Sprint Retro Notes.docx", type: "document", size: "124 KB", modified: "Jan 23, 2026", owner: "Emily R.", starred: false },
+    { name: "Q1 2026 Product Roadmap.pptx", type: "presentation", size: "24.5 MB", modified: "Jan 30, 2026", owner: "Emily R.", starred: true, shared: ["Sarah C.", "Mike J.", "+3"] },
+    { name: "Engineering OKRs.xlsx", type: "spreadsheet", size: "1.2 MB", modified: "Jan 29, 2026", owner: "Sarah C.", starred: true, shared: ["Team"] },
+    { name: "API Documentation v3.docx", type: "document", size: "856 KB", modified: "Jan 28, 2026", owner: "Mike J.", starred: false, shared: ["Public"] },
+    { name: "Brand Guidelines.pdf", type: "pdf", size: "45.2 MB", modified: "Jan 27, 2026", owner: "James W.", starred: true, shared: ["Marketing"] },
+    { name: "Architecture Diagram.png", type: "image", size: "2.1 MB", modified: "Jan 26, 2026", owner: "Alex K.", starred: false, shared: [] },
+    { name: "Sprint Retro Notes.docx", type: "document", size: "124 KB", modified: "Jan 25, 2026", owner: "Emily R.", starred: false, shared: ["Engineering"] },
+    { name: "Budget Forecast 2026.xlsx", type: "spreadsheet", size: "3.4 MB", modified: "Jan 24, 2026", owner: "Finance Team", starred: true, shared: ["Execs"] },
+    { name: "User Research Findings.pdf", type: "pdf", size: "12.8 MB", modified: "Jan 23, 2026", owner: "Lisa P.", starred: false, shared: ["Product"] },
+    { name: "Competitor Analysis.pptx", type: "presentation", size: "18.6 MB", modified: "Jan 22, 2026", owner: "Emily R.", starred: false, shared: ["Strategy"] },
+    { name: "Database Schema.sql", type: "code", size: "45 KB", modified: "Jan 21, 2026", owner: "Alex K.", starred: true, shared: ["Backend"] },
+    { name: "Meeting Recording 01-20.mp4", type: "video", size: "245 MB", modified: "Jan 20, 2026", owner: "Zoom", starred: false, shared: [] },
+    { name: "Onboarding Checklist.docx", type: "document", size: "234 KB", modified: "Jan 19, 2026", owner: "HR Team", starred: false, shared: ["All"] },
   ];
+
+  const storageUsed = 8.7;
+  const storageTotal = 15;
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -787,17 +886,39 @@ function DriveApp() {
 // ZOOM - Meetings Interface
 // ============================================================================
 function ZoomApp() {
+  const [activeSection, setActiveSection] = useState("home");
+
   const meetings = [
-    { id: 1, title: "Weekly Team Standup", time: "10:00 AM - 10:30 AM", host: "Sarah Chen", status: "live", participants: 12 },
-    { id: 2, title: "Q1 Planning Review", time: "2:00 PM - 3:00 PM", host: "Emily Rodriguez", status: "upcoming" },
-    { id: 3, title: "Design Review", time: "4:00 PM - 4:45 PM", host: "James Wilson", status: "upcoming" },
+    { id: 1, title: "Weekly Team Standup", time: "10:00 AM - 10:30 AM", host: "Sarah Chen", status: "live", participants: 12, meetingId: "847 2931 4582", recurring: true },
+    { id: 2, title: "Q1 Planning Review", time: "2:00 PM - 3:00 PM", host: "Emily Rodriguez", status: "upcoming", participants: 0, meetingId: "923 1847 3920", recurring: false },
+    { id: 3, title: "Design Review", time: "4:00 PM - 4:45 PM", host: "James Wilson", status: "upcoming", participants: 0, meetingId: "182 9374 5821", recurring: true },
+    { id: 4, title: "1:1 with Mike", time: "5:00 PM - 5:30 PM", host: "You", status: "upcoming", participants: 0, meetingId: "293 1820 4738", recurring: true },
+  ];
+
+  const upcomingMeetings = [
+    { title: "Sprint Retrospective", date: "Tomorrow", time: "9:00 AM", host: "Sarah Chen" },
+    { title: "Product Roadmap Review", date: "Tomorrow", time: "2:00 PM", host: "Emily Rodriguez" },
+    { title: "All-Hands Meeting", date: "Friday", time: "10:00 AM", host: "CEO" },
+    { title: "Tech Talk: WebSockets", date: "Friday", time: "3:00 PM", host: "Mike Johnson" },
   ];
 
   const recordings = [
-    { title: "Product Demo - Acme Corp", date: "Jan 29, 2026", duration: "42:18", size: "156 MB" },
-    { title: "Engineering All-Hands", date: "Jan 28, 2026", duration: "58:32", size: "234 MB" },
-    { title: "Customer Success Training", date: "Jan 27, 2026", duration: "1:23:45", size: "412 MB" },
+    { title: "Product Demo - Acme Corp", date: "Jan 29, 2026", duration: "42:18", size: "156 MB", thumbnail: "demo", views: 24, shared: true },
+    { title: "Engineering All-Hands", date: "Jan 28, 2026", duration: "58:32", size: "234 MB", thumbnail: "meeting", views: 47, shared: true },
+    { title: "Customer Success Training", date: "Jan 27, 2026", duration: "1:23:45", size: "412 MB", thumbnail: "training", views: 156, shared: true },
+    { title: "Q4 2025 Review", date: "Jan 15, 2026", duration: "1:45:22", size: "523 MB", thumbnail: "review", views: 89, shared: false },
+    { title: "New Hire Orientation", date: "Jan 12, 2026", duration: "2:10:15", size: "678 MB", thumbnail: "onboard", views: 234, shared: true },
   ];
+
+  const contacts = [
+    { name: "Sarah Chen", email: "sarah@company.com", status: "online", favorite: true },
+    { name: "Mike Johnson", email: "mike@company.com", status: "away", favorite: true },
+    { name: "Emily Rodriguez", email: "emily@company.com", status: "offline", favorite: true },
+    { name: "Alex Kim", email: "alex@company.com", status: "dnd", favorite: false },
+    { name: "James Wilson", email: "james@company.com", status: "online", favorite: false },
+  ];
+
+  const personalMeetingId = "847 2931 4582";
 
   return (
     <div className="h-full flex bg-[#242424]">
@@ -1035,32 +1156,61 @@ function ConfluenceApp() {
 // SALESFORCE - Opportunity Pipeline
 // ============================================================================
 function SalesforceApp() {
+  const [selectedQuarter, setSelectedQuarter] = useState("Q1 2026");
+  const [viewMode, setViewMode] = useState("pipeline");
+
   const stages = [
-    { name: "Prospecting", color: "#b0adab", deals: 2, value: "$1.38M" },
-    { name: "Qualification", color: "#f88962", deals: 1, value: "$425K" },
-    { name: "Proposal", color: "#54c1d2", deals: 1, value: "$850K" },
-    { name: "Negotiation", color: "#4bc076", deals: 1, value: "$180K" },
-    { name: "Closed Won", color: "#2e844a", deals: 1, value: "$2.4M" },
+    { name: "Prospecting", color: "#b0adab", deals: 4, value: "$2.85M" },
+    { name: "Qualification", color: "#f88962", deals: 3, value: "$1.12M" },
+    { name: "Proposal", color: "#54c1d2", deals: 2, value: "$1.65M" },
+    { name: "Negotiation", color: "#4bc076", deals: 2, value: "$980K" },
+    { name: "Closed Won", color: "#2e844a", deals: 5, value: "$4.8M" },
   ];
+
+  const pipelineStats = {
+    totalValue: "$11.4M",
+    weightedValue: "$6.2M",
+    avgDealSize: "$712K",
+    winRate: "32%",
+    avgSalesCycle: "45 days",
+    dealsInPipeline: 16,
+  };
 
   const opportunities = {
     Prospecting: [
-      { name: "Retail Giant - Analytics Suite", account: "Retail Giant Co", amount: 1200000, probability: 10, owner: "David Brown" },
-      { name: "Tech Startup - Basic Plan", account: "NextGen Tech", amount: 180000, probability: 15, owner: "Lisa Park" },
+      { name: "Retail Giant - Analytics Suite", account: "Retail Giant Co", amount: 1200000, probability: 10, owner: "David Brown", nextStep: "Discovery call scheduled", closeDate: "Mar 15, 2026", industry: "Retail" },
+      { name: "Tech Startup - Basic Plan", account: "NextGen Tech", amount: 180000, probability: 15, owner: "Lisa Park", nextStep: "Send proposal", closeDate: "Feb 28, 2026", industry: "Technology" },
+      { name: "Manufacturing Corp - IoT Platform", account: "Industrial Systems Inc", amount: 890000, probability: 10, owner: "David Brown", nextStep: "Initial meeting", closeDate: "Apr 10, 2026", industry: "Manufacturing" },
+      { name: "Education First - Learning Suite", account: "Education First", amount: 580000, probability: 20, owner: "Sarah M.", nextStep: "Demo scheduled", closeDate: "Mar 22, 2026", industry: "Education" },
     ],
     Qualification: [
-      { name: "HealthCare Plus - Compliance Package", account: "HealthCare Plus", amount: 425000, probability: 30, owner: "Lisa Park" },
+      { name: "HealthCare Plus - Compliance Package", account: "HealthCare Plus", amount: 425000, probability: 30, owner: "Lisa Park", nextStep: "Technical review", closeDate: "Feb 20, 2026", industry: "Healthcare" },
+      { name: "Financial Services - Risk Platform", account: "Capital Partners", amount: 520000, probability: 35, owner: "David Brown", nextStep: "Security audit", closeDate: "Mar 5, 2026", industry: "Finance" },
+      { name: "Logistics Pro - Tracking System", account: "FastShip Logistics", amount: 175000, probability: 40, owner: "Sarah M.", nextStep: "POC setup", closeDate: "Feb 15, 2026", industry: "Logistics" },
     ],
     Proposal: [
-      { name: "Global Finance - Platform Migration", account: "Global Finance Ltd", amount: 850000, probability: 50, owner: "David Brown" },
+      { name: "Global Finance - Platform Migration", account: "Global Finance Ltd", amount: 850000, probability: 50, owner: "David Brown", nextStep: "Contract review", closeDate: "Feb 10, 2026", industry: "Finance", hot: true },
+      { name: "Media Group - Content Platform", account: "Digital Media Corp", amount: 800000, probability: 55, owner: "Lisa Park", nextStep: "Executive presentation", closeDate: "Feb 18, 2026", industry: "Media" },
     ],
     Negotiation: [
-      { name: "TechStart Inc - Startup Plan", account: "TechStart Inc", amount: 180000, probability: 75, owner: "Lisa Park" },
+      { name: "TechStart Inc - Startup Plan", account: "TechStart Inc", amount: 180000, probability: 75, owner: "Lisa Park", nextStep: "Final pricing discussion", closeDate: "Feb 5, 2026", industry: "Technology", hot: true },
+      { name: "Insurance Partners - Claims System", account: "National Insurance", amount: 800000, probability: 80, owner: "David Brown", nextStep: "Legal review", closeDate: "Feb 8, 2026", industry: "Insurance", hot: true },
     ],
     "Closed Won": [
-      { name: "Acme Corp - Enterprise License", account: "Acme Corporation", amount: 2400000, probability: 100, owner: "David Brown" },
+      { name: "Acme Corp - Enterprise License", account: "Acme Corporation", amount: 2400000, probability: 100, owner: "David Brown", closeDate: "Jan 28, 2026", industry: "Technology" },
+      { name: "Metro Hospital - Patient Portal", account: "Metro Health System", amount: 650000, probability: 100, owner: "Lisa Park", closeDate: "Jan 25, 2026", industry: "Healthcare" },
+      { name: "Legal Associates - Document AI", account: "Legal Associates LLP", amount: 320000, probability: 100, owner: "Sarah M.", closeDate: "Jan 22, 2026", industry: "Legal" },
+      { name: "Green Energy - Monitoring Suite", account: "Green Energy Solutions", amount: 890000, probability: 100, owner: "David Brown", closeDate: "Jan 18, 2026", industry: "Energy" },
+      { name: "Travel Co - Booking Platform", account: "Global Travel Inc", amount: 540000, probability: 100, owner: "Lisa Park", closeDate: "Jan 12, 2026", industry: "Travel" },
     ],
   };
+
+  const activities = [
+    { type: "call", description: "Discovery call with Retail Giant", time: "2 hours ago", owner: "David Brown" },
+    { type: "email", description: "Sent proposal to Global Finance", time: "4 hours ago", owner: "David Brown" },
+    { type: "meeting", description: "Demo with HealthCare Plus", time: "Yesterday", owner: "Lisa Park" },
+    { type: "task", description: "Follow up with TechStart Inc", time: "Yesterday", owner: "Lisa Park" },
+  ];
 
   return (
     <div className="h-full flex flex-col bg-[#f3f3f3]">
@@ -1312,12 +1462,52 @@ function FigmaApp() {
 // NOTION - Workspace Interface
 // ============================================================================
 function NotionApp() {
+  const [selectedPage, setSelectedPage] = useState("sprint-planning");
+  const [dbView, setDbView] = useState("board");
+
+  const workspaces = [
+    { name: "Digital Workplace", icon: "🏢", members: 47 },
+    { name: "Personal", icon: "👤", members: 1 },
+  ];
+
   const pages = [
-    { icon: "📋", name: "Sprint Planning", type: "database" },
-    { icon: "📚", name: "Team Wiki", type: "page" },
-    { icon: "💡", name: "Ideas Backlog", type: "database" },
-    { icon: "📝", name: "Meeting Notes", type: "page" },
-    { icon: "🎯", name: "OKRs 2026", type: "database" },
+    { id: "sprint-planning", icon: "📋", name: "Sprint Planning", type: "database", lastEdited: "2 hours ago", views: ["Board", "Table", "Timeline"] },
+    { id: "team-wiki", icon: "📚", name: "Team Wiki", type: "page", lastEdited: "Yesterday" },
+    { id: "ideas-backlog", icon: "💡", name: "Ideas Backlog", type: "database", lastEdited: "3 days ago", views: ["Board", "List"] },
+    { id: "meeting-notes", icon: "📝", name: "Meeting Notes", type: "page", lastEdited: "Today" },
+    { id: "okrs-2026", icon: "🎯", name: "OKRs 2026", type: "database", lastEdited: "1 week ago", views: ["Table", "Board"] },
+    { id: "roadmap", icon: "🗺️", name: "Product Roadmap", type: "database", lastEdited: "Yesterday", views: ["Timeline", "Board"] },
+    { id: "docs", icon: "📖", name: "Documentation", type: "page", lastEdited: "4 days ago" },
+    { id: "resources", icon: "🔗", name: "Useful Resources", type: "page", lastEdited: "1 week ago" },
+  ];
+
+  const favorites = [
+    { icon: "⭐", name: "Quick Links", type: "page" },
+    { icon: "📊", name: "Team Dashboard", type: "database" },
+  ];
+
+  const sprintTasks = {
+    "To Do": [
+      { id: 1, title: "Implement search filters", priority: "High", assignee: "SC", tags: ["Frontend"], dueDate: "Feb 5" },
+      { id: 2, title: "Write API documentation", priority: "Medium", assignee: "MJ", tags: ["Docs"], dueDate: "Feb 7" },
+      { id: 3, title: "Design error states", priority: "Low", assignee: "JW", tags: ["Design"], dueDate: "Feb 8" },
+      { id: 4, title: "Set up monitoring", priority: "High", assignee: "AK", tags: ["DevOps"], dueDate: "Feb 4" },
+    ],
+    "In Progress": [
+      { id: 5, title: "Build notification system", priority: "High", assignee: "MJ", tags: ["Backend", "Feature"], dueDate: "Feb 3", progress: 75 },
+      { id: 6, title: "User testing sessions", priority: "Medium", assignee: "LP", tags: ["Research"], dueDate: "Feb 6", progress: 40 },
+    ],
+    "Done": [
+      { id: 7, title: "Database migration", priority: "High", assignee: "AK", tags: ["Backend"], completedDate: "Jan 30" },
+      { id: 8, title: "Landing page redesign", priority: "Medium", assignee: "JW", tags: ["Design", "Frontend"], completedDate: "Jan 29" },
+      { id: 9, title: "Performance optimization", priority: "High", assignee: "SC", tags: ["Frontend"], completedDate: "Jan 28" },
+    ],
+  };
+
+  const recentActivity = [
+    { user: "Sarah Chen", action: "edited", page: "Sprint Planning", time: "2 hours ago" },
+    { user: "Mike Johnson", action: "commented on", page: "API Documentation", time: "4 hours ago" },
+    { user: "James Wilson", action: "created", page: "Design System v3", time: "Yesterday" },
   ];
 
   return (
@@ -1422,28 +1612,82 @@ function NotionApp() {
 // LINKEDIN - Feed Interface
 // ============================================================================
 function LinkedInApp() {
+  const [activeTab, setActiveTab] = useState("feed");
+
+  const userProfile = {
+    name: "Your Name",
+    title: "Software Engineer at Digital Workplace AI",
+    connections: 847,
+    profileViews: 142,
+    postImpressions: 1247,
+    searchAppearances: 38,
+  };
+
   const posts = [
     {
       author: "Sarah Chen",
       title: "VP of Engineering at Digital Workplace AI",
       avatar: "SC",
       time: "2h",
-      content: "Excited to announce that we've just reached a major milestone - our AI assistant now handles over 1 million queries per day! 🎉\n\nThis wouldn't have been possible without our incredible engineering team. Special thanks to @Mike Johnson and @Alex Kim for leading this effort.\n\n#AI #Engineering #Milestone",
-      likes: 234,
-      comments: 45,
-      reposts: 12,
+      content: "Excited to announce that we've just reached a major milestone - our AI assistant now handles over 1 million queries per day! 🎉\n\nThis wouldn't have been possible without our incredible engineering team. Special thanks to @Mike Johnson and @Alex Kim for leading this effort.\n\nKey achievements:\n• 99.9% uptime\n• <100ms average response time\n• 4.8/5 user satisfaction score\n\n#AI #Engineering #Milestone #TechLeadership",
+      likes: 1234,
+      comments: 89,
+      reposts: 45,
+      celebrates: 156,
+      verified: true,
     },
     {
       author: "Emily Rodriguez",
       title: "Product Manager at Digital Workplace AI",
       avatar: "ER",
       time: "5h",
-      content: "Just published a new article on building products that users actually love. Key takeaway: Listen more, assume less.\n\nLink in comments 👇",
-      likes: 156,
-      comments: 28,
-      reposts: 8,
+      content: "Just published a new article on building products that users actually love. Key takeaway: Listen more, assume less.\n\n5 principles I've learned:\n1. User feedback is gold\n2. Data tells stories\n3. Iterate fast, fail faster\n4. Simplicity wins\n5. Empathy is your superpower\n\nLink in comments 👇",
+      likes: 567,
+      comments: 78,
+      reposts: 23,
       image: true,
     },
+    {
+      author: "Mike Johnson",
+      title: "Senior Software Engineer at Digital Workplace AI",
+      avatar: "MJ",
+      time: "1d",
+      content: "🚀 Just open-sourced our WebSocket library that powers real-time features at Digital Workplace!\n\nFeatures:\n• Automatic reconnection\n• Connection pooling\n• TypeScript support\n• <5KB gzipped\n\nCheck it out: github.com/digitalworkplace/ws-client\n\n#OpenSource #WebSockets #TypeScript",
+      likes: 892,
+      comments: 134,
+      reposts: 67,
+      code: true,
+    },
+    {
+      author: "Digital Workplace AI",
+      title: "45,000 followers • Enterprise Software",
+      avatar: "DW",
+      time: "2d",
+      content: "We're hiring! 🎯\n\nLooking for talented engineers to join our growing team:\n\n• Senior Frontend Engineer (React/Next.js)\n• Backend Engineer (Node.js/Python)\n• DevOps Engineer (AWS/Kubernetes)\n• Product Designer (Figma)\n\nRemote-first | Competitive salary | Great benefits\n\nApply now: careers.digitalworkplace.ai\n\n#Hiring #TechJobs #RemoteWork",
+      likes: 456,
+      comments: 89,
+      reposts: 123,
+      promoted: true,
+    },
+  ];
+
+  const notifications = [
+    { type: "connection", text: "Alex Kim accepted your connection request", time: "1h ago" },
+    { type: "like", text: "Sarah Chen and 12 others liked your post", time: "3h ago" },
+    { type: "comment", text: "Mike Johnson commented on your post", time: "5h ago" },
+    { type: "view", text: "Your profile was viewed by 15 people", time: "1d ago" },
+  ];
+
+  const suggestedConnections = [
+    { name: "Jennifer Lee", title: "Engineering Manager at Meta", mutual: 12 },
+    { name: "David Park", title: "CTO at TechStartup", mutual: 8 },
+    { name: "Amanda Torres", title: "Product Lead at Google", mutual: 15 },
+  ];
+
+  const trendingTopics = [
+    { topic: "#AIEngineering", posts: "2,847 posts" },
+    { topic: "#RemoteWork", posts: "5,234 posts" },
+    { topic: "#TechLeadership", posts: "1,456 posts" },
   ];
 
   return (

@@ -55,13 +55,26 @@ export function AppShortcutsBar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Load apps from localStorage on mount
+  // Merge with defaults to ensure hasInternalPage flag is always applied
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setApps(parsed);
+          // Create a map of default apps for quick lookup
+          const defaultAppsMap = new Map(defaultApps.map(app => [app.id, app]));
+
+          // Merge hasInternalPage from defaults into saved apps
+          const mergedApps = parsed.map((savedApp: AppShortcut) => {
+            const defaultApp = defaultAppsMap.get(savedApp.id);
+            if (defaultApp && defaultApp.hasInternalPage) {
+              return { ...savedApp, hasInternalPage: true };
+            }
+            return savedApp;
+          });
+
+          setApps(mergedApps);
         }
       } catch (e) {
         console.error("Failed to parse saved app shortcuts:", e);

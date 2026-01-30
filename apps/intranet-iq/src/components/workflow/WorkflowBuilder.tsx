@@ -3,8 +3,9 @@
 import { useState, useCallback, useEffect } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { History } from "lucide-react";
 import { WorkflowCanvasNew } from "./WorkflowCanvasNew";
-import { NodeConfigPanel } from "./panels";
+import { NodeConfigPanel, VersionHistoryPanel } from "./panels";
 import { useWorkflowStore } from "@/lib/workflow/store";
 import type { WorkflowNode, WorkflowEdge } from "@/lib/workflow/types";
 
@@ -25,6 +26,7 @@ export function WorkflowBuilder({
 }: WorkflowBuilderProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
 
   // Zustand store
   const {
@@ -36,6 +38,8 @@ export function WorkflowBuilder({
     selectNode,
     isDirty,
     markClean,
+    createVersion,
+    versions,
   } = useWorkflowStore();
 
   // Initialize workflow from props
@@ -48,7 +52,7 @@ export function WorkflowBuilder({
     }
   }, [initialNodes, initialEdges, setNodes, setEdges]);
 
-  // Handle save
+  // Handle save (creates a new version automatically)
   const handleSave = useCallback(async () => {
     if (!onSave || isSaving) return;
 
@@ -57,6 +61,8 @@ export function WorkflowBuilder({
 
     try {
       await onSave(nodes, edges);
+      // Create a new version on save
+      createVersion(`Saved version`, true);
       markClean();
     } catch (error) {
       console.error("Failed to save workflow:", error);
@@ -64,7 +70,7 @@ export function WorkflowBuilder({
     } finally {
       setIsSaving(false);
     }
-  }, [nodes, edges, onSave, isSaving, markClean]);
+  }, [nodes, edges, onSave, isSaving, markClean, createVersion]);
 
   // Handle node selection from canvas
   const handleNodeSelect = useCallback(
@@ -111,7 +117,7 @@ export function WorkflowBuilder({
         {/* Main Canvas */}
         <div
           className={`flex-1 h-full transition-all duration-300 ${
-            selectedNodeId ? "mr-[400px]" : ""
+            selectedNodeId ? "mr-[400px]" : showVersionHistory ? "mr-[288px]" : ""
           }`}
         >
           <WorkflowCanvasNew
@@ -120,12 +126,40 @@ export function WorkflowBuilder({
             readOnly={readOnly}
             isSaving={isSaving}
           />
+
+          {/* Version History Toggle Button */}
+          {!readOnly && (
+            <motion.button
+              onClick={() => setShowVersionHistory(!showVersionHistory)}
+              className={`absolute top-4 right-4 p-2.5 rounded-lg transition-colors z-20 ${
+                showVersionHistory
+                  ? "bg-[var(--accent-ember)] text-white"
+                  : "bg-[var(--bg-charcoal)]/90 backdrop-blur border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              title="Version History"
+            >
+              <History className="w-5 h-5" />
+              {versions.length > 0 && !showVersionHistory && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--accent-ember)] rounded-full text-[10px] text-white flex items-center justify-center">
+                  {versions.length}
+                </span>
+              )}
+            </motion.button>
+          )}
         </div>
 
         {/* Node Configuration Panel */}
         <NodeConfigPanel
           isOpen={!!selectedNodeId && !readOnly}
           onClose={handleClosePanel}
+        />
+
+        {/* Version History Panel */}
+        <VersionHistoryPanel
+          isOpen={showVersionHistory && !selectedNodeId}
+          onClose={() => setShowVersionHistory(false)}
         />
 
         {/* Save Error Toast */}

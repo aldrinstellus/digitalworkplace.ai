@@ -10,6 +10,7 @@ import { ArticleEditor } from "@/components/content/ArticleEditor";
 import { CreateContentModal } from "@/components/content/CreateContentModal";
 import { VersionHistoryModal } from "@/components/content/VersionHistoryModal";
 import { ArticleApprovalPanel } from "@/components/content/ArticleApprovalPanel";
+import { FrameworkComparisonModal } from "@/components/content/FrameworkComparisonModal";
 import DOMPurify from "isomorphic-dompurify";
 import {
   Search,
@@ -30,7 +31,6 @@ import {
   CheckCircle2,
   Loader2,
   ThumbsUp,
-  Link2,
   Check,
   ClipboardCheck,
   Layers,
@@ -39,8 +39,29 @@ import {
   GitBranch,
   Code,
   ExternalLink,
+  Scale,
+  MessageSquare,
+  Building2,
 } from "lucide-react";
 import type { KBCategory, Article } from "@/lib/database.types";
+
+// Client type definition for multi-client isolation
+interface Client {
+  id: string;
+  name: string;
+  shortName: string;
+  color: string;
+  bgColor: string;
+}
+
+// Mock clients data
+const CLIENTS: Client[] = [
+  { id: "all", name: "All Clients", shortName: "All", color: "text-white", bgColor: "bg-white/20" },
+  { id: "acme", name: "Acme Corp", shortName: "Acme", color: "text-blue-400", bgColor: "bg-blue-500/20" },
+  { id: "techco", name: "TechCo Industries", shortName: "TechCo", color: "text-purple-400", bgColor: "bg-purple-500/20" },
+  { id: "globalbank", name: "GlobalBank", shortName: "GBank", color: "text-green-400", bgColor: "bg-green-500/20" },
+  { id: "healthplus", name: "HealthPlus", shortName: "Health+", color: "text-pink-400", bgColor: "bg-pink-500/20" },
+];
 
 // Framework type definition
 interface Framework {
@@ -54,6 +75,7 @@ interface Framework {
   status: "active" | "deprecated" | "experimental";
   version?: string;
   docsUrl?: string;
+  assignedClients: string[]; // Client IDs this framework is assigned to
 }
 
 // Mock frameworks data - in production this would come from the database
@@ -69,6 +91,7 @@ const FRAMEWORKS: Framework[] = [
     status: "active",
     version: "2.1.0",
     docsUrl: "https://react.dev",
+    assignedClients: ["acme", "techco"],
   },
   {
     id: "api-design",
@@ -80,6 +103,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["backend", "api", "rest"],
     status: "active",
     version: "3.0.0",
+    assignedClients: ["acme", "globalbank", "healthplus"],
   },
   {
     id: "microservices",
@@ -90,6 +114,7 @@ const FRAMEWORKS: Framework[] = [
     articleCount: 18,
     tags: ["architecture", "backend", "distributed"],
     status: "active",
+    assignedClients: ["techco", "globalbank"],
     version: "1.5.0",
   },
   {
@@ -102,6 +127,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["data", "etl", "analytics"],
     status: "active",
     version: "2.0.0",
+    assignedClients: ["globalbank", "healthplus"],
   },
   {
     id: "testing-framework",
@@ -113,6 +139,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["testing", "quality", "automation"],
     status: "active",
     version: "1.3.0",
+    assignedClients: ["acme", "techco", "globalbank", "healthplus"],
   },
   {
     id: "security-baseline",
@@ -124,6 +151,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["security", "compliance", "baseline"],
     status: "active",
     version: "4.0.0",
+    assignedClients: ["globalbank", "healthplus"],
   },
   {
     id: "legacy-patterns",
@@ -135,6 +163,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["legacy", "integration"],
     status: "deprecated",
     version: "1.0.0",
+    assignedClients: ["acme"],
   },
   {
     id: "ai-ml-ops",
@@ -146,6 +175,7 @@ const FRAMEWORKS: Framework[] = [
     tags: ["ai", "ml", "mlops"],
     status: "experimental",
     version: "0.9.0",
+    assignedClients: ["techco"],
   },
 ];
 
@@ -267,6 +297,7 @@ function ContentPageInner() {
   );
   const [selectedFramework, setSelectedFramework] = useState<Framework | null>(null);
   const [frameworkFilter, setFrameworkFilter] = useState<"all" | "active" | "deprecated" | "experimental">("all");
+  const [selectedClient, setSelectedClient] = useState<string>("all");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -280,6 +311,11 @@ function ContentPageInner() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
 
+  // Framework comparison state
+  const [comparisonMode, setComparisonMode] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<Set<string>>(new Set());
+  const [showComparisonModal, setShowComparisonModal] = useState(false);
+
   const { categories, loading: categoriesLoading } = useKBCategories();
   const { articles, loading: articlesLoading } = useArticles();
   const { departments, loading: departmentsLoading } = useDepartments();
@@ -291,11 +327,50 @@ function ContentPageInner() {
       .slice(0, 20);
   }, [articles]);
 
-  // Filter frameworks based on selected filter
+  // Filter frameworks based on selected filter and client
   const filteredFrameworks = useMemo(() => {
-    if (frameworkFilter === "all") return FRAMEWORKS;
-    return FRAMEWORKS.filter(f => f.status === frameworkFilter);
-  }, [frameworkFilter]);
+    let filtered = FRAMEWORKS;
+
+    // Filter by status
+    if (frameworkFilter !== "all") {
+      filtered = filtered.filter(f => f.status === frameworkFilter);
+    }
+
+    // Filter by client
+    if (selectedClient !== "all") {
+      filtered = filtered.filter(f => f.assignedClients.includes(selectedClient));
+    }
+
+    return filtered;
+  }, [frameworkFilter, selectedClient]);
+
+  // Get the selected client object
+  const selectedClientObj = CLIENTS.find(c => c.id === selectedClient) || CLIENTS[0];
+
+  // Get frameworks selected for comparison
+  const getSelectedComparisonFrameworks = (): Framework[] => {
+    return FRAMEWORKS.filter(f => selectedForComparison.has(f.id));
+  };
+
+  // Toggle framework selection for comparison
+  const toggleFrameworkForComparison = (frameworkId: string) => {
+    setSelectedForComparison(prev => {
+      const next = new Set(prev);
+      if (next.has(frameworkId)) {
+        next.delete(frameworkId);
+      } else if (next.size < 2) {
+        next.add(frameworkId);
+      }
+      return next;
+    });
+  };
+
+  // Handle opening comparison modal
+  const handleOpenComparison = () => {
+    if (selectedForComparison.size === 2) {
+      setShowComparisonModal(true);
+    }
+  };
 
   // Get articles for a specific framework (by tag matching)
   const getFrameworkArticles = (framework: Framework) => {
@@ -625,22 +700,73 @@ function ContentPageInner() {
             ) : viewMode === "frameworks" ? (
               /* Frameworks List */
               <div className="px-2">
-                {/* Framework Filter */}
-                <div className="flex items-center gap-1 mb-3 px-2">
-                  {(["all", "active", "deprecated", "experimental"] as const).map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setFrameworkFilter(filter)}
-                      className={`px-2 py-1 text-xs rounded-md transition-colors capitalize ${
-                        frameworkFilter === filter
-                          ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                          : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
+                {/* Framework Filter and Compare Toggle */}
+                <div className="flex items-center justify-between gap-2 mb-3 px-2">
+                  <div className="flex items-center gap-1">
+                    {(["all", "active", "deprecated", "experimental"] as const).map((filter) => (
+                      <button
+                        key={filter}
+                        onClick={() => setFrameworkFilter(filter)}
+                        className={`px-2 py-1 text-xs rounded-md transition-colors capitalize ${
+                          frameworkFilter === filter
+                            ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                            : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)]"
+                        }`}
+                      >
+                        {filter}
+                      </button>
+                    ))}
+                  </div>
+                  <motion.button
+                    onClick={() => {
+                      setComparisonMode(!comparisonMode);
+                      if (comparisonMode) {
+                        setSelectedForComparison(new Set());
+                      }
+                    }}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors flex items-center gap-1 ${
+                      comparisonMode
+                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-slate)] border border-transparent"
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Scale className="w-3 h-3" />
+                    Compare
+                  </motion.button>
                 </div>
+
+                {/* Compare Selected Button - appears when 2 frameworks selected */}
+                <AnimatePresence>
+                  {comparisonMode && selectedForComparison.size === 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="px-2 mb-3"
+                    >
+                      <motion.button
+                        onClick={handleOpenComparison}
+                        className="w-full bg-emerald-500 hover:bg-emerald-400 text-white px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 text-sm font-medium shadow-lg shadow-emerald-500/20"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Scale className="w-4 h-4" />
+                        Compare Selected (2)
+                      </motion.button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Comparison Mode Instructions */}
+                {comparisonMode && selectedForComparison.size < 2 && (
+                  <div className="px-2 mb-3">
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2 text-xs text-emerald-400">
+                      Select {2 - selectedForComparison.size} more framework{selectedForComparison.size === 1 ? "" : "s"} to compare
+                    </div>
+                  </div>
+                )}
 
                 {filteredFrameworks.length === 0 ? (
                   <div className="text-center py-8">
@@ -651,26 +777,45 @@ function ContentPageInner() {
                   <StaggerContainer>
                     {filteredFrameworks.map((framework) => {
                       const IconComponent = frameworkIcons[framework.icon];
+                      const isSelectedForComparison = selectedForComparison.has(framework.id);
                       return (
                         <StaggerItem key={framework.id}>
                           <motion.div
                             onClick={() => {
-                              setSelectedFramework(framework);
-                              setSelectedItem(null);
-                              setSelectedData(null);
+                              if (comparisonMode) {
+                                toggleFrameworkForComparison(framework.id);
+                              } else {
+                                setSelectedFramework(framework);
+                                setSelectedItem(null);
+                                setSelectedData(null);
+                              }
                             }}
                             className={`flex items-start gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors mb-1 ${
-                              selectedFramework?.id === framework.id
+                              isSelectedForComparison
+                                ? "bg-emerald-500/20 border border-emerald-500/30"
+                                : selectedFramework?.id === framework.id
                                 ? "bg-[var(--accent-ember)]/20 border border-[var(--accent-ember)]/30"
                                 : "hover:bg-[var(--bg-slate)] border border-transparent"
                             }`}
                             whileHover={{ x: 2 }}
                           >
+                            {/* Comparison Mode Checkbox */}
+                            {comparisonMode && (
+                              <div
+                                className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors ${
+                                  isSelectedForComparison
+                                    ? "bg-emerald-500 text-white"
+                                    : "border border-[var(--border-default)] bg-[var(--bg-slate)]"
+                                }`}
+                              >
+                                {isSelectedForComparison && <Check className="w-3 h-3" />}
+                              </div>
+                            )}
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border ${framework.color}`}>
                               <IconComponent className="w-4 h-4" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <span className="text-sm font-medium text-[var(--text-primary)] truncate">
                                   {framework.name}
                                 </span>
@@ -691,6 +836,28 @@ function ContentPageInner() {
                                   <span className="text-[var(--text-muted)]">v{framework.version}</span>
                                 )}
                               </div>
+                              {/* Client badges */}
+                              {selectedClient === "all" && framework.assignedClients.length > 0 && (
+                                <div className="flex items-center gap-1 mt-1.5 flex-wrap">
+                                  {framework.assignedClients.slice(0, 2).map((clientId) => {
+                                    const client = CLIENTS.find(c => c.id === clientId);
+                                    if (!client) return null;
+                                    return (
+                                      <span
+                                        key={clientId}
+                                        className={`text-[10px] px-1.5 py-0.5 rounded ${client.bgColor} ${client.color}`}
+                                      >
+                                        {client.shortName}
+                                      </span>
+                                    );
+                                  })}
+                                  {framework.assignedClients.length > 2 && (
+                                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-[var(--text-muted)]">
+                                      +{framework.assignedClients.length - 2}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </motion.div>
                         </StaggerItem>
@@ -858,6 +1025,27 @@ function ContentPageInner() {
                     </motion.span>
                   ))}
                 </div>
+
+                {/* Assigned Clients */}
+                {selectedFramework.assignedClients.length > 0 && (
+                  <div className="flex items-center gap-2 mt-3">
+                    <Building2 className="w-4 h-4 text-[var(--text-muted)]" />
+                    <span className="text-sm text-[var(--text-muted)]">Assigned to:</span>
+                    {selectedFramework.assignedClients.map((clientId) => {
+                      const client = CLIENTS.find(c => c.id === clientId);
+                      if (!client) return null;
+                      return (
+                        <motion.span
+                          key={clientId}
+                          className={`px-2 py-0.5 rounded text-xs ${client.bgColor} ${client.color}`}
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          {client.name}
+                        </motion.span>
+                      );
+                    })}
+                  </div>
+                )}
               </motion.div>
 
               {/* Framework Articles */}
@@ -1069,6 +1257,37 @@ function ContentPageInner() {
                       }}
                     />
                   </div>
+
+                  {/* Discussion Link Footer */}
+                  <div className="border-t border-white/10 pt-4 mt-6">
+                    <motion.button
+                      onClick={() => {
+                        // Navigate to channels page with article reference
+                        // In production, this would link to a specific discussion channel
+                        const articleSlug = selectedData.article?.slug || selectedData.article?.id;
+                        window.location.href = `/diq/channels?article=${articleSlug}`;
+                      }}
+                      className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors group"
+                      whileHover={{ x: 4 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Discuss this article</span>
+                      {/* Mock discussion count - in production this would come from the database */}
+                      {(() => {
+                        // Generate a deterministic "discussion count" based on article id for demo
+                        const discussionCount = selectedData.article?.id
+                          ? (parseInt(selectedData.article.id.replace(/[^0-9]/g, '').slice(-2) || '0', 10) % 15)
+                          : 0;
+                        return discussionCount > 0 ? (
+                          <span className="bg-emerald-500/20 px-2 rounded-full text-xs">
+                            {discussionCount} comments
+                          </span>
+                        ) : null;
+                      })()}
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </motion.button>
+                  </div>
                 </div>
               </motion.div>
             </>
@@ -1153,32 +1372,70 @@ function ContentPageInner() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="flex-1 flex items-center justify-center"
+              className="flex-1 flex flex-col"
             >
-              <div className="text-center max-w-md">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6 border border-[var(--accent-ember)]/20">
-                  <Layers className="w-10 h-10 text-[var(--accent-ember)]" />
+              {/* Framework Hub Header with Client Context Selector */}
+              <div className="border-b border-[var(--border-subtle)] p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-purple-500/20 flex items-center justify-center border border-[var(--accent-ember)]/20">
+                      <Layers className="w-6 h-6 text-[var(--accent-ember)]" />
+                    </div>
+                    <div>
+                      <h1 className="text-xl font-medium text-[var(--text-primary)]">Framework Hub</h1>
+                      <p className="text-sm text-[var(--text-muted)]">Enterprise frameworks and best practices</p>
+                    </div>
+                  </div>
+
+                  {/* Client Context Selector */}
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <Building2 className="w-4 h-4 text-[var(--text-muted)]" />
+                      <span className="text-sm text-[var(--text-muted)]">Client Context:</span>
+                    </div>
+                    <select
+                      value={selectedClient}
+                      onChange={(e) => setSelectedClient(e.target.value)}
+                      className="bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 cursor-pointer min-w-[180px]"
+                    >
+                      {CLIENTS.map((client) => (
+                        <option key={client.id} value={client.id}>
+                          {client.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                <h3 className="text-xl font-medium text-[var(--text-primary)] mb-2">
-                  Framework Hub
-                </h3>
-                <p className="text-sm text-[var(--text-muted)] mb-6">
-                  Discover and explore enterprise frameworks, accelerators, and best practices.
-                  Select a framework from the list to view its documentation and related articles.
-                </p>
-                <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-muted)]">
-                  <span className="flex items-center gap-1">
-                    <Layers className="w-4 h-4 text-[var(--accent-ember)]" />
-                    {FRAMEWORKS.filter(f => f.status === "active").length} Active
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Zap className="w-4 h-4 text-pink-400" />
-                    {FRAMEWORKS.filter(f => f.status === "experimental").length} Experimental
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <FileText className="w-4 h-4 text-[var(--text-muted)]" />
-                    {FRAMEWORKS.reduce((sum, f) => sum + f.articleCount, 0)} Articles
-                  </span>
+              </div>
+
+              {/* Framework Hub Content */}
+              <div className="flex-1 flex items-center justify-center p-6">
+                <div className="text-center max-w-md">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-purple-500/20 flex items-center justify-center mx-auto mb-6 border border-[var(--accent-ember)]/20">
+                    <Layers className="w-10 h-10 text-[var(--accent-ember)]" />
+                  </div>
+                  <h3 className="text-xl font-medium text-[var(--text-primary)] mb-2">
+                    {selectedClient !== "all" ? `${selectedClientObj.name} Frameworks` : "All Frameworks"}
+                  </h3>
+                  <p className="text-sm text-[var(--text-muted)] mb-6">
+                    {selectedClient !== "all"
+                      ? `Showing frameworks assigned to ${selectedClientObj.name}. Select a framework from the list to view its documentation.`
+                      : "Discover and explore enterprise frameworks, accelerators, and best practices. Select a framework from the list to view its documentation and related articles."}
+                  </p>
+                  <div className="flex items-center justify-center gap-4 text-sm text-[var(--text-muted)]">
+                    <span className="flex items-center gap-1">
+                      <Layers className="w-4 h-4 text-[var(--accent-ember)]" />
+                      {filteredFrameworks.filter(f => f.status === "active").length} Active
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Zap className="w-4 h-4 text-pink-400" />
+                      {filteredFrameworks.filter(f => f.status === "experimental").length} Experimental
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <FileText className="w-4 h-4 text-[var(--text-muted)]" />
+                      {filteredFrameworks.reduce((sum, f) => sum + f.articleCount, 0)} Articles
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -1258,6 +1515,24 @@ function ContentPageInner() {
           window.location.reload();
         }}
       />
+
+      {/* Framework Comparison Modal */}
+      <AnimatePresence>
+        {showComparisonModal && selectedForComparison.size === 2 && (() => {
+          const frameworks = getSelectedComparisonFrameworks();
+          return (
+            <FrameworkComparisonModal
+              frameworkA={frameworks[0]}
+              frameworkB={frameworks[1]}
+              onClose={() => {
+                setShowComparisonModal(false);
+                setComparisonMode(false);
+                setSelectedForComparison(new Set());
+              }}
+            />
+          );
+        })()}
+      </AnimatePresence>
 
       {/* Share Toast */}
       <AnimatePresence>

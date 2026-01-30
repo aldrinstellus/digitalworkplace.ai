@@ -18,6 +18,10 @@ import {
   Bot,
   MessageSquare,
   UserPlus,
+  Clock,
+  AlertTriangle,
+  X,
+  CalendarDays,
 } from "lucide-react";
 
 interface Role {
@@ -37,6 +41,11 @@ interface User {
   department: string;
   lastActive: string;
   avatar?: string;
+  temporaryAccess?: {
+    expiresAt: string;
+    grantedBy: string;
+    grantedAt: string;
+  };
 }
 
 const permissionCategories = [
@@ -128,11 +137,24 @@ const mockRoles: Role[] = [
   },
 ];
 
+// Helper to get days until expiration
+const getDaysUntilExpiration = (expiresAt: string): number => {
+  const now = new Date();
+  const expiry = new Date(expiresAt);
+  const diffTime = expiry.getTime() - now.getTime();
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+};
+
+// Helper to format date for input
+const formatDateForInput = (date: Date): string => {
+  return date.toISOString().split('T')[0];
+};
+
 const mockUsers: User[] = [
   { id: "1", name: "Sarah Chen", email: "sarah.chen@company.com", role: "Super Admin", department: "Engineering", lastActive: "2 min ago" },
   { id: "2", name: "Alex Thompson", email: "alex.t@company.com", role: "Admin", department: "HR", lastActive: "15 min ago" },
-  { id: "3", name: "Maria Garcia", email: "m.garcia@company.com", role: "Editor", department: "Marketing", lastActive: "1 hour ago" },
-  { id: "4", name: "James Wilson", email: "j.wilson@company.com", role: "Viewer", department: "Sales", lastActive: "3 hours ago" },
+  { id: "3", name: "Maria Garcia", email: "m.garcia@company.com", role: "Editor", department: "Marketing", lastActive: "1 hour ago", temporaryAccess: { expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), grantedBy: "Sarah Chen", grantedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString() } },
+  { id: "4", name: "James Wilson", email: "j.wilson@company.com", role: "Viewer", department: "Sales", lastActive: "3 hours ago", temporaryAccess: { expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), grantedBy: "Alex Thompson", grantedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() } },
   { id: "5", name: "Emily Brown", email: "e.brown@company.com", role: "Editor", department: "Product", lastActive: "1 day ago" },
 ];
 
@@ -142,6 +164,10 @@ export default function PermissionsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedCategories, setExpandedCategories] = useState<string[]>(permissionCategories.map(c => c.name));
   const [_showCreateRole, setShowCreateRole] = useState(false);
+  const [showTempAccessModal, setShowTempAccessModal] = useState(false);
+  const [selectedUserForTempAccess, setSelectedUserForTempAccess] = useState<User | null>(null);
+  const [tempAccessDate, setTempAccessDate] = useState("");
+  const [grantTempAccess, setGrantTempAccess] = useState(false);
 
   const toggleCategory = (name: string) => {
     setExpandedCategories(prev =>
@@ -161,6 +187,57 @@ export default function PermissionsPage() {
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const openTempAccessModal = (user: User) => {
+    setSelectedUserForTempAccess(user);
+    setGrantTempAccess(!!user.temporaryAccess);
+    // Calculate default date (7 days from now) inside the event handler
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 7);
+    setTempAccessDate(
+      user.temporaryAccess
+        ? formatDateForInput(new Date(user.temporaryAccess.expiresAt))
+        : formatDateForInput(defaultDate)
+    );
+    setShowTempAccessModal(true);
+  };
+
+  const handleSaveTempAccess = () => {
+    // In production, this would save to the backend
+    console.log("Saving temp access for", selectedUserForTempAccess?.name, {
+      grantTempAccess,
+      expiresAt: tempAccessDate,
+    });
+    setShowTempAccessModal(false);
+    setSelectedUserForTempAccess(null);
+  };
+
+  const getExpirationBadge = (user: User) => {
+    if (!user.temporaryAccess) return null;
+    const daysLeft = getDaysUntilExpiration(user.temporaryAccess.expiresAt);
+    const isExpiringSoon = daysLeft <= 7;
+    const isExpired = daysLeft <= 0;
+
+    if (isExpired) {
+      return (
+        <span className="flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400 border border-red-500/30">
+          <AlertTriangle className="w-3 h-3" />
+          Expired
+        </span>
+      );
+    }
+
+    return (
+      <span className={`flex items-center gap-1 px-2 py-0.5 rounded text-xs ${
+        isExpiringSoon
+          ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+          : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+      }`}>
+        <Clock className="w-3 h-3" />
+        Expires in {daysLeft} day{daysLeft !== 1 ? 's' : ''}
+      </span>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-[var(--bg-obsidian)]">
@@ -376,6 +453,7 @@ export default function PermissionsPage() {
                     <tr className="text-left text-sm text-[var(--text-muted)] border-b border-[var(--border-subtle)]">
                       <th className="px-6 py-3 font-medium">User</th>
                       <th className="px-6 py-3 font-medium">Role</th>
+                      <th className="px-6 py-3 font-medium">Access Status</th>
                       <th className="px-6 py-3 font-medium">Department</th>
                       <th className="px-6 py-3 font-medium">Last Active</th>
                       <th className="px-6 py-3 font-medium">Actions</th>
@@ -404,12 +482,36 @@ export default function PermissionsPage() {
                             ))}
                           </select>
                         </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col gap-1">
+                            {user.temporaryAccess ? (
+                              <>
+                                {getExpirationBadge(user)}
+                                <span className="text-xs text-[var(--text-muted)]">
+                                  by {user.temporaryAccess.grantedBy}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="flex items-center gap-1 px-2 py-0.5 rounded text-xs bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] w-fit">
+                                <Shield className="w-3 h-3" />
+                                Permanent
+                              </span>
+                            )}
+                          </div>
+                        </td>
                         <td className="px-6 py-4 text-[var(--text-secondary)]">{user.department}</td>
                         <td className="px-6 py-4 text-[var(--text-muted)] text-sm">{user.lastActive}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-1">
                             <button className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                               <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => openTempAccessModal(user)}
+                              className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-amber-400 transition-colors"
+                              title="Grant Temporary Access"
+                            >
+                              <Clock className="w-4 h-4" />
                             </button>
                             <button className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors">
                               <Edit className="w-4 h-4" />
@@ -448,6 +550,164 @@ export default function PermissionsPage() {
             </div>
           )}
         </div>
+
+        {/* Temporary Access Modal */}
+        {showTempAccessModal && selectedUserForTempAccess && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setShowTempAccessModal(false)}
+            />
+
+            {/* Modal Content */}
+            <div className="relative bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl w-full max-w-md shadow-2xl">
+              {/* Header */}
+              <div className="flex items-center justify-between p-5 border-b border-[var(--border-subtle)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium text-[var(--text-primary)]">
+                      Temporary Access
+                    </h3>
+                    <p className="text-sm text-[var(--text-muted)]">
+                      {selectedUserForTempAccess.name}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowTempAccessModal(false)}
+                  className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="p-5 space-y-5">
+                {/* User Info */}
+                <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-[var(--text-primary)] font-medium text-lg">
+                    {selectedUserForTempAccess.name.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-[var(--text-primary)] font-medium">
+                      {selectedUserForTempAccess.name}
+                    </div>
+                    <div className="text-sm text-[var(--text-muted)]">
+                      {selectedUserForTempAccess.email}
+                    </div>
+                    <div className="text-xs text-[var(--text-muted)] mt-0.5">
+                      Current role: {selectedUserForTempAccess.role}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grant Temporary Access Toggle */}
+                <div className="space-y-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={grantTempAccess}
+                        onChange={(e) => setGrantTempAccess(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-10 h-6 rounded-full bg-white/20 peer-checked:bg-[var(--accent-ember)] transition-colors" />
+                      <div className="absolute left-1 top-1 w-4 h-4 rounded-full bg-white transition-transform peer-checked:translate-x-4" />
+                    </div>
+                    <span className="text-[var(--text-primary)] font-medium">
+                      Grant temporary access
+                    </span>
+                  </label>
+
+                  {/* Date Picker - Only shown when temp access is enabled */}
+                  {grantTempAccess && (
+                    <div className="space-y-2 pl-[52px]">
+                      <label className="block text-sm text-[var(--text-secondary)]">
+                        Access expires on
+                      </label>
+                      <div className="relative">
+                        <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
+                        <input
+                          type="date"
+                          value={tempAccessDate}
+                          onChange={(e) => setTempAccessDate(e.target.value)}
+                          min={formatDateForInput(new Date())}
+                          className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg pl-10 pr-4 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
+                        />
+                      </div>
+
+                      {/* Preview of expiration */}
+                      {tempAccessDate && (
+                        <div className="flex items-center gap-2 text-sm">
+                          {(() => {
+                            const days = getDaysUntilExpiration(tempAccessDate);
+                            const isExpiringSoon = days <= 7;
+                            return (
+                              <span className={`flex items-center gap-1 px-2 py-0.5 rounded text-xs ${
+                                isExpiringSoon
+                                  ? "bg-amber-500/20 text-amber-400"
+                                  : "bg-blue-500/20 text-blue-400"
+                              }`}>
+                                <Clock className="w-3 h-3" />
+                                Expires in {days} day{days !== 1 ? 's' : ''}
+                              </span>
+                            );
+                          })()}
+                        </div>
+                      )}
+
+                      {/* Warning for short durations */}
+                      {grantTempAccess && getDaysUntilExpiration(tempAccessDate) <= 7 && (
+                        <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-xs text-amber-400">
+                          <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                          <span>
+                            Short-term access. The user will be notified when access is about to expire.
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Current temporary access info */}
+                {selectedUserForTempAccess.temporaryAccess && (
+                  <div className="p-3 bg-white/5 rounded-lg border border-[var(--border-subtle)]">
+                    <div className="text-xs text-[var(--text-muted)] mb-1">
+                      Current temporary access
+                    </div>
+                    <div className="flex items-center justify-between">
+                      {getExpirationBadge(selectedUserForTempAccess)}
+                      <span className="text-xs text-[var(--text-muted)]">
+                        Granted by {selectedUserForTempAccess.temporaryAccess.grantedBy}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-end gap-3 p-5 border-t border-[var(--border-subtle)]">
+                <button
+                  onClick={() => setShowTempAccessModal(false)}
+                  className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 text-sm transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveTempAccess}
+                  className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-[var(--text-primary)] text-sm font-medium transition-colors flex items-center gap-2"
+                >
+                  <Clock className="w-4 h-4" />
+                  {grantTempAccess ? "Save Access" : "Remove Temp Access"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

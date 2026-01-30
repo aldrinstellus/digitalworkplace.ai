@@ -21,6 +21,43 @@ export const DEFAULT_WIDGETS: DashboardWidget[] = [
   { id: "trending", type: "trending", title: "Trending Topics", visible: true, order: 5, size: "full" },
 ];
 
+// Layout preset definitions
+export type LayoutPresetKey = "task-focused" | "news-heavy" | "minimal" | "default";
+
+export interface LayoutPreset {
+  key: LayoutPresetKey;
+  name: string;
+  description: string;
+  widgetTypes: DashboardWidget["type"][];
+}
+
+export const LAYOUT_PRESETS: LayoutPreset[] = [
+  {
+    key: "task-focused",
+    name: "Task-Focused",
+    description: "Prioritizes tasks, calendar, and approvals",
+    widgetTypes: ["quick-actions", "meeting", "activity"],
+  },
+  {
+    key: "news-heavy",
+    name: "News-Heavy",
+    description: "Focus on news feed, announcements, and trending",
+    widgetTypes: ["news", "trending", "activity"],
+  },
+  {
+    key: "minimal",
+    name: "Minimal",
+    description: "Clean layout with essential widgets only",
+    widgetTypes: ["quick-actions", "meeting"],
+  },
+  {
+    key: "default",
+    name: "Default",
+    description: "Balanced layout with all widgets",
+    widgetTypes: ["meeting", "quick-actions", "news", "events", "activity", "trending"],
+  },
+];
+
 const STORAGE_KEY = "diq-dashboard-widgets";
 
 // Get widgets from localStorage (for non-logged-in users or initial load)
@@ -159,6 +196,41 @@ export function useDashboardWidgets() {
     }
   }, [settings, updateSettings]);
 
+  // Apply a layout preset
+  const applyPreset = useCallback(
+    (presetKey: LayoutPresetKey) => {
+      const preset = LAYOUT_PRESETS.find((p) => p.key === presetKey);
+      if (!preset) return;
+
+      setWidgetsState((prev) => {
+        // Create new widget array with visibility based on preset
+        const newWidgets = prev.map((widget, index) => ({
+          ...widget,
+          visible: preset.widgetTypes.includes(widget.type),
+          // Reorder based on preset order
+          order: preset.widgetTypes.indexOf(widget.type) !== -1
+            ? preset.widgetTypes.indexOf(widget.type)
+            : index + preset.widgetTypes.length,
+        }));
+
+        // Sort by order
+        const sorted = [...newWidgets].sort((a, b) => a.order - b.order);
+
+        saveStoredWidgets(sorted);
+        if (settings) {
+          updateSettings({
+            appearance: {
+              ...settings.appearance,
+              dashboardWidgets: sorted,
+            },
+          });
+        }
+        return sorted;
+      });
+    },
+    [settings, updateSettings]
+  );
+
   // Get visible widgets sorted by order
   const visibleWidgets = widgets
     .filter((w) => w.visible)
@@ -172,5 +244,6 @@ export function useDashboardWidgets() {
     toggleWidget,
     reorderWidgets,
     resetWidgets,
+    applyPreset,
   };
 }

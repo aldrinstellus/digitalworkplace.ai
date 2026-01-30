@@ -12,6 +12,8 @@ import type {
   WorkflowNodeData,
   WorkflowNodeType,
   WorkflowBuilderState,
+  WorkflowVersion,
+  ErrorHandlingConfig,
 } from './types';
 import { createDefaultNodeData, isValidConnection } from './constants';
 
@@ -42,6 +44,8 @@ const initialState = {
   history: [] as { nodes: WorkflowNode[]; edges: WorkflowEdge[] }[],
   historyIndex: -1,
   clipboard: null as { nodes: WorkflowNode[]; edges: WorkflowEdge[] } | null,
+  versions: [] as WorkflowVersion[],
+  selectedVersionId: null as string | null,
 };
 
 // =============================================================================
@@ -467,6 +471,83 @@ export const useWorkflowStore = create<WorkflowBuilderState>()(
           selectedNodeIds: [],
           selectedEdgeId: null,
           isPanelOpen: false,
+          isDirty: true,
+        }));
+      },
+
+      // ==========================================================================
+      // VERSION HISTORY ACTIONS
+      // ==========================================================================
+
+      // Create a new version snapshot
+      createVersion: (description?: string, isAutoSave: boolean = false) => {
+        const state = get();
+        const versionNumber = state.versions.length + 1;
+
+        const newVersion: WorkflowVersion = {
+          id: generateId(),
+          versionNumber,
+          createdAt: new Date().toISOString(),
+          description: description || (isAutoSave ? 'Auto-saved' : `Version ${versionNumber}`),
+          nodes: JSON.parse(JSON.stringify(state.nodes)),
+          edges: JSON.parse(JSON.stringify(state.edges)),
+          isAutoSave,
+        };
+
+        set((state) => ({
+          versions: [...state.versions, newVersion],
+        }));
+      },
+
+      // Restore workflow to a specific version
+      restoreVersion: (versionId: string) => {
+        const state = get();
+        const version = state.versions.find((v) => v.id === versionId);
+
+        if (!version) return;
+
+        // Save current state before restoring
+        state.createVersion('Before restore', false);
+        state.saveToHistory();
+
+        set({
+          nodes: JSON.parse(JSON.stringify(version.nodes)),
+          edges: JSON.parse(JSON.stringify(version.edges)),
+          selectedVersionId: null,
+          isDirty: true,
+        });
+      },
+
+      // Select a version for preview (without restoring)
+      selectVersion: (versionId: string | null) => {
+        set({ selectedVersionId: versionId });
+      },
+
+      // Get all versions
+      getVersions: () => {
+        return get().versions;
+      },
+
+      // Clear all versions
+      clearVersions: () => {
+        set({ versions: [], selectedVersionId: null });
+      },
+
+      // ==========================================================================
+      // ERROR HANDLING ACTIONS
+      // ==========================================================================
+
+      // Update error handling config for a node
+      updateNodeErrorHandling: (nodeId: string, errorHandling: ErrorHandlingConfig) => {
+        const state = get();
+        state.saveToHistory();
+
+        set((state) => ({
+          nodes: state.nodes.map((node) =>
+            node.id === nodeId
+              ? { ...node, data: { ...node.data, errorHandling } }
+              : node
+          ),
           isDirty: true,
         }));
       },

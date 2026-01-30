@@ -1,14 +1,23 @@
 "use client";
 
-import React, { useState, useMemo, useRef, useCallback } from "react";
+import React, { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import { WorkflowCanvas, type WorkflowNode as LegacyWorkflowNode } from "@/components/workflow/WorkflowCanvas";
 import { WorkflowBuilder } from "@/components/workflow";
 import { ExecutionView } from "@/components/workflow/ExecutionView";
+import { CodeEditor } from "@/components/workflow/CodeEditor";
 import { useWorkflows } from "@/lib/hooks/useSupabase";
 import { workflowToReactFlow, reactFlowToDatabase, convertLegacyWorkflow } from "@/lib/workflow/serialization";
+import {
+  workflowToYAML,
+  workflowToJSON,
+  yamlToWorkflow,
+  jsonToWorkflow,
+  validateSyntax,
+  type ParseError,
+} from "@/lib/workflow/yaml-converter";
 import type { WorkflowNode, WorkflowEdge, WorkflowResponse } from "@/lib/workflow/types";
 import {
   Bot,
@@ -37,6 +46,8 @@ import {
   TrendingUp,
   Eye,
   Grid,
+  Code2,
+  Layout,
 } from "lucide-react";
 import type { Workflow } from "@/lib/database.types";
 
@@ -105,6 +116,15 @@ export default function AgentsPage() {
   const [showEditMode, setShowEditMode] = useState(false);
   const [editingStep, setEditingStep] = useState<string | null>(null);
   const [workflowList, setWorkflowList] = useState<Workflow[]>([]);
+
+  // Code Mode state
+  const [builderMode, setBuilderMode] = useState<"visual" | "code">("visual");
+  const [codeFormat, setCodeFormat] = useState<"yaml" | "json">("yaml");
+  const [codeValue, setCodeValue] = useState("");
+  const [codeErrors, setCodeErrors] = useState<ParseError[]>([]);
+  const [isCodeValid, setIsCodeValid] = useState(true);
+  const [isCodeDirty, setIsCodeDirty] = useState(false);
+  const [originalCode, setOriginalCode] = useState("");
 
   // Sync workflows from hook to local state
   React.useEffect(() => {
@@ -221,6 +241,143 @@ export default function AgentsPage() {
       throw error;
     }
   }, [selectedWorkflow]);
+
+  // =============================================================================
+  // CODE MODE HANDLERS
+  // =============================================================================
+
+  // Generate code from visual workflow when switching to code mode
+  const syncVisualToCode = useCallback(() => {
+    if (!selectedWorkflow) return;
+
+    const metadata = {
+      name: selectedWorkflow.name,
+      description: selectedWorkflow.description || undefined,
+    };
+
+    let code: string;
+    if (codeFormat === "yaml") {
+      code = workflowToYAML(reactFlowNodes, reactFlowEdges, metadata);
+    } else {
+      code = workflowToJSON(reactFlowNodes, reactFlowEdges, metadata);
+    }
+
+    setCodeValue(code);
+    setOriginalCode(code);
+    setCodeErrors([]);
+    setIsCodeValid(true);
+    setIsCodeDirty(false);
+  }, [selectedWorkflow, reactFlowNodes, reactFlowEdges, codeFormat]);
+
+  // Switch between visual and code mode
+  const handleModeSwitch = useCallback((mode: "visual" | "code") => {
+    if (mode === "code" && builderMode === "visual") {
+      // Switching to code mode - sync visual to code
+      syncVisualToCode();
+    }
+    setBuilderMode(mode);
+  }, [builderMode, syncVisualToCode]);
+
+  // Handle code format change (YAML <-> JSON)
+  const handleCodeFormatChange = useCallback((format: "yaml" | "json") => {
+    if (format === codeFormat) return;
+
+    // Convert current code to new format
+    try {
+      let parsed;
+      if (codeFormat === "yaml") {
+        parsed = yamlToWorkflow(codeValue);
+      } else {
+        parsed = jsonToWorkflow(codeValue);
+      }
+
+      if (parsed.success && parsed.nodes && parsed.edges) {
+        const metadata = {
+          name: selectedWorkflow?.name || "Workflow",
+          description: selectedWorkflow?.description || undefined,
+        };
+
+        let newCode: string;
+        if (format === "yaml") {
+          newCode = workflowToYAML(parsed.nodes, parsed.edges, metadata);
+        } else {
+          newCode = workflowToJSON(parsed.nodes, parsed.edges, metadata);
+        }
+
+        setCodeValue(newCode);
+        setCodeErrors([]);
+        setIsCodeValid(true);
+      }
+    } catch {
+      // If conversion fails, just change format and validate
+      const errors = validateSyntax(codeValue, format);
+      setCodeErrors(errors);
+      setIsCodeValid(errors.length === 0);
+    }
+
+    setCodeFormat(format);
+  }, [codeFormat, codeValue, selectedWorkflow]);
+
+  // Handle code changes
+  const handleCodeChange = useCallback((value: string) => {
+    setCodeValue(value);
+    setIsCodeDirty(value !== originalCode);
+
+    // Debounced syntax validation
+    const errors = validateSyntax(value, codeFormat);
+    setCodeErrors(errors);
+    setIsCodeValid(errors.length === 0);
+  }, [originalCode, codeFormat]);
+
+  // Validate code
+  const handleValidateCode = useCallback(() => {
+    let result;
+    if (codeFormat === "yaml") {
+      result = yamlToWorkflow(codeValue);
+    } else {
+      result = jsonToWorkflow(codeValue);
+    }
+
+    if (result.success) {
+      setCodeErrors([]);
+      setIsCodeValid(true);
+    } else {
+      setCodeErrors(result.errors || []);
+      setIsCodeValid(false);
+    }
+  }, [codeValue, codeFormat]);
+
+  // Apply code changes to visual workflow
+  const handleApplyCode = useCallback(() => {
+    let result;
+    if (codeFormat === "yaml") {
+      result = yamlToWorkflow(codeValue);
+    } else {
+      result = jsonToWorkflow(codeValue);
+    }
+
+    if (result.success && result.nodes && result.edges) {
+      // Update ReactFlow state
+      setReactFlowNodes(result.nodes);
+      setReactFlowEdges(result.edges);
+
+      // Mark as clean
+      setOriginalCode(codeValue);
+      setIsCodeDirty(false);
+
+      console.log("Code changes applied to visual workflow");
+    } else {
+      setCodeErrors(result.errors || [{ message: "Failed to parse code", type: "syntax" }]);
+      setIsCodeValid(false);
+    }
+  }, [codeValue, codeFormat]);
+
+  // Update code when visual workflow changes (while in code mode)
+  useEffect(() => {
+    if (builderMode === "code" && !isCodeDirty) {
+      syncVisualToCode();
+    }
+  }, [reactFlowNodes, reactFlowEdges, builderMode, isCodeDirty, syncVisualToCode]);
 
   // Add new step to workflow
   const handleAddStep = () => {
@@ -815,49 +972,126 @@ export default function AgentsPage() {
                     }}
                   />
                 ) : viewMode === "canvas" ? (
-                  /* Canvas View */
-                  <div className="h-full">
+                  /* Canvas View with Visual/Code Toggle */
+                  <div className="h-full flex flex-col">
+                    {/* Header with Visual/Code Toggle */}
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider">
-                        Visual Workflow Builder
+                        {builderMode === "visual" ? "Visual Workflow Builder" : "Code Editor"}
                       </h3>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs text-[var(--text-muted)]">Builder:</span>
-                        <motion.button
-                          onClick={() => setUseNewBuilder(!useNewBuilder)}
-                          className={`px-3 py-1 rounded-lg text-xs transition-colors ${
-                            useNewBuilder
-                              ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                              : "bg-[var(--bg-slate)] text-[var(--text-muted)]"
-                          }`}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          {useNewBuilder ? "ReactFlow (New)" : "Legacy"}
-                        </motion.button>
+                      <div className="flex items-center gap-3">
+                        {/* Visual / Code Toggle */}
+                        <div className="flex items-center rounded-lg bg-[var(--bg-slate)] border border-[var(--border-subtle)] p-0.5">
+                          <motion.button
+                            onClick={() => handleModeSwitch("visual")}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                              builderMode === "visual"
+                                ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Layout className="w-3.5 h-3.5" />
+                            Visual
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleModeSwitch("code")}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                              builderMode === "code"
+                                ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Code2 className="w-3.5 h-3.5" />
+                            Code
+                          </motion.button>
+                        </div>
+
+                        {/* Builder Type Toggle (only in visual mode) */}
+                        {builderMode === "visual" && (
+                          <>
+                            <div className="w-px h-6 bg-[var(--border-subtle)]" />
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-[var(--text-muted)]">Builder:</span>
+                              <motion.button
+                                onClick={() => setUseNewBuilder(!useNewBuilder)}
+                                className={`px-3 py-1 rounded-lg text-xs transition-colors ${
+                                  useNewBuilder
+                                    ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                                    : "bg-[var(--bg-slate)] text-[var(--text-muted)]"
+                                }`}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                {useNewBuilder ? "ReactFlow (New)" : "Legacy"}
+                              </motion.button>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
-                    {useNewBuilder ? (
-                      <div className="h-[calc(100%-2rem)] min-h-[500px] rounded-xl overflow-hidden">
-                        <WorkflowBuilder
-                          workflowId={selectedWorkflow.id}
-                          initialNodes={reactFlowNodes}
-                          initialEdges={reactFlowEdges}
-                          onSave={handleSaveWorkflow}
-                          readOnly={false}
-                        />
-                      </div>
-                    ) : (
-                      <WorkflowCanvas
-                        nodes={canvasNodes.length > 0 ? canvasNodes : [
-                          { id: "1", type: "trigger", name: "Trigger", description: "Start workflow", position: { x: 50, y: 100 }, connections: { success: "2" } },
-                          { id: "2", type: "search", name: "Search KB", description: "Search knowledge base", position: { x: 350, y: 100 }, connections: { success: "3" } },
-                          { id: "3", type: "think", name: "AI Analysis", description: "Process with AI", position: { x: 650, y: 100 }, connections: { success: "4" } },
-                          { id: "4", type: "output", name: "Output", description: "Return result", position: { x: 950, y: 100 }, connections: {} },
-                        ]}
-                        onNodesChange={setCanvasNodes}
-                      />
-                    )}
+
+                    {/* Content Area */}
+                    <AnimatePresence mode="wait">
+                      {builderMode === "visual" ? (
+                        /* Visual Builder */
+                        <motion.div
+                          key="visual"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -20 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex-1 min-h-[500px]"
+                        >
+                          {useNewBuilder ? (
+                            <div className="h-full rounded-xl overflow-hidden">
+                              <WorkflowBuilder
+                                workflowId={selectedWorkflow.id}
+                                initialNodes={reactFlowNodes}
+                                initialEdges={reactFlowEdges}
+                                onSave={handleSaveWorkflow}
+                                readOnly={false}
+                              />
+                            </div>
+                          ) : (
+                            <WorkflowCanvas
+                              nodes={canvasNodes.length > 0 ? canvasNodes : [
+                                { id: "1", type: "trigger", name: "Trigger", description: "Start workflow", position: { x: 50, y: 100 }, connections: { success: "2" } },
+                                { id: "2", type: "search", name: "Search KB", description: "Search knowledge base", position: { x: 350, y: 100 }, connections: { success: "3" } },
+                                { id: "3", type: "think", name: "AI Analysis", description: "Process with AI", position: { x: 650, y: 100 }, connections: { success: "4" } },
+                                { id: "4", type: "output", name: "Output", description: "Return result", position: { x: 950, y: 100 }, connections: {} },
+                              ]}
+                              onNodesChange={setCanvasNodes}
+                            />
+                          )}
+                        </motion.div>
+                      ) : (
+                        /* Code Editor */
+                        <motion.div
+                          key="code"
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex-1 min-h-[500px]"
+                        >
+                          <CodeEditor
+                            value={codeValue}
+                            onChange={handleCodeChange}
+                            format={codeFormat}
+                            onFormatChange={handleCodeFormatChange}
+                            errors={codeErrors}
+                            onValidate={handleValidateCode}
+                            onApply={handleApplyCode}
+                            isValid={isCodeValid}
+                            isDirty={isCodeDirty}
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ) : (
                   /* List View */

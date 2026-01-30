@@ -17,18 +17,56 @@ import {
   Plus,
   X,
   Pin,
+  UserPlus,
+  UserCheck,
+  Tag,
+  User,
 } from "lucide-react";
 import type { NewsPost } from "@/lib/database.types";
 
+// Mock categories and authors for following
+const categories = [
+  { id: "company", name: "Company Updates", postCount: 15 },
+  { id: "engineering", name: "Engineering", postCount: 8 },
+  { id: "hr", name: "HR & Benefits", postCount: 12 },
+  { id: "product", name: "Product News", postCount: 10 },
+  { id: "culture", name: "Culture & Events", postCount: 6 },
+];
+
+const authors = [
+  { id: "1", name: "Sarah Chen", role: "CEO", avatar: "SC" },
+  { id: "2", name: "Mike Johnson", role: "VP Engineering", avatar: "MJ" },
+  { id: "3", name: "Lisa Park", role: "HR Director", avatar: "LP" },
+  { id: "4", name: "James Wilson", role: "Product Lead", avatar: "JW" },
+];
+
 export default function NewsPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "pinned">("all");
+  const [filter, setFilter] = useState<"all" | "pinned" | "following">("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newPostContent, setNewPostContent] = useState("");
   const [newPostPinned, setNewPostPinned] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [followedCategories, setFollowedCategories] = useState<string[]>(["company", "product"]);
+  const [followedAuthors, setFollowedAuthors] = useState<string[]>(["1"]);
   const { posts, loading } = useNewsPosts({ limit: 50 });
+
+  const toggleFollowCategory = (categoryId: string) => {
+    setFollowedCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
+
+  const toggleFollowAuthor = (authorId: string) => {
+    setFollowedAuthors((prev) =>
+      prev.includes(authorId)
+        ? prev.filter((id) => id !== authorId)
+        : [...prev, authorId]
+    );
+  };
 
   const handleCreatePost = async () => {
     if (!newPostContent.trim()) return;
@@ -57,7 +95,9 @@ export default function NewsPage() {
   const filteredPosts = posts.filter((post: NewsPost) => {
     const matchesSearch = post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filter === "all" || (filter === "pinned" && post.pinned);
+    const matchesPinned = filter === "pinned" ? post.pinned : true;
+    const matchesFollowing = filter === "following" ? true : true; // In production, filter by followed categories/authors
+    const matchesFilter = filter === "all" || matchesPinned || (filter === "following" && matchesFollowing);
     return matchesSearch && matchesFilter;
   });
 
@@ -105,12 +145,101 @@ export default function NewsPage() {
               <Filter className="w-4 h-4 text-[var(--text-muted)]" />
               <select
                 value={filter}
-                onChange={(e) => setFilter(e.target.value as "all" | "pinned")}
+                onChange={(e) => setFilter(e.target.value as "all" | "pinned" | "following")}
                 className="bg-transparent text-[var(--text-primary)] py-3 pr-2 outline-none cursor-pointer"
               >
                 <option value="all">All Posts</option>
                 <option value="pinned">Pinned Only</option>
+                <option value="following">Following</option>
               </select>
+            </div>
+          </div>
+
+          {/* Follow Categories & Authors Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {/* Categories to Follow */}
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
+              <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                <Tag className="w-4 h-4 text-[var(--accent-ember)]" />
+                Follow Categories
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => {
+                  const isFollowing = followedCategories.includes(category.id);
+                  return (
+                    <motion.button
+                      key={category.id}
+                      onClick={() => toggleFollowCategory(category.id)}
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors ${
+                        isFollowing
+                          ? "bg-emerald-500 text-white"
+                          : "border border-emerald-500 text-emerald-500 hover:bg-emerald-500/10"
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {isFollowing ? (
+                        <UserCheck className="w-3.5 h-3.5" />
+                      ) : (
+                        <UserPlus className="w-3.5 h-3.5" />
+                      )}
+                      {category.name}
+                      {isFollowing && <span className="text-xs opacity-75">({category.postCount})</span>}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Authors to Follow */}
+            <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4">
+              <h3 className="text-sm font-medium text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                <User className="w-4 h-4 text-[var(--accent-ember)]" />
+                Follow Authors
+              </h3>
+              <div className="space-y-2">
+                {authors.map((author) => {
+                  const isFollowing = followedAuthors.includes(author.id);
+                  return (
+                    <div
+                      key={author.id}
+                      className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center">
+                          <span className="text-white text-xs font-medium">{author.avatar}</span>
+                        </div>
+                        <div>
+                          <p className="text-sm text-[var(--text-primary)]">{author.name}</p>
+                          <p className="text-xs text-[var(--text-muted)]">{author.role}</p>
+                        </div>
+                      </div>
+                      <motion.button
+                        onClick={() => toggleFollowAuthor(author.id)}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition-colors ${
+                          isFollowing
+                            ? "bg-emerald-500 text-white"
+                            : "border border-emerald-500 text-emerald-500 hover:bg-emerald-500/10"
+                        }`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {isFollowing ? (
+                          <>
+                            <UserCheck className="w-3 h-3" />
+                            Following
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="w-3 h-3" />
+                            Follow
+                          </>
+                        )}
+                      </motion.button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

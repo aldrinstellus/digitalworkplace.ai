@@ -8,7 +8,7 @@ import { ChatSpaces, type ChatSpace } from "@/components/chat/ChatSpaces";
 import { FileUploadModal } from "@/components/chat/FileUploadModal";
 import { SearchScopeToggle, type SearchScope } from "@/components/chat/SearchScopeToggle";
 import { MentionInput } from "@/components/chat/MentionInput";
-import { FadeIn, ScaleOnHover } from "@/lib/motion";
+import { FadeIn } from "@/lib/motion";
 import {
   Send,
   Sparkles,
@@ -18,19 +18,25 @@ import {
   ThumbsUp,
   ThumbsDown,
   Copy,
-  ExternalLink,
   ChevronDown,
   Mic,
   Paperclip,
   Settings2,
   Clock,
-  FileText,
   Plus,
   Trash2,
   Eye,
+  GitBranch,
+  Download,
+  FileText,
+  FileDown,
+  Clipboard,
+  Check,
 } from "lucide-react";
 import { useChatThreads, useChatMessages } from "@/lib/hooks/useSupabase";
-import type { ChatThread, ChatMessage } from "@/lib/database.types";
+import type { ChatThread, ChatMessage, ChatSource } from "@/lib/database.types";
+import { ConfidenceBadge } from "@/components/chat/ConfidenceBadge";
+import { MessageContentWithCitations, SourcesFooter } from "@/components/chat/CitationLink";
 
 const llmOptions = [
   { id: "gpt-4", name: "GPT-4", provider: "OpenAI" },
@@ -52,9 +58,11 @@ const demoSpaces: ChatSpace[] = [
 ];
 
 export default function ChatPage() {
-  const { threads, loading: threadsLoading, createThread, setThreads } = useChatThreads();
+  const { threads, loading: threadsLoading, createThread, createBranch, isBranch, getParentThreadId, setThreads } = useChatThreads();
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const { messages, loading: messagesLoading, addMessage, setMessages } = useChatMessages(activeThreadId);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState<string | null>(null);
 
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -364,6 +372,169 @@ export default function ChatPage() {
     setIsTyping(false);
   }, [lastUserQuery, isTyping, messages, setMessages, addMessage, responseStyle.id, selectedLLM.id, activeThreadId]);
 
+  // Handle branching from a specific message
+  const handleBranchFromMessage = useCallback(async (messageId: string) => {
+    if (!activeThreadId || isTyping) return;
+
+    const result = await createBranch(activeThreadId, messageId, selectedLLM.id);
+    if (result) {
+      // Switch to the new branched thread
+      setActiveThreadId(result.thread.id);
+      setMessages(result.messages);
+    }
+  }, [activeThreadId, isTyping, createBranch, selectedLLM.id, setMessages]);
+
+  // Get current thread for export
+  const currentThread = threads.find(t => t.id === activeThreadId);
+
+  // Export conversation as Markdown
+  const exportAsMarkdown = useCallback(() => {
+    if (!currentThread || messages.length === 0) return;
+
+    const threadTitle = currentThread.title || "Chat Export";
+    const date = new Date().toISOString().split("T")[0];
+
+    let markdown = `# ${threadTitle}\n`;
+    markdown += `**Date:** ${date}\n`;
+    markdown += `**Model:** ${selectedLLM.name}\n\n`;
+    markdown += `---\n\n`;
+
+    messages.forEach((msg) => {
+      const timestamp = new Date(msg.created_at).toLocaleString();
+      const role = msg.role === "user" ? "User" : "Assistant";
+      markdown += `## ${role}\n`;
+      markdown += `*${timestamp}*\n\n`;
+      markdown += `${msg.content}\n\n`;
+
+      // Add sources if available
+      if (msg.role === "assistant" && msg.sources && msg.sources.length > 0) {
+        markdown += `**Sources:**\n`;
+        msg.sources.forEach((source: ChatSource, idx: number) => {
+          markdown += `${idx + 1}. ${source.title}${source.url ? ` - ${source.url}` : ""}\n`;
+        });
+        markdown += `\n`;
+      }
+
+      markdown += `---\n\n`;
+    });
+
+    // Create and download file
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${threadTitle.replace(/[^a-z0-9]/gi, "_")}_${date}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setShowExportMenu(false);
+    setExportSuccess("Markdown");
+    setTimeout(() => setExportSuccess(null), 3000);
+  }, [currentThread, messages, selectedLLM.name]);
+
+  // Export conversation as PDF (using print dialog)
+  const exportAsPDF = useCallback(() => {
+    if (!currentThread || messages.length === 0) return;
+
+    const threadTitle = currentThread.title || "Chat Export";
+    const date = new Date().toISOString().split("T")[0];
+
+    // Create printable HTML
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+
+    let html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${threadTitle}</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #fff; color: #1a1a1a; }
+          h1 { color: #10b981; border-bottom: 2px solid #10b981; padding-bottom: 10px; }
+          .meta { color: #666; font-size: 14px; margin-bottom: 20px; }
+          .message { margin-bottom: 24px; padding: 16px; border-radius: 8px; }
+          .message.user { background: #f0fdf4; border-left: 4px solid #10b981; }
+          .message.assistant { background: #f8fafc; border-left: 4px solid #64748b; }
+          .role { font-weight: 600; color: #10b981; margin-bottom: 8px; }
+          .message.assistant .role { color: #64748b; }
+          .timestamp { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+          .content { white-space: pre-wrap; line-height: 1.6; }
+          .sources { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }
+          .sources a { color: #10b981; }
+          @media print { body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <h1>${threadTitle}</h1>
+        <div class="meta">
+          <strong>Date:</strong> ${date}<br/>
+          <strong>Model:</strong> ${selectedLLM.name}
+        </div>
+    `;
+
+    messages.forEach((msg) => {
+      const timestamp = new Date(msg.created_at).toLocaleString();
+      const role = msg.role === "user" ? "User" : "Assistant";
+      html += `
+        <div class="message ${msg.role}">
+          <div class="role">${role}</div>
+          <div class="timestamp">${timestamp}</div>
+          <div class="content">${msg.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+      `;
+
+      if (msg.role === "assistant" && msg.sources && msg.sources.length > 0) {
+        html += `<div class="sources"><strong>Sources:</strong><br/>`;
+        msg.sources.forEach((source: ChatSource, idx: number) => {
+          html += `${idx + 1}. ${source.title}${source.url ? ` - <a href="${source.url}">${source.url}</a>` : ""}<br/>`;
+        });
+        html += `</div>`;
+      }
+
+      html += `</div>`;
+    });
+
+    html += `</body></html>`;
+
+    printWindow.document.write(html);
+    printWindow.document.close();
+    printWindow.focus();
+
+    // Trigger print after content loads
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+
+    setShowExportMenu(false);
+    setExportSuccess("PDF");
+    setTimeout(() => setExportSuccess(null), 3000);
+  }, [currentThread, messages, selectedLLM.name]);
+
+  // Copy conversation to clipboard
+  const copyToClipboard = useCallback(async () => {
+    if (!currentThread || messages.length === 0) return;
+
+    const threadTitle = currentThread.title || "Chat Export";
+    let text = `${threadTitle}\n${"=".repeat(threadTitle.length)}\n\n`;
+
+    messages.forEach((msg) => {
+      const timestamp = new Date(msg.created_at).toLocaleString();
+      const role = msg.role === "user" ? "User" : "Assistant";
+      text += `[${role}] (${timestamp})\n`;
+      text += `${msg.content}\n\n`;
+    });
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setShowExportMenu(false);
+      setExportSuccess("Clipboard");
+      setTimeout(() => setExportSuccess(null), 3000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  }, [currentThread, messages]);
+
   return (
     <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
@@ -408,6 +579,66 @@ export default function ChatPage() {
                 <Eye className="w-4 h-4" />
                 Show work
               </motion.button>
+
+              {/* Export Button */}
+              <div className="relative">
+                <motion.button
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  disabled={messages.length === 0}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                    showExportMenu
+                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] border-[var(--accent-ember)]/30"
+                      : "bg-[var(--bg-slate)] hover:bg-[var(--bg-slate)]/80 text-[var(--text-secondary)] border-[var(--border-subtle)]"
+                  }`}
+                  whileHover={{ scale: messages.length > 0 ? 1.02 : 1 }}
+                  whileTap={{ scale: messages.length > 0 ? 0.98 : 1 }}
+                >
+                  {exportSuccess ? (
+                    <>
+                      <Check className="w-4 h-4 text-[var(--success)]" />
+                      <span className="text-[var(--success)]">Exported!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4" />
+                      Export
+                    </>
+                  )}
+                </motion.button>
+
+                <AnimatePresence>
+                  {showExportMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute right-0 top-12 w-48 bg-[var(--bg-charcoal)] border border-[var(--border-default)] rounded-xl shadow-xl z-50 p-2"
+                    >
+                      <button
+                        onClick={exportAsPDF}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] transition-colors"
+                      >
+                        <FileDown className="w-4 h-4" />
+                        Export as PDF
+                      </button>
+                      <button
+                        onClick={exportAsMarkdown}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] transition-colors"
+                      >
+                        <FileText className="w-4 h-4" />
+                        Export as Markdown
+                      </button>
+                      <button
+                        onClick={copyToClipboard}
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-slate)] transition-colors"
+                      >
+                        <Clipboard className="w-4 h-4" />
+                        Copy to Clipboard
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* LLM Selector */}
               <div className="relative">
@@ -551,35 +782,34 @@ export default function ChatPage() {
                           : "bg-[var(--bg-charcoal)] border border-[var(--border-subtle)]"
                       } rounded-2xl px-4 py-3`}
                     >
-                      <div className="text-[var(--text-primary)]/90 whitespace-pre-wrap text-sm leading-relaxed">
-                        {message.content}
-                      </div>
-
-                      {/* Sources & Confidence */}
-                      {message.role === "assistant" && message.sources && message.sources.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-[var(--border-subtle)]">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs text-[var(--text-muted)]">Sources</span>
-                            {message.confidence && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--success)]/20 text-[var(--success)]">
-                                {message.confidence}% confidence
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {message.sources.map((source: any, idx: number) => (
-                              <a
-                                key={idx}
-                                href={source.url || "#"}
-                                className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-[var(--bg-slate)] hover:bg-[var(--bg-slate)]/80 text-xs text-[var(--accent-ember)] transition-colors"
-                              >
-                                <FileText className="w-3 h-3" />
-                                {source.title}
-                                <ExternalLink className="w-3 h-3" />
-                              </a>
-                            ))}
-                          </div>
+                      {/* Message Content with Inline Citations */}
+                      {message.role === "assistant" && message.sources && message.sources.length > 0 ? (
+                        <MessageContentWithCitations
+                          content={message.content}
+                          sources={message.sources as ChatSource[]}
+                        />
+                      ) : (
+                        <div className="text-[var(--text-primary)]/90 whitespace-pre-wrap text-sm leading-relaxed">
+                          {message.content}
                         </div>
+                      )}
+
+                      {/* Confidence Badge and Sources Footer - for assistant messages */}
+                      {message.role === "assistant" && (
+                        <>
+                          {/* Confidence indicator */}
+                          <div className="mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-[var(--text-muted)]">Confidence</span>
+                              <ConfidenceBadge sources={message.sources} />
+                            </div>
+                          </div>
+
+                          {/* Sources Footer with numbered list */}
+                          {message.sources && message.sources.length > 0 && (
+                            <SourcesFooter sources={message.sources as ChatSource[]} />
+                          )}
+                        </>
                       )}
 
                       {/* Actions */}
@@ -603,6 +833,16 @@ export default function ChatPage() {
                             whileTap={{ scale: 0.9 }}
                           >
                             <RefreshCw className={`w-4 h-4 ${isTyping ? "animate-spin" : ""}`} />
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleBranchFromMessage(message.id)}
+                            disabled={isTyping}
+                            className="p-1.5 rounded hover:bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--accent-gold)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            title="Branch from here"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                          >
+                            <GitBranch className="w-4 h-4" />
                           </motion.button>
                           <div className="flex items-center gap-1 ml-2">
                             <motion.button
@@ -782,31 +1022,49 @@ export default function ChatPage() {
             </div>
           ) : threads.length > 0 ? (
             <div className="space-y-2 flex-1 overflow-y-auto">
-              {threads.map((thread: ChatThread, index: number) => (
-                <motion.button
-                  key={thread.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => setActiveThreadId(thread.id)}
-                  className={`w-full text-left px-3 py-2 rounded-lg transition-colors group ${
-                    activeThreadId === thread.id
-                      ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                      : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)]"
-                  }`}
-                  whileHover={{ x: 4 }}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm truncate flex-1">
-                      {thread.title || "New conversation"}
+              {threads.map((thread: ChatThread, index: number) => {
+                const threadIsBranch = isBranch(thread);
+                const parentId = getParentThreadId(thread);
+                const parentThread = parentId ? threads.find(t => t.id === parentId) : null;
+
+                return (
+                  <motion.button
+                    key={thread.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => setActiveThreadId(thread.id)}
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors group ${
+                      activeThreadId === thread.id
+                        ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
+                        : "hover:bg-[var(--bg-slate)] text-[var(--text-muted)]"
+                    }`}
+                    whileHover={{ x: 4 }}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        {threadIsBranch && (
+                          <GitBranch className="w-3.5 h-3.5 text-[var(--accent-gold)] flex-shrink-0" />
+                        )}
+                        <div className="text-sm truncate">
+                          {thread.title || "New conversation"}
+                        </div>
+                      </div>
+                      <Trash2 className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 hover:opacity-100 hover:text-[var(--error)] transition-all flex-shrink-0" />
                     </div>
-                    <Trash2 className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 hover:opacity-100 hover:text-[var(--error)] transition-all" />
-                  </div>
-                  <div className="text-xs text-[var(--text-muted)] mt-0.5">
-                    {new Date(thread.updated_at).toLocaleDateString()}
-                  </div>
-                </motion.button>
-              ))}
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-xs text-[var(--text-muted)]">
+                        {new Date(thread.updated_at).toLocaleDateString()}
+                      </span>
+                      {threadIsBranch && parentThread && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--accent-gold)]/10 text-[var(--accent-gold)] truncate max-w-[100px]">
+                          Branch of: {parentThread.title?.slice(0, 15) || "Chat"}...
+                        </span>
+                      )}
+                    </div>
+                  </motion.button>
+                );
+              })}
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center">

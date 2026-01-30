@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import {
   Calendar,
@@ -27,6 +27,13 @@ import {
   Search,
   ExternalLink,
   RefreshCw,
+  Command,
+  X,
+  Mic,
+  MicOff,
+  Lightbulb,
+  ThumbsUp,
+  Eye,
 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
 
@@ -89,6 +96,358 @@ export default function MyDayPage() {
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [calendarConnected, setCalendarConnected] = useState(false);
   const quickAddRef = useRef<HTMLInputElement>(null);
+  const commandInputRef = useRef<HTMLInputElement>(null);
+
+  // Natural Language Command state
+  const [commandInput, setCommandInput] = useState('');
+  const [showCommandSuggestions, setShowCommandSuggestions] = useState(false);
+  const [highlightedPriorityTasks, setHighlightedPriorityTasks] = useState(false);
+
+  // Voice input state
+  const [isRecording, setIsRecording] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+
+  // AI-suggested tasks state
+  interface AISuggestion {
+    id: string;
+    text: string;
+    reason: string;
+    icon: 'view' | 'trend' | 'reminder';
+  }
+  const [aiSuggestions, setAiSuggestions] = useState<AISuggestion[]>([
+    {
+      id: 'sug-1',
+      text: 'Create summary of Project X documentation',
+      reason: 'You viewed this 5 times this week',
+      icon: 'view',
+    },
+    {
+      id: 'sug-2',
+      text: 'Schedule follow-up with Design team',
+      reason: 'Last meeting was 2 weeks ago',
+      icon: 'reminder',
+    },
+    {
+      id: 'sug-3',
+      text: 'Review Q1 Analytics Dashboard updates',
+      reason: 'Trending topic in your department',
+      icon: 'trend',
+    },
+  ]);
+  const [dismissedSuggestions, setDismissedSuggestions] = useState<Set<string>>(new Set());
+
+  // Local toast notification state (inline implementation)
+  const [toastMessage, setToastMessage] = useState<{
+    type: 'success' | 'error' | 'info';
+    title: string;
+    description?: string;
+  } | null>(null);
+
+  // Command suggestions
+  const commandSuggestions = [
+    { command: 'add task: Review Q3 report', description: 'Create a new task' },
+    { command: 'remind me to call Sarah tomorrow', description: 'Set a reminder' },
+    { command: "what's my top priority", description: 'Show priority tasks' },
+    { command: 'move task to Friday', description: 'Reschedule a task' },
+  ];
+
+  // Show toast notification
+  const showToast = useCallback((type: 'success' | 'error' | 'info', title: string, description?: string) => {
+    setToastMessage({ type, title, description });
+    setTimeout(() => setToastMessage(null), 4000);
+  }, []);
+
+  // Parse and execute natural language command
+  const parseCommand = useCallback((input: string) => {
+    const trimmedInput = input.trim().toLowerCase();
+
+    // Pattern: "add task: [description]" or "create task [description]"
+    const addTaskMatch = input.match(/^(?:add task:?\s*|create task\s+)(.+)/i);
+    if (addTaskMatch) {
+      const taskTitle = addTaskMatch[1].trim();
+      if (taskTitle) {
+        return { type: 'add_task' as const, title: taskTitle };
+      }
+    }
+
+    // Pattern: "remind me [description] [date]" or "remind me about [description] [date]"
+    const remindMatch = input.match(/^remind me(?:\s+(?:to|about))?\s+(.+?)\s+(today|tomorrow|monday|tuesday|wednesday|thursday|friday|saturday|sunday)$/i);
+    if (remindMatch) {
+      const description = remindMatch[1].trim();
+      const dayRef = remindMatch[2].toLowerCase();
+      return { type: 'remind' as const, title: description, day: dayRef };
+    }
+
+    // Simpler remind pattern without day: "remind me [description]"
+    const simpleRemindMatch = input.match(/^remind me(?:\s+(?:to|about))?\s+(.+)/i);
+    if (simpleRemindMatch && !remindMatch) {
+      const description = simpleRemindMatch[1].trim();
+      return { type: 'remind' as const, title: description, day: 'today' };
+    }
+
+    // Pattern: "what's my priority" or "top tasks" or "show priority"
+    const priorityMatch = trimmedInput.match(/^(?:what'?s my|show|view)\s*(?:top|priority|priorities|important)/i) ||
+                          trimmedInput.match(/^top\s*(?:tasks?|priority|priorities)/i);
+    if (priorityMatch) {
+      return { type: 'show_priority' as const };
+    }
+
+    return null;
+  }, []);
+
+  // Get date from day reference
+  const getDateFromDayRef = useCallback((dayRef: string): string => {
+    const today = new Date();
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+    if (dayRef === 'today') {
+      return today.toISOString().split('T')[0];
+    }
+
+    if (dayRef === 'tomorrow') {
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      return tomorrow.toISOString().split('T')[0];
+    }
+
+    // Handle day names (monday, tuesday, etc.)
+    const targetDayIndex = dayNames.indexOf(dayRef.toLowerCase());
+    if (targetDayIndex !== -1) {
+      const currentDayIndex = today.getDay();
+      let daysUntilTarget = targetDayIndex - currentDayIndex;
+      if (daysUntilTarget <= 0) {
+        daysUntilTarget += 7; // Move to next week
+      }
+      const targetDate = new Date(today);
+      targetDate.setDate(today.getDate() + daysUntilTarget);
+      return targetDate.toISOString().split('T')[0];
+    }
+
+    return today.toISOString().split('T')[0];
+  }, []);
+
+  // Execute the parsed command
+  const executeCommand = useCallback(async (command: ReturnType<typeof parseCommand>) => {
+    if (!command) {
+      showToast('error', 'Command not recognized', 'Try "add task: [description]" or "what\'s my priority"');
+      return;
+    }
+
+    if (command.type === 'add_task') {
+      // Create task via API or optimistically
+      try {
+        const response = await fetch('/diq/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            title: command.title,
+            priority: 'medium',
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTasks(prev => [data.task, ...prev]);
+          showToast('success', 'Task created', `"${command.title}" has been added to your tasks`);
+        } else {
+          throw new Error('API error');
+        }
+      } catch {
+        // Optimistic add for demo
+        const newTask: Task = {
+          id: Date.now().toString(),
+          user_id: userId,
+          title: command.title,
+          status: 'todo',
+          priority: 'medium',
+          tags: [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setTasks(prev => [newTask, ...prev]);
+        showToast('success', 'Task created', `"${command.title}" has been added to your tasks`);
+      }
+    } else if (command.type === 'remind') {
+      const dueDate = getDateFromDayRef(command.day);
+
+      try {
+        const response = await fetch('/diq/api/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            title: command.title,
+            priority: 'medium',
+            dueDate,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setTasks(prev => [data.task, ...prev]);
+          showToast('success', 'Reminder set', `"${command.title}" scheduled for ${command.day}`);
+        } else {
+          throw new Error('API error');
+        }
+      } catch {
+        // Optimistic add for demo
+        const newTask: Task = {
+          id: Date.now().toString(),
+          user_id: userId,
+          title: command.title,
+          status: 'todo',
+          priority: 'medium',
+          due_date: dueDate,
+          tags: ['reminder'],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+        setTasks(prev => [newTask, ...prev]);
+        showToast('success', 'Reminder set', `"${command.title}" scheduled for ${command.day}`);
+      }
+    } else if (command.type === 'show_priority') {
+      // Highlight priority tasks
+      setHighlightedPriorityTasks(true);
+      setFilter('all'); // Reset filter to show all tasks
+
+      // Find high priority tasks
+      const priorityTasks = tasks.filter(t =>
+        (t.priority === 'urgent' || t.priority === 'high') && t.status !== 'done'
+      );
+
+      showToast('info', 'Priority tasks highlighted',
+        priorityTasks.length > 0
+          ? `You have ${priorityTasks.length} high priority task${priorityTasks.length > 1 ? 's' : ''}`
+          : 'No high priority tasks found'
+      );
+
+      // Remove highlight after 5 seconds
+      setTimeout(() => setHighlightedPriorityTasks(false), 5000);
+    }
+  }, [showToast, getDateFromDayRef, tasks]);
+
+  // Handle command submission
+  const handleCommandSubmit = useCallback(() => {
+    if (!commandInput.trim()) return;
+
+    const command = parseCommand(commandInput);
+    executeCommand(command);
+    setCommandInput('');
+    setShowCommandSuggestions(false);
+  }, [commandInput, parseCommand, executeCommand]);
+
+  // Check for speech recognition support
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as Window & typeof globalThis & { SpeechRecognition?: typeof window.SpeechRecognition; webkitSpeechRecognition?: typeof window.SpeechRecognition }).SpeechRecognition ||
+                                (window as Window & typeof globalThis & { webkitSpeechRecognition?: typeof window.SpeechRecognition }).webkitSpeechRecognition;
+      setSpeechSupported(!!SpeechRecognition);
+    }
+  }, []);
+
+  // Voice input function using Web Speech API
+  const startVoiceInput = useCallback(() => {
+    if (typeof window === 'undefined') return;
+
+    const SpeechRecognition = (window as Window & typeof globalThis & { SpeechRecognition?: typeof window.SpeechRecognition; webkitSpeechRecognition?: typeof window.SpeechRecognition }).SpeechRecognition ||
+                              (window as Window & typeof globalThis & { webkitSpeechRecognition?: typeof window.SpeechRecognition }).webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      showToast('error', 'Voice input not supported', 'Your browser does not support speech recognition');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event: Event & { results: { [index: number]: { [index: number]: { transcript: string } } } }) => {
+      const transcript = event.results[0][0].transcript;
+      setCommandInput(transcript);
+      setIsRecording(false);
+      showToast('success', 'Voice captured', `"${transcript}"`);
+      // Focus the command input so user can review/edit
+      commandInputRef.current?.focus();
+    };
+
+    recognition.onerror = (event: Event & { error: string }) => {
+      setIsRecording(false);
+      if (event.error === 'no-speech') {
+        showToast('info', 'No speech detected', 'Please try again and speak clearly');
+      } else if (event.error === 'not-allowed') {
+        showToast('error', 'Microphone access denied', 'Please allow microphone access in your browser settings');
+      } else {
+        showToast('error', 'Voice input error', `Error: ${event.error}`);
+      }
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    try {
+      recognition.start();
+    } catch {
+      setIsRecording(false);
+      showToast('error', 'Voice input failed', 'Could not start voice recognition');
+    }
+  }, [showToast]);
+
+  // Handle accepting an AI suggestion
+  const acceptSuggestion = useCallback(async (suggestion: AISuggestion) => {
+    // Create a task from the suggestion
+    try {
+      const response = await fetch('/diq/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          title: suggestion.text,
+          priority: 'medium',
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(prev => [data.task, ...prev]);
+        showToast('success', 'Task created from suggestion', `"${suggestion.text}" has been added`);
+      } else {
+        throw new Error('API error');
+      }
+    } catch {
+      // Optimistic add for demo
+      const newTask: Task = {
+        id: Date.now().toString(),
+        user_id: userId,
+        title: suggestion.text,
+        status: 'todo',
+        priority: 'medium',
+        tags: ['ai-suggested'],
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      setTasks(prev => [newTask, ...prev]);
+      showToast('success', 'Task created from suggestion', `"${suggestion.text}" has been added`);
+    }
+
+    // Remove the suggestion
+    setDismissedSuggestions(prev => new Set([...prev, suggestion.id]));
+  }, [showToast]);
+
+  // Handle dismissing an AI suggestion
+  const dismissSuggestion = useCallback((suggestionId: string) => {
+    setDismissedSuggestions(prev => new Set([...prev, suggestionId]));
+    showToast('info', 'Suggestion dismissed', 'We\'ll show you different suggestions next time');
+  }, [showToast]);
+
+  // Get visible AI suggestions (not dismissed)
+  const visibleSuggestions = aiSuggestions.filter(s => !dismissedSuggestions.has(s.id));
 
   useEffect(() => {
     fetchTasks();
@@ -472,224 +831,410 @@ export default function MyDayPage() {
             </div>
           </motion.div>
 
-{/* Gmail-Style Calendar Widget with Event Pills */}
+          {/* AI-Suggested Tasks Section */}
+          {visibleSuggestions.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mb-6"
+            >
+              <div className="bg-[#121218] rounded-xl p-4 border border-emerald-500/20">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-medium flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                    </div>
+                    <span className="text-white/90">Suggested for you</span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 rounded">AI</span>
+                  </h3>
+                  <span className="text-[10px] text-white/40">Based on your activity</span>
+                </div>
+                <div className="space-y-2">
+                  <AnimatePresence>
+                    {visibleSuggestions.map((suggestion) => (
+                      <motion.div
+                        key={suggestion.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20, height: 0 }}
+                        className="group flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] transition-all"
+                      >
+                        {/* Icon */}
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                          suggestion.icon === 'view' ? 'bg-blue-500/20' :
+                          suggestion.icon === 'trend' ? 'bg-purple-500/20' : 'bg-amber-500/20'
+                        }`}>
+                          {suggestion.icon === 'view' ? (
+                            <Eye className={`w-4 h-4 ${suggestion.icon === 'view' ? 'text-blue-400' : ''}`} />
+                          ) : suggestion.icon === 'trend' ? (
+                            <Target className="w-4 h-4 text-purple-400" />
+                          ) : (
+                            <Lightbulb className="w-4 h-4 text-amber-400" />
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-white/90 truncate">
+                            {suggestion.text}
+                          </p>
+                          <p className="text-[11px] text-white/40 mt-0.5">
+                            {suggestion.reason}
+                          </p>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={() => acceptSuggestion(suggestion)}
+                            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 text-xs font-medium transition-colors"
+                          >
+                            <ThumbsUp className="w-3 h-3" />
+                            Accept
+                          </button>
+                          <button
+                            onClick={() => dismissSuggestion(suggestion.id)}
+                            className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white/60 transition-colors"
+                            title="Dismiss"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Compact Information-Dense Calendar Widget */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-6"
           >
-            <div className="rounded-2xl bg-[#0d1117] border border-white/[0.06] overflow-hidden shadow-2xl">
-              {/* Calendar Header - Clean & Minimal */}
-              <div className="flex items-center justify-between px-5 py-4 bg-gradient-to-r from-[#0d1117] to-[#131920]">
-                <div className="flex items-center gap-4">
-                  {/* Month Navigation */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => navigateMonth('prev')}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-white/50 hover:text-white transition-all"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <h3 className="text-lg font-semibold text-white min-w-[160px] text-center">
-                      {calendarMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                    </h3>
-                    <button
-                      onClick={() => navigateMonth('next')}
-                      className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10 text-white/50 hover:text-white transition-all"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
+            <div className="grid grid-cols-12 gap-4">
+              {/* Mini Month Calendar - Compact with Task Dots */}
+              <div className="col-span-4 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
+                {/* Month Header */}
+                <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/[0.06]">
+                  <button
+                    onClick={() => navigateMonth('prev')}
+                    className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
                   <button
                     onClick={() => setCalendarMonth(new Date())}
-                    className="px-3 py-1.5 rounded-full text-sm font-medium bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all"
+                    className="text-sm font-medium text-white/90 hover:text-emerald-400 transition-colors"
                   >
-                    Today
+                    {calendarMonth.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                  </button>
+                  <button
+                    onClick={() => navigateMonth('next')}
+                    className="w-6 h-6 rounded flex items-center justify-center hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                  >
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Project Legend */}
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-3 text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-[4px] bg-rose-500"></span>
-                      <span className="text-white/60">Urgent</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-[4px] bg-amber-500"></span>
-                      <span className="text-white/60">High</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-[4px] bg-sky-500"></span>
-                      <span className="text-white/60">Medium</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-3 h-3 rounded-[4px] bg-emerald-500"></span>
-                      <span className="text-white/60">Low</span>
-                    </div>
+                {/* Compact Day Grid */}
+                <div className="p-2">
+                  {/* Day Headers */}
+                  <div className="grid grid-cols-7 mb-1">
+                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
+                      <div key={i} className="text-center text-[10px] font-medium text-white/30 py-1">
+                        {day}
+                      </div>
+                    ))}
                   </div>
-                  {!calendarConnected && (
-                    <button
-                      onClick={() => setCalendarConnected(true)}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-sm font-medium transition-all"
-                    >
-                      <Plus className="w-4 h-4" />
-                      Connect Calendar
-                    </button>
-                  )}
+
+                  {/* Calendar Days */}
+                  <div className="grid grid-cols-7 gap-0.5">
+                    {calendarDays.map((day, i) => {
+                      if (day === null) {
+                        return <div key={i} className="aspect-square" />;
+                      }
+
+                      const dateStr = formatCalendarDate(
+                        calendarMonth.getFullYear(),
+                        calendarMonth.getMonth(),
+                        day
+                      );
+                      const dayTasks = getTasksForDate(dateStr);
+                      const isToday = dateStr === new Date().toISOString().split('T')[0];
+                      const isPast = dateStr < new Date().toISOString().split('T')[0];
+                      const taskCount = dayTasks.length;
+                      const hasUrgent = dayTasks.some(t => t.priority === 'urgent' || isOverdue(t));
+                      const hasHigh = dayTasks.some(t => t.priority === 'high');
+
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => {
+                            setNewTaskDueDate(dateStr);
+                            setShowQuickAdd(true);
+                          }}
+                          className={`aspect-square rounded-md flex flex-col items-center justify-center relative group transition-all ${
+                            isToday
+                              ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30'
+                              : isPast
+                              ? 'text-white/25 hover:bg-white/5'
+                              : taskCount > 0
+                              ? 'bg-white/[0.03] text-white/80 hover:bg-white/[0.08]'
+                              : 'text-white/50 hover:bg-white/5'
+                          }`}
+                        >
+                          <span className={`text-[11px] font-medium ${isToday ? 'font-semibold' : ''}`}>
+                            {day}
+                          </span>
+                          {/* Task indicator dots */}
+                          {taskCount > 0 && !isToday && (
+                            <div className="flex gap-0.5 mt-0.5">
+                              {hasUrgent && <span className="w-1 h-1 rounded-full bg-rose-400" />}
+                              {hasHigh && !hasUrgent && <span className="w-1 h-1 rounded-full bg-amber-400" />}
+                              {!hasUrgent && !hasHigh && <span className="w-1 h-1 rounded-full bg-emerald-400" />}
+                              {taskCount > 1 && <span className="w-1 h-1 rounded-full bg-white/30" />}
+                              {taskCount > 2 && <span className="w-1 h-1 rounded-full bg-white/20" />}
+                            </div>
+                          )}
+                          {isToday && taskCount > 0 && (
+                            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-white text-emerald-600 text-[8px] font-bold flex items-center justify-center">
+                              {taskCount}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Priority Legend - Compact */}
+                <div className="px-3 py-2 border-t border-white/[0.06] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-1 text-[9px] text-white/40">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-400" /> Urgent
+                    </span>
+                    <span className="flex items-center gap-1 text-[9px] text-white/40">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> High
+                    </span>
+                    <span className="flex items-center gap-1 text-[9px] text-white/40">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Other
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Calendar Grid */}
-              <div className="p-4">
-                {/* Day Headers */}
-                <div className="grid grid-cols-7 mb-2">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
-                    <div key={i} className="text-center text-xs font-semibold text-white/40 uppercase tracking-wider py-2">
-                      {day}
-                    </div>
-                  ))}
+              {/* Week Timeline + Upcoming Tasks */}
+              <div className="col-span-8 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
+                {/* Week Strip Header */}
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-3">
+                    <CalendarDays className="w-4 h-4 text-emerald-400" />
+                    <span className="text-sm font-medium text-white/90">This Week</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!calendarConnected ? (
+                      <button
+                        onClick={() => setCalendarConnected(true)}
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-xs font-medium transition-all"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Sync
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[10px] text-white/40">Synced</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* Calendar Days with Event Pills */}
-                <div className="grid grid-cols-7 border-t border-l border-white/[0.06]">
-                  {calendarDays.map((day, i) => {
-                    if (day === null) {
+                {/* Week Days Strip */}
+                <div className="grid grid-cols-7 border-b border-white/[0.06]">
+                  {(() => {
+                    const today = new Date();
+                    const startOfWeek = new Date(today);
+                    startOfWeek.setDate(today.getDate() - today.getDay());
+
+                    return Array.from({ length: 7 }, (_, i) => {
+                      const date = new Date(startOfWeek);
+                      date.setDate(startOfWeek.getDate() + i);
+                      const dateStr = date.toISOString().split('T')[0];
+                      const dayTasks = getTasksForDate(dateStr);
+                      const isToday = dateStr === today.toISOString().split('T')[0];
+                      const isPast = dateStr < today.toISOString().split('T')[0];
+                      const taskCount = dayTasks.length;
+                      const urgentCount = dayTasks.filter(t => t.priority === 'urgent' || isOverdue(t)).length;
+                      const highCount = dayTasks.filter(t => t.priority === 'high').length;
+
                       return (
-                        <div
+                        <button
                           key={i}
-                          className="min-h-[100px] border-r border-b border-white/[0.06] bg-white/[0.01]"
-                        />
+                          onClick={() => {
+                            setNewTaskDueDate(dateStr);
+                            setShowQuickAdd(true);
+                          }}
+                          className={`py-2.5 px-1 flex flex-col items-center gap-1 transition-all border-r border-white/[0.04] last:border-r-0 ${
+                            isToday
+                              ? 'bg-emerald-500/10'
+                              : isPast
+                              ? 'opacity-50'
+                              : 'hover:bg-white/[0.03]'
+                          }`}
+                        >
+                          <span className="text-[10px] font-medium text-white/40 uppercase">
+                            {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                          </span>
+                          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-semibold ${
+                            isToday
+                              ? 'bg-emerald-500 text-white'
+                              : 'text-white/70'
+                          }`}>
+                            {date.getDate()}
+                          </span>
+                          {/* Task count bar */}
+                          <div className="flex gap-0.5 h-1.5">
+                            {urgentCount > 0 && (
+                              <div
+                                className="rounded-full bg-rose-500"
+                                style={{ width: `${Math.min(urgentCount * 4, 12)}px` }}
+                              />
+                            )}
+                            {highCount > 0 && (
+                              <div
+                                className="rounded-full bg-amber-500"
+                                style={{ width: `${Math.min(highCount * 4, 12)}px` }}
+                              />
+                            )}
+                            {taskCount - urgentCount - highCount > 0 && (
+                              <div
+                                className="rounded-full bg-emerald-500/60"
+                                style={{ width: `${Math.min((taskCount - urgentCount - highCount) * 4, 12)}px` }}
+                              />
+                            )}
+                            {taskCount === 0 && !isPast && (
+                              <div className="w-1 h-1 rounded-full bg-white/10" />
+                            )}
+                          </div>
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+
+                {/* Today's Tasks List - Compact */}
+                <div className="p-3 max-h-[180px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10">
+                  {(() => {
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const todayTasks = getTasksForDate(todayStr);
+                    const upcomingTasks = tasks
+                      .filter(t => t.due_date && t.due_date > todayStr && t.status !== 'done')
+                      .slice(0, 3);
+                    const allDisplayTasks = [...todayTasks, ...upcomingTasks].slice(0, 5);
+
+                    if (allDisplayTasks.length === 0) {
+                      return (
+                        <div className="flex items-center justify-center py-6 text-white/30 text-sm">
+                          <span>No tasks scheduled</span>
+                        </div>
                       );
                     }
 
-                    const dateStr = formatCalendarDate(
-                      calendarMonth.getFullYear(),
-                      calendarMonth.getMonth(),
-                      day
-                    );
-                    const dayTasks = getTasksForDate(dateStr);
-                    const isToday = dateStr === new Date().toISOString().split('T')[0];
-                    const isPast = dateStr < new Date().toISOString().split('T')[0];
-                    const isWeekend = i % 7 === 0 || i % 7 === 6;
-                    const taskCount = dayTasks.length;
-
-                    // Get color for task based on priority
-                    const getTaskColor = (task: Task) => {
-                      if (isOverdue(task)) return { bg: 'bg-rose-500', text: 'text-white', hover: 'hover:bg-rose-600' };
-                      switch (task.priority) {
-                        case 'urgent': return { bg: 'bg-rose-500', text: 'text-white', hover: 'hover:bg-rose-600' };
-                        case 'high': return { bg: 'bg-amber-500', text: 'text-amber-950', hover: 'hover:bg-amber-400' };
-                        case 'medium': return { bg: 'bg-sky-500', text: 'text-white', hover: 'hover:bg-sky-400' };
-                        case 'low': return { bg: 'bg-emerald-500', text: 'text-white', hover: 'hover:bg-emerald-400' };
-                        default: return { bg: 'bg-slate-500', text: 'text-white', hover: 'hover:bg-slate-400' };
-                      }
-                    };
-
                     return (
-                      <div
-                        key={i}
-                        onClick={() => {
-                          setNewTaskDueDate(dateStr);
-                          setShowQuickAdd(true);
-                        }}
-                        className={`min-h-[100px] border-r border-b border-white/[0.06] p-1.5 cursor-pointer transition-all group ${
-                          isToday
-                            ? 'bg-emerald-500/[0.08]'
-                            : isWeekend
-                            ? 'bg-white/[0.02]'
-                            : isPast
-                            ? 'bg-transparent'
-                            : 'hover:bg-white/[0.03]'
-                        }`}
-                      >
-                        {/* Day Number */}
-                        <div className={`flex items-center justify-between mb-1`}>
-                          <span className={`w-7 h-7 flex items-center justify-center rounded-full text-sm font-medium transition-all ${
-                            isToday
-                              ? 'bg-emerald-500 text-white'
-                              : isPast && taskCount === 0
-                              ? 'text-white/25'
-                              : 'text-white/70 group-hover:text-white'
-                          }`}>
-                            {day}
-                          </span>
-                          {/* Add button on hover */}
-                          <span className="w-6 h-6 rounded-full flex items-center justify-center text-white/0 group-hover:text-white/40 hover:!text-emerald-400 hover:!bg-emerald-500/20 transition-all">
-                            <Plus className="w-4 h-4" />
-                          </span>
-                        </div>
+                      <div className="space-y-1.5">
+                        {allDisplayTasks.map((task, idx) => {
+                          const isTaskToday = task.due_date === todayStr;
+                          const priorityColor = task.priority === 'urgent' || isOverdue(task)
+                            ? 'bg-rose-500'
+                            : task.priority === 'high'
+                            ? 'bg-amber-500'
+                            : task.priority === 'medium'
+                            ? 'bg-sky-500'
+                            : 'bg-emerald-500';
 
-                        {/* Event Pills */}
-                        <div className="space-y-1">
-                          {dayTasks.slice(0, 3).map((task, idx) => {
-                            const colors = getTaskColor(task);
-                            return (
-                              <motion.div
-                                key={task.id}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.05 }}
-                                className={`px-2 py-1 rounded-md text-[11px] font-medium truncate cursor-pointer transition-all ${colors.bg} ${colors.text} ${colors.hover}`}
+                          return (
+                            <motion.div
+                              key={task.id}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: idx * 0.03 }}
+                              className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg transition-all cursor-pointer group ${
+                                isTaskToday
+                                  ? 'bg-white/[0.04] hover:bg-white/[0.08]'
+                                  : 'hover:bg-white/[0.04]'
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleTaskExpanded(task.id);
+                              }}
+                            >
+                              {/* Priority indicator */}
+                              <span className={`w-1.5 h-6 rounded-full ${priorityColor} shrink-0`} />
+
+                              {/* Task info */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className={`text-xs font-medium truncate ${
+                                    task.status === 'done' ? 'text-white/40 line-through' : 'text-white/90'
+                                  }`}>
+                                    {task.title}
+                                  </span>
+                                  {!isTaskToday && task.due_date && (
+                                    <span className="text-[10px] text-white/30 shrink-0">
+                                      {new Date(task.due_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                    </span>
+                                  )}
+                                </div>
+                                {task.due_time && (
+                                  <span className="text-[10px] text-white/40 flex items-center gap-1">
+                                    <Clock className="w-2.5 h-2.5" />
+                                    {task.due_time.slice(0, 5)}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Quick complete button */}
+                              <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  // Could open task detail modal here
+                                  updateTaskStatus(task.id, task.status === 'done' ? 'todo' : 'done');
                                 }}
-                                title={`${task.title}${task.due_time ? ` at ${task.due_time}` : ''}`}
+                                className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all ${
+                                  task.status === 'done'
+                                    ? 'bg-emerald-500 border-emerald-500 text-white'
+                                    : 'border-white/20 text-transparent hover:border-emerald-400 hover:text-emerald-400'
+                                }`}
                               >
-                                {task.due_time && (
-                                  <span className="opacity-80 mr-1">{task.due_time.slice(0, 5)}</span>
-                                )}
-                                {task.title}
-                              </motion.div>
-                            );
-                          })}
-                          {/* More indicator */}
-                          {taskCount > 3 && (
-                            <div className="px-2 py-0.5 text-[10px] font-medium text-white/50 hover:text-white/70 cursor-pointer transition-colors">
-                              +{taskCount - 3} more
-                            </div>
-                          )}
-                        </div>
+                                <CheckCircle2 className="w-3 h-3" />
+                              </button>
+                            </motion.div>
+                          );
+                        })}
                       </div>
                     );
-                  })}
+                  })()}
                 </div>
-              </div>
 
-              {/* Calendar Footer - Connected Calendars */}
-              <div className="px-5 py-3 bg-[#0a0d10] border-t border-white/[0.06] flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="text-xs text-white/40">Connected:</span>
-                  {calendarConnected ? (
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 text-xs">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24">
-                          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                        </svg>
-                        <span className="text-white/70">Google Calendar</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                      </div>
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 text-xs">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24">
-                          <rect width="24" height="24" rx="4" fill="#0078D4"/>
-                          <path d="M6 6h5v5H6V6zm7 0h5v5h-5V6zm-7 7h5v5H6v-5zm7 0h5v5h-5v-5z" fill="white" fillOpacity="0.9"/>
-                        </svg>
-                        <span className="text-white/70">Outlook</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                      </div>
-                    </div>
-                  ) : (
-                    <span className="text-xs text-white/30">None - Click "Connect Calendar" above</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-2 text-xs text-white/40">
-                  <span>{tasks.filter(t => t.due_date && t.status !== 'done').length} events</span>
-                  <span>•</span>
-                  <span>{stats?.overdue || 0} overdue</span>
+                {/* Quick Stats Footer */}
+                <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between bg-[#080a0e]">
+                  <div className="flex items-center gap-4 text-[10px]">
+                    <span className="text-white/40">
+                      <span className="text-white/70 font-medium">{stats?.dueToday || 0}</span> today
+                    </span>
+                    <span className="text-white/40">
+                      <span className="text-rose-400 font-medium">{stats?.overdue || 0}</span> overdue
+                    </span>
+                    <span className="text-white/40">
+                      <span className="text-emerald-400 font-medium">{stats?.done || 0}</span> done
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-white/30">
+                    {tasks.filter(t => t.status !== 'done').length} pending
+                  </span>
                 </div>
               </div>
             </div>
@@ -779,6 +1324,108 @@ export default function MyDayPage() {
             )}
           </AnimatePresence>
 
+          {/* Natural Language Command Input with Voice */}
+          <div className="mb-6 relative">
+            <div className="relative flex items-center gap-2">
+              {/* Microphone Button */}
+              {speechSupported && (
+                <button
+                  onClick={startVoiceInput}
+                  disabled={isRecording}
+                  className={`p-3 rounded-xl transition-all flex-shrink-0 ${
+                    isRecording
+                      ? 'bg-red-500 animate-pulse shadow-lg shadow-red-500/30'
+                      : 'bg-white/10 hover:bg-white/15 hover:shadow-lg hover:shadow-emerald-500/10'
+                  }`}
+                  title={isRecording ? 'Listening...' : 'Voice input'}
+                >
+                  {isRecording ? (
+                    <MicOff className="w-5 h-5 text-white" />
+                  ) : (
+                    <Mic className="w-5 h-5 text-emerald-400" />
+                  )}
+                </button>
+              )}
+
+              {/* Command Input Field */}
+              <div className="relative flex-1">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-emerald-400" />
+                </div>
+                <input
+                  ref={commandInputRef}
+                  type="text"
+                  value={commandInput}
+                  onChange={(e) => setCommandInput(e.target.value)}
+                  onFocus={() => setShowCommandSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowCommandSuggestions(false), 200)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleCommandSubmit();
+                    } else if (e.key === 'Escape') {
+                      setCommandInput('');
+                      setShowCommandSuggestions(false);
+                      commandInputRef.current?.blur();
+                    }
+                  }}
+                  placeholder={isRecording ? 'Listening... speak now' : "Type or speak a command... e.g., 'add task: Review Q3 report'"}
+                  className={`w-full pl-12 pr-24 py-3.5 bg-[#1c1c24] border rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all ${
+                    isRecording ? 'border-red-500/50 ring-1 ring-red-500/30' : 'border-white/[0.12]'
+                  }`}
+                />
+                {commandInput && (
+                  <button
+                    onClick={() => setCommandInput('')}
+                    className="absolute right-16 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-white/10 text-white/40 hover:text-white transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+                <button
+                  onClick={handleCommandSubmit}
+                  disabled={!commandInput.trim()}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors"
+                >
+                  Run
+                </button>
+              </div>
+            </div>
+
+            {/* Command Suggestions Dropdown */}
+            <AnimatePresence>
+              {showCommandSuggestions && !commandInput && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-[#1c1c24] border border-white/[0.12] rounded-xl overflow-hidden shadow-xl z-20"
+                >
+                  <div className="px-3 py-2 border-b border-white/[0.08]">
+                    <span className="text-xs text-white/40 font-medium">Suggested commands</span>
+                  </div>
+                  {commandSuggestions.map((suggestion, idx) => (
+                    <button
+                      key={idx}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setCommandInput(suggestion.command);
+                        setShowCommandSuggestions(false);
+                        commandInputRef.current?.focus();
+                      }}
+                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.05] transition-colors text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Command className="w-4 h-4 text-emerald-400/70" />
+                        <span className="text-sm text-white/90">{suggestion.command}</span>
+                      </div>
+                      <span className="text-xs text-white/40">{suggestion.description}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {/* Filters */}
           <div className="flex items-center gap-2 mb-6">
             <Filter className="w-4 h-4 text-white/40" />
@@ -827,15 +1474,27 @@ export default function MyDayPage() {
                 </div>
               ) : (
                 <AnimatePresence>
-                  {tasks.map((task, index) => (
+                  {tasks.map((task, index) => {
+                    const isPriorityHighlighted = highlightedPriorityTasks &&
+                      (task.priority === 'urgent' || task.priority === 'high') &&
+                      task.status !== 'done';
+
+                    return (
                     <motion.div
                       key={task.id}
                       initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      animate={isPriorityHighlighted ? {
+                        opacity: 1,
+                        y: 0,
+                        scale: [1, 1.01, 1],
+                        transition: { scale: { duration: 0.5, repeat: 2 } }
+                      } : { opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -100 }}
                       transition={{ delay: index * 0.05 }}
-                      className={`group p-4 rounded-xl transition-colors ${
-                        task.status === 'done'
+                      className={`group p-4 rounded-xl transition-all ${
+                        isPriorityHighlighted
+                          ? 'bg-emerald-500/15 border-2 border-emerald-500/50 ring-2 ring-emerald-500/20'
+                          : task.status === 'done'
                           ? 'bg-white/[0.02] opacity-60'
                           : isOverdue(task)
                           ? 'bg-red-500/5 border border-red-500/20'
@@ -1001,7 +1660,8 @@ export default function MyDayPage() {
                         </div>
                       </div>
                     </motion.div>
-                  ))}
+                    );
+                  })}
                 </AnimatePresence>
               )}
             </div>
@@ -1020,59 +1680,71 @@ export default function MyDayPage() {
                   </div>
 
                   <div className="space-y-2 min-h-[200px] p-2 bg-white/[0.02] rounded-xl">
-                    {tasksByStatus[status].map(task => (
-                      <motion.div
-                        key={task.id}
-                        layout
-                        className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                          isOverdue(task)
-                            ? 'bg-red-500/10 border border-red-500/20'
-                            : 'bg-white/5 hover:bg-white/10'
-                        }`}
-                        onClick={() =>
-                          updateTaskStatus(
-                            task.id,
-                            status === 'todo'
-                              ? 'in_progress'
-                              : status === 'in_progress'
-                              ? 'done'
-                              : 'todo'
-                          )
-                        }
-                      >
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <span
-                            className={`text-sm font-medium ${
-                              status === 'done' ? 'line-through text-white/50' : 'text-white'
-                            }`}
-                          >
-                            {task.title}
-                          </span>
-                          <span
-                            className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                              task.priority === 'urgent'
-                                ? 'bg-red-400'
-                                : task.priority === 'high'
-                                ? 'bg-orange-400'
-                                : task.priority === 'medium'
-                                ? 'bg-yellow-400'
-                                : 'bg-blue-400'
-                            }`}
-                          />
-                        </div>
+                    {tasksByStatus[status].map(task => {
+                      const isPriorityHighlighted = highlightedPriorityTasks &&
+                        (task.priority === 'urgent' || task.priority === 'high') &&
+                        task.status !== 'done';
 
-                        {task.due_date && (
-                          <span
-                            className={`flex items-center gap-1 text-xs ${
-                              isOverdue(task) ? 'text-red-400' : 'text-white/40'
-                            }`}
-                          >
-                            <Calendar className="w-3 h-3" />
-                            {formatDate(task.due_date)}
-                          </span>
-                        )}
-                      </motion.div>
-                    ))}
+                      return (
+                        <motion.div
+                          key={task.id}
+                          layout
+                          className={`p-3 rounded-lg cursor-pointer transition-all ${
+                            isPriorityHighlighted
+                              ? 'bg-emerald-500/20 border-2 border-emerald-500/50 ring-2 ring-emerald-500/30'
+                              : isOverdue(task)
+                              ? 'bg-red-500/10 border border-red-500/20'
+                              : 'bg-white/5 hover:bg-white/10'
+                          }`}
+                          animate={isPriorityHighlighted ? {
+                            scale: [1, 1.02, 1],
+                            transition: { duration: 0.5, repeat: 2 }
+                          } : {}}
+                          onClick={() =>
+                            updateTaskStatus(
+                              task.id,
+                              status === 'todo'
+                                ? 'in_progress'
+                                : status === 'in_progress'
+                                ? 'done'
+                                : 'todo'
+                            )
+                          }
+                        >
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <span
+                              className={`text-sm font-medium ${
+                                status === 'done' ? 'line-through text-white/50' : 'text-white'
+                              }`}
+                            >
+                              {task.title}
+                            </span>
+                            <span
+                              className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                                task.priority === 'urgent'
+                                  ? 'bg-red-400'
+                                  : task.priority === 'high'
+                                  ? 'bg-orange-400'
+                                  : task.priority === 'medium'
+                                  ? 'bg-yellow-400'
+                                  : 'bg-blue-400'
+                              }`}
+                            />
+                          </div>
+
+                          {task.due_date && (
+                            <span
+                              className={`flex items-center gap-1 text-xs ${
+                                isOverdue(task) ? 'text-red-400' : 'text-white/40'
+                              }`}
+                            >
+                              <Calendar className="w-3 h-3" />
+                              {formatDate(task.due_date)}
+                            </span>
+                          )}
+                        </motion.div>
+                      );
+                    })}
 
                     {tasksByStatus[status].length === 0 && (
                       <div className="text-center py-8 text-white/30 text-sm">
@@ -1086,6 +1758,54 @@ export default function MyDayPage() {
           )}
         </div>
       </main>
+
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, x: 50 }}
+            animate={{ opacity: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, y: 50, x: 50 }}
+            className="fixed bottom-6 right-6 z-50"
+          >
+            <div className={`flex items-start gap-3 px-4 py-3 rounded-xl border shadow-xl backdrop-blur-sm ${
+              toastMessage.type === 'success'
+                ? 'bg-emerald-500/10 border-emerald-500/30'
+                : toastMessage.type === 'error'
+                ? 'bg-red-500/10 border-red-500/30'
+                : 'bg-blue-500/10 border-blue-500/30'
+            }`}>
+              <div className={`p-1.5 rounded-lg ${
+                toastMessage.type === 'success'
+                  ? 'bg-emerald-500/20'
+                  : toastMessage.type === 'error'
+                  ? 'bg-red-500/20'
+                  : 'bg-blue-500/20'
+              }`}>
+                <CheckCircle2 className={`w-4 h-4 ${
+                  toastMessage.type === 'success'
+                    ? 'text-emerald-400'
+                    : toastMessage.type === 'error'
+                    ? 'text-red-400'
+                    : 'text-blue-400'
+                }`} />
+              </div>
+              <div className="flex-1 min-w-0 max-w-xs">
+                <p className="text-sm font-medium text-white">{toastMessage.title}</p>
+                {toastMessage.description && (
+                  <p className="mt-0.5 text-xs text-white/60">{toastMessage.description}</p>
+                )}
+              </div>
+              <button
+                onClick={() => setToastMessage(null)}
+                className="p-1 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

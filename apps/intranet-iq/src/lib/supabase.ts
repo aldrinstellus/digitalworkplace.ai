@@ -155,7 +155,15 @@ export async function getChatMessages(threadId: string) {
 /**
  * Create a new chat thread
  */
-export async function createChatThread(userId: string, title?: string, llmModel = 'gpt-4') {
+export async function createChatThread(
+  userId: string,
+  title?: string,
+  llmModel = 'gpt-4',
+  options?: {
+    parentThreadId?: string;
+    branchedFromMessageId?: string;
+  }
+) {
   return supabase
     .schema('diq')
     .from('chat_threads')
@@ -164,10 +172,93 @@ export async function createChatThread(userId: string, title?: string, llmModel 
       title,
       llm_model: llmModel,
       status: 'active',
-      metadata: {},
+      metadata: options?.parentThreadId ? { parent_thread_id: options.parentThreadId, branched_from_message_id: options.branchedFromMessageId } : {},
     })
     .select()
     .single();
+}
+
+/**
+ * Create a branched thread from an existing message
+ * Copies all messages up to and including the specified message
+ */
+export async function branchThread(
+  userId: string,
+  parentThreadId: string,
+  branchFromMessageId: string,
+  llmModel = 'gpt-4'
+): Promise<{ thread: any; messages: any[] } | null> {
+  // Get parent thread info
+  const { data: parentThread } = await supabase
+    .schema('diq')
+    .from('chat_threads')
+    .select('title')
+    .eq('id', parentThreadId)
+    .single();
+
+  // Get all messages up to and including the branch point
+  const { data: parentMessages } = await supabase
+    .schema('diq')
+    .from('chat_messages')
+    .select('*')
+    .eq('thread_id', parentThreadId)
+    .order('created_at', { ascending: true });
+
+  if (!parentMessages) return null;
+
+  // Find the branch point index
+  const branchIndex = parentMessages.findIndex(m => m.id === branchFromMessageId);
+  if (branchIndex === -1) return null;
+
+  // Get messages up to and including the branch point
+  const messagesToCopy = parentMessages.slice(0, branchIndex + 1);
+
+  // Create new thread with branch metadata
+  const branchTitle = parentThread?.title
+    ? `Branch of: ${parentThread.title.slice(0, 30)}...`
+    : 'Branched conversation';
+
+  const { data: newThread, error: threadError } = await supabase
+    .schema('diq')
+    .from('chat_threads')
+    .insert({
+      user_id: userId,
+      title: branchTitle,
+      llm_model: llmModel,
+      status: 'active',
+      metadata: {
+        parent_thread_id: parentThreadId,
+        branched_from_message_id: branchFromMessageId,
+        branched_at: new Date().toISOString(),
+      },
+    })
+    .select()
+    .single();
+
+  if (threadError || !newThread) return null;
+
+  // Copy messages to new thread
+  const newMessages = [];
+  for (const msg of messagesToCopy) {
+    const { data: newMsg } = await supabase
+      .schema('diq')
+      .from('chat_messages')
+      .insert({
+        thread_id: newThread.id,
+        role: msg.role,
+        content: msg.content,
+        sources: msg.sources || [],
+        confidence: msg.confidence,
+        tokens_used: msg.tokens_used,
+        llm_model: msg.llm_model,
+        metadata: { ...msg.metadata, copied_from: msg.id },
+      })
+      .select()
+      .single();
+    if (newMsg) newMessages.push(newMsg);
+  }
+
+  return { thread: newThread, messages: newMessages };
 }
 
 /**

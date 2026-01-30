@@ -11,8 +11,10 @@ import {
   CheckCircle,
   ChevronDown,
   ChevronUp,
+  RefreshCw,
+  Shield,
 } from "lucide-react";
-import type { WorkflowNode, WorkflowNodeData } from "@/lib/workflow/types";
+import type { WorkflowNode, WorkflowNodeData, ErrorHandlingConfig } from "@/lib/workflow/types";
 import {
   NODE_TYPE_CONFIG,
   TRIGGER_SUBTYPES,
@@ -29,17 +31,34 @@ interface NodeConfigPanelProps {
   onClose: () => void;
 }
 
+// Default error handling config
+const defaultErrorHandling: ErrorHandlingConfig = {
+  retry: {
+    enabled: false,
+    maxAttempts: 3,
+    delaySeconds: 5,
+    backoffMultiplier: 1,
+  },
+  fallback: {
+    onFailure: 'stop',
+    notifyOnFailure: false,
+    logLevel: 'error',
+  },
+};
+
 export function NodeConfigPanel({ isOpen, onClose }: NodeConfigPanelProps) {
   const selectedNode = useWorkflowStore(selectSelectedNode);
-  const { updateNode, deleteNode, saveToHistory } = useWorkflowStore();
+  const { updateNode, deleteNode, saveToHistory, updateNodeErrorHandling, nodes } = useWorkflowStore();
 
   // Local form state
   const [label, setLabel] = useState("");
   const [description, setDescription] = useState("");
   const [config, setConfig] = useState<Record<string, unknown>>({});
+  const [errorHandling, setErrorHandling] = useState<ErrorHandlingConfig>(defaultErrorHandling);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     basic: true,
     config: true,
+    errorHandling: false,
     advanced: false,
   });
 
@@ -49,6 +68,7 @@ export function NodeConfigPanel({ isOpen, onClose }: NodeConfigPanelProps) {
       setLabel(selectedNode.data.label);
       setDescription(selectedNode.data.description || "");
       setConfig((selectedNode.data.config || {}) as Record<string, unknown>);
+      setErrorHandling(selectedNode.data.errorHandling || defaultErrorHandling);
     }
   }, [selectedNode]);
 
@@ -66,9 +86,10 @@ export function NodeConfigPanel({ isOpen, onClose }: NodeConfigPanelProps) {
       label,
       description,
       config,
+      errorHandling,
       isConfigured: validation.isValid,
     });
-  }, [selectedNode, label, description, config, validation.isValid, updateNode, saveToHistory]);
+  }, [selectedNode, label, description, config, errorHandling, validation.isValid, updateNode, saveToHistory]);
 
   // Handle delete
   const handleDelete = useCallback(() => {
@@ -231,6 +252,178 @@ export function NodeConfigPanel({ isOpen, onClose }: NodeConfigPanelProps) {
                 {renderTypeConfig(selectedNode.data.type, config, updateConfigField)}
               </ConfigSection>
 
+              {/* Error Handling Section */}
+              <ConfigSection
+                title="Error Handling"
+                expanded={expandedSections.errorHandling}
+                onToggle={() => toggleSection("errorHandling")}
+                icon={<Shield className="w-4 h-4 text-[var(--accent-ember)]" />}
+                badge={errorHandling.retry.enabled ? "Retry" : undefined}
+              >
+                <div className="space-y-4">
+                  {/* Retry Configuration */}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <label className="flex items-center gap-2 text-xs font-medium text-[var(--text-secondary)]">
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Retry on Failure
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setErrorHandling((prev) => ({
+                            ...prev,
+                            retry: { ...prev.retry, enabled: !prev.retry.enabled },
+                          }))
+                        }
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          errorHandling.retry.enabled
+                            ? "bg-[var(--accent-ember)]"
+                            : "bg-[var(--bg-obsidian)]"
+                        }`}
+                      >
+                        <span
+                          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
+                            errorHandling.retry.enabled ? "translate-x-5" : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
+
+                    {errorHandling.retry.enabled && (
+                      <div className="space-y-3 pl-5 border-l-2 border-[var(--accent-ember)]/30">
+                        <div>
+                          <label className="block text-xs text-[var(--text-muted)] mb-1">
+                            Max Attempts (1-5)
+                          </label>
+                          <input
+                            type="number"
+                            min={1}
+                            max={5}
+                            value={errorHandling.retry.maxAttempts}
+                            onChange={(e) =>
+                              setErrorHandling((prev) => ({
+                                ...prev,
+                                retry: {
+                                  ...prev.retry,
+                                  maxAttempts: Math.min(5, Math.max(1, parseInt(e.target.value) || 1)),
+                                },
+                              }))
+                            }
+                            className="w-full px-3 py-2 bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:border-[var(--accent-ember)]/50 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[var(--text-muted)] mb-1">
+                            Delay Between Retries (seconds)
+                          </label>
+                          <input
+                            type="number"
+                            min={0}
+                            max={300}
+                            value={errorHandling.retry.delaySeconds}
+                            onChange={(e) =>
+                              setErrorHandling((prev) => ({
+                                ...prev,
+                                retry: {
+                                  ...prev.retry,
+                                  delaySeconds: Math.min(300, Math.max(0, parseInt(e.target.value) || 0)),
+                                },
+                              }))
+                            }
+                            className="w-full px-3 py-2 bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:border-[var(--accent-ember)]/50 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Fallback Configuration */}
+                  <div className="pt-2 border-t border-[var(--border-subtle)]">
+                    <label className="block text-xs font-medium text-[var(--text-secondary)] mb-2">
+                      On Failure Action
+                    </label>
+                    <select
+                      value={errorHandling.fallback.onFailure}
+                      onChange={(e) =>
+                        setErrorHandling((prev) => ({
+                          ...prev,
+                          fallback: {
+                            ...prev.fallback,
+                            onFailure: e.target.value as "stop" | "skip" | "fallback",
+                          },
+                        }))
+                      }
+                      className="w-full px-3 py-2 bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:border-[var(--accent-ember)]/50 focus:outline-none"
+                    >
+                      <option value="stop">Stop Workflow</option>
+                      <option value="skip">Skip Step & Continue</option>
+                      <option value="fallback">Run Fallback Node</option>
+                    </select>
+
+                    {errorHandling.fallback.onFailure === "fallback" && (
+                      <div className="mt-3">
+                        <label className="block text-xs text-[var(--text-muted)] mb-1">
+                          Fallback Node
+                        </label>
+                        <select
+                          value={errorHandling.fallback.fallbackNodeId || ""}
+                          onChange={(e) =>
+                            setErrorHandling((prev) => ({
+                              ...prev,
+                              fallback: {
+                                ...prev.fallback,
+                                fallbackNodeId: e.target.value || undefined,
+                              },
+                            }))
+                          }
+                          className="w-full px-3 py-2 bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg text-sm text-[var(--text-primary)] focus:border-[var(--accent-ember)]/50 focus:outline-none"
+                        >
+                          <option value="">Select a node...</option>
+                          {nodes
+                            .filter((n) => n.id !== selectedNode.id)
+                            .map((node) => (
+                              <option key={node.id} value={node.id}>
+                                {node.data.label}
+                              </option>
+                            ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Notify on Failure */}
+                    <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border-subtle)]">
+                      <label className="text-xs text-[var(--text-muted)]">
+                        Notify on failure
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setErrorHandling((prev) => ({
+                            ...prev,
+                            fallback: {
+                              ...prev.fallback,
+                              notifyOnFailure: !prev.fallback.notifyOnFailure,
+                            },
+                          }))
+                        }
+                        className={`relative w-10 h-5 rounded-full transition-colors ${
+                          errorHandling.fallback.notifyOnFailure
+                            ? "bg-[var(--accent-ember)]"
+                            : "bg-[var(--bg-obsidian)]"
+                        }`}
+                      >
+                        <span
+                          className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
+                            errorHandling.fallback.notifyOnFailure ? "translate-x-5" : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ConfigSection>
+
               {/* Advanced Section */}
               <ConfigSection
                 title="Advanced"
@@ -300,11 +493,15 @@ function ConfigSection({
   expanded,
   onToggle,
   children,
+  icon,
+  badge,
 }: {
   title: string;
   expanded: boolean;
   onToggle: () => void;
   children: React.ReactNode;
+  icon?: React.ReactNode;
+  badge?: string;
 }) {
   return (
     <div className="border border-[var(--border-subtle)] rounded-xl overflow-hidden">
@@ -312,7 +509,15 @@ function ConfigSection({
         onClick={onToggle}
         className="w-full px-4 py-3 flex items-center justify-between bg-[var(--bg-slate)]/50 hover:bg-[var(--bg-slate)] transition-colors"
       >
-        <span className="text-sm font-medium text-[var(--text-secondary)]">{title}</span>
+        <div className="flex items-center gap-2">
+          {icon}
+          <span className="text-sm font-medium text-[var(--text-secondary)]">{title}</span>
+          {badge && (
+            <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]">
+              {badge}
+            </span>
+          )}
+        </div>
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" />
         ) : (

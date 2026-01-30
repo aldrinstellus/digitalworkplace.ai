@@ -41,6 +41,7 @@ import {
   getUserSettings,
   updateUserSettings,
   logActivity,
+  branchThread,
 } from "../supabase";
 import type {
   ChatThread,
@@ -96,7 +97,32 @@ export function useChatThreads() {
     [user]
   );
 
-  return { threads, loading, error, createThread, setThreads };
+  const createBranch = useCallback(
+    async (parentThreadId: string, branchFromMessageId: string, llmModel = "claude-3") => {
+      if (!user) return null;
+      const result = await branchThread(user.id, parentThreadId, branchFromMessageId, llmModel);
+      if (!result) {
+        setError("Failed to create branch");
+        return null;
+      }
+      // Add the new thread to the list
+      setThreads((prev) => [result.thread, ...prev]);
+      return result;
+    },
+    [user]
+  );
+
+  // Check if a thread is a branch
+  const isBranch = useCallback((thread: ChatThread) => {
+    return !!(thread.metadata as Record<string, unknown>)?.parent_thread_id;
+  }, []);
+
+  // Get parent thread info for a branch
+  const getParentThreadId = useCallback((thread: ChatThread) => {
+    return (thread.metadata as Record<string, unknown>)?.parent_thread_id as string | undefined;
+  }, []);
+
+  return { threads, loading, error, createThread, createBranch, isBranch, getParentThreadId, setThreads };
 }
 
 export function useChatMessages(threadId: string | null) {

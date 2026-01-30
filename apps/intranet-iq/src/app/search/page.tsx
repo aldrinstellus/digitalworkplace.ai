@@ -28,6 +28,10 @@ import {
   X,
   Trash2,
   CheckCircle,
+  Type,
+  Brain,
+  Blend,
+  Info,
 } from "lucide-react";
 
 const filterCategories = [
@@ -57,6 +61,189 @@ const typeColors: Record<string, string> = {
 
 const RESULTS_PER_PAGE = 20;
 
+// Common typo corrections mapping
+const commonCorrections: Record<string, string[]> = {
+  'employe': ['employee'],
+  'emplyee': ['employee'],
+  'emploee': ['employee'],
+  'polcy': ['policy'],
+  'poilcy': ['policy'],
+  'policiy': ['policy'],
+  'vacaton': ['vacation'],
+  'vacaion': ['vacation'],
+  'benifits': ['benefits'],
+  'benefts': ['benefits'],
+  'beneftis': ['benefits'],
+  'onbording': ['onboarding'],
+  'onboardng': ['onboarding'],
+  'onboaring': ['onboarding'],
+  'guidelins': ['guidelines'],
+  'guidlines': ['guidelines'],
+  'documnt': ['document'],
+  'documnet': ['document'],
+  'proceedure': ['procedure'],
+  'procedur': ['procedure'],
+  'orgnization': ['organization'],
+  'organisaton': ['organization'],
+  'calender': ['calendar'],
+  'calandar': ['calendar'],
+  'schedual': ['schedule'],
+  'schdule': ['schedule'],
+  'traininig': ['training'],
+  'traning': ['training'],
+  'annoucment': ['announcement'],
+  'anouncement': ['announcement'],
+  'departmnt': ['department'],
+  'deparment': ['department'],
+  'knowlege': ['knowledge'],
+  'knowlede': ['knowledge'],
+  'managment': ['management'],
+  'managemnt': ['management'],
+  'infomation': ['information'],
+  'informaton': ['information'],
+  'requirment': ['requirement'],
+  'requiremnt': ['requirement'],
+  'performace': ['performance'],
+  'perfomance': ['performance'],
+  'secuirty': ['security'],
+  'securty': ['security'],
+  'compiance': ['compliance'],
+  'complance': ['compliance'],
+  'heatlh': ['health'],
+  'helath': ['health'],
+  'saftey': ['safety'],
+  'safty': ['safety'],
+  'payrol': ['payroll'],
+  'paryoll': ['payroll'],
+  'expenes': ['expenses'],
+  'expensess': ['expenses'],
+  'reimbusement': ['reimbursement'],
+  'reimbursmnt': ['reimbursement'],
+  'appoval': ['approval'],
+  'aprooval': ['approval'],
+  'timeoff': ['time off', 'time-off'],
+  'pto': ['PTO', 'time off', 'paid time off'],
+  'hr': ['HR', 'human resources'],
+  'faq': ['FAQ', 'frequently asked questions'],
+};
+
+// Related search suggestions for common topics
+const relatedTerms: Record<string, string[]> = {
+  'employee': ['employee handbook', 'employee directory', 'employee benefits'],
+  'policy': ['vacation policy', 'remote work policy', 'expense policy'],
+  'vacation': ['vacation policy', 'time off request', 'PTO balance'],
+  'benefits': ['health benefits', 'employee benefits', '401k'],
+  'onboarding': ['new hire checklist', 'onboarding guide', 'first day'],
+  'training': ['training schedule', 'compliance training', 'learning'],
+  'payroll': ['payroll schedule', 'direct deposit', 'pay stub'],
+  'handbook': ['employee handbook', 'company policies', 'code of conduct'],
+  'remote': ['remote work policy', 'work from home', 'hybrid work'],
+  'expense': ['expense report', 'expense policy', 'reimbursement'],
+  'leave': ['leave request', 'sick leave', 'parental leave'],
+  'performance': ['performance review', 'goals', 'feedback'],
+  'security': ['security policy', 'password reset', 'data protection'],
+  'compliance': ['compliance training', 'code of conduct', 'ethics'],
+  'it': ['IT support', 'helpdesk', 'password reset'],
+  'help': ['IT help', 'HR help', 'FAQ'],
+};
+
+// Calculate Levenshtein distance for fuzzy matching
+function levenshteinDistance(str1: string, str2: string): number {
+  const m = str1.length;
+  const n = str2.length;
+  const dp: number[][] = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (str1[i - 1] === str2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+      }
+    }
+  }
+
+  return dp[m][n];
+}
+
+// Generate spelling suggestions using fuzzy matching
+function generateSuggestions(query: string): { corrections: string[]; relatedSearches: string[] } {
+  const normalizedQuery = query.toLowerCase().trim();
+  const corrections: string[] = [];
+  const relatedSearches: string[] = [];
+
+  // Check for exact typo matches first
+  if (commonCorrections[normalizedQuery]) {
+    corrections.push(...commonCorrections[normalizedQuery]);
+  }
+
+  // Check for partial matches in typo corrections
+  const queryWords = normalizedQuery.split(/\s+/);
+  queryWords.forEach(word => {
+    if (commonCorrections[word]) {
+      corrections.push(...commonCorrections[word].map(correction =>
+        normalizedQuery.replace(word, correction)
+      ));
+    }
+  });
+
+  // Fuzzy match against known terms using Levenshtein distance
+  const allKnownTerms = [
+    ...Object.values(commonCorrections).flat(),
+    ...Object.keys(relatedTerms),
+  ];
+
+  const uniqueTerms = [...new Set(allKnownTerms)];
+
+  uniqueTerms.forEach(term => {
+    const termLower = term.toLowerCase();
+    const distance = levenshteinDistance(normalizedQuery, termLower);
+    const maxAllowedDistance = Math.max(2, Math.floor(termLower.length * 0.3));
+
+    if (distance > 0 && distance <= maxAllowedDistance && !corrections.includes(term)) {
+      corrections.push(term);
+    }
+  });
+
+  // Get related searches based on query terms
+  queryWords.forEach(word => {
+    const wordLower = word.toLowerCase();
+    // Direct match in related terms
+    if (relatedTerms[wordLower]) {
+      relatedSearches.push(...relatedTerms[wordLower]);
+    }
+    // Check if word is part of a key
+    Object.keys(relatedTerms).forEach(key => {
+      if (key.includes(wordLower) || wordLower.includes(key)) {
+        relatedSearches.push(...relatedTerms[key]);
+      }
+    });
+  });
+
+  // Deduplicate and limit results
+  const uniqueCorrections = [...new Set(corrections)]
+    .filter(c => c.toLowerCase() !== normalizedQuery)
+    .slice(0, 3);
+
+  const uniqueRelated = [...new Set(relatedSearches)]
+    .filter(r => r.toLowerCase() !== normalizedQuery && !uniqueCorrections.includes(r.toLowerCase()))
+    .slice(0, 5);
+
+  return { corrections: uniqueCorrections, relatedSearches: uniqueRelated };
+}
+
+// Search mode configuration
+type SearchMode = 'keyword' | 'semantic' | 'hybrid';
+
+const searchModes: { id: SearchMode; label: string; icon: typeof Type; tooltip: string }[] = [
+  { id: 'keyword', label: 'Keyword', icon: Type, tooltip: 'Traditional text matching' },
+  { id: 'semantic', label: 'Semantic', icon: Brain, tooltip: 'AI-powered meaning-based search' },
+  { id: 'hybrid', label: 'Hybrid', icon: Blend, tooltip: 'Best of both (Recommended)' },
+];
+
 function SearchPageInner() {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
@@ -66,6 +253,10 @@ function SearchPageInner() {
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
   const [summarizingId, setSummarizingId] = useState<string | null>(null);
   const [feedbackGiven, setFeedbackGiven] = useState<"positive" | "negative" | null>(null);
+
+  // Search mode state - default to hybrid
+  const [searchMode, setSearchMode] = useState<SearchMode>('hybrid');
+  const [hoveredMode, setHoveredMode] = useState<SearchMode | null>(null);
 
   // AI Summary state - stores summaries for each result
   const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
@@ -80,6 +271,12 @@ function SearchPageInner() {
   const [allResults, setAllResults] = useState<any[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  // Query suggestions state (for "Did you mean?" feature)
+  const [querySuggestions, setQuerySuggestions] = useState<{
+    corrections: string[];
+    relatedSearches: string[];
+  }>({ corrections: [], relatedSearches: [] });
 
   // Search history state
   const [showSearchHistory, setShowSearchHistory] = useState(false);
@@ -122,6 +319,13 @@ function SearchPageInner() {
     setShowSearchHistory(false);
     // Trigger search
     handleSearchWithQuery(historyQuery);
+  };
+
+  // Use a suggestion as search query
+  const useSuggestion = (suggestion: string) => {
+    setQuery(suggestion);
+    setQuerySuggestions({ corrections: [], relatedSearches: [] });
+    handleSearchWithQuery(suggestion);
   };
 
   // Filter results by department
@@ -169,11 +373,19 @@ function SearchPageInner() {
     if (page === 1) {
       setAllResults(results);
       setHasMore(results.length >= RESULTS_PER_PAGE);
+
+      // Generate suggestions when results are low (0-2 results) and there's a query
+      if (query.trim() && results.length < 3) {
+        const suggestions = generateSuggestions(query);
+        setQuerySuggestions(suggestions);
+      } else {
+        setQuerySuggestions({ corrections: [], relatedSearches: [] });
+      }
     } else {
       setAllResults((prev) => [...prev, ...results]);
       setHasMore(results.length >= RESULTS_PER_PAGE);
     }
-  }, [results]);
+  }, [results, query, page]);
 
   // Compute faceted counts from department-filtered results
   const facetCounts = [
@@ -282,6 +494,7 @@ function SearchPageInner() {
     await search(searchQuery, {
       itemTypes: activeFilter === "all" ? undefined : [activeFilter],
       maxResults: RESULTS_PER_PAGE,
+      mode: searchMode,
     });
 
     // Add to search history (results will be in the `results` state from useSearch)
@@ -291,9 +504,9 @@ function SearchPageInner() {
     // Log search activity
     await log("search", {
       entityType: "search",
-      metadata: { query: searchQuery, filter: activeFilter, departments: selectedDepartments },
+      metadata: { query: searchQuery, filter: activeFilter, departments: selectedDepartments, searchMode },
     });
-  }, [activeFilter, search, log, selectedDepartments, addToHistory]);
+  }, [activeFilter, search, log, selectedDepartments, addToHistory, searchMode]);
 
   const handleSearch = useCallback(async () => {
     await handleSearchWithQuery(query);
@@ -383,6 +596,65 @@ function SearchPageInner() {
                 </div>
               </div>
 
+              {/* Search Mode Toggle */}
+              <div className="mt-4 pt-4 border-t border-[var(--border-subtle)]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider">Search Mode</span>
+                    <div className="relative">
+                      <Info className="w-3.5 h-3.5 text-[var(--text-muted)] cursor-help" />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 p-1 bg-[#1c1c24] rounded-lg">
+                    {searchModes.map((mode) => {
+                      const Icon = mode.icon;
+                      const isActive = searchMode === mode.id;
+                      return (
+                        <div key={mode.id} className="relative">
+                          <motion.button
+                            onClick={() => setSearchMode(mode.id)}
+                            onMouseEnter={() => setHoveredMode(mode.id)}
+                            onMouseLeave={() => setHoveredMode(null)}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                              isActive
+                                ? "bg-[#10b981] text-white shadow-lg shadow-[#10b981]/25"
+                                : "text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-slate)]"
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <Icon className="w-4 h-4" />
+                            <span>{mode.label}</span>
+                            {mode.id === 'hybrid' && !isActive && (
+                              <span className="ml-1 px-1.5 py-0.5 text-[10px] bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] rounded-full">
+                                Rec
+                              </span>
+                            )}
+                          </motion.button>
+
+                          {/* Tooltip */}
+                          <AnimatePresence>
+                            {hoveredMode === mode.id && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 5 }}
+                                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-[var(--bg-obsidian)] border border-[var(--border-default)] rounded-lg shadow-xl z-50 whitespace-nowrap"
+                              >
+                                <span className="text-xs text-[var(--text-secondary)]">{mode.tooltip}</span>
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px">
+                                  <div className="border-4 border-transparent border-t-[var(--border-default)]" />
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
               {/* Advanced Filters */}
               <AnimatePresence>
                 {showAdvanced && (
@@ -438,6 +710,50 @@ function SearchPageInner() {
               </AnimatePresence>
             </div>
           </FadeIn>
+
+          {/* Query Suggestions - "Did you mean?" */}
+          <AnimatePresence>
+            {(querySuggestions.corrections.length > 0 || querySuggestions.relatedSearches.length > 0) && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mb-6 p-4 bg-transparent"
+              >
+                {/* Spelling corrections - "Did you mean?" */}
+                {querySuggestions.corrections.length > 0 && (
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-sm text-[var(--text-muted)]">Did you mean:</span>
+                    {querySuggestions.corrections.map((correction, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => useSuggestion(correction)}
+                        className="text-sm text-[#10b981] hover:text-[#34d399] underline underline-offset-2 transition-colors font-medium"
+                      >
+                        {correction}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Related searches - pill buttons */}
+                {querySuggestions.relatedSearches.length > 0 && (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-sm text-[var(--text-muted)]">Related searches:</span>
+                    {querySuggestions.relatedSearches.map((related, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => useSuggestion(related)}
+                        className="px-3 py-1 text-sm text-[var(--text-secondary)] bg-[var(--bg-slate)] hover:bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] hover:border-[#10b981]/50 rounded-full transition-all hover:text-[#10b981]"
+                      >
+                        {related}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* AI Suggestion - show when there are results */}
           <AnimatePresence>

@@ -25,6 +25,7 @@ export interface WorkflowNodeData {
   config: NodeConfig;
   isConfigured: boolean;
   icon?: string;
+  errorHandling?: ErrorHandlingConfig;
   [key: string]: unknown; // Index signature for ReactFlow compatibility
 }
 
@@ -146,6 +147,44 @@ export interface OutputConfig {
   [key: string]: unknown;
 }
 
+// =============================================================================
+// ERROR HANDLING / RETRY CONFIG
+// =============================================================================
+
+export interface RetryConfig {
+  enabled: boolean;
+  maxAttempts: number; // 1-5
+  delaySeconds: number; // Delay between retries
+  backoffMultiplier?: number; // Optional exponential backoff
+}
+
+export interface FallbackConfig {
+  onFailure: 'stop' | 'skip' | 'fallback';
+  fallbackNodeId?: string; // If onFailure === 'fallback'
+  notifyOnFailure?: boolean;
+  logLevel?: 'error' | 'warning' | 'info';
+}
+
+export interface ErrorHandlingConfig {
+  retry: RetryConfig;
+  fallback: FallbackConfig;
+}
+
+// =============================================================================
+// WORKFLOW VERSION TYPES
+// =============================================================================
+
+export interface WorkflowVersion {
+  id: string;
+  versionNumber: number;
+  createdAt: string;
+  createdBy?: string;
+  description?: string;
+  nodes: WorkflowNode[];
+  edges: WorkflowEdge[];
+  isAutoSave: boolean;
+}
+
 /**
  * V2.0: Human Approval Node Configuration
  * Pauses workflow execution until a human approves or rejects
@@ -230,6 +269,10 @@ export interface WorkflowBuilderState {
   // Clipboard
   clipboard: { nodes: WorkflowNode[]; edges: WorkflowEdge[] } | null;
 
+  // Version history
+  versions: WorkflowVersion[];
+  selectedVersionId: string | null;
+
   // Actions
   setNodes: (nodes: WorkflowNode[]) => void;
   setEdges: (edges: WorkflowEdge[]) => void;
@@ -264,6 +307,16 @@ export interface WorkflowBuilderState {
   duplicateSelectedNodes: () => void;
   canPaste: () => boolean;
   deleteSelectedNodes: () => void;
+
+  // Version history actions
+  createVersion: (description?: string, isAutoSave?: boolean) => void;
+  restoreVersion: (versionId: string) => void;
+  selectVersion: (versionId: string | null) => void;
+  getVersions: () => WorkflowVersion[];
+  clearVersions: () => void;
+
+  // Error handling actions
+  updateNodeErrorHandling: (nodeId: string, errorHandling: ErrorHandlingConfig) => void;
 }
 
 // =============================================================================

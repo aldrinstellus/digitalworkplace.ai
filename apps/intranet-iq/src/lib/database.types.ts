@@ -191,6 +191,8 @@ export interface ChatThread {
   llm_model: string;
   status: 'active' | 'archived' | 'deleted';
   metadata: Record<string, unknown>;
+  parent_thread_id?: string | null;  // For thread branching
+  branched_from_message_id?: string | null;  // Message ID where branch started
   created_at: string;
   updated_at: string;
 }

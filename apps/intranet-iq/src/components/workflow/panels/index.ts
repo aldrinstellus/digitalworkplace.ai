@@ -4,3 +4,4 @@
  */
 
 export { NodeConfigPanel } from "./NodeConfigPanel";
+export { VersionHistoryPanel } from "./VersionHistoryPanel";

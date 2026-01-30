@@ -7,7 +7,8 @@ import {
   Search, Sparkles, Clock, TrendingUp, FileText, Users, Calendar,
   MessageSquare, Newspaper, Bell, ChevronRight, ListTodo, GripVertical,
   Layout, ChevronDown, X, CheckCircle2, Circle, AlertCircle, Bot,
-  ArrowRight, ExternalLink, Flame, Zap, Star
+  ArrowRight, ExternalLink, Flame, Zap, Star, Bookmark, Target, BarChart3,
+  CloudSun, Megaphone, Gift, Vote
 } from "lucide-react";
 import { useDashboardWidgets, DashboardWidget, LAYOUT_PRESETS, LayoutPresetKey } from "@/lib/hooks/useDashboardWidgets";
 import { mockNewsPosts, mockEvents, mockRecentActivity, type MockNewsPost, type MockEvent, type MockActivity } from "@/lib/mockData";
@@ -53,6 +54,66 @@ const mockAISuggestions = [
   { id: 3, title: "Prepare weekly report", description: "Your weekly report is due in 2 days", icon: "report" },
 ];
 
+// Mock data for new widgets
+const mockCalendarEvents = [
+  { id: 1, title: "Team Standup", time: "9:00 AM", type: "meeting" },
+  { id: 2, title: "1:1 with Sarah", time: "11:00 AM", type: "meeting" },
+  { id: 3, title: "Lunch & Learn", time: "12:30 PM", type: "event" },
+  { id: 4, title: "Sprint Planning", time: "2:00 PM", type: "meeting" },
+  { id: 5, title: "Code Review", time: "4:00 PM", type: "task" },
+];
+
+const mockBookmarks = [
+  { id: 1, title: "HR Portal", url: "/settings", icon: "users" },
+  { id: 2, title: "Expense Reports", url: "/content", icon: "receipt" },
+  { id: 3, title: "IT Help Desk", url: "/chat", icon: "headset" },
+  { id: 4, title: "Company Wiki", url: "/content", icon: "book" },
+];
+
+const mockGoals = [
+  { id: 1, title: "Complete Q1 OKRs", progress: 75, status: "on-track" },
+  { id: 2, title: "Launch v2.0 features", progress: 45, status: "at-risk" },
+  { id: 3, title: "Improve NPS score", progress: 90, status: "ahead" },
+];
+
+const mockTeamMembers = [
+  { id: 1, name: "Sarah Chen", role: "Engineering Manager", avatar: "SC", status: "online" },
+  { id: 2, name: "Mike Johnson", role: "Senior Developer", avatar: "MJ", status: "away" },
+  { id: 3, name: "Emily Rodriguez", role: "Product Designer", avatar: "ER", status: "online" },
+  { id: 4, name: "Alex Kim", role: "Data Analyst", avatar: "AK", status: "offline" },
+];
+
+const mockAnnouncements = [
+  { id: 1, title: "Office Closure - President's Day", date: "Feb 17", priority: "high" },
+  { id: 2, title: "Benefits Enrollment Deadline", date: "Feb 28", priority: "medium" },
+  { id: 3, title: "Q1 Town Hall Meeting", date: "Mar 5", priority: "normal" },
+];
+
+const mockPolls = [
+  { id: 1, title: "Best day for team lunch?", votes: 24, options: 4, expires: "2 days" },
+  { id: 2, title: "Preferred meeting time", votes: 18, options: 3, expires: "5 days" },
+];
+
+const mockBirthdays = [
+  { id: 1, name: "Sarah Chen", type: "birthday", date: "Today" },
+  { id: 2, name: "Mike Johnson", type: "anniversary", years: 3, date: "Tomorrow" },
+  { id: 3, name: "Emily Rodriguez", type: "birthday", date: "Feb 3" },
+];
+
+const mockPerformance = [
+  { id: 1, metric: "Tasks Completed", value: 24, trend: "+12%" },
+  { id: 2, metric: "Response Time", value: "2.4h", trend: "-18%" },
+  { id: 3, metric: "Satisfaction Score", value: "4.8", trend: "+5%" },
+];
+
+const mockWeather = {
+  temp: 72,
+  condition: "Sunny",
+  high: 78,
+  low: 62,
+  location: "San Francisco, CA"
+};
+
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const { organization } = useOrganization();
@@ -72,26 +133,12 @@ export default function Dashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
 
-  const { widgets, visibleWidgets, reorderWidgets, applyPreset, toggleWidget } = useDashboardWidgets();
+  const { widgets, visibleWidgets, reorderWidgets, applyPreset, toggleWidget, currentPreset } = useDashboardWidgets();
 
   // Helper to check if a widget type is visible
   const isWidgetVisible = (widgetType: string) => {
     return visibleWidgets.some(w => w.type === widgetType);
   };
-
-  // Current preset detection (for displaying active state)
-  const getCurrentPreset = (): LayoutPresetKey | null => {
-    const visibleTypes = visibleWidgets.map(w => w.type).sort();
-    for (const preset of LAYOUT_PRESETS) {
-      const presetTypes = [...preset.widgetTypes].sort();
-      if (JSON.stringify(visibleTypes) === JSON.stringify(presetTypes)) {
-        return preset.key;
-      }
-    }
-    return null;
-  };
-
-  const currentPreset = getCurrentPreset();
 
   // Close preset dropdown when clicking outside
   useEffect(() => {
@@ -271,10 +318,14 @@ export default function Dashboard() {
                 <div className="relative" ref={presetDropdownRef}>
                   <button
                     onClick={() => setIsPresetDropdownOpen(!isPresetDropdownOpen)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium bg-[var(--bg-charcoal)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/30 hover:text-[var(--accent-ember)] transition-all"
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
+                      currentPreset === "custom"
+                        ? "bg-purple-500/10 text-purple-400 border-purple-500/30 hover:border-purple-500/50"
+                        : "bg-[var(--bg-charcoal)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--accent-ember)]/30 hover:text-[var(--accent-ember)]"
+                    }`}
                   >
                     <Layout className="w-4 h-4" />
-                    <span>Presets</span>
+                    <span>{currentPreset === "custom" ? "Custom" : LAYOUT_PRESETS.find(p => p.key === currentPreset)?.name || "Presets"}</span>
                     <ChevronDown className={`w-4 h-4 transition-transform ${isPresetDropdownOpen ? "rotate-180" : ""}`} />
                   </button>
 
@@ -284,12 +335,28 @@ export default function Dashboard() {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="absolute right-0 top-full mt-2 w-64 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl shadow-xl overflow-hidden z-50"
+                        className="absolute right-0 top-full mt-2 w-72 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl shadow-xl overflow-hidden z-50"
                       >
                         <div className="p-2">
                           <div className="text-xs text-[var(--text-muted)] px-3 py-2 uppercase tracking-wider">
                             Layout Presets
                           </div>
+
+                          {/* Custom indicator when active */}
+                          {currentPreset === "custom" && (
+                            <div className="mx-2 mb-2 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-purple-400">Custom Layout</span>
+                                <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400">
+                                  Active
+                                </span>
+                              </div>
+                              <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                                {visibleWidgets.length} widgets • Select a preset to change
+                              </p>
+                            </div>
+                          )}
+
                           {LAYOUT_PRESETS.map((preset) => (
                             <button
                               key={preset.key}
@@ -321,6 +388,9 @@ export default function Dashboard() {
                                       Recommended
                                     </span>
                                   )}
+                                  <span className="text-xs text-[var(--text-muted)]">
+                                    {preset.widgetTypes.length} widgets
+                                  </span>
                                 </div>
                               </div>
                               <p className="text-xs text-[var(--text-muted)] mt-0.5">
@@ -770,6 +840,314 @@ export default function Dashboard() {
               </FadeIn>
               )}
             </div>
+            )}
+          </div>
+
+          {/* ===== ADDITIONAL WIDGETS SECTION ===== */}
+          <div className="grid gap-6 mt-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {/* Calendar Widget */}
+            {isWidgetVisible("calendar") && (
+              <FadeIn delay={0.35}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-[var(--accent-ember)]" />
+                      Today's Schedule
+                    </h2>
+                    <Link href="/events" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                      Full calendar <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                  <div className="space-y-2">
+                    {mockCalendarEvents.map((event) => (
+                      <div key={event.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
+                        <div className={`w-1 h-8 rounded ${
+                          event.type === "meeting" ? "bg-[var(--accent-ember)]" :
+                          event.type === "event" ? "bg-[var(--success)]" :
+                          "bg-[var(--accent-gold)]"
+                        }`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[var(--text-primary)] truncate">{event.title}</p>
+                          <p className="text-xs text-[var(--text-muted)]">{event.time}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Bookmarks Widget */}
+            {isWidgetVisible("bookmarks") && (
+              <FadeIn delay={0.4}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Bookmark className="w-5 h-5 text-[var(--accent-gold)]" />
+                      Quick Links
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {mockBookmarks.map((bookmark) => (
+                      <Link key={bookmark.id} href={bookmark.url}>
+                        <div className="p-3 rounded-lg bg-[var(--bg-slate)] hover:bg-[var(--accent-ember)]/10 transition-colors cursor-pointer text-center">
+                          <Bookmark className="w-4 h-4 text-[var(--accent-ember)] mx-auto mb-1" />
+                          <p className="text-xs text-[var(--text-primary)] truncate">{bookmark.title}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Goals Widget */}
+            {isWidgetVisible("goals") && (
+              <FadeIn delay={0.45}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Target className="w-5 h-5 text-[var(--success)]" />
+                      Goals & OKRs
+                    </h2>
+                  </div>
+                  <div className="space-y-3">
+                    {mockGoals.map((goal) => (
+                      <div key={goal.id} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-[var(--text-primary)] truncate">{goal.title}</p>
+                          <span className={`text-xs px-2 py-0.5 rounded ${
+                            goal.status === "ahead" ? "bg-green-500/20 text-green-400" :
+                            goal.status === "on-track" ? "bg-blue-500/20 text-blue-400" :
+                            "bg-yellow-500/20 text-yellow-400"
+                          }`}>{goal.status}</span>
+                        </div>
+                        <div className="h-2 bg-[var(--bg-slate)] rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${
+                              goal.status === "ahead" ? "bg-green-500" :
+                              goal.status === "on-track" ? "bg-blue-500" :
+                              "bg-yellow-500"
+                            }`}
+                            style={{ width: `${goal.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Team Directory Widget */}
+            {isWidgetVisible("team-directory") && (
+              <FadeIn delay={0.5}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Users className="w-5 h-5 text-[var(--accent-ember)]" />
+                      Team Directory
+                    </h2>
+                    <Link href="/people" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                      View all <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                  <div className="space-y-2">
+                    {mockTeamMembers.map((member) => (
+                      <Link key={member.id} href="/people">
+                        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer">
+                          <div className="relative">
+                            <div className="w-8 h-8 rounded-full bg-[var(--accent-ember)]/20 flex items-center justify-center text-xs font-medium text-[var(--accent-ember)]">
+                              {member.avatar}
+                            </div>
+                            <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[var(--bg-charcoal)] ${
+                              member.status === "online" ? "bg-green-500" :
+                              member.status === "away" ? "bg-yellow-500" :
+                              "bg-gray-500"
+                            }`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-[var(--text-primary)] truncate">{member.name}</p>
+                            <p className="text-xs text-[var(--text-muted)]">{member.role}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Announcements Widget */}
+            {isWidgetVisible("announcements") && (
+              <FadeIn delay={0.55}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Megaphone className="w-5 h-5 text-[var(--accent-gold)]" />
+                      Announcements
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {mockAnnouncements.map((announcement) => (
+                      <div key={announcement.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
+                        <div className={`w-2 h-2 rounded-full ${
+                          announcement.priority === "high" ? "bg-red-500" :
+                          announcement.priority === "medium" ? "bg-yellow-500" :
+                          "bg-blue-500"
+                        }`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[var(--text-primary)] truncate">{announcement.title}</p>
+                          <p className="text-xs text-[var(--text-muted)]">{announcement.date}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Polls Widget */}
+            {isWidgetVisible("polls") && (
+              <FadeIn delay={0.6}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Vote className="w-5 h-5 text-[var(--accent-ember)]" />
+                      Active Polls
+                    </h2>
+                  </div>
+                  <div className="space-y-3">
+                    {mockPolls.map((poll) => (
+                      <div key={poll.id} className="p-3 rounded-lg bg-[var(--bg-slate)] hover:bg-[var(--accent-ember)]/5 transition-colors cursor-pointer">
+                        <p className="text-sm text-[var(--text-primary)]">{poll.title}</p>
+                        <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
+                          <span>{poll.votes} votes</span>
+                          <span>·</span>
+                          <span>{poll.options} options</span>
+                          <span>·</span>
+                          <span>Expires in {poll.expires}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Birthdays Widget */}
+            {isWidgetVisible("birthdays") && (
+              <FadeIn delay={0.65}>
+                <motion.div
+                  className="bg-gradient-to-br from-pink-500/10 to-purple-500/10 border border-pink-500/20 rounded-xl p-5 hover:border-pink-500/40 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <Gift className="w-5 h-5 text-pink-400" />
+                      Celebrations
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {mockBirthdays.map((celebration) => (
+                      <div key={celebration.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+                        <div className="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center">
+                          {celebration.type === "birthday" ? "🎂" : "🎉"}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-[var(--text-primary)] truncate">{celebration.name}</p>
+                          <p className="text-xs text-[var(--text-muted)]">
+                            {celebration.type === "birthday" ? "Birthday" : `${celebration.years} Year Anniversary`} · {celebration.date}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Performance Widget */}
+            {isWidgetVisible("performance") && (
+              <FadeIn delay={0.7}>
+                <motion.div
+                  className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-[var(--accent-ember)]" />
+                      Performance
+                    </h2>
+                  </div>
+                  <div className="space-y-3">
+                    {mockPerformance.map((metric) => (
+                      <div key={metric.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
+                        <span className="text-sm text-[var(--text-muted)]">{metric.metric}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-[var(--text-primary)]">{metric.value}</span>
+                          <span className={`text-xs ${
+                            metric.trend.startsWith("+") ? "text-green-400" : "text-red-400"
+                          }`}>{metric.trend}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
+            )}
+
+            {/* Weather Widget */}
+            {isWidgetVisible("weather") && (
+              <FadeIn delay={0.75}>
+                <motion.div
+                  className="bg-gradient-to-br from-sky-500/10 to-blue-500/10 border border-sky-500/20 rounded-xl p-5 hover:border-sky-500/40 transition-colors"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                      <CloudSun className="w-5 h-5 text-sky-400" />
+                      Weather
+                    </h2>
+                  </div>
+                  <div className="text-center py-2">
+                    <div className="text-4xl mb-2">☀️</div>
+                    <p className="text-3xl font-light text-[var(--text-primary)]">{mockWeather.temp}°F</p>
+                    <p className="text-sm text-[var(--text-secondary)]">{mockWeather.condition}</p>
+                    <p className="text-xs text-[var(--text-muted)] mt-2">
+                      H: {mockWeather.high}° L: {mockWeather.low}°
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)]">{mockWeather.location}</p>
+                  </div>
+                </motion.div>
+              </FadeIn>
             )}
           </div>
         </div>

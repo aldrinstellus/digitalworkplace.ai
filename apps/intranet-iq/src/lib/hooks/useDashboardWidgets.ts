@@ -248,25 +248,53 @@ export function useDashboardWidgets() {
     }
   }, [settings, updateSettings]);
 
-  // Apply a layout preset
+  // Apply a layout preset - ensures all preset widgets exist and are visible
   const applyPreset = useCallback(
     (presetKey: LayoutPresetKey) => {
       const preset = LAYOUT_PRESETS.find((p) => p.key === presetKey);
       if (!preset) return;
 
       setWidgetsState((prev) => {
-        // Create new widget array with visibility based on preset
-        const newWidgets = prev.map((widget, index) => ({
+        // Start with existing widgets, update visibility
+        const updatedWidgets = prev.map((widget) => ({
           ...widget,
           visible: preset.widgetTypes.includes(widget.type),
-          // Reorder based on preset order
-          order: preset.widgetTypes.indexOf(widget.type) !== -1
-            ? preset.widgetTypes.indexOf(widget.type)
-            : index + preset.widgetTypes.length,
         }));
 
+        // Add any widgets from the preset that don't exist yet
+        const existingTypes = new Set(updatedWidgets.map(w => w.type));
+        const missingWidgets: DashboardWidget[] = [];
+
+        preset.widgetTypes.forEach((widgetType) => {
+          if (!existingTypes.has(widgetType)) {
+            const catalogItem = WIDGET_CATALOG.find(w => w.type === widgetType);
+            if (catalogItem) {
+              missingWidgets.push({
+                id: widgetType,
+                type: widgetType,
+                title: catalogItem.title,
+                visible: true,
+                order: 0, // Will be updated below
+                size: catalogItem.defaultSize,
+              });
+            }
+          }
+        });
+
+        // Combine existing and missing widgets
+        const allWidgets = [...updatedWidgets, ...missingWidgets];
+
+        // Set order based on preset order (visible widgets first, in preset order)
+        const finalWidgets = allWidgets.map((widget) => {
+          const presetIndex = preset.widgetTypes.indexOf(widget.type);
+          return {
+            ...widget,
+            order: presetIndex !== -1 ? presetIndex : 100 + allWidgets.indexOf(widget),
+          };
+        });
+
         // Sort by order
-        const sorted = [...newWidgets].sort((a, b) => a.order - b.order);
+        const sorted = [...finalWidgets].sort((a, b) => a.order - b.order);
 
         saveStoredWidgets(sorted);
         if (settings) {
@@ -354,11 +382,32 @@ export function useDashboardWidgets() {
     (catalogItem) => !widgets.some((w) => w.type === catalogItem.type)
   );
 
+  // Detect current preset based on visible widgets
+  const getCurrentPreset = useCallback((): LayoutPresetKey | "custom" => {
+    const visibleTypes = visibleWidgets.map(w => w.type).sort();
+
+    for (const preset of LAYOUT_PRESETS) {
+      const presetTypes = [...preset.widgetTypes].sort();
+      if (
+        visibleTypes.length === presetTypes.length &&
+        visibleTypes.every((type, index) => type === presetTypes[index])
+      ) {
+        return preset.key;
+      }
+    }
+
+    return "custom";
+  }, [visibleWidgets]);
+
+  // Get the current preset key
+  const currentPreset = getCurrentPreset();
+
   return {
     widgets,
     visibleWidgets,
     availableWidgets,
     loading,
+    currentPreset,
     updateWidget,
     toggleWidget,
     reorderWidgets,
@@ -366,5 +415,6 @@ export function useDashboardWidgets() {
     applyPreset,
     addWidget,
     removeWidget,
+    getCurrentPreset,
   };
 }

@@ -3,14 +3,66 @@
 import { useState, useEffect, useCallback } from "react";
 import { useUserSettings } from "./useSupabase";
 
+export type WidgetType =
+  | "quick-actions"
+  | "news"
+  | "events"
+  | "activity"
+  | "trending"
+  | "meeting"
+  | "calendar"
+  | "weather"
+  | "bookmarks"
+  | "team-directory"
+  | "announcements"
+  | "polls"
+  | "birthdays"
+  | "performance"
+  | "goals";
+
 export interface DashboardWidget {
   id: string;
-  type: "quick-actions" | "news" | "events" | "activity" | "trending" | "meeting";
+  type: WidgetType;
   title: string;
   visible: boolean;
   order: number;
   size?: "small" | "medium" | "large" | "full";
 }
+
+// Widget catalog with metadata for the customizer
+export interface WidgetCatalogItem {
+  type: WidgetType;
+  title: string;
+  description: string;
+  category: "core" | "productivity" | "social" | "analytics";
+  defaultSize: "small" | "medium" | "large" | "full";
+  icon: string;
+}
+
+export const WIDGET_CATALOG: WidgetCatalogItem[] = [
+  // Core widgets
+  { type: "meeting", title: "Upcoming Meeting", description: "Shows your next scheduled meeting with quick join", category: "core", defaultSize: "full", icon: "video" },
+  { type: "quick-actions", title: "Quick Actions", description: "Tasks, documents, and AI assistant shortcuts", category: "core", defaultSize: "full", icon: "zap" },
+  { type: "news", title: "Company News", description: "Latest announcements and company updates", category: "core", defaultSize: "medium", icon: "newspaper" },
+  { type: "events", title: "Upcoming Events", description: "Calendar events and meetings", category: "core", defaultSize: "medium", icon: "calendar" },
+  { type: "activity", title: "Recent Activity", description: "Your recent actions and notifications", category: "core", defaultSize: "full", icon: "clock" },
+  { type: "trending", title: "Trending Topics", description: "Popular discussions and topics", category: "core", defaultSize: "full", icon: "trending-up" },
+
+  // Productivity widgets
+  { type: "calendar", title: "Calendar", description: "Full calendar view with upcoming events", category: "productivity", defaultSize: "large", icon: "calendar-days" },
+  { type: "bookmarks", title: "Bookmarks", description: "Quick access to saved links and resources", category: "productivity", defaultSize: "small", icon: "bookmark" },
+  { type: "goals", title: "Goals & OKRs", description: "Track your quarterly goals and objectives", category: "productivity", defaultSize: "medium", icon: "target" },
+
+  // Social widgets
+  { type: "team-directory", title: "Team Directory", description: "Quick access to team members", category: "social", defaultSize: "medium", icon: "users" },
+  { type: "announcements", title: "Announcements", description: "Important company-wide announcements", category: "social", defaultSize: "medium", icon: "megaphone" },
+  { type: "polls", title: "Active Polls", description: "Participate in company polls and surveys", category: "social", defaultSize: "small", icon: "bar-chart" },
+  { type: "birthdays", title: "Birthdays & Anniversaries", description: "Celebrate team milestones", category: "social", defaultSize: "small", icon: "cake" },
+
+  // Analytics widgets
+  { type: "performance", title: "Performance", description: "Your performance metrics and KPIs", category: "analytics", defaultSize: "medium", icon: "line-chart" },
+  { type: "weather", title: "Weather", description: "Current weather for your location", category: "analytics", defaultSize: "small", icon: "cloud-sun" },
+];
 
 export const DEFAULT_WIDGETS: DashboardWidget[] = [
   { id: "meeting", type: "meeting", title: "Upcoming Meeting", visible: true, order: 0, size: "full" },
@@ -28,7 +80,7 @@ export interface LayoutPreset {
   key: LayoutPresetKey;
   name: string;
   description: string;
-  widgetTypes: DashboardWidget["type"][];
+  widgetTypes: WidgetType[];
 }
 
 export const LAYOUT_PRESETS: LayoutPreset[] = [
@@ -231,19 +283,88 @@ export function useDashboardWidgets() {
     [settings, updateSettings]
   );
 
+  // Add a new widget from the catalog
+  const addWidget = useCallback(
+    (widgetType: WidgetType) => {
+      const catalogItem = WIDGET_CATALOG.find((w) => w.type === widgetType);
+      if (!catalogItem) return;
+
+      // Check if widget already exists
+      const exists = widgets.some((w) => w.type === widgetType);
+      if (exists) {
+        // Just make it visible
+        toggleWidget(widgetType);
+        return;
+      }
+
+      setWidgetsState((prev) => {
+        const newWidget: DashboardWidget = {
+          id: widgetType,
+          type: widgetType,
+          title: catalogItem.title,
+          visible: true,
+          order: prev.length,
+          size: catalogItem.defaultSize,
+        };
+        const newWidgets = [...prev, newWidget];
+        saveStoredWidgets(newWidgets);
+        if (settings) {
+          updateSettings({
+            appearance: {
+              ...settings.appearance,
+              dashboardWidgets: newWidgets,
+            },
+          });
+        }
+        return newWidgets;
+      });
+    },
+    [widgets, settings, updateSettings, toggleWidget]
+  );
+
+  // Remove a widget completely
+  const removeWidget = useCallback(
+    (widgetId: string) => {
+      setWidgetsState((prev) => {
+        const newWidgets = prev.filter((w) => w.id !== widgetId);
+        // Re-order remaining widgets
+        const reordered = newWidgets.map((w, i) => ({ ...w, order: i }));
+        saveStoredWidgets(reordered);
+        if (settings) {
+          updateSettings({
+            appearance: {
+              ...settings.appearance,
+              dashboardWidgets: reordered,
+            },
+          });
+        }
+        return reordered;
+      });
+    },
+    [settings, updateSettings]
+  );
+
   // Get visible widgets sorted by order
   const visibleWidgets = widgets
     .filter((w) => w.visible)
     .sort((a, b) => a.order - b.order);
 
+  // Get available widgets (in catalog but not in current widgets)
+  const availableWidgets = WIDGET_CATALOG.filter(
+    (catalogItem) => !widgets.some((w) => w.type === catalogItem.type)
+  );
+
   return {
     widgets,
     visibleWidgets,
+    availableWidgets,
     loading,
     updateWidget,
     toggleWidget,
     reorderWidgets,
     resetWidgets,
     applyPreset,
+    addWidget,
+    removeWidget,
   };
 }

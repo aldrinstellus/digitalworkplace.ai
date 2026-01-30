@@ -17,6 +17,7 @@ import {
   Globe, Building2, GraduationCap, MapPin, Heart, Repeat2, Send as SendIcon, ImageIcon
 } from "lucide-react";
 import { FadeIn } from "@/lib/motion";
+import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
 
 export default function AppDetailPage() {
   const params = useParams();
@@ -72,7 +73,7 @@ export default function AppDetailPage() {
   return (
     <div className="min-h-screen bg-[var(--bg-obsidian)]">
       <Sidebar />
-      <main className="ml-16 mr-0 h-screen overflow-hidden">
+      <main className="ml-16 mr-20 h-screen overflow-hidden">
         {/* Back button overlay */}
         <Link
           href="/dashboard"
@@ -84,6 +85,8 @@ export default function AppDetailPage() {
           {renderApp()}
         </FadeIn>
       </main>
+      {/* App Shortcuts Bar */}
+      <AppShortcutsBar />
     </div>
   );
 }

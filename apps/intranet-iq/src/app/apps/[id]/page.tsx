@@ -408,12 +408,12 @@ function JiraApp() {
                 {tickets[col.id as keyof typeof tickets]?.map((ticket) => (
                   <motion.div
                     key={ticket.key}
-                    className={`bg-[#22272b] p-3 rounded shadow-sm hover:bg-[#282e33] cursor-pointer border-l-2 ${ticket.blocked ? 'border-red-500' : 'border-transparent'}`}
+                    className={`bg-[#22272b] p-3 rounded shadow-sm hover:bg-[#282e33] cursor-pointer border-l-2 ${'blocked' in ticket && ticket.blocked ? 'border-red-500' : 'border-transparent'}`}
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm text-[#b6c2cf] line-clamp-2">{ticket.title}</p>
-                      {ticket.blocked && <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded">BLOCKED</span>}
+                      {'blocked' in ticket && ticket.blocked && <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded">BLOCKED</span>}
                     </div>
                     <div className="flex items-center justify-between mt-3">
                       <div className="flex items-center gap-2">

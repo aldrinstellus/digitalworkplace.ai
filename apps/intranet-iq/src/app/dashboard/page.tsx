@@ -72,7 +72,26 @@ export default function Dashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isPulsing, setIsPulsing] = useState(false);
 
-  const { visibleWidgets, reorderWidgets, applyPreset } = useDashboardWidgets();
+  const { widgets, visibleWidgets, reorderWidgets, applyPreset, toggleWidget } = useDashboardWidgets();
+
+  // Helper to check if a widget type is visible
+  const isWidgetVisible = (widgetType: string) => {
+    return visibleWidgets.some(w => w.type === widgetType);
+  };
+
+  // Current preset detection (for displaying active state)
+  const getCurrentPreset = (): LayoutPresetKey | null => {
+    const visibleTypes = visibleWidgets.map(w => w.type).sort();
+    for (const preset of LAYOUT_PRESETS) {
+      const presetTypes = [...preset.widgetTypes].sort();
+      if (JSON.stringify(visibleTypes) === JSON.stringify(presetTypes)) {
+        return preset.key;
+      }
+    }
+    return null;
+  };
+
+  const currentPreset = getCurrentPreset();
 
   // Close preset dropdown when clicking outside
   useEffect(() => {
@@ -277,17 +296,32 @@ export default function Dashboard() {
                               onClick={() => handlePresetSelect(preset.key)}
                               onMouseEnter={() => setHoveredPreset(preset.key)}
                               onMouseLeave={() => setHoveredPreset(null)}
-                              className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-[var(--bg-slate)] transition-colors group"
+                              className={`w-full text-left px-3 py-2.5 rounded-lg transition-colors group ${
+                                currentPreset === preset.key
+                                  ? 'bg-[var(--accent-ember)]/10 border border-[var(--accent-ember)]/30'
+                                  : 'hover:bg-[var(--bg-slate)]'
+                              }`}
                             >
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-[var(--text-primary)] group-hover:text-[var(--accent-ember)] transition-colors">
+                                <span className={`text-sm transition-colors ${
+                                  currentPreset === preset.key
+                                    ? 'text-[var(--accent-ember)]'
+                                    : 'text-[var(--text-primary)] group-hover:text-[var(--accent-ember)]'
+                                }`}>
                                   {preset.name}
                                 </span>
-                                {preset.key === "default" && (
-                                  <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--accent-ember)]/10 text-[var(--accent-ember)]">
-                                    Recommended
-                                  </span>
-                                )}
+                                <div className="flex items-center gap-2">
+                                  {currentPreset === preset.key && (
+                                    <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]">
+                                      Active
+                                    </span>
+                                  )}
+                                  {preset.key === "default" && currentPreset !== preset.key && (
+                                    <span className="text-xs px-1.5 py-0.5 rounded bg-[var(--accent-ember)]/10 text-[var(--accent-ember)]">
+                                      Recommended
+                                    </span>
+                                  )}
+                                </div>
                               </div>
                               <p className="text-xs text-[var(--text-muted)] mt-0.5">
                                 {preset.description}
@@ -330,16 +364,26 @@ export default function Dashboard() {
           </FadeIn>
 
           {/* Meeting Card - Full Width */}
-          <FadeIn delay={0.15}>
-            <div className="mb-6">
-              <MeetingCard />
-            </div>
-          </FadeIn>
+          {isWidgetVisible("meeting") && (
+            <FadeIn delay={0.15}>
+              <div className="mb-6">
+                <MeetingCard />
+              </div>
+            </FadeIn>
+          )}
 
           {/* ===== OPTIMIZED 3-COLUMN GRID LAYOUT ===== */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className={`grid gap-6 ${
+            // Dynamic grid columns based on visible widgets
+            (isWidgetVisible("quick-actions") && (isWidgetVisible("news") || isWidgetVisible("events") || isWidgetVisible("trending") || isWidgetVisible("activity")))
+              ? 'grid-cols-3'
+              : (isWidgetVisible("quick-actions") || isWidgetVisible("news") || isWidgetVisible("events") || isWidgetVisible("trending") || isWidgetVisible("activity"))
+                ? 'grid-cols-2'
+                : 'grid-cols-1'
+          }`}>
 
             {/* Column 1: Quick Actions + AI Assistant */}
+            {isWidgetVisible("quick-actions") && (
             <div className="space-y-6">
               {/* My Tasks Card */}
               <FadeIn delay={0.2}>
@@ -451,8 +495,10 @@ export default function Dashboard() {
                 />
               </FadeIn>
             </div>
+            )}
 
             {/* Column 2: Company News + Team Updates */}
+            {isWidgetVisible("news") && (
             <div className="space-y-6">
               {/* Team Updates Card */}
               <FadeIn delay={0.2}>
@@ -555,10 +601,13 @@ export default function Dashboard() {
                 </motion.div>
               </FadeIn>
             </div>
+            )}
 
             {/* Column 3: Trending + Events + Activity */}
+            {(isWidgetVisible("trending") || isWidgetVisible("events") || isWidgetVisible("activity")) && (
             <div className="space-y-6">
               {/* Trending - Now at top of column */}
+              {isWidgetVisible("trending") && (
               <FadeIn delay={0.2}>
                 <motion.div
                   className="bg-gradient-to-br from-[var(--accent-ember)]/10 to-transparent border border-[var(--accent-ember)]/20 rounded-xl p-5 hover:border-[var(--accent-ember)]/40 transition-colors"
@@ -597,8 +646,10 @@ export default function Dashboard() {
                   </div>
                 </motion.div>
               </FadeIn>
+              )}
 
               {/* Upcoming Events */}
+              {isWidgetVisible("events") && (
               <FadeIn delay={0.25}>
                 <motion.div
                   className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
@@ -659,8 +710,10 @@ export default function Dashboard() {
                   )}
                 </motion.div>
               </FadeIn>
+              )}
 
               {/* Recent Activity */}
+              {isWidgetVisible("activity") && (
               <FadeIn delay={0.3}>
                 <motion.div
                   className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
@@ -715,7 +768,9 @@ export default function Dashboard() {
                   </div>
                 </motion.div>
               </FadeIn>
+              )}
             </div>
+            )}
           </div>
         </div>
       </main>

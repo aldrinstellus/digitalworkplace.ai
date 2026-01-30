@@ -43,7 +43,7 @@ READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 
 **dIQ (Intranet IQ)** is an AI-powered internal knowledge network - part of the Digital Workplace AI product suite.
 
-**Version:** 2.1.0 (PRD Compliance Enhancements)
+**Version:** 2.5.0 (Full Widget System)
 **Audit Score:** 100/100
 **Design System:** Midnight Green (emerald/teal accents)
 **Production:** https://diq.digitalworkplace.ai/diq/dashboard
@@ -438,5 +438,5 @@ docker compose -f docker-compose.elasticsearch.yml up -d
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
-*Version: 2.4.0*
+*Version: 2.5.0*
 *Last Updated: January 30, 2026*

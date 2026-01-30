@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.5.0] - 2026-01-30
+
+### Full Widget Catalog & Preset-Customization Interlinking
+
+This release completes the dashboard widget system with all 15 widget types fully implemented and bidirectional interlinking between presets and customization.
+
+#### New Widget Components (9 Added)
+- **Today's Schedule (Calendar)**: Daily events with color-coded types
+- **Quick Links (Bookmarks)**: 4 quick access link buttons
+- **Goals & OKRs**: Progress bars with status badges (on-track, at-risk, ahead)
+- **Team Directory**: Team members with avatar initials and online status
+- **Announcements**: Priority-coded company announcements
+- **Active Polls**: Company surveys with vote counts and expiry
+- **Celebrations (Birthdays)**: Birthdays and work anniversaries
+- **Performance**: Metrics with trend indicators (+/-%)
+- **Weather**: Temperature with conditions and forecast
+
+#### Preset-Customization Interlinking
+- **Enhanced applyPreset()**: Now adds missing widgets from presets, not just toggles visibility
+- **currentPreset detection**: Hook returns preset key or "custom" when no match
+- **Dynamic preset button**: Shows current state (preset name or "Custom" in purple)
+- **Custom indicator**: Purple styling when widget configuration doesn't match any preset
+- **Dropdown enhancements**: Shows "Custom Layout" with widget count, each preset shows widget count
+
+#### Full Spectrum Testing Verified
+- All 4 presets tested (Default, Task-Focused, News-Heavy, Minimal)
+- Custom layout detection verified
+- Bidirectional flow: Presets ↔ Widgets ↔ Customization
+- State persistence in localStorage verified
+
+#### Technical Details
+- Total widgets: 15 (6 core + 3 productivity + 4 social + 2 analytics)
+- All widgets render with proper UI components
+- Mock data for all new widgets
+- Responsive 3-column grid layout for additional widgets section
+
+#### Files Modified
+- `src/app/dashboard/page.tsx` - Added 9 new widget components (+416 lines)
+- `src/lib/hooks/useDashboardWidgets.ts` - Enhanced preset application and detection (+66 lines)
+
+---
+
 ## [2.4.1] - 2026-01-30
 
 ### Dashboard Presets & Customize Fully Functional

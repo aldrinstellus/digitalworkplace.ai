@@ -438,5 +438,5 @@ docker compose -f docker-compose.elasticsearch.yml up -d
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq*
 *Repository: https://github.com/aldrinstellus/digitalworkplace.ai*
-*Version: 2.1.0*
-*Last Updated: January 29, 2026*
+*Version: 2.4.0*
+*Last Updated: January 30, 2026*

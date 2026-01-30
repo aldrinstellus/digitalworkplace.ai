@@ -17,6 +17,14 @@
 | **Pages** | PASS | 19/19 implemented |
 | **Production Status** | LIVE | https://diq.digitalworkplace.ai |
 
+### Related Documents
+
+| Document | Purpose | Link |
+|----------|---------|------|
+| **PRD V2.0 Gap Analysis** | Feature compliance vs V2.0 PRD (85% complete) | [PRD_V2_GAPS.md](./PRD_V2_GAPS.md) |
+| **Session State** | Current development state | [SAVEPOINT.md](./SAVEPOINT.md) |
+| **Changelog** | Version history | [CHANGELOG.md](./CHANGELOG.md) |
+
 ---
 
 ## 1. DATABASE AUDIT

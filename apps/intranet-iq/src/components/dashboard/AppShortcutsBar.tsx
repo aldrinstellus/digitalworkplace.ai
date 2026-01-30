@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, Plus, Settings, X, Trash2, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 
 interface AppShortcut {
   id: string;
@@ -11,20 +12,21 @@ interface AppShortcut {
   icon: string;
   url: string;
   color: string;
+  hasInternalPage?: boolean;
 }
 
-// Default app shortcuts - Updated with Ember-themed colors
+// Default app shortcuts - Updated with Ember-themed colors and internal pages
 const defaultApps: AppShortcut[] = [
-  { id: "drive", name: "Google Drive", icon: "📁", url: "https://drive.google.com", color: "bg-amber-500/20" },
-  { id: "slack", name: "Slack", icon: "💬", url: "https://slack.com", color: "bg-[var(--accent-ember)]/20" },
-  { id: "zoom", name: "Zoom", icon: "🎥", url: "https://zoom.us", color: "bg-orange-500/20" },
-  { id: "confluence", name: "Confluence", icon: "📝", url: "https://confluence.atlassian.com", color: "bg-orange-600/20" },
-  { id: "jira", name: "Jira", icon: "🎯", url: "https://jira.atlassian.com", color: "bg-amber-400/20" },
-  { id: "salesforce", name: "Salesforce", icon: "☁️", url: "https://salesforce.com", color: "bg-[var(--accent-gold)]/20" },
-  { id: "linkedin", name: "LinkedIn", icon: "💼", url: "https://linkedin.com", color: "bg-orange-700/20" },
-  { id: "github", name: "GitHub", icon: "🐙", url: "https://github.com", color: "bg-[var(--bg-slate)]" },
-  { id: "notion", name: "Notion", icon: "📓", url: "https://notion.so", color: "bg-[var(--border-default)]" },
-  { id: "figma", name: "Figma", icon: "🎨", url: "https://figma.com", color: "bg-[var(--accent-copper)]/20" },
+  { id: "slack", name: "Slack", icon: "💬", url: "https://slack.com", color: "bg-[var(--accent-ember)]/20", hasInternalPage: true },
+  { id: "jira", name: "Jira", icon: "🎯", url: "https://jira.atlassian.com", color: "bg-amber-400/20", hasInternalPage: true },
+  { id: "github", name: "GitHub", icon: "🐙", url: "https://github.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "drive", name: "Google Drive", icon: "📁", url: "https://drive.google.com", color: "bg-amber-500/20", hasInternalPage: true },
+  { id: "zoom", name: "Zoom", icon: "🎥", url: "https://zoom.us", color: "bg-orange-500/20", hasInternalPage: true },
+  { id: "confluence", name: "Confluence", icon: "📝", url: "https://confluence.atlassian.com", color: "bg-orange-600/20", hasInternalPage: true },
+  { id: "salesforce", name: "Salesforce", icon: "☁️", url: "https://salesforce.com", color: "bg-[var(--accent-gold)]/20", hasInternalPage: true },
+  { id: "figma", name: "Figma", icon: "🎨", url: "https://figma.com", color: "bg-[var(--accent-copper)]/20", hasInternalPage: true },
+  { id: "notion", name: "Notion", icon: "📓", url: "https://notion.so", color: "bg-[var(--border-default)]", hasInternalPage: true },
+  { id: "linkedin", name: "LinkedIn", icon: "💼", url: "https://linkedin.com", color: "bg-orange-700/20", hasInternalPage: true },
 ];
 
 // Available apps to add (not in default list)
@@ -159,33 +161,41 @@ export function AppShortcutsBar() {
               animate={{ y: -scrollPosition * 68 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              {apps.map((app, index) => (
-                <motion.a
-                  key={app.id}
-                  href={app.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-[var(--bg-slate)] transition-colors group"
-                  title={app.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
+              {apps.map((app, index) => {
+                const AppWrapper = app.hasInternalPage ? Link : "a";
+                const linkProps = app.hasInternalPage
+                  ? { href: `/apps/${app.id}` }
+                  : { href: app.url, target: "_blank", rel: "noopener noreferrer" };
+
+                return (
                   <motion.div
-                    className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center text-lg`}
-                    whileHover={{
-                      boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
-                    }}
+                    key={app.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {app.icon}
+                    <AppWrapper
+                      {...linkProps}
+                      className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-[var(--bg-slate)] transition-colors group"
+                      title={app.name}
+                    >
+                      <motion.div
+                        className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center text-lg`}
+                        whileHover={{
+                          boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
+                        }}
+                      >
+                        {app.icon}
+                      </motion.div>
+                      <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate w-full text-center transition-colors">
+                        {app.name.length > 8 ? app.name.slice(0, 7) + "…" : app.name}
+                      </span>
+                    </AppWrapper>
                   </motion.div>
-                  <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate w-full text-center transition-colors">
-                    {app.name.length > 8 ? app.name.slice(0, 7) + "…" : app.name}
-                  </span>
-                </motion.a>
-              ))}
+                );
+              })}
             </motion.div>
           </div>
 

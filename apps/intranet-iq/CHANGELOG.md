@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.0] - 2026-01-30
+
+### Realistic App Interface Replicas
+
+This release adds authentic UI replicas of all 10 integrated apps in the dashboard sidebar with realistic dummy data.
+
+#### App Interfaces Implemented
+- **Slack**: Full workspace UI with channel sidebar, message threading, reactions, DMs with status indicators, message input toolbar
+- **Jira**: Sprint board with 4 Kanban columns (TO DO, IN PROGRESS, IN REVIEW, DONE), ticket cards with type/priority/story points
+- **GitHub**: PR code review interface with conversation/commits/checks/files tabs, file diffs with +/- lines, CI status
+- **Google Drive**: My Drive file manager with folders grid, files table, list/grid toggle, storage indicator
+- **Zoom**: Meetings dashboard with action buttons (New Meeting, Join, Schedule), today's meetings with LIVE indicator
+- **Confluence**: Wiki page viewer with space sidebar, breadcrumb navigation, API documentation content
+- **Salesforce**: Opportunity Pipeline with 5 stages (Prospecting → Closed Won), deal cards with amounts and probability
+- **Figma**: Canvas interface with layers panel, properties panel, toolbar, zoom controls, design/prototype/dev mode toggle
+- **Notion**: Workspace with sidebar, page content with emoji icon, database board view with Kanban columns
+- **LinkedIn**: Feed interface with header navigation, profile sidebar, post creation, engagement metrics
+
+#### Navigation Updates
+- **AppShortcutsBar**: Updated to use internal `/apps/[id]` routes instead of external links
+- **Back Navigation**: Floating back button overlay to return to dashboard
+
+#### Files Modified
+- `src/app/apps/[id]/page.tsx` - Complete rewrite (1578 lines) with all 10 app interfaces
+- `src/components/dashboard/AppShortcutsBar.tsx` - Internal routing with hasInternalPage flag
+
+---
+
+## [2.3.1] - 2026-01-30
+
+### Dashboard View All Links Fixed
+
+This patch release fixes all "View All" links in the dashboard widgets to properly navigate to content pages.
+
+#### Dashboard Widget Fixes
+- **Recent Activity "View all"**: Changed from `/settings?tab=activity` to `/notifications`
+- **Activity Items**: Now use `mockRecentActivity` data with proper links to news/events/articles/channels
+- **Recent Documents**: Each document item now links to `/content/[id]`
+- **Team Updates**: Each update item now links to `/news/[id]`
+- **My Tasks**: Each task item now links to `/my-day`
+
+#### Component Updates
+- **ActivityItem**: Updated to accept optional `href` prop and wrap in Next.js Link component
+- **mockRecentDocs**: Added `href` field linking to content pages
+- **mockTeamUpdates**: Added `href` field linking to news pages
+
+#### Files Modified
+- `src/app/dashboard/page.tsx`
+
+---
+
+## [2.3.0] - 2026-01-30
+
+### Full Spectrum Mock Data - Zero 404 Errors
+
+This release ensures all navigation links have proper data and detail pages.
+
+#### Mock Data Enhancements
+- Centralized `mockData.ts` with consistent IDs across all pages
+- Created detail pages: news/[id], events/[id], people/[id], content/[id], channels/[id]
+- Fixed trending topics to link to actual news articles
+- Replaced all Supabase hooks with mock data for demo mode
+
+---
+
 ## [2.2.0] - 2026-01-30
 
 ### 100% PRD Compliance - All 9 EPICs Complete

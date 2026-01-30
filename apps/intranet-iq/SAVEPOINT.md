@@ -20,9 +20,9 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 
 | Property | Value |
 |----------|-------|
-| **Last Updated** | January 30, 2026 @ 6:45 PM |
-| **Session** | Full Spectrum Mock Data - Zero 404 Errors |
-| **Version** | 2.3.0 |
+| **Last Updated** | January 30, 2026 @ 10:00 PM |
+| **Session** | Realistic App Interface Replicas |
+| **Version** | 2.4.0 |
 | **PRD Compliance** | **100%** |
 | **Mock Data Coverage** | **100%** (All pages use centralized mock data) |
 | **Detail Pages** | **100%** (news, events, people, content, channels) |
@@ -223,7 +223,27 @@ All 9 EPICs from the V2.0 PRD are now at 100% compliance. This was achieved by i
 
 ## VERSION HISTORY (from CHANGELOG.md)
 
-### v2.3.0 (January 30, 2026) - Current
+### v2.4.0 (January 30, 2026) - Current
+- **Realistic App Interface Replicas** - All 10 integrated apps with authentic UI
+- SlackApp: Full workspace/channel UI with message threading
+- JiraApp: Sprint board with Kanban columns and ticket cards
+- GitHubApp: PR code review with file diffs and CI checks
+- DriveApp: My Drive file manager with folder/file views
+- ZoomApp: Meetings dashboard with LIVE indicator
+- ConfluenceApp: Wiki page viewer with space sidebar
+- SalesforceApp: Opportunity Pipeline with deal stages
+- FigmaApp: Canvas interface with layers/properties panels
+- NotionApp: Workspace with database board view
+- LinkedInApp: Feed interface with post creation
+- AppShortcutsBar updated for internal routing
+
+### v2.3.1 (January 30, 2026)
+- **Dashboard View All Links Fixed** - All widgets properly linked
+- Recent Activity "View all" → /notifications (was /settings?tab=activity)
+- All activity items, docs, updates, tasks now clickable with proper hrefs
+- ActivityItem component updated to support links
+
+### v2.3.0 (January 30, 2026)
 - **Full Spectrum Mock Data** - Zero 404 errors across entire app
 - Centralized mockData.ts with realistic enterprise data
 - Created detail pages: news/[id], events/[id], people/[id], content/[id], channels/[id]
@@ -412,18 +432,78 @@ apps/intranet-iq/
 
 - [x] v2.2.0 100% PRD Compliance - COMPLETE
 - [x] Build verified: 58 pages compiled successfully
-- [x] Git commit: 765a02a pushed to main
-- [x] Vercel deployment: LIVE at https://diq.digitalworkplace.ai/diq/dashboard
-- [x] Documentation updated (PRD_V2_GAPS.md, CHANGELOG.md, SAVEPOINT.md)
-- [x] Production verification: All pages returning 200 OK
+- [x] v2.3.0 Full Spectrum Mock Data - Zero 404 Errors - COMPLETE
+- [x] v2.3.1 Dashboard View All Links Fixed - COMPLETE
+- [x] v2.4.0 Realistic App Interface Replicas - COMPLETE
+- [ ] Git commit and push v2.4.0 changes
+- [ ] Vercel deployment for v2.4.0
 
-**No pending tasks. v2.2.0 is fully deployed and documented.**
+**Current:** v2.4.0 app replicas implemented, ready to deploy.
 
 ---
 
 ## SESSION HISTORY
 
-### January 30, 2026 @ 3:15 PM (Current Session)
+### January 30, 2026 @ 10:00 PM (Current Session)
+**Accomplishments:**
+1. **Realistic App Interface Replicas** - All 10 integrated apps with authentic dummy data
+2. **SlackApp**: Full workspace with channel sidebar (260px), message threading, reactions, DMs with status indicators, formatting toolbar
+3. **JiraApp**: Sprint board with 4 Kanban columns (TO DO, IN PROGRESS, IN REVIEW, DONE), ticket cards with type icons, priorities, story points
+4. **GitHubApp**: PR code review interface with 4 tabs (Conversation, Commits, Checks, Files changed), file diffs with +/- lines
+5. **DriveApp**: My Drive with sidebar navigation, folders grid, files table view, list/grid toggle, storage indicator
+6. **ZoomApp**: Meetings dashboard with action buttons (New Meeting, Join, Schedule), today's meetings with LIVE indicator
+7. **ConfluenceApp**: Wiki page with space sidebar, breadcrumb navigation, API documentation content with code blocks
+8. **SalesforceApp**: Opportunity Pipeline with 5 stages (Prospecting → Closed Won), deal cards with amounts and probability
+9. **FigmaApp**: Canvas interface with layers panel, properties panel (position, size, fill), toolbar, zoom controls
+10. **NotionApp**: Workspace sidebar, page content with emoji icons, database board view with Kanban
+11. **LinkedInApp**: Feed with header navigation, profile sidebar, post creation, engagement metrics
+12. **AppShortcutsBar**: Updated to use internal `/apps/[id]` routes with `hasInternalPage` flag
+
+**Files Modified:**
+- `src/app/apps/[id]/page.tsx` - Complete rewrite (1578 lines) with all 10 app interfaces
+- `src/components/dashboard/AppShortcutsBar.tsx` - Internal routing
+
+**Technical Details:**
+- Each app uses useState for tab/view state management
+- App-specific color schemes matching real products
+- Tailwind CSS for styling with responsive layouts
+- Lucide React icons throughout
+
+---
+
+### January 30, 2026 @ 7:30 PM (Previous Session)
+**Accomplishments:**
+1. **Dashboard "View All" Links Fixed** - All widgets now link to proper pages
+2. **Recent Activity Section Overhauled:**
+   - "View all" changed from `/settings?tab=activity` to `/notifications`
+   - Activity items now use `mockRecentActivity` data with proper links
+   - Each activity links to its content: news/events/articles/channels
+3. **Recent Documents Made Clickable** - Each doc links to `/content/[id]`
+4. **Team Updates Made Clickable** - Each update links to `/news/[id]`
+5. **Tasks Made Clickable** - Each task links to `/my-day`
+6. **ActivityItem Component Updated** - Now accepts optional `href` prop
+
+**View All Link Summary (All Fixed):**
+| Widget | View All Link | Status |
+|--------|---------------|--------|
+| My Tasks | `/my-day` | ✅ |
+| Recent Documents | `/content` | ✅ |
+| Team Updates | `/news` | ✅ |
+| Company News | `/news` | ✅ |
+| Upcoming Events | `/events` | ✅ |
+| Recent Activity | `/notifications` | ✅ Fixed |
+
+**Files Modified:**
+- `src/app/dashboard/page.tsx` - Updated mockRecentDocs, mockTeamUpdates with hrefs, Activity section refactored
+
+**Verification:**
+- All linked pages return HTTP 200
+- Browser automation confirmed navigation works
+- News detail page shows full content with rich data
+
+---
+
+### January 30, 2026 @ 3:15 PM
 **Accomplishments:**
 1. **Full Visual Browser Verification** - Playwright automation with 20 screenshots
 2. **100% Page Coverage** - All 11 pages visually verified working
@@ -563,6 +643,6 @@ open https://diq.digitalworkplace.ai/diq/dashboard
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/intranet-iq*
 *Production: https://diq.digitalworkplace.ai/diq/dashboard*
-*Version: 2.2.0*
+*Version: 2.4.0*
 *PRD Compliance: 100%*
-*Last Updated: January 30, 2026 @ 2:00 AM*
+*Last Updated: January 30, 2026 @ 10:00 PM*

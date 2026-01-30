@@ -33,18 +33,18 @@ const mockTasks = [
 ];
 
 const mockRecentDocs = [
-  { id: 1, title: "Q4 Planning Document", type: "document", updated: "2 hours ago", author: "Sarah Chen" },
-  { id: 2, title: "Engineering Roadmap 2026", type: "spreadsheet", updated: "4 hours ago", author: "Mike Johnson" },
-  { id: 3, title: "Product Launch Checklist", type: "document", updated: "Yesterday", author: "Alex Kim" },
-  { id: 4, title: "Team Budget Report", type: "spreadsheet", updated: "Yesterday", author: "Lisa Park" },
-  { id: 5, title: "Design System v3.0", type: "presentation", updated: "2 days ago", author: "James Wilson" },
+  { id: 1, title: "Q4 Planning Document", type: "document", updated: "2 hours ago", author: "Sarah Chen", href: "/content/1" },
+  { id: 2, title: "Engineering Roadmap 2026", type: "spreadsheet", updated: "4 hours ago", author: "Mike Johnson", href: "/content/2" },
+  { id: 3, title: "Product Launch Checklist", type: "document", updated: "Yesterday", author: "Alex Kim", href: "/content/3" },
+  { id: 4, title: "Team Budget Report", type: "spreadsheet", updated: "Yesterday", author: "Lisa Park", href: "/content/4" },
+  { id: 5, title: "Design System v3.0", type: "presentation", updated: "2 days ago", author: "James Wilson", href: "/content/5" },
 ];
 
 const mockTeamUpdates = [
-  { id: 1, title: "New hire: Welcome Emma to Engineering!", type: "announcement", time: "1 hour ago", reactions: 24 },
-  { id: 2, title: "Office closed Monday for holiday", type: "notice", time: "3 hours ago", reactions: 12 },
-  { id: 3, title: "Q4 goals published - check them out!", type: "announcement", time: "Yesterday", reactions: 45 },
-  { id: 4, title: "New coffee machine in break room ☕", type: "casual", time: "Yesterday", reactions: 67 },
+  { id: 1, title: "New hire: Welcome Emma to Engineering!", type: "announcement", time: "1 hour ago", reactions: 24, href: "/news/2" },
+  { id: 2, title: "Office closed Monday for holiday", type: "notice", time: "3 hours ago", reactions: 12, href: "/news/6" },
+  { id: 3, title: "Q4 goals published - check them out!", type: "announcement", time: "Yesterday", reactions: 45, href: "/news/1" },
+  { id: 4, title: "New coffee machine in break room ☕", type: "casual", time: "Yesterday", reactions: 67, href: "/news/5" },
 ];
 
 const mockAISuggestions = [
@@ -354,24 +354,26 @@ export default function Dashboard() {
                   expandedContent={
                     <div className="space-y-2 mt-4">
                       {mockTasks.map((task) => (
-                        <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-                          {task.status === "in-progress" ? (
-                            <div className="w-4 h-4 rounded-full border-2 border-[var(--accent-ember)] border-t-transparent animate-spin" />
-                          ) : (
-                            <Circle className="w-4 h-4 text-[var(--text-muted)]" />
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-[var(--text-primary)] truncate">{task.title}</p>
-                            <p className="text-xs text-[var(--text-muted)]">Due: {task.due}</p>
+                        <Link key={task.id} href="/my-day">
+                          <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                            {task.status === "in-progress" ? (
+                              <div className="w-4 h-4 rounded-full border-2 border-[var(--accent-ember)] border-t-transparent animate-spin" />
+                            ) : (
+                              <Circle className="w-4 h-4 text-[var(--text-muted)]" />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-[var(--text-primary)] truncate">{task.title}</p>
+                              <p className="text-xs text-[var(--text-muted)]">Due: {task.due}</p>
+                            </div>
+                            <span className={`text-xs px-2 py-0.5 rounded ${
+                              task.priority === "high" ? "bg-red-500/20 text-red-400" :
+                              task.priority === "medium" ? "bg-yellow-500/20 text-yellow-400" :
+                              "bg-blue-500/20 text-blue-400"
+                            }`}>
+                              {task.priority}
+                            </span>
                           </div>
-                          <span className={`text-xs px-2 py-0.5 rounded ${
-                            task.priority === "high" ? "bg-red-500/20 text-red-400" :
-                            task.priority === "medium" ? "bg-yellow-500/20 text-yellow-400" :
-                            "bg-blue-500/20 text-blue-400"
-                          }`}>
-                            {task.priority}
-                          </span>
-                        </div>
+                        </Link>
                       ))}
                       <Link href="/my-day" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all tasks <ArrowRight className="w-4 h-4" />
@@ -394,21 +396,23 @@ export default function Dashboard() {
                   expandedContent={
                     <div className="space-y-2 mt-4">
                       {mockRecentDocs.map((doc) => (
-                        <div key={doc.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-                          <div className={`w-8 h-8 rounded flex items-center justify-center ${
-                            doc.type === "document" ? "bg-blue-500/20 text-blue-400" :
-                            doc.type === "spreadsheet" ? "bg-green-500/20 text-green-400" :
-                            "bg-orange-500/20 text-orange-400"
-                          }`}>
-                            <FileText className="w-4 h-4" />
+                        <Link key={doc.id} href={doc.href}>
+                          <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                            <div className={`w-8 h-8 rounded flex items-center justify-center ${
+                              doc.type === "document" ? "bg-blue-500/20 text-blue-400" :
+                              doc.type === "spreadsheet" ? "bg-green-500/20 text-green-400" :
+                              "bg-orange-500/20 text-orange-400"
+                            }`}>
+                              <FileText className="w-4 h-4" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-[var(--text-primary)] truncate">{doc.title}</p>
+                              <p className="text-xs text-[var(--text-muted)]">{doc.author} · {doc.updated}</p>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-[var(--text-primary)] truncate">{doc.title}</p>
-                            <p className="text-xs text-[var(--text-muted)]">{doc.author} · {doc.updated}</p>
-                          </div>
-                        </div>
+                        </Link>
                       ))}
-                      <Link href="/content?view=recent" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <Link href="/content" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all documents <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
@@ -463,25 +467,27 @@ export default function Dashboard() {
                   expandedContent={
                     <div className="space-y-2 mt-4">
                       {mockTeamUpdates.map((update) => (
-                        <div key={update.id} className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-                          <div className={`w-8 h-8 rounded flex items-center justify-center flex-shrink-0 ${
-                            update.type === "announcement" ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]" :
-                            update.type === "notice" ? "bg-yellow-500/20 text-yellow-400" :
-                            "bg-blue-500/20 text-blue-400"
-                          }`}>
-                            {update.type === "announcement" ? <Bell className="w-4 h-4" /> :
-                             update.type === "notice" ? <AlertCircle className="w-4 h-4" /> :
-                             <MessageSquare className="w-4 h-4" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-[var(--text-primary)] line-clamp-2">{update.title}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-xs text-[var(--text-muted)]">{update.time}</span>
-                              <span className="text-xs text-[var(--text-muted)]">·</span>
-                              <span className="text-xs text-[var(--accent-ember)]">{update.reactions} reactions</span>
+                        <Link key={update.id} href={update.href}>
+                          <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer">
+                            <div className={`w-8 h-8 rounded flex items-center justify-center flex-shrink-0 ${
+                              update.type === "announcement" ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]" :
+                              update.type === "notice" ? "bg-yellow-500/20 text-yellow-400" :
+                              "bg-blue-500/20 text-blue-400"
+                            }`}>
+                              {update.type === "announcement" ? <Bell className="w-4 h-4" /> :
+                               update.type === "notice" ? <AlertCircle className="w-4 h-4" /> :
+                               <MessageSquare className="w-4 h-4" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-[var(--text-primary)] line-clamp-2">{update.title}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-xs text-[var(--text-muted)]">{update.time}</span>
+                                <span className="text-xs text-[var(--text-muted)]">·</span>
+                                <span className="text-xs text-[var(--accent-ember)]">{update.reactions} reactions</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       ))}
                       <Link href="/news" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all updates <ArrowRight className="w-4 h-4" />
@@ -666,15 +672,46 @@ export default function Dashboard() {
                       <Clock className="w-5 h-5 text-[var(--accent-ember)]" />
                       Recent Activity
                     </h2>
-                    <Link href="/settings?tab=activity" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                    <Link href="/notifications" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
                       View all <ChevronRight className="w-3 h-3" />
                     </Link>
                   </div>
 
                   <div className="space-y-2">
-                    <ActivityItem title="Q4 Planning Document" type="document" time="2 hours ago" user="Sarah Chen" />
-                    <ActivityItem title="Engineering Team Channel" type="channel" time="4 hours ago" user="12 new messages" />
-                    <ActivityItem title="Product Roadmap 2026" type="document" time="Yesterday" user="Updated by Alex" />
+                    {activities.slice(0, 4).map((activity: MockActivity) => {
+                      // Determine the link based on target_type
+                      const getActivityLink = () => {
+                        switch (activity.target_type) {
+                          case "news": return `/news/${activity.target_id}`;
+                          case "event": return `/events/${activity.target_id}`;
+                          case "article": return `/content/${activity.target_id}`;
+                          case "channel": return `/channels/${activity.target_id}`;
+                          default: return "/notifications";
+                        }
+                      };
+
+                      // Format the time
+                      const formatTime = (dateStr: string) => {
+                        const date = new Date(dateStr);
+                        const now = new Date();
+                        const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+                        if (diffHours < 1) return "Just now";
+                        if (diffHours < 24) return `${diffHours} hours ago`;
+                        if (diffHours < 48) return "Yesterday";
+                        return `${Math.floor(diffHours / 24)} days ago`;
+                      };
+
+                      return (
+                        <ActivityItem
+                          key={activity.id}
+                          title={activity.title}
+                          type={activity.target_type === "channel" ? "channel" : "document"}
+                          time={formatTime(activity.created_at)}
+                          user={activity.actor_name}
+                          href={getActivityLink()}
+                        />
+                      );
+                    })}
                   </div>
                 </motion.div>
               </FadeIn>
@@ -776,13 +813,15 @@ function ActivityItem({
   type,
   time,
   user,
+  href,
 }: {
   title: string;
   type: "document" | "channel";
   time: string;
   user: string;
+  href?: string;
 }) {
-  return (
+  const content = (
     <motion.div
       className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer"
       whileHover={{ x: 4 }}
@@ -803,4 +842,10 @@ function ActivityItem({
       <span className="text-xs text-[var(--text-muted)] flex-shrink-0">{time}</span>
     </motion.div>
   );
+
+  if (href) {
+    return <Link href={href}>{content}</Link>;
+  }
+
+  return content;
 }

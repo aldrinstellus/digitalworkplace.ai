@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-28 19:45 UTC
-**Version**: 0.8.3
-**Session Status**: dCQ Workflows Expanded - 12 New Workflows Live
+**Last Updated**: 2026-01-29 12:00 UTC
+**Version**: 0.9.0
+**Session Status**: dIQ V2.0 LIVE - 9 EPICs Complete, 90/90 Features Passing
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 4a4283f - feat(dCQ): Add 12 new workflows for City of Doral
+**Git Commit**: 04029bc - feat(diq): V2.0 Major Release - 9 EPICs Complete
 
 ---
 
@@ -117,7 +117,7 @@ const isPublicRoute = createRouteMatcher([
 |---------|----------------|--------|---------|
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
-| **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | 1.1.0 |
+| **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
 | **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
 

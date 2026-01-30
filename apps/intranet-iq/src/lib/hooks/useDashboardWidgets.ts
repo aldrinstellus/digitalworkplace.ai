@@ -33,6 +33,12 @@ export interface LayoutPreset {
 
 export const LAYOUT_PRESETS: LayoutPreset[] = [
   {
+    key: "default",
+    name: "Default",
+    description: "Balanced layout with all widgets",
+    widgetTypes: ["meeting", "quick-actions", "news", "events", "activity", "trending"],
+  },
+  {
     key: "task-focused",
     name: "Task-Focused",
     description: "Prioritizes tasks, calendar, and approvals",
@@ -49,12 +55,6 @@ export const LAYOUT_PRESETS: LayoutPreset[] = [
     name: "Minimal",
     description: "Clean layout with essential widgets only",
     widgetTypes: ["quick-actions", "meeting"],
-  },
-  {
-    key: "default",
-    name: "Default",
-    description: "Balanced layout with all widgets",
-    widgetTypes: ["meeting", "quick-actions", "news", "events", "activity", "trending"],
   },
 ];
 

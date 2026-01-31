@@ -18,15 +18,17 @@ interface AppShortcut {
 // Default app shortcuts - Updated with Ember-themed colors and internal pages
 const defaultApps: AppShortcut[] = [
   { id: "slack", name: "Slack", icon: "💬", url: "https://slack.com", color: "bg-[var(--accent-ember)]/20", hasInternalPage: true },
+  { id: "email", name: "Email", icon: "📧", url: "https://mail.google.com", color: "bg-blue-500/20", hasInternalPage: true },
   { id: "jira", name: "Jira", icon: "🎯", url: "https://jira.atlassian.com", color: "bg-amber-400/20", hasInternalPage: true },
   { id: "github", name: "GitHub", icon: "🐙", url: "https://github.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
   { id: "drive", name: "Google Drive", icon: "📁", url: "https://drive.google.com", color: "bg-amber-500/20", hasInternalPage: true },
   { id: "zoom", name: "Zoom", icon: "🎥", url: "https://zoom.us", color: "bg-orange-500/20", hasInternalPage: true },
   { id: "confluence", name: "Confluence", icon: "📝", url: "https://confluence.atlassian.com", color: "bg-orange-600/20", hasInternalPage: true },
-  { id: "salesforce", name: "Salesforce", icon: "☁️", url: "https://salesforce.com", color: "bg-[var(--accent-gold)]/20", hasInternalPage: true },
+  { id: "bookmarks", name: "Bookmarks", icon: "🔖", url: "#", color: "bg-violet-500/20", hasInternalPage: true },
   { id: "figma", name: "Figma", icon: "🎨", url: "https://figma.com", color: "bg-[var(--accent-copper)]/20", hasInternalPage: true },
   { id: "notion", name: "Notion", icon: "📓", url: "https://notion.so", color: "bg-[var(--border-default)]", hasInternalPage: true },
   { id: "linkedin", name: "LinkedIn", icon: "💼", url: "https://linkedin.com", color: "bg-orange-700/20", hasInternalPage: true },
+  { id: "salesforce", name: "Salesforce", icon: "☁️", url: "https://salesforce.com", color: "bg-[var(--accent-gold)]/20", hasInternalPage: true },
 ];
 
 // Available apps to add (not in default list)

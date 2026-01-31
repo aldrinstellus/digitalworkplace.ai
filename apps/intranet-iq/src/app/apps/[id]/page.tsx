@@ -25,11 +25,13 @@ export default function AppDetailPage() {
 
   const appInfo: Record<string, { name: string; icon: string; color: string }> = {
     slack: { name: "Slack", icon: "💬", color: "bg-[#611f69]" },
+    email: { name: "Email", icon: "📧", color: "bg-[#EA4335]" },
     jira: { name: "Jira", icon: "🎯", color: "bg-[#0052CC]" },
     github: { name: "GitHub", icon: "🐙", color: "bg-[#24292f]" },
     drive: { name: "Google Drive", icon: "📁", color: "bg-white" },
     zoom: { name: "Zoom", icon: "🎥", color: "bg-[#2D8CFF]" },
     confluence: { name: "Confluence", icon: "📝", color: "bg-[#0052CC]" },
+    bookmarks: { name: "Bookmarks", icon: "🔖", color: "bg-[#8B5CF6]" },
     salesforce: { name: "Salesforce", icon: "☁️", color: "bg-[#00A1E0]" },
     figma: { name: "Figma", icon: "🎨", color: "bg-[#1e1e1e]" },
     notion: { name: "Notion", icon: "📓", color: "bg-white" },
@@ -57,11 +59,13 @@ export default function AppDetailPage() {
   const renderApp = () => {
     switch (appId) {
       case "slack": return <SlackApp />;
+      case "email": return <EmailApp />;
       case "jira": return <JiraApp />;
       case "github": return <GitHubApp />;
       case "drive": return <DriveApp />;
       case "zoom": return <ZoomApp />;
       case "confluence": return <ConfluenceApp />;
+      case "bookmarks": return <BookmarksApp />;
       case "salesforce": return <SalesforceApp />;
       case "figma": return <FigmaApp />;
       case "notion": return <NotionApp />;
@@ -1817,6 +1821,347 @@ function LinkedInApp() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// EMAIL - Gmail-style Email Client
+// ============================================================================
+function EmailApp() {
+  const [selectedEmail, setSelectedEmail] = useState<number | null>(1);
+  const [selectedFolder, setSelectedFolder] = useState("inbox");
+
+  const folders = [
+    { id: "inbox", name: "Inbox", icon: "📥", count: 12 },
+    { id: "starred", name: "Starred", icon: "⭐", count: 3 },
+    { id: "sent", name: "Sent", icon: "📤", count: 0 },
+    { id: "drafts", name: "Drafts", icon: "📝", count: 2 },
+    { id: "important", name: "Important", icon: "🏷️", count: 5 },
+    { id: "spam", name: "Spam", icon: "⚠️", count: 0 },
+    { id: "trash", name: "Trash", icon: "🗑️", count: 0 },
+  ];
+
+  const emails = [
+    { id: 1, from: "Sarah Chen", email: "sarah@company.com", subject: "Re: Q1 Budget Review - Final approval needed", preview: "Hi team, I've reviewed the budget proposal and have a few comments...", time: "2h ago", starred: true, important: true, unread: true },
+    { id: 2, from: "Mike Johnson", email: "mike@company.com", subject: "Sprint Planning Notes - Attached", preview: "Here are the notes from today's sprint planning session. Please review and add any items I might have missed.", time: "4h ago", starred: false, important: false, unread: true },
+    { id: 3, from: "HR Team", email: "hr@company.com", subject: "Benefits Enrollment Reminder - Action Required", preview: "This is a reminder that open enrollment closes on Friday. Please make sure to review and confirm your selections.", time: "Yesterday", starred: false, important: true, unread: false },
+    { id: 4, from: "Alex Kim", email: "alex@company.com", subject: "DevOps Weekly Update", preview: "Quick update on our CI/CD improvements this week. We've reduced build times by 40% and...", time: "Yesterday", starred: false, important: false, unread: false },
+    { id: 5, from: "Emily Rodriguez", email: "emily@company.com", subject: "Product Roadmap Q2 2026", preview: "Attached is the draft roadmap for Q2. Would love your feedback before we present to leadership.", time: "2 days ago", starred: true, important: true, unread: false },
+    { id: 6, from: "James Wilson", email: "james@company.com", subject: "Design Review Meeting", preview: "Reminder: We have our design review meeting tomorrow at 2 PM. Please bring your latest mockups.", time: "2 days ago", starred: false, important: false, unread: false },
+    { id: 7, from: "Lisa Park", email: "lisa@company.com", subject: "QA Test Results - All Passed", preview: "Great news! All regression tests have passed. We're ready for the release candidate.", time: "3 days ago", starred: false, important: false, unread: false },
+    { id: 8, from: "Tech Newsletter", email: "news@tech.com", subject: "This Week in AI: GPT-5 Rumors and More", preview: "Your weekly roundup of the latest in technology, AI, and software development...", time: "3 days ago", starred: false, important: false, unread: false },
+  ];
+
+  const selectedEmailData = emails.find(e => e.id === selectedEmail);
+
+  return (
+    <div className="h-full flex bg-[#f6f8fc]">
+      {/* Sidebar */}
+      <div className="w-64 bg-[#f6f8fc] p-4 flex flex-col">
+        <button className="flex items-center gap-3 px-6 py-3 bg-white hover:shadow-md rounded-2xl text-gray-700 font-medium mb-4 transition-shadow">
+          <Edit3 className="w-5 h-5" />
+          Compose
+        </button>
+        <nav className="space-y-1">
+          {folders.map((folder) => (
+            <button
+              key={folder.id}
+              onClick={() => setSelectedFolder(folder.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-r-full text-sm ${
+                selectedFolder === folder.id
+                  ? "bg-[#d3e3fd] text-[#001d35] font-medium"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              <span>{folder.icon}</span>
+              <span className="flex-1 text-left">{folder.name}</span>
+              {folder.count > 0 && (
+                <span className={`text-xs ${selectedFolder === folder.id ? "font-bold" : ""}`}>
+                  {folder.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </nav>
+        <div className="mt-auto pt-4 border-t">
+          <div className="text-xs text-gray-500">
+            <div className="flex justify-between mb-1">
+              <span>Storage used</span>
+              <span>5.2 GB of 15 GB</span>
+            </div>
+            <div className="h-1.5 bg-gray-200 rounded-full">
+              <div className="h-full w-1/3 bg-[#1a73e8] rounded-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Email List */}
+      <div className="w-96 bg-white border-x border-gray-200 flex flex-col">
+        <div className="p-3 border-b flex items-center gap-2">
+          <input
+            type="checkbox"
+            className="w-4 h-4 rounded"
+          />
+          <button className="p-2 hover:bg-gray-100 rounded-full">
+            <RefreshCw className="w-4 h-4 text-gray-500" />
+          </button>
+          <button className="p-2 hover:bg-gray-100 rounded-full">
+            <MoreVertical className="w-4 h-4 text-gray-500" />
+          </button>
+          <span className="ml-auto text-xs text-gray-500">1-50 of 128</span>
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          {emails.map((email) => (
+            <div
+              key={email.id}
+              onClick={() => setSelectedEmail(email.id)}
+              className={`flex items-start gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 ${
+                selectedEmail === email.id
+                  ? "bg-[#c2dbff]"
+                  : email.unread
+                  ? "bg-white hover:shadow-md"
+                  : "bg-[#f6f8fc] hover:bg-gray-100"
+              }`}
+            >
+              <input type="checkbox" className="w-4 h-4 mt-1 rounded" onClick={(e) => e.stopPropagation()} />
+              <button onClick={(e) => { e.stopPropagation(); }} className="mt-0.5">
+                <Star className={`w-4 h-4 ${email.starred ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
+              </button>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className={`text-sm truncate ${email.unread ? "font-bold text-gray-900" : "text-gray-700"}`}>
+                    {email.from}
+                  </span>
+                  {email.important && <span className="text-yellow-500 text-xs">🏷️</span>}
+                </div>
+                <p className={`text-sm truncate ${email.unread ? "font-semibold text-gray-900" : "text-gray-600"}`}>
+                  {email.subject}
+                </p>
+                <p className="text-xs text-gray-500 truncate">{email.preview}</p>
+              </div>
+              <span className="text-xs text-gray-500 whitespace-nowrap">{email.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Email Detail */}
+      <div className="flex-1 bg-white flex flex-col">
+        {selectedEmailData ? (
+          <>
+            <div className="p-4 border-b flex items-center gap-2">
+              <button className="p-2 hover:bg-gray-100 rounded-full"><ArrowLeft className="w-5 h-5 text-gray-500" /></button>
+              <button className="p-2 hover:bg-gray-100 rounded-full"><Trash2 className="w-5 h-5 text-gray-500" /></button>
+              <button className="p-2 hover:bg-gray-100 rounded-full"><FileText className="w-5 h-5 text-gray-500" /></button>
+              <button className="p-2 hover:bg-gray-100 rounded-full"><Clock className="w-5 h-5 text-gray-500" /></button>
+              <button className="p-2 hover:bg-gray-100 rounded-full"><MoreVertical className="w-5 h-5 text-gray-500" /></button>
+            </div>
+            <div className="flex-1 p-6 overflow-y-auto">
+              <h1 className="text-2xl text-gray-900 mb-4">{selectedEmailData.subject}</h1>
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold">
+                  {selectedEmailData.from[0]}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-gray-900">{selectedEmailData.from}</span>
+                    <span className="text-sm text-gray-500">&lt;{selectedEmailData.email}&gt;</span>
+                  </div>
+                  <div className="text-sm text-gray-500">to me</div>
+                </div>
+                <span className="text-sm text-gray-500">{selectedEmailData.time}</span>
+                <button className="p-2 hover:bg-gray-100 rounded-full">
+                  <Star className={`w-5 h-5 ${selectedEmailData.starred ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
+                </button>
+              </div>
+              <div className="prose max-w-none text-gray-700">
+                <p>Hi,</p>
+                <p className="mt-4">{selectedEmailData.preview}</p>
+                <p className="mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p className="mt-4">Please let me know if you have any questions or concerns.</p>
+                <p className="mt-4">Best regards,<br />{selectedEmailData.from}</p>
+              </div>
+            </div>
+            <div className="p-4 border-t flex gap-2">
+              <button className="flex items-center gap-2 px-4 py-2 border rounded-full text-gray-700 hover:bg-gray-100">
+                <ArrowLeft className="w-4 h-4" /> Reply
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 border rounded-full text-gray-700 hover:bg-gray-100">
+                <Share2 className="w-4 h-4" /> Forward
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-gray-400">
+            <div className="text-center">
+              <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p>Select an email to read</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// BOOKMARKS - Bookmark Manager App
+// ============================================================================
+function BookmarksApp() {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const categories = [
+    { id: "all", name: "All Bookmarks", icon: "📚", count: 24 },
+    { id: "work", name: "Work", icon: "💼", count: 12 },
+    { id: "dev", name: "Development", icon: "💻", count: 8 },
+    { id: "design", name: "Design", icon: "🎨", count: 6 },
+    { id: "learning", name: "Learning", icon: "📖", count: 5 },
+    { id: "tools", name: "Tools", icon: "🛠️", count: 7 },
+    { id: "news", name: "News", icon: "📰", count: 3 },
+  ];
+
+  const bookmarks = [
+    { id: 1, title: "React Documentation", url: "react.dev", category: "dev", favicon: "⚛️", description: "Official React documentation - learn React step by step", tags: ["react", "frontend", "docs"], createdAt: "2 days ago" },
+    { id: 2, title: "Tailwind CSS", url: "tailwindcss.com", category: "dev", favicon: "🎨", description: "Rapidly build modern websites without ever leaving your HTML", tags: ["css", "styling", "framework"], createdAt: "3 days ago" },
+    { id: 3, title: "Figma Community", url: "figma.com/community", category: "design", favicon: "🎨", description: "Browse and use thousands of free design files and plugins", tags: ["design", "ui", "templates"], createdAt: "1 week ago" },
+    { id: 4, title: "GitHub", url: "github.com", category: "dev", favicon: "🐙", description: "Where the world builds software", tags: ["code", "git", "collaboration"], createdAt: "1 week ago" },
+    { id: 5, title: "Vercel Dashboard", url: "vercel.com/dashboard", category: "work", favicon: "▲", description: "Deploy and manage your applications", tags: ["deploy", "hosting", "ci-cd"], createdAt: "2 weeks ago" },
+    { id: 6, title: "Supabase Docs", url: "supabase.com/docs", category: "dev", favicon: "⚡", description: "Supabase documentation and API reference", tags: ["database", "backend", "api"], createdAt: "2 weeks ago" },
+    { id: 7, title: "Dribbble", url: "dribbble.com", category: "design", favicon: "🏀", description: "Discover the world's top designers & creatives", tags: ["design", "inspiration", "portfolio"], createdAt: "3 weeks ago" },
+    { id: 8, title: "MDN Web Docs", url: "developer.mozilla.org", category: "learning", favicon: "🦊", description: "Resources for developers, by developers", tags: ["docs", "reference", "web"], createdAt: "1 month ago" },
+    { id: 9, title: "Company Wiki", url: "wiki.company.com", category: "work", favicon: "📖", description: "Internal company knowledge base and documentation", tags: ["internal", "docs", "wiki"], createdAt: "1 month ago" },
+    { id: 10, title: "Jira Board", url: "jira.atlassian.com/browse/PROJ", category: "work", favicon: "🎯", description: "Project management and issue tracking", tags: ["project", "tasks", "agile"], createdAt: "1 month ago" },
+    { id: 11, title: "Notion Templates", url: "notion.so/templates", category: "tools", favicon: "📓", description: "Get started with templates for every use case", tags: ["templates", "productivity", "notes"], createdAt: "1 month ago" },
+    { id: 12, title: "Tech News Daily", url: "technews.com", category: "news", favicon: "📰", description: "Latest technology news and updates", tags: ["news", "tech", "updates"], createdAt: "2 months ago" },
+  ];
+
+  const filteredBookmarks = bookmarks.filter(b => {
+    const matchesCategory = selectedCategory === "all" || b.category === selectedCategory;
+    const matchesSearch = !searchQuery ||
+      b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      b.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="h-full flex bg-[#0f0f12]">
+      {/* Sidebar */}
+      <div className="w-64 bg-[#16161a] border-r border-white/10 p-4 flex flex-col">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-violet-500/20 flex items-center justify-center">
+            <Bookmark className="w-5 h-5 text-violet-400" />
+          </div>
+          <div>
+            <h1 className="font-semibold text-white">Bookmarks</h1>
+            <p className="text-xs text-white/50">24 saved links</p>
+          </div>
+        </div>
+
+        <button className="flex items-center gap-2 px-4 py-2.5 bg-violet-500 hover:bg-violet-600 rounded-xl text-white font-medium mb-4 transition-colors">
+          <Plus className="w-4 h-4" />
+          Add Bookmark
+        </button>
+
+        <nav className="space-y-1 flex-1">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                selectedCategory === cat.id
+                  ? "bg-violet-500/20 text-violet-300"
+                  : "text-white/60 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <span>{cat.icon}</span>
+              <span className="flex-1 text-left">{cat.name}</span>
+              <span className="text-xs opacity-60">{cat.count}</span>
+            </button>
+          ))}
+        </nav>
+
+        <div className="pt-4 border-t border-white/10">
+          <button className="w-full flex items-center gap-2 px-3 py-2 text-white/50 hover:text-white/70 text-sm">
+            <Settings className="w-4 h-4" />
+            Settings
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="p-4 border-b border-white/10 flex items-center gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search bookmarks..."
+              className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-violet-500/50"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/60">
+              <Grid3X3 className="w-4 h-4" />
+            </button>
+            <button className="p-2 rounded-lg hover:bg-white/5 text-white/40">
+              <List className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Bookmarks Grid */}
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4">
+            {filteredBookmarks.map((bookmark) => (
+              <motion.a
+                key={bookmark.id}
+                href={`https://${bookmark.url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group p-4 rounded-xl bg-[#1a1a1f] border border-white/5 hover:border-violet-500/30 transition-all"
+                whileHover={{ y: -2, boxShadow: "0 8px 30px rgba(139, 92, 246, 0.15)" }}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-xl flex-shrink-0">
+                    {bookmark.favicon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-white truncate group-hover:text-violet-300 transition-colors">
+                      {bookmark.title}
+                    </h3>
+                    <p className="text-xs text-white/40 truncate">{bookmark.url}</p>
+                  </div>
+                  <button
+                    onClick={(e) => e.preventDefault()}
+                    className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-white/10 text-white/50 transition-all"
+                  >
+                    <MoreHorizontal className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="mt-3 text-sm text-white/50 line-clamp-2">{bookmark.description}</p>
+                <div className="mt-3 flex items-center gap-2 flex-wrap">
+                  {bookmark.tags.slice(0, 3).map((tag) => (
+                    <span key={tag} className="px-2 py-0.5 rounded-full bg-white/5 text-[10px] text-white/40">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[10px] text-white/30">
+                  <span>Added {bookmark.createdAt}</span>
+                  <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              </motion.a>
+            ))}
           </div>
         </div>
       </div>

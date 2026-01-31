@@ -42,6 +42,9 @@ import {
   Scale,
   MessageSquare,
   Building2,
+  Users,
+  Lock,
+  Globe,
 } from "lucide-react";
 // Types imported from mockData
 
@@ -1103,7 +1106,7 @@ function ContentPageInner() {
                             whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
                           >
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center gap-2 mb-3 flex-wrap">
                               <FileText className="w-6 h-6 text-[var(--accent-ember)]" />
                               {article.status === "published" ? (
                                 <span className="px-1.5 py-0.5 rounded text-[10px] bg-[var(--success)]/20 text-[var(--success)]">
@@ -1114,6 +1117,11 @@ function ContentPageInner() {
                                   Draft
                                 </span>
                               )}
+                              {/* Per-Document Access Control Badge */}
+                              <span className="px-1.5 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1">
+                                <Users className="w-2.5 h-2.5" />
+                                {article.id.charCodeAt(0) % 3 === 0 ? "Public" : article.id.charCodeAt(0) % 3 === 1 ? "Team Only" : "Restricted"}
+                              </span>
                             </div>
                             <h3 className="text-[var(--text-primary)] font-medium mb-1 line-clamp-2">
                               {article.title}
@@ -1164,6 +1172,25 @@ function ContentPageInner() {
                           Pending Review
                         </span>
                       )}
+                      {/* Per-Document Access Control */}
+                      <span className="px-2 py-0.5 rounded-full text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1.5">
+                        {selectedData.article.id.charCodeAt(0) % 3 === 0 ? (
+                          <>
+                            <Globe className="w-3 h-3" />
+                            Public Access
+                          </>
+                        ) : selectedData.article.id.charCodeAt(0) % 3 === 1 ? (
+                          <>
+                            <Users className="w-3 h-3" />
+                            Team Only
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-3 h-3" />
+                            Restricted
+                          </>
+                        )}
+                      </span>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
                       <span className="flex items-center gap-1">

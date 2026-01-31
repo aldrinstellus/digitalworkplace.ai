@@ -34,6 +34,13 @@ import {
   Lightbulb,
   ThumbsUp,
   Eye,
+  Mail,
+  MailOpen,
+  Brain,
+  Zap,
+  Star,
+  Reply,
+  Forward,
 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
 
@@ -1235,6 +1242,151 @@ export default function MyDayPage() {
                   <span className="text-[10px] text-white/30">
                     {tasks.filter(t => t.status !== 'done').length} pending
                   </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Email Summary & Focus Time Row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-6"
+          >
+            <div className="grid grid-cols-12 gap-4">
+              {/* Email Summary Widget */}
+              <div className="col-span-6 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                      <Mail className="w-4 h-4 text-blue-400" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-white/90">Email Summary</span>
+                      <span className="text-[10px] text-white/40 ml-2">12 unread</span>
+                    </div>
+                  </div>
+                  <button className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors">
+                    Open Inbox →
+                  </button>
+                </div>
+                <div className="p-3 space-y-2">
+                  {/* Priority Email */}
+                  <div className="flex items-start gap-3 p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/10">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                      SC
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-white/90 truncate">Sarah Chen</span>
+                        <Star className="w-3 h-3 text-amber-400 fill-amber-400 shrink-0" />
+                        <span className="text-[10px] text-white/30">2h ago</span>
+                      </div>
+                      <p className="text-[11px] text-white/60 truncate">Re: Q1 Budget Review - Final approval needed</p>
+                    </div>
+                    <div className="flex gap-1 shrink-0">
+                      <button className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white/70">
+                        <Reply className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                  {/* Regular Emails */}
+                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition-colors">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                      MJ
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-white/80 truncate">Mike Johnson</span>
+                        <span className="text-[10px] text-white/30">4h ago</span>
+                      </div>
+                      <p className="text-[11px] text-white/50 truncate">Sprint Planning Notes - Attached</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition-colors">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                      HR
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-white/80 truncate">HR Team</span>
+                        <span className="text-[10px] text-white/30">Yesterday</span>
+                      </div>
+                      <p className="text-[11px] text-white/50 truncate">Benefits Enrollment Reminder - Action Required</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between bg-[#080a0e]">
+                  <span className="text-[10px] text-white/40">
+                    <span className="text-blue-400 font-medium">3</span> priority · <span className="text-white/60">9</span> others
+                  </span>
+                  <button className="text-[10px] text-white/40 hover:text-white/60">Mark all read</button>
+                </div>
+              </div>
+
+              {/* Focus Time Recommendations */}
+              <div className="col-span-6 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                      <Brain className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-white/90">Focus Time</span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-purple-500/10 text-purple-400 rounded ml-2">AI</span>
+                    </div>
+                  </div>
+                  <button className="text-[10px] text-purple-400 hover:text-purple-300 transition-colors">
+                    Settings →
+                  </button>
+                </div>
+                <div className="p-3 space-y-3">
+                  {/* Best Focus Window */}
+                  <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-500/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-medium text-purple-300">Optimal Focus Window</span>
+                      <span className="text-[10px] text-white/40">Based on your patterns</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-amber-400" />
+                        <span className="text-lg font-semibold text-white">9:00 - 11:30 AM</span>
+                      </div>
+                      <button className="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-[10px] font-medium transition-colors">
+                        Block Calendar
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Focus Stats */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
+                      <div className="text-lg font-semibold text-emerald-400">4.2h</div>
+                      <div className="text-[10px] text-white/40">Focus Today</div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
+                      <div className="text-lg font-semibold text-white/90">87%</div>
+                      <div className="text-[10px] text-white/40">Productivity</div>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
+                      <div className="text-lg font-semibold text-amber-400">2</div>
+                      <div className="text-[10px] text-white/40">Distractions</div>
+                    </div>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] font-medium text-white/50 uppercase tracking-wide">Recommendations</span>
+                    <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] text-[11px] text-white/70">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>Complete &quot;Q1 Analytics Review&quot; during focus time</span>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] text-[11px] text-white/70">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span>Avoid meetings before 11 AM for deep work</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

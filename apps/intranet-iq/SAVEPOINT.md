@@ -20,9 +20,9 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 
 | Property | Value |
 |----------|-------|
-| **Last Updated** | February 2, 2026 @ 4:30 PM |
-| **Session** | Full Ecosystem Integration - 100% Complete & LIVE |
-| **Version** | 2.7.0 |
+| **Last Updated** | February 2, 2026 @ 11:55 PM |
+| **Session** | Auzmor Office Redesign - v2.7.2 |
+| **Version** | 2.7.2 |
 | **PRD Compliance** | **100%** (All 9 EPICs) |
 | **Integration Score** | **100/100** (All areas complete) |
 | **Apps Integrated** | **11** (dIQ + Slack, Jira, GitHub, Drive, Zoom, Confluence, Salesforce, Figma, Notion, LinkedIn) |
@@ -41,8 +41,42 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 | **GitHub Status** | ✅ Pushed to main |
 | **Local URL** | http://localhost:3001/diq/dashboard |
 | **Production URL** | https://intranet-iq.vercel.app/diq/dashboard |
-| **App Interfaces** | ✅ All 10 apps working (Slack, Jira, GitHub, Drive, Zoom, Confluence, Salesforce, Figma, Notion, LinkedIn) |
+| **App Interfaces** | ✅ All 11 apps working (Auzmor Office, Slack, Jira, GitHub, Drive, Zoom, Confluence, Salesforce, Figma, Notion, LinkedIn) |
 | **App Shortcuts Bar** | ✅ Proper SVG icons + internal routes (/diq/apps/[id]) |
+| **Auzmor Office** | ✅ Redesigned - Light theme matching original |
+
+---
+
+## AUZMOR OFFICE REDESIGN (v2.7.2)
+
+### Summary
+
+Complete redesign of the Auzmor Office app replica to match the original light theme design:
+
+| Change | Before | After |
+|--------|--------|-------|
+| Theme | Dark sidebar | Light theme |
+| Accent | Emerald | Teal (#0d9488) |
+| Layout | Slack-like | Original 3-column |
+| Right Widgets | Quick Links, Trending | Birthday, Anniversary, Channel Requests |
+
+### Features Implemented
+
+- ✅ Light theme header with Auzmor logo and navigation tabs
+- ✅ Trial banner ("Experience 12 days trial")
+- ✅ User card with teal gradient and location
+- ✅ App Launcher (expandable)
+- ✅ Channels list with Explore Channels
+- ✅ Teams section with illustration
+- ✅ Post composer with Media/Shoutout/Polls
+- ✅ Feed posts with Like/Comment
+- ✅ Birthday widget with illustration
+- ✅ Work Anniversaries widget with illustration
+- ✅ Channel Requests widget with Accept/Decline
+
+### File Changed
+
+- `src/app/apps/[id]/page.tsx` - AuzmorOfficeApp component (~450 lines)
 
 ---
 
@@ -613,6 +647,33 @@ apps/intranet-iq/
 
 ## SESSION HISTORY
 
+### February 2, 2026 @ 11:30 PM - Apps Bar Scroll Enhancement (v2.7.1)
+
+**Accomplishments:**
+1. **Apps Bar Mouse Wheel Scroll** - Added wheel event handler for scrolling with mouse wheel
+2. **Apps Bar Drag-to-Scroll** - Added click-hold-drag scrolling functionality
+3. **Click Protection** - Prevents accidental navigation when user was dragging
+4. **Cursor Feedback** - Shows grab/grabbing cursor states
+
+**Files Modified:**
+- `src/components/dashboard/AppShortcutsBar.tsx` - Added scroll handlers (+70 lines)
+- `CHANGELOG.md` - Added v2.7.1 entry
+- `SAVEPOINT.md` - Updated session history
+
+**Technical Implementation:**
+- `useRef` for container reference and hasMoved tracking
+- `useCallback` for memoized event handlers
+- Wheel events with `{ passive: false }` for preventDefault
+- 5px movement threshold for drag detection
+- Spring animation maintained for smooth scrolling
+
+**Verification:**
+- Mouse wheel scroll tested and working (scroll indicator shows position change)
+- Drag-to-scroll tested and working
+- Main page scroll unaffected (works independently)
+
+---
+
 ### January 31, 2026 @ 3:45 AM (Current Session) - 100% PRD COMPLIANCE
 **Accomplishments:**
 1. **Full Spectrum Test Report v3** - Achieved 100/100 score with all gaps fixed:
@@ -988,6 +1049,6 @@ open https://diq.digitalworkplace.ai/diq/dashboard
 *Part of Digital Workplace AI Product Suite*
 *Repository: https://github.com/aldrinstellus/intranet-iq*
 *Production: https://diq.digitalworkplace.ai/diq/dashboard*
-*Version: 2.5.3*
+*Version: 2.7.1*
 *PRD Compliance: 100%*
-*Last Updated: January 31, 2026 @ 1:45 AM*
+*Last Updated: February 2, 2026 @ 11:30 PM*

@@ -1,10 +1,11 @@
 # dIQ - Maintenance Guide
 
-**Version**: 2.7.0
+**Version**: 2.7.2
 **Last Updated**: 2026-02-02
 **Applies To**: Intranet IQ (dIQ) Application
 **Status**: ACTIVE
 **Integration**: Full Ecosystem (11 Apps Connected) - 100% Integration Score
+**Auzmor Office**: Redesigned (Light theme, matching original)
 
 ---
 

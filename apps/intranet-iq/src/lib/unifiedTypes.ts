@@ -20,7 +20,8 @@ export type DataSource =
   | 'salesforce'    // Salesforce opportunities
   | 'figma'         // Figma projects
   | 'notion'        // Notion pages
-  | 'linkedin';     // LinkedIn notifications
+  | 'linkedin'      // LinkedIn notifications
+  | 'auzmor-office'; // Auzmor Office social intranet
 
 export type ContentType =
   | 'article'           // dIQ knowledge base article
@@ -40,7 +41,8 @@ export type ContentType =
   | 'salesforce_opp'    // Salesforce opportunity
   | 'figma_project'     // Figma project
   | 'notion_page'       // Notion page
-  | 'linkedin_notif';   // LinkedIn notification
+  | 'linkedin_notif'    // LinkedIn notification
+  | 'auzmor_office_post'; // Auzmor Office post
 
 // =============================================================================
 // UNIFIED SEARCH ITEM
@@ -427,6 +429,12 @@ export interface AggregatedAppData {
     notifications: number;
     connections: number;
   };
+  'auzmor-office': {
+    posts: number;
+    channels: number;
+    users: number;
+    unreadCount: number;
+  };
 }
 
 // =============================================================================
@@ -473,6 +481,7 @@ export const SOURCE_DISPLAY: Record<DataSource, { name: string; icon: string; co
   figma: { name: 'Figma', icon: '🎨', color: '#F24E1E' },
   notion: { name: 'Notion', icon: '📓', color: '#000000' },
   linkedin: { name: 'LinkedIn', icon: '💼', color: '#0077B5' },
+  'auzmor-office': { name: 'Auzmor Office', icon: '🏢', color: '#10b981' },
 };
 
 export const CONTENT_TYPE_DISPLAY: Record<ContentType, { name: string; icon: string }> = {
@@ -494,4 +503,5 @@ export const CONTENT_TYPE_DISPLAY: Record<ContentType, { name: string; icon: str
   figma_project: { name: 'Figma Project', icon: '🎨' },
   notion_page: { name: 'Notion Page', icon: '📓' },
   linkedin_notif: { name: 'LinkedIn', icon: '💼' },
+  auzmor_office_post: { name: 'Auzmor Office Post', icon: '🏢' },
 };

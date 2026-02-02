@@ -620,6 +620,151 @@ export const mockNotionPages: NotionPage[] = [
   { id: "nt5", title: "Company Handbook", icon: "📖", workspace: "HR", lastEdited: "3 days ago", lastEditedBy: "Amanda Foster", type: "wiki", shared: true },
 ];
 
+// Auzmor Office Mock Data
+export interface AuzmorOfficePost {
+  id: string;
+  author: {
+    id: string;
+    name: string;
+    avatar: string;
+    department: string;
+    title: string;
+  };
+  content: string;
+  timestamp: string;
+  likes: number;
+  comments: number;
+  type: "update" | "announcement" | "celebration" | "poll" | "shoutout";
+  images: string[];
+  pinned?: boolean;
+  reactions?: { emoji: string; count: number }[];
+}
+
+export interface AuzmorOfficeUser {
+  id: string;
+  name: string;
+  avatar: string;
+  title: string;
+  department: string;
+  email: string;
+  status: "online" | "away" | "dnd" | "offline";
+  location: string;
+  timezone: string;
+}
+
+export interface AuzmorOfficeChannel {
+  id: string;
+  name: string;
+  description: string;
+  members: number;
+  unread: number;
+  isPrivate: boolean;
+  lastActivity: string;
+}
+
+export const mockAuzmorOfficePosts: AuzmorOfficePost[] = [
+  {
+    id: "aop1",
+    author: { id: "u1", name: "Sarah Chen", avatar: "SC", department: "Engineering", title: "VP of Engineering" },
+    content: "🎉 Thrilled to announce that our team just shipped the new real-time notification system! Huge thanks to Mike, Alex, and the entire engineering team for their incredible work. This is a major milestone for our platform!",
+    timestamp: "2026-01-30T10:30:00Z",
+    likes: 47,
+    comments: 12,
+    type: "update",
+    images: [],
+    reactions: [{ emoji: "🎉", count: 24 }, { emoji: "💪", count: 15 }, { emoji: "🚀", count: 8 }],
+  },
+  {
+    id: "aop2",
+    author: { id: "u8", name: "Amanda Foster", avatar: "AF", department: "People", title: "Chief People Officer" },
+    content: "📢 Reminder: Open enrollment for 2026 benefits closes this Friday! Don't miss out on the new mental health coverage and increased 401(k) match. Visit the Benefits Portal to make your selections.",
+    timestamp: "2026-01-30T08:15:00Z",
+    likes: 89,
+    comments: 23,
+    type: "announcement",
+    images: [],
+    pinned: true,
+    reactions: [{ emoji: "👍", count: 45 }, { emoji: "❤️", count: 22 }, { emoji: "🙏", count: 12 }],
+  },
+  {
+    id: "aop3",
+    author: { id: "u7", name: "David Brown", avatar: "DB", department: "Sales", title: "Account Executive" },
+    content: "Just closed our biggest enterprise deal of the quarter! 🎯 $2.4M ARR with Acme Corporation. Couldn't have done it without the amazing support from Lisa and James on the demos. Team effort! 💪",
+    timestamp: "2026-01-30T09:30:00Z",
+    likes: 156,
+    comments: 45,
+    type: "celebration",
+    images: [],
+    reactions: [{ emoji: "🎉", count: 67 }, { emoji: "💰", count: 42 }, { emoji: "🏆", count: 28 }],
+  },
+  {
+    id: "aop4",
+    author: { id: "u5", name: "James Wilson", avatar: "JW", department: "Design", title: "Senior Product Designer" },
+    content: "New dashboard designs are up in Figma! We've simplified the navigation from 8 to 5 main tabs based on user feedback. Would love everyone's input before we finalize.",
+    timestamp: "2026-01-29T16:45:00Z",
+    likes: 34,
+    comments: 18,
+    type: "update",
+    images: ["dashboard-preview.png"],
+    reactions: [{ emoji: "😍", count: 18 }, { emoji: "👀", count: 12 }],
+  },
+  {
+    id: "aop5",
+    author: { id: "u4", name: "Emily Rodriguez", avatar: "ER", department: "Product", title: "Product Manager" },
+    content: "🗓️ Sprint 14 Retrospective Summary:\n\n✅ What went well: Team collaboration, on-time delivery\n🔄 What to improve: Earlier QA involvement\n💡 Action items: Weekly design-dev syncs starting next sprint\n\nThanks everyone for a great sprint!",
+    timestamp: "2026-01-29T14:00:00Z",
+    likes: 28,
+    comments: 7,
+    type: "update",
+    images: [],
+    reactions: [{ emoji: "✅", count: 15 }, { emoji: "💡", count: 8 }],
+  },
+  {
+    id: "aop6",
+    author: { id: "u6", name: "Lisa Park", avatar: "LP", department: "Engineering", title: "QA Engineer" },
+    content: "🎊 Shoutout to @Mike Johnson for staying late to help debug the WebSocket connection issues! Your dedication is inspiring. Thank you! 🌟",
+    timestamp: "2026-01-29T18:30:00Z",
+    likes: 42,
+    comments: 8,
+    type: "shoutout",
+    images: [],
+    reactions: [{ emoji: "💜", count: 24 }, { emoji: "🙌", count: 14 }],
+  },
+  {
+    id: "aop7",
+    author: { id: "u3", name: "Alex Kim", avatar: "AK", department: "Engineering", title: "DevOps Lead" },
+    content: "Infrastructure update: We've successfully migrated to the new Kubernetes cluster. Performance metrics are looking great - 40% faster deployments and 50% reduction in resource costs! 📈",
+    timestamp: "2026-01-28T11:00:00Z",
+    likes: 67,
+    comments: 15,
+    type: "update",
+    images: [],
+    reactions: [{ emoji: "🔥", count: 32 }, { emoji: "💪", count: 22 }, { emoji: "📈", count: 13 }],
+  },
+];
+
+export const mockAuzmorOfficeUsers: AuzmorOfficeUser[] = [
+  { id: "u1", name: "Sarah Chen", avatar: "SC", title: "VP of Engineering", department: "Engineering", email: "sarah.chen@company.com", status: "online", location: "San Francisco, CA", timezone: "PST" },
+  { id: "u2", name: "Mike Johnson", avatar: "MJ", title: "Senior Backend Engineer", department: "Engineering", email: "mike.johnson@company.com", status: "online", location: "Austin, TX", timezone: "CST" },
+  { id: "u3", name: "Alex Kim", avatar: "AK", title: "DevOps Lead", department: "Engineering", email: "alex.kim@company.com", status: "dnd", location: "Seattle, WA", timezone: "PST" },
+  { id: "u4", name: "Emily Rodriguez", avatar: "ER", title: "Product Manager", department: "Product", email: "emily.rodriguez@company.com", status: "online", location: "New York, NY", timezone: "EST" },
+  { id: "u5", name: "James Wilson", avatar: "JW", title: "Senior Product Designer", department: "Design", email: "james.wilson@company.com", status: "away", location: "Los Angeles, CA", timezone: "PST" },
+  { id: "u6", name: "Lisa Park", avatar: "LP", title: "QA Engineer", department: "Engineering", email: "lisa.park@company.com", status: "online", location: "Chicago, IL", timezone: "CST" },
+  { id: "u7", name: "David Brown", avatar: "DB", title: "Account Executive", department: "Sales", email: "david.brown@company.com", status: "online", location: "Boston, MA", timezone: "EST" },
+  { id: "u8", name: "Amanda Foster", avatar: "AF", title: "Chief People Officer", department: "People", email: "amanda.foster@company.com", status: "offline", location: "Denver, CO", timezone: "MST" },
+];
+
+export const mockAuzmorOfficeChannels: AuzmorOfficeChannel[] = [
+  { id: "aoc1", name: "General", description: "Company-wide announcements and updates", members: 247, unread: 3, isPrivate: false, lastActivity: "10:45 AM" },
+  { id: "aoc2", name: "Engineering", description: "Engineering team discussions and updates", members: 63, unread: 12, isPrivate: false, lastActivity: "10:32 AM" },
+  { id: "aoc3", name: "Product", description: "Product updates and roadmap discussions", members: 28, unread: 5, isPrivate: false, lastActivity: "10:15 AM" },
+  { id: "aoc4", name: "Design", description: "Design team collaboration and reviews", members: 18, unread: 0, isPrivate: false, lastActivity: "9:45 AM" },
+  { id: "aoc5", name: "Sales", description: "Sales wins, updates, and strategies", members: 42, unread: 8, isPrivate: false, lastActivity: "9:30 AM" },
+  { id: "aoc6", name: "Random", description: "Off-topic conversations and fun", members: 189, unread: 24, isPrivate: false, lastActivity: "10:50 AM" },
+  { id: "aoc7", name: "Announcements", description: "Official company announcements", members: 247, unread: 1, isPrivate: false, lastActivity: "8:00 AM" },
+  { id: "aoc8", name: "Leadership", description: "Leadership team discussions", members: 12, unread: 2, isPrivate: true, lastActivity: "Yesterday" },
+];
+
 // LinkedIn Mock Data
 export interface LinkedInNotification {
   id: string;
@@ -651,6 +796,7 @@ export interface AppIntegration {
 }
 
 export const mockAppIntegrations: AppIntegration[] = [
+  { id: "auzmor-office", name: "Auzmor Office", icon: "🏢", color: "bg-emerald-500/20", status: "connected", lastSync: "Just now", unreadCount: 5, quickStats: [{ label: "Posts", value: 7 }, { label: "Channels", value: 8 }, { label: "Team", value: 8 }] },
   { id: "slack", name: "Slack", icon: "💬", color: "bg-[var(--accent-ember)]/20", status: "connected", lastSync: "Just now", unreadCount: 28, quickStats: [{ label: "Unread", value: 28 }, { label: "Channels", value: 12 }, { label: "DMs", value: 5 }] },
   { id: "jira", name: "Jira", icon: "🎯", color: "bg-amber-400/20", status: "connected", lastSync: "2 min ago", unreadCount: 5, quickStats: [{ label: "Assigned", value: 8 }, { label: "In Progress", value: 3 }, { label: "To Review", value: 2 }] },
   { id: "github", name: "GitHub", icon: "🐙", color: "bg-[var(--bg-slate)]", status: "connected", lastSync: "5 min ago", unreadCount: 3, quickStats: [{ label: "Open PRs", value: 4 }, { label: "Reviews", value: 2 }, { label: "Issues", value: 7 }] },

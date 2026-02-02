@@ -27,6 +27,9 @@ import {
   mockNotionPages,
   mockLinkedInNotifications,
   mockAppIntegrations,
+  mockAuzmorOfficePosts,
+  mockAuzmorOfficeUsers,
+  mockAuzmorOfficeChannels,
 } from './mockAppsData';
 
 import type {
@@ -104,6 +107,13 @@ import {
 } from './dataTransformers/linkedinTransformer';
 
 import {
+  transformAllAuzmorOfficePostsToSearchItems,
+  transformAllAuzmorOfficeUsersToSearchItems,
+  transformAllAuzmorOfficeChannelsToSearchItems,
+  transformAuzmorOfficePostToActivity,
+} from './dataTransformers/auzmorOfficeTransformer';
+
+import {
   transformAllNewsPostsToSearchItems,
   transformAllEventsToSearchItems,
   transformAllEventsToUnifiedEvents,
@@ -143,6 +153,11 @@ export function getAllSearchableItems(): UnifiedSearchItem[] {
   items.push(...transformAllFigmaProjectsToSearchItems(mockFigmaProjects));
   items.push(...transformAllNotionPagesToSearchItems(mockNotionPages));
   items.push(...transformAllLinkedInNotificationsToSearchItems(mockLinkedInNotifications));
+
+  // Auzmor Office
+  items.push(...transformAllAuzmorOfficePostsToSearchItems(mockAuzmorOfficePosts));
+  items.push(...transformAllAuzmorOfficeUsersToSearchItems(mockAuzmorOfficeUsers));
+  items.push(...transformAllAuzmorOfficeChannelsToSearchItems(mockAuzmorOfficeChannels));
 
   return items;
 }
@@ -268,6 +283,7 @@ export function getAllTasks(): UnifiedTaskList {
       figma: 0,
       notion: 0,
       linkedin: 0,
+      'auzmor-office': 0,
     },
     overdue: tasks.filter(t => t.dueDate && new Date(t.dueDate) < now && t.status !== 'done').length,
     dueToday: tasks.filter(t => {
@@ -324,6 +340,7 @@ export function getTasksForUser(userName: string): UnifiedTaskList {
         figma: 0,
         notion: 0,
         linkedin: 0,
+        'auzmor-office': 0,
       },
       overdue: userTasks.filter(t => t.dueDate && new Date(t.dueDate) < now && t.status !== 'done').length,
       dueToday: userTasks.filter(t => {
@@ -384,6 +401,7 @@ export function getAllEvents(): UnifiedEventList {
       figma: 0,
       notion: 0,
       linkedin: 0,
+      'auzmor-office': 0,
     },
   };
 
@@ -428,6 +446,7 @@ export function getEventsForUser(userName: string): UnifiedEventList {
         figma: 0,
         notion: 0,
         linkedin: 0,
+        'auzmor-office': 0,
       },
     },
   };
@@ -495,6 +514,11 @@ export function getAllActivity(limit: number = 50): UnifiedActivityFeed {
   // Figma projects
   for (const project of mockFigmaProjects.slice(0, 2)) {
     activities.push(transformFigmaProjectToActivity(project));
+  }
+
+  // Auzmor Office posts
+  for (const post of mockAuzmorOfficePosts.slice(0, 5)) {
+    activities.push(transformAuzmorOfficePostToActivity(post));
   }
 
   // Sort by date (most recent first)
@@ -579,6 +603,12 @@ export function getAggregatedAppData(): AggregatedAppData {
       messages: mockLinkedInNotifications.filter(n => n.type === 'message').length,
       notifications: mockLinkedInNotifications.filter(n => !n.read).length,
       connections: 847, // Mock value
+    },
+    'auzmor-office': {
+      posts: mockAuzmorOfficePosts.length,
+      channels: mockAuzmorOfficeChannels.length,
+      users: mockAuzmorOfficeUsers.length,
+      unreadCount: mockAuzmorOfficeChannels.reduce((sum, ch) => sum + ch.unread, 0),
     },
   };
 }

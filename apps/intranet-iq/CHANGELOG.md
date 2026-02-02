@@ -7,6 +7,112 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.7.2] - 2026-02-02
+
+### Auzmor Office Replica Redesign - Light Theme
+
+Complete redesign of the Auzmor Office app replica to match the original Auzmor Office feed design with light theme and teal accents.
+
+#### Design Changes
+
+| Before | After |
+|--------|-------|
+| Dark sidebar (`bg-[#0a1628]`) | Light theme (`bg-white`, `bg-[#f5f5f5]`) |
+| Emerald accents (`#10b981`) | Teal accents (`#0d9488`, `#10b981`) |
+| Slack-like layout | Original Auzmor Office layout |
+| Quick Links/Trending widgets | Birthday/Anniversary/Channel Requests widgets |
+
+#### New Layout Structure
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  [Auzmor Logo]  [Search Bar]  Feed People Apps Channels Admin 🔔 │
+├───────────────────────────────────────────────────────────────────┤
+│                    [Trial Banner - 12 days]                      │
+├──────────────┬───────────────────────────────┬───────────────────┤
+│ LEFT (293px) │     CENTER (flex-grow)        │  RIGHT (293px)    │
+├──────────────┼───────────────────────────────┼───────────────────┤
+│ [User Card]  │  "What's on your mind?"       │  Birthday 🎂      │
+│ Teal gradient│  [Media] [Shoutout] [Polls]   │  (illustration)   │
+│              │                               │                   │
+│ App Launcher │  [Post Feed]                  │  Work Anniv 🎉    │
+│ (expandable) │  - Lily Wright                │  (illustration)   │
+│              │  - Addison Green              │                   │
+│ Channels     │  - Logan Martinez             │  Channel Requests │
+│ • Core Data  │  - Sebastian Sanchez          │  (3 pending)      │
+│ • DEI Resou  │                               │  [Accept/Decline] │
+│              │  Like | Comment               │                   │
+│ Teams        │                               │                   │
+│ (illustration)                               │                   │
+└──────────────┴───────────────────────────────┴───────────────────┘
+```
+
+#### Features Implemented
+
+| Feature | Description |
+|---------|-------------|
+| **Light Theme Header** | Auzmor logo, search bar, navigation tabs (Feed/People/Apps/Channels/Admin) |
+| **Trial Banner** | "Experience 12 days trial" with Contact Sales button |
+| **User Card** | Teal gradient with avatar, name, location |
+| **App Launcher** | Expandable section with "Add Apps" placeholder |
+| **Channels** | Core Data Science, DEI Employee Resources with Explore Channels link |
+| **Teams** | Collapsible with team illustration SVG |
+| **Post Composer** | "What's on your mind?" with Media/Shoutout/Polls buttons |
+| **Feed Posts** | 4 posts with Like/Comment actions, timestamps, public globe icon |
+| **Birthday Widget** | Collapsible with cake illustration, empty state message |
+| **Work Anniversaries** | Collapsible with trophy illustration, empty state message |
+| **Channel Requests** | 3 pending requests with Accept/Decline buttons |
+
+#### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/app/apps/[id]/page.tsx` | Complete AuzmorOfficeApp redesign (~450 lines) |
+
+#### Color Palette Used
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| Primary | #10b981 | Action buttons, Accept buttons |
+| Primary Dark | #0d9488 | Logo, user card gradient |
+| Background | #f5f5f5 | Page background |
+| Cards | #ffffff | All cards, sidebars |
+| Text Primary | #171717 | Main text (neutral-900) |
+| Text Secondary | #737373 | Secondary text (neutral-500) |
+| Borders | #e5e5e5 | Card borders (neutral-200) |
+
+---
+
+## [2.7.1] - 2026-02-02
+
+### Apps Bar Scroll Enhancement
+
+Added mouse wheel scroll and drag-to-scroll functionality to the Apps Bar on the right side of the dashboard.
+
+#### Features Added
+
+| Feature | Description |
+|---------|-------------|
+| **Mouse Wheel Scroll** | Scroll up/down with mouse wheel while hovering over Apps Bar |
+| **Drag-to-Scroll** | Click and drag vertically to scroll through apps |
+| **Cursor Feedback** | Shows grab/grabbing cursor states during interaction |
+| **Click Protection** | Prevents accidental navigation when dragging |
+
+#### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/components/dashboard/AppShortcutsBar.tsx` | Added useRef, useCallback hooks; wheel event handler; drag handlers; container ref and mouse events |
+
+#### Technical Details
+
+- Wheel events captured with `{ passive: false }` to allow `preventDefault()`
+- Drag threshold of 5px to differentiate drag from click
+- Spring animation for smooth scroll transitions
+- `hasMovedRef` prevents click navigation after drag
+
+---
+
 ## [2.7.0] - 2026-02-02
 
 ### Full Ecosystem Integration - 100% Complete

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, FileText, Globe, MessageSquare, Target, GitBranch, Folder, Video, BookOpen, Cloud, Palette, StickyNote, Briefcase } from "lucide-react";
+import { ExternalLink, FileText, Globe, MessageSquare, Target, GitBranch, Folder, Video, BookOpen, Cloud, Palette, StickyNote, Briefcase, Building2 } from "lucide-react";
 import type { ChatSource } from "@/lib/database.types";
 import { SOURCE_DISPLAY, type DataSource } from "@/lib/unifiedTypes";
 
@@ -19,6 +19,7 @@ const APP_ICONS: Record<DataSource, { icon: React.ReactNode; color: string }> = 
   figma: { icon: <Palette className="w-3.5 h-3.5" />, color: '#F24E1E' },
   notion: { icon: <StickyNote className="w-3.5 h-3.5" />, color: '#000000' },
   linkedin: { icon: <Briefcase className="w-3.5 h-3.5" />, color: '#0077B5' },
+  'auzmor-office': { icon: <Building2 className="w-3.5 h-3.5" />, color: '#10b981' },
 };
 
 // Get app icon and info for a source type
@@ -58,6 +59,8 @@ function getAppInfo(type: string): { icon: React.ReactNode; color: string; label
       return { ...APP_ICONS.notion, label: 'Notion' };
     case 'linkedin_notif':
       return { ...APP_ICONS.linkedin, label: 'LinkedIn' };
+    case 'auzmor_office_post':
+      return { ...APP_ICONS['auzmor-office'], label: 'Auzmor Office' };
     case 'article':
     case 'news':
     case 'event':

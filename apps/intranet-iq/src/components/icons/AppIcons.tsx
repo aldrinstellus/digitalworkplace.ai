@@ -190,6 +190,30 @@ export const TrelloIcon: React.FC<AppIconProps> = ({ size = 24, className = '' }
   </svg>
 );
 
+// Auzmor Office Icon (based on OfficeLogo.svg)
+export const AuzmorOfficeIcon: React.FC<AppIconProps> = ({ size = 24, className = '' }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" className={className} fill="none">
+    <rect width="24" height="24" rx="4" fill="#0a1628"/>
+    <g transform="translate(4, 6) scale(0.13)">
+      <path d="M64 21H24L64 61V21Z" fill="#10B981"/>
+      <path d="M64 21V61L104 21H64Z" fill="#10B981"/>
+      <path d="M104 101V61H64L104 101Z" fill="#10B981"/>
+      <path d="M104 21L64 61H104V21Z" fill="#10B981"/>
+      <path d="M48 77L64 61L68 77H48Z" fill="#10B981"/>
+      <path d="M68 77H80L64 61L68 77Z" fill="#10B981"/>
+      <path d="M48 57L64 61L48 77V57Z" fill="#10B981"/>
+      <path d="M48 45L64 61L48 57V45Z" fill="#10B981"/>
+      <path opacity="0.6" d="M64 21H24L64 61V21Z" fill="white"/>
+      <path opacity="0.75" d="M64 21V61L104 21H64Z" fill="white"/>
+      <path opacity="0.3" d="M104 21L64 61H104V21Z" fill="white"/>
+      <path opacity="0.25" d="M48 77L64 61L68 77H48Z" fill="black"/>
+      <path opacity="0.4" d="M68 77H80L64 61L68 77Z" fill="black"/>
+      <path opacity="0.1" d="M48 57L64 61L48 77V57Z" fill="black"/>
+      <path opacity="0.4" d="M48 45L64 61L48 57V45Z" fill="black"/>
+    </g>
+  </svg>
+);
+
 // App icon map for easy lookup
 export const APP_ICONS: Record<string, React.FC<AppIconProps>> = {
   slack: SlackIcon,
@@ -209,6 +233,7 @@ export const APP_ICONS: Record<string, React.FC<AppIconProps>> = {
   dropbox: DropboxIcon,
   asana: AsanaIcon,
   trello: TrelloIcon,
+  'auzmor-office': AuzmorOfficeIcon,
 };
 
 // Helper component to render app icon by id

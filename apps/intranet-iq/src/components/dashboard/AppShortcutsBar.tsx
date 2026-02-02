@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, Plus, Settings, X, Trash2, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -17,6 +17,7 @@ interface AppShortcut {
 
 // Default app shortcuts - Uses internal /diq/apps/[id] routes with proper SVG icons
 const defaultApps: AppShortcut[] = [
+  { id: "auzmor-office", name: "Auzmor Office", url: "/diq/apps/auzmor-office", color: "bg-emerald-500/20" },
   { id: "drive", name: "Google Drive", url: "/diq/apps/drive", color: "bg-amber-500/20" },
   { id: "slack", name: "Slack", url: "/diq/apps/slack", color: "bg-[var(--accent-ember)]/20" },
   { id: "zoom", name: "Zoom", url: "/diq/apps/zoom", color: "bg-blue-500/20" },
@@ -54,6 +55,13 @@ export function AppShortcutsBar() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // Drag-to-scroll state
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startY, setStartY] = useState(0);
+  const [startScroll, setStartScroll] = useState(0);
+  const hasMovedRef = useRef(false);
+
   // Load apps from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -76,6 +84,78 @@ export function AppShortcutsBar() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(apps));
     }
   }, [apps, isLoaded]);
+
+  // Mouse wheel scroll handler
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const maxScroll = Math.max(0, apps.length - VISIBLE_APPS);
+
+    if (e.deltaY > 0) {
+      // Scroll down
+      setScrollPosition(prev => Math.min(maxScroll, prev + 1));
+    } else if (e.deltaY < 0) {
+      // Scroll up
+      setScrollPosition(prev => Math.max(0, prev - 1));
+    }
+  }, [apps.length]);
+
+  // Drag handlers for click-hold-drag scrolling
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartY(e.clientY);
+    setStartScroll(scrollPosition);
+    hasMovedRef.current = false;
+  }, [scrollPosition]);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+
+    const deltaY = startY - e.clientY;
+    const scrollDelta = Math.round(deltaY / 68); // 68px per item
+
+    if (Math.abs(deltaY) > 5) {
+      hasMovedRef.current = true;
+    }
+
+    const maxScroll = Math.max(0, apps.length - VISIBLE_APPS);
+    const newScroll = Math.min(maxScroll, Math.max(0, startScroll + scrollDelta));
+    setScrollPosition(newScroll);
+  }, [isDragging, startY, startScroll, apps.length]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    // Reset hasMoved after a short delay to allow click events
+    setTimeout(() => {
+      hasMovedRef.current = false;
+    }, 100);
+  }, []);
+
+  // Add/remove event listeners for drag and wheel
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Add wheel listener with passive: false to allow preventDefault
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
+  }, [handleWheel]);
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const canScrollUp = scrollPosition > 0;
   const canScrollDown = scrollPosition < apps.length - VISIBLE_APPS;
@@ -154,8 +234,13 @@ export function AppShortcutsBar() {
             <ChevronUp className="w-4 h-4" />
           </motion.button>
 
-          {/* Apps Container - Vertical Scroll */}
-          <div className="flex-1 overflow-hidden px-2">
+          {/* Apps Container - Vertical Scroll with Mouse Wheel & Drag Support */}
+          <div
+            ref={containerRef}
+            className="flex-1 overflow-hidden px-2 select-none"
+            onMouseDown={handleMouseDown}
+            style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          >
             <motion.div
               className="flex flex-col gap-1"
               animate={{ y: -scrollPosition * 68 }}
@@ -174,6 +259,12 @@ export function AppShortcutsBar() {
                   transition={{ delay: index * 0.05 }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    // Prevent navigation if we just finished dragging
+                    if (hasMovedRef.current) {
+                      e.preventDefault();
+                    }
+                  }}
                 >
                   <motion.div
                     className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center`}

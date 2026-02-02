@@ -24,6 +24,7 @@ export default function AppDetailPage() {
   const appId = params.id as string;
 
   const appInfo: Record<string, { name: string; icon: string; color: string }> = {
+    "auzmor-office": { name: "Auzmor Office", icon: "🏢", color: "bg-white" },
     slack: { name: "Slack", icon: "💬", color: "bg-[#611f69]" },
     email: { name: "Email", icon: "📧", color: "bg-[#EA4335]" },
     jira: { name: "Jira", icon: "🎯", color: "bg-[#0052CC]" },
@@ -58,6 +59,7 @@ export default function AppDetailPage() {
 
   const renderApp = () => {
     switch (appId) {
+      case "auzmor-office": return <AuzmorOfficeApp />;
       case "slack": return <SlackApp />;
       case "email": return <EmailApp />;
       case "jira": return <JiraApp />;
@@ -91,6 +93,464 @@ export default function AppDetailPage() {
       </main>
       {/* App Shortcuts Bar */}
       <AppShortcutsBar />
+    </div>
+  );
+}
+
+// ============================================================================
+// AUZMOR OFFICE - Social Intranet Replica (Light Theme - Matching Original)
+// ============================================================================
+function AuzmorOfficeApp() {
+  const [activeNavTab, setActiveNavTab] = useState<"feed" | "people" | "apps" | "channels" | "admin">("feed");
+  const [appLauncherOpen, setAppLauncherOpen] = useState(true);
+  const [channelsOpen, setChannelsOpen] = useState(true);
+  const [teamsOpen, setTeamsOpen] = useState(true);
+  const [birthdayOpen, setBirthdayOpen] = useState(true);
+  const [anniversaryOpen, setAnniversaryOpen] = useState(true);
+  const [channelRequestsOpen, setChannelRequestsOpen] = useState(true);
+
+  // Mock data - Posts for feed (matching original Auzmor Office)
+  const posts = [
+    {
+      id: "p1",
+      author: { name: "Lily Wright", avatar: "/avatars/lily.jpg", initials: "LW" },
+      content: "",
+      timestamp: "16 days ago",
+      likes: 0,
+      comments: 0,
+      isPublic: true,
+    },
+    {
+      id: "p2",
+      author: { name: "Addison Green", avatar: "/avatars/addison.jpg", initials: "AG" },
+      content: "",
+      timestamp: "16 days ago",
+      likes: 0,
+      comments: 0,
+      isPublic: true,
+    },
+    {
+      id: "p3",
+      author: { name: "Logan Martinez", avatar: "/avatars/logan.jpg", initials: "LM" },
+      content: "",
+      timestamp: "16 days ago",
+      likes: 0,
+      comments: 0,
+      isPublic: true,
+    },
+    {
+      id: "p4",
+      author: { name: "Sebastian Sanchez", avatar: "/avatars/sebastian.jpg", initials: "SS" },
+      content: "",
+      timestamp: "16 days ago",
+      likes: 0,
+      comments: 1,
+      isPublic: true,
+    },
+  ];
+
+  // Mock data - Channels (matching original)
+  const channels = [
+    { id: "core-data", name: "Core Data Science", members: 12 },
+    { id: "dei", name: "DEI Employee Resou...", members: 45 },
+  ];
+
+  // Mock data - Channel requests
+  const channelRequests = [
+    { id: "1", user: { name: "Sofia Rodriguez", avatar: "/avatars/sofia.jpg", initials: "SR" }, channel: "Core Data Scie..." },
+    { id: "2", user: { name: "Elena Ivanova", avatar: "/avatars/elena.jpg", initials: "EI" }, channel: "DEI Employee ..." },
+    { id: "3", user: { name: "Hiroshi Yamamoto", avatar: "/avatars/hiroshi.jpg", initials: "HY" }, channel: "Data Innovatio..." },
+  ];
+
+  return (
+    <div className="h-full flex flex-col bg-[#f5f5f5]">
+      {/* Top Header - Full Width */}
+      <div className="h-14 bg-white border-b border-neutral-200 px-4 flex items-center justify-between shrink-0">
+        {/* Left: Logo */}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[#0d9488] flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 3L3 9V21H9V14H15V21H21V9L12 3Z" fill="white"/>
+              </svg>
+            </div>
+            <div className="flex items-baseline">
+              <span className="text-[#0d9488] font-bold text-lg">auzmor</span>
+              <span className="text-neutral-600 font-normal text-lg ml-1">Office</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Search */}
+        <div className="flex-1 max-w-xl mx-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+            <input
+              type="text"
+              placeholder="Search trainings, people, teams, channels, documents, apps"
+              className="w-full pl-10 pr-4 py-2 bg-neutral-100 border border-neutral-200 rounded-full text-sm text-neutral-600 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#10b981]/50"
+            />
+          </div>
+        </div>
+
+        {/* Right: Navigation */}
+        <div className="flex items-center gap-1">
+          {[
+            { id: "feed", label: "Feed", icon: Home },
+            { id: "people", label: "People", icon: Users },
+            { id: "apps", label: "Apps", icon: Grid3X3 },
+            { id: "channels", label: "Channels", icon: Hash },
+            { id: "admin", label: "Admin", icon: Settings },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveNavTab(item.id as typeof activeNavTab)}
+              className={`flex flex-col items-center px-4 py-1.5 rounded-lg transition-colors ${
+                activeNavTab === item.id
+                  ? "text-[#0d9488]"
+                  : "text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100"
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="text-xs mt-0.5">{item.label}</span>
+            </button>
+          ))}
+          <div className="w-px h-8 bg-neutral-200 mx-2" />
+          <button className="relative p-2 hover:bg-neutral-100 rounded-lg">
+            <Bell className="w-5 h-5 text-neutral-500" />
+          </button>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0d9488] to-[#10b981] flex items-center justify-center text-white text-sm font-medium ml-2">
+            TA
+          </div>
+        </div>
+      </div>
+
+      {/* Trial Banner */}
+      <div className="h-10 bg-neutral-800 flex items-center justify-center gap-2 text-sm shrink-0">
+        <span className="text-neutral-300">Experience</span>
+        <span className="text-[#10b981] font-medium">12 days trial</span>
+        <span className="text-neutral-300">of Auzmor Office</span>
+        <button className="ml-2 px-3 py-1 bg-[#0d9488] text-white text-sm rounded hover:bg-[#0f766e] transition-colors">
+          Contact Sales
+        </button>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Sidebar (293px) */}
+        <div className="w-[293px] bg-white border-r border-neutral-200 flex flex-col shrink-0 overflow-y-auto">
+          {/* User Card */}
+          <div className="p-4">
+            <div className="bg-gradient-to-br from-[#0d9488] to-[#10b981] rounded-xl p-4 text-center">
+              <div className="w-20 h-20 mx-auto rounded-full bg-white/20 border-4 border-white/30 flex items-center justify-center text-white text-2xl font-medium mb-2">
+                TA
+              </div>
+              <h3 className="text-white font-semibold text-lg">Test Admin</h3>
+              <p className="text-white/80 text-sm flex items-center justify-center gap-1 mt-1">
+                <MapPin className="w-3 h-3" />
+                San Francisco, CA
+              </p>
+            </div>
+          </div>
+
+          {/* App Launcher */}
+          <div className="px-4 py-2">
+            <button
+              onClick={() => setAppLauncherOpen(!appLauncherOpen)}
+              className="w-full flex items-center justify-between py-2 text-neutral-900 font-semibold"
+            >
+              <span>App Launcher</span>
+              {appLauncherOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
+            {appLauncherOpen && (
+              <div className="py-3 text-center border border-neutral-200 rounded-lg mt-2">
+                <p className="text-neutral-500 text-sm">There are no apps in your organization.</p>
+                <button className="mt-2 px-4 py-1.5 border border-neutral-300 rounded-lg text-sm text-neutral-600 hover:bg-neutral-50 flex items-center gap-1 mx-auto">
+                  <Plus className="w-4 h-4" />
+                  Add Apps
+                </button>
+                <p className="text-neutral-400 text-xs mt-2">Only admins can see this.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Channels */}
+          <div className="px-4 py-2">
+            <button
+              onClick={() => setChannelsOpen(!channelsOpen)}
+              className="w-full flex items-center justify-between py-2 text-neutral-900 font-semibold"
+            >
+              <span>Channels</span>
+              {channelsOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
+            {channelsOpen && (
+              <div className="space-y-1 mt-2">
+                {channels.map((ch) => (
+                  <button
+                    key={ch.id}
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-100 rounded-lg"
+                  >
+                    <span className="truncate">{ch.name}</span>
+                    <Plus className="w-4 h-4 text-neutral-400" />
+                  </button>
+                ))}
+                <button className="w-full py-2 text-sm text-[#0d9488] font-medium hover:bg-neutral-100 rounded-lg">
+                  Explore Channels
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Teams */}
+          <div className="px-4 py-2 flex-1">
+            <button
+              onClick={() => setTeamsOpen(!teamsOpen)}
+              className="w-full flex items-center justify-between py-2 text-neutral-900 font-semibold"
+            >
+              <span>Teams</span>
+              {teamsOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+            </button>
+            {teamsOpen && (
+              <div className="mt-4 flex flex-col items-center py-4">
+                {/* Team illustration - two people working */}
+                <svg width="120" height="100" viewBox="0 0 120 100" fill="none" className="mb-2">
+                  {/* Person 1 at desk */}
+                  <ellipse cx="35" cy="85" rx="25" ry="8" fill="#e5e5e5"/>
+                  <rect x="20" y="55" width="30" height="25" rx="2" fill="#d4d4d4"/>
+                  <rect x="25" y="58" width="20" height="12" rx="1" fill="#a3a3a3"/>
+                  <circle cx="35" cy="45" r="8" fill="#fed7aa"/>
+                  <path d="M28 43 C28 38, 42 38, 42 43" fill="#78350f"/>
+                  <rect x="30" y="52" width="10" height="12" rx="2" fill="#0d9488"/>
+
+                  {/* Person 2 standing */}
+                  <ellipse cx="85" cy="88" rx="15" ry="5" fill="#e5e5e5"/>
+                  <circle cx="85" cy="40" r="10" fill="#fcd34d"/>
+                  <path d="M76 37 C76 30, 94 30, 94 37" fill="#92400e"/>
+                  <rect x="78" y="50" width="14" height="20" rx="2" fill="#6366f1"/>
+                  <rect x="78" y="70" width="6" height="15" rx="1" fill="#4f46e5"/>
+                  <rect x="86" y="70" width="6" height="15" rx="1" fill="#4f46e5"/>
+
+                  {/* Plant */}
+                  <rect x="95" y="70" width="8" height="12" rx="1" fill="#a3a3a3"/>
+                  <ellipse cx="99" cy="65" rx="6" ry="8" fill="#10b981"/>
+                </svg>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Center Content */}
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <div className="max-w-2xl mx-auto">
+            {/* Create Post */}
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0d9488] to-[#10b981] flex items-center justify-center text-white font-medium shrink-0">
+                  TA
+                </div>
+                <input
+                  type="text"
+                  placeholder="What's on your mind?"
+                  className="flex-1 h-10 px-4 bg-neutral-100 border border-neutral-200 rounded-full text-sm text-neutral-600 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#10b981]/50"
+                />
+              </div>
+              <div className="flex items-center gap-4 mt-4 pt-4 border-t border-neutral-200">
+                <button className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-100 rounded-lg flex-1 justify-center">
+                  <ImageIcon className="w-4 h-4" />
+                  Media
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-100 rounded-lg flex-1 justify-center">
+                  <Award className="w-4 h-4" />
+                  Shoutout
+                </button>
+                <button className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 hover:bg-neutral-100 rounded-lg flex-1 justify-center">
+                  <TrendingUp className="w-4 h-4" />
+                  Polls
+                </button>
+              </div>
+            </div>
+
+            {/* Feed Actions */}
+            <div className="flex items-center gap-3 mb-4">
+              <button className="p-2 hover:bg-white rounded-lg border border-transparent hover:border-neutral-200">
+                <RefreshCw className="w-4 h-4 text-neutral-500" />
+              </button>
+              <button className="p-2 hover:bg-white rounded-lg border border-transparent hover:border-neutral-200">
+                <Bookmark className="w-4 h-4 text-neutral-500" />
+              </button>
+              <div className="flex-1" />
+              <button className="p-2 hover:bg-white rounded-lg border border-transparent hover:border-neutral-200">
+                <Filter className="w-4 h-4 text-neutral-500" />
+              </button>
+            </div>
+
+            {/* Posts Feed */}
+            <div className="space-y-4">
+              {posts.map((post) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden"
+                >
+                  <div className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center text-white font-medium shrink-0">
+                        {post.author.initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-neutral-900">{post.author.name}</span>
+                          <span className="text-neutral-500 text-sm">shared a post</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-neutral-500 mt-0.5">
+                          <span>{post.timestamp}</span>
+                          <span>•</span>
+                          <Globe className="w-3 h-3" />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button className="p-1.5 hover:bg-neutral-100 rounded">
+                          <Bookmark className="w-4 h-4 text-neutral-400" />
+                        </button>
+                        <button className="p-1.5 hover:bg-neutral-100 rounded">
+                          <MoreHorizontal className="w-4 h-4 text-neutral-400" />
+                        </button>
+                      </div>
+                    </div>
+                    {/* Post content placeholder */}
+                    <div className="mt-4 h-32 bg-neutral-100 rounded-lg" />
+                  </div>
+                  <div className="px-4 py-3 border-t border-neutral-100 flex items-center gap-4">
+                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981]">
+                      <ThumbsUp className="w-4 h-4" />
+                      Like
+                    </button>
+                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981]">
+                      <MessageCircle className="w-4 h-4" />
+                      Comment
+                      {post.comments > 0 && <span className="text-neutral-500">({post.comments} comment{post.comments !== 1 ? 's' : ''})</span>}
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar (293px) */}
+        <div className="w-[293px] bg-white border-l border-neutral-200 p-4 shrink-0 overflow-y-auto">
+          {/* Birthday Widget */}
+          <div className="mb-4">
+            <button
+              onClick={() => setBirthdayOpen(!birthdayOpen)}
+              className="w-full flex items-center justify-between py-2"
+            >
+              <span className="font-semibold text-neutral-900">Birthday 🎂</span>
+              {birthdayOpen ? <ChevronDown className="w-4 h-4 text-neutral-400" /> : <ChevronRight className="w-4 h-4 text-neutral-400" />}
+            </button>
+            {birthdayOpen && (
+              <div className="flex flex-col items-center py-6 border border-neutral-200 rounded-xl mt-2">
+                {/* Birthday illustration */}
+                <svg width="100" height="80" viewBox="0 0 100 80" fill="none" className="mb-3">
+                  {/* Cake */}
+                  <rect x="30" y="45" width="40" height="25" rx="4" fill="#fcd34d"/>
+                  <rect x="25" y="65" width="50" height="10" rx="2" fill="#f59e0b"/>
+                  {/* Candle */}
+                  <rect x="48" y="30" width="4" height="15" fill="#60a5fa"/>
+                  <ellipse cx="50" cy="28" rx="4" ry="6" fill="#fbbf24"/>
+                  {/* Decorations */}
+                  <circle cx="35" cy="52" r="3" fill="#ec4899"/>
+                  <circle cx="50" cy="55" r="3" fill="#8b5cf6"/>
+                  <circle cx="65" cy="52" r="3" fill="#10b981"/>
+                  {/* Confetti */}
+                  <rect x="20" y="20" width="3" height="6" rx="1" fill="#ec4899" transform="rotate(15 20 20)"/>
+                  <rect x="75" y="15" width="3" height="6" rx="1" fill="#10b981" transform="rotate(-20 75 15)"/>
+                  <rect x="80" y="35" width="3" height="6" rx="1" fill="#fbbf24" transform="rotate(10 80 35)"/>
+                  <rect x="15" y="40" width="3" height="6" rx="1" fill="#60a5fa" transform="rotate(-15 15 40)"/>
+                </svg>
+                <p className="text-neutral-500 text-sm text-center">
+                  Upcoming birthdays will show here.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Work Anniversaries Widget */}
+          <div className="mb-4">
+            <button
+              onClick={() => setAnniversaryOpen(!anniversaryOpen)}
+              className="w-full flex items-center justify-between py-2"
+            >
+              <span className="font-semibold text-neutral-900">Work Anniversaries 🎉</span>
+              {anniversaryOpen ? <ChevronDown className="w-4 h-4 text-neutral-400" /> : <ChevronRight className="w-4 h-4 text-neutral-400" />}
+            </button>
+            {anniversaryOpen && (
+              <div className="flex flex-col items-center py-6 border border-neutral-200 rounded-xl mt-2">
+                {/* Anniversary illustration */}
+                <svg width="100" height="80" viewBox="0 0 100 80" fill="none" className="mb-3">
+                  {/* Trophy */}
+                  <path d="M35 25 L35 45 L45 55 L55 55 L65 45 L65 25 Z" fill="#fbbf24"/>
+                  <rect x="43" y="55" width="14" height="8" fill="#d97706"/>
+                  <rect x="38" y="63" width="24" height="6" rx="1" fill="#92400e"/>
+                  {/* Handles */}
+                  <path d="M35 28 C25 28, 25 42, 35 42" stroke="#fbbf24" strokeWidth="4" fill="none"/>
+                  <path d="M65 28 C75 28, 75 42, 65 42" stroke="#fbbf24" strokeWidth="4" fill="none"/>
+                  {/* Star */}
+                  <path d="M50 30 L52 36 L58 36 L53 40 L55 46 L50 42 L45 46 L47 40 L42 36 L48 36 Z" fill="#ffffff"/>
+                  {/* Confetti */}
+                  <circle cx="25" cy="20" r="3" fill="#ec4899"/>
+                  <circle cx="75" cy="25" r="3" fill="#10b981"/>
+                  <rect x="80" cy="45" width="4" height="4" fill="#60a5fa" transform="rotate(45 80 45)"/>
+                  <rect x="15" cy="35" width="4" height="4" fill="#8b5cf6" transform="rotate(45 15 35)"/>
+                </svg>
+                <p className="text-neutral-500 text-sm text-center">
+                  Upcoming work anniversaries will show here.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Channel Requests Widget */}
+          <div>
+            <button
+              onClick={() => setChannelRequestsOpen(!channelRequestsOpen)}
+              className="w-full flex items-center justify-between py-2"
+            >
+              <span className="font-semibold text-neutral-900">Channel requests ( 3 )</span>
+              {channelRequestsOpen ? <ChevronDown className="w-4 h-4 text-neutral-400" /> : <ChevronRight className="w-4 h-4 text-neutral-400" />}
+            </button>
+            {channelRequestsOpen && (
+              <div className="space-y-3 mt-2">
+                {channelRequests.map((request) => (
+                  <div key={request.id} className="p-3 bg-neutral-50 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center text-white text-xs font-medium shrink-0">
+                        {request.user.initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-neutral-700">
+                          <span className="font-medium">{request.user.name}</span>
+                          <span className="text-neutral-500"> requested to join </span>
+                          <span className="text-[#0d9488] font-medium">{request.channel}</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-3 justify-end">
+                      <button className="px-4 py-1.5 text-sm border border-neutral-300 rounded-lg text-neutral-600 hover:bg-neutral-100">
+                        Decline
+                      </button>
+                      <button className="px-4 py-1.5 text-sm bg-[#10b981] text-white rounded-lg hover:bg-[#059669]">
+                        Accept
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

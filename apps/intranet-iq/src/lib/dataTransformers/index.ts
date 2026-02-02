@@ -16,3 +16,4 @@ export * from './figmaTransformer';
 export * from './notionTransformer';
 export * from './linkedinTransformer';
 export * from './diqTransformer';
+export * from './auzmorOfficeTransformer';

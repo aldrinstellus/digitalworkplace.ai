@@ -1,4 +1,4 @@
-# Master Demo Guide - Support IQ (dSQ)
+# DSQ Demo Guide - Support IQ (dSQ)
 
 **Version**: 1.0.0
 **Last Updated**: January 26, 2026

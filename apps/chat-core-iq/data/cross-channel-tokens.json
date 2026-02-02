@@ -142,28 +142,28 @@
   "EYJJIJ": {
     "token": "EYJJIJ",
     "sourceChannel": "ivr",
-    "sourceUserId": "+1-demo-1769461063974",
-    "sessionId": "ivr_1769461090162",
+    "sourceUserId": "+1-demo-1769505339605",
+    "sessionId": "ivr_1769505364723",
     "language": "en",
-    "createdAt": "2026-01-26T20:58:10.162Z",
-    "expiresAt": "2026-01-26T21:28:10.156Z",
+    "createdAt": "2026-01-27T09:16:04.723Z",
+    "expiresAt": "2026-01-27T09:46:04.714Z",
     "used": false,
-    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2OTQ2Mjg5MDE1NiwidiI6MX0",
+    "fullData": "eyJjIjoiaXZyIiwibCI6ImVuIiwiZSI6MTc2OTUwNzE2NDcxNCwidiI6MX0",
     "messages": [
       {
         "role": "assistant",
         "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
-        "timestamp": "2026-01-26T20:58:10.163Z"
+        "timestamp": "2026-01-27T09:16:04.724Z"
       },
       {
         "role": "user",
         "content": "Pressed: 1",
-        "timestamp": "2026-01-26T20:58:10.163Z"
+        "timestamp": "2026-01-27T09:16:04.724Z"
       },
       {
         "role": "assistant",
         "content": "You can ask me questions about our services, policies, and more. Press 1 at any time to speak with a representative. Press 2 to get a code to continue this conversation on our website. How can I help you today?",
-        "timestamp": "2026-01-26T20:58:10.163Z"
+        "timestamp": "2026-01-27T09:16:04.724Z"
       }
     ]
   }

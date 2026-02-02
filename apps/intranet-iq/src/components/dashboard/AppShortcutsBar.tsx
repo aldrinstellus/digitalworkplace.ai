@@ -5,44 +5,47 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, Plus, Settings, X, Trash2, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
+import { AppIcon } from "@/components/icons/AppIcons";
 
 interface AppShortcut {
   id: string;
   name: string;
-  icon: string;
+  icon?: string; // Optional emoji fallback for custom apps
   url: string;
   color: string;
   hasInternalPage?: boolean;
 }
 
 // Default app shortcuts - Updated with Ember-themed colors and internal pages
+// Icons are now rendered via AppIcon component based on id
 const defaultApps: AppShortcut[] = [
-  { id: "slack", name: "Slack", icon: "💬", url: "https://slack.com", color: "bg-[var(--accent-ember)]/20", hasInternalPage: true },
-  { id: "email", name: "Email", icon: "📧", url: "https://mail.google.com", color: "bg-blue-500/20", hasInternalPage: true },
-  { id: "jira", name: "Jira", icon: "🎯", url: "https://jira.atlassian.com", color: "bg-amber-400/20", hasInternalPage: true },
-  { id: "github", name: "GitHub", icon: "🐙", url: "https://github.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "drive", name: "Google Drive", icon: "📁", url: "https://drive.google.com", color: "bg-amber-500/20", hasInternalPage: true },
-  { id: "zoom", name: "Zoom", icon: "🎥", url: "https://zoom.us", color: "bg-orange-500/20", hasInternalPage: true },
-  { id: "confluence", name: "Confluence", icon: "📝", url: "https://confluence.atlassian.com", color: "bg-orange-600/20", hasInternalPage: true },
-  { id: "bookmarks", name: "Bookmarks", icon: "🔖", url: "#", color: "bg-violet-500/20", hasInternalPage: true },
-  { id: "figma", name: "Figma", icon: "🎨", url: "https://figma.com", color: "bg-[var(--accent-copper)]/20", hasInternalPage: true },
-  { id: "notion", name: "Notion", icon: "📓", url: "https://notion.so", color: "bg-[var(--border-default)]", hasInternalPage: true },
-  { id: "linkedin", name: "LinkedIn", icon: "💼", url: "https://linkedin.com", color: "bg-orange-700/20", hasInternalPage: true },
-  { id: "salesforce", name: "Salesforce", icon: "☁️", url: "https://salesforce.com", color: "bg-[var(--accent-gold)]/20", hasInternalPage: true },
+  { id: "slack", name: "Slack", url: "https://slack.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "email", name: "Email", url: "https://mail.google.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "jira", name: "Jira", url: "https://jira.atlassian.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "github", name: "GitHub", url: "https://github.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "drive", name: "Google Drive", url: "https://drive.google.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "zoom", name: "Zoom", url: "https://zoom.us", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "confluence", name: "Confluence", url: "https://confluence.atlassian.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "bookmarks", name: "Bookmarks", url: "#", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "figma", name: "Figma", url: "https://figma.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "notion", name: "Notion", url: "https://notion.so", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "linkedin", name: "LinkedIn", url: "https://linkedin.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "salesforce", name: "Salesforce", url: "https://salesforce.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
 ];
 
 // Available apps to add (not in default list)
+// Note: Apps without official SVG icons will use AppIcon fallback (first letter)
 const availableAppsToAdd: AppShortcut[] = [
-  { id: "teams", name: "Microsoft Teams", icon: "👥", url: "https://teams.microsoft.com", color: "bg-orange-500/20" },
-  { id: "outlook", name: "Outlook", icon: "📧", url: "https://outlook.com", color: "bg-amber-500/20" },
-  { id: "dropbox", name: "Dropbox", icon: "📦", url: "https://dropbox.com", color: "bg-[var(--accent-ember)]/20" },
-  { id: "asana", name: "Asana", icon: "✅", url: "https://asana.com", color: "bg-[var(--accent-copper)]/20" },
-  { id: "trello", name: "Trello", icon: "📋", url: "https://trello.com", color: "bg-orange-600/20" },
-  { id: "monday", name: "Monday.com", icon: "📊", url: "https://monday.com", color: "bg-[var(--accent-ember)]/20" },
-  { id: "airtable", name: "Airtable", icon: "🗃️", url: "https://airtable.com", color: "bg-amber-400/20" },
-  { id: "miro", name: "Miro", icon: "🖼️", url: "https://miro.com", color: "bg-[var(--accent-gold)]/20" },
-  { id: "hubspot", name: "HubSpot", icon: "🧡", url: "https://hubspot.com", color: "bg-orange-500/20" },
-  { id: "zendesk", name: "Zendesk", icon: "💚", url: "https://zendesk.com", color: "bg-[var(--success)]/20" },
+  { id: "teams", name: "Microsoft Teams", url: "https://teams.microsoft.com", color: "bg-[var(--bg-slate)]" },
+  { id: "outlook", name: "Outlook", icon: "📧", url: "https://outlook.com", color: "bg-[var(--bg-slate)]" },
+  { id: "dropbox", name: "Dropbox", url: "https://dropbox.com", color: "bg-[var(--bg-slate)]" },
+  { id: "asana", name: "Asana", url: "https://asana.com", color: "bg-[var(--bg-slate)]" },
+  { id: "trello", name: "Trello", url: "https://trello.com", color: "bg-[var(--bg-slate)]" },
+  { id: "monday", name: "Monday.com", icon: "📊", url: "https://monday.com", color: "bg-[var(--bg-slate)]" },
+  { id: "airtable", name: "Airtable", icon: "🗃️", url: "https://airtable.com", color: "bg-[var(--bg-slate)]" },
+  { id: "miro", name: "Miro", icon: "🖼️", url: "https://miro.com", color: "bg-[var(--bg-slate)]" },
+  { id: "hubspot", name: "HubSpot", icon: "🧡", url: "https://hubspot.com", color: "bg-[var(--bg-slate)]" },
+  { id: "zendesk", name: "Zendesk", icon: "💚", url: "https://zendesk.com", color: "bg-[var(--bg-slate)]" },
 ];
 
 const STORAGE_KEY = "diq-app-shortcuts";
@@ -292,12 +295,12 @@ export function AppShortcutsBar() {
                       title={app.name}
                     >
                       <motion.div
-                        className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center text-lg`}
+                        className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center`}
                         whileHover={!isDragging ? {
                           boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
                         } : undefined}
                       >
-                        {app.icon}
+                        <AppIcon appId={app.id} size={24} />
                       </motion.div>
                       <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate w-full text-center transition-colors">
                         {app.name.length > 8 ? app.name.slice(0, 7) + "…" : app.name}
@@ -496,8 +499,8 @@ function AddAppModal({
                       whileHover={!isAdded ? { scale: 1.02 } : undefined}
                       whileTap={!isAdded ? { scale: 0.98 } : undefined}
                     >
-                      <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center text-base`}>
-                        {app.icon}
+                      <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center`}>
+                        <AppIcon appId={app.id} size={20} />
                       </div>
                       <span className="text-sm text-[var(--text-secondary)] truncate flex-1">{app.name}</span>
                       {isAdded && <Check className="w-4 h-4 text-[var(--success)]" />}
@@ -697,8 +700,8 @@ function ManageAppsModal({
                   </div>
 
                   {/* App Info */}
-                  <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center text-base`}>
-                    {app.icon}
+                  <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center`}>
+                    <AppIcon appId={app.id} size={20} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-[var(--text-primary)] truncate">{app.name}</p>

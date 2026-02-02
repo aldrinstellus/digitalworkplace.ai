@@ -2533,7 +2533,22 @@
           "timestamp": "2026-01-26T20:58:35.456Z"
         }
       ]
+    },
+    "ivr:+1-demo-1769505339605": {
+      "sessionId": "ivr_1769505339622_wxufrbbfk",
+      "channel": "ivr",
+      "userId": "+1-demo-1769505339605",
+      "startTime": "2026-01-27T09:15:39.622Z",
+      "lastActivity": "2026-01-27T09:15:39.629Z",
+      "language": "en",
+      "messages": [
+        {
+          "role": "assistant",
+          "content": "Hello! Welcome to Chat Core IQ. Press 1 for English. Para español, presione el dos. Pou Kreyòl Ayisyen, peze twa.",
+          "timestamp": "2026-01-27T09:15:39.629Z"
+        }
+      ]
     }
   },
-  "lastUpdated": "2026-01-26T20:58:35.456Z"
+  "lastUpdated": "2026-01-27T09:15:39.629Z"
 }

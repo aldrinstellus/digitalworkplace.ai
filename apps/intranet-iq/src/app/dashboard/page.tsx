@@ -27,6 +27,7 @@ import { EditLayoutButton } from "@/components/dashboard/DraggableWidget";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import { ListItemSkeleton } from "@/components/ui/Skeleton";
+import { AppIcon } from "@/components/icons/AppIcons";
 
 // Connection status type for real-time indicator
 type ConnectionStatus = "connected" | "stale" | "disconnected";
@@ -129,20 +130,7 @@ const unreadCounts = getTotalUnreadCounts();
 const allUnifiedEventsData = getAllEvents();
 const allUnifiedEvents = allUnifiedEventsData.events;
 
-// Source icons for unified activity
-const SOURCE_ICONS: Record<string, string> = {
-  slack: "💬",
-  jira: "📋",
-  github: "🐙",
-  drive: "📁",
-  zoom: "📹",
-  confluence: "📝",
-  salesforce: "💼",
-  figma: "🎨",
-  notion: "📓",
-  linkedin: "💼",
-  diq: "🏢",
-};
+// Source icons now use professional SVG icons via AppIcon component
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
@@ -888,8 +876,8 @@ export default function Dashboard() {
                     }))].slice(0, 4).map((item) => (
                       <div key={item.id} className="relative">
                         {item.source !== 'diq' && (
-                          <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-xs">
-                            {SOURCE_ICONS[item.source] || "📌"}
+                          <span className="absolute -left-1 top-1/2 -translate-y-1/2">
+                            <AppIcon appId={item.source} size={16} />
                           </span>
                         )}
                         <div className={item.source !== 'diq' ? 'ml-5' : ''}>
@@ -945,8 +933,8 @@ export default function Dashboard() {
                       }`}
                       whileHover={{ x: 4 }}
                     >
-                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center text-sm flex-shrink-0">
-                        {SOURCE_ICONS[activity.source] || "📌"}
+                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center flex-shrink-0">
+                        <AppIcon appId={activity.source} size={18} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
@@ -996,7 +984,7 @@ export default function Dashboard() {
                       className="p-3 rounded-lg bg-[var(--bg-slate)] hover:bg-[var(--accent-ember)]/5 transition-colors cursor-pointer"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-lg">{SOURCE_ICONS[app.id] || app.icon}</span>
+                        <AppIcon appId={app.id} size={24} />
                         {app.unreadCount > 0 && (
                           <span className="px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs">
                             {app.unreadCount}

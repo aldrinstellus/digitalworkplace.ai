@@ -698,19 +698,211 @@ export function getTotalUnreadCounts(): {
 }
 
 // =============================================================================
+// EXTERNAL DOCUMENTS AGGREGATION
+// =============================================================================
+
+/**
+ * Represents an external document from connected apps
+ */
+export interface ExternalDocument {
+  id: string;
+  title: string;
+  description?: string;
+  source: DataSource;
+  sourceLabel: string;
+  type: ContentType;
+  url?: string;
+  updatedAt: string;
+  createdAt?: string;
+  author?: string;
+  thumbnail?: string;
+  metadata?: Record<string, unknown>;
+}
+
+/**
+ * Get all external documents from connected apps (Drive, Confluence, Notion, etc.)
+ * Used by the Content Browser's External Sources tab
+ */
+export function getExternalDocuments(options?: {
+  sources?: DataSource[];
+  limit?: number;
+  sortBy?: 'date' | 'title';
+  sortOrder?: 'asc' | 'desc';
+}): ExternalDocument[] {
+  const documents: ExternalDocument[] = [];
+
+  // Google Drive files
+  const driveEnabled = !options?.sources || options.sources.includes('drive');
+  if (driveEnabled) {
+    mockDriveFiles.forEach(file => {
+      documents.push({
+        id: `drive-${file.id}`,
+        title: file.name,
+        description: `${file.type} • ${file.path}`,
+        source: 'drive',
+        sourceLabel: 'Google Drive',
+        type: 'drive_file',
+        url: `https://drive.google.com/file/${file.id}`,
+        updatedAt: file.lastModified,
+        author: file.owner.name,
+        metadata: {
+          fileType: file.type,
+          size: file.size,
+          starred: file.starred,
+          sharedWith: file.sharedWith,
+        },
+      });
+    });
+  }
+
+  // Confluence pages
+  const confluenceEnabled = !options?.sources || options.sources.includes('confluence');
+  if (confluenceEnabled) {
+    mockConfluencePages.forEach(page => {
+      documents.push({
+        id: `confluence-${page.id}`,
+        title: page.title,
+        description: page.content.substring(0, 150) + '...',
+        source: 'confluence',
+        sourceLabel: 'Confluence',
+        type: 'confluence_page',
+        url: `https://confluence.company.com/wiki/spaces/${page.space}/pages/${page.id}`,
+        updatedAt: page.lastUpdated,
+        author: page.author.name,
+        metadata: {
+          space: page.space,
+          labels: page.labels,
+          views: page.views,
+          likes: page.likes,
+        },
+      });
+    });
+  }
+
+  // Notion pages
+  const notionEnabled = !options?.sources || options.sources.includes('notion');
+  if (notionEnabled) {
+    mockNotionPages.forEach(page => {
+      documents.push({
+        id: `notion-${page.id}`,
+        title: page.title,
+        description: `${page.type} in ${page.workspace}`,
+        source: 'notion',
+        sourceLabel: 'Notion',
+        type: 'notion_page',
+        url: `https://notion.so/${page.id}`,
+        updatedAt: page.lastEdited,
+        author: page.lastEditedBy,
+        thumbnail: page.icon,
+        metadata: {
+          type: page.type,
+          workspace: page.workspace,
+          shared: page.shared,
+        },
+      });
+    });
+  }
+
+  // Figma projects (design documents)
+  const figmaEnabled = !options?.sources || options.sources.includes('figma');
+  if (figmaEnabled) {
+    mockFigmaProjects.forEach(project => {
+      documents.push({
+        id: `figma-${project.id}`,
+        title: project.name,
+        description: `${project.status} • ${project.editors.length} editors`,
+        source: 'figma',
+        sourceLabel: 'Figma',
+        type: 'figma_project',
+        url: `https://figma.com/file/${project.id}`,
+        updatedAt: project.lastModified,
+        thumbnail: project.thumbnail,
+        metadata: {
+          status: project.status,
+          editors: project.editors,
+          viewers: project.viewers,
+          comments: project.comments,
+        },
+      });
+    });
+  }
+
+  // Sort documents
+  const sortBy = options?.sortBy || 'date';
+  const sortOrder = options?.sortOrder || 'desc';
+
+  documents.sort((a, b) => {
+    if (sortBy === 'title') {
+      return sortOrder === 'asc'
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    }
+    // Sort by date
+    const dateA = new Date(a.updatedAt).getTime();
+    const dateB = new Date(b.updatedAt).getTime();
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+  });
+
+  // Apply limit
+  if (options?.limit) {
+    return documents.slice(0, options.limit);
+  }
+
+  return documents;
+}
+
+/**
+ * Get external documents grouped by source
+ */
+export function getExternalDocumentsBySource(): Record<DataSource, ExternalDocument[]> {
+  const allDocs = getExternalDocuments();
+  const grouped: Partial<Record<DataSource, ExternalDocument[]>> = {};
+
+  allDocs.forEach(doc => {
+    if (!grouped[doc.source]) {
+      grouped[doc.source] = [];
+    }
+    grouped[doc.source]!.push(doc);
+  });
+
+  return grouped as Record<DataSource, ExternalDocument[]>;
+}
+
+/**
+ * Get counts of external documents by source
+ */
+export function getExternalDocumentCounts(): Record<string, number> {
+  return {
+    drive: mockDriveFiles.length,
+    confluence: mockConfluencePages.length,
+    notion: mockNotionPages.length,
+    figma: mockFigmaProjects.length,
+    total: mockDriveFiles.length + mockConfluencePages.length + mockNotionPages.length + mockFigmaProjects.length,
+  };
+}
+
+// =============================================================================
 // CONTEXT FOR AI CHAT
 // =============================================================================
 
 /**
  * Get context data for AI chat (RAG enhancement)
+ * @param query - Search query
+ * @param options - Optional filtering options
+ * @param options.appFilter - Filter results to a specific app source ('all' for no filter)
  */
-export function getContextForChat(query: string): {
+export function getContextForChat(query: string, options?: { appFilter?: DataSource | 'all' }): {
   relevantItems: UnifiedSearchItem[];
   appContext: AggregatedAppData;
   recentActivity: UnifiedActivity[];
 } {
-  // Search for relevant items
-  const relevantItems = searchAllSources(query, { limit: 10 });
+  // Determine sources to search based on appFilter
+  const sources = options?.appFilter && options.appFilter !== 'all'
+    ? [options.appFilter]
+    : undefined;
+
+  // Search for relevant items (filtered by app if specified)
+  const relevantItems = searchAllSources(query, { limit: 10, sources });
 
   // Get current app state
   const appContext = getAggregatedAppData();

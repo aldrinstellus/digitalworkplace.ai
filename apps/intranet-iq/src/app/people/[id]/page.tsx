@@ -33,7 +33,9 @@ import {
 import Link from "next/link";
 import { getAppPresenceForEmployee } from "@/lib/crossReferences";
 import { getAllActivity, getAllTasks } from "@/lib/integratedData";
-import { SOURCE_DISPLAY, type UnifiedActivity, type UnifiedTask } from "@/lib/unifiedTypes";
+import { SOURCE_DISPLAY, type UnifiedActivity, type UnifiedTask, type UnifiedEvent } from "@/lib/unifiedTypes";
+import { mockZoomMeetings } from "@/lib/mockAppsData";
+import { getUpcomingZoomMeetingsForUser, getLiveZoomMeetingsForUser } from "@/lib/dataTransformers/zoomTransformer";
 
 // Source icons for cross-app activity
 const SOURCE_ICONS: Record<string, string> = {
@@ -70,6 +72,13 @@ const getCrossAppTasks = (employeeEmail: string): UnifiedTask[] => {
     task.assignee?.email?.toLowerCase() === employeeEmail.toLowerCase() ||
     task.assignee?.name?.toLowerCase().includes(employeeEmail.split('@')[0].toLowerCase())
   ).slice(0, 5);
+};
+
+// Get Zoom schedule for an employee
+const getZoomSchedule = (employeeName: string): { upcoming: UnifiedEvent[]; live: UnifiedEvent[] } => {
+  const upcoming = getUpcomingZoomMeetingsForUser(mockZoomMeetings, employeeName);
+  const live = getLiveZoomMeetingsForUser(mockZoomMeetings, employeeName);
+  return { upcoming: upcoming.slice(0, 3), live };
 };
 
 // Comprehensive mock employee data
@@ -455,6 +464,7 @@ export default function EmployeeProfilePage() {
   const [employee, setEmployee] = useState<EmployeeProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "team" | "activity">("overview");
+  const [activityTab, setActivityTab] = useState<"all" | "slack" | "jira" | "github">("all");
 
   useEffect(() => {
     const id = params.id as string;
@@ -794,18 +804,46 @@ export default function EmployeeProfilePage() {
                 </div>
               </FadeIn>
 
-              {/* Cross-App Activity */}
+              {/* Cross-App Activity with Tabs */}
               <FadeIn delay={0.25}>
                 <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-purple-400" /> Cross-App Activity
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)] flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-purple-400" /> Cross-App Activity
+                    </h3>
+                    {/* Activity Tabs */}
+                    <div className="flex items-center gap-1 bg-white/5 rounded-lg p-0.5">
+                      {[
+                        { id: 'all', label: 'All', icon: '📊' },
+                        { id: 'slack', label: 'Slack', icon: '💬', color: '#4A154B' },
+                        { id: 'jira', label: 'Jira', icon: '📋', color: '#0052CC' },
+                        { id: 'github', label: 'GitHub', icon: '🐙', color: '#24292e' },
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActivityTab(tab.id as any)}
+                          className={`px-3 py-1.5 text-xs rounded-md transition-colors flex items-center gap-1.5 ${
+                            activityTab === tab.id
+                              ? 'bg-purple-500/30 text-purple-300'
+                              : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5'
+                          }`}
+                        >
+                          <span>{tab.icon}</span>
+                          <span>{tab.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   {(() => {
-                    const crossAppActivity = getCrossAppActivity(employee.email);
-                    if (crossAppActivity.length > 0) {
+                    const allActivity = getCrossAppActivity(employee.email);
+                    const filteredActivity = activityTab === 'all'
+                      ? allActivity
+                      : allActivity.filter(a => a.source === activityTab);
+
+                    if (filteredActivity.length > 0) {
                       return (
                         <div className="space-y-3">
-                          {crossAppActivity.slice(0, 5).map((activity: UnifiedActivity, index) => (
+                          {filteredActivity.slice(0, 5).map((activity: UnifiedActivity, index) => (
                             <div key={activity.id || index} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
                               <div className="w-10 h-10 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center text-xl">
                                 {SOURCE_ICONS[activity.source] || "📌"}
@@ -832,7 +870,9 @@ export default function EmployeeProfilePage() {
                       );
                     }
                     return (
-                      <p className="text-[var(--text-muted)] text-center py-4">No cross-app activity found</p>
+                      <p className="text-[var(--text-muted)] text-center py-4">
+                        No {activityTab === 'all' ? 'cross-app' : activityTab} activity found
+                      </p>
                     );
                   })()}
                 </div>
@@ -885,6 +925,79 @@ export default function EmployeeProfilePage() {
                     }
                     return (
                       <p className="text-[var(--text-muted)] text-center py-4">No assigned external tasks found</p>
+                    );
+                  })()}
+                </div>
+              </FadeIn>
+
+              {/* Zoom Schedule */}
+              <FadeIn delay={0.35}>
+                <div className="bg-gradient-to-br from-[#2D8CFF]/10 to-[#0b5cff]/10 border border-[#2D8CFF]/20 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                    <Video className="w-5 h-5 text-[#2D8CFF]" /> Zoom Schedule
+                  </h3>
+                  {(() => {
+                    const zoomSchedule = getZoomSchedule(employee.full_name);
+                    const hasSchedule = zoomSchedule.live.length > 0 || zoomSchedule.upcoming.length > 0;
+
+                    if (hasSchedule) {
+                      return (
+                        <div className="space-y-3">
+                          {/* Live Meetings */}
+                          {zoomSchedule.live.length > 0 && (
+                            <div className="mb-4">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                                <span className="text-xs font-medium text-red-400">LIVE NOW</span>
+                              </div>
+                              {zoomSchedule.live.map((meeting, index) => (
+                                <div key={meeting.id || index} className="flex items-center gap-4 p-3 bg-red-500/10 rounded-lg border border-red-500/30">
+                                  <div className="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                                    <Video className="w-5 h-5 text-red-400" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-[var(--text-primary)] font-medium text-sm">{meeting.title}</p>
+                                    <p className="text-[var(--text-muted)] text-xs">
+                                      Started {meeting.startTime ? new Date(meeting.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'just now'}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Upcoming Meetings */}
+                          {zoomSchedule.upcoming.length > 0 && (
+                            <>
+                              <div className="flex items-center gap-2 mb-2">
+                                <Clock className="w-4 h-4 text-[#2D8CFF]" />
+                                <span className="text-xs font-medium text-[#2D8CFF]">UPCOMING</span>
+                              </div>
+                              {zoomSchedule.upcoming.map((meeting, index) => (
+                                <div key={meeting.id || index} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                                  <div className="w-10 h-10 rounded-lg bg-[#2D8CFF]/20 flex items-center justify-center">
+                                    <Video className="w-5 h-5 text-[#2D8CFF]" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-[var(--text-primary)] font-medium text-sm">{meeting.title}</p>
+                                    <p className="text-[var(--text-muted)] text-xs">
+                                      {meeting.startTime ? new Date(meeting.startTime).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }) : ''} at {meeting.startTime ? new Date(meeting.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                                    </p>
+                                  </div>
+                                  {meeting.url && (
+                                    <a href={meeting.url} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg bg-[#2D8CFF]/20 text-[#2D8CFF] text-xs font-medium hover:bg-[#2D8CFF]/30 transition-colors">
+                                      Join
+                                    </a>
+                                  )}
+                                </div>
+                              ))}
+                            </>
+                          )}
+                        </div>
+                      );
+                    }
+                    return (
+                      <p className="text-[var(--text-muted)] text-center py-4">No upcoming Zoom meetings</p>
                     );
                   })()}
                 </div>

@@ -282,6 +282,12 @@ function SearchPageInner() {
   const [includeApps, setIncludeApps] = useState(true);
   const [appResults, setAppResults] = useState<any[]>([]);
 
+  // Per-source advanced filters
+  const [slackFilters, setSlackFilters] = useState<{ channel: string; dateRange: string }>({ channel: 'all', dateRange: 'any' });
+  const [jiraFilters, setJiraFilters] = useState<{ project: string; status: string; priority: string }>({ project: 'all', status: 'all', priority: 'all' });
+  const [githubFilters, setGithubFilters] = useState<{ repo: string; prStatus: string }>({ repo: 'all', prStatus: 'all' });
+  const [driveFilters, setDriveFilters] = useState<{ fileType: string; folder: string }>({ fileType: 'all', folder: 'all' });
+
   // AI Summary state - stores summaries for each result
   const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
 
@@ -864,6 +870,168 @@ function SearchPageInner() {
                         <option value="spreadsheet">Spreadsheet</option>
                       </select>
                     </div>
+
+                    {/* Per-Source Filters - Show when specific source is selected */}
+                    {selectedSources.includes('slack') && !selectedSources.includes('all') && (
+                      <>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            💬 Slack Channel
+                          </label>
+                          <select
+                            value={slackFilters.channel}
+                            onChange={(e) => setSlackFilters(prev => ({ ...prev, channel: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#4A154B]/50"
+                          >
+                            <option value="all">All channels</option>
+                            <option value="general">general</option>
+                            <option value="engineering">engineering</option>
+                            <option value="product-launch">product-launch</option>
+                            <option value="design">design</option>
+                            <option value="sales">sales</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            💬 Message Date
+                          </label>
+                          <select
+                            value={slackFilters.dateRange}
+                            onChange={(e) => setSlackFilters(prev => ({ ...prev, dateRange: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#4A154B]/50"
+                          >
+                            <option value="any">Any time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This week</option>
+                            <option value="month">This month</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {selectedSources.includes('jira') && !selectedSources.includes('all') && (
+                      <>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            🎯 Jira Project
+                          </label>
+                          <select
+                            value={jiraFilters.project}
+                            onChange={(e) => setJiraFilters(prev => ({ ...prev, project: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#0052CC]/50"
+                          >
+                            <option value="all">All projects</option>
+                            <option value="DIQ">DIQ - dIQ Platform</option>
+                            <option value="PLAT">PLAT - Platform</option>
+                            <option value="MOB">MOB - Mobile</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            🎯 Status
+                          </label>
+                          <select
+                            value={jiraFilters.status}
+                            onChange={(e) => setJiraFilters(prev => ({ ...prev, status: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#0052CC]/50"
+                          >
+                            <option value="all">All statuses</option>
+                            <option value="todo">To Do</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="in-review">In Review</option>
+                            <option value="done">Done</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            🎯 Priority
+                          </label>
+                          <select
+                            value={jiraFilters.priority}
+                            onChange={(e) => setJiraFilters(prev => ({ ...prev, priority: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#0052CC]/50"
+                          >
+                            <option value="all">All priorities</option>
+                            <option value="highest">Highest</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {selectedSources.includes('github') && !selectedSources.includes('all') && (
+                      <>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            🐙 Repository
+                          </label>
+                          <select
+                            value={githubFilters.repo}
+                            onChange={(e) => setGithubFilters(prev => ({ ...prev, repo: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#24292e]/50"
+                          >
+                            <option value="all">All repos</option>
+                            <option value="diq-platform">diq-platform</option>
+                            <option value="diq-mobile">diq-mobile</option>
+                            <option value="diq-api">diq-api</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            🐙 PR Status
+                          </label>
+                          <select
+                            value={githubFilters.prStatus}
+                            onChange={(e) => setGithubFilters(prev => ({ ...prev, prStatus: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#24292e]/50"
+                          >
+                            <option value="all">All</option>
+                            <option value="open">Open</option>
+                            <option value="merged">Merged</option>
+                            <option value="closed">Closed</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
+
+                    {selectedSources.includes('drive') && !selectedSources.includes('all') && (
+                      <>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            📁 File Type
+                          </label>
+                          <select
+                            value={driveFilters.fileType}
+                            onChange={(e) => setDriveFilters(prev => ({ ...prev, fileType: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#4285F4]/50"
+                          >
+                            <option value="all">All types</option>
+                            <option value="document">Documents</option>
+                            <option value="spreadsheet">Spreadsheets</option>
+                            <option value="presentation">Presentations</option>
+                            <option value="pdf">PDFs</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-xs text-[var(--text-muted)] uppercase tracking-wider block mb-2">
+                            📁 Folder
+                          </label>
+                          <select
+                            value={driveFilters.folder}
+                            onChange={(e) => setDriveFilters(prev => ({ ...prev, folder: e.target.value }))}
+                            className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[#4285F4]/50"
+                          >
+                            <option value="all">All folders</option>
+                            <option value="Product">Product</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Finance">Finance</option>
+                          </select>
+                        </div>
+                      </>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

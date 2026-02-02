@@ -2,8 +2,73 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, FileText, Globe } from "lucide-react";
+import { ExternalLink, FileText, Globe, MessageSquare, Target, GitBranch, Folder, Video, BookOpen, Cloud, Palette, StickyNote, Briefcase } from "lucide-react";
 import type { ChatSource } from "@/lib/database.types";
+import { SOURCE_DISPLAY, type DataSource } from "@/lib/unifiedTypes";
+
+// App icon mapping for connected apps
+const APP_ICONS: Record<DataSource, { icon: React.ReactNode; color: string }> = {
+  diq: { icon: <FileText className="w-3.5 h-3.5" />, color: '#10b981' },
+  slack: { icon: <MessageSquare className="w-3.5 h-3.5" />, color: '#4A154B' },
+  jira: { icon: <Target className="w-3.5 h-3.5" />, color: '#0052CC' },
+  github: { icon: <GitBranch className="w-3.5 h-3.5" />, color: '#24292e' },
+  drive: { icon: <Folder className="w-3.5 h-3.5" />, color: '#4285F4' },
+  zoom: { icon: <Video className="w-3.5 h-3.5" />, color: '#2D8CFF' },
+  confluence: { icon: <BookOpen className="w-3.5 h-3.5" />, color: '#172B4D' },
+  salesforce: { icon: <Cloud className="w-3.5 h-3.5" />, color: '#00A1E0' },
+  figma: { icon: <Palette className="w-3.5 h-3.5" />, color: '#F24E1E' },
+  notion: { icon: <StickyNote className="w-3.5 h-3.5" />, color: '#000000' },
+  linkedin: { icon: <Briefcase className="w-3.5 h-3.5" />, color: '#0077B5' },
+};
+
+// Get app icon and info for a source type
+function getAppInfo(type: string): { icon: React.ReactNode; color: string; label: string } {
+  // Check if type is a DataSource
+  if (type in APP_ICONS) {
+    const appIcon = APP_ICONS[type as DataSource];
+    const display = SOURCE_DISPLAY[type as DataSource];
+    return {
+      icon: appIcon.icon,
+      color: appIcon.color,
+      label: display?.name || type,
+    };
+  }
+
+  // Map common types to apps
+  switch (type) {
+    case 'slack_message':
+    case 'slack_channel':
+      return { ...APP_ICONS.slack, label: 'Slack' };
+    case 'jira_ticket':
+      return { ...APP_ICONS.jira, label: 'Jira' };
+    case 'github_pr':
+    case 'github_issue':
+      return { ...APP_ICONS.github, label: 'GitHub' };
+    case 'drive_file':
+      return { ...APP_ICONS.drive, label: 'Google Drive' };
+    case 'zoom_meeting':
+      return { ...APP_ICONS.zoom, label: 'Zoom' };
+    case 'confluence_page':
+      return { ...APP_ICONS.confluence, label: 'Confluence' };
+    case 'salesforce_opp':
+      return { ...APP_ICONS.salesforce, label: 'Salesforce' };
+    case 'figma_project':
+      return { ...APP_ICONS.figma, label: 'Figma' };
+    case 'notion_page':
+      return { ...APP_ICONS.notion, label: 'Notion' };
+    case 'linkedin_notif':
+      return { ...APP_ICONS.linkedin, label: 'LinkedIn' };
+    case 'article':
+    case 'news':
+    case 'event':
+    case 'person':
+      return { ...APP_ICONS.diq, label: 'Knowledge Base' };
+    case 'web':
+      return { icon: <Globe className="w-3.5 h-3.5" />, color: '#6366f1', label: 'Web' };
+    default:
+      return { icon: <FileText className="w-3.5 h-3.5" />, color: '#10b981', label: 'Document' };
+  }
+}
 
 interface CitationLinkProps {
   citationNumber: number;
@@ -52,14 +117,18 @@ export function CitationLink({ citationNumber, source, onSourceClick }: Citation
   };
 
   const getSourceIcon = () => {
-    switch (source.type) {
-      case "article":
-        return <FileText className="w-3.5 h-3.5" />;
-      case "web":
-        return <Globe className="w-3.5 h-3.5" />;
-      default:
-        return <FileText className="w-3.5 h-3.5" />;
-    }
+    const appInfo = getAppInfo(source.type);
+    return appInfo.icon;
+  };
+
+  const getSourceColor = () => {
+    const appInfo = getAppInfo(source.type);
+    return appInfo.color;
+  };
+
+  const getSourceLabel = () => {
+    const appInfo = getAppInfo(source.type);
+    return appInfo.label;
   };
 
   return (
@@ -95,12 +164,15 @@ export function CitationLink({ citationNumber, source, onSourceClick }: Citation
 
             {/* Content */}
             <div className="flex items-start gap-2">
-              <div className="flex-shrink-0 w-8 h-8 rounded-md bg-[#10b981]/20 flex items-center justify-center text-[#10b981]">
+              <div
+                className="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center"
+                style={{ backgroundColor: `${getSourceColor()}20`, color: getSourceColor() }}
+              >
                 {getSourceIcon()}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-0.5">
-                  {source.type === "article" ? "Knowledge Base" : source.type === "web" ? "Web" : "Document"}
+                  {getSourceLabel()}
                 </div>
                 <div className="text-sm text-[var(--text-primary)] font-medium truncate">
                   {source.title}
@@ -126,7 +198,7 @@ export function CitationLink({ citationNumber, source, onSourceClick }: Citation
                 }}
                 className="mt-2 w-full flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md bg-[#10b981]/20 hover:bg-[#10b981]/30 text-[#10b981] text-xs font-medium transition-colors"
               >
-                Open source
+                Open in {getSourceLabel()}
                 <ExternalLink className="w-3 h-3" />
               </button>
             )}
@@ -144,6 +216,7 @@ interface SourcesFooterProps {
 
 /**
  * SourcesFooter - Numbered list of sources at the bottom of AI responses
+ * Enhanced with app icons for connected apps (Slack, Jira, GitHub, etc.)
  */
 export function SourcesFooter({ sources, onSourceClick }: SourcesFooterProps) {
   if (!sources || sources.length === 0) return null;
@@ -156,60 +229,46 @@ export function SourcesFooter({ sources, onSourceClick }: SourcesFooterProps) {
     }
   };
 
-  const getSourceIcon = (type: string) => {
-    switch (type) {
-      case "article":
-        return <FileText className="w-3.5 h-3.5" />;
-      case "web":
-        return <Globe className="w-3.5 h-3.5" />;
-      default:
-        return <FileText className="w-3.5 h-3.5" />;
-    }
-  };
-
-  const getSourceTypeLabel = (type: string) => {
-    switch (type) {
-      case "article":
-        return "Knowledge Base";
-      case "web":
-        return "Web";
-      case "document":
-        return "Document";
-      default:
-        return type.charAt(0).toUpperCase() + type.slice(1);
-    }
-  };
-
   return (
     <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.12)]">
       <div className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
         <FileText className="w-3.5 h-3.5" />
-        Sources
+        Sources ({sources.length})
       </div>
       <div className="space-y-1.5">
-        {sources.map((source, index) => (
-          <button
-            key={source.id || index}
-            onClick={() => handleSourceClick(source)}
-            className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md bg-[var(--bg-slate)]/50 hover:bg-[var(--bg-slate)] text-left transition-colors group"
-          >
-            <span className="flex-shrink-0 w-5 h-5 rounded bg-[#10b981]/20 flex items-center justify-center text-[#10b981] text-xs font-medium">
-              {index + 1}
-            </span>
-            <span className="flex-shrink-0 text-[var(--text-muted)]">
-              {getSourceIcon(source.type)}
-            </span>
-            <span className="flex-1 min-w-0 text-sm text-[var(--text-primary)] truncate group-hover:text-[#10b981] transition-colors">
-              {source.title}
-            </span>
-            <span className="flex-shrink-0 text-xs text-[var(--text-muted)]">
-              {getSourceTypeLabel(source.type)}
-            </span>
-            {source.url && (
-              <ExternalLink className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[#10b981] transition-colors" />
-            )}
-          </button>
-        ))}
+        {sources.map((source, index) => {
+          const appInfo = getAppInfo(source.type);
+          return (
+            <button
+              key={source.id || index}
+              onClick={() => handleSourceClick(source)}
+              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md bg-[var(--bg-slate)]/50 hover:bg-[var(--bg-slate)] text-left transition-colors group"
+            >
+              <span className="flex-shrink-0 w-5 h-5 rounded bg-[#10b981]/20 flex items-center justify-center text-[#10b981] text-xs font-medium">
+                {index + 1}
+              </span>
+              <span
+                className="flex-shrink-0 w-6 h-6 rounded flex items-center justify-center"
+                style={{ backgroundColor: `${appInfo.color}20`, color: appInfo.color }}
+                title={appInfo.label}
+              >
+                {appInfo.icon}
+              </span>
+              <span className="flex-1 min-w-0 text-sm text-[var(--text-primary)] truncate group-hover:text-[#10b981] transition-colors">
+                {source.title}
+              </span>
+              <span
+                className="flex-shrink-0 text-xs px-1.5 py-0.5 rounded"
+                style={{ backgroundColor: `${appInfo.color}15`, color: appInfo.color }}
+              >
+                {appInfo.label}
+              </span>
+              {source.url && (
+                <ExternalLink className="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[#10b981] transition-colors" />
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

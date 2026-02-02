@@ -508,11 +508,40 @@ async function executeTool(
   }
 }
 
-// Build system prompt based on response style
-function buildSystemPrompt(style: string, sources: Source[], includeAppContext: boolean = true): string {
-  const connectedAppsInfo = includeAppContext ? `
+// Build system prompt based on response style with full app context
+function buildSystemPrompt(
+  style: string,
+  sources: Source[],
+  includeAppContext: boolean = true,
+  appContext?: ReturnType<typeof getContextForChat>
+): string {
+  // Build dynamic app context summary
+  let connectedAppsInfo = '';
 
-You also have access to connected workplace apps:
+  if (includeAppContext) {
+    const appStatsInfo = appContext ? `
+
+CURRENT WORKSPACE STATUS:
+- Slack: ${appContext.appContext.slack.unreadCount} unread messages across ${appContext.appContext.slack.channels} channels
+- Jira: ${appContext.appContext.jira.assigned} tickets assigned (${appContext.appContext.jira.inProgress} in progress)
+- GitHub: ${appContext.appContext.github.openPRs} open PRs, ${appContext.appContext.github.pendingReviews} pending reviews
+- Zoom: ${appContext.appContext.zoom.upcoming} upcoming meetings${appContext.appContext.zoom.inMeeting ? ' (currently in meeting)' : ''}
+- Drive: ${appContext.appContext.drive.recent} recent files
+- Confluence: ${appContext.appContext.confluence.updated} recently updated pages
+- Salesforce: $${(appContext.appContext.salesforce.pipeline / 1000).toFixed(0)}K pipeline value
+- Figma: ${appContext.appContext.figma.projects} active projects
+- Notion: ${appContext.appContext.notion.pages} workspace pages
+` : '';
+
+    const recentActivityInfo = appContext && appContext.recentActivity.length > 0 ? `
+
+RECENT ACTIVITY (last 24 hours):
+${appContext.recentActivity.slice(0, 5).map(a => `- [${SOURCE_DISPLAY[a.source]?.name || a.source}] ${a.title}`).join('\n')}
+` : '';
+
+    connectedAppsInfo = `
+
+You have access to connected workplace apps:
 - **Slack**: Search messages and channels for discussions and decisions
 - **Jira**: Look up tickets, issues, and project status
 - **GitHub**: Find pull requests, code changes, and repository information
@@ -522,14 +551,18 @@ You also have access to connected workplace apps:
 - **Salesforce**: Look up customer and deal information
 - **Figma**: Find design files and projects
 - **Notion**: Search workspace pages
-
+${appStatsInfo}${recentActivityInfo}
 Use the search_connected_apps tool when users ask about:
 - Recent discussions (Slack)
 - Project status or tickets (Jira)
 - Code changes or PRs (GitHub)
 - Specific files or documents (Drive, Confluence)
 - Meeting schedules (Zoom)
-` : '';
+
+IMPORTANT: When citing sources from connected apps, always indicate which app the information came from.
+For example: "According to a Slack message in #engineering..." or "Based on Jira ticket DIQ-123..."
+`;
+  }
 
   const basePrompt = `You are an AI assistant for a company intranet called dIQ (Intranet IQ). You help employees find information, answer questions about company policies, and provide assistance with work-related queries.
 
@@ -538,6 +571,7 @@ Your knowledge is grounded in the company's knowledge base. When answering quest
 2. If you're not sure about something, say so
 3. Provide actionable information when possible
 4. Keep responses professional but friendly
+5. When referencing data from connected apps, always indicate the source app
 ${connectedAppsInfo}
 `;
 
@@ -605,6 +639,7 @@ export async function POST(request: NextRequest) {
       model = 'claude-sonnet-4-20250514',
       responseStyle = 'balanced',
       enableToolUse = true,
+      appFilter = 'all', // Filter search results by app source
     } = await request.json();
 
     if (!message) {
@@ -631,6 +666,16 @@ export async function POST(request: NextRequest) {
       duration: Date.now() - ragStartTime,
     });
 
+    // Step 3: Get enhanced app context for AI (filtered by app if specified)
+    const appContextStartTime = Date.now();
+    const appContext = getContextForChat(message, { appFilter: appFilter as any });
+    steps.push({
+      id: '3',
+      name: appFilter !== 'all' ? `Loading ${appFilter} context` : 'Loading app context',
+      status: 'completed',
+      duration: Date.now() - appContextStartTime,
+    });
+
     // Check if Anthropic API key is configured
     if (process.env.ANTHROPIC_API_KEY) {
       try {
@@ -639,10 +684,10 @@ export async function POST(request: NextRequest) {
           apiKey: process.env.ANTHROPIC_API_KEY,
         });
 
-        // Build system prompt with RAG context and response style
-        const systemPrompt = buildSystemPrompt(responseStyle, sources);
+        // Build system prompt with RAG context, response style, and app context
+        const systemPrompt = buildSystemPrompt(responseStyle, sources, true, appContext);
 
-        // Step 3: Generate response with Claude
+        // Step 4: Generate response with Claude
         const llmStartTime = Date.now();
 
         // Initial API call with tool support
@@ -655,7 +700,7 @@ export async function POST(request: NextRequest) {
         });
 
         steps.push({
-          id: '3',
+          id: '4',
           name: 'LLM initial response',
           status: 'completed',
           duration: Date.now() - llmStartTime,

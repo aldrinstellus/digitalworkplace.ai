@@ -19,8 +19,14 @@ import {
   List,
   Network,
   ArrowUpDown,
+  GitBranch,
+  Target,
+  Video,
+  Clock,
 } from "lucide-react";
 import { mockEmployees, type MockEmployee } from "@/lib/mockData";
+import { getAppPresenceForEmployee } from "@/lib/crossReferences";
+import type { UnifiedEmployee } from "@/lib/unifiedTypes";
 import Link from "next/link";
 
 // Inline mock departments - IDs must match mockEmployees.department_id values
@@ -45,17 +51,22 @@ const sortOptions = [
   { value: "title", label: "Title" },
 ];
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   online: "bg-[var(--success)]",
   away: "bg-[var(--warning)]",
+  dnd: "bg-red-500",
   offline: "bg-[var(--text-muted)]",
 };
 
-// Mock status since we don't have real-time presence
-function getRandomStatus(): "online" | "away" | "offline" {
-  const statuses: ("online" | "away" | "offline")[] = ["online", "away", "offline"];
-  return statuses[Math.floor(Math.random() * statuses.length)];
-}
+const statusLabels: Record<string, string> = {
+  online: "Online",
+  away: "Away",
+  dnd: "Do Not Disturb",
+  offline: "Offline",
+};
+
+// Get app presence data for employees
+type AppPresence = ReturnType<typeof getAppPresenceForEmployee>;
 
 export default function PeoplePage() {
   // Use mock data directly
@@ -68,19 +79,19 @@ export default function PeoplePage() {
   const [sortBy, setSortBy] = useState<SortOption>("name-asc");
   const [selectedPerson, setSelectedPerson] = useState<any | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
-  const [employeeStatuses, setEmployeeStatuses] = useState<Record<string, "online" | "away" | "offline">>({});
-  const hasInitializedStatusesRef = useRef(false);
+  const [employeePresence, setEmployeePresence] = useState<Record<string, AppPresence>>({});
+  const hasInitializedPresenceRef = useRef(false);
   const hasInitializedNodesRef = useRef(false);
 
-  // Set random statuses for demo (using useEffect to avoid state update during render)
+  // Load real app presence for employees from connected apps
   useEffect(() => {
-    if (employees.length > 0 && !hasInitializedStatusesRef.current) {
-      hasInitializedStatusesRef.current = true;
-      const statuses: Record<string, "online" | "away" | "offline"> = {};
+    if (employees.length > 0 && !hasInitializedPresenceRef.current) {
+      hasInitializedPresenceRef.current = true;
+      const presence: Record<string, AppPresence> = {};
       employees.forEach((emp) => {
-        statuses[emp.id] = getRandomStatus();
+        presence[emp.id] = getAppPresenceForEmployee(emp.id);
       });
-      setEmployeeStatuses(statuses);
+      setEmployeePresence(presence);
     }
   }, [employees]);
 
@@ -95,24 +106,29 @@ export default function PeoplePage() {
     }
   }, [employees]);
 
-  // Transform employees with user data - MEMOIZED
+  // Transform employees with user data and app presence - MEMOIZED
   const transformedEmployees = useMemo(() =>
-    employees.map((emp: MockEmployee) => ({
-      id: emp.id,
-      name: emp.full_name,
-      title: emp.job_title,
-      department: emp.department_name,
-      departmentId: emp.department_id,
-      location: emp.location,
-      email: emp.email,
-      phone: emp.phone || "",
-      avatar: emp.avatar,
-      status: employeeStatuses[emp.id] || "offline",
-      manager: emp.manager_id,
-      managerId: emp.manager_id,
-      skills: emp.skills || [],
-    })),
-    [employees, employeeStatuses]
+    employees.map((emp: MockEmployee) => {
+      const presence = employeePresence[emp.id];
+      return {
+        id: emp.id,
+        name: emp.full_name,
+        title: emp.job_title,
+        department: emp.department_name,
+        departmentId: emp.department_id,
+        location: emp.location,
+        email: emp.email,
+        phone: emp.phone || "",
+        avatar: emp.avatar,
+        status: presence?.slack?.status || "offline",
+        slackStatus: presence?.slack?.statusText,
+        manager: emp.manager_id,
+        managerId: emp.manager_id,
+        skills: emp.skills || [],
+        appPresence: presence,
+      };
+    }),
+    [employees, employeePresence]
   );
 
   // Create lookup maps for O(1) child finding - PERFORMANCE OPTIMIZATION
@@ -442,7 +458,37 @@ export default function PeoplePage() {
                                 <MapPin className="w-4 h-4" />
                                 {person.location}
                               </div>
+                              {/* Slack Status Text */}
+                              {person.slackStatus && (
+                                <div className="flex items-center gap-2 text-xs">
+                                  <MessageSquare className="w-3 h-3 text-[#4A154B]" />
+                                  <span className="truncate">{person.slackStatus}</span>
+                                </div>
+                              )}
                             </div>
+                            {/* App Activity Indicators */}
+                            {person.appPresence && (
+                              <div className="mt-3 pt-3 border-t border-[var(--border-subtle)] flex items-center gap-3 text-xs">
+                                {person.appPresence.jira?.assigned > 0 && (
+                                  <div className="flex items-center gap-1 text-[#0052CC]" title={`${person.appPresence.jira.assigned} Jira tickets assigned`}>
+                                    <Target className="w-3 h-3" />
+                                    <span>{person.appPresence.jira.assigned}</span>
+                                  </div>
+                                )}
+                                {person.appPresence.github?.openPRs > 0 && (
+                                  <div className="flex items-center gap-1 text-[#24292e]" title={`${person.appPresence.github.openPRs} open PRs`}>
+                                    <GitBranch className="w-3 h-3" />
+                                    <span>{person.appPresence.github.openPRs}</span>
+                                  </div>
+                                )}
+                                {person.appPresence.zoom?.inMeeting && (
+                                  <div className="flex items-center gap-1 text-[#2D8CFF]" title="In Zoom meeting">
+                                    <Video className="w-3 h-3" />
+                                    <span className="text-[10px]">In meeting</span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </motion.div>
                         </Link>
                       </StaggerItem>
@@ -470,12 +516,37 @@ export default function PeoplePage() {
                             }`}
                           />
                         </div>
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <h4 className="text-[var(--text-primary)] font-medium">{person.name}</h4>
-                          <p className="text-sm text-[var(--text-muted)]">{person.title}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm text-[var(--text-muted)]">{person.title}</p>
+                            {person.slackStatus && (
+                              <span className="text-xs text-[var(--text-muted)] truncate max-w-[150px]">• {person.slackStatus}</span>
+                            )}
+                          </div>
                         </div>
                         <div className="text-sm text-[var(--text-muted)]">{person.department}</div>
                         <div className="text-sm text-[var(--text-muted)]">{person.location}</div>
+                        {/* App Activity Indicators */}
+                        <div className="flex items-center gap-2 text-xs">
+                          {person.appPresence?.jira?.assigned > 0 && (
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[#0052CC]/10 text-[#0052CC]" title={`${person.appPresence.jira.assigned} Jira tickets`}>
+                              <Target className="w-3 h-3" />
+                              <span>{person.appPresence.jira.assigned}</span>
+                            </div>
+                          )}
+                          {person.appPresence?.github?.openPRs > 0 && (
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[#24292e]/10 text-[#24292e]" title={`${person.appPresence.github.openPRs} open PRs`}>
+                              <GitBranch className="w-3 h-3" />
+                              <span>{person.appPresence.github.openPRs}</span>
+                            </div>
+                          )}
+                          {person.appPresence?.zoom?.inMeeting && (
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[#2D8CFF]/10 text-[#2D8CFF]" title="In Zoom meeting">
+                              <Video className="w-3 h-3" />
+                            </div>
+                          )}
+                        </div>
                       </motion.div>
                     </Link>
                     ))}

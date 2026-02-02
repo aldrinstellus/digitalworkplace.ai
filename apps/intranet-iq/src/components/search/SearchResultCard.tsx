@@ -67,10 +67,18 @@ const typeColors: Record<string, string> = {
 };
 
 const sourceBadges: Record<string, { label: string; color: string }> = {
+  diq: { label: "dIQ", color: "bg-emerald-500/20 text-emerald-400" },
   confluence: { label: "Confluence", color: "bg-blue-600/20 text-blue-400" },
   sharepoint: { label: "SharePoint", color: "bg-teal-500/20 text-teal-400" },
-  drive: { label: "Drive", color: "bg-yellow-500/20 text-yellow-400" },
+  drive: { label: "Google Drive", color: "bg-blue-500/20 text-blue-400" },
   slack: { label: "Slack", color: "bg-purple-500/20 text-purple-400" },
+  jira: { label: "Jira", color: "bg-blue-600/20 text-blue-400" },
+  github: { label: "GitHub", color: "bg-gray-500/20 text-gray-400" },
+  zoom: { label: "Zoom", color: "bg-blue-500/20 text-blue-400" },
+  salesforce: { label: "Salesforce", color: "bg-blue-400/20 text-blue-300" },
+  figma: { label: "Figma", color: "bg-orange-500/20 text-orange-400" },
+  notion: { label: "Notion", color: "bg-gray-600/20 text-gray-400" },
+  linkedin: { label: "LinkedIn", color: "bg-blue-700/20 text-blue-400" },
   kb: { label: "Knowledge Base", color: "bg-blue-500/20 text-blue-400" },
 };
 
@@ -284,7 +292,7 @@ export function SearchResultCard({
                       onOpen(result.id);
                     }}
                     className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors"
-                    title="Open"
+                    title={result.source && sourceBadges[result.source] ? `Open in ${sourceBadges[result.source].label}` : "Open"}
                   >
                     <ExternalLink className="w-4 h-4" />
                   </button>

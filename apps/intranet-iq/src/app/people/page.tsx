@@ -506,6 +506,12 @@ export default function PeoplePage() {
                                     <span className="text-[10px]">In meeting</span>
                                   </div>
                                 )}
+                                {person.appPresence['auzmor-office']?.posts > 0 && (
+                                  <div className="flex items-center gap-1 text-[#10b981]" title={`${person.appPresence['auzmor-office'].posts} Auzmor Office posts`}>
+                                    <Building2 className="w-3 h-3" />
+                                    <span>{person.appPresence['auzmor-office'].posts}</span>
+                                  </div>
+                                )}
                               </div>
                             )}
                             {/* Direct Message Button */}
@@ -571,6 +577,12 @@ export default function PeoplePage() {
                           {person.appPresence?.zoom?.inMeeting && (
                             <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[#2D8CFF]/10 text-[#2D8CFF]" title="In Zoom meeting">
                               <Video className="w-3 h-3" />
+                            </div>
+                          )}
+                          {person.appPresence?.['auzmor-office']?.posts > 0 && (
+                            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[#10b981]/10 text-[#10b981]" title={`${person.appPresence['auzmor-office'].posts} Auzmor Office posts`}>
+                              <Building2 className="w-3 h-3" />
+                              <span>{person.appPresence['auzmor-office'].posts}</span>
                             </div>
                           )}
                         </div>

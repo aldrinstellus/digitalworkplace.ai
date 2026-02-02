@@ -59,6 +59,8 @@ const sourceFilters: { id: DataSource | 'all'; label: string; icon: string; colo
   { id: 'salesforce', label: 'Salesforce', icon: '☁️', color: '#00A1E0' },
   { id: 'figma', label: 'Figma', icon: '🎨', color: '#F24E1E' },
   { id: 'notion', label: 'Notion', icon: '📓', color: '#000000' },
+  { id: 'linkedin', label: 'LinkedIn', icon: '💼', color: '#0A66C2' },
+  { id: 'auzmor-office', label: 'Auzmor Office', icon: '🏢', color: '#10b981' },
 ];
 
 const typeIcons: Record<string, typeof FileText> = {

@@ -45,14 +45,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 });
     }
 
-    // Build query
+    // Build query - simplified without FK join (actor data is optional)
     let query = supabase
       .schema('diq')
       .from('notifications')
-      .select(`
-        *,
-        actor:actor_id(id, full_name, avatar_url)
-      `)
+      .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);

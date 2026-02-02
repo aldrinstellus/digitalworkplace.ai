@@ -88,14 +88,37 @@ export default function NotificationsPage() {
       const response = await fetch(`/diq/api/notifications?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setNotifications(data.notifications || []);
-        setUnreadCount(data.unreadCount || 0);
+        // Use demo data if API returns empty (no real notifications in database)
+        if (!data.notifications || data.notifications.length === 0) {
+          const demoNotifications = getDemoNotifications();
+          // Apply filters to demo data
+          let filtered = demoNotifications;
+          if (filter === 'unread') {
+            filtered = filtered.filter(n => !n.read);
+          }
+          if (typeFilter) {
+            filtered = filtered.filter(n => n.type === typeFilter);
+          }
+          setNotifications(filtered);
+          setUnreadCount(demoNotifications.filter(n => !n.read).length);
+        } else {
+          setNotifications(data.notifications);
+          setUnreadCount(data.unreadCount || 0);
+        }
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
       // Use demo data on error
-      setNotifications(getDemoNotifications());
-      setUnreadCount(5);
+      const demoNotifications = getDemoNotifications();
+      let filtered = demoNotifications;
+      if (filter === 'unread') {
+        filtered = filtered.filter(n => !n.read);
+      }
+      if (typeFilter) {
+        filtered = filtered.filter(n => n.type === typeFilter);
+      }
+      setNotifications(filtered);
+      setUnreadCount(demoNotifications.filter(n => !n.read).length);
     } finally {
       setLoading(false);
     }
@@ -372,86 +395,430 @@ export default function NotificationsPage() {
   );
 }
 
-// Demo notifications for development
+// Demo notifications for development - Full spectrum across all integrated apps
 function getDemoNotifications(): Notification[] {
+  const now = Date.now();
   return [
+    // === SLACK NOTIFICATIONS ===
     {
       id: '1',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
       type: 'mention',
-      title: 'Sarah Chen mentioned you in a comment',
-      message: 'Hey @you, can you review the Q4 budget proposal?',
+      entity_type: 'slack',
+      title: 'Sarah Chen mentioned you in #engineering',
+      message: 'Hey @you, can you review the Q4 budget proposal? Need your input before the meeting.',
       actor: {
         id: '2',
         full_name: 'Sarah Chen',
         avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah',
       },
-      link: '/diq/news/1',
+      link: '/diq/apps/slack?channel=engineering',
       read: false,
-      created_at: new Date(Date.now() - 5 * 60000).toISOString(),
+      created_at: new Date(now - 5 * 60000).toISOString(),
     },
     {
       id: '2',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
       type: 'reaction',
-      title: 'Michael Ross reacted to your post',
-      message: '👍 on "Team outing ideas for Q1"',
+      entity_type: 'slack',
+      title: 'Mike Johnson reacted to your message',
+      message: '🎉 on "Great news! The deployment was successful!"',
       actor: {
         id: '3',
-        full_name: 'Michael Ross',
-        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Michael',
+        full_name: 'Mike Johnson',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
       },
       read: false,
-      created_at: new Date(Date.now() - 30 * 60000).toISOString(),
+      created_at: new Date(now - 15 * 60000).toISOString(),
     },
     {
       id: '3',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
-      type: 'assignment',
-      title: 'New task assigned to you',
-      message: 'Review and approve the marketing campaign assets',
+      type: 'comment',
+      entity_type: 'slack',
+      title: 'New thread reply in #product',
+      message: 'Alex Kim replied: "I agree with this approach. Let\'s discuss in the standup."',
       actor: {
         id: '4',
-        full_name: 'Emma Watson',
-        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma',
+        full_name: 'Alex Kim',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
       },
-      link: '/diq/my-day',
+      link: '/diq/apps/slack?channel=product',
       read: false,
-      created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
+      created_at: new Date(now - 45 * 60000).toISOString(),
     },
+
+    // === JIRA NOTIFICATIONS ===
     {
       id: '4',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
-      type: 'comment',
-      title: 'New comment on your article',
-      message: 'Great writeup! This will be really helpful for the team.',
+      type: 'assignment',
+      entity_type: 'jira',
+      title: 'New Jira ticket assigned to you',
+      message: 'PROJ-456: Implement user authentication flow - High Priority',
       actor: {
         id: '5',
-        full_name: 'James Wilson',
-        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
+        full_name: 'Emily Rodriguez',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emily',
       },
-      link: '/diq/content/onboarding-guide',
-      read: true,
-      created_at: new Date(Date.now() - 24 * 3600000).toISOString(),
+      link: '/diq/apps/jira?ticket=PROJ-456',
+      read: false,
+      created_at: new Date(now - 1 * 3600000).toISOString(),
     },
     {
       id: '5',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
-      type: 'system',
-      title: 'System maintenance scheduled',
-      message: 'Planned downtime on Saturday 2am-4am EST for system upgrades.',
+      type: 'comment',
+      entity_type: 'jira',
+      title: 'Comment on PROJ-234',
+      message: 'James Wilson commented: "I\'ve added the API documentation to the ticket."',
+      actor: {
+        id: '6',
+        full_name: 'James Wilson',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James',
+      },
+      link: '/diq/apps/jira?ticket=PROJ-234',
       read: true,
-      created_at: new Date(Date.now() - 48 * 3600000).toISOString(),
+      created_at: new Date(now - 2 * 3600000).toISOString(),
     },
     {
       id: '6',
       user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'jira',
+      title: 'Sprint completed',
+      message: 'Sprint "Q4 Week 3" has ended. 23 of 25 story points completed.',
+      link: '/diq/apps/jira',
+      read: true,
+      created_at: new Date(now - 3 * 3600000).toISOString(),
+    },
+
+    // === GITHUB NOTIFICATIONS ===
+    {
+      id: '7',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'assignment',
+      entity_type: 'github',
+      title: 'Review requested on PR #127',
+      message: 'Alex Kim requested your review on "feat: Add semantic search to knowledge base"',
+      actor: {
+        id: '4',
+        full_name: 'Alex Kim',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex',
+      },
+      link: '/diq/apps/github?pr=127',
+      read: false,
+      created_at: new Date(now - 30 * 60000).toISOString(),
+    },
+    {
+      id: '8',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'comment',
+      entity_type: 'github',
+      title: 'PR #115 approved',
+      message: 'Mike Johnson approved your pull request "fix: Resolve authentication timeout"',
+      actor: {
+        id: '3',
+        full_name: 'Mike Johnson',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mike',
+      },
+      link: '/diq/apps/github?pr=115',
+      read: true,
+      created_at: new Date(now - 4 * 3600000).toISOString(),
+    },
+    {
+      id: '9',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'github',
+      title: 'CI/CD Pipeline completed',
+      message: 'Build #892 succeeded on main branch. All 247 tests passed.',
+      link: '/diq/apps/github',
+      read: true,
+      created_at: new Date(now - 5 * 3600000).toISOString(),
+    },
+
+    // === GOOGLE DRIVE NOTIFICATIONS ===
+    {
+      id: '10',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'comment',
+      entity_type: 'drive',
+      title: 'New comment on shared document',
+      message: 'Lisa Park commented on "Q4 Strategy Document": "Can we add more details on budget allocation?"',
+      actor: {
+        id: '7',
+        full_name: 'Lisa Park',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa',
+      },
+      link: '/diq/apps/drive?doc=q4-strategy',
+      read: false,
+      created_at: new Date(now - 2 * 3600000).toISOString(),
+    },
+    {
+      id: '11',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'drive',
+      title: 'Document shared with you',
+      message: 'David Brown shared "Engineering Roadmap 2026" with you (Edit access)',
+      actor: {
+        id: '8',
+        full_name: 'David Brown',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=David',
+      },
+      link: '/diq/apps/drive?doc=roadmap-2026',
+      read: true,
+      created_at: new Date(now - 6 * 3600000).toISOString(),
+    },
+
+    // === ZOOM NOTIFICATIONS ===
+    {
+      id: '12',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
       type: 'reminder',
+      entity_type: 'zoom',
+      title: 'Meeting starting in 15 minutes',
+      message: 'Weekly Product Sync with Engineering Team - Join link ready',
+      link: '/diq/apps/zoom?meeting=weekly-sync',
+      read: false,
+      created_at: new Date(now - 10 * 60000).toISOString(),
+    },
+    {
+      id: '13',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'zoom',
+      title: 'Meeting recording available',
+      message: 'Recording for "Design Review Session" is now available to view',
+      link: '/diq/apps/zoom?recording=design-review',
+      read: true,
+      created_at: new Date(now - 24 * 3600000).toISOString(),
+    },
+
+    // === CONFLUENCE NOTIFICATIONS ===
+    {
+      id: '14',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'mention',
+      entity_type: 'confluence',
+      title: 'Mentioned in "API Documentation"',
+      message: 'Amanda Foster mentioned you: "@you please review the authentication section"',
+      actor: {
+        id: '9',
+        full_name: 'Amanda Foster',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Amanda',
+      },
+      link: '/diq/apps/confluence?page=api-docs',
+      read: false,
+      created_at: new Date(now - 3 * 3600000).toISOString(),
+    },
+    {
+      id: '15',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'confluence',
+      title: 'Page updated',
+      message: 'Tom Chen updated "Onboarding Guide" - 5 changes made',
+      actor: {
+        id: '10',
+        full_name: 'Tom Chen',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=TomC',
+      },
+      link: '/diq/apps/confluence?page=onboarding',
+      read: true,
+      created_at: new Date(now - 8 * 3600000).toISOString(),
+    },
+
+    // === SALESFORCE NOTIFICATIONS ===
+    {
+      id: '16',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'salesforce',
+      title: 'Deal stage updated',
+      message: 'Acme Corp Enterprise ($150K) moved to "Negotiation" stage',
+      link: '/diq/apps/salesforce?opp=acme-enterprise',
+      read: false,
+      created_at: new Date(now - 4 * 3600000).toISOString(),
+    },
+    {
+      id: '17',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'reminder',
+      entity_type: 'salesforce',
+      title: 'Follow-up due today',
+      message: 'Scheduled follow-up call with TechStart Inc - Contact: Jennifer Lee',
+      link: '/diq/apps/salesforce?opp=techstart',
+      read: false,
+      created_at: new Date(now - 1 * 3600000).toISOString(),
+    },
+
+    // === FIGMA NOTIFICATIONS ===
+    {
+      id: '18',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'comment',
+      entity_type: 'figma',
+      title: 'Comment on design file',
+      message: 'Priya Sharma left feedback: "Love the new dashboard layout! Can we adjust the spacing?"',
+      actor: {
+        id: '11',
+        full_name: 'Priya Sharma',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya',
+      },
+      link: '/diq/apps/figma?file=dashboard-v3',
+      read: false,
+      created_at: new Date(now - 5 * 3600000).toISOString(),
+    },
+    {
+      id: '19',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'figma',
+      title: 'Design file shared',
+      message: 'Marcus Lee invited you to collaborate on "Mobile App Redesign"',
+      actor: {
+        id: '12',
+        full_name: 'Marcus Lee',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus',
+      },
+      link: '/diq/apps/figma?file=mobile-redesign',
+      read: true,
+      created_at: new Date(now - 12 * 3600000).toISOString(),
+    },
+
+    // === NOTION NOTIFICATIONS ===
+    {
+      id: '20',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'mention',
+      entity_type: 'notion',
+      title: 'Mentioned in "Sprint Planning"',
+      message: 'Jennifer Kim assigned you action item: "Review user feedback for v2.1"',
+      actor: {
+        id: '13',
+        full_name: 'Jennifer Kim',
+        avatar_url: 'https://api.dicebear.com/7.x/avataaars/svg?seed=JenK',
+      },
+      link: '/diq/apps/notion?page=sprint-planning',
+      read: false,
+      created_at: new Date(now - 6 * 3600000).toISOString(),
+    },
+    {
+      id: '21',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'notion',
+      title: 'Database updated',
+      message: 'Product Roadmap database has 3 new entries this week',
+      link: '/diq/apps/notion?db=roadmap',
+      read: true,
+      created_at: new Date(now - 24 * 3600000).toISOString(),
+    },
+
+    // === LINKEDIN NOTIFICATIONS ===
+    {
+      id: '22',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'reaction',
+      entity_type: 'linkedin',
+      title: 'Your post is trending',
+      message: 'Your article "AI in Enterprise Software" has 2.4K views and 156 reactions',
+      link: '/diq/apps/linkedin?post=ai-enterprise',
+      read: true,
+      created_at: new Date(now - 10 * 3600000).toISOString(),
+    },
+    {
+      id: '23',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'linkedin',
+      title: 'New connection request',
+      message: 'Chris O\'Brien, VP of Engineering at TechCorp, wants to connect',
+      link: '/diq/apps/linkedin',
+      read: true,
+      created_at: new Date(now - 18 * 3600000).toISOString(),
+    },
+
+    // === AUZMOR OFFICE NOTIFICATIONS ===
+    {
+      id: '24',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'comment',
+      entity_type: 'auzmor-office',
+      title: 'New post in Company News',
+      message: 'CEO posted: "Exciting announcement coming next week! Stay tuned for big news."',
+      link: '/diq/apps/auzmor-office?post=ceo-announcement',
+      read: false,
+      created_at: new Date(now - 7 * 3600000).toISOString(),
+    },
+    {
+      id: '25',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'reaction',
+      entity_type: 'auzmor-office',
+      title: 'Your post received recognition',
+      message: '12 colleagues reacted to your Q4 team accomplishments post 🎉',
+      link: '/diq/apps/auzmor-office?post=q4-accomplishments',
+      read: true,
+      created_at: new Date(now - 20 * 3600000).toISOString(),
+    },
+
+    // === DIQ INTERNAL NOTIFICATIONS ===
+    {
+      id: '26',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'reminder',
+      entity_type: 'diq',
       title: 'Task due tomorrow',
-      message: 'Complete quarterly performance review',
+      message: 'Complete quarterly performance review - Due Jan 31',
       link: '/diq/my-day',
       read: false,
-      created_at: new Date(Date.now() - 3 * 3600000).toISOString(),
+      created_at: new Date(now - 3 * 3600000).toISOString(),
+    },
+    {
+      id: '27',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'assignment',
+      entity_type: 'diq',
+      title: 'Workflow completed',
+      message: '"New Employee Onboarding" workflow finished successfully - 8 steps completed',
+      link: '/diq/agents',
+      read: true,
+      created_at: new Date(now - 9 * 3600000).toISOString(),
+    },
+    {
+      id: '28',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'diq',
+      title: 'System maintenance scheduled',
+      message: 'Planned downtime on Saturday 2am-4am EST for system upgrades.',
+      read: true,
+      created_at: new Date(now - 48 * 3600000).toISOString(),
+    },
+    {
+      id: '29',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'system',
+      entity_type: 'diq',
+      title: 'Knowledge base updated',
+      message: '15 new articles added to the Engineering documentation space',
+      link: '/diq/content',
+      read: true,
+      created_at: new Date(now - 36 * 3600000).toISOString(),
+    },
+    {
+      id: '30',
+      user_id: '550e8400-e29b-41d4-a716-446655440001',
+      type: 'mention',
+      entity_type: 'diq',
+      title: 'Tagged in company news',
+      message: 'Your team was mentioned in "Q4 All-Hands Meeting Highlights"',
+      link: '/diq/news/q4-allhands',
+      read: true,
+      created_at: new Date(now - 72 * 3600000).toISOString(),
     },
   ];
 }

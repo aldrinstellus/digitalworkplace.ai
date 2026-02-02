@@ -43,6 +43,7 @@ import {
   Palette,
   StickyNote,
   Briefcase,
+  Building2,
 } from "lucide-react";
 import { mockChatThreads, mockChatMessages } from "@/lib/mockData";
 import type { ChatSource } from "@/lib/database.types";
@@ -61,6 +62,7 @@ const APP_FILTER_OPTIONS: Array<{ id: DataSource | 'all'; name: string; icon: Re
   { id: 'figma', name: 'Figma', icon: <Palette className="w-4 h-4" />, color: '#F24E1E' },
   { id: 'notion', name: 'Notion', icon: <StickyNote className="w-4 h-4" />, color: '#000000' },
   { id: 'linkedin', name: 'LinkedIn', icon: <Briefcase className="w-4 h-4" />, color: '#0077B5' },
+  { id: 'auzmor-office', name: 'Auzmor Office', icon: <Building2 className="w-4 h-4" />, color: '#10b981' },
 ];
 
 // Extended types for chat page that work with mock data

@@ -285,6 +285,13 @@ export interface UnifiedEmployee {
       openOpportunities: number;
       pipelineValue: number;
     };
+    'auzmor-office'?: {
+      status: 'online' | 'away' | 'dnd' | 'offline';
+      statusText?: string;
+      lastActive?: string;
+      posts?: number;
+      channels?: string[];
+    };
   };
 }
 

@@ -857,6 +857,30 @@ export function getExternalDocuments(options?: {
     });
   }
 
+  // Auzmor Office posts
+  const auzmorEnabled = !options?.sources || options.sources.includes('auzmor-office');
+  if (auzmorEnabled) {
+    mockAuzmorOfficePosts.forEach(post => {
+      documents.push({
+        id: `auzmor-office-${post.id}`,
+        title: `Post by ${post.author.name}`,
+        description: post.content.substring(0, 150) + (post.content.length > 150 ? '...' : ''),
+        source: 'auzmor-office',
+        sourceLabel: 'Auzmor Office',
+        type: 'auzmor_office_post',
+        url: `/diq/apps/auzmor-office?post=${post.id}`,
+        updatedAt: post.timestamp,
+        author: post.author.name,
+        metadata: {
+          department: post.author.department,
+          likes: post.likes,
+          comments: post.comments,
+          type: post.type,
+        },
+      });
+    });
+  }
+
   // Sort documents
   const sortBy = options?.sortBy || 'date';
   const sortOrder = options?.sortOrder || 'desc';
@@ -907,7 +931,8 @@ export function getExternalDocumentCounts(): Record<string, number> {
     confluence: mockConfluencePages.length,
     notion: mockNotionPages.length,
     figma: mockFigmaProjects.length,
-    total: mockDriveFiles.length + mockConfluencePages.length + mockNotionPages.length + mockFigmaProjects.length,
+    'auzmor-office': mockAuzmorOfficePosts.length,
+    total: mockDriveFiles.length + mockConfluencePages.length + mockNotionPages.length + mockFigmaProjects.length + mockAuzmorOfficePosts.length,
   };
 }
 

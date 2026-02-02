@@ -317,6 +317,7 @@ const SOURCE_ICONS: Record<string, React.ReactNode> = {
   zoom: <Video className="w-4 h-4" />,
   salesforce: <Cloud className="w-4 h-4" />,
   linkedin: <Briefcase className="w-4 h-4" />,
+  'auzmor-office': <Building2 className="w-4 h-4" />,
 };
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -330,6 +331,7 @@ const SOURCE_COLORS: Record<string, string> = {
   zoom: '#2D8CFF',
   salesforce: '#00A1E0',
   linkedin: '#0077B5',
+  'auzmor-office': '#10b981',
 };
 
 function ContentPageInner() {

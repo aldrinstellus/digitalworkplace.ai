@@ -50,6 +50,7 @@ const SOURCE_ICONS: Record<string, string> = {
   notion: "📓",
   linkedin: "💼",
   diq: "🏢",
+  'auzmor-office': "🏢",
 };
 
 // Get cross-app activity for an employee
@@ -464,7 +465,7 @@ export default function EmployeeProfilePage() {
   const [employee, setEmployee] = useState<EmployeeProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "team" | "activity">("overview");
-  const [activityTab, setActivityTab] = useState<"all" | "slack" | "jira" | "github">("all");
+  const [activityTab, setActivityTab] = useState<"all" | "slack" | "jira" | "github" | "drive" | "zoom" | "confluence" | "salesforce" | "figma" | "notion" | "linkedin" | "auzmor-office">("all");
 
   useEffect(() => {
     const id = params.id as string;
@@ -812,17 +813,25 @@ export default function EmployeeProfilePage() {
                       <Zap className="w-5 h-5 text-purple-400" /> Cross-App Activity
                     </h3>
                     {/* Activity Tabs */}
-                    <div className="flex items-center gap-1 bg-white/5 rounded-lg p-0.5">
+                    <div className="flex items-center gap-1 bg-white/5 rounded-lg p-0.5 overflow-x-auto max-w-[500px]">
                       {[
                         { id: 'all', label: 'All', icon: '📊' },
                         { id: 'slack', label: 'Slack', icon: '💬', color: '#4A154B' },
                         { id: 'jira', label: 'Jira', icon: '📋', color: '#0052CC' },
                         { id: 'github', label: 'GitHub', icon: '🐙', color: '#24292e' },
+                        { id: 'drive', label: 'Drive', icon: '📁', color: '#4285F4' },
+                        { id: 'zoom', label: 'Zoom', icon: '🎥', color: '#2D8CFF' },
+                        { id: 'confluence', label: 'Confluence', icon: '📝', color: '#172B4D' },
+                        { id: 'salesforce', label: 'Salesforce', icon: '☁️', color: '#00A1E0' },
+                        { id: 'figma', label: 'Figma', icon: '🎨', color: '#F24E1E' },
+                        { id: 'notion', label: 'Notion', icon: '📓', color: '#000000' },
+                        { id: 'linkedin', label: 'LinkedIn', icon: '💼', color: '#0A66C2' },
+                        { id: 'auzmor-office', label: 'Auzmor', icon: '🏢', color: '#10b981' },
                       ].map((tab) => (
                         <button
                           key={tab.id}
                           onClick={() => setActivityTab(tab.id as any)}
-                          className={`px-3 py-1.5 text-xs rounded-md transition-colors flex items-center gap-1.5 ${
+                          className={`px-3 py-1.5 text-xs rounded-md transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                             activityTab === tab.id
                               ? 'bg-purple-500/30 text-purple-300'
                               : 'text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-white/5'

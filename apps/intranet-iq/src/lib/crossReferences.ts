@@ -17,6 +17,7 @@ import {
   mockSalesforceOpportunities,
   mockFigmaProjects,
   mockNotionPages,
+  mockAuzmorOfficePosts,
   type SlackMessage,
   type JiraTicket,
   type GitHubPullRequest,
@@ -219,6 +220,11 @@ export function getAppPresenceForEmployee(employeeId: string): UnifiedEmployee['
   );
   const pipelineValue = sfOpportunities.reduce((sum, opp) => sum + opp.amount, 0);
 
+  // Auzmor Office presence
+  const auzmorPosts = mockAuzmorOfficePosts.filter(
+    post => post.author.name === employeeName
+  );
+
   return {
     slack: {
       status: slackStatus,
@@ -239,6 +245,12 @@ export function getAppPresenceForEmployee(employeeId: string): UnifiedEmployee['
     salesforce: {
       openOpportunities: sfOpportunities.length,
       pipelineValue,
+    },
+    'auzmor-office': {
+      status: auzmorPosts.length > 0 ? 'online' : 'offline',
+      lastActive: auzmorPosts.length > 0 ? auzmorPosts[0].timestamp : undefined,
+      posts: auzmorPosts.length,
+      channels: [],
     },
   };
 }

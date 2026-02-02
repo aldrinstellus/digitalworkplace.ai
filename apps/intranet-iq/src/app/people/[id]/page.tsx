@@ -27,8 +27,50 @@ import {
   Clock,
   FileText,
   ChevronRight,
+  ExternalLink,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { getAppPresenceForEmployee } from "@/lib/crossReferences";
+import { getAllActivity, getAllTasks } from "@/lib/integratedData";
+import { SOURCE_DISPLAY, type UnifiedActivity, type UnifiedTask } from "@/lib/unifiedTypes";
+
+// Source icons for cross-app activity
+const SOURCE_ICONS: Record<string, string> = {
+  slack: "💬",
+  jira: "📋",
+  github: "🐙",
+  drive: "📁",
+  zoom: "📹",
+  confluence: "📝",
+  salesforce: "💼",
+  figma: "🎨",
+  notion: "📓",
+  linkedin: "💼",
+  diq: "🏢",
+};
+
+// Get cross-app activity for an employee
+const getCrossAppActivity = (employeeEmail: string): UnifiedActivity[] => {
+  const allActivityData = getAllActivity(50);
+  const allActivity = allActivityData.activities;
+  // Filter activity that involves this employee (by email match in author/actor)
+  return allActivity.filter((activity: UnifiedActivity) =>
+    activity.actor?.email?.toLowerCase() === employeeEmail.toLowerCase() ||
+    activity.actor?.name?.toLowerCase().includes(employeeEmail.split('@')[0].toLowerCase())
+  ).slice(0, 10);
+};
+
+// Get cross-app tasks for an employee
+const getCrossAppTasks = (employeeEmail: string): UnifiedTask[] => {
+  const allTasksData = getAllTasks();
+  const allTasks = allTasksData.tasks;
+  // Filter tasks assigned to this employee
+  return allTasks.filter((task: UnifiedTask) =>
+    task.assignee?.email?.toLowerCase() === employeeEmail.toLowerCase() ||
+    task.assignee?.name?.toLowerCase().includes(employeeEmail.split('@')[0].toLowerCase())
+  ).slice(0, 5);
+};
 
 // Comprehensive mock employee data
 const mockEmployeesData: Record<string, EmployeeProfile> = {
@@ -718,35 +760,136 @@ export default function EmployeeProfilePage() {
           )}
 
           {activeTab === "activity" && (
-            <FadeIn delay={0.2}>
-              <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Recent Activity</h3>
-                {employee.recent_activity.length > 0 ? (
-                  <div className="space-y-3">
-                    {employee.recent_activity.map((activity, index) => (
-                      <Link key={index} href={activity.link} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          activity.type === "post" ? "bg-blue-500/20 text-blue-400" :
-                          activity.type === "event" ? "bg-purple-500/20 text-purple-400" :
-                          "bg-green-500/20 text-green-400"
-                        }`}>
-                          {activity.type === "post" ? <FileText className="w-5 h-5" /> :
-                           activity.type === "event" ? <Calendar className="w-5 h-5" /> :
-                           <FileText className="w-5 h-5" />}
+            <>
+              {/* dIQ Platform Activity */}
+              <FadeIn delay={0.2}>
+                <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 mb-6">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                    <span className="text-xl">🏢</span> Platform Activity
+                  </h3>
+                  {employee.recent_activity.length > 0 ? (
+                    <div className="space-y-3">
+                      {employee.recent_activity.map((activity, index) => (
+                        <Link key={index} href={activity.link} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            activity.type === "post" ? "bg-blue-500/20 text-blue-400" :
+                            activity.type === "event" ? "bg-purple-500/20 text-purple-400" :
+                            "bg-green-500/20 text-green-400"
+                          }`}>
+                            {activity.type === "post" ? <FileText className="w-5 h-5" /> :
+                             activity.type === "event" ? <Calendar className="w-5 h-5" /> :
+                             <FileText className="w-5 h-5" />}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-[var(--text-primary)] font-medium">{activity.title}</p>
+                            <p className="text-[var(--text-muted)] text-sm capitalize">{activity.type} • {formatDate(activity.date)}</p>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-[var(--text-muted)]" />
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-[var(--text-muted)] text-center py-4">No recent platform activity</p>
+                  )}
+                </div>
+              </FadeIn>
+
+              {/* Cross-App Activity */}
+              <FadeIn delay={0.25}>
+                <div className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-purple-400" /> Cross-App Activity
+                  </h3>
+                  {(() => {
+                    const crossAppActivity = getCrossAppActivity(employee.email);
+                    if (crossAppActivity.length > 0) {
+                      return (
+                        <div className="space-y-3">
+                          {crossAppActivity.slice(0, 5).map((activity: UnifiedActivity, index) => (
+                            <div key={activity.id || index} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
+                              <div className="w-10 h-10 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center text-xl">
+                                {SOURCE_ICONS[activity.source] || "📌"}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-xs px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">
+                                    {SOURCE_DISPLAY[activity.source]?.name || activity.source}
+                                  </span>
+                                </div>
+                                <p className="text-[var(--text-primary)] font-medium text-sm">{activity.title}</p>
+                                <p className="text-[var(--text-muted)] text-xs">
+                                  {activity.createdAt ? new Date(activity.createdAt).toLocaleDateString() : ''}
+                                </p>
+                              </div>
+                              {activity.target?.url && (
+                                <a href={activity.target.url} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                                  <ExternalLink className="w-4 h-4 text-[var(--text-muted)]" />
+                                </a>
+                              )}
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex-1">
-                          <p className="text-[var(--text-primary)] font-medium">{activity.title}</p>
-                          <p className="text-[var(--text-muted)] text-sm capitalize">{activity.type} • {formatDate(activity.date)}</p>
+                      );
+                    }
+                    return (
+                      <p className="text-[var(--text-muted)] text-center py-4">No cross-app activity found</p>
+                    );
+                  })()}
+                </div>
+              </FadeIn>
+
+              {/* Assigned Tasks from External Apps */}
+              <FadeIn delay={0.3}>
+                <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
+                    <span className="text-xl">📋</span> Assigned Tasks
+                  </h3>
+                  {(() => {
+                    const crossAppTasks = getCrossAppTasks(employee.email);
+                    if (crossAppTasks.length > 0) {
+                      return (
+                        <div className="space-y-3">
+                          {crossAppTasks.map((task: UnifiedTask, index) => (
+                            <div key={task.id || index} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
+                              <div className="w-10 h-10 rounded-lg bg-[var(--bg-obsidian)] flex items-center justify-center text-xl">
+                                {SOURCE_ICONS[task.source] || "📌"}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-xs px-2 py-0.5 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]">
+                                    {SOURCE_DISPLAY[task.source]?.name || task.source}
+                                  </span>
+                                  <span className={`text-xs px-2 py-0.5 rounded ${
+                                    task.priority === 'highest' || task.priority === 'urgent' ? 'bg-red-500/20 text-red-400' :
+                                    task.priority === 'high' ? 'bg-orange-500/20 text-orange-400' :
+                                    task.priority === 'medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                                    'bg-blue-500/20 text-blue-400'
+                                  }`}>
+                                    {task.priority}
+                                  </span>
+                                </div>
+                                <p className="text-[var(--text-primary)] font-medium text-sm">{task.title}</p>
+                                <p className="text-[var(--text-muted)] text-xs capitalize">
+                                  {task.status?.replace('_', ' ')} {task.dueDate ? `• Due: ${new Date(task.dueDate).toLocaleDateString()}` : ''}
+                                </p>
+                              </div>
+                              {task.url && (
+                                <a href={task.url} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-white/10 rounded-lg transition-colors">
+                                  <ExternalLink className="w-4 h-4 text-[var(--text-muted)]" />
+                                </a>
+                              )}
+                            </div>
+                          ))}
                         </div>
-                        <ChevronRight className="w-5 h-5 text-[var(--text-muted)]" />
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-[var(--text-muted)] text-center py-8">No recent activity</p>
-                )}
-              </div>
-            </FadeIn>
+                      );
+                    }
+                    return (
+                      <p className="text-[var(--text-muted)] text-center py-4">No assigned external tasks found</p>
+                    );
+                  })()}
+                </div>
+              </FadeIn>
+            </>
           )}
         </div>
       </main>

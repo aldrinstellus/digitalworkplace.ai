@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.6.0] - 2026-02-02
+
+### Full Ecosystem Integration - All Apps Connected
+
+This release completes the **dIQ Full Ecosystem Integration**, connecting all Apps Bar data (Slack, Jira, GitHub, Drive, Zoom, Confluence, Salesforce, Figma, Notion, LinkedIn) with the main dIQ platform.
+
+#### Major Features
+
+| Feature | Description |
+|---------|-------------|
+| **Unified Data Layer** | 3,615+ lines of integration code across 14 new files |
+| **11 Data Transformers** | Convert app data to unified types |
+| **Cross-App Search** | Search Jira tickets, Slack messages, GitHub PRs, etc. |
+| **Dashboard Integration** | Unified activity feed, app summaries, unread counts |
+| **My Day Integration** | External tasks from Jira/GitHub, Zoom meetings |
+| **Chat/AI Integration** | Claude can reference all connected app data |
+| **People Profiles** | Cross-app activity and assigned tasks |
+
+#### New Files Created
+
+| File | Lines | Purpose |
+|------|-------|---------|
+| `src/lib/unifiedTypes.ts` | 497 | Unified type definitions |
+| `src/lib/crossReferences.ts` | 473 | User/employee mapping |
+| `src/lib/integratedData.ts` | 726 | Central data aggregator |
+| `src/lib/dataTransformers/*.ts` | 1,901 | 11 app transformers |
+
+#### Integration Points
+
+| Phase | Component | Status |
+|-------|-----------|--------|
+| Phase 1 | Unified Data Layer | ✅ Complete |
+| Phase 2 | Search Integration | ✅ Complete |
+| Phase 3 | Dashboard Integration | ✅ Complete |
+| Phase 4 | My Day Integration | ✅ Complete |
+| Phase 5 | Chat/AI Integration | ✅ Complete |
+| Phase 6 | People Integration | ✅ Complete |
+
+#### Documentation
+
+- `INTEGRATION.md` - Full spectrum audit report (100% verified)
+
+#### Deployment
+
+- Production: https://diq.digitalworkplace.ai/diq/dashboard
+- TypeScript: 0 errors
+- ESLint: 0 errors
+
+---
+
 ## [2.5.5] - 2026-01-31
 
 ### 100% PRD Compliance - All Gaps Fixed

@@ -43,6 +43,49 @@ import {
   Forward,
 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
+import {
+  getAllTasks,
+  getAllEvents,
+} from '@/lib/integratedData';
+import { SOURCE_DISPLAY, type UnifiedTask, type UnifiedEvent } from '@/lib/unifiedTypes';
+
+// Get unified tasks from external apps (Jira, GitHub, etc.)
+const externalTasksData = getAllTasks();
+const externalTasks = externalTasksData.tasks;
+const unifiedEventsData = getAllEvents();
+const unifiedEvents = unifiedEventsData.events;
+
+// Source icons for external tasks
+const TASK_SOURCE_ICONS: Record<string, string> = {
+  jira: "📋",
+  github: "🐙",
+  diq: "✓",
+};
+
+// Convert unified tasks to local Task format
+const convertUnifiedTask = (ut: UnifiedTask): Task => ({
+  id: ut.id,
+  user_id: ut.assignee?.id || 'external',
+  title: ut.title,
+  description: ut.description,
+  status: ut.status === 'todo' ? 'todo'
+        : ut.status === 'in_progress' || ut.status === 'in_review' ? 'in_progress'
+        : ut.status === 'done' ? 'done'
+        : ut.status === 'cancelled' ? 'cancelled'
+        : 'todo',
+  priority: ut.priority === 'urgent' || ut.priority === 'highest' ? 'urgent'
+          : ut.priority === 'high' ? 'high'
+          : ut.priority === 'medium' ? 'medium'
+          : 'low',
+  due_date: ut.dueDate,
+  tags: [...(ut.labels || []), ut.source],
+  created_at: ut.createdAt,
+  updated_at: ut.updatedAt,
+  // Custom property to track source
+  _source: ut.source,
+  _sourceUrl: ut.url,
+  _sourceIcon: TASK_SOURCE_ICONS[ut.source] || "📌",
+} as Task & { _source?: string; _sourceUrl?: string; _sourceIcon?: string });
 
 interface Task {
   id: string;
@@ -92,6 +135,8 @@ export default function MyDayPage() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'list' | 'board'>('list');
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [showExternalTasks, setShowExternalTasks] = useState(true);
+  const [externalTaskFilter, setExternalTaskFilter] = useState<'all' | 'jira' | 'github'>('all');
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskPriority, setNewTaskPriority] = useState<Task['priority']>('medium');
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
@@ -1226,6 +1271,61 @@ export default function MyDayPage() {
                   })()}
                 </div>
 
+                {/* Upcoming Meetings (including Zoom) */}
+                {unifiedEvents.filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual').length > 0 && (
+                  <div className="p-3 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-[10px] text-blue-400 font-medium uppercase tracking-wider">
+                        📹 Upcoming Meetings
+                      </span>
+                      <span className="text-[10px] text-white/30">
+                        ({unifiedEvents.filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual').length})
+                      </span>
+                    </div>
+                    <div className="space-y-1.5">
+                      {unifiedEvents
+                        .filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual')
+                        .slice(0, 3)
+                        .map((event: UnifiedEvent) => (
+                          <motion.a
+                            key={event.id}
+                            href={event.meetingUrl || event.url || '#'}
+                            target={event.meetingUrl ? "_blank" : undefined}
+                            rel="noopener noreferrer"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer group"
+                          >
+                            <span className="w-1.5 h-6 rounded-full bg-blue-500 shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-medium text-white/90 truncate">
+                                  {event.title}
+                                </span>
+                                {event.source === 'zoom' && (
+                                  <span className="text-[9px] px-1 py-0.5 rounded bg-blue-500/20 text-blue-300">
+                                    Zoom
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 text-[10px] text-white/40">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5" />
+                                  {new Date(event.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                                </span>
+                                {event.duration && <span>· {event.duration}</span>}
+                                {event.status === 'live' && (
+                                  <span className="text-red-400 animate-pulse">Live Now</span>
+                                )}
+                              </div>
+                            </div>
+                            <ExternalLink className="w-3.5 h-3.5 text-white/30 group-hover:text-blue-400 shrink-0" />
+                          </motion.a>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Quick Stats Footer */}
                 <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between bg-[#080a0e]">
                   <div className="flex items-center gap-4 text-[10px]">
@@ -1594,7 +1694,123 @@ export default function MyDayPage() {
                 {f === 'all' ? 'All Tasks' : f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
+            <div className="border-l border-white/10 h-6 mx-2" />
+            <button
+              onClick={() => setShowExternalTasks(!showExternalTasks)}
+              className={`px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${
+                showExternalTasks
+                  ? 'bg-purple-500/20 text-purple-400'
+                  : 'bg-white/5 text-white/60 hover:text-white'
+              }`}
+            >
+              <Zap className="w-4 h-4" />
+              External Tasks ({externalTasks.length})
+            </button>
           </div>
+
+          {/* External Tasks Section (Jira, GitHub) */}
+          {showExternalTasks && externalTasks.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium text-white/60 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-purple-400" />
+                  External Tasks
+                </h3>
+                <div className="flex items-center gap-2">
+                  {(['all', 'jira', 'github'] as const).map(src => (
+                    <button
+                      key={src}
+                      onClick={() => setExternalTaskFilter(src)}
+                      className={`px-3 py-1 rounded text-xs transition-colors ${
+                        externalTaskFilter === src
+                          ? 'bg-purple-500/20 text-purple-400'
+                          : 'bg-white/5 text-white/40 hover:text-white'
+                      }`}
+                    >
+                      {src === 'all' ? 'All' : src === 'jira' ? '📋 Jira' : '🐙 GitHub'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-2">
+                {externalTasks
+                  .filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter)
+                  .slice(0, 5)
+                  .map((task: UnifiedTask) => {
+                    const converted = convertUnifiedTask(task);
+                    const isHighPriority = converted.priority === 'urgent' || converted.priority === 'high';
+                    return (
+                      <motion.div
+                        key={task.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={`p-3 rounded-xl transition-colors ${
+                          isHighPriority
+                            ? 'bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20'
+                            : 'bg-white/[0.03] border border-white/5'
+                        } hover:border-purple-500/30`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg flex-shrink-0">
+                            {TASK_SOURCE_ICONS[task.source] || "📌"}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">
+                                {SOURCE_DISPLAY[task.source]?.name || task.source}
+                              </span>
+                              {task.sourceKey && (
+                                <span className="text-xs text-white/40">
+                                  {task.sourceKey}
+                                </span>
+                              )}
+                              <span
+                                className={`px-2 py-0.5 rounded text-xs ${
+                                  priorityColors[converted.priority].bg
+                                } ${priorityColors[converted.priority].text}`}
+                              >
+                                {converted.priority}
+                              </span>
+                            </div>
+                            <p className="text-sm text-white mt-1 truncate">{task.title}</p>
+                            <div className="flex items-center gap-3 mt-1.5 text-xs text-white/40">
+                              {task.assignee && (
+                                <span>Assigned: {task.assignee.name}</span>
+                              )}
+                              {task.dueDate && (
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {new Date(task.dueDate).toLocaleDateString()}
+                                </span>
+                              )}
+                              {task.status && (
+                                <span className="capitalize">{task.status.replace('_', ' ')}</span>
+                              )}
+                            </div>
+                          </div>
+                          {task.url && (
+                            <a
+                              href={task.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded hover:bg-white/10 transition-colors flex-shrink-0"
+                              title="Open in app"
+                            >
+                              <ExternalLink className="w-4 h-4 text-white/40 hover:text-purple-400" />
+                            </a>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                {externalTasks.filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter).length > 5 && (
+                  <button className="w-full py-2 text-sm text-purple-400 hover:text-purple-300 transition-colors">
+                    View all {externalTasks.filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter).length} external tasks
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Task List View */}
           {viewMode === 'list' && (

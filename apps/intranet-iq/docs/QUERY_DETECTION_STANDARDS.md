@@ -1,10 +1,11 @@
 # dIQ - Query Detection Standards
 
-**Version**: 1.0.0
-**Last Updated**: 2026-01-29
+**Version**: 2.0.0
+**Last Updated**: 2026-02-02
 **Applies To**: Intranet IQ (dIQ) Application
 **Parent Document**: `/docs/QUERY_DETECTION_STANDARDS.md` (Global Standards)
 **Status**: ACTIVE
+**Integration**: Full Ecosystem Search (10 Apps)
 
 ---
 

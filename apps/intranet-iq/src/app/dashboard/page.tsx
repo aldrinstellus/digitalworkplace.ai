@@ -13,6 +13,13 @@ import {
 import { useDashboardWidgets, DashboardWidget, LAYOUT_PRESETS, LayoutPresetKey } from "@/lib/hooks/useDashboardWidgets";
 import { mockNewsPosts, mockEvents, mockRecentActivity, type MockNewsPost, type MockEvent, type MockActivity } from "@/lib/mockData";
 import Link from "next/link";
+import {
+  getAllActivity,
+  getAppSummaries,
+  getTotalUnreadCounts,
+  getAllEvents,
+} from "@/lib/integratedData";
+import { SOURCE_DISPLAY, CONTENT_TYPE_DISPLAY, type UnifiedActivity, type AppSummary, type UnifiedEvent } from "@/lib/unifiedTypes";
 import { MeetingCard } from "@/components/dashboard/MeetingCard";
 import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
 import { DashboardCustomizer, DashboardCustomizeButton } from "@/components/dashboard/DashboardCustomizer";
@@ -112,6 +119,29 @@ const mockWeather = {
   high: 78,
   low: 62,
   location: "San Francisco, CA"
+};
+
+// Get unified data from all app integrations
+const unifiedActivityData = getAllActivity(10);
+const unifiedActivity = unifiedActivityData.activities;
+const appSummaries = getAppSummaries();
+const unreadCounts = getTotalUnreadCounts();
+const allUnifiedEventsData = getAllEvents();
+const allUnifiedEvents = allUnifiedEventsData.events;
+
+// Source icons for unified activity
+const SOURCE_ICONS: Record<string, string> = {
+  slack: "💬",
+  jira: "📋",
+  github: "🐙",
+  drive: "📁",
+  zoom: "📹",
+  confluence: "📝",
+  salesforce: "💼",
+  figma: "🎨",
+  notion: "📓",
+  linkedin: "💼",
+  diq: "🏢",
 };
 
 export default function Dashboard() {
@@ -720,7 +750,7 @@ export default function Dashboard() {
               </FadeIn>
               )}
 
-              {/* Upcoming Events */}
+              {/* Upcoming Events - Now includes Zoom meetings */}
               {isWidgetVisible("events") && (
               <FadeIn delay={0.25}>
                 <motion.div
@@ -744,34 +774,49 @@ export default function Dashboard() {
                         <ListItemSkeleton key={i} showAvatar={false} />
                       ))}
                     </div>
-                  ) : events.length > 0 ? (
+                  ) : allUnifiedEvents.length > 0 ? (
                     <div className="space-y-3">
-                      {events.slice(0, 3).map((event: MockEvent) => (
-                        <Link key={event.id} href={`/events/${event.id}`}>
+                      {allUnifiedEvents.slice(0, 4).map((event: UnifiedEvent) => (
+                        <Link key={event.id} href={event.url || `/events/${event.sourceId}`}>
                           <motion.div
-                            className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer border-l-2 border-[var(--success)]"
+                            className={`p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer border-l-2 ${
+                              event.source === 'zoom' ? 'border-blue-400' : 'border-[var(--success)]'
+                            }`}
                             whileHover={{ x: 4 }}
                           >
-                            <h4 className="text-[var(--text-primary)] font-medium text-sm">{event.title}</h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="text-[var(--text-primary)] font-medium text-sm flex-1">{event.title}</h4>
+                              {event.source === 'zoom' && (
+                                <span className="text-xs px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">
+                                  Zoom
+                                </span>
+                              )}
+                            </div>
                             <p className="text-xs text-[var(--text-muted)] mt-1">
-                              {new Date(event.start_time).toLocaleDateString("en-US", {
+                              {new Date(event.startTime).toLocaleDateString("en-US", {
                                 weekday: "short",
                                 month: "short",
                                 day: "numeric",
                                 hour: "numeric",
                                 minute: "2-digit",
                               })}
+                              {event.duration && ` · ${event.duration}`}
                             </p>
                             <div className="flex items-center gap-2 mt-2">
                               <span className={`px-2 py-0.5 rounded text-xs ${
-                                event.location_type === "virtual"
+                                event.locationType === "virtual"
                                   ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]"
-                                  : event.location_type === "hybrid"
+                                  : event.locationType === "hybrid"
                                   ? "bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]"
                                   : "bg-[var(--success)]/20 text-[var(--success)]"
                               }`}>
-                                {event.location_type}
+                                {event.locationType}
                               </span>
+                              {event.status === 'live' && (
+                                <span className="px-2 py-0.5 rounded text-xs bg-red-500/20 text-red-400 animate-pulse">
+                                  Live now
+                                </span>
+                              )}
                             </div>
                           </motion.div>
                         </Link>
@@ -784,7 +829,7 @@ export default function Dashboard() {
               </FadeIn>
               )}
 
-              {/* Recent Activity */}
+              {/* Recent Activity - Now includes cross-app activity */}
               {isWidgetVisible("activity") && (
               <FadeIn delay={0.3}>
                 <motion.div
@@ -803,46 +848,177 @@ export default function Dashboard() {
                   </div>
 
                   <div className="space-y-2">
-                    {activities.slice(0, 4).map((activity: MockActivity) => {
-                      // Determine the link based on target_type
-                      const getActivityLink = () => {
-                        switch (activity.target_type) {
-                          case "news": return `/news/${activity.target_id}`;
-                          case "event": return `/events/${activity.target_id}`;
-                          case "article": return `/content/${activity.target_id}`;
-                          case "channel": return `/channels/${activity.target_id}`;
-                          default: return "/notifications";
-                        }
-                      };
-
-                      // Format the time
-                      const formatTime = (dateStr: string) => {
-                        const date = new Date(dateStr);
+                    {/* Mix of dIQ activity and unified cross-app activity */}
+                    {[...activities.slice(0, 2).map((activity: MockActivity) => ({
+                      id: activity.id,
+                      title: activity.title,
+                      type: activity.target_type === "channel" ? "channel" as const : "document" as const,
+                      time: (() => {
+                        const date = new Date(activity.created_at);
                         const now = new Date();
                         const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
                         if (diffHours < 1) return "Just now";
                         if (diffHours < 24) return `${diffHours} hours ago`;
                         if (diffHours < 48) return "Yesterday";
                         return `${Math.floor(diffHours / 24)} days ago`;
-                      };
-
-                      return (
-                        <ActivityItem
-                          key={activity.id}
-                          title={activity.title}
-                          type={activity.target_type === "channel" ? "channel" : "document"}
-                          time={formatTime(activity.created_at)}
-                          user={activity.actor_name}
-                          href={getActivityLink()}
-                        />
-                      );
-                    })}
+                      })(),
+                      user: activity.actor_name,
+                      href: activity.target_type === "news" ? `/news/${activity.target_id}`
+                          : activity.target_type === "event" ? `/events/${activity.target_id}`
+                          : activity.target_type === "article" ? `/content/${activity.target_id}`
+                          : activity.target_type === "channel" ? `/channels/${activity.target_id}`
+                          : "/notifications",
+                      source: 'diq' as const,
+                    })), ...unifiedActivity.slice(0, 2).map((ua: UnifiedActivity) => ({
+                      id: ua.id,
+                      title: ua.title,
+                      type: 'document' as const,
+                      time: (() => {
+                        const date = new Date(ua.createdAt);
+                        const now = new Date();
+                        const diffHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+                        if (diffHours < 1) return "Just now";
+                        if (diffHours < 24) return `${diffHours} hours ago`;
+                        if (diffHours < 48) return "Yesterday";
+                        return `${Math.floor(diffHours / 24)} days ago`;
+                      })(),
+                      user: ua.actor?.name || 'Unknown',
+                      href: ua.target?.url || '/notifications',
+                      source: ua.source,
+                    }))].slice(0, 4).map((item) => (
+                      <div key={item.id} className="relative">
+                        {item.source !== 'diq' && (
+                          <span className="absolute -left-1 top-1/2 -translate-y-1/2 text-xs">
+                            {SOURCE_ICONS[item.source] || "📌"}
+                          </span>
+                        )}
+                        <div className={item.source !== 'diq' ? 'ml-5' : ''}>
+                          <ActivityItem
+                            title={item.title}
+                            type={item.type}
+                            time={item.time}
+                            user={item.user}
+                            href={item.href}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               </FadeIn>
               )}
             </div>
             )}
+          </div>
+
+          {/* ===== UNIFIED APP DATA SECTION ===== */}
+          <div className="grid gap-6 mt-6 grid-cols-1 lg:grid-cols-2">
+            {/* Unified Activity Feed - Shows activity from Slack, Jira, GitHub, etc. */}
+            <FadeIn delay={0.32}>
+              <motion.div
+                className="bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-5 hover:border-purple-500/40 transition-colors"
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-purple-400" />
+                    Cross-App Activity
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    {unreadCounts.total > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">
+                        {unreadCounts.total} unread
+                      </span>
+                    )}
+                    <Link href="/notifications" className="text-xs text-purple-400 hover:text-purple-300 flex items-center gap-1 transition-colors">
+                      View all <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+                <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                  {unifiedActivity.slice(0, 6).map((activity: UnifiedActivity) => (
+                    <motion.div
+                      key={activity.id}
+                      className={`flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer ${
+                        activity.isUnread ? 'bg-white/[0.03]' : ''
+                      }`}
+                      whileHover={{ x: 4 }}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-slate)] flex items-center justify-center text-sm flex-shrink-0">
+                        {SOURCE_ICONS[activity.source] || "📌"}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">
+                            {SOURCE_DISPLAY[activity.source]?.name || activity.source}
+                          </span>
+                          {activity.isUnread && (
+                            <span className="w-2 h-2 rounded-full bg-purple-400" />
+                          )}
+                        </div>
+                        <p className="text-sm text-[var(--text-primary)] truncate mt-1">{activity.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {activity.actor && (
+                            <span className="text-xs text-[var(--text-muted)]">{activity.actor.name}</span>
+                          )}
+                          <span className="text-xs text-[var(--text-muted)]">
+                            {new Date(activity.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </FadeIn>
+
+            {/* App Summary Cards */}
+            <FadeIn delay={0.34}>
+              <motion.div
+                className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--border-default)] transition-colors"
+                whileHover={{ y: -2 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-base font-medium text-[var(--text-primary)] flex items-center gap-2">
+                    <Layout className="w-5 h-5 text-[var(--accent-ember)]" />
+                    Connected Apps
+                  </h2>
+                  <Link href="/integrations" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                    Manage <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {appSummaries.slice(0, 6).map((app: AppSummary) => (
+                    <div
+                      key={app.id}
+                      className="p-3 rounded-lg bg-[var(--bg-slate)] hover:bg-[var(--accent-ember)]/5 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-lg">{SOURCE_ICONS[app.id] || app.icon}</span>
+                        {app.unreadCount > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs">
+                            {app.unreadCount}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm font-medium text-[var(--text-primary)]">
+                        {app.name}
+                      </p>
+                      <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                        {app.quickStats.length > 0 ? `${app.quickStats[0].value} ${app.quickStats[0].label}` : 'Connected'}
+                      </p>
+                      {app.lastSync && (
+                        <p className="text-xs text-[var(--text-muted)] mt-1">
+                          Last: {new Date(app.lastSync).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </FadeIn>
           </div>
 
           {/* ===== ADDITIONAL WIDGETS SECTION ===== */}

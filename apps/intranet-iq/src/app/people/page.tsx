@@ -23,16 +23,16 @@ import {
 import { mockEmployees, type MockEmployee } from "@/lib/mockData";
 import Link from "next/link";
 
-// Inline mock departments
+// Inline mock departments - IDs must match mockEmployees.department_id values
 const mockDepartments = [
-  { id: "exec", name: "Executive Team" },
-  { id: "eng", name: "Engineering" },
-  { id: "hr", name: "Human Resources" },
-  { id: "product", name: "Product" },
-  { id: "finance", name: "Finance" },
-  { id: "cs", name: "Customer Success" },
-  { id: "sales", name: "Sales" },
-  { id: "marketing", name: "Marketing" },
+  { id: "dept-exec", name: "Executive Team" },
+  { id: "dept-eng", name: "Engineering" },
+  { id: "dept-hr", name: "Human Resources" },
+  { id: "dept-product", name: "Product" },
+  { id: "dept-ops", name: "Operations" },
+  { id: "dept-cs", name: "Customer Success" },
+  { id: "dept-sales", name: "Sales" },
+  { id: "dept-it", name: "IT Security" },
 ];
 
 type ViewMode = "grid" | "list" | "org";

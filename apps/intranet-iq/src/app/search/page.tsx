@@ -32,7 +32,11 @@ import {
   Brain,
   Blend,
   Info,
+  GitPullRequest,
+  Video,
 } from "lucide-react";
+import { SOURCE_DISPLAY, CONTENT_TYPE_DISPLAY, type DataSource, type ContentType } from "@/lib/unifiedTypes";
+import { searchAllSources, getSearchFacets } from "@/lib/integratedData";
 
 const filterCategories = [
   { id: "all", label: "All Results", icon: Database },
@@ -40,6 +44,21 @@ const filterCategories = [
   { id: "employee", label: "People", icon: Users },
   { id: "event", label: "Events", icon: Calendar },
   { id: "document", label: "Documents", icon: FileText },
+];
+
+// Source filter chips for app integrations
+const sourceFilters: { id: DataSource | 'all'; label: string; icon: string; color: string }[] = [
+  { id: 'all', label: 'All Sources', icon: '🔍', color: '#10b981' },
+  { id: 'diq', label: 'dIQ', icon: '📊', color: '#10b981' },
+  { id: 'slack', label: 'Slack', icon: '💬', color: '#4A154B' },
+  { id: 'jira', label: 'Jira', icon: '🎯', color: '#0052CC' },
+  { id: 'github', label: 'GitHub', icon: '🐙', color: '#24292e' },
+  { id: 'drive', label: 'Drive', icon: '📁', color: '#4285F4' },
+  { id: 'zoom', label: 'Zoom', icon: '🎥', color: '#2D8CFF' },
+  { id: 'confluence', label: 'Confluence', icon: '📝', color: '#172B4D' },
+  { id: 'salesforce', label: 'Salesforce', icon: '☁️', color: '#00A1E0' },
+  { id: 'figma', label: 'Figma', icon: '🎨', color: '#F24E1E' },
+  { id: 'notion', label: 'Notion', icon: '📓', color: '#000000' },
 ];
 
 const typeIcons: Record<string, typeof FileText> = {
@@ -258,6 +277,11 @@ function SearchPageInner() {
   const [searchMode, setSearchMode] = useState<SearchMode>('hybrid');
   const [hoveredMode, setHoveredMode] = useState<SearchMode | null>(null);
 
+  // Source filter state - for app integrations
+  const [selectedSources, setSelectedSources] = useState<(DataSource | 'all')[]>(['all']);
+  const [includeApps, setIncludeApps] = useState(true);
+  const [appResults, setAppResults] = useState<any[]>([]);
+
   // AI Summary state - stores summaries for each result
   const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
 
@@ -295,7 +319,24 @@ function SearchPageInner() {
   const departments = mockDepartments as MockDepartment[];
   const searchParams = useSearchParams();
 
-  // Mock search function
+  // Toggle source filter
+  const toggleSourceFilter = (sourceId: DataSource | 'all') => {
+    if (sourceId === 'all') {
+      setSelectedSources(['all']);
+    } else {
+      setSelectedSources(prev => {
+        const filtered = prev.filter(s => s !== 'all');
+        if (filtered.includes(sourceId)) {
+          const newSources = filtered.filter(s => s !== sourceId);
+          return newSources.length === 0 ? ['all'] : newSources;
+        } else {
+          return [...filtered, sourceId];
+        }
+      });
+    }
+  };
+
+  // Mock search function - now includes app data
   const search = useCallback(async (query: string, _options?: { itemTypes?: string[]; maxResults?: number; offset?: number; mode?: string }) => {
     setLoading(true);
     // Simulate search delay
@@ -308,8 +349,24 @@ function SearchPageInner() {
       result.highlights.some(h => h.toLowerCase().includes(queryLower))
     );
     setResults(filtered);
+
+    // Also search app data if enabled
+    if (includeApps && query.trim()) {
+      const sources = selectedSources.includes('all')
+        ? undefined
+        : selectedSources.filter((s): s is DataSource => s !== 'all');
+
+      const integratedResults = searchAllSources(query, {
+        sources,
+        limit: 20,
+      });
+      setAppResults(integratedResults);
+    } else {
+      setAppResults([]);
+    }
+
     setLoading(false);
-  }, []);
+  }, [includeApps, selectedSources]);
 
   // Mock activity log function
   const log = useCallback(async (_action: string, _data: Record<string, unknown>) => {
@@ -560,9 +617,41 @@ function SearchPageInner() {
     );
   };
 
-  const filteredResults = departmentFilteredResults.filter((result) => {
-    if (activeFilter === "all") return true;
-    return result.type === activeFilter;
+  // Merge mock results with app results
+  const mergedResults = [
+    ...departmentFilteredResults.map(r => ({
+      ...r,
+      source: 'diq' as DataSource,
+      sourceDisplay: SOURCE_DISPLAY['diq'],
+    })),
+    ...appResults.map(r => ({
+      id: r.id,
+      title: r.title,
+      description: r.description || r.summary,
+      summary: r.summary || r.description,
+      type: r.type,
+      source: r.source as DataSource,
+      sourceDisplay: SOURCE_DISPLAY[r.source as DataSource] || { name: r.source, icon: '📄', color: '#666' },
+      typeDisplay: CONTENT_TYPE_DISPLAY[r.type as ContentType],
+      url: r.url,
+      created_at: r.createdAt,
+      relevance: r.relevanceScore || 70,
+      author: r.author,
+      tags: r.tags,
+      metadata: r.metadata,
+    })),
+  ];
+
+  const filteredResults = mergedResults.filter((result) => {
+    // Filter by content type
+    if (activeFilter !== "all" && result.type !== activeFilter) return false;
+
+    // Filter by source
+    if (!selectedSources.includes('all')) {
+      if (!selectedSources.includes(result.source)) return false;
+    }
+
+    return true;
   });
 
   return (
@@ -676,6 +765,52 @@ function SearchPageInner() {
                       );
                     })}
                   </div>
+                </div>
+              </div>
+
+              {/* Source Filters - App Integrations */}
+              <div className="mt-4 pt-4 border-t border-[var(--border-subtle)]">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[var(--text-muted)] uppercase tracking-wider">Search Sources</span>
+                    <motion.button
+                      onClick={() => setIncludeApps(!includeApps)}
+                      className={`text-xs px-2 py-0.5 rounded-full transition-colors ${
+                        includeApps
+                          ? 'bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]'
+                          : 'bg-[var(--bg-slate)] text-[var(--text-muted)]'
+                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {includeApps ? 'Apps Enabled' : 'Apps Disabled'}
+                    </motion.button>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {sourceFilters.map((source) => {
+                    const isSelected = selectedSources.includes(source.id);
+                    return (
+                      <motion.button
+                        key={source.id}
+                        onClick={() => toggleSourceFilter(source.id)}
+                        disabled={!includeApps && source.id !== 'all' && source.id !== 'diq'}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all ${
+                          isSelected
+                            ? 'text-white shadow-md'
+                            : 'bg-[var(--bg-slate)] text-[var(--text-muted)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-charcoal)]'
+                        } ${!includeApps && source.id !== 'all' && source.id !== 'diq' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        style={{
+                          backgroundColor: isSelected ? source.color : undefined,
+                        }}
+                        whileHover={{ scale: includeApps || source.id === 'all' || source.id === 'diq' ? 1.02 : 1 }}
+                        whileTap={{ scale: includeApps || source.id === 'all' || source.id === 'diq' ? 0.98 : 1 }}
+                      >
+                        <span>{source.icon}</span>
+                        <span>{source.label}</span>
+                      </motion.button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -978,13 +1113,23 @@ function SearchPageInner() {
                   {filteredResults.map((result) => (
                     <StaggerItem key={result.id}>
                       <div className="relative">
+                        {/* Source Badge */}
+                        {result.source && result.source !== 'diq' && (
+                          <div
+                            className="absolute -top-2 -left-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs text-white shadow-md"
+                            style={{ backgroundColor: result.sourceDisplay?.color || '#666' }}
+                          >
+                            <span>{result.sourceDisplay?.icon}</span>
+                            <span>{result.sourceDisplay?.name}</span>
+                          </div>
+                        )}
                         <SearchResultCard
                           result={{
                             id: result.id,
                             title: result.title,
-                            summary: result.summary || "",
+                            summary: result.summary || result.description || "",
                             type: result.type,
-                            source: result.project_code || "dIQ",
+                            source: result.sourceDisplay?.name || result.source || "dIQ",
                             relevance: result.relevance || 0,
                             updatedAt: result.created_at,
                           }}

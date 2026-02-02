@@ -1,11 +1,11 @@
 # dIQ - Query Detection Standards
 
-**Version**: 2.0.0
+**Version**: 2.7.0
 **Last Updated**: 2026-02-02
 **Applies To**: Intranet IQ (dIQ) Application
 **Parent Document**: `/docs/QUERY_DETECTION_STANDARDS.md` (Global Standards)
 **Status**: ACTIVE
-**Integration**: Full Ecosystem Search (10 Apps)
+**Integration**: Full Ecosystem Search (11 Apps) - 100% Integration Score
 
 ---
 
@@ -360,10 +360,71 @@ curl -X POST http://localhost:3001/diq/api/search \
 
 ---
 
+## 11. Chat AI App Filter (v2.7.0)
+
+### App-Specific Query UI
+
+The Chat AI now supports filtering queries by specific app sources:
+
+```typescript
+// App filter options
+const APP_FILTER_OPTIONS = [
+  { id: 'all', name: 'All Apps', icon: Grid3X3 },
+  { id: 'diq', name: 'dIQ Knowledge', icon: FileText },
+  { id: 'slack', name: 'Slack', icon: MessageSquare },
+  { id: 'jira', name: 'Jira', icon: Target },
+  { id: 'github', name: 'GitHub', icon: GitBranch },
+  { id: 'drive', name: 'Google Drive', icon: Folder },
+  { id: 'zoom', name: 'Zoom', icon: Video },
+  { id: 'confluence', name: 'Confluence', icon: BookOpen },
+  { id: 'salesforce', name: 'Salesforce', icon: Cloud },
+  { id: 'figma', name: 'Figma', icon: Palette },
+  { id: 'notion', name: 'Notion', icon: StickyNote },
+  { id: 'linkedin', name: 'LinkedIn', icon: Briefcase },
+];
+```
+
+### App Context Injection
+
+The AI system prompt now includes dynamic workspace stats:
+
+```typescript
+// Context injected into system prompt
+const appContext = getContextForChat(query, { appFilter: selectedAppFilter });
+
+// System prompt includes:
+// - Slack: X unread messages, Y channels
+// - Jira: X open tickets, Y in progress
+// - GitHub: X open PRs, Y awaiting review
+// - Zoom: X upcoming meetings
+```
+
+### Source Attribution
+
+All AI responses now include app-specific source badges:
+
+| Source Type | Icon | Color |
+|-------------|------|-------|
+| diq | FileText | #10b981 |
+| slack | MessageSquare | #4A154B |
+| jira | Target | #0052CC |
+| github | GitBranch | #24292e |
+| drive | Folder | #4285F4 |
+| zoom | Video | #2D8CFF |
+| confluence | BookOpen | #172B4D |
+| salesforce | Cloud | #00A1E0 |
+| figma | Palette | #F24E1E |
+| notion | StickyNote | #000000 |
+| linkedin | Briefcase | #0077B5 |
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.7.0 | 2026-02-02 | Chat AI app filter, source attribution, 100% integration |
+| 2.0.0 | 2026-02-02 | Full ecosystem search (10 apps) |
 | 1.0.0 | 2026-01-29 | Initial release with dIQ-specific standards |
 
 ---

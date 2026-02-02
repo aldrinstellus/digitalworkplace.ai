@@ -142,16 +142,6 @@ body {
   background: rgba(16, 185, 129, 0.3);
 }
 
-/* Hide scrollbar utility class */
-.scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari, Opera */
-}
-
 /* Focus styles - WCAG 2.1 AA compliant */
 :focus-visible {
   outline: 2px solid var(--accent-ember);

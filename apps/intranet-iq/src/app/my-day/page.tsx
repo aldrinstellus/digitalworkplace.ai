@@ -34,58 +34,8 @@ import {
   Lightbulb,
   ThumbsUp,
   Eye,
-  Mail,
-  MailOpen,
-  Brain,
-  Zap,
-  Star,
-  Reply,
-  Forward,
 } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import {
-  getAllTasks,
-  getAllEvents,
-} from '@/lib/integratedData';
-import { SOURCE_DISPLAY, type UnifiedTask, type UnifiedEvent } from '@/lib/unifiedTypes';
-
-// Get unified tasks from external apps (Jira, GitHub, etc.)
-const externalTasksData = getAllTasks();
-const externalTasks = externalTasksData.tasks;
-const unifiedEventsData = getAllEvents();
-const unifiedEvents = unifiedEventsData.events;
-
-// Source icons for external tasks
-const TASK_SOURCE_ICONS: Record<string, string> = {
-  jira: "📋",
-  github: "🐙",
-  diq: "✓",
-};
-
-// Convert unified tasks to local Task format
-const convertUnifiedTask = (ut: UnifiedTask): Task => ({
-  id: ut.id,
-  user_id: ut.assignee?.id || 'external',
-  title: ut.title,
-  description: ut.description,
-  status: ut.status === 'todo' ? 'todo'
-        : ut.status === 'in_progress' || ut.status === 'in_review' ? 'in_progress'
-        : ut.status === 'done' ? 'done'
-        : ut.status === 'cancelled' ? 'cancelled'
-        : 'todo',
-  priority: ut.priority === 'urgent' || ut.priority === 'highest' ? 'urgent'
-          : ut.priority === 'high' ? 'high'
-          : ut.priority === 'medium' ? 'medium'
-          : 'low',
-  due_date: ut.dueDate,
-  tags: [...(ut.labels || []), ut.source],
-  created_at: ut.createdAt,
-  updated_at: ut.updatedAt,
-  // Custom property to track source
-  _source: ut.source,
-  _sourceUrl: ut.url,
-  _sourceIcon: TASK_SOURCE_ICONS[ut.source] || "📌",
-} as Task & { _source?: string; _sourceUrl?: string; _sourceIcon?: string });
 
 interface Task {
   id: string;
@@ -135,12 +85,11 @@ export default function MyDayPage() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'list' | 'board'>('list');
   const [showQuickAdd, setShowQuickAdd] = useState(false);
-  const [showExternalTasks, setShowExternalTasks] = useState(true);
-  const [externalTaskFilter, setExternalTaskFilter] = useState<'all' | 'jira' | 'github'>('all');
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskPriority, setNewTaskPriority] = useState<Task['priority']>('medium');
   const [newTaskDueDate, setNewTaskDueDate] = useState('');
   const [filter, setFilter] = useState<'all' | 'today' | 'overdue' | 'upcoming'>('all');
+  const [taskSearchQuery, setTaskSearchQuery] = useState('');
   const [briefing, setBriefing] = useState<string | null>(null);
   const [loadingBriefing, setLoadingBriefing] = useState(false);
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
@@ -1271,61 +1220,6 @@ export default function MyDayPage() {
                   })()}
                 </div>
 
-                {/* Upcoming Meetings (including Zoom) */}
-                {unifiedEvents.filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual').length > 0 && (
-                  <div className="p-3 border-t border-white/[0.06]">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[10px] text-blue-400 font-medium uppercase tracking-wider">
-                        📹 Upcoming Meetings
-                      </span>
-                      <span className="text-[10px] text-white/30">
-                        ({unifiedEvents.filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual').length})
-                      </span>
-                    </div>
-                    <div className="space-y-1.5">
-                      {unifiedEvents
-                        .filter((e: UnifiedEvent) => e.source === 'zoom' || e.locationType === 'virtual')
-                        .slice(0, 3)
-                        .map((event: UnifiedEvent) => (
-                          <motion.a
-                            key={event.id}
-                            href={event.meetingUrl || event.url || '#'}
-                            target={event.meetingUrl ? "_blank" : undefined}
-                            rel="noopener noreferrer"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 transition-all cursor-pointer group"
-                          >
-                            <span className="w-1.5 h-6 rounded-full bg-blue-500 shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-medium text-white/90 truncate">
-                                  {event.title}
-                                </span>
-                                {event.source === 'zoom' && (
-                                  <span className="text-[9px] px-1 py-0.5 rounded bg-blue-500/20 text-blue-300">
-                                    Zoom
-                                  </span>
-                                )}
-                              </div>
-                              <div className="flex items-center gap-2 text-[10px] text-white/40">
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-2.5 h-2.5" />
-                                  {new Date(event.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                                </span>
-                                {event.duration && <span>· {event.duration}</span>}
-                                {event.status === 'live' && (
-                                  <span className="text-red-400 animate-pulse">Live Now</span>
-                                )}
-                              </div>
-                            </div>
-                            <ExternalLink className="w-3.5 h-3.5 text-white/30 group-hover:text-blue-400 shrink-0" />
-                          </motion.a>
-                        ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Quick Stats Footer */}
                 <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between bg-[#080a0e]">
                   <div className="flex items-center gap-4 text-[10px]">
@@ -1342,151 +1236,6 @@ export default function MyDayPage() {
                   <span className="text-[10px] text-white/30">
                     {tasks.filter(t => t.status !== 'done').length} pending
                   </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Email Summary & Focus Time Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mb-6"
-          >
-            <div className="grid grid-cols-12 gap-4">
-              {/* Email Summary Widget */}
-              <div className="col-span-6 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                      <Mail className="w-4 h-4 text-blue-400" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-white/90">Email Summary</span>
-                      <span className="text-[10px] text-white/40 ml-2">12 unread</span>
-                    </div>
-                  </div>
-                  <button className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors">
-                    Open Inbox →
-                  </button>
-                </div>
-                <div className="p-3 space-y-2">
-                  {/* Priority Email */}
-                  <div className="flex items-start gap-3 p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/10">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-                      SC
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-white/90 truncate">Sarah Chen</span>
-                        <Star className="w-3 h-3 text-amber-400 fill-amber-400 shrink-0" />
-                        <span className="text-[10px] text-white/30">2h ago</span>
-                      </div>
-                      <p className="text-[11px] text-white/60 truncate">Re: Q1 Budget Review - Final approval needed</p>
-                    </div>
-                    <div className="flex gap-1 shrink-0">
-                      <button className="p-1 rounded hover:bg-white/10 text-white/40 hover:text-white/70">
-                        <Reply className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                  {/* Regular Emails */}
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition-colors">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-                      MJ
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-white/80 truncate">Mike Johnson</span>
-                        <span className="text-[10px] text-white/30">4h ago</span>
-                      </div>
-                      <p className="text-[11px] text-white/50 truncate">Sprint Planning Notes - Attached</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/[0.03] transition-colors">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
-                      HR
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-medium text-white/80 truncate">HR Team</span>
-                        <span className="text-[10px] text-white/30">Yesterday</span>
-                      </div>
-                      <p className="text-[11px] text-white/50 truncate">Benefits Enrollment Reminder - Action Required</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-4 py-2 border-t border-white/[0.06] flex items-center justify-between bg-[#080a0e]">
-                  <span className="text-[10px] text-white/40">
-                    <span className="text-blue-400 font-medium">3</span> priority · <span className="text-white/60">9</span> others
-                  </span>
-                  <button className="text-[10px] text-white/40 hover:text-white/60">Mark all read</button>
-                </div>
-              </div>
-
-              {/* Focus Time Recommendations */}
-              <div className="col-span-6 rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                      <Brain className="w-4 h-4 text-purple-400" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-medium text-white/90">Focus Time</span>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-purple-500/10 text-purple-400 rounded ml-2">AI</span>
-                    </div>
-                  </div>
-                  <button className="text-[10px] text-purple-400 hover:text-purple-300 transition-colors">
-                    Settings →
-                  </button>
-                </div>
-                <div className="p-3 space-y-3">
-                  {/* Best Focus Window */}
-                  <div className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-500/20">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-medium text-purple-300">Optimal Focus Window</span>
-                      <span className="text-[10px] text-white/40">Based on your patterns</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-amber-400" />
-                        <span className="text-lg font-semibold text-white">9:00 - 11:30 AM</span>
-                      </div>
-                      <button className="px-2.5 py-1 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-[10px] font-medium transition-colors">
-                        Block Calendar
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Focus Stats */}
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
-                      <div className="text-lg font-semibold text-emerald-400">4.2h</div>
-                      <div className="text-[10px] text-white/40">Focus Today</div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
-                      <div className="text-lg font-semibold text-white/90">87%</div>
-                      <div className="text-[10px] text-white/40">Productivity</div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-white/[0.03] text-center">
-                      <div className="text-lg font-semibold text-amber-400">2</div>
-                      <div className="text-[10px] text-white/40">Distractions</div>
-                    </div>
-                  </div>
-
-                  {/* Recommendations */}
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-medium text-white/50 uppercase tracking-wide">Recommendations</span>
-                    <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] text-[11px] text-white/70">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>Complete &quot;Q1 Analytics Review&quot; during focus time</span>
-                    </div>
-                    <div className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] text-[11px] text-white/70">
-                      <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                      <span>Avoid meetings before 11 AM for deep work</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1678,8 +1427,8 @@ export default function MyDayPage() {
             </AnimatePresence>
           </div>
 
-          {/* Filters */}
-          <div className="flex items-center gap-2 mb-6">
+          {/* Filters and Search */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
             <Filter className="w-4 h-4 text-white/40" />
             {(['all', 'today', 'overdue', 'upcoming'] as const).map(f => (
               <button
@@ -1694,123 +1443,26 @@ export default function MyDayPage() {
                 {f === 'all' ? 'All Tasks' : f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
-            <div className="border-l border-white/10 h-6 mx-2" />
-            <button
-              onClick={() => setShowExternalTasks(!showExternalTasks)}
-              className={`px-4 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 ${
-                showExternalTasks
-                  ? 'bg-purple-500/20 text-purple-400'
-                  : 'bg-white/5 text-white/60 hover:text-white'
-              }`}
-            >
-              <Zap className="w-4 h-4" />
-              External Tasks ({externalTasks.length})
-            </button>
-          </div>
-
-          {/* External Tasks Section (Jira, GitHub) */}
-          {showExternalTasks && externalTasks.length > 0 && (
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-medium text-white/60 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-purple-400" />
-                  External Tasks
-                </h3>
-                <div className="flex items-center gap-2">
-                  {(['all', 'jira', 'github'] as const).map(src => (
-                    <button
-                      key={src}
-                      onClick={() => setExternalTaskFilter(src)}
-                      className={`px-3 py-1 rounded text-xs transition-colors ${
-                        externalTaskFilter === src
-                          ? 'bg-purple-500/20 text-purple-400'
-                          : 'bg-white/5 text-white/40 hover:text-white'
-                      }`}
-                    >
-                      {src === 'all' ? 'All' : src === 'jira' ? '📋 Jira' : '🐙 GitHub'}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-2">
-                {externalTasks
-                  .filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter)
-                  .slice(0, 5)
-                  .map((task: UnifiedTask) => {
-                    const converted = convertUnifiedTask(task);
-                    const isHighPriority = converted.priority === 'urgent' || converted.priority === 'high';
-                    return (
-                      <motion.div
-                        key={task.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={`p-3 rounded-xl transition-colors ${
-                          isHighPriority
-                            ? 'bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20'
-                            : 'bg-white/[0.03] border border-white/5'
-                        } hover:border-purple-500/30`}
-                      >
-                        <div className="flex items-start gap-3">
-                          <span className="text-lg flex-shrink-0">
-                            {TASK_SOURCE_ICONS[task.source] || "📌"}
-                          </span>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">
-                                {SOURCE_DISPLAY[task.source]?.name || task.source}
-                              </span>
-                              {task.sourceKey && (
-                                <span className="text-xs text-white/40">
-                                  {task.sourceKey}
-                                </span>
-                              )}
-                              <span
-                                className={`px-2 py-0.5 rounded text-xs ${
-                                  priorityColors[converted.priority].bg
-                                } ${priorityColors[converted.priority].text}`}
-                              >
-                                {converted.priority}
-                              </span>
-                            </div>
-                            <p className="text-sm text-white mt-1 truncate">{task.title}</p>
-                            <div className="flex items-center gap-3 mt-1.5 text-xs text-white/40">
-                              {task.assignee && (
-                                <span>Assigned: {task.assignee.name}</span>
-                              )}
-                              {task.dueDate && (
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  {new Date(task.dueDate).toLocaleDateString()}
-                                </span>
-                              )}
-                              {task.status && (
-                                <span className="capitalize">{task.status.replace('_', ' ')}</span>
-                              )}
-                            </div>
-                          </div>
-                          {task.url && (
-                            <a
-                              href={task.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1.5 rounded hover:bg-white/10 transition-colors flex-shrink-0"
-                              title="Open in app"
-                            >
-                              <ExternalLink className="w-4 h-4 text-white/40 hover:text-purple-400" />
-                            </a>
-                          )}
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                {externalTasks.filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter).length > 5 && (
-                  <button className="w-full py-2 text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                    View all {externalTasks.filter(t => externalTaskFilter === 'all' || t.source === externalTaskFilter).length} external tasks
-                  </button>
-                )}
-              </div>
+            {/* Task Search */}
+            <div className="relative flex-1 min-w-[200px] max-w-sm ml-auto">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <input
+                type="text"
+                value={taskSearchQuery}
+                onChange={(e) => setTaskSearchQuery(e.target.value)}
+                placeholder="Search tasks..."
+                className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all"
+              />
+              {taskSearchQuery && (
+                <button
+                  onClick={() => setTaskSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-white/10 text-white/40 hover:text-white transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Task List View */}
           {viewMode === 'list' && (
@@ -1842,7 +1494,17 @@ export default function MyDayPage() {
                 </div>
               ) : (
                 <AnimatePresence>
-                  {tasks.map((task, index) => {
+                  {tasks
+                    .filter(task => {
+                      if (!taskSearchQuery.trim()) return true;
+                      const query = taskSearchQuery.toLowerCase();
+                      return (
+                        task.title.toLowerCase().includes(query) ||
+                        task.description?.toLowerCase().includes(query) ||
+                        task.tags?.some(tag => tag.toLowerCase().includes(query))
+                      );
+                    })
+                    .map((task, index) => {
                     const isPriorityHighlighted = highlightedPriorityTasks &&
                       (task.priority === 'urgent' || task.priority === 'high') &&
                       task.status !== 'done';

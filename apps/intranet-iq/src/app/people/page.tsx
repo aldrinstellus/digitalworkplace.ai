@@ -23,6 +23,8 @@ import {
   Target,
   Video,
   Clock,
+  Send,
+  X,
 } from "lucide-react";
 import { mockEmployees, type MockEmployee } from "@/lib/mockData";
 import { getAppPresenceForEmployee } from "@/lib/crossReferences";
@@ -78,6 +80,23 @@ export default function PeoplePage() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortBy, setSortBy] = useState<SortOption>("name-asc");
   const [selectedPerson, setSelectedPerson] = useState<any | null>(null);
+  const [dmModalPerson, setDmModalPerson] = useState<any | null>(null);
+  const [dmMessage, setDmMessage] = useState("");
+
+  const openDmModal = (person: any, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDmModalPerson(person);
+    setDmMessage("");
+  };
+
+  const sendDm = () => {
+    if (!dmMessage.trim() || !dmModalPerson) return;
+    console.log("Sending DM to", dmModalPerson.name, ":", dmMessage);
+    // In production, this would call an API to send the message
+    setDmModalPerson(null);
+    setDmMessage("");
+  };
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [employeePresence, setEmployeePresence] = useState<Record<string, AppPresence>>({});
   const hasInitializedPresenceRef = useRef(false);
@@ -489,6 +508,14 @@ export default function PeoplePage() {
                                 )}
                               </div>
                             )}
+                            {/* Direct Message Button */}
+                            <button
+                              onClick={(e) => openDmModal(person, e)}
+                              className="mt-3 w-full py-2 px-3 rounded-lg bg-[var(--accent-ember)]/10 hover:bg-[var(--accent-ember)]/20 border border-[var(--accent-ember)]/20 text-[var(--accent-ember)] text-sm flex items-center justify-center gap-2 transition-colors"
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                              Message
+                            </button>
                           </motion.div>
                         </Link>
                       </StaggerItem>
@@ -694,6 +721,72 @@ export default function PeoplePage() {
           )}
         </div>
       </main>
+
+      {/* Direct Message Modal */}
+      <AnimatePresence>
+        {dmModalPerson && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl w-full max-w-md overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-white font-medium">
+                    {dmModalPerson.avatar}
+                  </div>
+                  <div>
+                    <h2 className="text-[var(--text-primary)] font-medium">{dmModalPerson.name}</h2>
+                    <p className="text-xs text-[var(--text-muted)]">{dmModalPerson.title}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setDmModalPerson(null)}
+                  className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4">
+                <label className="block text-sm text-[var(--text-muted)] mb-2">
+                  Send a direct message
+                </label>
+                <textarea
+                  value={dmMessage}
+                  onChange={(e) => setDmMessage(e.target.value)}
+                  placeholder={`Write a message to ${dmModalPerson.name}...`}
+                  rows={4}
+                  className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors resize-none"
+                  autoFocus
+                />
+              </div>
+              <div className="flex items-center justify-between p-4 border-t border-[var(--border-subtle)]">
+                <p className="text-xs text-[var(--text-muted)]">
+                  Message will be sent via Slack
+                </p>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setDmModalPerson(null)}
+                    className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-white/5 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={sendDm}
+                    disabled={!dmMessage.trim()}
+                    className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:bg-[var(--accent-ember)]/50 disabled:cursor-not-allowed text-white flex items-center gap-2 transition-colors"
+                  >
+                    <Send className="w-4 h-4" />
+                    Send
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

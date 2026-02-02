@@ -53,6 +53,9 @@ import {
   Video,
   Briefcase,
   Filter,
+  Trash2,
+  AlertTriangle,
+  ArrowUpDown,
 } from "lucide-react";
 import { getExternalDocuments, getExternalDocumentCounts, type ExternalDocument } from "@/lib/integratedData";
 import { SOURCE_DISPLAY, type DataSource } from "@/lib/unifiedTypes";
@@ -354,6 +357,7 @@ function ContentPageInner() {
   }, [externalSourceFilter]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"name" | "date" | "views">("name");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [selectedData, setSelectedData] = useState<TreeItem | null>(null);
@@ -364,6 +368,8 @@ function ContentPageInner() {
   const [showApprovalPanel, setShowApprovalPanel] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Framework comparison state
   const [comparisonMode, setComparisonMode] = useState(false);
@@ -481,6 +487,34 @@ function ContentPageInner() {
     setTimeout(() => setShowShareToast(false), 2000);
   };
 
+  // Handle delete article
+  const handleDeleteArticle = async () => {
+    if (!selectedData?.article) return;
+
+    setIsDeleting(true);
+    try {
+      // In production, call delete API
+      const response = await fetch(`/diq/api/content/${selectedData.article.id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // Clear selection and close confirmation
+        setSelectedData(null);
+        setSelectedItem(null);
+        setShowDeleteConfirm(false);
+        // In production, would refresh the tree
+        console.log("Article deleted:", selectedData.article.id);
+      } else {
+        console.error("Failed to delete article");
+      }
+    } catch (error) {
+      console.error("Error deleting article:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   // Handle bookmark toggle
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
@@ -517,9 +551,20 @@ function ContentPageInner() {
         children: [],
       };
 
-      // Find articles for this category
+      // Find articles for this category and sort them
       const categoryArticles = articles.filter((a) => a.category_id === cat.id);
-      catItem.children = categoryArticles.map((article) => ({
+      const sortedCategoryArticles = [...categoryArticles].sort((a, b) => {
+        switch (sortBy) {
+          case "date":
+            return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+          case "views":
+            return (b.view_count || 0) - (a.view_count || 0);
+          case "name":
+          default:
+            return a.title.localeCompare(b.title);
+        }
+      });
+      catItem.children = sortedCategoryArticles.map((article) => ({
         id: `article-${article.id}`,
         name: article.title,
         type: "article" as const,
@@ -548,7 +593,7 @@ function ContentPageInner() {
     return Array.from(deptMap.values()).filter(
       (dept) => dept.children && dept.children.length > 0
     );
-  }, [categories, articles, departments]);
+  }, [categories, articles, departments, sortBy]);
 
   // Auto-expand first folder (using useEffect to avoid state update during render)
   const hasExpandedFirstFolderRef = useRef(false);
@@ -759,6 +804,46 @@ function ContentPageInner() {
                 className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg pl-9 pr-4 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-all"
               />
             </div>
+
+            {/* Sort Options (visible in browse mode) */}
+            {viewMode === "browse" && (
+              <div className="flex items-center gap-2 mt-3">
+                <ArrowUpDown className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+                <span className="text-xs text-[var(--text-muted)]">Sort:</span>
+                <div className="flex items-center bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg p-0.5">
+                  <button
+                    onClick={() => setSortBy("name")}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                      sortBy === "name"
+                        ? "bg-[var(--accent-ember)] text-white"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    Name
+                  </button>
+                  <button
+                    onClick={() => setSortBy("date")}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                      sortBy === "date"
+                        ? "bg-[var(--accent-ember)] text-white"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    Date
+                  </button>
+                  <button
+                    onClick={() => setSortBy("views")}
+                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
+                      sortBy === "views"
+                        ? "bg-[var(--accent-ember)] text-white"
+                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    Views
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Tree View, Frameworks List, or Recent List */}
@@ -1281,11 +1366,84 @@ function ContentPageInner() {
             </>
           ) : selectedData && selectedData.type === "article" && selectedData.article ? (
             <>
+              {/* Breadcrumb Navigation */}
+              <motion.nav
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="px-6 pt-4 pb-2"
+              >
+                <ol className="flex items-center gap-2 text-sm">
+                  <li>
+                    <button
+                      onClick={() => {
+                        setSelectedItem(null);
+                        setSelectedData(null);
+                        setViewMode("browse");
+                      }}
+                      className="text-[var(--text-muted)] hover:text-[var(--accent-ember)] transition-colors"
+                    >
+                      Knowledge Base
+                    </button>
+                  </li>
+                  <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
+                  {(() => {
+                    // Find the parent category and department for breadcrumb
+                    const article = selectedData.article;
+                    const category = categories.find(c => c.id === article.category_id);
+                    const department = departments.find(d => d.id === category?.department_id);
+
+                    return (
+                      <>
+                        {department && (
+                          <>
+                            <li>
+                              <button
+                                onClick={() => {
+                                  const deptId = `dept-${department.id}`;
+                                  setSelectedItem(deptId);
+                                  setExpandedFolders(prev => new Set([...prev, deptId]));
+                                }}
+                                className="text-[var(--text-muted)] hover:text-[var(--accent-ember)] transition-colors"
+                              >
+                                {department.name}
+                              </button>
+                            </li>
+                            <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
+                          </>
+                        )}
+                        {category && (
+                          <>
+                            <li>
+                              <button
+                                onClick={() => {
+                                  const catId = `cat-${category.id}`;
+                                  setSelectedItem(catId);
+                                  if (department) {
+                                    setExpandedFolders(prev => new Set([...prev, `dept-${department.id}`, catId]));
+                                  }
+                                }}
+                                className="text-[var(--text-muted)] hover:text-[var(--accent-ember)] transition-colors"
+                              >
+                                {category.name}
+                              </button>
+                            </li>
+                            <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
+                          </>
+                        )}
+                        <li className="text-[var(--text-primary)] truncate max-w-[200px]">
+                          {article.title}
+                        </li>
+                      </>
+                    );
+                  })()}
+                </ol>
+              </motion.nav>
+
               {/* Article Header */}
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="border-b border-[var(--border-subtle)] p-6"
+                className="border-b border-[var(--border-subtle)] p-6 pt-2"
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -1374,6 +1532,15 @@ function ContentPageInner() {
                       whileTap={{ scale: 0.9 }}
                     >
                       <History className="w-5 h-5" />
+                    </motion.button>
+                    <motion.button
+                      onClick={() => setShowDeleteConfirm(true)}
+                      className="p-2 rounded-lg hover:bg-red-500/10 text-[var(--text-muted)] hover:text-red-400 transition-colors"
+                      title="Delete article"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <Trash2 className="w-5 h-5" />
                     </motion.button>
                     <motion.button
                       onClick={() => setShowArticleEditor(true)}
@@ -1810,6 +1977,70 @@ function ContentPageInner() {
           >
             <Check className="w-4 h-4" />
             Link copied to clipboard
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteConfirm && selectedData?.article && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowDeleteConfirm(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[var(--bg-charcoal)] border border-white/10 rounded-xl p-6 max-w-md w-full shadow-2xl"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 rounded-lg bg-red-500/10">
+                  <AlertTriangle className="w-6 h-6 text-red-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-white">Delete Article</h3>
+              </div>
+              <p className="text-[var(--text-secondary)] mb-2">
+                Are you sure you want to delete <span className="text-white font-medium">&quot;{selectedData.article.title}&quot;</span>?
+              </p>
+              <p className="text-sm text-[var(--text-muted)] mb-6">
+                This action cannot be undone. The article and all its version history will be permanently removed.
+              </p>
+              <div className="flex items-center justify-end gap-3">
+                <motion.button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 rounded-lg border border-white/10 text-[var(--text-secondary)] hover:text-white hover:bg-white/5 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  onClick={handleDeleteArticle}
+                  className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white flex items-center gap-2 transition-colors disabled:opacity-50"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </>
+                  )}
+                </motion.button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

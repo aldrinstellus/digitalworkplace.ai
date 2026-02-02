@@ -270,6 +270,8 @@ function SearchPageInner() {
   const [dateRange, setDateRange] = useState("any");
   const [sortBy, setSortBy] = useState("relevance");
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [summarizingId, setSummarizingId] = useState<string | null>(null);
   const [feedbackGiven, setFeedbackGiven] = useState<"positive" | "negative" | null>(null);
 
@@ -351,8 +353,8 @@ function SearchPageInner() {
     const queryLower = query.toLowerCase();
     const filtered = mockSearchResults.filter(result =>
       result.title.toLowerCase().includes(queryLower) ||
-      result.description.toLowerCase().includes(queryLower) ||
-      result.highlights.some(h => h.toLowerCase().includes(queryLower))
+      (result.description?.toLowerCase().includes(queryLower) ?? false) ||
+      (result.highlights?.some((h: string) => h.toLowerCase().includes(queryLower)) ?? false)
     );
     setResults(filtered);
 
@@ -415,10 +417,27 @@ function SearchPageInner() {
     handleSearchWithQuery(suggestion);
   };
 
-  // Filter results by department
+  // Filter results by department, author, and tags
   const departmentFilteredResults = allResults.filter((result) => {
-    if (selectedDepartments.length === 0) return true;
-    return selectedDepartments.includes(result.department_id);
+    // Department filter
+    if (selectedDepartments.length > 0 && !selectedDepartments.includes(result.department_id)) {
+      return false;
+    }
+    // Author filter
+    if (selectedAuthors.length > 0) {
+      const author = (result as any).author_name || (result as any).author || (result as any).name;
+      if (!author || !selectedAuthors.includes(author)) {
+        return false;
+      }
+    }
+    // Tag filter
+    if (selectedTags.length > 0) {
+      const tags = (result as any).tags || [];
+      if (!selectedTags.some(t => tags.includes(t))) {
+        return false;
+      }
+    }
+    return true;
   });
 
   // Define loadMoreResults before useEffect that uses it
@@ -482,6 +501,48 @@ function SearchPageInner() {
     { type: "event", label: "Events", count: departmentFilteredResults.filter(r => r.type === "event").length, icon: Calendar },
     { type: "document", label: "Documents", count: departmentFilteredResults.filter(r => r.type === "document").length, icon: FileText },
   ];
+
+  // Compute author facets from results
+  const authorFacets = (() => {
+    const authorCounts = new Map<string, number>();
+    departmentFilteredResults.forEach(r => {
+      const author = (r as any).author_name || (r as any).author || (r as any).name;
+      if (author) {
+        authorCounts.set(author, (authorCounts.get(author) || 0) + 1);
+      }
+    });
+    return Array.from(authorCounts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+  })();
+
+  // Compute tag facets from results
+  const tagFacets = (() => {
+    const tagCounts = new Map<string, number>();
+    departmentFilteredResults.forEach(r => {
+      const tags = (r as any).tags || [];
+      tags.forEach((tag: string) => {
+        tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+      });
+    });
+    return Array.from(tagCounts.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count);
+  })();
+
+  // Toggle author filter
+  const toggleAuthor = (author: string) => {
+    setSelectedAuthors(prev =>
+      prev.includes(author) ? prev.filter(a => a !== author) : [...prev, author]
+    );
+  };
+
+  // Toggle tag filter
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev =>
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
 
   const handleSummarize = async (resultId: string) => {
     setSummarizingId(resultId);
@@ -1155,6 +1216,12 @@ function SearchPageInner() {
               departments={departments}
               selectedDepartments={selectedDepartments}
               onDepartmentToggle={toggleDepartment}
+              authors={authorFacets}
+              selectedAuthors={selectedAuthors}
+              onAuthorToggle={toggleAuthor}
+              tags={tagFacets}
+              selectedTags={selectedTags}
+              onTagToggle={toggleTag}
             />
 
             {/* Results */}

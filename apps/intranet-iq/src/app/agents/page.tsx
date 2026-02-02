@@ -8,7 +8,7 @@ import { WorkflowCanvas, type WorkflowNode as LegacyWorkflowNode } from "@/compo
 import { WorkflowBuilder } from "@/components/workflow";
 import { ExecutionView } from "@/components/workflow/ExecutionView";
 import { CodeEditor } from "@/components/workflow/CodeEditor";
-import { mockWorkflows, type MockWorkflow } from "@/lib/mockData";
+import { useWorkflows } from "@/lib/hooks/useSupabase";
 import { workflowToReactFlow, reactFlowToDatabase, convertLegacyWorkflow } from "@/lib/workflow/serialization";
 import {
   workflowToYAML,
@@ -48,10 +48,6 @@ import {
   Grid,
   Code2,
   Layout,
-  Terminal,
-  Activity,
-  RefreshCw,
-  Filter,
 } from "lucide-react";
 import type { Workflow } from "@/lib/database.types";
 
@@ -101,7 +97,7 @@ export default function AgentsPage() {
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showTemplates, setShowTemplates] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "canvas" | "logs">("list");
+  const [viewMode, setViewMode] = useState<"list" | "canvas">("list");
   const [showExecution, setShowExecution] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);
   const [canvasNodes, setCanvasNodes] = useState<LegacyWorkflowNode[]>([]);
@@ -116,18 +112,7 @@ export default function AgentsPage() {
   }[]>([]);
   const [isRunning, setIsRunning] = useState(false);
 
-  // Use mock data instead of Supabase hooks
-  const workflows = mockWorkflows as unknown as Workflow[];
-  const loading = false;
-  const error = null;
-  const updateWorkflow = async (id: string, updates: Partial<Workflow>) => {
-    console.log("Update workflow:", id, updates);
-    return workflows.find(w => w.id === id) || null;
-  };
-  const createWorkflow = async (data: Partial<Workflow>) => {
-    console.log("Create workflow:", data);
-    return { ...data, id: `wf-new-${Date.now()}` } as Workflow;
-  };
+  const { workflows, loading, error, updateWorkflow, createWorkflow } = useWorkflows();
   const [showEditMode, setShowEditMode] = useState(false);
   const [editingStep, setEditingStep] = useState<string | null>(null);
   const [workflowList, setWorkflowList] = useState<Workflow[]>([]);
@@ -700,17 +685,6 @@ export default function AgentsPage() {
                   >
                     <Eye className="w-4 h-4" />
                   </motion.button>
-                  <motion.button
-                    onClick={() => setViewMode("logs")}
-                    className={`p-1.5 rounded-md transition-colors ${
-                      viewMode === "logs" ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]" : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    title="Execution Logs"
-                  >
-                    <Terminal className="w-4 h-4" />
-                  </motion.button>
                 </div>
                 <motion.button
                   onClick={() => setShowTemplates(true)}
@@ -860,150 +834,9 @@ export default function AgentsPage() {
           </div>
         </FadeIn>
 
-        {/* Right Panel - Workflow Detail or Logs */}
+        {/* Right Panel - Workflow Detail */}
         <FadeIn className="flex-1 flex flex-col">
-          {viewMode === "logs" ? (
-            /* Agent Logs & Monitoring Dashboard */
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex-1 p-6 overflow-y-auto"
-            >
-              <div className="max-w-5xl mx-auto">
-                {/* Logs Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[var(--accent-ember)]/20 flex items-center justify-center">
-                      <Terminal className="w-5 h-5 text-[var(--accent-ember)]" />
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-medium text-[var(--text-primary)]">
-                        Execution Logs & Monitoring
-                      </h2>
-                      <p className="text-sm text-[var(--text-muted)]">
-                        Real-time workflow execution history
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      className="p-2 rounded-lg bg-[var(--bg-slate)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Filter className="w-4 h-4" />
-                    </motion.button>
-                    <motion.button
-                      className="p-2 rounded-lg bg-[var(--bg-slate)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <RefreshCw className="w-4 h-4" />
-                    </motion.button>
-                  </div>
-                </div>
-
-                {/* Stats Row */}
-                <div className="grid grid-cols-4 gap-4 mb-6">
-                  {[
-                    { label: "Total Executions", value: "1,247", change: "+12%", icon: Activity, color: "text-blue-400 bg-blue-500/20" },
-                    { label: "Success Rate", value: "98.2%", change: "+0.5%", icon: CheckCircle2, color: "text-[var(--success)] bg-[var(--success)]/20" },
-                    { label: "Avg Duration", value: "2.4s", change: "-0.3s", icon: Clock, color: "text-purple-400 bg-purple-500/20" },
-                    { label: "Active Now", value: "3", change: "", icon: Zap, color: "text-[var(--accent-ember)] bg-[var(--accent-ember)]/20" },
-                  ].map((stat) => (
-                    <motion.div
-                      key={stat.label}
-                      className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-4"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className={`w-8 h-8 rounded-lg ${stat.color} flex items-center justify-center`}>
-                          <stat.icon className="w-4 h-4" />
-                        </div>
-                        <span className="text-xs text-[var(--text-muted)]">{stat.label}</span>
-                      </div>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-semibold text-[var(--text-primary)]">{stat.value}</span>
-                        {stat.change && (
-                          <span className={`text-xs ${stat.change.startsWith('+') ? 'text-[var(--success)]' : stat.change.startsWith('-') ? 'text-blue-400' : 'text-[var(--text-muted)]'}`}>
-                            {stat.change}
-                          </span>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Execution Log Table */}
-                <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl overflow-hidden">
-                  <div className="p-4 border-b border-[var(--border-subtle)] flex items-center justify-between">
-                    <h3 className="text-sm font-medium text-[var(--text-primary)]">Recent Executions</h3>
-                    <span className="text-xs text-[var(--text-muted)]">Last 24 hours</span>
-                  </div>
-                  <div className="divide-y divide-[var(--border-subtle)]">
-                    {[
-                      { id: "exec-001", workflow: "Daily Report Generator", status: "completed", duration: "1.8s", timestamp: "2 min ago", steps: 5, stepsCompleted: 5 },
-                      { id: "exec-002", workflow: "Email Auto-Responder", status: "running", duration: "0.6s", timestamp: "Just now", steps: 4, stepsCompleted: 2 },
-                      { id: "exec-003", workflow: "Data Sync Bot", status: "completed", duration: "3.2s", timestamp: "5 min ago", steps: 8, stepsCompleted: 8 },
-                      { id: "exec-004", workflow: "Document Approval", status: "failed", duration: "0.4s", timestamp: "12 min ago", steps: 6, stepsCompleted: 3, error: "API timeout" },
-                      { id: "exec-005", workflow: "Employee Onboarding", status: "completed", duration: "2.1s", timestamp: "18 min ago", steps: 7, stepsCompleted: 7 },
-                      { id: "exec-006", workflow: "Ticket Routing", status: "completed", duration: "0.9s", timestamp: "25 min ago", steps: 3, stepsCompleted: 3 },
-                      { id: "exec-007", workflow: "Report Generation", status: "completed", duration: "4.5s", timestamp: "32 min ago", steps: 6, stepsCompleted: 6 },
-                      { id: "exec-008", workflow: "Data Sync Bot", status: "completed", duration: "2.8s", timestamp: "45 min ago", steps: 8, stepsCompleted: 8 },
-                    ].map((log) => (
-                      <motion.div
-                        key={log.id}
-                        className="p-4 hover:bg-white/5 cursor-pointer transition-colors"
-                        whileHover={{ x: 2 }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <div className={`w-2 h-2 rounded-full ${
-                              log.status === "completed" ? "bg-[var(--success)]" :
-                              log.status === "running" ? "bg-[var(--accent-ember)] animate-pulse" :
-                              "bg-[var(--error)]"
-                            }`} />
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-[var(--text-primary)]">{log.workflow}</span>
-                                <span className={`px-1.5 py-0.5 rounded text-[10px] ${
-                                  log.status === "completed" ? "bg-[var(--success)]/20 text-[var(--success)]" :
-                                  log.status === "running" ? "bg-[var(--accent-ember)]/20 text-[var(--accent-ember)]" :
-                                  "bg-[var(--error)]/20 text-[var(--error)]"
-                                }`}>
-                                  {log.status}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-3 mt-1 text-xs text-[var(--text-muted)]">
-                                <span>{log.id}</span>
-                                <span>•</span>
-                                <span>{log.stepsCompleted}/{log.steps} steps</span>
-                                {log.error && (
-                                  <>
-                                    <span>•</span>
-                                    <span className="text-[var(--error)]">{log.error}</span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-[var(--text-secondary)]">{log.duration}</div>
-                            <div className="text-xs text-[var(--text-muted)]">{log.timestamp}</div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                  <div className="p-3 border-t border-[var(--border-subtle)] text-center">
-                    <button className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)]">
-                      View All Logs →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : selectedWorkflow ? (
+          {selectedWorkflow ? (
             <>
               {/* Workflow Header */}
               <motion.div

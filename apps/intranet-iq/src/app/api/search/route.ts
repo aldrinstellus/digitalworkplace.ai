@@ -9,12 +9,6 @@ import {
   SearchableDocument,
 } from '@/lib/elasticsearch';
 import type { SemanticSearchResult, HybridSearchResult } from '@/lib/database.types';
-import {
-  searchAllSources,
-  getSearchFacets,
-} from '@/lib/integratedData';
-import type { DataSource, ContentType } from '@/lib/unifiedTypes';
-import { SOURCE_DISPLAY, CONTENT_TYPE_DISPLAY } from '@/lib/unifiedTypes';
 
 /**
  * Generate embedding for search query using OpenAI
@@ -50,9 +44,6 @@ export async function POST(request: NextRequest) {
       // New Elasticsearch-specific options
       useElasticsearch = true,
       hybridWeight = 0.5,
-      // New integrated search options
-      includeApps = true,  // Include app data (Slack, Jira, GitHub, etc.)
-      sources = [] as DataSource[],  // Filter by specific sources
     } = await request.json();
 
     if (!query) {
@@ -240,72 +231,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Include app data if enabled
-    let appResults: any[] = [];
-    let facets = null;
-
-    if (includeApps) {
-      try {
-        // Get integrated app results
-        const integratedResults = searchAllSources(query, {
-          sources: sources.length > 0 ? sources : undefined,
-          types: contentTypes as ContentType[],
-          limit: Math.max(limit, 20), // Get more for merging
-        });
-
-        // Transform to consistent format with source metadata
-        appResults = integratedResults.map((item) => ({
-          id: item.id,
-          type: item.type,
-          source: item.source,
-          sourceDisplay: SOURCE_DISPLAY[item.source],
-          typeDisplay: CONTENT_TYPE_DISPLAY[item.type],
-          title: item.title,
-          summary: item.description,
-          content: item.content,
-          excerpt: item.excerpt,
-          author: item.author,
-          tags: item.tags,
-          url: item.url,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-          metadata: item.metadata,
-          relevanceScore: item.relevanceScore || 70, // Default score for app results
-        }));
-
-        // Get facets for filtering
-        facets = getSearchFacets();
-      } catch (appError) {
-        console.warn('[Search] App integration search failed:', appError);
-      }
-    }
-
-    // Merge results: prioritize Elasticsearch/Supabase results, then add app results
-    // Deduplicate by checking for overlapping content
-    const existingIds = new Set(results.map((r) => r.id));
-    const mergedAppResults = appResults.filter((r) => !existingIds.has(r.id));
-
-    // Combine and sort by relevance
-    const allResults = [...results, ...mergedAppResults.slice(0, Math.max(0, limit - results.length))];
-
-    // Sort by relevance score
-    allResults.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
-
-    // Apply final limit
-    const finalResults = allResults.slice(0, limit);
-
     // Get AI summary if we have results and Anthropic is configured
     let aiSummary = null;
-    if (finalResults.length > 0 && process.env.ANTHROPIC_API_KEY) {
+    if (results.length > 0 && process.env.ANTHROPIC_API_KEY) {
       try {
         const Anthropic = (await import('@anthropic-ai/sdk')).default;
         const anthropic = new Anthropic({
           apiKey: process.env.ANTHROPIC_API_KEY,
         });
 
-        const context = finalResults
+        const context = results
           .slice(0, 3)
-          .map((r) => `- [${r.source || 'dIQ'}] ${r.title}: ${r.summary || 'No summary'}`)
+          .map((r) => `- ${r.title}: ${r.summary || 'No summary'}`)
           .join('\n');
 
         const response = await anthropic.messages.create({
@@ -330,19 +267,11 @@ export async function POST(request: NextRequest) {
       query,
       searchMethod,
       searchEngine,
-      totalResults: finalResults.length,
-      results: finalResults,
+      totalResults: results.length,
+      results,
       aiSummary,
       embeddingsEnabled: true,
       elasticsearchEnabled: esAvailable,
-      // New integrated search metadata
-      integratedSearch: {
-        enabled: includeApps,
-        appResultsCount: appResults.length,
-        facets,
-        sources: Object.keys(SOURCE_DISPLAY),
-        availableTypes: Object.keys(CONTENT_TYPE_DISPLAY),
-      },
     });
   } catch (error) {
     console.error('Search API error:', error);

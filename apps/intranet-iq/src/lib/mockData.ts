@@ -1059,7 +1059,7 @@ export interface MockArticle {
   slug: string;
   content: string;
   excerpt: string;
-  summary: string;
+  summary?: string;
   category_id: string;
   category_name: string;
   author_id: string;
@@ -1111,7 +1111,6 @@ If you need assistance:
 2. **Knowledge Base**: Search for articles on any topic
 3. **IT Support**: Submit a ticket via the help desk`,
     excerpt: "Complete guide to getting started with Digital Workplace AI platform.",
-    summary: "Complete guide to getting started with Digital Workplace AI platform. Covers the Quick Start Checklist, Platform Overview of all four products, and how to get help.",
     category_id: "cat-001",
     category_name: "Getting Started",
     author_id: "1",
@@ -1152,7 +1151,6 @@ If you suspect a security incident:
 3. Preserve evidence
 4. Document what you observed`,
     excerpt: "Comprehensive security guidelines covering passwords, 2FA, and incident reporting.",
-    summary: "Comprehensive security guidelines covering passwords, 2FA, and incident reporting. Includes password requirements, authentication methods, and incident response procedures.",
     category_id: "cat-002",
     category_name: "IT & Security",
     author_id: "10",
@@ -1198,7 +1196,6 @@ We offer three medical plan options:
 - Non-birth parent: 8 weeks paid
 - Adoption: 12 weeks paid`,
     excerpt: "Complete guide to employee benefits including health insurance, 401k, and PTO.",
-    summary: "Complete guide to employee benefits including health insurance options (PPO and HSA plans), 401k with 6% company match, PTO policies based on tenure, and parental leave.",
     category_id: "cat-003",
     category_name: "HR & Benefits",
     author_id: "6",
@@ -1247,7 +1244,6 @@ Access the AI Assistant in three ways:
 - Provide context when needed
 - Iterate and refine your requests`,
     excerpt: "Learn how to effectively use the AI Assistant for productivity.",
-    summary: "Learn how to effectively use the AI Assistant powered by Claude 3.5 for productivity. Covers access methods, use cases for information retrieval, document assistance, and task automation.",
     category_id: "cat-004",
     category_name: "AI & Tools",
     author_id: "4",
@@ -1287,7 +1283,6 @@ Access the AI Assistant in three ways:
 - Take regular breaks
 - Maintain work-life boundaries`,
     excerpt: "Best practices for remote work productivity and communication.",
-    summary: "Best practices for remote work success including home office setup, communication guidelines for core hours and async work, and productivity tips for maintaining work-life balance.",
     category_id: "cat-005",
     category_name: "Work Policies",
     author_id: "3",
@@ -1419,381 +1414,6 @@ export const mockChannels: MockChannel[] = [
 ];
 
 // =============================================================================
-// KNOWLEDGE BASE CATEGORIES
-// =============================================================================
-
-export interface MockKBCategory {
-  id: string;
-  name: string;
-  slug: string;
-  description: string;
-  icon: string;
-  article_count: number;
-  parent_id: string | null;
-  department_id: string | null;
-  order: number;
-}
-
-export const mockKBCategories: MockKBCategory[] = [
-  { id: "cat-001", name: "Getting Started", slug: "getting-started", description: "New employee onboarding and basics", icon: "rocket", article_count: 15, parent_id: null, department_id: "dept-hr", order: 1 },
-  { id: "cat-002", name: "Company Policies", slug: "company-policies", description: "HR policies, guidelines, and procedures", icon: "shield", article_count: 24, parent_id: null, department_id: "dept-hr", order: 2 },
-  { id: "cat-003", name: "Benefits & Compensation", slug: "benefits-compensation", description: "Health, 401k, stock options, and perks", icon: "gift", article_count: 18, parent_id: null, department_id: "dept-hr", order: 3 },
-  { id: "cat-004", name: "AI & Tools", slug: "ai-tools", description: "AI Assistant, productivity tools, and integrations", icon: "cpu", article_count: 12, parent_id: null, department_id: "dept-product", order: 4 },
-  { id: "cat-005", name: "Work Policies", slug: "work-policies", description: "Remote work, PTO, and workplace guidelines", icon: "briefcase", article_count: 9, parent_id: null, department_id: "dept-hr", order: 5 },
-  { id: "cat-006", name: "Engineering", slug: "engineering", description: "Technical docs, architecture, and best practices", icon: "code", article_count: 42, parent_id: null, department_id: "dept-eng", order: 6 },
-  { id: "cat-007", name: "Product", slug: "product", description: "Roadmaps, specs, and product updates", icon: "package", article_count: 28, parent_id: null, department_id: "dept-product", order: 7 },
-  { id: "cat-008", name: "Sales & Marketing", slug: "sales-marketing", description: "Sales playbooks, marketing materials", icon: "trending-up", article_count: 35, parent_id: null, department_id: "dept-sales", order: 8 },
-];
-
-// =============================================================================
-// DEPARTMENTS
-// =============================================================================
-
-export interface MockDepartment {
-  id: string;
-  name: string;
-  description: string;
-  head_id: string;
-  head_name: string;
-  employee_count: number;
-  color: string;
-}
-
-export const mockDepartments: MockDepartment[] = [
-  { id: "dept-exec", name: "Executive Team", description: "Company leadership and strategic direction", head_id: "1", head_name: "Sarah Chen", employee_count: 4, color: "#10b981" },
-  { id: "dept-eng", name: "Engineering", description: "Product development and technical infrastructure", head_id: "2", head_name: "Mike Johnson", employee_count: 45, color: "#3b82f6" },
-  { id: "dept-hr", name: "Human Resources", description: "People operations, recruiting, and culture", head_id: "3", head_name: "Lisa Park", employee_count: 12, color: "#8b5cf6" },
-  { id: "dept-product", name: "Product", description: "Product management and design", head_id: "4", head_name: "James Wilson", employee_count: 18, color: "#f59e0b" },
-  { id: "dept-finance", name: "Finance", description: "Financial planning, accounting, and operations", head_id: "5", head_name: "Tom Chen", employee_count: 8, color: "#ef4444" },
-  { id: "dept-cs", name: "Customer Success", description: "Customer support and success management", head_id: "7", head_name: "Emily Rodriguez", employee_count: 22, color: "#06b6d4" },
-  { id: "dept-sales", name: "Sales", description: "Revenue generation and business development", head_id: "9", head_name: "David Kim", employee_count: 28, color: "#ec4899" },
-  { id: "dept-marketing", name: "Marketing", description: "Brand, content, and demand generation", head_id: "10", head_name: "Rachel Martinez", employee_count: 15, color: "#84cc16" },
-];
-
-// =============================================================================
-// CHAT THREADS & MESSAGES
-// =============================================================================
-
-export interface MockChatThread {
-  id: string;
-  title: string;
-  created_at: string;
-  updated_at: string;
-  message_count: number;
-  preview: string;
-}
-
-export interface MockChatMessage {
-  id: string;
-  thread_id: string;
-  role: "user" | "assistant";
-  content: string;
-  created_at: string;
-}
-
-export const mockChatThreads: MockChatThread[] = [
-  { id: "thread-1", title: "Q4 Budget Questions", created_at: "2026-01-28T10:00:00Z", updated_at: "2026-01-28T10:15:00Z", message_count: 4, preview: "Can you help me understand the Q4 budget allocation..." },
-  { id: "thread-2", title: "Remote Work Policy", created_at: "2026-01-27T14:00:00Z", updated_at: "2026-01-27T14:30:00Z", message_count: 6, preview: "What are the guidelines for remote work?" },
-  { id: "thread-3", title: "Engineering Roadmap", created_at: "2026-01-26T09:00:00Z", updated_at: "2026-01-26T09:45:00Z", message_count: 8, preview: "Summarize the Q1 engineering priorities..." },
-  { id: "thread-4", title: "Benefits Enrollment", created_at: "2026-01-25T11:00:00Z", updated_at: "2026-01-25T11:20:00Z", message_count: 3, preview: "When is the deadline for benefits enrollment?" },
-  { id: "thread-5", title: "Meeting Notes Summary", created_at: "2026-01-24T16:00:00Z", updated_at: "2026-01-24T16:10:00Z", message_count: 2, preview: "Can you summarize the key points from today's all-hands?" },
-];
-
-export const mockChatMessages: MockChatMessage[] = [
-  { id: "msg-1", thread_id: "thread-1", role: "user", content: "Can you help me understand the Q4 budget allocation for the engineering team?", created_at: "2026-01-28T10:00:00Z" },
-  { id: "msg-2", thread_id: "thread-1", role: "assistant", content: "Based on the Q4 financial reports, the Engineering department received $8.2M in budget allocation, representing 35% of total company spending. Key areas include:\n\n• Infrastructure: $3.1M (cloud, tooling)\n• Headcount: $4.2M (new hires, salaries)\n• R&D: $900K (AI initiatives)", created_at: "2026-01-28T10:01:00Z" },
-  { id: "msg-3", thread_id: "thread-1", role: "user", content: "How does that compare to Q3?", created_at: "2026-01-28T10:10:00Z" },
-  { id: "msg-4", thread_id: "thread-1", role: "assistant", content: "Q4 engineering budget increased 18% compared to Q3 ($6.9M). The main increases were:\n\n• Headcount +25% (17 new engineers hired)\n• R&D +40% (expanded AI team)\n• Infrastructure +12% (scaling for growth)", created_at: "2026-01-28T10:11:00Z" },
-];
-
-// =============================================================================
-// RECENT ACTIVITY
-// =============================================================================
-
-export interface MockActivity {
-  id: string;
-  type: "news" | "event" | "article" | "channel" | "recognition" | "announcement";
-  title: string;
-  description: string;
-  actor_name: string;
-  actor_avatar: string;
-  target_id: string;
-  target_type: string;
-  created_at: string;
-}
-
-export const mockRecentActivity: MockActivity[] = [
-  { id: "act-1", type: "news", title: "Q4 2025 Company Results Published", description: "Sarah Chen posted a company announcement", actor_name: "Sarah Chen", actor_avatar: "SC", target_id: "1", target_type: "news", created_at: "2026-01-28T09:00:00Z" },
-  { id: "act-2", type: "event", title: "Q1 All-Hands Meeting Scheduled", description: "New event added for February 3rd", actor_name: "Sarah Chen", actor_avatar: "SC", target_id: "1", target_type: "event", created_at: "2026-01-27T15:00:00Z" },
-  { id: "act-3", type: "recognition", title: "Kudos to Engineering Team", description: "Emily Rodriguez recognized the team for Q4 launch", actor_name: "Emily Rodriguez", actor_avatar: "ER", target_id: "", target_type: "recognition", created_at: "2026-01-27T14:00:00Z" },
-  { id: "act-4", type: "article", title: "AI Assistant Guide Updated", description: "James Wilson updated the knowledge base", actor_name: "James Wilson", actor_avatar: "JW", target_id: "4", target_type: "article", created_at: "2026-01-26T11:00:00Z" },
-  { id: "act-5", type: "channel", title: "New #ai-projects Channel", description: "Alex Kim created a new channel", actor_name: "Alex Kim", actor_avatar: "AK", target_id: "5", target_type: "channel", created_at: "2026-01-25T10:00:00Z" },
-  { id: "act-6", type: "news", title: "Remote Work Policy Updated", description: "Lisa Park announced policy changes", actor_name: "Lisa Park", actor_avatar: "LP", target_id: "3", target_type: "news", created_at: "2026-01-25T09:00:00Z" },
-  { id: "act-7", type: "announcement", title: "Benefits Enrollment Open", description: "Amanda Foster reminded about enrollment deadline", actor_name: "Amanda Foster", actor_avatar: "AF", target_id: "6", target_type: "news", created_at: "2026-01-24T08:00:00Z" },
-  { id: "act-8", type: "event", title: "Engineering Offsite Confirmed", description: "Mike Johnson finalized the offsite details", actor_name: "Mike Johnson", actor_avatar: "MJ", target_id: "2", target_type: "event", created_at: "2026-01-23T16:00:00Z" },
-];
-
-// =============================================================================
-// USER SETTINGS
-// =============================================================================
-
-export interface MockUserSettings {
-  id: string;
-  user_id: string;
-  theme: "light" | "dark" | "system";
-  notifications_email: boolean;
-  notifications_push: boolean;
-  notifications_slack: boolean;
-  digest_frequency: "daily" | "weekly" | "never";
-  timezone: string;
-  language: string;
-  compact_mode: boolean;
-  appearance: {
-    theme: string;
-    language: string;
-    timezone: string;
-    sidebar_collapsed: boolean;
-    density: string;
-  };
-  notification_prefs: Record<string, { email: boolean; push: boolean; inApp: boolean }>;
-}
-
-export const mockUserSettings: MockUserSettings = {
-  id: "settings-1",
-  user_id: "current-user",
-  theme: "dark",
-  notifications_email: true,
-  notifications_push: true,
-  notifications_slack: true,
-  digest_frequency: "daily",
-  timezone: "America/Los_Angeles",
-  language: "en-US",
-  compact_mode: false,
-  appearance: {
-    theme: "dark",
-    language: "en-US",
-    timezone: "America/Los_Angeles",
-    sidebar_collapsed: false,
-    density: "comfortable",
-  },
-  notification_prefs: {
-    mentions: { email: true, push: true, inApp: true },
-    channels: { email: false, push: true, inApp: true },
-    documents: { email: true, push: false, inApp: true },
-    calendar: { email: true, push: true, inApp: true },
-    workflows: { email: false, push: true, inApp: true },
-  },
-};
-
-export interface MockCurrentUser {
-  id: string;
-  email: string;
-  full_name: string;
-  avatar: string;
-  job_title: string;
-  department: string;
-  department_id: string;
-  role: "admin" | "editor" | "viewer";
-  joined_at: string;
-}
-
-export const mockCurrentUser: MockCurrentUser = {
-  id: "current-user",
-  email: "you@digitalworkplace.ai",
-  full_name: "Current User",
-  avatar: "CU",
-  job_title: "Product Manager",
-  department: "Product",
-  department_id: "dept-product",
-  role: "admin",
-  joined_at: "2024-06-15T00:00:00Z",
-};
-
-// =============================================================================
-// SEARCH RESULTS
-// =============================================================================
-
-export interface MockSearchResult {
-  id: string;
-  type: "article" | "news" | "event" | "person" | "channel";
-  title: string;
-  description: string;
-  url: string;
-  relevance_score: number;
-  highlights: string[];
-  created_at: string;
-  author?: string;
-}
-
-export const mockSearchResults: MockSearchResult[] = [
-  { id: "sr-1", type: "article", title: "Getting Started with Digital Workplace AI", description: "Comprehensive guide for new employees", url: "/content/1", relevance_score: 0.95, highlights: ["Digital Workplace AI", "getting started", "onboarding"], created_at: "2026-01-15T00:00:00Z", author: "James Wilson" },
-  { id: "sr-2", type: "news", title: "Q4 2025 Company Results", description: "Record-breaking performance announced", url: "/news/1", relevance_score: 0.92, highlights: ["Q4 results", "revenue growth", "company"], created_at: "2026-01-28T09:00:00Z", author: "Sarah Chen" },
-  { id: "sr-3", type: "person", title: "Sarah Chen", description: "CEO - Executive Team", url: "/people/1", relevance_score: 0.88, highlights: ["CEO", "leadership", "founder"], created_at: "2019-03-15T00:00:00Z" },
-  { id: "sr-4", type: "event", title: "Q1 All-Hands Meeting", description: "Quarterly company meeting", url: "/events/1", relevance_score: 0.85, highlights: ["all-hands", "Q1", "company meeting"], created_at: "2026-02-03T10:00:00Z" },
-  { id: "sr-5", type: "article", title: "Remote Work Best Practices", description: "Guidelines for remote work success", url: "/content/5", relevance_score: 0.82, highlights: ["remote work", "work from home", "productivity"], created_at: "2026-01-18T00:00:00Z", author: "Lisa Park" },
-  { id: "sr-6", type: "channel", title: "#engineering", description: "Engineering team discussions", url: "/channels/2", relevance_score: 0.78, highlights: ["engineering", "technical", "development"], created_at: "2020-01-10T00:00:00Z" },
-  { id: "sr-7", type: "article", title: "Benefits & Compensation Guide", description: "Complete guide to employee benefits", url: "/content/3", relevance_score: 0.75, highlights: ["benefits", "health insurance", "401k"], created_at: "2026-01-01T00:00:00Z", author: "Amanda Foster" },
-  { id: "sr-8", type: "news", title: "Welcome New Engineering Team", description: "17 new engineers join the team", url: "/news/2", relevance_score: 0.72, highlights: ["new hires", "engineering", "team growth"], created_at: "2026-01-27T14:00:00Z", author: "Mike Johnson" },
-];
-
-// =============================================================================
-// WORKFLOWS
-// =============================================================================
-
-export interface MockWorkflow {
-  id: string;
-  name: string;
-  description: string;
-  status: 'active' | 'paused' | 'draft' | 'error' | 'archived';
-  category: string;
-  trigger_type: string;
-  created_at: string;
-  updated_at: string;
-  last_run_at: string | null;
-  total_runs: number;
-  success_rate: number;
-  created_by_id: string;
-  created_by_name: string;
-  steps: { id: string; type: string; name: string; config: Record<string, unknown> }[];
-  definition: Record<string, unknown>;
-}
-
-export const mockWorkflows: MockWorkflow[] = [
-  {
-    id: "wf-1",
-    name: "Employee Onboarding Automation",
-    description: "Automates the employee onboarding process including account creation, equipment requests, and training assignments",
-    status: "active",
-    category: "HR",
-    trigger_type: "webhook",
-    created_at: "2026-01-10T10:00:00Z",
-    updated_at: "2026-01-28T14:00:00Z",
-    last_run_at: "2026-01-29T09:30:00Z",
-    total_runs: 156,
-    success_rate: 98.7,
-    created_by_id: "3",
-    created_by_name: "Lisa Park",
-    steps: [
-      { id: "s1", type: "trigger", name: "New Hire Webhook", config: { endpoint: "/api/onboard" } },
-      { id: "s2", type: "action", name: "Create Accounts", config: { systems: ["email", "slack", "jira"] } },
-      { id: "s3", type: "action", name: "Request Equipment", config: { items: ["laptop", "monitor", "headset"] } },
-      { id: "s4", type: "notification", name: "Welcome Email", config: { template: "new-hire-welcome" } },
-    ],
-    definition: {},
-  },
-  {
-    id: "wf-2",
-    name: "Document Approval Workflow",
-    description: "Routes documents through approval chains based on type and value",
-    status: "active",
-    category: "Operations",
-    trigger_type: "manual",
-    created_at: "2026-01-05T09:00:00Z",
-    updated_at: "2026-01-25T16:00:00Z",
-    last_run_at: "2026-01-30T11:15:00Z",
-    total_runs: 312,
-    success_rate: 99.4,
-    created_by_id: "5",
-    created_by_name: "Tom Chen",
-    steps: [
-      { id: "s1", type: "trigger", name: "Document Submitted", config: { types: ["contract", "invoice", "proposal"] } },
-      { id: "s2", type: "condition", name: "Check Value", config: { threshold: 10000 } },
-      { id: "s3", type: "action", name: "Route to Manager", config: { notify: true } },
-      { id: "s4", type: "notification", name: "Approval Notification", config: { channels: ["email", "slack"] } },
-    ],
-    definition: {},
-  },
-  {
-    id: "wf-3",
-    name: "Daily Report Generator",
-    description: "Generates and distributes daily performance reports to stakeholders",
-    status: "active",
-    category: "Analytics",
-    trigger_type: "schedule",
-    created_at: "2025-12-15T10:00:00Z",
-    updated_at: "2026-01-20T08:00:00Z",
-    last_run_at: "2026-01-30T06:00:00Z",
-    total_runs: 45,
-    success_rate: 100,
-    created_by_id: "4",
-    created_by_name: "James Wilson",
-    steps: [
-      { id: "s1", type: "trigger", name: "Daily Schedule", config: { cron: "0 6 * * *" } },
-      { id: "s2", type: "action", name: "Fetch Metrics", config: { sources: ["analytics", "sales", "support"] } },
-      { id: "s3", type: "llm_call", name: "Generate Summary", config: { model: "claude-3" } },
-      { id: "s4", type: "notification", name: "Send Report", config: { recipients: ["leadership-team"] } },
-    ],
-    definition: {},
-  },
-  {
-    id: "wf-4",
-    name: "Ticket Auto-Router",
-    description: "Automatically routes support tickets to the appropriate team based on content analysis",
-    status: "active",
-    category: "Support",
-    trigger_type: "webhook",
-    created_at: "2026-01-08T11:00:00Z",
-    updated_at: "2026-01-27T10:00:00Z",
-    last_run_at: "2026-01-30T10:45:00Z",
-    total_runs: 1247,
-    success_rate: 96.8,
-    created_by_id: "7",
-    created_by_name: "Emily Rodriguez",
-    steps: [
-      { id: "s1", type: "trigger", name: "New Ticket", config: { source: "zendesk" } },
-      { id: "s2", type: "llm_call", name: "Analyze Content", config: { model: "claude-3", task: "classify" } },
-      { id: "s3", type: "condition", name: "Priority Check", config: { levels: ["high", "medium", "low"] } },
-      { id: "s4", type: "action", name: "Assign to Team", config: { teams: ["billing", "technical", "sales"] } },
-    ],
-    definition: {},
-  },
-  {
-    id: "wf-5",
-    name: "Data Sync Pipeline",
-    description: "Synchronizes data between CRM, ERP, and data warehouse systems",
-    status: "paused",
-    category: "IT",
-    trigger_type: "schedule",
-    created_at: "2025-11-20T14:00:00Z",
-    updated_at: "2026-01-15T09:00:00Z",
-    last_run_at: "2026-01-15T03:00:00Z",
-    total_runs: 89,
-    success_rate: 94.4,
-    created_by_id: "10",
-    created_by_name: "Marcus Johnson",
-    steps: [
-      { id: "s1", type: "trigger", name: "Scheduled Sync", config: { cron: "0 3 * * *" } },
-      { id: "s2", type: "action", name: "Extract from CRM", config: { system: "salesforce" } },
-      { id: "s3", type: "action", name: "Transform Data", config: { mapping: "standard-v2" } },
-      { id: "s4", type: "action", name: "Load to Warehouse", config: { target: "snowflake" } },
-    ],
-    definition: {},
-  },
-  {
-    id: "wf-6",
-    name: "Marketing Email Campaign",
-    description: "Automated email drip campaigns for marketing nurture sequences",
-    status: "draft",
-    category: "Marketing",
-    trigger_type: "manual",
-    created_at: "2026-01-25T15:00:00Z",
-    updated_at: "2026-01-29T11:00:00Z",
-    last_run_at: null,
-    total_runs: 0,
-    success_rate: 0,
-    created_by_id: "9",
-    created_by_name: "Tom Martinez",
-    steps: [
-      { id: "s1", type: "trigger", name: "Campaign Start", config: {} },
-      { id: "s2", type: "action", name: "Segment Audience", config: { criteria: ["engagement", "industry"] } },
-      { id: "s3", type: "action", name: "Send Email", config: { template: "nurture-v1" } },
-      { id: "s4", type: "condition", name: "Wait for Response", config: { days: 3 } },
-    ],
-    definition: {},
-  },
-];
-
-// =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
 
@@ -1816,3 +1436,160 @@ export function getArticleById(id: string): MockArticle | undefined {
 export function getChannelById(id: string): MockChannel | undefined {
   return mockChannels.find(channel => channel.id === id);
 }
+
+// =============================================================================
+// KB CATEGORIES
+// =============================================================================
+
+export interface MockKBCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  parent_id: string | null;
+  department_id?: string | null;
+  article_count: number;
+  icon?: string;
+}
+
+export const mockKBCategories: MockKBCategory[] = [
+  { id: "cat-001", name: "Getting Started", slug: "getting-started", description: "Onboarding and basics", parent_id: null, article_count: 12, icon: "rocket" },
+  { id: "cat-002", name: "IT & Security", slug: "it-security", description: "IT policies and security guidelines", parent_id: null, article_count: 18, icon: "shield" },
+  { id: "cat-003", name: "HR Policies", slug: "hr-policies", description: "Human resources policies and procedures", parent_id: null, article_count: 24, icon: "users" },
+  { id: "cat-004", name: "Engineering", slug: "engineering", description: "Technical documentation and standards", parent_id: null, article_count: 45, icon: "code" },
+  { id: "cat-005", name: "Product", slug: "product", description: "Product guides and documentation", parent_id: null, article_count: 32, icon: "box" },
+  { id: "cat-006", name: "Sales & Marketing", slug: "sales-marketing", description: "Sales playbooks and marketing resources", parent_id: null, article_count: 28, icon: "trending-up" },
+  { id: "cat-007", name: "Finance", slug: "finance", description: "Financial policies and procedures", parent_id: null, article_count: 15, icon: "dollar-sign" },
+  { id: "cat-008", name: "Legal", slug: "legal", description: "Legal guidelines and compliance", parent_id: null, article_count: 10, icon: "scale" },
+];
+
+export function getKBCategoryById(id: string): MockKBCategory | undefined {
+  return mockKBCategories.find(cat => cat.id === id);
+}
+
+// =============================================================================
+// DEPARTMENTS
+// =============================================================================
+
+export interface MockDepartment {
+  id: string;
+  name: string;
+  description: string;
+  manager_id: string;
+  manager_name: string;
+  employee_count: number;
+  parent_id: string | null;
+}
+
+export const mockDepartments: MockDepartment[] = [
+  { id: "dept-exec", name: "Executive Team", description: "Company leadership", manager_id: "1", manager_name: "Sarah Chen", employee_count: 5, parent_id: null },
+  { id: "dept-eng", name: "Engineering", description: "Product development and infrastructure", manager_id: "2", manager_name: "Marcus Johnson", employee_count: 38, parent_id: null },
+  { id: "dept-product", name: "Product", description: "Product management and design", manager_id: "5", manager_name: "Emily Rodriguez", employee_count: 12, parent_id: null },
+  { id: "dept-sales", name: "Sales", description: "Revenue and business development", manager_id: "8", manager_name: "David Kim", employee_count: 22, parent_id: null },
+  { id: "dept-marketing", name: "Marketing", description: "Brand and growth", manager_id: "11", manager_name: "Jessica Taylor", employee_count: 15, parent_id: null },
+  { id: "dept-hr", name: "Human Resources", description: "People operations", manager_id: "14", manager_name: "Robert Williams", employee_count: 8, parent_id: null },
+  { id: "dept-finance", name: "Finance", description: "Financial operations", manager_id: "17", manager_name: "Amanda Chen", employee_count: 10, parent_id: null },
+  { id: "dept-legal", name: "Legal", description: "Legal and compliance", manager_id: "20", manager_name: "Michael Brown", employee_count: 6, parent_id: null },
+  { id: "dept-it", name: "IT Operations", description: "Infrastructure and support", manager_id: "23", manager_name: "Chris Anderson", employee_count: 12, parent_id: null },
+  { id: "dept-cs", name: "Customer Success", description: "Customer support and success", manager_id: "26", manager_name: "Lisa Martinez", employee_count: 18, parent_id: null },
+];
+
+export function getDepartmentById(id: string): MockDepartment | undefined {
+  return mockDepartments.find(dept => dept.id === id);
+}
+
+// =============================================================================
+// SEARCH RESULTS
+// =============================================================================
+
+export interface MockSearchResult {
+  id: string;
+  title: string;
+  excerpt: string;
+  description?: string;
+  highlights?: string[];
+  type: 'article' | 'news' | 'event' | 'employee' | 'channel';
+  source: string;
+  url: string;
+  relevance: number;
+  author?: string;
+  date?: string;
+  tags?: string[];
+}
+
+export const mockSearchResults: MockSearchResult[] = [
+  { id: "sr-1", title: "Getting Started with Digital Workplace AI", excerpt: "Complete guide to getting started with the platform...", type: "article", source: "Knowledge Base", url: "/diq/content/1", relevance: 0.95, author: "Sarah Chen", tags: ["onboarding", "guide"] },
+  { id: "sr-2", title: "IT Security Guidelines", excerpt: "Security best practices and policies for all employees...", type: "article", source: "Knowledge Base", url: "/diq/content/2", relevance: 0.88, author: "Marcus Johnson", tags: ["security", "IT"] },
+  { id: "sr-3", title: "Q4 2025 Results Announcement", excerpt: "Record-breaking quarterly results with 35% YoY growth...", type: "news", source: "News", url: "/diq/news/1", relevance: 0.82, author: "Sarah Chen", date: "2026-01-28" },
+  { id: "sr-4", title: "Annual Company Retreat 2026", excerpt: "Join us for the annual company retreat in Lake Tahoe...", type: "event", source: "Events", url: "/diq/events/1", relevance: 0.75, date: "2026-03-15" },
+  { id: "sr-5", title: "Marcus Johnson", excerpt: "VP of Engineering, leading the platform development team...", type: "employee", source: "People", url: "/diq/people/2", relevance: 0.70 },
+];
+
+// =============================================================================
+// CHAT THREADS & MESSAGES
+// =============================================================================
+
+export interface MockChatThread {
+  id: string;
+  title: string | null;
+  created_at: string;
+  updated_at: string;
+  message_count: number;
+  model: string;
+  parent_thread_id: string | null;
+  branch_point_message_id: string | null;
+  preview: string;
+}
+
+export interface MockChatMessage {
+  id: string;
+  thread_id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  created_at: string;
+  sources?: { id: string; title: string; type: string; url?: string }[];
+}
+
+export const mockChatThreads: MockChatThread[] = [
+  { id: "thread-1", title: "Help with onboarding process", created_at: "2026-01-30T10:00:00Z", updated_at: "2026-01-30T10:15:00Z", message_count: 4, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "How do I complete my onboarding checklist?" },
+  { id: "thread-2", title: "PTO policy questions", created_at: "2026-01-29T14:30:00Z", updated_at: "2026-01-29T14:45:00Z", message_count: 6, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What is our PTO policy?" },
+  { id: "thread-3", title: "IT security requirements", created_at: "2026-01-28T09:00:00Z", updated_at: "2026-01-28T09:30:00Z", message_count: 8, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What are the security requirements for remote access?" },
+];
+
+export const mockChatMessages: MockChatMessage[] = [
+  { id: "msg-1", thread_id: "thread-1", role: "user", content: "How do I complete my onboarding checklist?", created_at: "2026-01-30T10:00:00Z" },
+  { id: "msg-2", thread_id: "thread-1", role: "assistant", content: "I can help you with that! Your onboarding checklist includes several key steps:\n\n1. **Complete your profile** - Add your photo, bio, and contact information\n2. **Set up 2FA** - Enable two-factor authentication for security\n3. **Join team channels** - Connect with your team on Slack\n4. **Review policies** - Read through the employee handbook\n\nWould you like me to guide you through any of these steps?", created_at: "2026-01-30T10:01:00Z", sources: [{ id: "1", title: "Getting Started Guide", type: "article", url: "/diq/content/1" }] },
+  { id: "msg-3", thread_id: "thread-2", role: "user", content: "What is our PTO policy?", created_at: "2026-01-29T14:30:00Z" },
+  { id: "msg-4", thread_id: "thread-2", role: "assistant", content: "Our PTO policy provides generous time off benefits:\n\n- **Vacation**: 20 days per year for all full-time employees\n- **Sick Leave**: 10 days per year\n- **Personal Days**: 3 days per year\n- **Holidays**: 12 company-observed holidays\n\nPTO accrues monthly and can be carried over up to 5 days. For detailed information, please refer to the HR Policies section.", created_at: "2026-01-29T14:31:00Z", sources: [{ id: "3", title: "PTO Policy", type: "article", url: "/diq/content/3" }] },
+];
+
+export function getChatThreadById(id: string): MockChatThread | undefined {
+  return mockChatThreads.find(thread => thread.id === id);
+}
+
+export function getMessagesForThread(threadId: string): MockChatMessage[] {
+  return mockChatMessages.filter(msg => msg.thread_id === threadId);
+}
+
+// =============================================================================
+// RECENT ACTIVITY
+// =============================================================================
+
+export interface MockRecentActivity {
+  id: string;
+  type: 'article_published' | 'news_posted' | 'event_created' | 'employee_joined' | 'comment_added';
+  title: string;
+  description: string;
+  user_name: string;
+  user_avatar: string;
+  timestamp: string;
+  url?: string;
+}
+
+export const mockRecentActivity: MockRecentActivity[] = [
+  { id: "act-1", type: "article_published", title: "New article published", description: "Getting Started with AI Workflows", user_name: "Sarah Chen", user_avatar: "SC", timestamp: "2026-01-30T15:30:00Z", url: "/diq/content/5" },
+  { id: "act-2", type: "news_posted", title: "Company announcement", description: "Q4 2025 Results Released", user_name: "Marketing Team", user_avatar: "MT", timestamp: "2026-01-28T09:00:00Z", url: "/diq/news/1" },
+  { id: "act-3", type: "event_created", title: "New event scheduled", description: "Team Retrospective - Q1 Planning", user_name: "Emily Rodriguez", user_avatar: "ER", timestamp: "2026-01-27T14:00:00Z", url: "/diq/events/3" },
+  { id: "act-4", type: "employee_joined", title: "New team member", description: "Alex Thompson joined Engineering", user_name: "HR Team", user_avatar: "HR", timestamp: "2026-01-26T10:00:00Z", url: "/diq/people/42" },
+  { id: "act-5", type: "comment_added", title: "New comment", description: "Discussion on IT Security Guidelines", user_name: "Marcus Johnson", user_avatar: "MJ", timestamp: "2026-01-25T16:45:00Z", url: "/diq/content/2" },
+];

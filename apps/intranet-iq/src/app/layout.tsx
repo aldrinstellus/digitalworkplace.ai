@@ -33,7 +33,7 @@ export default function RootLayout({
       afterSignUpUrl="/diq/dashboard"
     >
       <html lang="en" className="dark">
-        <body className="antialiased min-h-dvh bg-[var(--bg-obsidian)]">
+        <body className="antialiased min-h-screen bg-[var(--bg-obsidian)]">
           <QueryProvider>
             <TrackingWrapper>
               {children}

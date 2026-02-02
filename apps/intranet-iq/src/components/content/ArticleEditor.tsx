@@ -24,6 +24,9 @@ import {
   Check,
   Loader2,
   Paperclip,
+  Globe,
+  Users,
+  Lock,
 } from "lucide-react";
 import { FileAttachmentUpload } from "./FileAttachmentUpload";
 
@@ -46,6 +49,7 @@ interface ArticleEditorProps {
     summary?: string;
     tags?: string[];
     status: string;
+    visibility?: string;
     attachments?: FileAttachment[];
   };
   onSave: (data: {
@@ -54,6 +58,7 @@ interface ArticleEditorProps {
     summary: string;
     tags: string[];
     status: string;
+    visibility: string;
     attachments: FileAttachment[];
   }) => Promise<void>;
   onCancel: () => void;
@@ -66,6 +71,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
   const [tags, setTags] = useState<string[]>(article?.tags || []);
   const [tagInput, setTagInput] = useState("");
   const [status, setStatus] = useState(article?.status || "draft");
+  const [visibility, setVisibility] = useState(article?.visibility || "team");
   const [isPreview, setIsPreview] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -98,6 +104,7 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
         summary,
         tags,
         status: saveStatus || status,
+        visibility,
         attachments: attachments.filter((a) => a.status === "complete"),
       });
       setSaved(true);
@@ -328,17 +335,63 @@ export function ArticleEditor({ article, onSave, onCancel }: ArticleEditorProps)
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-white/40">Status:</span>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="bg-[var(--bg-slate)] border border-white/10 rounded px-2 py-1 text-xs text-white outline-none"
-            >
-              <option value="draft">Draft</option>
-              <option value="pending_review">Pending Review</option>
-              <option value="published">Published</option>
-            </select>
+          <div className="flex items-center gap-6">
+            {/* Visibility Toggle */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-white/40">Visibility:</span>
+              <div className="flex items-center bg-[var(--bg-slate)] border border-white/10 rounded-lg p-0.5">
+                <button
+                  onClick={() => setVisibility("public")}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${
+                    visibility === "public"
+                      ? "bg-green-500/20 text-green-400"
+                      : "text-white/50 hover:text-white"
+                  }`}
+                  title="Visible to everyone"
+                >
+                  <Globe className="w-3 h-3" />
+                  Public
+                </button>
+                <button
+                  onClick={() => setVisibility("team")}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${
+                    visibility === "team"
+                      ? "bg-blue-500/20 text-blue-400"
+                      : "text-white/50 hover:text-white"
+                  }`}
+                  title="Visible to team members only"
+                >
+                  <Users className="w-3 h-3" />
+                  Team
+                </button>
+                <button
+                  onClick={() => setVisibility("private")}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${
+                    visibility === "private"
+                      ? "bg-orange-500/20 text-orange-400"
+                      : "text-white/50 hover:text-white"
+                  }`}
+                  title="Visible only to you"
+                >
+                  <Lock className="w-3 h-3" />
+                  Private
+                </button>
+              </div>
+            </div>
+
+            {/* Status Dropdown */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-white/40">Status:</span>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="bg-[var(--bg-slate)] border border-white/10 rounded px-2 py-1 text-xs text-white outline-none"
+              >
+                <option value="draft">Draft</option>
+                <option value="pending_review">Pending Review</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>

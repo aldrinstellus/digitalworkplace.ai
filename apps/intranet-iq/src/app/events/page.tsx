@@ -22,6 +22,7 @@ import {
   Check,
   HelpCircle,
   X,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -39,6 +40,15 @@ export default function EventsPage() {
   const [filter, setFilter] = useState<"all" | "virtual" | "in_person" | "hybrid">("all");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    type: "hybrid" as "virtual" | "in_person" | "hybrid",
+  });
 
   // Use mock data directly
   const events = mockEvents;
@@ -148,14 +158,25 @@ export default function EventsPage() {
       <main className="ml-16 p-8">
         <FadeIn className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-medium text-[var(--text-primary)] mb-2 flex items-center gap-3">
-              <Calendar className="w-7 h-7 text-[var(--accent-ember)]" />
-              Upcoming Events
-            </h1>
-            <p className="text-[var(--text-muted)]">
-              View and manage upcoming company events and meetings
-            </p>
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-medium text-[var(--text-primary)] mb-2 flex items-center gap-3">
+                <Calendar className="w-7 h-7 text-[var(--accent-ember)]" />
+                Upcoming Events
+              </h1>
+              <p className="text-[var(--text-muted)]">
+                View and manage upcoming company events and meetings
+              </p>
+            </div>
+            <motion.button
+              onClick={() => setShowCreateModal(true)}
+              className="px-4 py-2.5 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] text-white flex items-center gap-2 transition-colors"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Plus className="w-5 h-5" />
+              Create Event
+            </motion.button>
           </div>
 
           {/* Search, Filter, and View Toggle */}
@@ -460,6 +481,122 @@ export default function EventsPage() {
           )}
         </FadeIn>
       </main>
+
+      {/* Create Event Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-2xl w-full max-w-lg overflow-hidden"
+          >
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border-subtle)]">
+              <h2 className="text-lg font-medium text-[var(--text-primary)] flex items-center gap-2">
+                <Plus className="w-5 h-5 text-[var(--accent-ember)]" />
+                Create New Event
+              </h2>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm text-[var(--text-muted)] mb-1.5">Event Title</label>
+                <input
+                  type="text"
+                  value={newEvent.title}
+                  onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                  placeholder="Enter event title..."
+                  className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-[var(--text-muted)] mb-1.5">Description</label>
+                <textarea
+                  value={newEvent.description}
+                  onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                  placeholder="Event description..."
+                  rows={3}
+                  className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors resize-none"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-[var(--text-muted)] mb-1.5">Date</label>
+                  <input
+                    type="date"
+                    value={newEvent.date}
+                    onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
+                    className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-[var(--text-muted)] mb-1.5">Time</label>
+                  <input
+                    type="time"
+                    value={newEvent.time}
+                    onChange={(e) => setNewEvent({ ...newEvent, time: e.target.value })}
+                    className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm text-[var(--text-muted)] mb-1.5">Location</label>
+                <input
+                  type="text"
+                  value={newEvent.location}
+                  onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                  placeholder="Enter location or meeting link..."
+                  className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-[var(--text-muted)] mb-1.5">Event Type</label>
+                <div className="flex gap-2">
+                  {(["virtual", "in_person", "hybrid"] as const).map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setNewEvent({ ...newEvent, type })}
+                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg border text-sm transition-colors ${
+                        newEvent.type === type
+                          ? "bg-[var(--accent-ember)]/20 border-[var(--accent-ember)]/50 text-[var(--accent-ember)]"
+                          : "border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-white/5"
+                      }`}
+                    >
+                      {type === "virtual" && <Video className="w-4 h-4" />}
+                      {type === "in_person" && <Building className="w-4 h-4" />}
+                      {type === "hybrid" && <Globe className="w-4 h-4" />}
+                      {type.replace("_", "-")}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 p-4 border-t border-[var(--border-subtle)]">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-muted)] hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  console.log("Creating event:", newEvent);
+                  setShowCreateModal(false);
+                  setNewEvent({ title: "", description: "", date: "", time: "", location: "", type: "hybrid" });
+                }}
+                disabled={!newEvent.title || !newEvent.date}
+                className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:bg-[var(--accent-ember)]/50 disabled:cursor-not-allowed text-white transition-colors"
+              >
+                Create Event
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

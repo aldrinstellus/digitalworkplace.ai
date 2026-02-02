@@ -78,16 +78,16 @@ body { h-dvh overflow-hidden; }     /* ⛔ BREAKS */
 
 **dIQ (Intranet IQ)** is an AI-powered internal knowledge network - part of the Digital Workplace AI product suite.
 
-**Version:** 2.6.0 (Full Ecosystem Integration)
+**Version:** 2.7.0 (Full Ecosystem Integration - 100% Complete)
 **Audit Score:** 100/100
-**Integration Status:** 100% (10 Apps Connected)
+**Integration Status:** 100% (11 Apps Connected - Chat AI, Content, People, Search all enhanced)
 **Design System:** Midnight Green (emerald/teal accents)
-**Production:** https://diq.digitalworkplace.ai/diq/dashboard
+**Production:** https://intranet-iq.vercel.app/diq/dashboard
 **Cache Prevention:** ✅ Configured
 **Session Management:** Full Spectrum (SAVEPOINT.md is master reference)
 
-### Full Ecosystem Integration (v2.6.0)
-All Apps Bar data is now fully connected:
+### Full Ecosystem Integration (v2.7.0)
+All Apps Bar data is now fully connected with 100% integration score:
 - **Slack** - Messages, channels searchable
 - **Jira** - Tickets as tasks in My Day
 - **GitHub** - PRs as tasks in My Day

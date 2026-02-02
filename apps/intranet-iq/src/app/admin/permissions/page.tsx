@@ -22,6 +22,9 @@ import {
   AlertTriangle,
   X,
   CalendarDays,
+  CheckSquare,
+  Square,
+  UserMinus,
 } from "lucide-react";
 
 interface Role {
@@ -163,14 +166,13 @@ export default function PermissionsPage() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(mockRoles[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedCategories, setExpandedCategories] = useState<string[]>(permissionCategories.map(c => c.name));
-  const [showCreateRole, setShowCreateRole] = useState(false);
+  const [_showCreateRole, setShowCreateRole] = useState(false);
   const [showTempAccessModal, setShowTempAccessModal] = useState(false);
-  const [newRoleName, setNewRoleName] = useState("");
-  const [newRoleDescription, setNewRoleDescription] = useState("");
-  const [newRolePermissions, setNewRolePermissions] = useState<string[]>([]);
   const [selectedUserForTempAccess, setSelectedUserForTempAccess] = useState<User | null>(null);
   const [tempAccessDate, setTempAccessDate] = useState("");
   const [grantTempAccess, setGrantTempAccess] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+  const [bulkRole, setBulkRole] = useState("");
 
   const toggleCategory = (name: string) => {
     setExpandedCategories(prev =>
@@ -190,6 +192,41 @@ export default function PermissionsPage() {
       user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Bulk selection helpers
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUsers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(userId)) {
+        newSet.delete(userId);
+      } else {
+        newSet.add(userId);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedUsers.size === filteredUsers.length) {
+      setSelectedUsers(new Set());
+    } else {
+      setSelectedUsers(new Set(filteredUsers.map(u => u.id)));
+    }
+  };
+
+  const handleBulkAssignRole = () => {
+    if (!bulkRole) return;
+    console.log("Assigning role", bulkRole, "to users:", Array.from(selectedUsers));
+    // In production, this would call an API
+    setSelectedUsers(new Set());
+    setBulkRole("");
+  };
+
+  const handleBulkRemove = () => {
+    console.log("Removing users:", Array.from(selectedUsers));
+    // In production, this would call an API
+    setSelectedUsers(new Set());
+  };
 
   const openTempAccessModal = (user: User) => {
     setSelectedUserForTempAccess(user);
@@ -448,12 +485,75 @@ export default function PermissionsPage() {
                     Add User
                   </button>
                 </div>
+
+                {/* Bulk Actions Bar */}
+                {selectedUsers.size > 0 && (
+                  <div className="mt-4 p-3 bg-[var(--accent-ember)]/10 border border-[var(--accent-ember)]/30 rounded-lg flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <CheckSquare className="w-5 h-5 text-[var(--accent-ember)]" />
+                      <span className="text-sm text-[var(--text-primary)]">
+                        {selectedUsers.size} user{selectedUsers.size !== 1 ? 's' : ''} selected
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-[var(--text-muted)]">Assign role:</span>
+                        <select
+                          value={bulkRole}
+                          onChange={(e) => setBulkRole(e.target.value)}
+                          className="bg-white/5 border border-[var(--border-subtle)] rounded-lg px-3 py-1.5 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent-ember)]/50"
+                        >
+                          <option value="">Select role</option>
+                          {mockRoles.map((role) => (
+                            <option key={role.id} value={role.id}>
+                              {role.name}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={handleBulkAssignRole}
+                          disabled={!bulkRole}
+                          className="px-3 py-1.5 rounded-lg bg-blue-500 hover:bg-blue-600 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white text-sm flex items-center gap-1.5 transition-colors"
+                        >
+                          <Shield className="w-3.5 h-3.5" />
+                          Apply
+                        </button>
+                      </div>
+                      <div className="w-px h-6 bg-white/10" />
+                      <button
+                        onClick={handleBulkRemove}
+                        className="px-3 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 text-red-400 text-sm flex items-center gap-1.5 transition-colors"
+                      >
+                        <UserMinus className="w-3.5 h-3.5" />
+                        Remove
+                      </button>
+                      <button
+                        onClick={() => setSelectedUsers(new Set())}
+                        className="p-1.5 rounded-lg hover:bg-white/10 text-[var(--text-muted)] transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="text-left text-sm text-[var(--text-muted)] border-b border-[var(--border-subtle)]">
+                      <th className="px-4 py-3 w-12">
+                        <button
+                          onClick={toggleSelectAll}
+                          className="p-1 rounded hover:bg-white/10 transition-colors"
+                        >
+                          {selectedUsers.size === filteredUsers.length && filteredUsers.length > 0 ? (
+                            <CheckSquare className="w-5 h-5 text-[var(--accent-ember)]" />
+                          ) : (
+                            <Square className="w-5 h-5 text-[var(--text-muted)]" />
+                          )}
+                        </button>
+                      </th>
                       <th className="px-6 py-3 font-medium">User</th>
                       <th className="px-6 py-3 font-medium">Role</th>
                       <th className="px-6 py-3 font-medium">Access Status</th>
@@ -464,7 +564,19 @@ export default function PermissionsPage() {
                   </thead>
                   <tbody>
                     {filteredUsers.map((user) => (
-                      <tr key={user.id} className="border-b border-[var(--border-subtle)]/50 hover:bg-white/5">
+                      <tr key={user.id} className={`border-b border-[var(--border-subtle)]/50 hover:bg-white/5 ${selectedUsers.has(user.id) ? 'bg-[var(--accent-ember)]/5' : ''}`}>
+                        <td className="px-4 py-4">
+                          <button
+                            onClick={() => toggleUserSelection(user.id)}
+                            className="p-1 rounded hover:bg-white/10 transition-colors"
+                          >
+                            {selectedUsers.has(user.id) ? (
+                              <CheckSquare className="w-5 h-5 text-[var(--accent-ember)]" />
+                            ) : (
+                              <Square className="w-5 h-5 text-[var(--text-muted)]" />
+                            )}
+                          </button>
+                        </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--accent-ember)] to-[var(--accent-copper)] flex items-center justify-center text-[var(--text-primary)] font-medium">
@@ -553,177 +665,6 @@ export default function PermissionsPage() {
             </div>
           )}
         </div>
-
-        {/* Create Role Modal */}
-        {showCreateRole && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setShowCreateRole(false)}
-            />
-            <div className="relative bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col">
-              {/* Header */}
-              <div className="flex items-center justify-between p-5 border-b border-[var(--border-subtle)]">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[var(--accent-ember)]/20 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-[var(--accent-ember)]" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium text-[var(--text-primary)]">
-                      Create New Role
-                    </h3>
-                    <p className="text-sm text-[var(--text-muted)]">
-                      Define permissions for this role
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowCreateRole(false)}
-                  className="p-2 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Body */}
-              <div className="p-5 space-y-5 overflow-y-auto flex-1">
-                {/* Role Name */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
-                    Role Name
-                  </label>
-                  <input
-                    type="text"
-                    value={newRoleName}
-                    onChange={(e) => setNewRoleName(e.target.value)}
-                    placeholder="e.g., Content Manager"
-                    className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors"
-                  />
-                </div>
-
-                {/* Role Description */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
-                    Description
-                  </label>
-                  <textarea
-                    value={newRoleDescription}
-                    onChange={(e) => setNewRoleDescription(e.target.value)}
-                    placeholder="Describe what this role can do..."
-                    rows={2}
-                    className="w-full bg-[var(--bg-slate)] border border-[var(--border-subtle)] rounded-lg px-4 py-2.5 text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:border-[var(--accent-ember)]/50 transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Permissions Selection */}
-                <div className="space-y-3">
-                  <label className="block text-sm font-medium text-[var(--text-secondary)]">
-                    Permissions
-                  </label>
-                  <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
-                    {permissionCategories.map((category) => {
-                      const CategoryIcon = category.icon;
-                      const selectedCount = category.permissions.filter(p =>
-                        newRolePermissions.includes(p.id)
-                      ).length;
-
-                      return (
-                        <div key={category.name} className="border border-[var(--border-subtle)] rounded-lg overflow-hidden">
-                          <div className="flex items-center justify-between p-3 bg-white/5">
-                            <div className="flex items-center gap-2">
-                              <CategoryIcon className="w-4 h-4 text-[var(--text-secondary)]" />
-                              <span className="text-sm font-medium text-[var(--text-primary)]">{category.name}</span>
-                              <span className="px-1.5 py-0.5 rounded text-xs bg-white/10 text-[var(--text-muted)]">
-                                {selectedCount}/{category.permissions.length}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => {
-                                const allIds = category.permissions.map(p => p.id);
-                                const allSelected = allIds.every(id => newRolePermissions.includes(id));
-                                if (allSelected) {
-                                  setNewRolePermissions(prev => prev.filter(id => !allIds.includes(id)));
-                                } else {
-                                  setNewRolePermissions(prev => [...new Set([...prev, ...allIds])]);
-                                }
-                              }}
-                              className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)]"
-                            >
-                              {category.permissions.every(p => newRolePermissions.includes(p.id)) ? "Deselect All" : "Select All"}
-                            </button>
-                          </div>
-                          <div className="p-3 space-y-2">
-                            {category.permissions.map((permission) => (
-                              <label key={permission.id} className="flex items-center gap-3 cursor-pointer group">
-                                <input
-                                  type="checkbox"
-                                  checked={newRolePermissions.includes(permission.id)}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setNewRolePermissions(prev => [...prev, permission.id]);
-                                    } else {
-                                      setNewRolePermissions(prev => prev.filter(id => id !== permission.id));
-                                    }
-                                  }}
-                                  className="w-4 h-4 rounded border-[var(--border-subtle)] bg-white/5 text-[var(--accent-ember)] focus:ring-[var(--accent-ember)]/50"
-                                />
-                                <div className="flex-1">
-                                  <span className="text-sm text-[var(--text-primary)] group-hover:text-[var(--accent-ember)] transition-colors">
-                                    {permission.name}
-                                  </span>
-                                  <p className="text-xs text-[var(--text-muted)]">{permission.description}</p>
-                                </div>
-                              </label>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-center justify-between p-5 border-t border-[var(--border-subtle)] bg-[var(--bg-charcoal)]">
-                <span className="text-sm text-[var(--text-muted)]">
-                  {newRolePermissions.length} permissions selected
-                </span>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => {
-                      setShowCreateRole(false);
-                      setNewRoleName("");
-                      setNewRoleDescription("");
-                      setNewRolePermissions([]);
-                    }}
-                    className="px-4 py-2 rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 text-sm transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => {
-                      // In production, this would save to the backend
-                      console.log("Creating role:", {
-                        name: newRoleName,
-                        description: newRoleDescription,
-                        permissions: newRolePermissions,
-                      });
-                      setShowCreateRole(false);
-                      setNewRoleName("");
-                      setNewRoleDescription("");
-                      setNewRolePermissions([]);
-                    }}
-                    disabled={!newRoleName.trim()}
-                    className="px-4 py-2 rounded-lg bg-[var(--accent-ember)] hover:bg-[var(--accent-ember-soft)] disabled:opacity-50 disabled:cursor-not-allowed text-[var(--text-primary)] text-sm font-medium transition-colors flex items-center gap-2"
-                  >
-                    <Plus className="w-4 h-4" />
-                    Create Role
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Temporary Access Modal */}
         {showTempAccessModal && selectedUserForTempAccess && (

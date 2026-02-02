@@ -1,10 +1,10 @@
 # dIQ - Maintenance Guide
 
-**Version**: 2.0.0
+**Version**: 2.7.0
 **Last Updated**: 2026-02-02
 **Applies To**: Intranet IQ (dIQ) Application
 **Status**: ACTIVE
-**Integration**: Full Ecosystem (10 Apps Connected)
+**Integration**: Full Ecosystem (11 Apps Connected) - 100% Integration Score
 
 ---
 
@@ -444,10 +444,57 @@ After major changes:
 
 ---
 
+## 11. Full Ecosystem Integration Verification (v2.7.0)
+
+### Integration Health Checks
+
+After deployment, verify all integration points:
+
+```bash
+# 1. Verify Chat AI app filter
+curl -X POST http://localhost:3001/diq/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "test", "appFilter": "slack"}' | jq '.appContext'
+
+# 2. Verify Content External tab
+curl http://localhost:3001/diq/api/content/external | jq '.documents | length'
+
+# 3. Verify People Slack status
+curl http://localhost:3001/diq/api/people | jq '.employees[0].slackStatus'
+
+# 4. Verify Search per-source filters
+curl -X POST http://localhost:3001/diq/api/search \
+  -d '{"query": "test", "sources": ["slack"]}' | jq '.results'
+```
+
+### Integration Score Verification
+
+| Area | Expected | Command |
+|------|----------|---------|
+| Chat/AI | 100% | Check app filter dropdown in `/diq/chat` |
+| Content | 100% | Check External tab in `/diq/content` |
+| People | 100% | Check Slack status on employee cards |
+| Search | 100% | Check per-source filters in `/diq/search` |
+
+### Post-Deployment Checklist (v2.7.0)
+
+- [ ] Chat AI app filter dropdown visible
+- [ ] Chat sources show app icons
+- [ ] Content External tab shows documents
+- [ ] Content source filter chips with counts
+- [ ] People cards show real Slack status
+- [ ] People activity tabs functional
+- [ ] Search per-source filters working
+- [ ] All 11 source badges displaying
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.7.0 | 2026-02-02 | Full ecosystem integration verification (100% score) |
+| 2.0.0 | 2026-02-02 | Full ecosystem (10 apps) |
 | 1.0.0 | 2026-01-29 | Initial release |
 
 ---

@@ -21,6 +21,9 @@ import {
   Tag,
   User,
   Loader2,
+  Share2,
+  Link2,
+  Check,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -50,6 +53,26 @@ export default function NewsPage() {
   const [creating, setCreating] = useState(false);
   const [followedCategories, setFollowedCategories] = useState<string[]>(["company", "product"]);
   const [followedAuthors, setFollowedAuthors] = useState<string[]>(["1"]);
+  const [shareDropdownOpen, setShareDropdownOpen] = useState<string | null>(null);
+  const [copiedPostId, setCopiedPostId] = useState<string | null>(null);
+
+  const handleShare = (postId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShareDropdownOpen(shareDropdownOpen === postId ? null : postId);
+  };
+
+  const handleCopyLink = async (postId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = `${window.location.origin}/diq/news/${postId}`;
+    await navigator.clipboard.writeText(url);
+    setCopiedPostId(postId);
+    setTimeout(() => {
+      setCopiedPostId(null);
+      setShareDropdownOpen(null);
+    }, 2000);
+  };
 
   // Use mock data directly
   const posts = mockNewsPosts;
@@ -294,6 +317,39 @@ export default function NewsPage() {
                               <MessageSquare className="w-4 h-4" />
                               {post.comments_count} comments
                             </span>
+                            {/* Share Button */}
+                            <div className="relative">
+                              <button
+                                onClick={(e) => handleShare(post.id, e)}
+                                className="flex items-center gap-1.5 hover:text-[var(--accent-ember)] transition-colors"
+                              >
+                                <Share2 className="w-4 h-4" />
+                                Share
+                              </button>
+                              {shareDropdownOpen === post.id && (
+                                <div
+                                  className="absolute bottom-full mb-2 left-0 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-lg shadow-lg overflow-hidden z-10"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <button
+                                    onClick={(e) => handleCopyLink(post.id, e)}
+                                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-[var(--text-primary)] hover:bg-white/5 w-full transition-colors"
+                                  >
+                                    {copiedPostId === post.id ? (
+                                      <>
+                                        <Check className="w-4 h-4 text-green-400" />
+                                        <span className="text-green-400">Copied!</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Link2 className="w-4 h-4" />
+                                        Copy link
+                                      </>
+                                    )}
+                                  </button>
+                                </div>
+                              )}
+                            </div>
                             {post.pinned && (
                               <span className="px-2 py-0.5 rounded-full text-xs bg-[var(--accent-gold)]/20 text-[var(--accent-gold)]">
                                 Pinned

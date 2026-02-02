@@ -1,51 +1,46 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp, ChevronDown, Plus, Settings, X, Trash2, ExternalLink, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import Link from "next/link";
 import { AppIcon } from "@/components/icons/AppIcons";
 
 interface AppShortcut {
   id: string;
   name: string;
-  icon?: string; // Optional emoji fallback for custom apps
   url: string;
   color: string;
-  hasInternalPage?: boolean;
+  isExternal?: boolean;
+  customIcon?: string; // For user-added custom apps (emoji fallback)
 }
 
-// Default app shortcuts - Updated with Ember-themed colors and internal pages
-// Icons are now rendered via AppIcon component based on id
+// Default app shortcuts - Uses internal /diq/apps/[id] routes with proper SVG icons
 const defaultApps: AppShortcut[] = [
-  { id: "slack", name: "Slack", url: "https://slack.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "email", name: "Email", url: "https://mail.google.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "jira", name: "Jira", url: "https://jira.atlassian.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "github", name: "GitHub", url: "https://github.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "drive", name: "Google Drive", url: "https://drive.google.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "zoom", name: "Zoom", url: "https://zoom.us", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "confluence", name: "Confluence", url: "https://confluence.atlassian.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "bookmarks", name: "Bookmarks", url: "#", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "figma", name: "Figma", url: "https://figma.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "notion", name: "Notion", url: "https://notion.so", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "linkedin", name: "LinkedIn", url: "https://linkedin.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
-  { id: "salesforce", name: "Salesforce", url: "https://salesforce.com", color: "bg-[var(--bg-slate)]", hasInternalPage: true },
+  { id: "drive", name: "Google Drive", url: "/diq/apps/drive", color: "bg-amber-500/20" },
+  { id: "slack", name: "Slack", url: "/diq/apps/slack", color: "bg-[var(--accent-ember)]/20" },
+  { id: "zoom", name: "Zoom", url: "/diq/apps/zoom", color: "bg-blue-500/20" },
+  { id: "confluence", name: "Confluence", url: "/diq/apps/confluence", color: "bg-blue-600/20" },
+  { id: "jira", name: "Jira", url: "/diq/apps/jira", color: "bg-blue-500/20" },
+  { id: "salesforce", name: "Salesforce", url: "/diq/apps/salesforce", color: "bg-sky-500/20" },
+  { id: "linkedin", name: "LinkedIn", url: "/diq/apps/linkedin", color: "bg-blue-700/20" },
+  { id: "github", name: "GitHub", url: "/diq/apps/github", color: "bg-[var(--bg-slate)]" },
+  { id: "notion", name: "Notion", url: "/diq/apps/notion", color: "bg-[var(--border-default)]" },
+  { id: "figma", name: "Figma", url: "/diq/apps/figma", color: "bg-purple-500/20" },
 ];
 
 // Available apps to add (not in default list)
-// Note: Apps without official SVG icons will use AppIcon fallback (first letter)
 const availableAppsToAdd: AppShortcut[] = [
-  { id: "teams", name: "Microsoft Teams", url: "https://teams.microsoft.com", color: "bg-[var(--bg-slate)]" },
-  { id: "outlook", name: "Outlook", icon: "📧", url: "https://outlook.com", color: "bg-[var(--bg-slate)]" },
-  { id: "dropbox", name: "Dropbox", url: "https://dropbox.com", color: "bg-[var(--bg-slate)]" },
-  { id: "asana", name: "Asana", url: "https://asana.com", color: "bg-[var(--bg-slate)]" },
-  { id: "trello", name: "Trello", url: "https://trello.com", color: "bg-[var(--bg-slate)]" },
-  { id: "monday", name: "Monday.com", icon: "📊", url: "https://monday.com", color: "bg-[var(--bg-slate)]" },
-  { id: "airtable", name: "Airtable", icon: "🗃️", url: "https://airtable.com", color: "bg-[var(--bg-slate)]" },
-  { id: "miro", name: "Miro", icon: "🖼️", url: "https://miro.com", color: "bg-[var(--bg-slate)]" },
-  { id: "hubspot", name: "HubSpot", icon: "🧡", url: "https://hubspot.com", color: "bg-[var(--bg-slate)]" },
-  { id: "zendesk", name: "Zendesk", icon: "💚", url: "https://zendesk.com", color: "bg-[var(--bg-slate)]" },
+  { id: "teams", name: "Microsoft Teams", url: "/diq/apps/teams", color: "bg-purple-600/20" },
+  { id: "outlook", name: "Outlook", url: "https://outlook.com", color: "bg-blue-500/20", isExternal: true },
+  { id: "dropbox", name: "Dropbox", url: "/diq/apps/dropbox", color: "bg-blue-600/20" },
+  { id: "asana", name: "Asana", url: "/diq/apps/asana", color: "bg-rose-500/20" },
+  { id: "trello", name: "Trello", url: "/diq/apps/trello", color: "bg-blue-500/20" },
+  { id: "monday", name: "Monday.com", url: "https://monday.com", color: "bg-[var(--accent-ember)]/20", isExternal: true },
+  { id: "airtable", name: "Airtable", url: "https://airtable.com", color: "bg-amber-400/20", isExternal: true },
+  { id: "miro", name: "Miro", url: "https://miro.com", color: "bg-amber-500/20", isExternal: true },
+  { id: "hubspot", name: "HubSpot", url: "https://hubspot.com", color: "bg-orange-500/20", isExternal: true },
+  { id: "zendesk", name: "Zendesk", url: "https://zendesk.com", color: "bg-emerald-500/20", isExternal: true },
 ];
 
 const STORAGE_KEY = "diq-app-shortcuts";
@@ -59,35 +54,14 @@ export function AppShortcutsBar() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Drag-to-scroll state
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startY, setStartY] = useState(0);
-  const [startScrollPosition, setStartScrollPosition] = useState(0);
-  const hasMovedRef = useRef(false); // Use ref to avoid stale closure issues
-  const dragThreshold = 5; // Pixels moved before considering it a drag vs click
-
   // Load apps from localStorage on mount
-  // Merge with defaults to ensure hasInternalPage flag is always applied
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Create a map of default apps for quick lookup
-          const defaultAppsMap = new Map(defaultApps.map(app => [app.id, app]));
-
-          // Merge hasInternalPage from defaults into saved apps
-          const mergedApps = parsed.map((savedApp: AppShortcut) => {
-            const defaultApp = defaultAppsMap.get(savedApp.id);
-            if (defaultApp && defaultApp.hasInternalPage) {
-              return { ...savedApp, hasInternalPage: true };
-            }
-            return savedApp;
-          });
-
-          setApps(mergedApps);
+          setApps(parsed);
         }
       } catch (e) {
         console.error("Failed to parse saved app shortcuts:", e);
@@ -113,76 +87,6 @@ export function AppShortcutsBar() {
       setScrollPosition((prev) => Math.min(apps.length - VISIBLE_APPS, prev + 2));
     }
   };
-
-  // Drag-to-scroll handlers
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    // Only handle left mouse button
-    if (e.button !== 0) return;
-
-    setIsDragging(true);
-    setStartY(e.clientY);
-    setStartScrollPosition(scrollPosition);
-    hasMovedRef.current = false;
-
-    // Prevent text selection during drag
-    e.preventDefault();
-  }, [scrollPosition]);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging) return;
-
-    const deltaY = startY - e.clientY;
-    const itemHeight = 68; // Height of each app item including gap
-
-    // Check if user has moved enough to be considered a drag
-    if (Math.abs(deltaY) > dragThreshold) {
-      hasMovedRef.current = true;
-    }
-
-    // Convert pixel delta to scroll position (inverted for natural scroll feel)
-    const scrollDelta = deltaY / itemHeight;
-    const newPosition = Math.max(0, Math.min(apps.length - VISIBLE_APPS, startScrollPosition + scrollDelta));
-
-    setScrollPosition(newPosition);
-  }, [isDragging, startY, startScrollPosition, apps.length, dragThreshold]);
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-    // Snap to nearest integer position for clean alignment
-    setScrollPosition(prev => Math.round(prev));
-    // Reset hasMoved after a small delay to allow click prevention to work
-    setTimeout(() => {
-      hasMovedRef.current = false;
-    }, 100);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (isDragging) {
-      setIsDragging(false);
-      setScrollPosition(prev => Math.round(prev));
-      // Reset hasMoved after a small delay
-      setTimeout(() => {
-        hasMovedRef.current = false;
-      }, 100);
-    }
-  }, [isDragging]);
-
-  // Wheel scroll handler
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const scrollAmount = e.deltaY > 0 ? 1 : -1;
-    setScrollPosition(prev => {
-      const newPos = prev + scrollAmount;
-      return Math.max(0, Math.min(apps.length - VISIBLE_APPS, newPos));
-    });
-  }, [apps.length]);
-
-  // Check if a click should be allowed (not a drag)
-  const shouldAllowClick = useCallback(() => {
-    return !hasMovedRef.current;
-  }, []);
 
   const addApp = (app: AppShortcut) => {
     if (!apps.find((a) => a.id === app.id)) {
@@ -250,65 +154,44 @@ export function AppShortcutsBar() {
             <ChevronUp className="w-4 h-4" />
           </motion.button>
 
-          {/* Apps Container - Drag-to-Scroll */}
-          <div
-            ref={containerRef}
-            className={`flex-1 overflow-hidden px-2 select-none scrollbar-hide ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-            onWheel={handleWheel}
-          >
+          {/* Apps Container - Vertical Scroll */}
+          <div className="flex-1 overflow-hidden px-2">
             <motion.div
               className="flex flex-col gap-1"
               animate={{ y: -scrollPosition * 68 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              {apps.map((app, index) => {
-                const handleAppClick = (e: React.MouseEvent) => {
-                  // Prevent navigation if user was dragging
-                  if (!shouldAllowClick()) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }
-                };
-
-                const AppWrapper = app.hasInternalPage ? Link : "a";
-                const linkProps = app.hasInternalPage
-                  ? { href: `/apps/${app.id}` }
-                  : { href: app.url, target: "_blank", rel: "noopener noreferrer" };
-
-                return (
+              {apps.map((app, index) => (
+                <motion.a
+                  key={app.id}
+                  href={app.url}
+                  target={app.isExternal ? "_blank" : undefined}
+                  rel={app.isExternal ? "noopener noreferrer" : undefined}
+                  className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-[var(--bg-slate)] transition-colors group"
+                  title={app.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <motion.div
-                    key={app.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    whileHover={!isDragging ? { scale: 1.05 } : undefined}
-                    whileTap={!isDragging ? { scale: 0.95 } : undefined}
+                    className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center`}
+                    whileHover={{
+                      boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
+                    }}
                   >
-                    <AppWrapper
-                      {...linkProps}
-                      onClick={handleAppClick}
-                      className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-[var(--bg-slate)] transition-colors group"
-                      title={app.name}
-                    >
-                      <motion.div
-                        className={`w-10 h-10 rounded-xl ${app.color} flex items-center justify-center`}
-                        whileHover={!isDragging ? {
-                          boxShadow: "0 4px 20px rgba(16, 185, 129, 0.2)",
-                        } : undefined}
-                      >
-                        <AppIcon appId={app.id} size={24} />
-                      </motion.div>
-                      <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate w-full text-center transition-colors">
-                        {app.name.length > 8 ? app.name.slice(0, 7) + "…" : app.name}
-                      </span>
-                    </AppWrapper>
+                    {app.customIcon ? (
+                      <span className="text-lg">{app.customIcon}</span>
+                    ) : (
+                      <AppIcon appId={app.id} size={24} />
+                    )}
                   </motion.div>
-                );
-              })}
+                  <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-secondary)] truncate w-full text-center transition-colors">
+                    {app.name.length > 8 ? app.name.slice(0, 7) + "…" : app.name}
+                  </span>
+                </motion.a>
+              ))}
             </motion.div>
           </div>
 
@@ -437,8 +320,9 @@ function AddAppModal({
       id: `custom-${Date.now()}`,
       name: customName.trim(),
       url: url,
-      icon: customIcon,
+      customIcon: customIcon,
       color: "bg-[var(--bg-slate)]",
+      isExternal: true,
     };
     onAdd(customApp);
     setCustomName("");
@@ -701,7 +585,11 @@ function ManageAppsModal({
 
                   {/* App Info */}
                   <div className={`w-8 h-8 rounded-lg ${app.color} flex items-center justify-center`}>
-                    <AppIcon appId={app.id} size={20} />
+                    {app.customIcon ? (
+                      <span className="text-base">{app.customIcon}</span>
+                    ) : (
+                      <AppIcon appId={app.id} size={20} />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-[var(--text-primary)] truncate">{app.name}</p>

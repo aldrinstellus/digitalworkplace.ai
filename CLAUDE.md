@@ -294,7 +294,7 @@ npm run lint     # Run ESLint
 ## SUB-PROJECTS
 ---
 
-### dIQ - Intranet IQ (v1.1.0) - PRODUCTION LIVE (Full Spectrum)
+### dIQ - Intranet IQ (v2.7.3) - PRODUCTION LIVE (Full Spectrum - Audit Verified)
 
 | Property | Value |
 |----------|-------|

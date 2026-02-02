@@ -78,7 +78,7 @@ body { h-dvh overflow-hidden; }     /* ⛔ BREAKS */
 
 **dIQ (Intranet IQ)** is an AI-powered internal knowledge network - part of the Digital Workplace AI product suite.
 
-**Version:** 2.7.0 (Full Ecosystem Integration - 100% Complete)
+**Version:** 2.7.3 (Full Ecosystem Integration - Audit Verified)
 **Audit Score:** 100/100
 **Integration Status:** 100% (11 Apps Connected - Chat AI, Content, People, Search all enhanced)
 **Design System:** Midnight Green (emerald/teal accents)

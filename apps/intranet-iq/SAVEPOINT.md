@@ -33,7 +33,7 @@ When ending a session, say **"do a save point"** and Claude will update this fil
 | **Widget System** | **100%** (15 widgets, 4 presets, full interlinking) |
 | **Audit Score** | 100/100 |
 | **Git Branch** | main |
-| **Git Commit** | (pending - v2.6.0 integration) |
+| **Git Commit** | 1202780 |
 | **Build Status** | ✅ 58+ pages compiled |
 | **TypeScript** | ✅ 0 errors |
 | **ESLint** | ✅ 0 errors |

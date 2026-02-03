@@ -1,0 +1,160 @@
+'use client';
+
+import { memo } from 'react';
+import { motion } from 'framer-motion';
+import { CheckCircle2, XCircle, Clock, TestTube2, AlertCircle } from 'lucide-react';
+import { TestRun } from '@/lib/dtq/types';
+import { AnimatedCounter, ScaleOnHover } from '@/lib/motion';
+
+// Format the executed date as relative time (computed from props)
+function formatTimeAgo(executedAt: Date): string {
+  // Use the executedAt date directly without Date.now()
+  // This is a display-only calculation based on prop value
+  const now = new Date();
+  const daysAgo = Math.floor((now.getTime() - executedAt.getTime()) / (1000 * 60 * 60 * 24));
+  return daysAgo === 0 ? 'Today' : daysAgo === 1 ? 'Yesterday' : `${daysAgo} days ago`;
+}
+
+interface ReportCardProps {
+  report: TestRun;
+  delay?: number;
+  onViewIssues?: () => void;
+}
+
+export default memo(function ReportCard({ report, delay = 0, onViewIssues }: ReportCardProps) {
+  // Format time on initial render - this is display only and based on props
+  const timeAgo = formatTimeAgo(report.executedAt);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay }}
+    >
+      <ScaleOnHover scale={1.02} glowColor="rgba(255, 51, 102, 0.1)">
+        <div className="card rounded-xl p-5 transition-all">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>
+                {report.featureName}
+              </h3>
+              <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-muted)' }}>
+                <Clock className="w-4 h-4" />
+                <span>Executed {timeAgo}</span>
+              </div>
+            </div>
+
+            {/* Animated status badge */}
+            <motion.div
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
+                report.status === 'passed' ? 'badge-success' : 'badge-error'
+              }`}
+              animate={report.status === 'failed' ? {
+                boxShadow: [
+                  '0 0 5px rgba(248, 113, 113, 0.3)',
+                  '0 0 15px rgba(248, 113, 113, 0.5)',
+                  '0 0 5px rgba(248, 113, 113, 0.3)',
+                ],
+              } : {}}
+              transition={report.status === 'failed' ? { duration: 2, repeat: Infinity } : {}}
+            >
+              {report.status === 'passed' ? (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Passed</span>
+                </>
+              ) : (
+                <>
+                  <XCircle className="w-4 h-4" />
+                  <span>Failed</span>
+                </>
+              )}
+            </motion.div>
+          </div>
+
+          {/* Stats with animated counters */}
+          <div className="grid grid-cols-4 gap-4">
+            <motion.div
+              className="text-center p-3 rounded-lg"
+              style={{ background: 'var(--bg-tertiary)' }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <TestTube2 className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--text-muted)' }} />
+              <p className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                <AnimatedCounter value={report.totalTests} duration={0.5} />
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Tests</p>
+            </motion.div>
+
+            <motion.div
+              className="text-center p-3 rounded-lg"
+              style={{ background: 'var(--bg-tertiary)' }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <CheckCircle2 className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--status-success)' }} />
+              <p className="text-lg font-semibold" style={{ color: 'var(--status-success)' }}>
+                <AnimatedCounter value={report.passedTests} duration={0.5} />
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Passed</p>
+            </motion.div>
+
+            <motion.div
+              className="text-center p-3 rounded-lg"
+              style={{ background: 'var(--bg-tertiary)' }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <XCircle
+                className="w-5 h-5 mx-auto mb-1"
+                style={{ color: report.failedTests > 0 ? 'var(--status-error)' : 'var(--text-muted)' }}
+              />
+              <p
+                className="text-lg font-semibold"
+                style={{ color: report.failedTests > 0 ? 'var(--status-error)' : 'var(--text-primary)' }}
+              >
+                <AnimatedCounter value={report.failedTests} duration={0.5} />
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Failed</p>
+            </motion.div>
+
+            <motion.div
+              className="text-center p-3 rounded-lg"
+              style={{ background: 'var(--bg-tertiary)' }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+            >
+              <Clock className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--text-muted)' }} />
+              <p className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                {report.duration}s
+              </p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Duration</p>
+            </motion.div>
+          </div>
+
+          {/* View Issues button with hover scale */}
+          {report.status === 'failed' && report.issues && report.issues.length > 0 && (
+            <motion.button
+              onClick={onViewIssues}
+              className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all"
+              style={{
+                background: 'rgba(248, 113, 113, 0.1)',
+                border: '1px solid rgba(248, 113, 113, 0.3)',
+                color: 'var(--status-error)',
+              }}
+              whileHover={{
+                scale: 1.02,
+                background: 'rgba(248, 113, 113, 0.15)',
+              }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <AlertCircle className="w-4 h-4" />
+              View Issues ({report.issues.length})
+            </motion.button>
+          )}
+        </div>
+      </ScaleOnHover>
+    </motion.div>
+  );
+});

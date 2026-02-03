@@ -44,6 +44,7 @@ import {
   StickyNote,
   Briefcase,
   Building2,
+  Database,
 } from "lucide-react";
 import { mockChatThreads, mockChatMessages } from "@/lib/mockData";
 import type { ChatSource } from "@/lib/database.types";
@@ -690,9 +691,12 @@ export default function ChatPage() {
                   <Bot className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-medium text-[var(--text-primary)]">AI Assistant</h1>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-lg font-medium text-[var(--text-primary)]">AI Assistant</h1>
+                    <span className="px-2 py-0.5 rounded-full bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] text-[10px] font-medium uppercase">RAG</span>
+                  </div>
                   <p className="text-sm text-[var(--text-muted)]">
-                    Powered by {selectedLLM.name} ({selectedLLM.provider})
+                    Knowledge Base powered • {selectedLLM.name}
                   </p>
                 </div>
               </div>
@@ -946,10 +950,21 @@ export default function ChatPage() {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--accent-ember)]/20 to-[var(--accent-copper)]/10 flex items-center justify-center mb-4">
                   <Bot className="w-8 h-8 text-[var(--accent-ember)]" />
                 </div>
-                <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">Start a conversation</h3>
-                <p className="text-sm text-[var(--text-muted)]/70 max-w-md">
-                  Ask questions about your organization, search knowledge bases, or get help with tasks.
+                <h3 className="text-lg font-medium text-[var(--text-muted)] mb-2">AI Assistant with RAG</h3>
+                <p className="text-sm text-[var(--text-muted)]/70 max-w-md mb-3">
+                  Ask questions about your organization. Answers are grounded in your Knowledge Base with source references.
                 </p>
+                <div className="flex items-center gap-4 text-xs text-[var(--text-muted)]/60">
+                  <span className="flex items-center gap-1">
+                    <Database className="w-3 h-3" /> Knowledge Base
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FileText className="w-3 h-3" /> Source References
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> RAG-Powered
+                  </span>
+                </div>
               </FadeIn>
             ) : (
               <AnimatePresence mode="popLayout">

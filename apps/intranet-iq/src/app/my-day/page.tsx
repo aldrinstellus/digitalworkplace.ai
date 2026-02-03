@@ -1241,6 +1241,53 @@ export default function MyDayPage() {
             </div>
           </motion.div>
 
+          {/* Today's Meetings - Zoom & Calendar Integration */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-6"
+          >
+            <div className="rounded-xl bg-[#0a0d12] border border-white/[0.06] overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-medium text-white/90">Today&apos;s Meetings</span>
+                </div>
+                <span className="text-xs text-white/40">Zoom • Google Calendar</span>
+              </div>
+              <div className="p-3 space-y-2">
+                <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                    <span className="text-blue-400 text-xs font-bold">Z</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-white/90">Sprint Planning Meeting</div>
+                    <div className="text-xs text-white/50">10:00 AM - 11:00 AM • Zoom Meeting</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                    <span className="text-emerald-400 text-xs font-bold">G</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-white/90">Design Review Meeting</div>
+                    <div className="text-xs text-white/50">2:00 PM - 3:00 PM • Google Meet</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                    <span className="text-purple-400 text-xs font-bold">Z</span>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-white/90">1:1 with Manager Meeting</div>
+                    <div className="text-xs text-white/50">4:00 PM - 4:30 PM • Zoom Meeting</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
           {/* Quick Add Modal */}
           <AnimatePresence>
             {showQuickAdd && (

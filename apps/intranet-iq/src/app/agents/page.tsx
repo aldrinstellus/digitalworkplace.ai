@@ -52,7 +52,11 @@ import {
 import type { Workflow } from "@/lib/database.types";
 
 const workflowTemplates = [
+  { name: "PTO Request", icon: Calendar, category: "HR" },
+  { name: "Leave Request Approval", icon: CheckCircle2, category: "HR" },
+  { name: "Expense Report", icon: FileText, category: "Finance" },
   { name: "Employee Onboarding", icon: Users, category: "HR" },
+  { name: "Access Request", icon: Users, category: "IT" },
   { name: "Document Approval", icon: FileText, category: "Operations" },
   { name: "Data Sync", icon: Database, category: "IT" },
   { name: "Report Generation", icon: Calendar, category: "Analytics" },
@@ -96,7 +100,7 @@ export default function AgentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [showTemplates, setShowTemplates] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(true); // Show templates by default for discoverability
   const [viewMode, setViewMode] = useState<"list" | "canvas">("list");
   const [showExecution, setShowExecution] = useState(false);
   const [favorites, setFavorites] = useState<string[]>([]);

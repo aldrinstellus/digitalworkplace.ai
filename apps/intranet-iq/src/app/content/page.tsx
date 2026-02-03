@@ -665,7 +665,7 @@ function ContentPageInner() {
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-[var(--accent-ember)] flex-shrink-0" />
                 <h2 className="text-sm font-medium text-[var(--text-primary)]">
-                  {viewMode === "recent" ? "Recent" : "Knowledge Base"}
+                  {viewMode === "recent" ? "Recent" : "Knowledge Base Categories"}
                 </h2>
               </div>
               <div className="flex items-center gap-1.5">

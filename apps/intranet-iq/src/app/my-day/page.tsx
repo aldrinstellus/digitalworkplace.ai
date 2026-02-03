@@ -795,7 +795,8 @@ export default function MyDayPage() {
                   <Sparkles className="w-5 h-5 text-violet-400" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-violet-300 mb-1">Daily Briefing</h3>
+                  <h3 className="font-medium text-violet-300 mb-1">AI-Curated Daily Briefing</h3>
+                  <p className="text-xs text-violet-400/70 mb-2">Personalized insights based on your tasks and schedule</p>
                   {briefing ? (
                     <p className="text-white/80">{briefing}</p>
                   ) : loadingBriefing ? (

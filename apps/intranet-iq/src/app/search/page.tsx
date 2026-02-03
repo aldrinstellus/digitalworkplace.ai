@@ -735,7 +735,7 @@ function SearchPageInner() {
               Enterprise Search
             </h1>
             <p className="text-[var(--text-muted)]">
-              Search across articles, knowledge bases, people, and more
+              Search across articles, knowledge bases, people, and more with AI-powered summarization and insights
             </p>
           </FadeIn>
 

@@ -484,6 +484,22 @@ export default function PeoplePage() {
                                   <span className="truncate">{person.slackStatus}</span>
                                 </div>
                               )}
+                              {/* Skills/Expertise */}
+                              {person.skills && person.skills.length > 0 && (
+                                <div className="mt-1">
+                                  <span className="text-[10px] text-[var(--text-muted)] mr-1">Skills:</span>
+                                  <div className="flex flex-wrap gap-1 mt-0.5">
+                                    {person.skills.slice(0, 2).map((skill: string, i: number) => (
+                                      <span key={i} className="px-1.5 py-0.5 bg-[var(--accent-ember)]/10 text-[var(--accent-ember)] rounded text-[10px]">
+                                        {skill}
+                                      </span>
+                                    ))}
+                                    {person.skills.length > 2 && (
+                                      <span className="text-[10px] text-[var(--text-muted)]">+{person.skills.length - 2} more</span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                             {/* App Activity Indicators */}
                             {person.appPresence && (

@@ -1234,14 +1234,14 @@ export default function AgentsPage() {
                         </div>
                         <div>
                           <h4 className="text-[var(--text-primary)] font-medium">Start from Scratch</h4>
-                          <p className="text-sm text-[var(--text-muted)]">Build a custom workflow using the visual builder</p>
+                          <p className="text-sm text-[var(--text-muted)]">Build a multi-step process using the visual builder</p>
                         </div>
                       </div>
                     </motion.button>
                   </div>
 
                   <h3 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wider mb-4">
-                    Or start with a template
+                    Or start with a multi-step template
                   </h3>
 
                   <StaggerContainer className="grid grid-cols-2 gap-3">

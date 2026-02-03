@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.7.4] - 2026-02-03
+
+### PRD 100% Compliance + Auzmor Office Default
+
+Achieved 100% PRD use case compliance (29/29 tests passing) with localStorage version migration for Apps Bar.
+
+#### PRD Compliance Fixes
+
+| Fix | File | Description |
+|-----|------|-------------|
+| **Workflow Templates** | `agents/page.tsx` | Added PTO, Expense, Leave Request templates; show by default |
+| **RAG Indicator** | `chat/page.tsx` | Added RAG badge + "Knowledge Base powered" in header |
+| **KB Categories** | `content/page.tsx` | Added "Categories" to Knowledge Base header |
+| **Meetings Section** | `my-day/page.tsx` | Added Today's Meetings widget with Zoom/Google Calendar |
+| **Apps Bar Migration** | `AppShortcutsBar.tsx` | Version 2 migration auto-resets localStorage to show Auzmor Office first |
+
+#### PRD Test Results (29/29 Passing)
+
+| EPIC | Tests | Status |
+|------|-------|--------|
+| EPIC 1: Enterprise Search | 3/3 | ✅ PASS |
+| EPIC 2: AI Assistant | 3/3 | ✅ PASS |
+| EPIC 3: Knowledge Base | 3/3 | ✅ PASS |
+| EPIC 4: Framework Integration | 3/3 | ✅ PASS |
+| EPIC 5: RBAC | 3/3 | ✅ PASS |
+| EPIC 6: Agentic Workflows | 3/3 | ✅ PASS |
+| EPIC 7: Central Dashboard | 4/4 | ✅ PASS |
+| EPIC 8: Productivity Assistant | 4/4 | ✅ PASS |
+| EPIC 9: Employee Experience | 3/3 | ✅ PASS |
+
+#### Commits
+
+- `d8070da` - fix(diq): auto-migrate localStorage when AppsBar defaults change
+- `5ab7313` - feat(diq): achieve 100% PRD use case compliance
+
+---
+
 ## [2.7.3] - 2026-02-02
 
 ### Full Spectrum Audit Verification & Notifications Fix

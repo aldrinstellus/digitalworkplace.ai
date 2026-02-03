@@ -45,6 +45,8 @@ const availableAppsToAdd: AppShortcut[] = [
 ];
 
 const STORAGE_KEY = "diq-app-shortcuts";
+const STORAGE_VERSION_KEY = "diq-app-shortcuts-version";
+const CURRENT_VERSION = 2; // Increment when defaultApps changes
 const VISIBLE_APPS = 8;
 
 export function AppShortcutsBar() {
@@ -62,8 +64,20 @@ export function AppShortcutsBar() {
   const [startScroll, setStartScroll] = useState(0);
   const hasMovedRef = useRef(false);
 
-  // Load apps from localStorage on mount
+  // Load apps from localStorage on mount (with version migration)
   useEffect(() => {
+    const savedVersion = localStorage.getItem(STORAGE_VERSION_KEY);
+    const storedVersion = savedVersion ? parseInt(savedVersion, 10) : 0;
+
+    // If version mismatch, reset to defaults (new apps added)
+    if (storedVersion < CURRENT_VERSION) {
+      localStorage.setItem(STORAGE_VERSION_KEY, CURRENT_VERSION.toString());
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultApps));
+      setApps(defaultApps);
+      setIsLoaded(true);
+      return;
+    }
+
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {

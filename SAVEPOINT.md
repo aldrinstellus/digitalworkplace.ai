@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-04
-**Version**: 0.9.3
-**Session Status**: dTQ v1.3.0 LIVE - Knowledge Base + Vector Embeddings + AI Chat with RAG
+**Version**: 0.9.4
+**Session Status**: dTQ v1.4.0 LIVE - All API Endpoints Fixed + Full Data Seeded
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 2fa6180 - fix(dTQ): lower RAG match threshold to 0.3 and remove debug code
+**Git Commit**: caa67b5 - fix(dTQ): use public schema views for all data API endpoints
 
 ---
 
@@ -203,6 +203,60 @@ const isPublicRoute = createRouteMatcher([
 ---
 
 ## Previous Changes (v0.9.2)
+
+### dTQ v1.4.0 - All API Endpoints Fixed + Full Data Seeded (2026-02-04)
+
+**Fixed all data API endpoints and seeded missing data. All 6 endpoints now return live data from Supabase.**
+
+#### Root Cause
+The `dtq` schema is NOT exposed via Supabase PostgREST. All API routes were querying tables like `features`, `test_runs` etc. in the public schema, but these only exist in the `dtq` schema.
+
+#### Fix Applied
+1. **Created 6 public schema views** mapping to dtq tables:
+   - `public.dtq_features` → `dtq.features` (46 rows)
+   - `public.dtq_test_runs` → `dtq.test_runs` (40 rows)
+   - `public.dtq_test_issues` → `dtq.test_issues` (30 rows)
+   - `public.dtq_daily_metrics` → `dtq.daily_metrics` (30 rows)
+   - `public.dtq_personas` → `dtq.personas` (3 rows)
+   - `public.dtq_persona_metrics` → `dtq.persona_metrics` (24 rows)
+
+2. **Created 2 SECURITY DEFINER RPC functions** for INSERT operations:
+   - `public.insert_dtq_test_run()` — creates test runs
+   - `public.insert_dtq_test_issues()` — creates test issues
+
+3. **Updated all API routes** to use public schema views
+4. **Updated `supabase.ts`** — removed `{ db: { schema: 'dtq' } }` override
+5. **Seeded missing data**: persona_metrics (24 rows), test_issues (30 rows)
+
+#### Live Verification (ALL PASS)
+| Endpoint | Status | Data |
+|----------|--------|------|
+| `/api/dtq/features` | 200 | 46 features |
+| `/api/dtq/categories` | 200 | 10 categories |
+| `/api/dtq/metrics` | 200 | 30 days |
+| `/api/dtq/personas` | 200 | 3 personas (7+9+8 metrics) |
+| `/api/dtq/test-runs` | 200 | 40 runs (10 failed w/ 3 issues each) |
+| `/api/dtq/chat` | 200 | Claude Sonnet 4 + 8 RAG sources |
+| Dashboard page | 200 | OK |
+| History page | 200 | OK |
+| Reports page | 200 | OK |
+
+#### Git Commit: caa67b5
+#### Deploy: https://dtq.digitalworkplace.ai
+
+---
+
+### dTQ v1.3.0 - Knowledge Base + Vector Embeddings + AI Chat (2026-02-04)
+
+**Added 130-row knowledge base with 1536-dim OpenAI embeddings and Claude-powered AI chat with RAG.**
+
+- Knowledge base: 130 rows (features, KPIs, category summaries, test run summaries, daily metrics)
+- 100% embedding coverage (text-embedding-3-small, 1536 dimensions)
+- AI Chat: Claude Sonnet 4 with semantic search RAG pipeline
+- Match threshold: 0.3 (returns 8 sources per query)
+- Persona-aware context filtering
+
+---
 
 ### dTQ v1.1.0 - Test Pilot IQ Linked from Main Dashboard (2026-02-04)
 

@@ -51,7 +51,7 @@
 |-------|-------------|-----------|
 | `dtq.features` | Test features across 10 categories | 46 |
 | `dtq.test_runs` | Test execution history | 40+ |
-| `dtq.test_issues` | Failures/defects from test runs | 30+ |
+| `dtq.test_issues` | Failures/defects from test runs | 30 |
 | `dtq.daily_metrics` | 30-day historical metrics | 30 |
 | `dtq.personas` | Role-based persona definitions | 3 |
 | `dtq.persona_metrics` | KPIs per persona | 24 |
@@ -76,12 +76,27 @@ supabase/migrations/
 | `daily_metrics_summary` | 3 | Per-persona 30-day metrics overviews |
 | **Total** | **130** | **100% embedding coverage (1536-dim)** |
 
+### Public Schema Views (PostgREST Access)
+
+**Note:** The `dtq` schema is NOT exposed via PostgREST. All API access uses public schema views.
+
+| View | Points To | Row Count |
+|------|-----------|-----------|
+| `public.dtq_features` | `dtq.features` | 46 |
+| `public.dtq_test_runs` | `dtq.test_runs` | 40 |
+| `public.dtq_test_issues` | `dtq.test_issues` | 30 |
+| `public.dtq_daily_metrics` | `dtq.daily_metrics` | 30 |
+| `public.dtq_personas` | `dtq.personas` | 3 |
+| `public.dtq_persona_metrics` | `dtq.persona_metrics` | 24 |
+
 ### RPC Functions
 | Function | Schema | Purpose |
 |----------|--------|---------|
 | `search_dtq_knowledge_semantic` | `public` | SECURITY DEFINER wrapper for vector search (accepts jsonb) |
 | `get_dtq_kb_without_embeddings` | `public` | Helper for embedding generation script |
 | `update_dtq_kb_embedding` | `public` | Helper for embedding generation script |
+| `insert_dtq_test_run` | `public` | SECURITY DEFINER INSERT into dtq.test_runs |
+| `insert_dtq_test_issues` | `public` | SECURITY DEFINER INSERT into dtq.test_issues |
 | `search_knowledge_semantic` | `dtq` | Internal semantic search (vector parameter) |
 
 ### Key Fields

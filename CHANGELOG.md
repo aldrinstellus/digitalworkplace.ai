@@ -4,6 +4,51 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.6] - 2026-02-04
+
+### dTQ v1.6.0 - Chatbot Interlinked Navigation
+
+**Actionable link cards below AI chat responses that navigate directly to features, categories, metrics, reports, and history pages.**
+
+#### Architecture
+
+Chat API generates `relatedLinks[]` alongside response text. ChatWidget renders link cards with icons and hover animations. Clicking a card dispatches through `NavigationContext` which calls `router.push()` and sets a `pendingAction`. Target page picks up the action via `useEffect`, opens the appropriate modal, and clears the action.
+
+#### New Files
+
+| File | Purpose |
+|------|---------|
+| `src/contexts/NavigationContext.tsx` | Provider with dispatch/clearAction, 30s TTL for stale actions |
+| `src/lib/dtq/link-resolver.ts` | 3-strategy link resolver: bold text extraction, RAG source mapping, keyword detection |
+
+#### Modified Files (7)
+
+| File | Changes |
+|------|---------|
+| `types.ts` | Added ChatLinkTarget, ChatLink, NavigationAction; relatedLinks on ChatMessage |
+| `chat/route.ts` | Calls resolveLinks, returns relatedLinks; bold-name system prompt |
+| `layout.tsx` | Wrapped with NavigationProvider |
+| `ChatWidget.tsx` | Renders "Related" link cards with Framer Motion, dispatch on click |
+| `dashboard/page.tsx` | Handles feature/category/metric navigation actions |
+| `reports/page.tsx` | Handles test-run/feature navigation actions |
+| `history/page.tsx` | Handles metric/history navigation actions |
+
+#### Link Resolution Strategies
+
+1. **Bold text extraction** — `**Name**` matched against persona features and categories
+2. **Source-based** — RAG source types (feature, category_summary, persona_kpi) mapped to links
+3. **Keyword detection** — "test run"/"report" → Reports page, "trend"/"history" → History page
+
+#### Verification
+
+- Build: 0 errors, 13/13 pages
+- Live: All pages HTTP 200
+- Chat API: 5 relatedLinks returned with correct persona-scoped entity IDs
+- Git: `6a22d67` pushed to main
+- Vercel: Deployed to https://dtq.digitalworkplace.ai
+
+---
+
 ## [0.8.3] - 2026-01-28
 
 ### dCQ Workflow Expansion - 12 New Workflows

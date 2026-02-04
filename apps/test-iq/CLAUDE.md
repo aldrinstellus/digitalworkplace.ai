@@ -150,6 +150,7 @@ supabase/migrations/
   - Claude Sonnet 4 responses with RAG context injection
   - Demo mode fallback when API keys not configured
   - **ChatWidget UX (v1.5.0)**: Floating overlay, persistent quick action pills, user-controlled scroll, reset button, cross-page persistence via ChatContext
+  - **Interlinked Navigation (v1.6.0)**: Actionable link cards below AI responses with NavigationContext dispatch pattern; links navigate to features, categories, metrics, reports, and history pages; 3 link resolution strategies (bold text, RAG sources, keywords); max 5 links per response
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints
@@ -157,6 +158,8 @@ supabase/migrations/
 3. Real-time simulation updates local state (not persisted)
 4. Export functions use current state data
 5. AI chat: user message → OpenAI embedding → semantic search → Claude response with RAG context
+6. Link resolution: response text → bold text extraction + source mapping + keyword detection → relatedLinks[]
+7. Navigation: link card click → NavigationContext.dispatch → router.push + pendingAction → page useEffect opens modal
 
 ---
 ## TECH STACK
@@ -217,7 +220,8 @@ apps/test-iq/
 │   │   ├── TrendChart.tsx
 │   │   └── modals/
 │   ├── contexts/
-│   │   └── ChatContext.tsx            # Cross-page chat message persistence
+│   │   ├── ChatContext.tsx            # Cross-page chat message persistence
+│   │   └── NavigationContext.tsx      # Chat link → page modal navigation dispatch
 │   ├── hooks/
 │   │   └── useRealTimeSimulation.ts # Main data hook (API + simulation)
 │   └── lib/
@@ -225,7 +229,9 @@ apps/test-iq/
 │       └── dtq/
 │           ├── data.ts              # Fallback static data
 │           ├── types.ts             # TypeScript interfaces
-│           └── export.ts            # CSV/PDF export functions
+│           ├── export.ts            # CSV/PDF export functions
+│           ├── persona-data.ts      # Persona-specific data generator (csuite/techlead)
+│           └── link-resolver.ts     # Chat response → navigation link resolver
 └── CLAUDE.md                        # This file
 ```
 
@@ -254,6 +260,7 @@ apps/test-iq/
 - [x] Deploy to Vercel with all API keys configured
 - [x] ChatWidget UX overhaul — persistent quick actions, user-controlled scroll, reset button (v1.5.0)
 - [x] Cross-page chat persistence via ChatContext
+- [x] Chatbot interlinked navigation — actionable link cards, NavigationContext, link-resolver (v1.6.0)
 
 ---
 

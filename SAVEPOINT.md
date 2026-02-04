@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-04
-**Version**: 0.9.5
-**Session Status**: dTQ v1.5.0 LIVE - ChatWidget UX Overhaul + Persistent Quick Actions
+**Version**: 0.9.6
+**Session Status**: dTQ v1.6.0 LIVE - Chatbot Interlinked Navigation + Actionable Link Cards
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: eb2c5ce - fix(dTQ): ChatWidget UX overhaul — persistent quick actions, user-controlled scroll, reset button
+**Git Commit**: 6a22d67 - feat(dTQ): v1.6.0 chatbot interlinked navigation — actionable link cards in AI responses
 
 ---
 
@@ -119,11 +119,11 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.5.0 |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.6.0 |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 329adb3 - fix: Update Chat Core IQ link to Doral homepage
+- **Latest Commit**: 6a22d67 - feat(dTQ): v1.6.0 chatbot interlinked navigation
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -155,7 +155,57 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.5)
+## Latest Changes (v0.9.6)
+
+### dTQ v1.6.0 - Chatbot Interlinked Navigation (2026-02-04)
+
+**Actionable link cards below AI chat responses that navigate directly to features, categories, metrics, and pages.**
+
+#### Architecture
+
+```
+Chat API generates response + relatedLinks[]
+  → ChatWidget renders link cards below response
+  → User clicks → NavigationContext.dispatch(link)
+  → router.push(targetPage) + set pendingAction
+  → Page useEffect reads pendingAction → opens modal → clears action
+```
+
+#### Files Created (2)
+
+| File | Purpose |
+|------|---------|
+| `src/contexts/NavigationContext.tsx` | NavigationProvider with dispatch/clearAction + 30s TTL |
+| `src/lib/dtq/link-resolver.ts` | resolveLinks() — bold text extraction, source mapping, keyword detection |
+
+#### Files Modified (7)
+
+| File | Changes |
+|------|---------|
+| `src/lib/dtq/types.ts` | Added ChatLinkTarget, ChatLink, NavigationAction types; relatedLinks on ChatMessage |
+| `src/app/api/dtq/chat/route.ts` | Calls resolveLinks after response, returns relatedLinks; bold-name system prompt instruction |
+| `src/app/(dashboard)/layout.tsx` | Wrapped with NavigationProvider |
+| `src/components/dtq/ChatWidget.tsx` | Renders "Related" link cards with icons, hover animations, dispatch on click |
+| `src/app/(dashboard)/dashboard/page.tsx` | useEffect handles feature/category/metric navigation actions |
+| `src/app/(dashboard)/reports/page.tsx` | useEffect handles test-run/feature navigation actions |
+| `src/app/(dashboard)/history/page.tsx` | useEffect handles metric/history navigation actions |
+
+#### Link Resolution Strategies
+1. **Bold text extraction** — `**Feature Name**` matched against persona features/categories
+2. **Source-based** — RAG source types (feature, category_summary, persona_kpi) → links
+3. **Keyword detection** — "test run" → Reports, "trend"/"history" → History page
+
+#### Verification
+- **Build**: 0 errors, 13/13 pages
+- **Live**: All 3 pages return HTTP 200
+- **Chat API**: relatedLinks returned with correct entity IDs (5 links max)
+- **Persona scoping**: Manager → `f*` IDs, Tech Lead → `tl-*` IDs, C-Suite → `cs-*` IDs
+- **Git Commit**: 6a22d67
+- **Vercel**: Deployed to https://dtq.digitalworkplace.ai
+
+---
+
+## Previous Changes (v0.9.5)
 
 ### dTQ v1.5.0 - ChatWidget UX Overhaul (2026-02-04)
 
@@ -727,6 +777,7 @@ vercel --prod
 - [x] dTQ Knowledge Base + Vector Embeddings + AI Chat with RAG - LIVE (v1.3.0)
 - [x] dTQ All API Endpoints Fixed + Full Data Seeded - LIVE (v1.4.0)
 - [x] dTQ ChatWidget UX Overhaul — persistent quick actions, scroll fix, reset - LIVE (v1.5.0)
+- [x] dTQ Chatbot Interlinked Navigation — actionable link cards in AI responses - LIVE (v1.6.0)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -737,5 +788,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-04*
-*Version: 0.9.5*
+*Version: 0.9.6*
 *Machine: Mac Mini (aldrin-mac-mini)*

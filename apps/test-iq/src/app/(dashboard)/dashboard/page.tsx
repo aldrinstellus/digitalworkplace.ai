@@ -14,7 +14,6 @@ import MetricCard from '@/components/dtq/MetricCard';
 import HighRiskBanner from '@/components/dtq/HighRiskBanner';
 import TrendChart from '@/components/dtq/TrendChart';
 import FeatureCoverage from '@/components/dtq/FeatureCoverage';
-import AIAssistant from '@/components/dtq/AIAssistant';
 import LiveIndicator from '@/components/dtq/LiveIndicator';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
@@ -253,19 +252,12 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Feature Coverage & AI Assistant */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2">
-          <FeatureCoverage
-            categories={categories}
-            onFeatureClick={handleFeatureClick}
-            onCategoryClick={handleCategoryClick}
-          />
-        </div>
-        <div>
-          <AIAssistant />
-        </div>
-      </div>
+      {/* Feature Coverage */}
+      <FeatureCoverage
+        categories={categories}
+        onFeatureClick={handleFeatureClick}
+        onCategoryClick={handleCategoryClick}
+      />
 
       {/* Modals */}
 

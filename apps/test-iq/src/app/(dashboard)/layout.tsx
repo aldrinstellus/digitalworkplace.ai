@@ -3,6 +3,8 @@
 import { useState, createContext, useContext, useMemo } from 'react';
 import Sidebar from '@/components/dtq/Sidebar';
 import { PersonaType } from '@/lib/dtq/types';
+import { ChatProvider } from '@/contexts/ChatContext';
+import ChatWidget from '@/components/dtq/ChatWidget';
 
 interface PersonaContextType {
   persona: PersonaType;
@@ -26,14 +28,17 @@ export default function DashboardLayout({
 
   return (
     <PersonaContext.Provider value={contextValue}>
-      <div className="flex min-h-screen" style={{ background: 'var(--bg-primary)' }}>
-        <Sidebar persona={persona} onPersonaChange={setPersona} />
-        <main className="flex-1 overflow-auto">
-          <div className="p-6 lg:p-8">
-            {children}
-          </div>
-        </main>
-      </div>
+      <ChatProvider>
+        <div className="flex min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+          <Sidebar persona={persona} onPersonaChange={setPersona} />
+          <main className="flex-1 overflow-auto">
+            <div className="p-6 lg:p-8">
+              {children}
+            </div>
+          </main>
+        </div>
+        <ChatWidget />
+      </ChatProvider>
     </PersonaContext.Provider>
   );
 }

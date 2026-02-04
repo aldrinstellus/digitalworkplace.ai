@@ -164,18 +164,14 @@ interface ScaleOnHoverProps extends ComponentPropsWithoutRef<typeof motion.div> 
   children: ReactNode;
   scale?: number;
   tapScale?: number;
-  glowColor?: string;
 }
 
 export const ScaleOnHover = forwardRef<HTMLDivElement, ScaleOnHoverProps>(
-  ({ children, scale = 1.02, tapScale = 0.98, glowColor = PINK_GLOW, ...props }, ref) => {
+  ({ children, scale = 1.02, tapScale = 0.98, ...props }, ref) => {
     return (
       <motion.div
         ref={ref}
-        whileHover={{
-          scale,
-          boxShadow: `0 0 20px ${glowColor}`,
-        }}
+        whileHover={{ scale }}
         whileTap={{ scale: tapScale }}
         transition={{
           type: "spring",
@@ -293,8 +289,6 @@ export const Pulse = forwardRef<HTMLDivElement, PulseProps>(
         }}
         transition={{
           duration: 2,
-          repeat: Infinity,
-          repeatType: "loop",
           ease: "easeInOut",
         }}
         {...props}
@@ -323,7 +317,7 @@ export const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         onClick={onClick}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+        className="fixed inset-0 bg-black/80 z-40"
         {...props}
       />
     );
@@ -603,19 +597,7 @@ export const Glow = forwardRef<HTMLDivElement, GlowProps>(
     return (
       <motion.div
         ref={ref}
-        animate={{
-          boxShadow: [
-            `0 0 10px ${color}`,
-            `0 0 20px ${color}`,
-            `0 0 10px ${color}`,
-          ],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          repeatType: "loop",
-          ease: "easeInOut",
-        }}
+        style={{ boxShadow: `0 0 15px ${color}` }}
         {...props}
       >
         {children}
@@ -709,29 +691,10 @@ interface LogoPulseProps extends ComponentPropsWithoutRef<typeof motion.div> {
 }
 
 export const LogoPulse = forwardRef<HTMLDivElement, LogoPulseProps>(
-  ({ children, glowColor = PINK_GLOW, intensity = "subtle", ...props }, ref) => {
-    const intensityMap = {
-      subtle: { scale: [1, 1.02, 1], opacity: [0.8, 1, 0.8] },
-      medium: { scale: [1, 1.04, 1], opacity: [0.7, 1, 0.7] },
-      strong: { scale: [1, 1.06, 1], opacity: [0.6, 1, 0.6] },
-    };
-
-    const durationMap = {
-      subtle: 4,
-      medium: 3,
-      strong: 2.5,
-    };
-
+  ({ children, glowColor = PINK_GLOW, ...props }, ref) => {
     return (
       <motion.div
         ref={ref}
-        animate={intensityMap[intensity]}
-        transition={{
-          duration: durationMap[intensity],
-          repeat: Infinity,
-          repeatType: "loop",
-          ease: "easeInOut",
-        }}
         whileHover={{
           scale: 1.05,
           boxShadow: `0 0 20px ${glowColor}`,

@@ -4,7 +4,7 @@ import { useState, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Minus, LucideIcon, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { AnimatedCounter, ScaleOnHover } from '@/lib/motion';
+import { AnimatedCounter } from '@/lib/motion';
 
 interface MetricCardProps {
   label: string;
@@ -50,11 +50,10 @@ export default memo(function MetricCard({
     return () => clearTimeout(timer);
   }, [delay]);
 
-  const CardWrapper = interactive ? ScaleOnHover : motion.div;
   const wrapperProps = interactive
     ? {
-        scale: 1.02,
-        glowColor: accentColor ? `${accentColor}30` : 'rgba(255, 51, 102, 0.15)',
+        whileHover: { scale: 1.02 },
+        whileTap: { scale: 0.98 },
         onClick,
         className: 'cursor-pointer',
       }
@@ -68,7 +67,7 @@ export default memo(function MetricCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <CardWrapper {...wrapperProps}>
+      <motion.div {...wrapperProps}>
         <div
           className={cn(
             'metric-card relative overflow-hidden rounded-xl p-5 transition-all duration-300',
@@ -76,34 +75,16 @@ export default memo(function MetricCard({
             isHovered && interactive && 'gradient-border'
           )}
         >
-          {/* Accent gradient - animated on hover */}
-          <motion.div
-            className="absolute top-0 left-0 right-0 h-1"
-            initial={{ opacity: accentColor ? 1 : 0 }}
-            animate={{
-              opacity: accentColor || isHovered ? 1 : 0,
-              background: isHovered
-                ? `linear-gradient(90deg, ${accentColor || 'var(--accent-primary)'}, var(--chart-secondary), ${accentColor || 'var(--accent-primary)'})`
-                : `linear-gradient(90deg, ${accentColor || 'var(--accent-primary)'}, transparent)`,
-            }}
-            transition={{ duration: 0.3 }}
+          {/* Accent gradient with CSS transition */}
+          <div
+            className="absolute top-0 left-0 right-0 h-1 transition-opacity duration-300"
             style={{
-              backgroundSize: isHovered ? '200% 100%' : '100% 100%',
+              opacity: accentColor || isHovered ? 1 : 0,
+              background: accentColor
+                ? `linear-gradient(90deg, ${accentColor}, transparent)`
+                : 'linear-gradient(90deg, var(--accent-primary), transparent)',
             }}
           />
-
-          {/* Hover glow effect */}
-          {isHovered && interactive && (
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={{
-                background: `radial-gradient(circle at 50% 0%, ${accentColor || 'var(--accent-primary)'}15, transparent 70%)`,
-              }}
-            />
-          )}
 
           <div className="flex items-start justify-between relative">
             <div className="space-y-2">
@@ -150,19 +131,17 @@ export default memo(function MetricCard({
 
             <div className="flex items-center gap-2">
               {Icon && (
-                <motion.div
+                <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center"
                   style={{
                     background: accentColor ? `${accentColor}20` : 'var(--bg-elevated)',
                   }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                 >
                   <Icon
                     className="w-5 h-5"
                     style={{ color: accentColor || 'var(--text-secondary)' }}
                   />
-                </motion.div>
+                </div>
               )}
 
               {/* Drill-down indicator */}
@@ -181,22 +160,12 @@ export default memo(function MetricCard({
             </div>
           </div>
 
-          {/* Trend indicator with bounce animation - reduced frequency for performance */}
+          {/* Trend indicator - static */}
           {trend && trendValue && (
             <div className="flex items-center gap-1.5 mt-3">
-              <motion.div
-                animate={trend !== 'stable' ? {
-                  y: trend === 'up' ? [0, -3, 0] : [0, 3, 0],
-                } : {}}
-                transition={{
-                  duration: 0.6,
-                  repeat: Infinity,
-                  repeatDelay: 5,
-                  ease: 'easeInOut',
-                }}
-              >
+              <div>
                 <TrendIcon className="w-3.5 h-3.5" style={{ color: trendColor }} />
-              </motion.div>
+              </div>
               <span className="text-xs font-medium" style={{ color: trendColor }}>
                 {trendValue}
               </span>
@@ -206,7 +175,7 @@ export default memo(function MetricCard({
             </div>
           )}
         </div>
-      </CardWrapper>
+      </motion.div>
     </motion.div>
   );
 });

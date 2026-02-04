@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Crown, Users, Code, Radio } from 'lucide-react';
+import { Crown, Users, Code } from 'lucide-react';
 import { PersonaType } from '@/lib/dtq/types';
 
 interface PersonaCardProps {
@@ -59,17 +59,10 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
           transition={{ duration: 0.5 }}
         />
 
-        {/* Subtle animated gradient shift - reduced frequency for performance */}
-        <motion.div
+        {/* Static gradient overlay */}
+        <div
           className="absolute inset-0 opacity-30"
-          animate={{
-            background: [
-              `radial-gradient(circle at 0% 0%, ${data.iconBg}30, transparent 50%)`,
-              `radial-gradient(circle at 100% 100%, ${data.iconBg}30, transparent 50%)`,
-              `radial-gradient(circle at 0% 0%, ${data.iconBg}30, transparent 50%)`,
-            ],
-          }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ background: `radial-gradient(circle at 30% 30%, ${data.iconBg}30, transparent 50%)` }}
         />
 
         <div className="relative flex items-center gap-4">
@@ -119,7 +112,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
             </motion.p>
           </div>
 
-          {/* Enhanced live badge with pulse */}
+          {/* Live badge with CSS-only pulse */}
           <motion.div
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
             style={{
@@ -130,33 +123,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.25 }}
           >
-            <motion.div
-              className="relative"
-              animate={{
-                scale: [1, 1.2, 1],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            >
-              <Radio className="w-3 h-3" style={{ color: 'var(--status-success)' }} />
-              {/* Ping effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{ background: 'var(--status-success)' }}
-                animate={{
-                  scale: [1, 2],
-                  opacity: [0.5, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: 'easeOut',
-                }}
-              />
-            </motion.div>
+            <div className="w-2 h-2 rounded-full animate-pulse-dot" style={{ background: 'var(--status-success)' }} />
             <span className="text-xs font-medium" style={{ color: 'var(--status-success)' }}>
               Live Dashboard
             </span>

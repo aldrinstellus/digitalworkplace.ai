@@ -74,41 +74,11 @@ export default function LiveIndicator({ lastUpdate, isLive, onToggle }: LiveIndi
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* Animated indicator dot */}
-        <div className="relative">
-          <motion.div
-            className="w-2 h-2 rounded-full"
-            style={{ background: config.color }}
-            animate={
-              connectionState === 'connected'
-                ? { scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }
-                : connectionState === 'stale'
-                ? { opacity: [1, 0.5, 1] }
-                : {}
-            }
-            transition={{
-              duration: connectionState === 'connected' ? 1.5 : 2,
-              repeat: Infinity,
-            }}
-          />
-
-          {/* Ping effect for connected state */}
-          {connectionState === 'connected' && (
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{ background: config.color }}
-              animate={{
-                scale: [1, 2.5],
-                opacity: [0.6, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: 'easeOut',
-              }}
-            />
-          )}
-        </div>
+        {/* CSS-only indicator dot */}
+        <div
+          className={`w-2 h-2 rounded-full ${connectionState !== 'disconnected' ? 'animate-pulse-dot' : ''}`}
+          style={{ background: config.color }}
+        />
         {config.label}
       </motion.button>
 

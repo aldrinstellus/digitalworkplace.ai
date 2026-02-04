@@ -218,34 +218,7 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
           }}
         >
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <motion.div
-                className="w-2 h-2 rounded-full"
-                style={{ background: 'var(--status-success)' }}
-                animate={{
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
-              {/* Ping effect */}
-              <motion.div
-                className="absolute inset-0 rounded-full"
-                style={{ background: 'var(--status-success)' }}
-                animate={{
-                  scale: [1, 2],
-                  opacity: [0.5, 0],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: 'easeOut',
-                }}
-              />
-            </div>
+            <div className="w-2 h-2 rounded-full animate-pulse-dot" style={{ background: 'var(--status-success)' }} />
             <span>Live Dashboard</span>
           </div>
         </motion.div>

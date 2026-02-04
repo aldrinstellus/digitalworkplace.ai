@@ -27,38 +27,22 @@ export default function HighRiskBanner({ features, onFeatureClick }: HighRiskBan
         border: '1px solid rgba(248, 113, 113, 0.2)',
       }}
     >
-      {/* Pulsing red warning glow on left border - reduced frequency for performance */}
-      <motion.div
+      {/* Static red warning bar */}
+      <div
         className="absolute top-0 left-0 w-1 h-full rounded-l"
         style={{ background: 'var(--risk-high)' }}
-        animate={{
-          filter: [
-            'drop-shadow(0 0 5px rgba(248, 113, 113, 0.5))',
-            'drop-shadow(0 0 15px rgba(248, 113, 113, 0.8))',
-            'drop-shadow(0 0 5px rgba(248, 113, 113, 0.5))',
-          ],
-        }}
-        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
       />
 
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-4">
-          {/* Critical icon with subtle shake */}
-          <motion.div
+          {/* Critical icon */}
+          <div
             className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
             style={{ background: 'rgba(248, 113, 113, 0.2)' }}
-            animate={{
-              x: [0, -1, 1, -1, 0],
-            }}
-            transition={{
-              duration: 0.5,
-              repeat: Infinity,
-              repeatDelay: 3,
-            }}
           >
             <AlertTriangle className="w-5 h-5" style={{ color: 'var(--risk-high)' }} />
-          </motion.div>
+          </div>
 
           <div>
             <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
@@ -145,15 +129,9 @@ export default function HighRiskBanner({ features, onFeatureClick }: HighRiskBan
                     </div>
                     <div>
                       <span style={{ color: 'var(--text-muted)' }}>Risk: </span>
-                      <motion.span
-                        style={{ color: 'var(--risk-high)' }}
-                        animate={{
-                          opacity: [1, 0.7, 1],
-                        }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
+                      <span style={{ color: 'var(--risk-high)' }}>
                         {feature.riskScore}
-                      </motion.span>
+                      </span>
                     </div>
                     <div>
                       <span style={{ color: 'var(--text-muted)' }}>Defects: </span>

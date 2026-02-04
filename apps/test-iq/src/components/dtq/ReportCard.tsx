@@ -31,7 +31,7 @@ export default memo(function ReportCard({ report, delay = 0, onViewIssues }: Rep
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
     >
-      <ScaleOnHover scale={1.02} glowColor="rgba(255, 51, 102, 0.1)">
+      <ScaleOnHover scale={1.02}>
         <div className="card rounded-xl p-5 transition-all">
           <div className="flex items-start justify-between mb-4">
             <div>

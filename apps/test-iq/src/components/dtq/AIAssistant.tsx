@@ -112,20 +112,12 @@ export default function AIAssistant() {
       {/* Header */}
       <div className="p-5 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
         <div className="flex items-center gap-3">
-          <motion.div
+          <div
             className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: 'var(--accent-primary)' }}
-            animate={{
-              boxShadow: [
-                '0 0 10px rgba(255, 51, 102, 0.3)',
-                '0 0 20px rgba(255, 51, 102, 0.5)',
-                '0 0 10px rgba(255, 51, 102, 0.3)',
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
+            style={{ background: 'var(--accent-primary)', boxShadow: '0 0 15px rgba(255, 51, 102, 0.3)' }}
           >
             <Sparkles className="w-5 h-5 text-white" />
-          </motion.div>
+          </div>
           <div>
             <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
               AI Insights Assistant
@@ -145,16 +137,12 @@ export default function AIAssistant() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-8"
           >
-            <motion.div
+            <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
               style={{ background: 'var(--bg-elevated)' }}
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
             >
               <Bot className="w-8 h-8" style={{ color: 'var(--accent-primary)' }} />
-            </motion.div>
+            </div>
             <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
               Ask me about your testing metrics
             </p>
@@ -315,25 +303,10 @@ export default function AIAssistant() {
             className="w-10 h-10 rounded-lg flex items-center justify-center transition-all disabled:opacity-50"
             style={{
               background: input.trim() ? 'var(--accent-primary)' : 'var(--bg-tertiary)',
+              boxShadow: input.trim() ? '0 0 15px rgba(255, 51, 102, 0.3)' : 'none',
             }}
             whileHover={input.trim() ? { scale: 1.05 } : {}}
             whileTap={input.trim() ? { scale: 0.95 } : {}}
-            animate={
-              input.trim()
-                ? {
-                    boxShadow: [
-                      '0 0 10px rgba(255, 51, 102, 0.3)',
-                      '0 0 20px rgba(255, 51, 102, 0.5)',
-                      '0 0 10px rgba(255, 51, 102, 0.3)',
-                    ],
-                  }
-                : { boxShadow: 'none' }
-            }
-            transition={
-              input.trim()
-                ? { boxShadow: { duration: 1.5, repeat: Infinity } }
-                : {}
-            }
           >
             <Send className="w-4 h-4 text-white" />
           </motion.button>

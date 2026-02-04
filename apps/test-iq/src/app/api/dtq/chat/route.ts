@@ -140,6 +140,12 @@ export async function POST(request: NextRequest) {
       }
     } catch (embeddingError) {
       console.warn('RAG search failed, proceeding without context:', embeddingError);
+      // Include debug info temporarily to diagnose production issues
+      sources.push({
+        title: `DEBUG: ${embeddingError instanceof Error ? embeddingError.message : String(embeddingError)}`,
+        type: 'error',
+        similarity: 0,
+      });
     }
 
     // --- Build system prompt ---

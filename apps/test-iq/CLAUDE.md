@@ -13,9 +13,20 @@
 
 **FILES TO READ (in this order):**
 ```
-1. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - REQUIRED)
-2. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
-3. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/CLAUDE.md (This file)
+1. /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md (CURRENT STATE - most important)
+2. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/CLAUDE.md (This file)
+3. /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/TESTING-AUDIT-GUIDE.md (Testing audit results)
+4. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB)
+5. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search)
+```
+
+**DOCUMENTATION FILES (reference as needed):**
+```
+- /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/DEMO-GUIDE.md (1760-line comprehensive demo guide)
+- /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/DEMO-GUIDE.pdf (PDF version)
+- /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/SALES-GUIDE.md (534-line sales demo script)
+- /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/SALES-GUIDE.pdf (PDF version)
+- /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/TESTING-AUDIT-GUIDE.md (200-check testing audit)
 ```
 
 **THEN:**

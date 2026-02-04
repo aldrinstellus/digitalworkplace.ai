@@ -396,10 +396,10 @@ Four `MetricCard` components in a responsive grid (1 column on mobile, 2 on tabl
 
 | Card | Value (Manager Example) | Subtitle | Icon | Click Action |
 |------|------------------------|----------|------|--------------|
-| **Total Features** | 46 | "88.5% avg coverage" | Layers | Opens MetricDrillDownModal |
+| **Total Features** | 46 | "88% avg coverage" | Layers | Opens MetricDrillDownModal |
 | **Automation Rate** | 43% | "20 fully automated" | Cpu | Opens MetricDrillDownModal |
 | **Risk Distribution** | "3 High" | "25 Med / 18 Low" | AlertTriangle | Opens MetricDrillDownModal |
-| **Open Defects** | 35 | "Across all features" | Bug | Opens MetricDrillDownModal |
+| **Open Defects** | 47 | "Across all features" | Bug | Opens MetricDrillDownModal |
 
 > **Note:** Values shown are for the QA Manager persona. C-Suite and Tech Lead personas display different computed values.
 

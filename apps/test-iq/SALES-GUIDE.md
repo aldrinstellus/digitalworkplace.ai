@@ -158,7 +158,7 @@ These are the numbers you should be able to cite from memory:
 
 **SHOW:** Point to the primary metrics grid at the top.
 
-**SAY:** "The QA Manager is tracking 46 features across 10 categories. The automation rate is 43% -- 20 features are fully automated. There are 3 high-risk features flagged, and 35 open defects across the portfolio."
+**SAY:** "The QA Manager is tracking 46 features across 10 categories. The automation rate is 43% -- 20 features are fully automated. There are 3 high-risk features flagged, and 47 open defects across the portfolio."
 
 ### Walk Through the KPIs
 

@@ -3,3 +3,4 @@ export { default as MetricDrillDownModal } from './MetricDrillDownModal';
 export { default as FeatureDetailModal } from './FeatureDetailModal';
 export { default as CategoryAnalyticsModal } from './CategoryAnalyticsModal';
 export { default as ChartDrillDownModal } from './ChartDrillDownModal';
+export { default as TestRunDetailModal } from './TestRunDetailModal';

@@ -11,6 +11,8 @@ import {
   Crown,
   Users,
   Code,
+  ChevronDown,
+  Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/lib/dtq/types';
@@ -36,7 +38,10 @@ const personaConfig = {
 export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps) {
   const pathname = usePathname();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
-  const [hoveredPersona, setHoveredPersona] = useState<string | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const currentConfig = personaConfig[persona];
+  const CurrentIcon = currentConfig.icon;
 
   return (
     <aside
@@ -49,6 +54,89 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
             <TQLogo size="lg" showText />
           </motion.div>
         </Link>
+      </div>
+
+      {/* Persona Dropdown */}
+      <div className="px-4 pt-4 pb-2 relative">
+        <p className="text-xs font-medium uppercase tracking-wider mb-2 px-1" style={{ color: 'var(--text-muted)' }}>
+          Viewing as
+        </p>
+        <button
+          onClick={() => setDropdownOpen((prev) => !prev)}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all"
+          style={{
+            background: 'var(--bg-tertiary)',
+            color: 'var(--text-primary)',
+          }}
+        >
+          <motion.div
+            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+            style={{ background: currentConfig.color }}
+          >
+            <CurrentIcon className="w-4 h-4 text-white" />
+          </motion.div>
+          <span className="font-medium flex-1 text-left">{currentConfig.name}</span>
+          <motion.div
+            animate={{ rotate: dropdownOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronDown className="w-4 h-4" style={{ color: 'var(--text-muted)' }} />
+          </motion.div>
+        </button>
+
+        <AnimatePresence>
+          {dropdownOpen && (
+            <>
+              {/* Invisible overlay to close dropdown on click outside */}
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setDropdownOpen(false)}
+              />
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden mt-1 rounded-lg z-20 relative"
+                style={{ background: 'var(--bg-tertiary)' }}
+              >
+                {(Object.keys(personaConfig) as PersonaType[]).map((key) => {
+                  const config = personaConfig[key];
+                  const isActive = persona === key;
+                  const Icon = config.icon;
+
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        onPersonaChange(key);
+                        setDropdownOpen(false);
+                      }}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-[var(--bg-elevated)] text-left"
+                      style={{
+                        color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                      }}
+                    >
+                      <div
+                        className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
+                        style={{
+                          background: isActive ? config.color : 'transparent',
+                          border: isActive ? 'none' : '1px solid var(--border-subtle)',
+                        }}
+                      >
+                        <Icon className="w-3.5 h-3.5" style={{ color: isActive ? 'white' : 'var(--text-muted)' }} />
+                      </div>
+                      <span className="font-medium flex-1">{config.name}</span>
+                      {isActive && (
+                        <Check className="w-4 h-4" style={{ color: config.color }} />
+                      )}
+                    </button>
+                  );
+                })}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Navigation */}
@@ -129,80 +217,6 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
                   </AnimatePresence>
                 </motion.div>
               </Link>
-            );
-          })}
-        </div>
-
-        {/* Personas */}
-        <div className="pt-4 border-t" style={{ borderColor: 'var(--border-card)' }}>
-          <p className="text-xs font-medium uppercase tracking-wider mb-3 px-3" style={{ color: 'var(--text-muted)' }}>
-            Demo Personas
-          </p>
-          {(Object.keys(personaConfig) as PersonaType[]).map((key) => {
-            const config = personaConfig[key];
-            const isActive = persona === key;
-            const isHovered = hoveredPersona === key;
-            const Icon = config.icon;
-
-            return (
-              <motion.button
-                key={key}
-                onClick={() => onPersonaChange(key)}
-                onMouseEnter={() => setHoveredPersona(key)}
-                onMouseLeave={() => setHoveredPersona(null)}
-                className={cn(
-                  'sidebar-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-left relative',
-                  isActive && 'active'
-                )}
-                style={{
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                }}
-                whileHover={!isActive ? { scale: 1.02 } : {}}
-              >
-                {/* Smooth transition icon container */}
-                <motion.div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center"
-                  style={{
-                    background: isActive ? config.color : 'var(--bg-tertiary)',
-                  }}
-                  animate={{
-                    scale: isActive ? 1 : isHovered ? 1.05 : 1,
-                    opacity: isActive ? 1 : 0.6,
-                  }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <Icon className="w-4 h-4 text-white" />
-                </motion.div>
-
-                <div className="flex-1">
-                  <span className="font-medium block">{config.name}</span>
-                  <AnimatePresence mode="wait">
-                    {isActive && (
-                      <motion.span
-                        initial={{ opacity: 0, y: -5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 5 }}
-                        className="text-xs"
-                        style={{ color: 'var(--text-muted)' }}
-                      >
-                        Active
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Selection indicator */}
-                {isActive && (
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    exit={{ scale: 0 }}
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: config.color }}
-                  />
-                )}
-              </motion.button>
             );
           })}
         </div>

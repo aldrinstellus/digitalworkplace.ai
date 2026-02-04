@@ -15,6 +15,7 @@ import {
 import { ChatMessage } from '@/lib/dtq/types';
 import { aiResponses } from '@/lib/dtq/data';
 import { TypingIndicator } from '@/lib/motion';
+import { usePersona } from '@/app/(dashboard)/layout';
 
 const quickActions = [
   { id: 'high-risk', icon: Target, label: 'High-risk features', sublabel: 'Show features needing attention' },
@@ -23,7 +24,26 @@ const quickActions = [
   { id: 'quality-summary', icon: TrendingUp, label: 'Quality summary', sublabel: 'Get executive overview' },
 ];
 
+async function fetchChatResponse(
+  message: string,
+  persona: string,
+  history: { role: string; content: string }[]
+): Promise<{ response: string; sources: { title: string; type: string; similarity: number }[] }> {
+  const res = await fetch('/api/dtq/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, persona, history }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`Chat API error: ${res.status}`);
+  }
+
+  return res.json();
+}
+
 export default function AIAssistant() {
+  const { persona } = usePersona();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -45,6 +65,9 @@ export default function AIAssistant() {
     scrollToBottom();
   }, [messages, isTyping]);
 
+  const getHistory = () =>
+    messages.map((m) => ({ role: m.role, content: m.content }));
+
   const handleQuickAction = async (actionId: string) => {
     const action = quickActions.find(a => a.id === actionId);
     if (!action) return;
@@ -59,28 +82,38 @@ export default function AIAssistant() {
     setMessages(prev => [...prev, userMessage]);
     setIsTyping(true);
 
-    // Simulate typing delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const response = aiResponses[actionId] || "I don't have information about that yet.";
-    const assistantMessage: ChatMessage = {
-      id: generateId('assistant'),
-      role: 'assistant',
-      content: response,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, assistantMessage]);
-    setIsTyping(false);
+    try {
+      const data = await fetchChatResponse(action.label, persona, getHistory());
+      const assistantMessage: ChatMessage = {
+        id: generateId('assistant'),
+        role: 'assistant',
+        content: data.response,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch {
+      // Fallback to hardcoded responses
+      const response = aiResponses[actionId] || "I don't have information about that yet.";
+      const assistantMessage: ChatMessage = {
+        id: generateId('assistant'),
+        role: 'assistant',
+        content: response,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    const userInput = input;
     const userMessage: ChatMessage = {
       id: generateId('user'),
       role: 'user',
-      content: input,
+      content: userInput,
       timestamp: new Date(),
     };
 
@@ -88,18 +121,27 @@ export default function AIAssistant() {
     setInput('');
     setIsTyping(true);
 
-    // Simulate response
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const assistantMessage: ChatMessage = {
-      id: generateId('assistant'),
-      role: 'assistant',
-      content: `I understand you're asking about "${input}". Based on current metrics, here are my insights:\n\n- Overall test coverage is healthy at 93.3%\n- No critical issues detected in related areas\n- Recommend reviewing the feature coverage section for detailed data\n\nWould you like me to dive deeper into any specific aspect?`,
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, assistantMessage]);
-    setIsTyping(false);
+    try {
+      const data = await fetchChatResponse(userInput, persona, getHistory());
+      const assistantMessage: ChatMessage = {
+        id: generateId('assistant'),
+        role: 'assistant',
+        content: data.response,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch {
+      // Fallback response
+      const assistantMessage: ChatMessage = {
+        id: generateId('assistant'),
+        role: 'assistant',
+        content: `I understand you're asking about "${userInput}". Based on current metrics, here are my insights:\n\n- Overall test coverage is healthy at 93.3%\n- No critical issues detected in related areas\n- Recommend reviewing the feature coverage section for detailed data\n\nWould you like me to dive deeper into any specific aspect?`,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (

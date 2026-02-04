@@ -12,6 +12,7 @@ import {
 import MetricCard from '@/components/dtq/MetricCard';
 import TrendChart from '@/components/dtq/TrendChart';
 import LiveIndicator from '@/components/dtq/LiveIndicator';
+import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
 
 // Lazy load modals - they're not needed until user interaction
@@ -39,7 +40,8 @@ interface SelectedChartPoint {
 }
 
 export default function HistoryPage() {
-  const { dailyMetrics, lastUpdate, isLive, toggleLive } = useRealTimeSimulation(true);
+  const { persona } = usePersona();
+  const { dailyMetrics, lastUpdate, isLive, toggleLive } = useRealTimeSimulation(true, persona);
 
   // Modal state management
   const [selectedMetric, setSelectedMetric] = useState<SelectedMetric | null>(null);

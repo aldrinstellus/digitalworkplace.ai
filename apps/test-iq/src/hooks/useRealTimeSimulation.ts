@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef, useMemo, startTransition } from 'react';
-import { TestRun, Feature, DailyMetric, TestIssue, Persona } from '@/lib/dtq/types';
+import { TestRun, Feature, DailyMetric, TestIssue, Persona, PersonaType } from '@/lib/dtq/types';
 import {
-  features as fallbackFeatures,
-  dailyMetrics as fallbackMetrics,
-  testRuns as fallbackTestRuns,
   personas as fallbackPersonas,
 } from '@/lib/dtq/data';
+import { getPersonaData } from '@/lib/dtq/persona-data';
 
 // Realistic error messages for failed tests
 const errorMessages = [
@@ -68,64 +66,26 @@ function addVariance(value: number, maxVariance: number = 3): number {
   return Math.max(0, Math.min(100, value + variance));
 }
 
-// Fetch data from API with fallback to static data
-async function fetchFromAPI<T>(endpoint: string, fallback: T): Promise<T> {
-  try {
-    const response = await fetch(endpoint);
-    if (!response.ok) throw new Error('API error');
-    return await response.json();
-  } catch {
-    console.warn(`Failed to fetch ${endpoint}, using fallback data`);
-    return fallback;
-  }
-}
-
-export function useRealTimeSimulation(enabled: boolean = true) {
-  const [testRuns, setTestRuns] = useState<TestRun[]>(fallbackTestRuns);
-  const [features, setFeatures] = useState<Feature[]>(fallbackFeatures);
-  const [dailyMetrics, setDailyMetrics] = useState<DailyMetric[]>(fallbackMetrics);
-  const [personas, setPersonas] = useState<Persona[]>(fallbackPersonas);
+export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaType = 'manager') {
+  // Initialize from persona data
+  const initialData = getPersonaData(persona);
+  const [testRuns, setTestRuns] = useState<TestRun[]>(initialData.testRuns);
+  const [features, setFeatures] = useState<Feature[]>(initialData.features);
+  const [dailyMetrics, setDailyMetrics] = useState<DailyMetric[]>(initialData.dailyMetrics);
+  const [personas] = useState<Persona[]>(fallbackPersonas);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
   const [isLive, setIsLive] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const dataLoadedRef = useRef(false);
 
-  // Load initial data from API
+  // Reset state when persona changes
   useEffect(() => {
-    if (dataLoadedRef.current) return;
-    dataLoadedRef.current = true;
-
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        // Fetch all data in parallel
-        const [featuresData, testRunsData, metricsData, personasData] = await Promise.all([
-          fetchFromAPI<Feature[]>('/api/dtq/features', fallbackFeatures),
-          fetchFromAPI<TestRun[]>('/api/dtq/test-runs', fallbackTestRuns),
-          fetchFromAPI<DailyMetric[]>('/api/dtq/metrics', fallbackMetrics),
-          fetchFromAPI<Persona[]>('/api/dtq/personas', fallbackPersonas),
-        ]);
-
-        // Transform dates for test runs
-        const transformedRuns = testRunsData.map((run) => ({
-          ...run,
-          executedAt: new Date(run.executedAt),
-        }));
-
-        setFeatures(featuresData);
-        setTestRuns(transformedRuns);
-        setDailyMetrics(metricsData);
-        setPersonas(personasData);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
+    const data = getPersonaData(persona);
+    setFeatures(data.features);
+    setTestRuns(data.testRuns);
+    setDailyMetrics(data.dailyMetrics);
+    setLastUpdate(new Date());
+  }, [persona]);
 
   // Simulate new test runs appearing
   const simulateNewTestRun = useCallback(() => {

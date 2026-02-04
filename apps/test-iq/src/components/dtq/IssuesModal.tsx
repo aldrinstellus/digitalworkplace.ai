@@ -62,7 +62,7 @@ export default function IssuesModal({ isOpen, onClose, issues, featureName }: Is
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 bg-black/80"
           />
 
           {/* Modal */}
@@ -160,24 +160,16 @@ export default function IssuesModal({ isOpen, onClose, issues, featureName }: Is
                             <h3 className="font-medium" style={{ color: 'var(--text-primary)' }}>
                               {issue.testCaseName}
                             </h3>
-                            <motion.div
+                            <div
                               className="flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium"
                               style={{
                                 background: config.bg,
                                 color: config.color,
                               }}
-                              animate={issue.severity === 'high' ? {
-                                boxShadow: [
-                                  `0 0 5px ${config.color}30`,
-                                  `0 0 10px ${config.color}50`,
-                                  `0 0 5px ${config.color}30`,
-                                ],
-                              } : {}}
-                              transition={issue.severity === 'high' ? { duration: 2, repeat: Infinity } : {}}
                             >
                               <SeverityIcon className="w-3 h-3" />
                               <span className="capitalize">{issue.severity}</span>
-                            </motion.div>
+                            </div>
                           </div>
                         </div>
 

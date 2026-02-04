@@ -58,7 +58,7 @@ export default function DashboardPage() {
     lastUpdate,
     isLive,
     toggleLive,
-  } = useRealTimeSimulation(true);
+  } = useRealTimeSimulation(true, persona);
 
   // Modal state management
   const [selectedMetric, setSelectedMetric] = useState<SelectedMetric | null>(null);

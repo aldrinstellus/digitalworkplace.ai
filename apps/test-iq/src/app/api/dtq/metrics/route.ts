@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (type === 'summary') {
       // Get summary metrics from features
       const { data: features, error } = await supabase
-        .from('features')
+        .from('dtq_features')
         .select('*');
 
       if (error) {
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
     // Default: daily metrics
     const { data: metrics, error } = await supabase
-      .from('daily_metrics')
+      .from('dtq_daily_metrics')
       .select('*')
       .order('date', { ascending: true })
       .limit(days);

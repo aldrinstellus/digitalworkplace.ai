@@ -3,21 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// Create a custom client that targets the dtq schema
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  db: {
-    schema: 'dtq',
-  },
-});
+// Create Supabase client (uses public schema — dtq schema is accessed via views and RPC functions)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Also export a public schema client for cross-project queries
-export const supabasePublic = createClient(supabaseUrl, supabaseAnonKey, {
-  db: {
-    schema: 'public',
-  },
-});
-
-// Database types for dtq schema
+// Database types for dtq schema (accessed via public views: dtq_features, dtq_test_runs, etc.)
 export interface DbFeature {
   id: string;
   name: string;
@@ -71,8 +60,7 @@ export interface DbDailyMetric {
 }
 
 export interface DbPersona {
-  id: string;
-  type: 'csuite' | 'manager' | 'techlead';
+  id: string; // persona type: csuite, manager, techlead
   name: string;
   title: string;
   description: string;
@@ -83,21 +71,21 @@ export interface DbPersona {
 export interface DbPersonaMetric {
   id: string;
   persona_id: string;
-  key: string;
+  metric_key: string;
   label: string;
   value: string;
   unit: string;
   description: string;
   trend: 'up' | 'down' | 'stable';
   trend_value: string;
-  sort_order: number;
+  display_order: number;
   created_at: string;
 }
 
-// Fetch functions
+// Fetch functions (use public schema views: dtq_features, dtq_test_runs, etc.)
 export async function fetchFeatures(): Promise<DbFeature[]> {
   const { data, error } = await supabase
-    .from('features')
+    .from('dtq_features')
     .select('*')
     .order('category', { ascending: true });
 
@@ -107,7 +95,7 @@ export async function fetchFeatures(): Promise<DbFeature[]> {
 
 export async function fetchTestRuns(limit = 40): Promise<DbTestRun[]> {
   const { data, error } = await supabase
-    .from('test_runs')
+    .from('dtq_test_runs')
     .select('*')
     .order('executed_at', { ascending: false })
     .limit(limit);
@@ -117,7 +105,7 @@ export async function fetchTestRuns(limit = 40): Promise<DbTestRun[]> {
 }
 
 export async function fetchTestIssues(testRunId: string): Promise<DbTestIssue[]> {
-  const { data, error } = await supabase.from('test_issues').select('*').eq('test_run_id', testRunId);
+  const { data, error } = await supabase.from('dtq_test_issues').select('*').eq('test_run_id', testRunId);
 
   if (error) throw error;
   return data || [];
@@ -125,7 +113,7 @@ export async function fetchTestIssues(testRunId: string): Promise<DbTestIssue[]>
 
 export async function fetchDailyMetrics(days = 30): Promise<DbDailyMetric[]> {
   const { data, error } = await supabase
-    .from('daily_metrics')
+    .from('dtq_daily_metrics')
     .select('*')
     .order('date', { ascending: true })
     .limit(days);
@@ -135,14 +123,14 @@ export async function fetchDailyMetrics(days = 30): Promise<DbDailyMetric[]> {
 }
 
 export async function fetchPersonas(): Promise<DbPersona[]> {
-  const { data, error } = await supabase.from('personas').select('*');
+  const { data, error } = await supabase.from('dtq_personas').select('*');
 
   if (error) throw error;
   return data || [];
 }
 
 export async function fetchPersonaMetrics(personaId?: string): Promise<DbPersonaMetric[]> {
-  let query = supabase.from('persona_metrics').select('*').order('sort_order', { ascending: true });
+  let query = supabase.from('dtq_persona_metrics').select('*').order('display_order', { ascending: true });
 
   if (personaId) {
     query = query.eq('persona_id', personaId);
@@ -154,11 +142,22 @@ export async function fetchPersonaMetrics(personaId?: string): Promise<DbPersona
   return data || [];
 }
 
-// Insert functions for real-time simulation
+// Insert functions for real-time simulation (via SECURITY DEFINER RPC functions)
 export async function insertTestRun(
   run: Omit<DbTestRun, 'id' | 'created_at'>
 ): Promise<DbTestRun> {
-  const { data, error } = await supabase.from('test_runs').insert(run).select().single();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('insert_dtq_test_run', {
+    p_feature_id: run.feature_id,
+    p_feature_name: run.feature_name,
+    p_executed_at: run.executed_at,
+    p_status: run.status,
+    p_total_tests: run.total_tests,
+    p_passed_tests: run.passed_tests,
+    p_failed_tests: run.failed_tests,
+    p_duration: run.duration,
+    p_source: run.source || 'simulation',
+  });
 
   if (error) throw error;
   return data;
@@ -167,7 +166,10 @@ export async function insertTestRun(
 export async function insertTestIssue(
   issue: Omit<DbTestIssue, 'id' | 'created_at'>
 ): Promise<DbTestIssue> {
-  const { data, error } = await supabase.from('test_issues').insert(issue).select().single();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any).rpc('insert_dtq_test_issues', {
+    p_issues: [issue],
+  });
 
   if (error) throw error;
   return data;

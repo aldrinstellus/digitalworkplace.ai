@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     // Fetch test runs
     const { data: runs, error: runsError } = await supabase
-      .from('test_runs')
+      .from('dtq_test_runs')
       .select('*')
       .order('executed_at', { ascending: false })
       .limit(limit);
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     // Fetch issues for all runs
     const runIds = runs?.map((r) => r.id) || [];
     const { data: issues, error: issuesError } = await supabase
-      .from('test_issues')
+      .from('dtq_test_issues')
       .select('*')
       .in('test_run_id', runIds);
 
@@ -82,29 +82,29 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Insert test run
-    const { data: run, error: runError } = await supabase
-      .from('test_runs')
-      .insert({
-        feature_id: body.featureId,
-        feature_name: body.featureName,
-        executed_at: body.executedAt || new Date().toISOString(),
-        status: body.status,
-        total_tests: body.totalTests,
-        passed_tests: body.passedTests,
-        failed_tests: body.failedTests,
-        duration: body.duration,
-        source: body.source || 'simulation',
-      })
-      .select()
-      .single();
+    // Insert test run via SECURITY DEFINER RPC (dtq schema not exposed via PostgREST)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: run, error: runError } = await (supabase as any).rpc(
+      'insert_dtq_test_run',
+      {
+        p_feature_id: body.featureId,
+        p_feature_name: body.featureName,
+        p_executed_at: body.executedAt || new Date().toISOString(),
+        p_status: body.status,
+        p_total_tests: body.totalTests,
+        p_passed_tests: body.passedTests,
+        p_failed_tests: body.failedTests,
+        p_duration: body.duration,
+        p_source: body.source || 'simulation',
+      }
+    );
 
     if (runError) {
       console.error('Error creating test run:', runError);
       return NextResponse.json({ error: runError.message }, { status: 500 });
     }
 
-    // Insert issues if any
+    // Insert issues if any via SECURITY DEFINER RPC
     if (body.issues && body.issues.length > 0) {
       const issuesData = body.issues.map(
         (issue: {
@@ -121,9 +121,11 @@ export async function POST(request: NextRequest) {
         })
       );
 
-      const { error: issuesError } = await supabase
-        .from('test_issues')
-        .insert(issuesData);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: issuesError } = await (supabase as any).rpc(
+        'insert_dtq_test_issues',
+        { p_issues: issuesData }
+      );
 
       if (issuesError) {
         console.error('Error creating issues:', issuesError);

@@ -10,7 +10,7 @@ const supabase = createClient(
 export async function GET() {
   try {
     const { data: features, error } = await supabase
-      .from('features')
+      .from('dtq_features')
       .select('*')
       .order('category', { ascending: true });
 

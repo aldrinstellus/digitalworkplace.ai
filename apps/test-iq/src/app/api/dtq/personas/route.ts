@@ -11,7 +11,7 @@ export async function GET() {
   try {
     // Fetch personas
     const { data: personas, error: personasError } = await supabase
-      .from('personas')
+      .from('dtq_personas')
       .select('*');
 
     if (personasError) {
@@ -24,9 +24,9 @@ export async function GET() {
 
     // Fetch all persona metrics
     const { data: metrics, error: metricsError } = await supabase
-      .from('persona_metrics')
+      .from('dtq_persona_metrics')
       .select('*')
-      .order('sort_order', { ascending: true });
+      .order('display_order', { ascending: true });
 
     if (metricsError) {
       console.error('Error fetching persona metrics:', metricsError);
@@ -43,7 +43,7 @@ export async function GET() {
           acc[metric.persona_id] = [];
         }
         acc[metric.persona_id].push({
-          key: metric.key,
+          key: metric.metric_key,
           label: metric.label,
           value: isNaN(Number(metric.value))
             ? metric.value
@@ -60,7 +60,7 @@ export async function GET() {
 
     // Transform and combine
     const transformedPersonas = personas?.map((p) => ({
-      id: p.type, // Use type as ID for frontend compatibility
+      id: p.id, // id is the persona type (csuite, manager, techlead)
       name: p.name,
       title: p.title,
       description: p.description,

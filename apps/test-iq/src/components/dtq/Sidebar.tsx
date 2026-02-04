@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,7 +33,7 @@ const personaConfig = {
   techlead: { name: 'Tech Lead', icon: Code, color: 'var(--chart-secondary)' },
 };
 
-export default function Sidebar({ persona, onPersonaChange }: SidebarProps) {
+export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps) {
   const pathname = usePathname();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [hoveredPersona, setHoveredPersona] = useState<string | null>(null);
@@ -252,4 +252,4 @@ export default function Sidebar({ persona, onPersonaChange }: SidebarProps) {
       </div>
     </aside>
   );
-}
+});

@@ -107,11 +107,11 @@ export default function BaseModal({
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.12 }}
             onClick={closeOnOverlayClick ? onClose : undefined}
             aria-hidden="true"
           />
@@ -135,8 +135,8 @@ export default function BaseModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{
               type: 'spring',
-              stiffness: 300,
-              damping: 25,
+              stiffness: 500,
+              damping: 35,
             }}
           >
             {/* Pink glow effect on top border */}

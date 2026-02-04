@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { forwardRef, type ReactNode, type ComponentPropsWithoutRef, useEffect, useState, useRef } from "react";
+import { forwardRef, type ReactNode, type ComponentPropsWithoutRef, useEffect, useRef, useMemo } from "react";
 
 // Default easing curve - smooth and snappy
 const defaultEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -101,8 +101,8 @@ export const staggerContainerVariants: Variants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1,
+      staggerChildren: 0.04,
+      delayChildren: 0.02,
     },
   },
 };
@@ -113,31 +113,28 @@ export const staggerItemVariants: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.4,
+      duration: 0.25,
       ease: defaultEase,
     },
   },
 };
 
+const createStaggerVariants = (staggerDelay: number, delayChildren: number): Variants => ({
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: staggerDelay, delayChildren },
+  },
+});
+
 export const StaggerContainer = forwardRef<HTMLDivElement, StaggerContainerProps>(
-  ({ children, staggerDelay = 0.1, delayChildren = 0.1, ...props }, ref) => {
+  ({ children, staggerDelay = 0.04, delayChildren = 0.02, ...props }, ref) => {
+    const variants = useMemo(
+      () => createStaggerVariants(staggerDelay, delayChildren),
+      [staggerDelay, delayChildren]
+    );
     return (
-      <motion.div
-        ref={ref}
-        variants={{
-          hidden: { opacity: 0 },
-          show: {
-            opacity: 1,
-            transition: {
-              staggerChildren: staggerDelay,
-              delayChildren,
-            },
-          },
-        }}
-        initial="hidden"
-        animate="show"
-        {...props}
-      >
+      <motion.div ref={ref} variants={variants} initial="hidden" animate="show" {...props}>
         {children}
       </motion.div>
     );
@@ -374,18 +371,21 @@ interface AnimatedCounterProps {
 
 export function AnimatedCounter({
   value,
-  duration = 1,
+  duration = 0.6,
   className,
   formatValue,
   suffix = "",
   prefix = "",
 }: AnimatedCounterProps) {
-  const [displayValue, setDisplayValue] = useState(0);
-  const previousValue = useRef(0);
+  const spanRef = useRef<HTMLSpanElement>(null);
+  const previousValue = useRef(value);
 
   useEffect(() => {
     const startValue = previousValue.current;
     const endValue = value;
+    previousValue.current = value;
+    if (startValue === endValue) return;
+
     const startTime = performance.now();
     const durationMs = duration * 1000;
 
@@ -397,32 +397,29 @@ export function AnimatedCounter({
       const easeProgress = 1 - Math.pow(1 - progress, 3);
       const currentValue = startValue + (endValue - startValue) * easeProgress;
 
-      setDisplayValue(currentValue);
+      if (spanRef.current) {
+        const formatted = formatValue
+          ? formatValue(currentValue)
+          : currentValue.toFixed(currentValue % 1 === 0 ? 0 : 1);
+        spanRef.current.textContent = `${prefix}${formatted}${suffix}`;
+      }
 
       if (progress < 1) {
         requestAnimationFrame(animate);
-      } else {
-        previousValue.current = endValue;
       }
     };
 
     requestAnimationFrame(animate);
-  }, [value, duration]);
+  }, [value, duration, prefix, suffix, formatValue]);
 
-  const formattedValue = formatValue
-    ? formatValue(displayValue)
-    : displayValue.toFixed(displayValue % 1 === 0 ? 0 : 1);
+  const initialFormatted = formatValue
+    ? formatValue(value)
+    : value.toFixed(value % 1 === 0 ? 0 : 1);
 
   return (
-    <motion.span
-      className={className}
-      key={value}
-      initial={{ opacity: 0.5, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      {prefix}{formattedValue}{suffix}
-    </motion.span>
+    <span ref={spanRef} className={className}>
+      {prefix}{initialFormatted}{suffix}
+    </span>
   );
 }
 

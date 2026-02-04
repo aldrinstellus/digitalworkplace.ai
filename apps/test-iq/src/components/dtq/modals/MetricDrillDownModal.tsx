@@ -107,7 +107,7 @@ export default function MetricDrillDownModal({
       description="30-day metric history and breakdown"
       size="xl"
     >
-      <StaggerContainer staggerDelay={0.1}>
+      <StaggerContainer>
         {/* Current Value Summary */}
         <StaggerItem>
           <div className="grid grid-cols-4 gap-4 mb-6">
@@ -220,8 +220,8 @@ export default function MetricDrillDownModal({
                       stroke="var(--accent-primary)"
                       strokeWidth={2}
                       fill="url(#metricGradient)"
-                      animationDuration={1500}
-                      animationBegin={300}
+                      animationDuration={600}
+                      animationBegin={100}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -346,8 +346,8 @@ export default function MetricDrillDownModal({
                       dataKey="value"
                       fill="var(--accent-primary)"
                       radius={[0, 4, 4, 0]}
-                      animationDuration={1000}
-                      animationBegin={500}
+                      animationDuration={400}
+                      animationBegin={150}
                     />
                   </BarChart>
                 </ResponsiveContainer>

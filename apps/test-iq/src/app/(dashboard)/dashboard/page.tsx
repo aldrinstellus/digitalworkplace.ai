@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
@@ -66,41 +66,44 @@ export default function DashboardPage() {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
-  const currentPersona = personas.find(p => p.id === persona) || personas[1];
+  const currentPersona = useMemo(
+    () => personas.find(p => p.id === persona) || personas[1],
+    [personas, persona]
+  );
 
   // Chart data
-  const passRateData = dailyMetrics.slice(-7).map(m => ({
-    date: m.date,
-    value: m.passRate,
-  }));
+  const passRateData = useMemo(() =>
+    dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.passRate })),
+    [dailyMetrics]
+  );
 
-  const coverageData = dailyMetrics.slice(-7).map(m => ({
-    date: m.date,
-    value: m.automationCoverage,
-  }));
+  const coverageData = useMemo(() =>
+    dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.automationCoverage })),
+    [dailyMetrics]
+  );
 
   // Click handlers
-  const handleMetricClick = (metric: SelectedMetric) => {
+  const handleMetricClick = useCallback((metric: SelectedMetric) => {
     setSelectedMetric(metric);
-  };
+  }, []);
 
-  const handleChartPointClick = (dataPoint: ChartDataPoint, metricLabel: string, allData: ChartDataPoint[]) => {
+  const handleChartPointClick = useCallback((dataPoint: ChartDataPoint, metricLabel: string, allData: ChartDataPoint[]) => {
     setSelectedChartPoint({ dataPoint, metricLabel, allData });
-  };
+  }, []);
 
-  const handleFeatureClick = (feature: Feature) => {
+  const handleFeatureClick = useCallback((feature: Feature) => {
     setSelectedFeature(feature);
-  };
+  }, []);
 
-  const handleCategoryClick = (category: Category) => {
+  const handleCategoryClick = useCallback((category: Category) => {
     setSelectedCategory(category);
-  };
+  }, []);
 
   // Handle feature click from within CategoryAnalyticsModal
-  const handleCategoryFeatureClick = (feature: Feature) => {
+  const handleCategoryFeatureClick = useCallback((feature: Feature) => {
     setSelectedCategory(null); // Close category modal
     setSelectedFeature(feature); // Open feature modal
-  };
+  }, []);
 
   return (
     <div className="space-y-6">

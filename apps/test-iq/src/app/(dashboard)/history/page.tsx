@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
@@ -46,37 +46,49 @@ export default function HistoryPage() {
   const [selectedChartPoint, setSelectedChartPoint] = useState<SelectedChartPoint | null>(null);
 
   // Calculate 30-day averages
-  const avgPassRate = Math.round(
+  const avgPassRate = useMemo(() => Math.round(
     dailyMetrics.reduce((sum, m) => sum + m.passRate, 0) / dailyMetrics.length * 10
-  ) / 10;
+  ) / 10, [dailyMetrics]);
 
-  const avgFirstPassRate = Math.round(
+  const avgFirstPassRate = useMemo(() => Math.round(
     dailyMetrics.reduce((sum, m) => sum + m.firstRunPassRate, 0) / dailyMetrics.length * 10
-  ) / 10;
+  ) / 10, [dailyMetrics]);
 
-  const avgDefectDetection = Math.round(
+  const avgDefectDetection = useMemo(() => Math.round(
     dailyMetrics.reduce((sum, m) => sum + m.defectDetection, 0) / dailyMetrics.length * 10
-  ) / 10;
+  ) / 10, [dailyMetrics]);
 
-  const avgEffectiveness = Math.round(
+  const avgEffectiveness = useMemo(() => Math.round(
     dailyMetrics.reduce((sum, m) => sum + m.effectiveness, 0) / dailyMetrics.length * 10
-  ) / 10;
+  ) / 10, [dailyMetrics]);
 
   // Chart data
-  const passRateData = dailyMetrics.map(m => ({ date: m.date, value: m.passRate }));
-  const firstPassData = dailyMetrics.map(m => ({ date: m.date, value: m.firstRunPassRate }));
-  const defectData = dailyMetrics.map(m => ({ date: m.date, value: m.defectDetection }));
-  const effectivenessData = dailyMetrics.map(m => ({ date: m.date, value: m.effectiveness }));
+  const passRateData = useMemo(() =>
+    dailyMetrics.map(m => ({ date: m.date, value: m.passRate })),
+    [dailyMetrics]
+  );
+  const firstPassData = useMemo(() =>
+    dailyMetrics.map(m => ({ date: m.date, value: m.firstRunPassRate })),
+    [dailyMetrics]
+  );
+  const defectData = useMemo(() =>
+    dailyMetrics.map(m => ({ date: m.date, value: m.defectDetection })),
+    [dailyMetrics]
+  );
+  const effectivenessData = useMemo(() =>
+    dailyMetrics.map(m => ({ date: m.date, value: m.effectiveness })),
+    [dailyMetrics]
+  );
 
   // Metric click handlers
-  const handleMetricClick = (metric: SelectedMetric) => {
+  const handleMetricClick = useCallback((metric: SelectedMetric) => {
     setSelectedMetric(metric);
-  };
+  }, []);
 
   // Chart point click handlers
-  const handleChartPointClick = (dataPoint: ChartDataPoint, metricLabel: string, allData: ChartDataPoint[]) => {
+  const handleChartPointClick = useCallback((dataPoint: ChartDataPoint, metricLabel: string, allData: ChartDataPoint[]) => {
     setSelectedChartPoint({ dataPoint, metricLabel, allData });
-  };
+  }, []);
 
   return (
     <div className="space-y-6">

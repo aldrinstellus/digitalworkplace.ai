@@ -108,7 +108,7 @@ export default function FeatureDetailModal({
       description={`Category: ${feature.category}`}
       size="xl"
     >
-      <StaggerContainer staggerDelay={0.1}>
+      <StaggerContainer>
         {/* Overview Cards */}
         <StaggerItem>
           <div className="grid grid-cols-4 gap-4 mb-6">
@@ -260,7 +260,7 @@ export default function FeatureDetailModal({
                       strokeWidth={2}
                       dot={false}
                       activeDot={{ r: 4, fill: 'var(--accent-primary)' }}
-                      animationDuration={1500}
+                      animationDuration={600}
                     />
                     <Line
                       type="monotone"
@@ -269,8 +269,8 @@ export default function FeatureDetailModal({
                       strokeWidth={2}
                       dot={false}
                       activeDot={{ r: 4, fill: 'var(--chart-secondary)' }}
-                      animationDuration={1500}
-                      animationBegin={300}
+                      animationDuration={600}
+                      animationBegin={100}
                     />
                   </LineChart>
                 </ResponsiveContainer>

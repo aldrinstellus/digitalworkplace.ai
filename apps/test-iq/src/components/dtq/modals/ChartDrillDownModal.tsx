@@ -107,7 +107,7 @@ export default function ChartDrillDownModal({
       description={`${metricLabel} data point details`}
       size="lg"
     >
-      <StaggerContainer staggerDelay={0.1}>
+      <StaggerContainer>
         {/* Main Value Display */}
         <StaggerItem>
           <div
@@ -117,16 +117,11 @@ export default function ChartDrillDownModal({
               border: '1px solid var(--border-accent)',
             }}
           >
-            <motion.div
+            <div
               className="absolute inset-0"
-              animate={{
-                background: [
-                  'radial-gradient(circle at 0% 0%, var(--accent-primary-soft) 0%, transparent 50%)',
-                  'radial-gradient(circle at 100% 100%, var(--accent-primary-soft) 0%, transparent 50%)',
-                  'radial-gradient(circle at 0% 0%, var(--accent-primary-soft) 0%, transparent 50%)',
-                ],
+              style={{
+                background: 'radial-gradient(circle at 30% 30%, var(--accent-primary-soft) 0%, transparent 50%)',
               }}
-              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
             />
             <div className="relative">
               <div className="flex items-center justify-center gap-2 mb-2">

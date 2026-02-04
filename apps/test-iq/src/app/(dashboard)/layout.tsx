@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useMemo } from 'react';
 import Sidebar from '@/components/dtq/Sidebar';
 import { PersonaType } from '@/lib/dtq/types';
 
@@ -22,9 +22,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [persona, setPersona] = useState<PersonaType>('manager');
+  const contextValue = useMemo(() => ({ persona, setPersona }), [persona]);
 
   return (
-    <PersonaContext.Provider value={{ persona, setPersona }}>
+    <PersonaContext.Provider value={contextValue}>
       <div className="flex min-h-screen" style={{ background: 'var(--bg-primary)' }}>
         <Sidebar persona={persona} onPersonaChange={setPersona} />
         <main className="flex-1 overflow-auto">

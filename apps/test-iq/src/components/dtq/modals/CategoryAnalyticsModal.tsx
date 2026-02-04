@@ -84,7 +84,7 @@ export default function CategoryAnalyticsModal({
       description={`${totalFeatures} features in this category`}
       size="xl"
     >
-      <StaggerContainer staggerDelay={0.1}>
+      <StaggerContainer>
         {/* Summary Cards */}
         <StaggerItem>
           <div className="grid grid-cols-4 gap-4 mb-6">
@@ -241,7 +241,7 @@ export default function CategoryAnalyticsModal({
                       dataKey="coverage"
                       fill="var(--accent-primary)"
                       radius={[0, 4, 4, 0]}
-                      animationDuration={1000}
+                      animationDuration={400}
                     />
                   </BarChart>
                 </ResponsiveContainer>
@@ -270,7 +270,7 @@ export default function CategoryAnalyticsModal({
                         outerRadius={70}
                         paddingAngle={2}
                         dataKey="value"
-                        animationDuration={1000}
+                        animationDuration={400}
                       >
                         {riskDistribution.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />

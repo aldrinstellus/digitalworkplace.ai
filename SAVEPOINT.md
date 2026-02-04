@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-04
-**Version**: 0.9.2
-**Session Status**: dTQ v1.1.0 LIVE - Test Pilot IQ Linked from Main Dashboard
+**Version**: 0.9.3
+**Session Status**: dTQ v1.3.0 LIVE - Knowledge Base + Vector Embeddings + AI Chat with RAG
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 056de94 - feat(main): link Test Pilot IQ card and update to pink theme
+**Git Commit**: 2fa6180 - fix(dTQ): lower RAG match threshold to 0.3 and remove debug code
 
 ---
 
@@ -143,18 +143,66 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ** | dSQ | 3003 | ✅ | ✅ Live | ✅ 100% | 15 tables | - |
 | **Intranet IQ** | dIQ | 3001 | ✅ | ✅ Live | ✅ 100% | 45+ tables | 100/100 |
 | **Chat Core IQ** | dCQ | 3002 | ✅ | ✅ Live | ✅ 100% | 28 tables | **100/100** |
-| **Test Pilot IQ** | dTQ | 3004 | ✅ | ✅ Live | ⬜ | 6 tables | - |
+| **Test Pilot IQ** | dTQ | 3004 | ✅ | ✅ Live | ✅ 100% | 7 tables | - |
 
 ### Database Stats (Supabase)
 - **Project**: digitalworkplace-ai (fhtempgkltrazrgbedrh)
-- **Schemas**: public, diq, dsq, dcq
+- **Schemas**: public, diq, dsq, dcq, dtq
 - **pgvector**: v0.8.0 enabled
-- **Total Knowledge Items**: 357 with 100% embedding coverage
+- **Total Knowledge Items**: 457 with 100% embedding coverage (357 existing + 100 dTQ)
 - **DCQ FAQs**: 8 with 100% embedding coverage
+- **DTQ Knowledge Base**: 130 rows with 100% embedding coverage (1536-dim)
 
 ---
 
-## Latest Changes (v0.9.2)
+## Latest Changes (v0.9.3)
+
+### dTQ v1.3.0 - Knowledge Base + Vector Embeddings + AI Chat with RAG (2026-02-04)
+
+**Added full AI infrastructure: knowledge base, vector embeddings, and Claude-powered chat with RAG.**
+
+#### What Was Built
+- **dtq.knowledge_base**: 130 rows seeded across 3 personas (features, KPIs, summaries, categories)
+- **Vector Embeddings**: OpenAI text-embedding-3-small (1536-dim), 100% coverage on all 130 rows
+- **Semantic Search**: `public.search_dtq_knowledge_semantic` RPC (SECURITY DEFINER wrapper, jsonb→vector)
+- **Chat API**: `/api/dtq/chat` — Claude Sonnet 4 with RAG context from knowledge base
+- **AIAssistant**: Wired to real chat API with persona-aware context and demo mode fallback
+- **Cross-project Sync**: 100 items synced to `public.knowledge_items` with embeddings
+
+#### Files Created/Modified
+| File | Action |
+|------|--------|
+| `src/lib/embeddings.ts` | NEW - OpenAI embedding utility |
+| `src/app/api/dtq/chat/route.ts` | NEW - Claude chat API with RAG |
+| `src/lib/dtq/persona-data.ts` | NEW - Persona-specific data module |
+| `src/components/dtq/modals/TestRunDetailModal.tsx` | NEW - Test run detail modal |
+| `scripts/dtq-generate-embeddings.mjs` | NEW - Embedding generation script |
+| `supabase/migrations/015_dtq_knowledge_base.sql` | NEW - KB table + seed data |
+| `src/components/dtq/AIAssistant.tsx` | EDIT - Wired to real chat API |
+| `apps/test-iq/package.json` | EDIT - Added @anthropic-ai/sdk, openai |
+
+#### Database Verification (3 Levels)
+| Check | Result |
+|-------|--------|
+| Table columns (11) | id, persona, item_type, title, content, summary, tags, metadata, embedding, created/updated_at |
+| Indexes (5) | PK, HNSW (embedding), btree (persona, item_type), GIN (tags) |
+| RLS (2 policies) | Public read, service role full access |
+| Functions (4) | dtq.search_knowledge_semantic, public.search_dtq_knowledge_semantic, get/update helpers |
+| Data (130 rows) | 80 features + 20 categories + 24 KPIs + 3 test runs + 3 metrics |
+| Embeddings | 130/130 (100%), all 1536 dimensions |
+| public.knowledge_items | 100/100 (100%), synced with embeddings |
+| Semantic search | Working — returns relevant results with persona filtering |
+| Live RAG test | 8 sources returned, Claude references real data points |
+
+#### Deployment
+- **Git Commits**: 2427907 → ea5da59 → 1a60bdf → 24ae02e → 2fa6180
+- **Vercel**: Deployed with OPENAI_API_KEY, ANTHROPIC_API_KEY, SUPABASE vars
+- **Live URL**: https://dtq.digitalworkplace.ai/dtq/dashboard (verified 200 OK)
+- **Chat API**: https://dtq.digitalworkplace.ai/dtq/api/dtq/chat (RAG verified working)
+
+---
+
+## Previous Changes (v0.9.2)
 
 ### dTQ v1.1.0 - Test Pilot IQ Linked from Main Dashboard (2026-02-04)
 
@@ -586,6 +634,7 @@ vercel --prod
 - [x] dCQ Workflow Expansion - 12 new workflows LIVE (v0.8.3)
 - [x] dTQ (Test Pilot IQ) implementation - LIVE (v1.1.0)
 - [x] dTQ linked from main dashboard with pink theme (#ff3366)
+- [x] dTQ Knowledge Base + Vector Embeddings + AI Chat with RAG - LIVE (v1.3.0)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -595,6 +644,6 @@ vercel --prod
 
 ---
 
-*Last session: 2026-01-28 19:45 UTC*
-*Version: 0.8.3*
+*Last session: 2026-02-04*
+*Version: 0.9.3*
 *Machine: Mac Mini (aldrin-mac-mini)*

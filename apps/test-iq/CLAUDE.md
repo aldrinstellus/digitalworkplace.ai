@@ -55,14 +55,34 @@
 | `dtq.daily_metrics` | 30-day historical metrics | 30 |
 | `dtq.personas` | Role-based persona definitions | 3 |
 | `dtq.persona_metrics` | KPIs per persona | 24 |
+| `dtq.knowledge_base` | **AI knowledge base with vector embeddings** | **130** |
 
 ### Migration Files
 ```
 supabase/migrations/
 ├── 012_dtq_schema.sql         # Schema + tables + RLS
 ├── 013_dtq_seed_data.sql      # All seed data (features, runs, metrics, personas)
-└── 014_dtq_knowledge_sync.sql # Knowledge base integration trigger
+├── 014_dtq_knowledge_sync.sql # Knowledge base integration trigger
+└── 015_dtq_knowledge_base.sql # Knowledge base + embeddings + semantic search
 ```
+
+### Knowledge Base (`dtq.knowledge_base`)
+| Item Type | Count | Description |
+|-----------|-------|-------------|
+| `feature` | 80 | All features across 3 personas (16+46+18) |
+| `category_summary` | 20 | Category aggregations (5+10+5) |
+| `persona_kpi` | 24 | KPI metrics (7+9+8) |
+| `test_run_summary` | 3 | Per-persona test execution summaries |
+| `daily_metrics_summary` | 3 | Per-persona 30-day metrics overviews |
+| **Total** | **130** | **100% embedding coverage (1536-dim)** |
+
+### RPC Functions
+| Function | Schema | Purpose |
+|----------|--------|---------|
+| `search_dtq_knowledge_semantic` | `public` | SECURITY DEFINER wrapper for vector search (accepts jsonb) |
+| `get_dtq_kb_without_embeddings` | `public` | Helper for embedding generation script |
+| `update_dtq_kb_embedding` | `public` | Helper for embedding generation script |
+| `search_knowledge_semantic` | `dtq` | Internal semantic search (vector parameter) |
 
 ### Key Fields
 
@@ -91,6 +111,7 @@ supabase/migrations/
 | `/api/dtq/metrics` | GET | Daily metrics (30 days) |
 | `/api/dtq/metrics?type=summary` | GET | Summary metrics from features |
 | `/api/dtq/personas` | GET | All personas with metrics |
+| `/api/dtq/chat` | POST | **Claude-powered AI chat with RAG** |
 
 ---
 ## KEY FEATURES
@@ -107,12 +128,19 @@ supabase/migrations/
 - **Export Functionality**: CSV and PDF exports working
 - **Interactive Modals**: Feature drill-down, chart point analysis
 - **Knowledge Base Sync**: Features synced to `public.knowledge_items`
+- **AI Chat with RAG**: Claude-powered assistant with vector semantic search
+  - 130 knowledge base rows with 1536-dim OpenAI embeddings (100% coverage)
+  - Persona-aware context filtering (csuite/manager/techlead)
+  - Semantic search via `public.search_dtq_knowledge_semantic` RPC
+  - Claude Sonnet 4 responses with RAG context injection
+  - Demo mode fallback when API keys not configured
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints
 2. Fallback to static data.ts if API fails
 3. Real-time simulation updates local state (not persisted)
 4. Export functions use current state data
+5. AI chat: user message → OpenAI embedding → semantic search → Claude response with RAG context
 
 ---
 ## TECH STACK
@@ -199,7 +227,13 @@ apps/test-iq/
 - [x] Implement CSV export (working)
 - [x] Implement PDF export (working)
 - [x] Create knowledge base sync trigger
-- [ ] Add embeddings for semantic search (future)
+- [x] Add knowledge base table with 130 rows
+- [x] Generate OpenAI embeddings (100% coverage, 1536-dim)
+- [x] Create semantic search RPC function
+- [x] Build Claude chat API with RAG pipeline
+- [x] Wire AIAssistant to real chat API
+- [x] Sync 100 items to public.knowledge_items
+- [x] Deploy to Vercel with all API keys configured
 
 ---
 

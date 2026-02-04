@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-01-30 10:30 PM UTC
-**Version**: 0.9.1
-**Session Status**: dIQ v2.4.0 LIVE - Realistic App Interface Replicas Deployed
+**Last Updated**: 2026-02-04
+**Version**: 0.9.2
+**Session Status**: dTQ v1.1.0 LIVE - Test Pilot IQ Linked from Main Dashboard
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 1711e3c - feat(diq): v2.4.0 Realistic App Interface Replicas
+**Git Commit**: 056de94 - feat(main): link Test Pilot IQ card and update to pink theme
 
 ---
 
@@ -119,7 +119,7 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | - | ⬜ Pending | - |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.1.0 |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
@@ -132,6 +132,7 @@ const isPublicRoute = createRouteMatcher([
 | Chat Core IQ | https://vercel.com/aldos-projects-8cf34b67/chat-core-iq |
 | Intranet IQ | https://vercel.com/aldos-projects-8cf34b67/intranet-iq |
 | Support IQ | https://vercel.com/aldos-projects-8cf34b67/support-iq |
+| Test Pilot IQ | https://vercel.com/aldos-projects-8cf34b67/test-iq |
 
 ---
 
@@ -142,7 +143,7 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ** | dSQ | 3003 | ✅ | ✅ Live | ✅ 100% | 15 tables | - |
 | **Intranet IQ** | dIQ | 3001 | ✅ | ✅ Live | ✅ 100% | 45+ tables | 100/100 |
 | **Chat Core IQ** | dCQ | 3002 | ✅ | ✅ Live | ✅ 100% | 28 tables | **100/100** |
-| **Test Pilot IQ** | dTQ | 3004 | ⬜ | ⬜ | ⬜ | ⬜ | - |
+| **Test Pilot IQ** | dTQ | 3004 | ✅ | ✅ Live | ⬜ | 6 tables | - |
 
 ### Database Stats (Supabase)
 - **Project**: digitalworkplace-ai (fhtempgkltrazrgbedrh)
@@ -153,7 +154,30 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.1)
+## Latest Changes (v0.9.2)
+
+### dTQ v1.1.0 - Test Pilot IQ Linked from Main Dashboard (2026-02-04)
+
+**Linked Test Pilot IQ to the main DigitalWorkplace.ai dashboard and deployed both apps.**
+
+#### Changes
+- Enabled Test Pilot IQ card (removed "Coming Soon" disabled state)
+- Updated card theme from orange to pink (#ff3366) matching dTQ branding
+- Updated SVG illustration colors to pink theme
+- Set local URL: `http://localhost:3004/dtq/dashboard`
+- Set production URL: `https://dtq.digitalworkplace.ai/dtq/dashboard`
+
+#### File Changed
+- `apps/main/src/app/dashboard/page.tsx` - Card config + SVG illustration colors
+
+#### Deployment
+- **Git Commit**: 056de94
+- **Main App**: https://www.digitalworkplace.ai (verified 200 OK)
+- **Test IQ**: https://dtq.digitalworkplace.ai/dtq/dashboard (verified 200 OK)
+
+---
+
+## Previous Changes (v0.9.1)
 
 ### dIQ v2.4.0 - Realistic App Interface Replicas (2026-01-30)
 
@@ -560,7 +584,8 @@ vercel --prod
 - [x] Clerk OAuth Bulletproofing - COMPLETED
 - [x] Clerk OAuth Organization Fix - COMPLETED (v0.8.2)
 - [x] dCQ Workflow Expansion - 12 new workflows LIVE (v0.8.3)
-- [ ] dTQ (Test Pilot IQ) implementation
+- [x] dTQ (Test Pilot IQ) implementation - LIVE (v1.1.0)
+- [x] dTQ linked from main dashboard with pink theme (#ff3366)
 
 ### Medium Term
 - [ ] Cross-project search UI

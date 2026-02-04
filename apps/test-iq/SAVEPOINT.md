@@ -1,8 +1,8 @@
 # Test IQ (dTQ) - SAVEPOINT
 
-**Last Updated:** 2026-02-03
-**Version:** 1.0.0
-**Status:** PRODUCTION LIVE
+**Last Updated:** 2026-02-04
+**Version:** 1.1.0
+**Status:** PRODUCTION LIVE (Linked from Main Dashboard)
 
 ---
 
@@ -17,13 +17,15 @@
 
 ### Latest Commit
 ```
-ebbf909 fix(dTQ): wire up drill-down functionality for all pages
+056de94 feat(main): link Test Pilot IQ card and update to pink theme
+34c7915 feat(dTQ): implement full database integration for Test Pilot IQ
 ```
 
 ### Git Status
 - Branch: `main`
 - All changes committed and pushed
 - Deployed to Vercel production
+- Production alias: https://dtq.digitalworkplace.ai
 
 ---
 
@@ -175,6 +177,21 @@ const nextConfig: NextConfig = {
 ---
 
 ## Recent Session Work
+
+### Session: 2026-02-04
+
+1. **Main Dashboard Integration**
+   - Linked Test Pilot IQ card from main DigitalWorkplace.ai dashboard
+   - Removed "Coming Soon" disabled state
+   - Updated card theme from orange (#f59e0b) to pink (#ff3366) to match dTQ branding
+   - Updated SVG illustration colors to pink theme
+   - Card now launches dTQ in new tab via "Launch App" button
+
+2. **Deployment**
+   - Pushed to GitHub: commit 056de94
+   - Deployed both main app and test-iq to Vercel production
+   - Main: https://www.digitalworkplace.ai
+   - dTQ: https://dtq.digitalworkplace.ai
 
 ### Session: 2026-02-03
 

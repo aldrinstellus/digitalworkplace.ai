@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
@@ -18,6 +18,7 @@ import LiveIndicator from '@/components/dtq/LiveIndicator';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
 import { Feature, Category } from '@/lib/dtq/types';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 // Lazy load modals - they're not needed until user interaction
 const MetricDrillDownModal = dynamic(() => import('@/components/dtq/modals/MetricDrillDownModal'), { ssr: false });
@@ -65,10 +66,45 @@ export default function DashboardPage() {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
+  const { pendingAction, clearAction } = useNavigation();
+
   const currentPersona = useMemo(
     () => personas.find(p => p.id === persona) || personas[1],
     [personas, persona]
   );
+
+  // Handle navigation actions from chat link cards
+  useEffect(() => {
+    if (!pendingAction || pendingAction.link.page !== 'dashboard') return;
+
+    const { link } = pendingAction;
+
+    if (link.target === 'feature') {
+      const feature = categories
+        .flatMap(c => c.features)
+        .find(f => f.id === link.entityId);
+      if (feature) setSelectedFeature(feature);
+    } else if (link.target === 'category') {
+      const category = categories.find(c => c.name === link.entityId);
+      if (category) setSelectedCategory(category);
+    } else if (link.target === 'metric') {
+      const personaMetric = currentPersona.metrics.find(
+        m => m.label === link.entityId || m.key === link.entityId
+      );
+      if (personaMetric) {
+        setSelectedMetric({
+          key: personaMetric.key,
+          label: personaMetric.label,
+          value: typeof personaMetric.value === 'number' ? personaMetric.value : parseFloat(String(personaMetric.value)),
+          unit: personaMetric.unit || '',
+          trend: personaMetric.trend,
+          trendValue: personaMetric.trendValue,
+        });
+      }
+    }
+
+    clearAction(pendingAction.id);
+  }, [pendingAction, clearAction, categories, currentPersona]);
 
   // Chart data
   const passRateData = useMemo(() =>

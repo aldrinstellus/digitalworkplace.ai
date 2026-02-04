@@ -18,12 +18,20 @@ import {
   Code,
   Paperclip,
   RotateCcw,
+  ChevronRight,
+  Boxes,
+  Activity,
+  FileText,
+  Clock,
+  TestTube2,
+  type LucideIcon,
 } from 'lucide-react';
-import { ChatMessage } from '@/lib/dtq/types';
+import { ChatMessage, ChatLink, ChatLinkTarget } from '@/lib/dtq/types';
 import { aiResponses } from '@/lib/dtq/data';
 import { TypingIndicator } from '@/lib/motion';
 import { usePersona } from '@/app/(dashboard)/layout';
 import { useChat } from '@/contexts/ChatContext';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 const quickActions = [
   { id: 'high-risk', icon: Target, label: 'High-risk features' },
@@ -38,11 +46,20 @@ const personaConfig = {
   techlead: { name: 'Tech Lead', icon: Code, color: 'var(--chart-secondary)' },
 };
 
+const LINK_ICONS: Record<ChatLinkTarget, LucideIcon> = {
+  feature: Target,
+  category: Boxes,
+  metric: Activity,
+  report: FileText,
+  history: Clock,
+  'test-run': TestTube2,
+};
+
 async function fetchChatResponse(
   message: string,
   persona: string,
   history: { role: string; content: string }[]
-): Promise<{ response: string; sources: { title: string; type: string; similarity: number }[] }> {
+): Promise<{ response: string; sources: { title: string; type: string; similarity: number }[]; relatedLinks?: ChatLink[] }> {
   const res = await fetch('/api/dtq/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -59,6 +76,7 @@ async function fetchChatResponse(
 export default function ChatWidget() {
   const { persona } = usePersona();
   const { messages, isOpen, unreadCount, addMessage, clearMessages, toggleOpen, incrementUnread } = useChat();
+  const navigation = useNavigation();
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -117,6 +135,7 @@ export default function ChatWidget() {
         content: data.response,
         timestamp: new Date(),
         sources: data.sources,
+        relatedLinks: data.relatedLinks,
       };
       addMessage(assistantMessage);
       if (!isOpen) incrementUnread();
@@ -160,6 +179,7 @@ export default function ChatWidget() {
         content: data.response,
         timestamp: new Date(),
         sources: data.sources,
+        relatedLinks: data.relatedLinks,
       };
       addMessage(assistantMessage);
       if (!isOpen) incrementUnread();
@@ -389,6 +409,65 @@ export default function ChatWidget() {
                           {message.sources.length} source{message.sources.length !== 1 ? 's' : ''} used
                         </span>
                       </div>
+                    )}
+
+                    {/* Related link cards */}
+                    {message.role === 'assistant' && message.relatedLinks && message.relatedLinks.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.3 }}
+                        className="mt-2 ml-9 space-y-1"
+                      >
+                        <span
+                          className="text-[10px] uppercase font-semibold tracking-wider"
+                          style={{ color: 'var(--text-muted)' }}
+                        >
+                          Related
+                        </span>
+                        <div className="space-y-1">
+                          {message.relatedLinks.map((link) => {
+                            const LinkIcon = LINK_ICONS[link.target] || Target;
+                            return (
+                              <motion.button
+                                key={link.id}
+                                onClick={() => navigation.dispatch(link)}
+                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left cursor-pointer group transition-all"
+                                style={{
+                                  background: 'var(--bg-elevated)',
+                                  border: '1px solid var(--border-subtle)',
+                                }}
+                                whileHover={{
+                                  x: 2,
+                                  borderColor: 'var(--accent-primary)',
+                                }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                <div
+                                  className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+                                  style={{ background: 'var(--bg-tertiary)' }}
+                                >
+                                  <LinkIcon className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[12px] font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                                    {link.label}
+                                  </p>
+                                  {link.description && (
+                                    <p className="text-[10px] truncate" style={{ color: 'var(--text-muted)' }}>
+                                      {link.description}
+                                    </p>
+                                  )}
+                                </div>
+                                <ChevronRight
+                                  className="w-3.5 h-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                                  style={{ color: 'var(--accent-primary)' }}
+                                />
+                              </motion.button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
                     )}
                   </motion.div>
                 ))}

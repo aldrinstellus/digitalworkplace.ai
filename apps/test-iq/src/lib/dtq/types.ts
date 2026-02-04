@@ -71,10 +71,29 @@ export interface Persona {
 
 export type PersonaType = 'csuite' | 'manager' | 'techlead';
 
+export type ChatLinkTarget = 'feature' | 'category' | 'metric' | 'report' | 'history' | 'test-run';
+
+export interface ChatLink {
+  id: string;
+  target: ChatLinkTarget;
+  entityId: string;
+  label: string;
+  description?: string;
+  page: 'dashboard' | 'reports' | 'history';
+  persona?: PersonaType;
+}
+
+export interface NavigationAction {
+  id: string;
+  link: ChatLink;
+  timestamp: number;
+}
+
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
   sources?: { title: string; type: string; similarity: number }[];
+  relatedLinks?: ChatLink[];
 }

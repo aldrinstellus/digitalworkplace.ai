@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
@@ -14,6 +14,7 @@ import TrendChart from '@/components/dtq/TrendChart';
 import LiveIndicator from '@/components/dtq/LiveIndicator';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 // Lazy load modals - they're not needed until user interaction
 const MetricDrillDownModal = dynamic(() => import('@/components/dtq/modals/MetricDrillDownModal'), { ssr: false });
@@ -46,6 +47,7 @@ export default function HistoryPage() {
   // Modal state management
   const [selectedMetric, setSelectedMetric] = useState<SelectedMetric | null>(null);
   const [selectedChartPoint, setSelectedChartPoint] = useState<SelectedChartPoint | null>(null);
+  const { pendingAction, clearAction } = useNavigation();
 
   // Calculate 30-day averages
   const avgPassRate = useMemo(() => Math.round(
@@ -63,6 +65,37 @@ export default function HistoryPage() {
   const avgEffectiveness = useMemo(() => Math.round(
     dailyMetrics.reduce((sum, m) => sum + m.effectiveness, 0) / dailyMetrics.length * 10
   ) / 10, [dailyMetrics]);
+
+  // Handle navigation actions from chat link cards
+  useEffect(() => {
+    if (!pendingAction || pendingAction.link.page !== 'history') return;
+
+    const { link } = pendingAction;
+
+    if (link.target === 'metric' || link.target === 'history') {
+      const metricMap: Record<string, { key: string; label: string; value: number }> = {
+        passRate: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
+        firstRunPassRate: { key: 'firstRunPassRate', label: 'First Pass Rate', value: avgFirstPassRate },
+        defectDetection: { key: 'defectDetection', label: 'Defect Detection', value: avgDefectDetection },
+        effectiveness: { key: 'effectiveness', label: 'Test Effectiveness', value: avgEffectiveness },
+        performance: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
+      };
+
+      const mapping = metricMap[link.entityId];
+      if (mapping) {
+        setSelectedMetric({
+          key: mapping.key,
+          label: mapping.label,
+          value: mapping.value,
+          unit: '%',
+          trend: 'up',
+          trendValue: '+2.3%',
+        });
+      }
+    }
+
+    clearAction(pendingAction.id);
+  }, [pendingAction, clearAction, avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness]);
 
   // Chart data
   const passRateData = useMemo(() =>

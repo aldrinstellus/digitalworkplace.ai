@@ -27,6 +27,7 @@ import { usePersona } from '../layout';
 import { useRealTimeSimulation, formatTimeAgo } from '@/hooks/useRealTimeSimulation';
 import { exportTestRunsToCSV, exportTestRunsToPDF } from '@/lib/dtq/export';
 import { TestRun, Feature } from '@/lib/dtq/types';
+import { useNavigation } from '@/contexts/NavigationContext';
 import { cn } from '@/lib/utils';
 
 const TestRunDetailModal = dynamic(
@@ -57,6 +58,25 @@ export default function ReportsPage() {
 
   const { persona } = usePersona();
   const { testRuns, features, lastUpdate, isLive, toggleLive, refresh } = useRealTimeSimulation(true, persona);
+  const { pendingAction, clearAction } = useNavigation();
+
+  // Handle navigation actions from chat link cards
+  useEffect(() => {
+    if (!pendingAction || pendingAction.link.page !== 'reports') return;
+
+    const { link } = pendingAction;
+
+    if (link.target === 'test-run') {
+      const run = testRuns.find(r => r.featureId === link.entityId);
+      if (run) setSelectedRun(run);
+    } else if (link.target === 'feature') {
+      const feature = features.find(f => f.id === link.entityId);
+      if (feature) setSelectedFeature(feature);
+    }
+    // 'report' target — already on this page, no-op
+
+    clearAction(pendingAction.id);
+  }, [pendingAction, clearAction, testRuns, features]);
 
   // Memoized computations
   const passedCount = useMemo(() => testRuns.filter(r => r.status === 'passed').length, [testRuns]);

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateEmbedding } from '@/lib/embeddings';
 import { createClient } from '@supabase/supabase-js';
+import { resolveLinks } from '@/lib/dtq/link-resolver';
+import { PersonaType } from '@/lib/dtq/types';
 
 // Persona display names
 const PERSONA_TITLES: Record<string, string> = {
@@ -97,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     // Demo mode: no API keys configured
     if (!anthropicKey || !openaiKey || !supabaseUrl) {
-      return handleDemoMode(message);
+      return handleDemoMode(message, persona as PersonaType);
     }
 
     // --- RAG: Generate query embedding and search knowledge base ---
@@ -179,16 +181,19 @@ export async function POST(request: NextRequest) {
     if (!claudeResponse.ok) {
       const errorText = await claudeResponse.text();
       console.error('Claude API error:', claudeResponse.status, errorText);
-      return handleDemoMode(message);
+      return handleDemoMode(message, persona as PersonaType);
     }
 
     const claudeData = await claudeResponse.json();
     const responseText =
       claudeData.content?.[0]?.text || "I wasn't able to generate a response. Please try again.";
 
+    const relatedLinks = resolveLinks({ responseText, sources, persona: persona as PersonaType });
+
     return NextResponse.json({
       response: responseText,
       sources,
+      relatedLinks,
       model: 'claude-sonnet-4-20250514',
       persona,
     });
@@ -213,7 +218,8 @@ Guidelines:
 - Format responses with markdown (headers, bold, lists)
 - Be concise but thorough — aim for 150-300 words
 - If the context doesn't contain relevant information, say so honestly
-- Use the persona context to tailor your language (executives want ROI/strategy, managers want operational metrics, tech leads want technical details)`;
+- Use the persona context to tailor your language (executives want ROI/strategy, managers want operational metrics, tech leads want technical details)
+- IMPORTANT: Always bold feature names, category names, and metric names using **Name** syntax so they can be extracted as navigation links`;
 
   if (ragContext) {
     prompt += `\n\nUse the following knowledge base context to answer the user's question:\n\n${ragContext}`;
@@ -224,52 +230,34 @@ Guidelines:
   return prompt;
 }
 
-function handleDemoMode(message: string): NextResponse {
+function handleDemoMode(message: string, persona: PersonaType = 'manager'): NextResponse {
   const messageLower = message.toLowerCase();
+  let responseText: string;
 
   // Match quick actions
   if (messageLower.includes('high-risk') || messageLower.includes('high risk')) {
-    return NextResponse.json({
-      response: DEMO_RESPONSES['high-risk'],
-      sources: [],
-      model: 'demo',
-      persona: 'shared',
-    });
-  }
-  if (messageLower.includes('feature status') || messageLower.includes('feature coverage')) {
-    return NextResponse.json({
-      response: DEMO_RESPONSES['feature-status'],
-      sources: [],
-      model: 'demo',
-      persona: 'shared',
-    });
-  }
-  if (messageLower.includes('automation') || messageLower.includes('coverage gap')) {
-    return NextResponse.json({
-      response: DEMO_RESPONSES['automation-gaps'],
-      sources: [],
-      model: 'demo',
-      persona: 'shared',
-    });
-  }
-  if (
+    responseText = DEMO_RESPONSES['high-risk'];
+  } else if (messageLower.includes('feature status') || messageLower.includes('feature coverage')) {
+    responseText = DEMO_RESPONSES['feature-status'];
+  } else if (messageLower.includes('automation') || messageLower.includes('coverage gap')) {
+    responseText = DEMO_RESPONSES['automation-gaps'];
+  } else if (
     messageLower.includes('quality') ||
     messageLower.includes('summary') ||
     messageLower.includes('executive')
   ) {
-    return NextResponse.json({
-      response: DEMO_RESPONSES['quality-summary'],
-      sources: [],
-      model: 'demo',
-      persona: 'shared',
-    });
+    responseText = DEMO_RESPONSES['quality-summary'];
+  } else {
+    responseText = `Based on current testing metrics, here are my insights on "${message}":\n\n- Overall test coverage is healthy across all personas\n- No critical blockers detected in the related areas\n- Recommend reviewing the feature coverage section for detailed data\n\n*Note: Running in demo mode. Configure ANTHROPIC_API_KEY and OPENAI_API_KEY for full AI-powered responses with RAG.*`;
   }
 
-  // Generic fallback
+  const relatedLinks = resolveLinks({ responseText, sources: [], persona });
+
   return NextResponse.json({
-    response: `Based on current testing metrics, here are my insights on "${message}":\n\n- Overall test coverage is healthy across all personas\n- No critical blockers detected in the related areas\n- Recommend reviewing the feature coverage section for detailed data\n\n*Note: Running in demo mode. Configure ANTHROPIC_API_KEY and OPENAI_API_KEY for full AI-powered responses with RAG.*`,
+    response: responseText,
     sources: [],
+    relatedLinks,
     model: 'demo',
-    persona: 'shared',
+    persona,
   });
 }

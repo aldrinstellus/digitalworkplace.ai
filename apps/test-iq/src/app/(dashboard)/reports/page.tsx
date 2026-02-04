@@ -46,6 +46,21 @@ type SortDir = 'asc' | 'desc';
 
 const ROWS_PER_PAGE = 10;
 
+function SortIcon({ column, sortKey, sortDir }: { column: SortKey; sortKey: SortKey | null; sortDir: SortDir }) {
+  if (sortKey !== column) {
+    return (
+      <span className="inline-flex ml-1 opacity-0 group-hover:opacity-40 transition-opacity">
+        <ArrowUp className="w-3 h-3" />
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex ml-1" style={{ color: 'var(--accent-primary)' }}>
+      {sortDir === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+    </span>
+  );
+}
+
 export default function ReportsPage() {
   const [selectedRun, setSelectedRun] = useState<TestRun | null>(null);
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
@@ -66,16 +81,18 @@ export default function ReportsPage() {
 
     const { link } = pendingAction;
 
-    if (link.target === 'test-run') {
-      const run = testRuns.find(r => r.featureId === link.entityId);
-      if (run) setSelectedRun(run);
-    } else if (link.target === 'feature') {
-      const feature = features.find(f => f.id === link.entityId);
-      if (feature) setSelectedFeature(feature);
-    }
-    // 'report' target — already on this page, no-op
+    queueMicrotask(() => {
+      if (link.target === 'test-run') {
+        const run = testRuns.find(r => r.featureId === link.entityId);
+        if (run) setSelectedRun(run);
+      } else if (link.target === 'feature') {
+        const feature = features.find(f => f.id === link.entityId);
+        if (feature) setSelectedFeature(feature);
+      }
+      // 'report' target — already on this page, no-op
 
-    clearAction(pendingAction.id);
+      clearAction(pendingAction.id);
+    });
   }, [pendingAction, clearAction, testRuns, features]);
 
   // Memoized computations
@@ -140,7 +157,7 @@ export default function ReportsPage() {
   // Clamp page when data changes
   useEffect(() => {
     if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
+      queueMicrotask(() => setCurrentPage(totalPages));
     }
   }, [totalPages, currentPage]);
 
@@ -151,13 +168,13 @@ export default function ReportsPage() {
 
   // Reset to page 1 when filters or sort change
   useEffect(() => {
-    setCurrentPage(1);
+    queueMicrotask(() => setCurrentPage(1));
   }, [statusFilter, searchQuery, sortKey, sortDir]);
 
   // Highlight newest run when it changes
   useEffect(() => {
     if (testRuns.length > 0) {
-      setHighlightedRunId(testRuns[0].id);
+      queueMicrotask(() => setHighlightedRunId(testRuns[0].id));
       const timer = setTimeout(() => setHighlightedRunId(null), 1500);
       return () => clearTimeout(timer);
     }
@@ -195,22 +212,6 @@ export default function ReportsPage() {
   const handleExportPDF = useCallback(() => {
     exportTestRunsToPDF(testRuns);
   }, [testRuns]);
-
-  // Sort indicator for column headers
-  const SortIcon = ({ column }: { column: SortKey }) => {
-    if (sortKey !== column) {
-      return (
-        <span className="inline-flex ml-1 opacity-0 group-hover:opacity-40 transition-opacity">
-          <ArrowUp className="w-3 h-3" />
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex ml-1" style={{ color: 'var(--accent-primary)' }}>
-        {sortDir === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-      </span>
-    );
-  };
 
   const startRow = (currentPage - 1) * ROWS_PER_PAGE + 1;
   const endRow = Math.min(currentPage * ROWS_PER_PAGE, sortedRuns.length);
@@ -390,7 +391,7 @@ export default function ReportsPage() {
                   onClick={() => handleSort('status')}
                 >
                   Status
-                  <SortIcon column="status" />
+                  <SortIcon sortKey={sortKey} sortDir={sortDir} column="status" />
                 </th>
                 <th
                   className="text-left px-4 py-3 font-medium text-xs uppercase tracking-wider cursor-pointer select-none group"
@@ -398,7 +399,7 @@ export default function ReportsPage() {
                   onClick={() => handleSort('featureName')}
                 >
                   Feature Name
-                  <SortIcon column="featureName" />
+                  <SortIcon sortKey={sortKey} sortDir={sortDir} column="featureName" />
                 </th>
                 <th className="text-left px-4 py-3 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                   Tests
@@ -409,7 +410,7 @@ export default function ReportsPage() {
                   onClick={() => handleSort('duration')}
                 >
                   Duration
-                  <SortIcon column="duration" />
+                  <SortIcon sortKey={sortKey} sortDir={sortDir} column="duration" />
                 </th>
                 <th
                   className="text-left px-4 py-3 font-medium text-xs uppercase tracking-wider cursor-pointer select-none group"
@@ -417,7 +418,7 @@ export default function ReportsPage() {
                   onClick={() => handleSort('executedAt')}
                 >
                   Executed
-                  <SortIcon column="executedAt" />
+                  <SortIcon sortKey={sortKey} sortDir={sortDir} column="executedAt" />
                 </th>
                 <th
                   className="text-left px-4 py-3 font-medium text-xs uppercase tracking-wider hidden sm:table-cell cursor-pointer select-none group"
@@ -425,7 +426,7 @@ export default function ReportsPage() {
                   onClick={() => handleSort('issues')}
                 >
                   Issues
-                  <SortIcon column="issues" />
+                  <SortIcon sortKey={sortKey} sortDir={sortDir} column="issues" />
                 </th>
               </tr>
             </thead>

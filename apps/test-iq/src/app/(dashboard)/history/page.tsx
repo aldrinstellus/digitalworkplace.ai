@@ -72,29 +72,31 @@ export default function HistoryPage() {
 
     const { link } = pendingAction;
 
-    if (link.target === 'metric' || link.target === 'history') {
-      const metricMap: Record<string, { key: string; label: string; value: number }> = {
-        passRate: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
-        firstRunPassRate: { key: 'firstRunPassRate', label: 'First Pass Rate', value: avgFirstPassRate },
-        defectDetection: { key: 'defectDetection', label: 'Defect Detection', value: avgDefectDetection },
-        effectiveness: { key: 'effectiveness', label: 'Test Effectiveness', value: avgEffectiveness },
-        performance: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
-      };
+    queueMicrotask(() => {
+      if (link.target === 'metric' || link.target === 'history') {
+        const metricMap: Record<string, { key: string; label: string; value: number }> = {
+          passRate: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
+          firstRunPassRate: { key: 'firstRunPassRate', label: 'First Pass Rate', value: avgFirstPassRate },
+          defectDetection: { key: 'defectDetection', label: 'Defect Detection', value: avgDefectDetection },
+          effectiveness: { key: 'effectiveness', label: 'Test Effectiveness', value: avgEffectiveness },
+          performance: { key: 'passRate', label: 'Average Pass Rate', value: avgPassRate },
+        };
 
-      const mapping = metricMap[link.entityId];
-      if (mapping) {
-        setSelectedMetric({
-          key: mapping.key,
-          label: mapping.label,
-          value: mapping.value,
-          unit: '%',
-          trend: 'up',
-          trendValue: '+2.3%',
-        });
+        const mapping = metricMap[link.entityId];
+        if (mapping) {
+          setSelectedMetric({
+            key: mapping.key,
+            label: mapping.label,
+            value: mapping.value,
+            unit: '%',
+            trend: 'up',
+            trendValue: '+2.3%',
+          });
+        }
       }
-    }
 
-    clearAction(pendingAction.id);
+      clearAction(pendingAction.id);
+    });
   }, [pendingAction, clearAction, avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness]);
 
   // Chart data

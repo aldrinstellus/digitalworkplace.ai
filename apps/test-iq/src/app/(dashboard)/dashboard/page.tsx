@@ -79,31 +79,33 @@ export default function DashboardPage() {
 
     const { link } = pendingAction;
 
-    if (link.target === 'feature') {
-      const feature = categories
-        .flatMap(c => c.features)
-        .find(f => f.id === link.entityId);
-      if (feature) setSelectedFeature(feature);
-    } else if (link.target === 'category') {
-      const category = categories.find(c => c.name === link.entityId);
-      if (category) setSelectedCategory(category);
-    } else if (link.target === 'metric') {
-      const personaMetric = currentPersona.metrics.find(
-        m => m.label === link.entityId || m.key === link.entityId
-      );
-      if (personaMetric) {
-        setSelectedMetric({
-          key: personaMetric.key,
-          label: personaMetric.label,
-          value: typeof personaMetric.value === 'number' ? personaMetric.value : parseFloat(String(personaMetric.value)),
-          unit: personaMetric.unit || '',
-          trend: personaMetric.trend,
-          trendValue: personaMetric.trendValue,
-        });
+    queueMicrotask(() => {
+      if (link.target === 'feature') {
+        const feature = categories
+          .flatMap(c => c.features)
+          .find(f => f.id === link.entityId);
+        if (feature) setSelectedFeature(feature);
+      } else if (link.target === 'category') {
+        const category = categories.find(c => c.name === link.entityId);
+        if (category) setSelectedCategory(category);
+      } else if (link.target === 'metric') {
+        const personaMetric = currentPersona.metrics.find(
+          m => m.label === link.entityId || m.key === link.entityId
+        );
+        if (personaMetric) {
+          setSelectedMetric({
+            key: personaMetric.key,
+            label: personaMetric.label,
+            value: typeof personaMetric.value === 'number' ? personaMetric.value : parseFloat(String(personaMetric.value)),
+            unit: personaMetric.unit || '',
+            trend: personaMetric.trend,
+            trendValue: personaMetric.trendValue,
+          });
+        }
       }
-    }
 
-    clearAction(pendingAction.id);
+      clearAction(pendingAction.id);
+    });
   }, [pendingAction, clearAction, categories, currentPersona]);
 
   // Chart data

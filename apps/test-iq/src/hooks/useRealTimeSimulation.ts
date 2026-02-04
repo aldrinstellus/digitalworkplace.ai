@@ -81,10 +81,12 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
   // Reset state when persona changes
   useEffect(() => {
     const data = getPersonaData(persona);
-    setFeatures(data.features);
-    setTestRuns(data.testRuns);
-    setDailyMetrics(data.dailyMetrics);
-    setLastUpdate(new Date());
+    queueMicrotask(() => {
+      setFeatures(data.features);
+      setTestRuns(data.testRuns);
+      setDailyMetrics(data.dailyMetrics);
+      setLastUpdate(new Date());
+    });
   }, [persona]);
 
   // Simulate new test runs appearing

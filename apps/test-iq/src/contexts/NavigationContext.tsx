@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, useMemo, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChatLink, NavigationAction } from '@/lib/dtq/types';
 
@@ -49,13 +49,27 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     setPendingAction(prev => (prev?.id === actionId ? null : prev));
   }, []);
 
-  const value = useMemo(() => {
-    // Expire stale actions
-    if (pendingAction && Date.now() - pendingAction.timestamp > ACTION_TTL_MS) {
-      return { pendingAction: null, dispatch, clearAction };
+  // Expire stale actions via a timer instead of inside useMemo
+  useEffect(() => {
+    if (!pendingAction) return;
+
+    const elapsed = Date.now() - pendingAction.timestamp;
+    if (elapsed >= ACTION_TTL_MS) {
+      queueMicrotask(() => setPendingAction(null));
+      return;
     }
-    return { pendingAction, dispatch, clearAction };
-  }, [pendingAction, dispatch, clearAction]);
+
+    const timer = setTimeout(() => {
+      setPendingAction(null);
+    }, ACTION_TTL_MS - elapsed);
+
+    return () => clearTimeout(timer);
+  }, [pendingAction]);
+
+  const value = useMemo(
+    () => ({ pendingAction, dispatch, clearAction }),
+    [pendingAction, dispatch, clearAction]
+  );
 
   return (
     <NavigationContext.Provider value={value}>

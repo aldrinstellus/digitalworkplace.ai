@@ -108,19 +108,23 @@ export async function POST(request: NextRequest) {
       const queryEmbedding = await generateEmbedding(message);
 
       // Use public schema — dtq schema is not exposed via PostgREST.
-      // public.search_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
+      // public.search_dtq_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
       const supabase = createClient(supabaseUrl, supabaseKey!);
 
       const { data: matches, error: searchError } = await supabase.rpc(
         'search_dtq_knowledge_semantic',
         {
-          query_embedding: queryEmbedding,
+          query_embedding: JSON.stringify(queryEmbedding),
           match_threshold: 0.5,
           match_count: 8,
           filter_persona: persona,
           filter_types: null,
         }
       );
+
+      if (searchError) {
+        console.warn('RAG search error:', searchError.message);
+      }
 
       if (!searchError && matches && matches.length > 0) {
         ragContext = matches
@@ -140,12 +144,6 @@ export async function POST(request: NextRequest) {
       }
     } catch (embeddingError) {
       console.warn('RAG search failed, proceeding without context:', embeddingError);
-      // Include debug info temporarily to diagnose production issues
-      sources.push({
-        title: `DEBUG: ${embeddingError instanceof Error ? embeddingError.message : String(embeddingError)}`,
-        type: 'error',
-        similarity: 0,
-      });
     }
 
     // --- Build system prompt ---

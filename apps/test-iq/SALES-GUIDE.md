@@ -124,7 +124,7 @@ These are the numbers you should be able to cite from memory:
 
 **SHOW:** Click the **Automation ROI** card (285%).
 
-**SAY:** "Every metric is clickable. Here's the drill-down for Automation ROI. You can see the 30-day trend chart, period comparison, statistical breakdown -- min, max, average, standard deviation -- and a category-level breakdown. This is the kind of depth your board expects."
+**SAY:** "Every metric is clickable. Here's the drill-down for Automation ROI. You can see the 30-day trend chart, period comparison, statistical breakdown -- current value, 30-day average, peak, and low -- and a category-level breakdown. This is the kind of depth your board expects."
 
 **SHOW:** Close the modal by clicking the X or pressing Escape.
 
@@ -158,7 +158,7 @@ These are the numbers you should be able to cite from memory:
 
 **SHOW:** Point to the primary metrics grid at the top.
 
-**SAY:** "The QA Manager is tracking 46 features across 10 categories. The automation rate is 48% -- 22 features are fully automated. There are 4 high-risk features flagged, and 35 open defects across the portfolio."
+**SAY:** "The QA Manager is tracking 46 features across 10 categories. The automation rate is 43% -- 20 features are fully automated. There are 3 high-risk features flagged, and 35 open defects across the portfolio."
 
 ### Walk Through the KPIs
 
@@ -186,7 +186,7 @@ These are the numbers you should be able to cite from memory:
 | Learning Analytics | 42 | 89% | 91% |
 | Mobile Experience | 42 | 79% | 86% |
 
-**SAY:** "Mobile Experience has the highest risk with the lowest coverage at 79% -- that's a clear signal for where to invest next."
+**SAY:** "xAPI / LRS Integration has the highest risk score at 45. Mobile Experience has the lowest coverage of the three at 79%. Both are clear signals for where to invest next."
 
 ### Open a Category
 
@@ -226,7 +226,7 @@ These are the numbers you should be able to cite from memory:
 
 **SHOW:** Click on an issue to expand the stack trace. Click the copy button.
 
-**SAY:** "One click copies the error message and stack trace to the clipboard. Your engineer can paste it directly into a bug report or a Slack message."
+**SAY:** "One click copies the stack trace to the clipboard. Your engineer can paste it directly into a bug report or a Slack message."
 
 **SHOW:** Close the modal. Click the **All** filter tab to reset.
 
@@ -381,7 +381,7 @@ These are the numbers you should be able to cite from memory:
 
 **SHOW:** Click the **Export CSV** button in the Reports filter bar.
 
-**SAY:** "One click exports the entire test run history as a CSV file. The file is named with today's date -- `dtq-test-runs-2026-02-04.csv`. Open it in Excel, Google Sheets, or pipe it into your BI tools."
+**SAY:** "One click exports the entire test run history as a CSV file. The file is named with today's date -- `test-reports-2026-02-04.csv`. Open it in Excel, Google Sheets, or pipe it into your BI tools."
 
 ### Show PDF Export
 

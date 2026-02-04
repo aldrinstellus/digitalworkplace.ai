@@ -397,8 +397,8 @@ Four `MetricCard` components in a responsive grid (1 column on mobile, 2 on tabl
 | Card | Value (Manager Example) | Subtitle | Icon | Click Action |
 |------|------------------------|----------|------|--------------|
 | **Total Features** | 46 | "88.5% avg coverage" | Layers | Opens MetricDrillDownModal |
-| **Automation Rate** | 48% | "22 fully automated" | Cpu | Opens MetricDrillDownModal |
-| **Risk Distribution** | "4 High" | "18 Med / 24 Low" | AlertTriangle | Opens MetricDrillDownModal |
+| **Automation Rate** | 43% | "20 fully automated" | Cpu | Opens MetricDrillDownModal |
+| **Risk Distribution** | "3 High" | "25 Med / 18 Low" | AlertTriangle | Opens MetricDrillDownModal |
 | **Open Defects** | 35 | "Across all features" | Bug | Opens MetricDrillDownModal |
 
 > **Note:** Values shown are for the QA Manager persona. C-Suite and Tech Lead personas display different computed values.
@@ -693,7 +693,7 @@ All modals use a shared `BaseModal` component with animated entry/exit (Framer M
 **Contents:**
 - **Header:** Metric label, current value with unit, trend badge
 - **30-Day Trend Chart:** Area chart showing the metric's daily values over 30 days
-- **Statistics Row:** Min, max, average, standard deviation
+- **Statistics Row:** Current value, 30-Day Average, Peak, Low
 - **Period Comparison:** Current value vs previous period value with percentage change
 - **Category Breakdown:** Bar chart showing the metric broken down by feature category
 - **Related Features:** List of features most impacted by this metric
@@ -738,14 +738,14 @@ All modals use a shared `BaseModal` component with animated entry/exit (Framer M
 **Triggered by:** Clicking a row in the Reports table
 
 **Contents:**
-- **Header:** Feature name with test run ID
+- **Header:** Feature name, with status and date as description
 - **Status Badge:** Large pass/fail indicator
 - **4 Stat Cards:** Total Tests, Passed Tests, Failed Tests, Pass Rate (%)
 - **Issues Section (failed runs only):**
   - Severity filter tabs (All / High / Medium / Low)
   - Each issue shows: test case name, severity badge, error message
   - Expandable stack trace (click to toggle)
-  - **Copy button:** Copies error message and stack trace to clipboard
+  - **Copy button:** Copies stack trace to clipboard
 - **View Feature Button:** Cross-modal navigation to the FeatureDetailModal for the associated feature
 
 ---
@@ -761,9 +761,9 @@ The `useRealTimeSimulation` hook manages two simulation loops:
 2. **New Test Run Generation (every 8–15 seconds):** A new test run is generated with:
    - A random feature from the current persona's feature set
    - ~85% pass rate probability
-   - 8–30 total tests per run
-   - 1–4 failed tests (if failed)
-   - 4–14 second duration
+   - 10–34 total tests per run
+   - 1–5 failed tests (if failed)
+   - 4–13 second duration
    - Error messages and stack traces selected from pre-defined pools
 
 ### Live / Pause Toggle
@@ -790,16 +790,16 @@ The Reports page includes a refresh button (rotating arrow icon) next to the Liv
 Three export functions are available:
 
 **Test Runs CSV (`exportTestRunsToCSV`):**
-- File name: `dtq-test-runs-YYYY-MM-DD.csv`
+- File name: `test-reports-YYYY-MM-DD.csv`
 - Columns: ID, Feature, Status, Total Tests, Passed, Failed, Duration (s), Executed At
 - Includes all test runs in the current dataset
 
 **Features CSV (`exportFeaturesToCSV`):**
-- File name: `dtq-features-YYYY-MM-DD.csv`
+- File name: `features-YYYY-MM-DD.csv`
 - Columns: ID, Name, Category, Coverage (%), Status, Open Defects, Closed Defects, Risk Score, Pass Rate (%), Impact Score
 
 **Metrics CSV (`exportMetricsToCSV`):**
-- File name: `dtq-metrics-YYYY-MM-DD.csv`
+- File name: `metrics-YYYY-MM-DD.csv`
 - Columns: Date, Pass Rate (%), First Run Pass Rate (%), Defect Detection (%), Effectiveness (%), Automation Coverage (%)
 
 ### PDF Export
@@ -810,12 +810,12 @@ Three export functions are available:
 
 ### File Naming Convention
 
-All exported files follow the pattern: `dtq-{type}-YYYY-MM-DD.{ext}`
+All exported files follow the pattern: `{type}-YYYY-MM-DD.{ext}`
 
 Examples:
-- `dtq-test-runs-2026-02-04.csv`
-- `dtq-features-2026-02-04.csv`
-- `dtq-metrics-2026-02-04.csv`
+- `test-reports-2026-02-04.csv`
+- `features-2026-02-04.csv`
+- `metrics-2026-02-04.csv`
 
 ---
 
@@ -1164,7 +1164,7 @@ Then the page numbers show: 1 ... 2 3 4 ... 5
 Given the user is on the Reports page
 When they click a test run row
 Then the TestRunDetailModal opens
-And it shows the feature name and run ID
+And it shows the feature name with status and date
 And it displays test counts (total, passed, failed)
 ```
 
@@ -1180,7 +1180,7 @@ And the FeatureDetailModal opens for the associated feature
 ```
 Given the user is on the Reports page
 When they click "Export CSV"
-Then a file named "dtq-test-runs-YYYY-MM-DD.csv" downloads
+Then a file named "test-reports-YYYY-MM-DD.csv" downloads
 And it contains headers: ID, Feature, Status, Total Tests, Passed, Failed, Duration (s), Executed At
 And every test run is included as a row
 ```
@@ -1560,7 +1560,7 @@ And clicking again collapses the stack trace
 ```
 Given the TestRunDetailModal shows an issue with a stack trace
 When the user clicks the copy button
-Then the error message and stack trace are copied to the clipboard
+Then the stack trace is copied to the clipboard
 ```
 
 ---

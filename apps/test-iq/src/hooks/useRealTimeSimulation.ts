@@ -215,25 +215,38 @@ export function useRealTimeSimulation(enabled: boolean = true) {
     setIsLive((prev) => !prev);
   }, []);
 
-  // Calculate summary metrics dynamically
-  const summaryMetrics = useMemo(
-    () => ({
-      totalFeatures: features.length,
-      avgCoverage:
-        Math.round((features.reduce((sum, f) => sum + f.coverage, 0) / features.length) * 10) / 10,
-      automationRate: Math.round(
-        (features.filter((f) => f.status === 'fully_automated').length / features.length) * 100
-      ),
-      fullyAutomated: features.filter((f) => f.status === 'fully_automated').length,
+  // Calculate summary metrics dynamically - single pass over features array
+  const summaryMetrics = useMemo(() => {
+    let totalCoverage = 0;
+    let fullyAutomated = 0;
+    let riskHigh = 0;
+    let riskMedium = 0;
+    let riskLow = 0;
+    let totalOpenDefects = 0;
+
+    for (const f of features) {
+      totalCoverage += f.coverage;
+      if (f.status === 'fully_automated') fullyAutomated++;
+      if (f.riskScore >= 40) riskHigh++;
+      else if (f.riskScore >= 20) riskMedium++;
+      else riskLow++;
+      totalOpenDefects += f.openDefects;
+    }
+
+    const len = features.length;
+    return {
+      totalFeatures: len,
+      avgCoverage: Math.round((totalCoverage / len) * 10) / 10,
+      automationRate: Math.round((fullyAutomated / len) * 100),
+      fullyAutomated,
       riskDistribution: {
-        high: features.filter((f) => f.riskScore >= 40).length,
-        medium: features.filter((f) => f.riskScore >= 20 && f.riskScore < 40).length,
-        low: features.filter((f) => f.riskScore < 20).length,
+        high: riskHigh,
+        medium: riskMedium,
+        low: riskLow,
       },
-      openDefects: features.reduce((sum, f) => sum + f.openDefects, 0),
-    }),
-    [features]
-  );
+      openDefects: totalOpenDefects,
+    };
+  }, [features]);
 
   // High risk features
   const highRiskFeatures = useMemo(

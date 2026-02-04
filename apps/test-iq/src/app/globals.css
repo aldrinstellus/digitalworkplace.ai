@@ -383,6 +383,16 @@ body {
 
 .animate-border-glow {
   animation: border-glow 3s ease-in-out infinite;
+  animation-play-state: paused;
+  will-change: border-color, box-shadow;
+}
+
+/* Activate border-glow when hovered or within a hovered/focused parent */
+.animate-border-glow:hover,
+.animate-border-glow:focus-within,
+*:hover > .animate-border-glow,
+*:focus-within > .animate-border-glow {
+  animation-play-state: running;
 }
 
 .animate-number-pop {
@@ -391,6 +401,16 @@ body {
 
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
+  animation-play-state: paused;
+  will-change: box-shadow;
+}
+
+/* Activate glow-pulse when hovered or within a hovered/focused parent */
+.animate-glow-pulse:hover,
+.animate-glow-pulse:focus-within,
+*:hover > .animate-glow-pulse,
+*:focus-within > .animate-glow-pulse {
+  animation-play-state: running;
 }
 
 .animate-shake {

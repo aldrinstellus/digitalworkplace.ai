@@ -11,9 +11,26 @@ const nextConfig: NextConfig = {
     return `build-${Date.now()}`;
   },
 
-  // Prevent browser caching of HTML pages
+  // TypeScript errors will fail the build
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+
+  // Security headers + Cache control
   async headers() {
     return [
+      // Security headers (matching dSQ/dIQ/dCQ standard)
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+        ],
+      },
+      // Prevent caching of HTML pages - users always get fresh content
       {
         source: '/((?!_next/static|_next/image|favicon.ico).*)',
         headers: [

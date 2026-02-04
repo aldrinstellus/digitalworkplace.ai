@@ -1,5 +1,5 @@
 {
-  "name": "test-iq",
+  "name": "@digitalworkplace/test-iq",
   "version": "0.1.0",
   "private": true,
   "scripts": {

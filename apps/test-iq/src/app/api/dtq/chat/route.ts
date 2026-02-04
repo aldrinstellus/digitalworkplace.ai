@@ -117,14 +117,13 @@ export async function POST(request: NextRequest) {
       // public.search_dtq_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
       const supabase = createClient(supabaseUrl, supabaseKey!);
 
-      const embeddingStr = JSON.stringify(queryEmbedding);
-      debug.push(`embeddingStr: length=${embeddingStr.length}, starts=${embeddingStr.substring(0, 30)}`);
+      debug.push(`embedding first 3: [${queryEmbedding.slice(0, 3).join(', ')}]`);
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: matches, error: searchError } = await (supabase as any).rpc(
         'search_dtq_knowledge_semantic',
         {
-          query_embedding: embeddingStr,
+          query_embedding: queryEmbedding,
           match_threshold: 0.5,
           match_count: 8,
           filter_persona: persona,

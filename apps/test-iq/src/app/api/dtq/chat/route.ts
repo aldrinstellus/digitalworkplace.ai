@@ -103,25 +103,37 @@ export async function POST(request: NextRequest) {
     // --- RAG: Generate query embedding and search knowledge base ---
     let ragContext = '';
     const sources: { title: string; type: string; similarity: number }[] = [];
+    const debug: string[] = [];
 
     try {
+      debug.push(`openaiKey: ${openaiKey ? 'set (' + openaiKey.substring(0, 10) + '...)' : 'NOT SET'}`);
+      debug.push(`supabaseUrl: ${supabaseUrl || 'NOT SET'}`);
+      debug.push(`supabaseKey: ${supabaseKey ? 'set' : 'NOT SET'}`);
+
       const queryEmbedding = await generateEmbedding(message);
+      debug.push(`embedding: generated, length=${queryEmbedding.length}`);
 
       // Use public schema — dtq schema is not exposed via PostgREST.
       // public.search_dtq_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
       const supabase = createClient(supabaseUrl, supabaseKey!);
 
+      const embeddingStr = JSON.stringify(queryEmbedding);
+      debug.push(`embeddingStr: length=${embeddingStr.length}, starts=${embeddingStr.substring(0, 30)}`);
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: matches, error: searchError } = await (supabase as any).rpc(
         'search_dtq_knowledge_semantic',
         {
-          query_embedding: JSON.stringify(queryEmbedding),
+          query_embedding: embeddingStr,
           match_threshold: 0.5,
           match_count: 8,
           filter_persona: persona,
           filter_types: null,
         }
       );
+
+      debug.push(`searchError: ${searchError ? JSON.stringify(searchError) : 'none'}`);
+      debug.push(`matches: ${matches ? matches.length : 'null'}`);
 
       if (searchError) {
         console.error('RAG search error:', searchError.message, searchError);
@@ -144,6 +156,7 @@ export async function POST(request: NextRequest) {
         );
       }
     } catch (embeddingError) {
+      debug.push(`CATCH: ${embeddingError instanceof Error ? embeddingError.message : String(embeddingError)}`);
       console.warn('RAG search failed, proceeding without context:', embeddingError);
     }
 
@@ -189,6 +202,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       response: responseText,
       sources,
+      debug,
       model: 'claude-sonnet-4-20250514',
       persona,
     });

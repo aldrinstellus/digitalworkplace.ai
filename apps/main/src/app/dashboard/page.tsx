@@ -63,13 +63,13 @@ const products = [
     name: "Test Pilot IQ",
     title: "AI Testing",
     description: "Automated QA & testing intelligence",
-    localHref: "#",
-    prodHref: "#",
-    disabled: true, // Coming soon
+    localHref: "http://localhost:3004/dtq/dashboard",
+    prodHref: "https://dtq.digitalworkplace.ai/dtq/dashboard",
+    disabled: false,
     colors: {
-      primary: "#f59e0b",
-      secondary: "#ef4444",
-      glow: "rgba(245, 158, 11, 0.4)",
+      primary: "#ff3366",
+      secondary: "#ff1a53",
+      glow: "rgba(255, 51, 102, 0.4)",
     },
   },
 ];
@@ -514,12 +514,12 @@ const ProductIllustrations = {
     <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="testing-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#ef4444" stopOpacity="0.4" />
+          <stop offset="0%" stopColor="#ff3366" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#ff1a53" stopOpacity="0.4" />
         </linearGradient>
         <linearGradient id="testing-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.1" />
+          <stop offset="0%" stopColor="#ff3366" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#ff6699" stopOpacity="0.1" />
         </linearGradient>
         <filter id="testing-glow">
           <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
@@ -535,11 +535,11 @@ const ProductIllustrations = {
 
       {/* Clipboard - subtle glow pulse */}
       <g filter={isHovered ? "url(#testing-glow)" : undefined}>
-        <motion.rect x="180" y="30" width="80" height="110" rx="8" fill="none" stroke="#f59e0b" strokeWidth="2.5"
+        <motion.rect x="180" y="30" width="80" height="110" rx="8" fill="none" stroke="#ff3366" strokeWidth="2.5"
           animate={{ strokeOpacity: isHovered ? [0.8, 1, 0.8] : [0.3, 0.5, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.rect x="200" y="25" width="40" height="15" rx="4" fill="#f59e0b"
+        <motion.rect x="200" y="25" width="40" height="15" rx="4" fill="#ff3366"
           animate={{ fillOpacity: isHovered ? [0.6, 0.8, 0.6] : [0.3, 0.45, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -547,7 +547,7 @@ const ProductIllustrations = {
         {/* Progress bars - always animating */}
         {[[195, 55], [195, 80], [195, 105]].map(([x, y], i) => (
           <g key={i}>
-            <motion.rect x={x} y={y} height="8" rx="2" fill="#f59e0b"
+            <motion.rect x={x} y={y} height="8" rx="2" fill="#ff3366"
               animate={{
                 fillOpacity: isHovered ? [0.4, 0.7, 0.4] : [0.15, 0.3, 0.15],
                 width: isHovered ? [40, 50, 40] : [35, 42, 35]
@@ -575,7 +575,7 @@ const ProductIllustrations = {
         }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
       >
-        <motion.ellipse cx="70" cy="80" rx="20" ry="15" fill="#ef4444"
+        <motion.ellipse cx="70" cy="80" rx="20" ry="15" fill="#ff1a53"
           animate={{ fillOpacity: isHovered ? [0.6, 0.9, 0.6] : [0.3, 0.5, 0.3] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -594,9 +594,9 @@ const ProductIllustrations = {
             transition={{ duration: 0.5, repeat: Infinity }}
             style={{ originX: "70px", originY: "80px" }}
           >
-            <line x1={70 + dir * 15} y1="70" x2={70 + dir * 25} y2="60" stroke="#ef4444" strokeWidth="2" />
-            <line x1={70 + dir * 18} y1="80" x2={70 + dir * 30} y2="80" stroke="#ef4444" strokeWidth="2" />
-            <line x1={70 + dir * 15} y1="90" x2={70 + dir * 25} y2="100" stroke="#ef4444" strokeWidth="2" />
+            <line x1={70 + dir * 15} y1="70" x2={70 + dir * 25} y2="60" stroke="#ff1a53" strokeWidth="2" />
+            <line x1={70 + dir * 18} y1="80" x2={70 + dir * 30} y2="80" stroke="#ff1a53" strokeWidth="2" />
+            <line x1={70 + dir * 15} y1="90" x2={70 + dir * 25} y2="100" stroke="#ff1a53" strokeWidth="2" />
           </motion.g>
         ))}
       </motion.g>
@@ -609,21 +609,21 @@ const ProductIllustrations = {
         }}
         transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
       >
-        <circle cx="70" cy="80" r="25" fill="#ef4444" fillOpacity={0.3} />
+        <circle cx="70" cy="80" r="25" fill="#ff1a53" fillOpacity={0.3} />
         <line x1="55" y1="65" x2="85" y2="95" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
         <line x1="85" y1="65" x2="55" y2="95" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
       </motion.g>
 
       {/* Progress bar - always animating */}
-      <rect x="40" y="180" width="100" height="8" rx="4" fill="#f59e0b" fillOpacity={0.2} />
-      <motion.rect x="40" y="180" rx="4" height="8" fill="#f59e0b"
+      <rect x="40" y="180" width="100" height="8" rx="4" fill="#ff3366" fillOpacity={0.2} />
+      <motion.rect x="40" y="180" rx="4" height="8" fill="#ff3366"
         animate={{
           width: isHovered ? [80, 100, 80] : [50, 70, 50],
           fillOpacity: isHovered ? [0.6, 0.9, 0.6] : [0.3, 0.5, 0.3]
         }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />
-      <motion.text x="145" y="187" fill="#f59e0b" fontSize="10" fontWeight="bold"
+      <motion.text x="145" y="187" fill="#ff3366" fontSize="10" fontWeight="bold"
         animate={{ opacity: isHovered ? [0.8, 1, 0.8] : [0.4, 0.6, 0.4] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >

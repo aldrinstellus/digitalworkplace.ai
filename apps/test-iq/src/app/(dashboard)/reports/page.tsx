@@ -33,7 +33,7 @@ export default function ReportsPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-2xl font-bold gradient-text">Test Reports</h1>
+          <h1 className="text-2xl font-bold text-white">Test <span className="text-[#ff3366]">Reports</span></h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
             View regression test execution history and issues
           </p>

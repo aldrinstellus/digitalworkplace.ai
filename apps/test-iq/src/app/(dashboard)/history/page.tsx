@@ -86,7 +86,7 @@ export default function HistoryPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-2xl font-bold gradient-text">Team Performance Metrics</h1>
+          <h1 className="text-2xl font-bold text-white">Team Performance <span className="text-[#ff3366]">Metrics</span></h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
             Monitor team effectiveness and quality trends over the past 30 days
           </p>

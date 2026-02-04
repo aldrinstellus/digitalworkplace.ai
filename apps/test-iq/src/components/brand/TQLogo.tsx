@@ -151,7 +151,7 @@ export function TQLogo({ size = "md", showText = false, className = "" }: TQLogo
           >
             <span className="font-light text-[var(--text-muted)]">AI</span>
             {" "}
-            <span className="text-[#ff3366]">testing</span>
+            <span className="text-[#ff3366]">Testing</span>
           </span>
         </div>
       )}

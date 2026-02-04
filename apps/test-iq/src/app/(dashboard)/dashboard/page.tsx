@@ -110,7 +110,7 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-2xl font-bold gradient-text">Test IQ Dashboard</h1>
+          <h1 className="text-2xl font-bold text-white">Test IQ <span className="text-[#ff3366]">Dashboard</span></h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
             AI-Powered Testing Intelligence for Enterprise Quality
           </p>

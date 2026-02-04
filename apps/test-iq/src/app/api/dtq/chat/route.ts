@@ -111,7 +111,8 @@ export async function POST(request: NextRequest) {
       // public.search_dtq_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
       const supabase = createClient(supabaseUrl, supabaseKey!);
 
-      const { data: matches, error: searchError } = await supabase.rpc(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: matches, error: searchError } = await (supabase as any).rpc(
         'search_dtq_knowledge_semantic',
         {
           query_embedding: JSON.stringify(queryEmbedding),
@@ -123,7 +124,7 @@ export async function POST(request: NextRequest) {
       );
 
       if (searchError) {
-        console.warn('RAG search error:', searchError.message);
+        console.error('RAG search error:', searchError.message, searchError);
       }
 
       if (!searchError && matches && matches.length > 0) {

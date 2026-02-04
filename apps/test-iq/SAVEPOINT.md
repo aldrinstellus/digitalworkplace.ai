@@ -1,8 +1,8 @@
 # Test IQ (dTQ) - SAVEPOINT
 
 **Last Updated:** 2026-02-04
-**Version:** 1.1.0
-**Status:** PRODUCTION LIVE (Linked from Main Dashboard)
+**Version:** 1.2.0
+**Status:** PRODUCTION LIVE (Maintenance Standards Aligned)
 
 ---
 
@@ -17,8 +17,8 @@
 
 ### Latest Commit
 ```
+e7460a8 fix(dTQ): align with maintenance standards and optimize performance
 056de94 feat(main): link Test Pilot IQ card and update to pink theme
-34c7915 feat(dTQ): implement full database integration for Test Pilot IQ
 ```
 
 ### Git Status
@@ -115,14 +115,31 @@ const nextConfig: NextConfig = {
   basePath: "/dtq",
   devIndicators: false,
   generateBuildId: async () => `build-${Date.now()}`,
+  typescript: { ignoreBuildErrors: false },
   async headers() {
-    return [{
-      source: '/((?!_next/static|_next/image|favicon.ico).*)',
-      headers: [{ key: 'Cache-Control', value: 'no-store, must-revalidate' }],
-    }];
+    return [
+      { source: '/:path*', headers: [/* 5 security headers */] },
+      { source: '/((?!_next/static|...).*)', headers: [/* Cache-Control */] },
+    ];
   },
 };
 ```
+
+### Security Headers (v1.2.0)
+| Header | Value |
+|--------|-------|
+| X-Content-Type-Options | nosniff |
+| X-Frame-Options | DENY |
+| X-XSS-Protection | 1; mode=block |
+| Referrer-Policy | strict-origin-when-cross-origin |
+| Permissions-Policy | camera=(), microphone=(), geolocation=() |
+
+### Package Name
+- `@digitalworkplace/test-iq` (namespace aligned with dSQ/dIQ/dCQ)
+
+### `vercel.json`
+- Region: `iad1`
+- API function maxDuration: 60s
 
 ### Brand Colors
 - Primary Accent: `#ff3366` (pink)
@@ -178,9 +195,22 @@ const nextConfig: NextConfig = {
 
 ## Recent Session Work
 
-### Session: 2026-02-04
+### Session: 2026-02-04 (Maintenance Standards Alignment)
 
-1. **Main Dashboard Integration**
+1. **Maintenance Standards Alignment (v1.2.0)**
+   - Added 5 security headers to `next.config.ts` (matching dSQ/dIQ/dCQ)
+   - Added `typescript: { ignoreBuildErrors: false }` for strict builds
+   - Standardized ESLint config with custom rule overrides
+   - Created `vercel.json` with region (iad1) and function config
+   - Fixed package namespace: `test-iq` -> `@digitalworkplace/test-iq`
+   - Optimized CSS animations: `will-change` + paused-by-default for `animate-border-glow` and `animate-glow-pulse`
+   - Optimized `useRealTimeSimulation`: combined 6 `.reduce()` calls into single loop
+   - ESLint: 0 errors, 0 warnings
+   - Build: Clean with 0 TypeScript errors
+   - Deployed to Vercel: commit e7460a8
+   - All 3 pages verified: 200 OK with security headers
+
+2. **Main Dashboard Integration**
    - Linked Test Pilot IQ card from main DigitalWorkplace.ai dashboard
    - Removed "Coming Soon" disabled state
    - Updated card theme from orange (#f59e0b) to pink (#ff3366) to match dTQ branding

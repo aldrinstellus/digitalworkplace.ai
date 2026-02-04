@@ -143,12 +143,13 @@ supabase/migrations/
 - **Export Functionality**: CSV and PDF exports working
 - **Interactive Modals**: Feature drill-down, chart point analysis
 - **Knowledge Base Sync**: Features synced to `public.knowledge_items`
-- **AI Chat with RAG**: Claude-powered assistant with vector semantic search
+- **AI Chat with RAG**: Claude-powered floating chat widget with vector semantic search
   - 130 knowledge base rows with 1536-dim OpenAI embeddings (100% coverage)
   - Persona-aware context filtering (csuite/manager/techlead)
   - Semantic search via `public.search_dtq_knowledge_semantic` RPC
   - Claude Sonnet 4 responses with RAG context injection
   - Demo mode fallback when API keys not configured
+  - **ChatWidget UX (v1.5.0)**: Floating overlay, persistent quick action pills, user-controlled scroll, reset button, cross-page persistence via ChatContext
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints
@@ -194,7 +195,7 @@ apps/test-iq/
 ├── src/
 │   ├── app/
 │   │   ├── (dashboard)/
-│   │   │   ├── layout.tsx           # Dashboard layout + Persona context
+│   │   │   ├── layout.tsx           # Dashboard layout + Persona + ChatProvider + ChatWidget
 │   │   │   ├── dashboard/page.tsx   # Main dashboard
 │   │   │   ├── history/page.tsx     # 30-day metrics trends
 │   │   │   └── reports/page.tsx     # Test execution reports
@@ -205,7 +206,7 @@ apps/test-iq/
 │   │       ├── metrics/route.ts     # Metrics API
 │   │       └── personas/route.ts    # Personas API
 │   ├── components/dtq/
-│   │   ├── AIAssistant.tsx
+│   │   ├── ChatWidget.tsx            # Floating AI chat (replaces AIAssistant)
 │   │   ├── FeatureCoverage.tsx
 │   │   ├── HighRiskBanner.tsx
 │   │   ├── LiveIndicator.tsx
@@ -215,6 +216,8 @@ apps/test-iq/
 │   │   ├── Sidebar.tsx
 │   │   ├── TrendChart.tsx
 │   │   └── modals/
+│   ├── contexts/
+│   │   └── ChatContext.tsx            # Cross-page chat message persistence
 │   ├── hooks/
 │   │   └── useRealTimeSimulation.ts # Main data hook (API + simulation)
 │   └── lib/
@@ -249,6 +252,8 @@ apps/test-iq/
 - [x] Wire AIAssistant to real chat API
 - [x] Sync 100 items to public.knowledge_items
 - [x] Deploy to Vercel with all API keys configured
+- [x] ChatWidget UX overhaul — persistent quick actions, user-controlled scroll, reset button (v1.5.0)
+- [x] Cross-page chat persistence via ChatContext
 
 ---
 

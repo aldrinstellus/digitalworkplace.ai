@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-04
-**Version**: 0.9.4
-**Session Status**: dTQ v1.4.0 LIVE - All API Endpoints Fixed + Full Data Seeded
+**Version**: 0.9.5
+**Session Status**: dTQ v1.5.0 LIVE - ChatWidget UX Overhaul + Persistent Quick Actions
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: caa67b5 - fix(dTQ): use public schema views for all data API endpoints
+**Git Commit**: eb2c5ce - fix(dTQ): ChatWidget UX overhaul — persistent quick actions, user-controlled scroll, reset button
 
 ---
 
@@ -119,7 +119,7 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.1.0 |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.5.0 |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
@@ -155,7 +155,85 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.3)
+## Latest Changes (v0.9.5)
+
+### dTQ v1.5.0 - ChatWidget UX Overhaul (2026-02-04)
+
+**Complete UX rewrite of the AI chat widget with 5 critical fixes.**
+
+#### Issues Fixed
+
+| # | Issue | Fix |
+|---|-------|-----|
+| 1 | Auto-scroll forced user to bottom on every message | User-controlled scrolling via `shouldScrollRef` — only scrolls on user-sent messages |
+| 2 | No reset/clear chat button | Added animated `RotateCcw` button in header (visible when messages exist) |
+| 3 | Quick actions disappeared after first message | Moved to persistent horizontal pill strip above input — always visible |
+| 4 | Messages appeared to "disappear" (ternary swap) | Removed mutually exclusive ternary — welcome state + messages now coexist |
+| 5 | General UX polish | Flex layout, compact pill buttons, AnimatePresence transitions |
+
+#### Architecture Changes
+- **ChatWidget.tsx** replaces AIAssistant.tsx as floating overlay (not embedded in dashboard grid)
+- **ChatContext.tsx** provides cross-page message persistence via React Context
+- **Layout wrapping**: `(dashboard)/layout.tsx` wraps children in `<ChatProvider>` + `<ChatWidget />`
+- Quick actions render as horizontal scrollable pills between messages and input
+
+#### Files Changed
+
+| File | Action |
+|------|--------|
+| `src/components/dtq/ChatWidget.tsx` | REWRITTEN — All 5 UX fixes |
+| `src/components/dtq/AIAssistant.tsx` | DELETED — Replaced by ChatWidget |
+| `src/contexts/ChatContext.tsx` | EXISTS — Cross-page message persistence |
+| `src/app/(dashboard)/layout.tsx` | MODIFIED — ChatProvider + ChatWidget wrapper |
+| `src/app/(dashboard)/dashboard/page.tsx` | MODIFIED — Removed inline AIAssistant |
+| `src/lib/dtq/types.ts` | MODIFIED — Added sources to ChatMessage |
+
+#### Browser Testing (13/13 Scenarios Passed)
+
+| # | Scenario | Result |
+|---|----------|--------|
+| 1 | Open widget | Panel opens with welcome + quick actions |
+| 2 | Quick action click | User message + typing + response |
+| 3 | Quick actions persist | Still visible after responses |
+| 4 | Scroll freely | No forced auto-scroll |
+| 5-7 | All 4 quick actions | All work correctly |
+| 8 | Custom question | Type + Enter works |
+| 9 | Reset chat | Clears messages, shows welcome |
+| 10 | Post-reset action | Works normally |
+| 11 | Navigation persistence | Messages preserved across pages |
+| 12 | Persona switch | Badge updates in header |
+| 13 | Close/reopen | Messages preserved |
+
+#### Deployment
+- **Git Commit**: eb2c5ce
+- **Vercel**: Deployed to production
+- **Live URL**: https://dtq.digitalworkplace.ai/dtq/dashboard (verified 200 OK)
+- **All 3 pages**: Dashboard, History, Reports — all 200 OK
+
+---
+
+## Previous Changes (v0.9.4)
+
+### dTQ v1.4.0 - All API Endpoints Fixed + Full Data Seeded (2026-02-04)
+
+**Fixed all data API endpoints and seeded missing data. All 6 endpoints now return live data from Supabase.**
+
+#### Root Cause
+The `dtq` schema is NOT exposed via Supabase PostgREST. All API routes were querying tables like `features`, `test_runs` etc. in the public schema, but these only exist in the `dtq` schema.
+
+#### Fix Applied
+1. **Created 6 public schema views** mapping to dtq tables
+2. **Created 2 SECURITY DEFINER RPC functions** for INSERT operations
+3. **Updated all API routes** to use public schema views
+4. **Updated `supabase.ts`** — removed `{ db: { schema: 'dtq' } }` override
+5. **Seeded missing data**: persona_metrics (24 rows), test_issues (30 rows)
+
+#### Git Commit: caa67b5
+#### Deploy: https://dtq.digitalworkplace.ai
+
+---
+
+## Previous Changes (v0.9.3)
 
 ### dTQ v1.3.0 - Knowledge Base + Vector Embeddings + AI Chat with RAG (2026-02-04)
 
@@ -203,48 +281,6 @@ const isPublicRoute = createRouteMatcher([
 ---
 
 ## Previous Changes (v0.9.2)
-
-### dTQ v1.4.0 - All API Endpoints Fixed + Full Data Seeded (2026-02-04)
-
-**Fixed all data API endpoints and seeded missing data. All 6 endpoints now return live data from Supabase.**
-
-#### Root Cause
-The `dtq` schema is NOT exposed via Supabase PostgREST. All API routes were querying tables like `features`, `test_runs` etc. in the public schema, but these only exist in the `dtq` schema.
-
-#### Fix Applied
-1. **Created 6 public schema views** mapping to dtq tables:
-   - `public.dtq_features` → `dtq.features` (46 rows)
-   - `public.dtq_test_runs` → `dtq.test_runs` (40 rows)
-   - `public.dtq_test_issues` → `dtq.test_issues` (30 rows)
-   - `public.dtq_daily_metrics` → `dtq.daily_metrics` (30 rows)
-   - `public.dtq_personas` → `dtq.personas` (3 rows)
-   - `public.dtq_persona_metrics` → `dtq.persona_metrics` (24 rows)
-
-2. **Created 2 SECURITY DEFINER RPC functions** for INSERT operations:
-   - `public.insert_dtq_test_run()` — creates test runs
-   - `public.insert_dtq_test_issues()` — creates test issues
-
-3. **Updated all API routes** to use public schema views
-4. **Updated `supabase.ts`** — removed `{ db: { schema: 'dtq' } }` override
-5. **Seeded missing data**: persona_metrics (24 rows), test_issues (30 rows)
-
-#### Live Verification (ALL PASS)
-| Endpoint | Status | Data |
-|----------|--------|------|
-| `/api/dtq/features` | 200 | 46 features |
-| `/api/dtq/categories` | 200 | 10 categories |
-| `/api/dtq/metrics` | 200 | 30 days |
-| `/api/dtq/personas` | 200 | 3 personas (7+9+8 metrics) |
-| `/api/dtq/test-runs` | 200 | 40 runs (10 failed w/ 3 issues each) |
-| `/api/dtq/chat` | 200 | Claude Sonnet 4 + 8 RAG sources |
-| Dashboard page | 200 | OK |
-| History page | 200 | OK |
-| Reports page | 200 | OK |
-
-#### Git Commit: caa67b5
-#### Deploy: https://dtq.digitalworkplace.ai
-
----
 
 ### dTQ v1.3.0 - Knowledge Base + Vector Embeddings + AI Chat (2026-02-04)
 
@@ -689,6 +725,8 @@ vercel --prod
 - [x] dTQ (Test Pilot IQ) implementation - LIVE (v1.1.0)
 - [x] dTQ linked from main dashboard with pink theme (#ff3366)
 - [x] dTQ Knowledge Base + Vector Embeddings + AI Chat with RAG - LIVE (v1.3.0)
+- [x] dTQ All API Endpoints Fixed + Full Data Seeded - LIVE (v1.4.0)
+- [x] dTQ ChatWidget UX Overhaul — persistent quick actions, scroll fix, reset - LIVE (v1.5.0)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -699,5 +737,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-04*
-*Version: 0.9.3*
+*Version: 0.9.5*
 *Machine: Mac Mini (aldrin-mac-mini)*

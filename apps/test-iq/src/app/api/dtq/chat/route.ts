@@ -107,12 +107,12 @@ export async function POST(request: NextRequest) {
     try {
       const queryEmbedding = await generateEmbedding(message);
 
-      const supabase = createClient(supabaseUrl, supabaseKey!, {
-        db: { schema: 'dtq' },
-      });
+      // Use public schema — dtq schema is not exposed via PostgREST.
+      // public.search_knowledge_semantic is a SECURITY DEFINER wrapper that queries dtq.knowledge_base.
+      const supabase = createClient(supabaseUrl, supabaseKey!);
 
       const { data: matches, error: searchError } = await supabase.rpc(
-        'search_knowledge_semantic',
+        'search_dtq_knowledge_semantic',
         {
           query_embedding: queryEmbedding,
           match_threshold: 0.5,

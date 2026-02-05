@@ -162,6 +162,7 @@ supabase/migrations/
   - Demo mode fallback when API keys not configured
   - **ChatWidget UX (v1.5.0)**: Floating overlay, persistent quick action pills, user-controlled scroll, reset button, cross-page persistence via ChatContext
   - **Interlinked Navigation (v1.6.0)**: Actionable link cards below AI responses with NavigationContext dispatch pattern; links navigate to features, categories, metrics, reports, and history pages; 3 link resolution strategies (bold text, RAG sources, keywords); max 5 links per response
+  - **4-Tier Link Resolution (v1.7.0)**: Complete rewrite of link-resolver.ts — global entity index (80 features, 20 categories, 24 KPIs across all 3 personas), 4-tier pipeline (source-based → entity text scanning → keyword detection → context-aware fallback), guaranteed ≥1 link per response, cross-persona feature resolution, ~20 keyword pattern groups, error fallback links in ChatWidget
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints
@@ -169,7 +170,7 @@ supabase/migrations/
 3. Real-time simulation updates local state (not persisted)
 4. Export functions use current state data
 5. AI chat: user message → OpenAI embedding → semantic search → Claude response with RAG context
-6. Link resolution: response text → bold text extraction + source mapping + keyword detection → relatedLinks[]
+6. Link resolution: 4-tier pipeline — Tier 1 (RAG source types including test_run_summary/daily_metrics_summary) → Tier 2 (entity name substring scanning across all personas) → Tier 3 (~20 keyword pattern groups) → Tier 4 (context-aware fallback guaranteeing ≥1 link)
 7. Navigation: link card click → NavigationContext.dispatch → router.push + pendingAction → page useEffect opens modal
 
 ---
@@ -272,6 +273,7 @@ apps/test-iq/
 - [x] ChatWidget UX overhaul — persistent quick actions, user-controlled scroll, reset button (v1.5.0)
 - [x] Cross-page chat persistence via ChatContext
 - [x] Chatbot interlinked navigation — actionable link cards, NavigationContext, link-resolver (v1.6.0)
+- [x] 4-tier link resolution pipeline — global entity index, cross-persona matching, guaranteed fallback (v1.7.0)
 
 ---
 

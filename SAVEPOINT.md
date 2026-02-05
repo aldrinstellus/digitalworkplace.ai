@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.8
-**Session Status**: dTQ Full-Spectrum Testing Complete - All Documents Verified 100%
+**Version**: 0.9.9
+**Session Status**: dTQ v1.7.0 - 4-Tier Link Resolution Pipeline LIVE
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 86efafa - docs(dTQ): full-spectrum testing audit - 200 checks, 3 fixes, 100% accuracy
+**Git Commit**: b2b3fee - feat(dTQ): 4-tier link resolution pipeline — every response gets actionable links
 
 ---
 
@@ -119,11 +119,11 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | 1.6.0 |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **1.7.0** |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 86efafa - docs(dTQ): full-spectrum testing audit - 200 checks, 3 fixes, 100% accuracy
+- **Latest Commit**: b2b3fee - feat(dTQ): 4-tier link resolution pipeline — every response gets actionable links
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -155,9 +155,52 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.8)
+## Latest Changes (v0.9.9)
 
-### dTQ Full-Spectrum Testing Audit (2026-02-05)
+### dTQ v1.7.0 - 4-Tier Link Resolution Pipeline (2026-02-05)
+
+**Complete rewrite of link-resolver.ts — every AI response now generates actionable links.**
+
+#### Problem (10 gaps)
+Chat responses lacked links to features, categories, metrics, and pages. Bold-text matching was unreliable, source types test_run_summary and daily_metrics_summary were ignored, feature lookup was persona-scoped only, no substring matching, metric names never linked, demo mode sources empty, error fallbacks had no links, no guaranteed fallback.
+
+#### Solution: 4-Tier Pipeline + Global Entity Index
+
+| Tier | Strategy | Description |
+|------|----------|------------|
+| 1 | Source-based | All 5 RAG source types (feature, category_summary, persona_kpi, test_run_summary, daily_metrics_summary) |
+| 2 | Entity text scanning | Substring match of all 80 features + 20 categories + 24 metrics across all personas |
+| 3 | Keyword detection | ~20 pattern groups (test runs, trends, pass rate, defects, automation, risk, security, CI/CD, etc.) |
+| 4 | Context-aware fallback | Guaranteed ≥1 link per response, persona-appropriate defaults |
+
+#### Files Changed (3)
+
+| File | Changes |
+|------|---------|
+| `link-resolver.ts` | Complete rewrite — global entity index, 4-tier pipeline, ~310 lines |
+| `chat/route.ts` | Pass userMessage + personaMetrics to resolveLinks (RAG + demo mode) |
+| `ChatWidget.tsx` | getFallbackLinks helper + relatedLinks in both error catch blocks |
+
+#### Verification Results
+
+| Test | Result |
+|------|--------|
+| Build | 0 errors, 13/13 pages |
+| Live (all 5 apps) | HTTP 200 |
+| Payment Gateway (csuite) | 5 feature links |
+| High-risk features (demo) | Category + feature links |
+| Pass rate query | Metric + history links |
+| Cross-persona (Penetration Test Suite on manager) | Resolves techlead features |
+| Vague message ("hello") | 5 contextual fallback links |
+| Local dev (port 3004) | Working with RAG |
+
+#### Deployment
+- **Git**: b2b3fee pushed to main
+- **Vercel**: https://dtq.digitalworkplace.ai (deployed + verified)
+
+---
+
+### Previous: dTQ Full-Spectrum Testing Audit (2026-02-05)
 
 **Ran 7 parallel testing agents across all dTQ documentation, APIs, and browser UI. 200 checks total.**
 
@@ -907,6 +950,7 @@ vercel --prod
 - [x] dTQ SALES-GUIDE.md — 534-line sales script + PDF, 106/106 checks verified (v0.9.7)
 - [x] Full-spectrum verification of both documents against source code — 14 fixes applied (v0.9.7)
 - [x] dTQ Full-Spectrum Testing Audit — 200 checks, 3 additional fixes, TESTING-AUDIT-GUIDE.md created (v0.9.8)
+- [x] dTQ 4-Tier Link Resolution Pipeline — global entity index, cross-persona matching, guaranteed fallback, ~20 keyword groups (v0.9.9)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -917,5 +961,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.8*
+*Version: 0.9.9*
 *Machine: Mac Mini (aldrin-mac-mini)*

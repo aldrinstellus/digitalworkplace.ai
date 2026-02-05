@@ -351,7 +351,7 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 |---------|-------------|-------------|--------|
 | Support IQ | Green (#10b981) | Intelligent customer support automation | ✅ Active |
 | Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network | ✅ Active |
-| Test Pilot IQ | Orange (#f59e0b) | Automated QA & testing intelligence | ⬜ Pending |
+| Test Pilot IQ | Pink (#ff3366) | Automated QA & testing intelligence | ✅ Live: https://dtq.digitalworkplace.ai |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://dcq.digitalworkplace.ai |
 
 ### dCQ - Chat Core IQ (v1.2.1) - PRODUCTION LIVE (Full Spectrum + Workflows)
@@ -425,6 +425,30 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
   - **NEW** Workflow Execution Engine with webhooks/cron
   - **NEW** Connector Framework (Confluence, SharePoint, Notion, GDrive)
   - **NEW** Admin Analytics Dashboard with system health
+
+### dTQ - Test Pilot IQ (v1.7.0) - PRODUCTION LIVE
+- **Port**: 3004
+- **Production**: https://dtq.digitalworkplace.ai/dtq/dashboard
+- **GitHub**: https://github.com/aldrinstellus/digitalworkplace.ai (monorepo)
+- **Features**:
+  - 80 Features across 20 categories and 3 personas (C-Suite 16, Manager 46, Tech Lead 18)
+  - 3 Personas with 24 role-specific KPIs
+  - Real-time test simulation (new runs every 8-15 seconds)
+  - 30-day metrics history with interactive charts
+  - CSV + PDF export functionality
+  - AI Chat with RAG: Claude Sonnet 4 + vector semantic search (130 knowledge base rows)
+  - 4-Tier Link Resolution: every AI response generates actionable links
+  - Cross-persona entity matching (global index of all features/categories/metrics)
+  - NavigationContext dispatch pattern for chat-to-page navigation
+  - Demo mode fallback when API keys not configured
+- **Database**:
+  - Schema: `dtq` with 7 tables
+  - Knowledge Base: 130 rows with 100% embedding coverage (1536-dim)
+  - Semantic search via `public.search_dtq_knowledge_semantic` RPC
+- **Pages**:
+  - `/dtq/dashboard` — Main dashboard with persona switching
+  - `/dtq/reports` — Test execution history
+  - `/dtq/history` — 30-day metric trends
 
 ### Product Card Features
 - **Animated SVG Illustrations**: Each product has unique animated SVG background

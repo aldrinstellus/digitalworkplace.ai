@@ -4,6 +4,53 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.9] - 2026-02-05
+
+### dTQ v1.7.0 - 4-Tier Link Resolution Pipeline
+
+**Complete rewrite of link-resolver.ts — every response now gets actionable links.**
+
+#### Problem
+Chat responses lacked links to features, categories, metrics, and pages. 10 gaps identified: bold-text-only matching was unreliable, missing source types (test_run_summary, daily_metrics_summary), persona-scoped-only lookups, no substring/fuzzy matching, no metric name links, demo mode passed empty sources, error fallbacks had no links, no guaranteed fallback.
+
+#### Solution: 4-Tier Resolution Pipeline + Global Entity Index
+
+| Tier | Strategy | Confidence |
+|------|----------|------------|
+| 1 | Source-based (all 5 RAG source types) | HIGH |
+| 2 | Entity name text scanning (substring match across all personas) | MEDIUM |
+| 3 | Expanded keyword detection (~20 pattern groups) | MEDIUM |
+| 4 | Context-aware fallback (guaranteed ≥1 link) | LOW |
+
+#### Global Entity Index
+- 80 features, 20 categories, 24 KPIs indexed across all 3 personas
+- Features sorted by name length descending (longest first to avoid partial matches)
+- Keyed maps: featuresByNameLower, categoryByNameLower, metricByLabelLower, metricByKeyLower
+- Built once, cached at module level
+
+#### Files Changed (3)
+
+| File | Changes |
+|------|---------|
+| `link-resolver.ts` | Complete rewrite — 4-tier pipeline, global entity index, ~310 lines |
+| `chat/route.ts` | Pass userMessage + personaMetrics to resolveLinks (RAG + demo mode) |
+| `ChatWidget.tsx` | getFallbackLinks helper + relatedLinks in both error catch blocks |
+
+#### Verification
+
+- Build: 0 errors, 13/13 pages
+- Live: All 3 dTQ pages + all 4 other apps return HTTP 200
+- Payment Gateway query → 5 feature links (cross-persona)
+- High-risk features → category + feature links
+- Pass rate query → metric links + history
+- Cross-persona: Penetration Test Suite on manager → resolves techlead features
+- Vague message ("hello") → 5 contextual fallback links (no empty array)
+- Error fallback → 2 links (history + reports)
+- Git: `b2b3fee` pushed to main
+- Vercel: Deployed to https://dtq.digitalworkplace.ai
+
+---
+
 ## [0.9.6] - 2026-02-04
 
 ### dTQ v1.6.0 - Chatbot Interlinked Navigation

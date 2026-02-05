@@ -1,7 +1,7 @@
 # DSQ Demo Guide v1 - Support IQ (dSQ)
 
-**Version**: 1.1.0 (Grouped Queries Edition)
-**Last Updated**: January 27, 2026
+**Version**: 1.2.0 (Live Use Cases Edition)
+**Last Updated**: February 5, 2026
 **Production URL**: https://dsq.digitalworkplace.ai/dsq
 **Test Status**: 116/116 Tests Passing (100%)
 
@@ -48,8 +48,8 @@ Support IQ (dSQ) is an AI-enhanced customer support platform supporting **3 mode
 |---|-------------------|--------|----------|
 | 1 | "Show program overview" / "Show program health dashboard" / "Program health" | `program-health-dashboard` | Program health dashboard shows portfolio status and key metrics |
 | 2 | "Show milestone status" / "Milestone status" | `milestone-tracking-dashboard` | Milestone progress tracking toward key phases |
-| 3 | "Show risk register" | `program-health-dashboard` | Risk register shows active risks and mitigation plans |
-| 4 | "Critical risk" | `change-request-dashboard` | Change requests and risk items requiring attention |
+| 3 | "Show risk register" | `risk-register-dashboard` | Risk register shows active risks and mitigation plans |
+| 4 | "Critical risk" | `risk-register-dashboard` | Risk register with critical items requiring attention |
 | 5 | "Show resource allocation" / "Resource capacity" | `resource-capacity-dashboard` | Resource capacity and utilization across the team |
 | 6 | "Show me sprint burndown" / "Sprint burn-down" | `sprint-burndown-chart` | Sprint burndown chart shows current sprint progress |
 | 7 | "top performers" | `agent-performance-comparison` | Performance comparison for your team |
@@ -161,12 +161,79 @@ Support IQ (dSQ) is an AI-enhanced customer support platform supporting **3 mode
 | 1 | "Good morning, what's on my plate today?" / "what is on my plate today" / "good morning" | `agent-dashboard` | Your daily overview with tasks and priorities |
 | 2 | "Show me my performance stats" | `agent-performance-stats` | Your personal performance metrics |
 | 3 | "Show me my tickets" / "my tickets" | `ticket-list` | Latest end user requests |
-| 4 | "Show ticket DESK-1001" / "Show me ticket TICK-001" | `ticket-detail` | Ticket details |
+| 4 | "Show ticket DESK-1001" / "Show me ticket TICK-001" | `ticket-detail` | Ticket details with conversation history, AI draft, and action buttons |
 | 5 | "Find similar tickets I've resolved" / "similar tickets" | `similar-tickets-analysis` | Similar tickets and resolution patterns |
 | 6 | "Help me prepare for the call with Acme Corp" / "prepare for call" | `call-prep-notes` | Call preparation notes for upcoming customer call |
 | 7 | "Draft response for angry customer" / "draft response" | `response-composer` | Draft a professional response |
 | 8 | "Search knowledge base for password reset" / "password reset" | `knowledge-article` | Password reset guide |
 | 9 | "knowledge base" | `knowledge-base-search` | Knowledge base search results |
+
+---
+
+### Live Use Cases (Support Agent Workflows)
+
+These are end-to-end live workflows demonstrated using the **Support Agent** persona. Each use case starts with a real customer email sent to the Zoho Desk support inbox, creating a live ticket that the agent interacts with through the dashboard.
+
+**Support Email**: `demohelp@auzmorsupport.zohodesk.com`
+**Persona URL**: https://dsq.digitalworkplace.ai/dsq/demo/atc-support
+
+---
+
+#### Use Case 1: Account Password Reset
+
+**Scenario**: User is unable to login to their Auzmor Learn account.
+
+| Step | Action | What Happens |
+|------|--------|--------------|
+| 1 | **Send email** to `demohelp@auzmorsupport.zohodesk.com` | Zoho Desk creates a new ticket (e.g., #1005) |
+| | *Example*: "Good Morning, I have forgotten the password of my Learn account and unable to reset my password. Can you help out? Username: naveen.k" | |
+| 2 | Ask the dashboard: **"Show me Ticket-1005"** | `ticket-detail` widget displays ticket details, full conversation history, and an AI-generated draft response |
+| 3 | Review the **AI Draft** | The draft contains step-by-step password reset instructions tailored to the customer's issue |
+| 4 | Click **Regenerate** and enter instructions | Enter: *"Make the draft more professional"* — AI regenerates the draft with updated tone |
+| 5 | Click **Send Response** | Sends the AI-generated draft as an email reply to the customer via Zoho Desk |
+
+---
+
+#### Use Case 2: Printer Not Responding
+
+**Scenario**: User's printer is not responding to print jobs.
+
+| Step | Action | What Happens |
+|------|--------|--------------|
+| 1 | **Send email** to `demohelp@auzmorsupport.zohodesk.com` | Zoho Desk creates a new ticket (e.g., #1006) |
+| | *Example*: "Hi, I'm reaching out to report an issue with my printer (HP_M404dn_Office) — it's currently not responding when I try to print. I've already checked the connections and restarted both the printer and my computer, but the issue persists. Could you please look into this or guide me through the next troubleshooting steps?" | |
+| 2 | Ask the dashboard: **"Show me Ticket-1006"** | `ticket-detail` widget displays ticket details, conversation history, and AI-generated draft |
+| 3 | Review the **AI Draft** | The AI recognizes this as a hardware/technical issue and indicates in the draft that the issue will be escalated to the Technical team |
+| 4 | Click **Regenerate** and enter instructions | Enter: *"Make the draft simpler"* — AI regenerates with simplified language |
+| 5 | Click **Send Response** | Sends the AI-generated draft as an email reply to the customer |
+| 6 | Click **Escalate** button | Opens a modal with a **Jira ticket preview** pre-filled with ticket details |
+| 7 | Click **Create Ticket** | Creates a Jira ticket (e.g., KAN-135) with full context and links it to the Zoho ticket |
+
+---
+
+#### Use Case 3: General Query - Auzmor Learn (SCORM Import)
+
+**Scenario**: User is unable to import a SCORM course on Auzmor Learn.
+
+| Step | Action | What Happens |
+|------|--------|--------------|
+| 1 | **Send email** to `demohelp@auzmorsupport.zohodesk.com` | Zoho Desk creates a new ticket (e.g., #1007) |
+| | *Example*: "Hi, I'm facing some difficulty in importing a course on Learn. Can you provide some assistance here? Thanks" | |
+| 2 | Ask the dashboard: **"Show me Ticket-1007"** | `ticket-detail` widget displays ticket details, conversation history, and AI-generated draft |
+| 3 | Review the **AI Draft** | The draft contains detailed instructions on how to import a SCORM course on Auzmor Learn |
+| 4 | Click **Send Response** | Sends the AI-generated draft as an email reply to the customer |
+
+---
+
+#### Live Use Case Features Summary
+
+| Feature | Widget/Component | Description |
+|---------|-----------------|-------------|
+| **Ticket Detail View** | `LiveTicketDetailWidget` | Shows ticket info, SLA tracking, contact details, full conversation timeline |
+| **AI Draft Generation** | `DraftEditorPanel` | Claude 3.5 Sonnet generates context-aware response drafts |
+| **Regenerate Draft** | Regenerate button + instruction input | Modify draft tone/content with natural language instructions |
+| **Send Response** | Send Response button | Sends formatted HTML email reply via Zoho Desk API |
+| **Escalate to Jira** | `EscalateTicketModal` | Creates Jira ticket with rich text editor and ADF formatting |
 
 ---
 
@@ -208,6 +275,10 @@ These queries work across ALL personas:
 | **Grouped Query Sets** | 52 |
 | **Personas** | 10 |
 | **Modes** | 3 |
+| **Live Use Cases** | 3 (Password Reset, Printer Issue, SCORM Import) |
+| **Live Workflow Steps** | 16 (across all 3 use cases) |
+| **Knowledge Base Items (DSQ)** | 33 (with 100% embedding coverage) |
+| **Global Embeddings** | 474/474 (100%) |
 
 ---
 

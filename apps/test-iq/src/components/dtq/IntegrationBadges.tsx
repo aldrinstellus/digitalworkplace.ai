@@ -14,10 +14,10 @@ import {
 const integrations = [
   { name: 'JIRA', icon: Ticket, color: '#0052CC', status: 'connected' as const },
   { name: 'Confluence', icon: BookOpen, color: '#0052CC', status: 'connected' as const },
-  { name: 'GitHub', icon: Github, color: '#ffffff', status: 'connected' as const },
+  { name: 'GitHub / BitBucket', icon: Github, color: '#ffffff', status: 'connected' as const },
   { name: 'ServiceNow', icon: Headphones, color: '#81B5A1', status: 'connected' as const },
+  { name: 'CI/CD (Jenkins)', icon: Cloud, color: '#D33833', status: 'connected' as const },
   { name: 'Slack', icon: MessageSquare, color: '#4A154B', status: 'connected' as const },
-  { name: 'Azure DevOps', icon: Cloud, color: '#0078D4', status: 'available' as const },
 ];
 
 export default memo(function IntegrationBadges() {
@@ -37,7 +37,7 @@ export default memo(function IntegrationBadges() {
             className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
             style={{ background: 'var(--status-success-bg)', color: 'var(--status-success)' }}
           >
-            5 connected
+            6 connected
           </span>
         </div>
         <div className="flex items-center gap-3">

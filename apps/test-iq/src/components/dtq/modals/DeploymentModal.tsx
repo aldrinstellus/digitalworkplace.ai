@@ -11,9 +11,9 @@ interface DeploymentModalProps {
 
 const deploymentOptions = [
   {
-    name: 'Cloud (Vercel)',
+    name: 'Cloud (AWS / Azure / GCP)',
     icon: Cloud,
-    description: 'Fully managed cloud deployment with auto-scaling, CDN, and edge functions. Zero infrastructure management.',
+    description: 'Fully managed cloud deployment with auto-scaling, CDN, and edge functions. Fastest deployment, pay-as-you-go.',
     active: true,
     color: 'var(--accent-primary)',
   },

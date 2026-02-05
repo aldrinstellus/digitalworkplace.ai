@@ -253,7 +253,7 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
           }}
         >
           <Cloud className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
-          <span className="flex-1 text-left">Deployed: Cloud (Vercel)</span>
+          <span className="flex-1 text-left">Deployed: Cloud (AWS)</span>
           <ChevronRight className="w-3 h-3" />
         </motion.button>
       </div>

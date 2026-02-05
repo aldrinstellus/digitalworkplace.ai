@@ -25,7 +25,7 @@ export const features: Feature[] = [
   // Course Catalog & Enrollment
   { id: 'f15', name: 'Course Discovery', category: 'Course Catalog & Enrollment', coverage: 86, status: 'partially_automated', openDefects: 2, closedDefects: 7, riskScore: 30, passRate: 89, impactScore: 85 },
   { id: 'f16', name: 'Self-Enrollment', category: 'Course Catalog & Enrollment', coverage: 95, status: 'fully_automated', openDefects: 0, closedDefects: 5, riskScore: 14, passRate: 97, impactScore: 90 },
-  { id: 'f17', name: 'Manager-Assigned Learning', category: 'Course Catalog & Enrollment', coverage: 88, status: 'partially_automated', openDefects: 1, closedDefects: 6, riskScore: 24, passRate: 92, impactScore: 82 },
+  { id: 'f17', name: 'Manager-Assigned Learning', category: 'Course Catalog & Enrollment', coverage: 88, status: 'fully_automated', openDefects: 1, closedDefects: 6, riskScore: 24, passRate: 92, impactScore: 82 },
   { id: 'f18', name: 'Waitlist Management', category: 'Course Catalog & Enrollment', coverage: 79, status: 'partially_automated', openDefects: 1, closedDefects: 4, riskScore: 20, passRate: 86, impactScore: 60 },
 
   // Social & Collaboration
@@ -57,7 +57,7 @@ export const features: Feature[] = [
 
   // Events & Live Sessions
   { id: 'f38', name: 'Webinar Integration', category: 'Events & Live Sessions', coverage: 82, status: 'partially_automated', openDefects: 1, closedDefects: 5, riskScore: 28, passRate: 87, impactScore: 82 },
-  { id: 'f39', name: 'ILT Scheduling', category: 'Events & Live Sessions', coverage: 89, status: 'partially_automated', openDefects: 0, closedDefects: 7, riskScore: 22, passRate: 92, impactScore: 85 },
+  { id: 'f39', name: 'ILT Scheduling', category: 'Events & Live Sessions', coverage: 89, status: 'fully_automated', openDefects: 0, closedDefects: 7, riskScore: 22, passRate: 92, impactScore: 85 },
   { id: 'f40', name: 'Attendance Tracking', category: 'Events & Live Sessions', coverage: 94, status: 'fully_automated', openDefects: 0, closedDefects: 4, riskScore: 14, passRate: 96, impactScore: 78 },
   { id: 'f41', name: 'Virtual Classroom', category: 'Events & Live Sessions', coverage: 77, status: 'partially_automated', openDefects: 2, closedDefects: 6, riskScore: 38, passRate: 85, impactScore: 88 },
 
@@ -185,10 +185,10 @@ const managerMetrics: PersonaMetric[] = [
 const csuiteMetrics: PersonaMetric[] = [
   { key: 'releaseVelocity', label: 'Release Velocity', value: '+35', unit: '%', description: 'More releases per quarter', trend: 'up', trendValue: '+8%' },
   { key: 'timeToMarket', label: 'Mean Time to Market', value: 12, unit: 'days', description: 'For new features', trend: 'down', trendValue: '-4 days' },
-  { key: 'automationROI', label: 'Automation ROI', value: 285, unit: '%', description: 'Cost savings', trend: 'up', trendValue: '+45%' },
+  { key: 'automationROI', label: 'Automation ROI', value: '$2.3M', unit: 'saved', description: 'Cost savings from reduced manual effort', trend: 'up', trendValue: '+$0.4M' },
   { key: 'escapeRate', label: 'Defect Escape Rate', value: 2.1, unit: '%', description: 'Bugs reaching production', trend: 'down', trendValue: '-0.8%' },
   { key: 'incidentsPrevented', label: 'Incidents Prevented', value: 47, unit: 'count', description: 'Customer-impacting', trend: 'up', trendValue: '+12' },
-  { key: 'riskReduction', label: 'Risk Reduction', value: 68, unit: '%', description: 'Business impact weighted', trend: 'up', trendValue: '+15%' },
+  { key: 'riskReduction', label: 'Risk Reduction', value: 89, unit: '%', description: 'Proactive risk identification', trend: 'down', trendValue: '↓67%' },
   { key: 'capacityUnlocked', label: 'Capacity Unlocked', value: 42, unit: '%', description: 'QA time to innovation', trend: 'up', trendValue: '+8%' },
 ];
 

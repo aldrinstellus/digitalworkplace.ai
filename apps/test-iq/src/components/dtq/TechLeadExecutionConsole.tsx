@@ -32,6 +32,7 @@ export default function TechLeadExecutionConsole({ onTestRunsGenerated }: TechLe
     passCount,
     failCount,
     activeSlots,
+    elapsedSeconds,
     execute,
     reset,
     generatedRuns,
@@ -88,7 +89,7 @@ export default function TechLeadExecutionConsole({ onTestRunsGenerated }: TechLe
         </div>
         <div className="flex-1">
           <h2 className="text-base font-semibold" style={{ color: 'var(--text-primary)' }}>
-            Execution Console
+            Run Regression Tests
           </h2>
           <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
             Select features and configure test execution
@@ -148,6 +149,7 @@ export default function TechLeadExecutionConsole({ onTestRunsGenerated }: TechLe
               failCount={failCount}
               activeSlots={activeSlots}
               parallelInstances={config.parallelInstances}
+              elapsedSeconds={elapsedSeconds}
             />
           )}
         </AnimatePresence>

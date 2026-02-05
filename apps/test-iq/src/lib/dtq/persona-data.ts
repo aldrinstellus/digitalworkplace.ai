@@ -65,31 +65,32 @@ const csuiteFeatures: Feature[] = [
   { id: 'cs-f16', name: 'Legacy Migration', category: 'Digital Transformation', coverage: 84, status: 'partially_automated', openDefects: 1, closedDefects: 5, riskScore: 26, passRate: 91, impactScore: 85 },
 ];
 
-// ─── Tech Lead Features (~18 features, 5 categories) ───────────────────────
+// ─── Tech Lead Features (~18 features, 6 LMS categories) ───────────────────
 const techLeadFeatures: Feature[] = [
-  // CI/CD Pipeline
-  { id: 'tl-f1', name: 'Build Orchestration', category: 'CI/CD Pipeline', coverage: 88, status: 'fully_automated', openDefects: 2, closedDefects: 8, riskScore: 25, passRate: 91, impactScore: 90 },
-  { id: 'tl-f2', name: 'Deploy Pipeline', category: 'CI/CD Pipeline', coverage: 85, status: 'partially_automated', openDefects: 3, closedDefects: 7, riskScore: 32, passRate: 88, impactScore: 92 },
-  { id: 'tl-f3', name: 'Rollback Automation', category: 'CI/CD Pipeline', coverage: 82, status: 'partially_automated', openDefects: 2, closedDefects: 5, riskScore: 35, passRate: 86, impactScore: 88 },
-  { id: 'tl-f4', name: 'Feature Flags', category: 'CI/CD Pipeline', coverage: 90, status: 'fully_automated', openDefects: 1, closedDefects: 6, riskScore: 20, passRate: 93, impactScore: 78 },
-  // API Infrastructure
-  { id: 'tl-f5', name: 'REST API Gateway', category: 'API Infrastructure', coverage: 92, status: 'fully_automated', openDefects: 1, closedDefects: 9, riskScore: 18, passRate: 94, impactScore: 95 },
-  { id: 'tl-f6', name: 'GraphQL Layer', category: 'API Infrastructure', coverage: 79, status: 'partially_automated', openDefects: 3, closedDefects: 6, riskScore: 38, passRate: 85, impactScore: 88 },
-  { id: 'tl-f7', name: 'Rate Limiting', category: 'API Infrastructure', coverage: 86, status: 'fully_automated', openDefects: 1, closedDefects: 4, riskScore: 22, passRate: 92, impactScore: 82 },
-  { id: 'tl-f8', name: 'API Versioning', category: 'API Infrastructure', coverage: 83, status: 'partially_automated', openDefects: 2, closedDefects: 5, riskScore: 28, passRate: 89, impactScore: 76 },
-  // Performance Engineering
-  { id: 'tl-f9', name: 'Load Testing Framework', category: 'Performance Engineering', coverage: 78, status: 'partially_automated', openDefects: 3, closedDefects: 7, riskScore: 40, passRate: 84, impactScore: 90 },
-  { id: 'tl-f10', name: 'Memory Profiler', category: 'Performance Engineering', coverage: 75, status: 'partially_automated', openDefects: 2, closedDefects: 4, riskScore: 36, passRate: 82, impactScore: 85 },
-  { id: 'tl-f11', name: 'CDN Optimization', category: 'Performance Engineering', coverage: 91, status: 'fully_automated', openDefects: 0, closedDefects: 5, riskScore: 15, passRate: 95, impactScore: 80 },
-  // Security Testing
-  { id: 'tl-f12', name: 'Penetration Test Suite', category: 'Security Testing', coverage: 70, status: 'partially_automated', openDefects: 4, closedDefects: 8, riskScore: 45, passRate: 80, impactScore: 96 },
-  { id: 'tl-f13', name: 'Dependency Scanner', category: 'Security Testing', coverage: 93, status: 'fully_automated', openDefects: 1, closedDefects: 6, riskScore: 16, passRate: 94, impactScore: 88 },
-  { id: 'tl-f14', name: 'Auth Token Validation', category: 'Security Testing', coverage: 89, status: 'fully_automated', openDefects: 1, closedDefects: 5, riskScore: 20, passRate: 92, impactScore: 94 },
-  // DevOps Automation
-  { id: 'tl-f15', name: 'Container Orchestration', category: 'DevOps Automation', coverage: 84, status: 'partially_automated', openDefects: 2, closedDefects: 7, riskScore: 30, passRate: 88, impactScore: 92 },
-  { id: 'tl-f16', name: 'Log Aggregation', category: 'DevOps Automation', coverage: 87, status: 'fully_automated', openDefects: 1, closedDefects: 4, riskScore: 19, passRate: 91, impactScore: 78 },
-  { id: 'tl-f17', name: 'Infra-as-Code', category: 'DevOps Automation', coverage: 81, status: 'partially_automated', openDefects: 2, closedDefects: 6, riskScore: 33, passRate: 86, impactScore: 90 },
-  { id: 'tl-f18', name: 'Secrets Management', category: 'DevOps Automation', coverage: 96, status: 'fully_automated', openDefects: 0, closedDefects: 3, riskScore: 10, passRate: 98, impactScore: 95 },
+  // User Authentication & Access
+  { id: 'tl-f1', name: 'User Authentication', category: 'User Authentication & Access', coverage: 92, status: 'fully_automated', openDefects: 1, closedDefects: 9, riskScore: 18, passRate: 94, impactScore: 95 },
+  { id: 'tl-f2', name: 'Enterprise SSO', category: 'User Authentication & Access', coverage: 96, status: 'fully_automated', openDefects: 0, closedDefects: 3, riskScore: 10, passRate: 98, impactScore: 95 },
+  { id: 'tl-f3', name: 'Role-Based Access Control', category: 'User Authentication & Access', coverage: 89, status: 'fully_automated', openDefects: 1, closedDefects: 5, riskScore: 20, passRate: 92, impactScore: 94 },
+  // Course Management
+  { id: 'tl-f4', name: 'Course Management', category: 'Course Management', coverage: 88, status: 'fully_automated', openDefects: 2, closedDefects: 8, riskScore: 25, passRate: 91, impactScore: 90 },
+  { id: 'tl-f5', name: 'Course Catalog', category: 'Course Management', coverage: 86, status: 'partially_automated', openDefects: 2, closedDefects: 7, riskScore: 30, passRate: 89, impactScore: 85 },
+  { id: 'tl-f6', name: 'SCORM Import', category: 'Course Management', coverage: 94, status: 'fully_automated', openDefects: 1, closedDefects: 7, riskScore: 19, passRate: 95, impactScore: 88 },
+  { id: 'tl-f7', name: 'Content Authoring', category: 'Course Management', coverage: 81, status: 'partially_automated', openDefects: 2, closedDefects: 9, riskScore: 34, passRate: 86, impactScore: 92 },
+  // Payment & Billing
+  { id: 'tl-f8', name: 'Payment Processing', category: 'Payment & Billing', coverage: 85, status: 'partially_automated', openDefects: 3, closedDefects: 7, riskScore: 32, passRate: 88, impactScore: 92 },
+  { id: 'tl-f9', name: 'Subscription Billing', category: 'Payment & Billing', coverage: 82, status: 'partially_automated', openDefects: 2, closedDefects: 5, riskScore: 35, passRate: 86, impactScore: 88 },
+  // Reporting & Analytics
+  { id: 'tl-f10', name: 'Reporting Module', category: 'Reporting & Analytics', coverage: 90, status: 'fully_automated', openDefects: 1, closedDefects: 6, riskScore: 20, passRate: 93, impactScore: 78 },
+  { id: 'tl-f11', name: 'Learning Analytics', category: 'Reporting & Analytics', coverage: 79, status: 'partially_automated', openDefects: 3, closedDefects: 6, riskScore: 42, passRate: 85, impactScore: 88 },
+  { id: 'tl-f12', name: 'Executive Dashboard', category: 'Reporting & Analytics', coverage: 94, status: 'fully_automated', openDefects: 1, closedDefects: 6, riskScore: 20, passRate: 95, impactScore: 92 },
+  // Mobile & UX
+  { id: 'tl-f13', name: 'Mobile Experience', category: 'Mobile & UX', coverage: 78, status: 'partially_automated', openDefects: 3, closedDefects: 7, riskScore: 40, passRate: 84, impactScore: 90 },
+  { id: 'tl-f14', name: 'Adaptive Learning Paths', category: 'Mobile & UX', coverage: 85, status: 'partially_automated', openDefects: 3, closedDefects: 7, riskScore: 38, passRate: 88, impactScore: 90 },
+  // Admin & Configuration
+  { id: 'tl-f15', name: 'Admin Functions', category: 'Admin & Configuration', coverage: 84, status: 'partially_automated', openDefects: 2, closedDefects: 7, riskScore: 30, passRate: 88, impactScore: 92 },
+  { id: 'tl-f16', name: 'Notification Settings', category: 'Admin & Configuration', coverage: 87, status: 'fully_automated', openDefects: 1, closedDefects: 4, riskScore: 19, passRate: 91, impactScore: 78 },
+  { id: 'tl-f17', name: 'Integration Hub', category: 'Admin & Configuration', coverage: 75, status: 'partially_automated', openDefects: 2, closedDefects: 4, riskScore: 36, passRate: 82, impactScore: 85 },
+  { id: 'tl-f18', name: 'Audit Logs', category: 'Admin & Configuration', coverage: 97, status: 'fully_automated', openDefects: 0, closedDefects: 3, riskScore: 10, passRate: 99, impactScore: 90 },
 ];
 
 // ─── Test Run Generation ────────────────────────────────────────────────────

@@ -18,6 +18,11 @@ import LiveIndicator from '@/components/dtq/LiveIndicator';
 import BeforeAfterComparison from '@/components/dtq/BeforeAfterComparison';
 import IntegrationBadges from '@/components/dtq/IntegrationBadges';
 import TechLeadExecutionConsole from '@/components/dtq/TechLeadExecutionConsole';
+import ResultsStatCards from '@/components/dtq/ResultsStatCards';
+import AgentPipeline from '@/components/dtq/AgentPipeline';
+import ImplementationPhases from '@/components/dtq/ImplementationPhases';
+import CompetitiveComparison from '@/components/dtq/CompetitiveComparison';
+import NextStepsCTA from '@/components/dtq/NextStepsCTA';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
 import { Feature, Category, TestRun } from '@/lib/dtq/types';
@@ -347,7 +352,11 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* Before/After ROI Comparison */}
+      {/* 3-Agent Pipeline — PRD Slide 3 */}
+      <AgentPipeline />
+
+      {/* Before/After ROI Comparison + Customer Results — PRD Slide 10 */}
+      <ResultsStatCards />
       <BeforeAfterComparison persona={persona} />
 
       {/* Feature Coverage */}
@@ -356,6 +365,15 @@ export default function DashboardPage() {
         onFeatureClick={handleFeatureClick}
         onCategoryClick={handleCategoryClick}
       />
+
+      {/* Implementation Phases — PRD Slide 12 */}
+      <ImplementationPhases />
+
+      {/* Competitive Differentiation — PRD Slide 13 */}
+      <CompetitiveComparison />
+
+      {/* CTA / Next Steps — PRD Slide 14 */}
+      <NextStepsCTA />
 
       {/* Modals — conditionally rendered to avoid initialization when closed */}
 

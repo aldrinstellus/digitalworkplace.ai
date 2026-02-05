@@ -38,6 +38,7 @@ interface UseExecutionSimulationReturn {
   passCount: number;
   failCount: number;
   activeSlots: number;
+  elapsedSeconds: number;
   execute: (features: SelectedFeature[], config: ExecutionConfig) => void;
   reset: () => void;
   generatedRuns: TestRun[];
@@ -64,8 +65,10 @@ export function useExecutionSimulation(): UseExecutionSimulationReturn {
   const [failCount, setFailCount] = useState(0);
   const [activeSlots, setActiveSlots] = useState(0);
   const [generatedRuns, setGeneratedRuns] = useState<TestRun[]>([]);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const statesRef = useRef<FeatureExecutionState[]>([]);
   const configRef = useRef<ExecutionConfig | null>(null);
 
@@ -77,6 +80,10 @@ export function useExecutionSimulation(): UseExecutionSimulationReturn {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
+    }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
   }, []);
 
@@ -106,7 +113,13 @@ export function useExecutionSimulation(): UseExecutionSimulationReturn {
       setFailCount(0);
       setActiveSlots(0);
       setGeneratedRuns([]);
+      setElapsedSeconds(0);
       setPhase('running');
+
+      // Start elapsed time counter (1s interval)
+      timerRef.current = setInterval(() => {
+        setElapsedSeconds((prev) => prev + 1);
+      }, 1000);
 
       addLog('info', `Starting execution: ${features.length} features, ${config.environment} environment`);
       addLog('info', `Browser: ${config.browser} | Parallel instances: ${config.parallelInstances}`);
@@ -225,6 +238,7 @@ export function useExecutionSimulation(): UseExecutionSimulationReturn {
     setFailCount(0);
     setActiveSlots(0);
     setGeneratedRuns([]);
+    setElapsedSeconds(0);
   }, [cleanup]);
 
   return {
@@ -235,6 +249,7 @@ export function useExecutionSimulation(): UseExecutionSimulationReturn {
     passCount,
     failCount,
     activeSlots,
+    elapsedSeconds,
     execute,
     reset,
     generatedRuns,

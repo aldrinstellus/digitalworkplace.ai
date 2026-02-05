@@ -2,45 +2,44 @@
 
 import { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, TrendingUp, TrendingDown } from 'lucide-react';
+import { ChevronDown, TrendingUp } from 'lucide-react';
 import { PersonaType } from '@/lib/dtq/types';
-import { AnimatedCounter } from '@/lib/motion';
 
 interface ROIRow {
   metric: string;
   before: string;
-  afterValue: number;
-  afterSuffix: string;
-  improvement: string;
-  improvementPositive: boolean;
+  after: string;
 }
 
 const roiData: Record<PersonaType, ROIRow[]> = {
   csuite: [
-    { metric: 'Manual Test Scripts', before: '2,400+', afterValue: 0, afterSuffix: '', improvement: '-100%', improvementPositive: true },
-    { metric: 'Script Maintenance', before: '40 hrs/week', afterValue: 12, afterSuffix: ' hrs/week', improvement: '-70%', improvementPositive: true },
-    { metric: 'Test Pass Rate', before: '78%', afterValue: 94.2, afterSuffix: '%', improvement: '+20.8%', improvementPositive: true },
-    { metric: 'Regression Cycle Time', before: '3 days', afterValue: 4, afterSuffix: ' hours', improvement: '-94%', improvementPositive: true },
-    { metric: 'UI Change Rework', before: '16 hrs/sprint', afterValue: 0, afterSuffix: ' hrs', improvement: '-100%', improvementPositive: true },
-    { metric: 'QA Coverage', before: '43%', afterValue: 92, afterSuffix: '%', improvement: '+114%', improvementPositive: true },
+    { metric: 'Regression Ownership', before: 'QA Team (manual)', after: 'AI Agent (autonomous)' },
+    { metric: 'Script Maintenance', before: '70% of QA time', after: '<10% of QA time' },
+    { metric: 'Test Automation Engineers', before: 'Fixing scripts', after: 'Actual feature testing' },
+    { metric: 'UI Change Impact', before: 'Days of rework', after: 'Zero rework' },
+    { metric: 'Bug Leakage', before: 'Frequent', after: 'Rare' },
+    { metric: 'QA Focus', before: 'Regression + Sprint', after: 'Sprint testing only' },
   ],
   manager: [
-    { metric: 'Manual Test Scripts', before: '2,400+', afterValue: 0, afterSuffix: '', improvement: '-100%', improvementPositive: true },
-    { metric: 'Script Maintenance', before: '40 hrs/week', afterValue: 12, afterSuffix: ' hrs/week', improvement: '-70%', improvementPositive: true },
-    { metric: 'Test Pass Rate', before: '78%', afterValue: 94.2, afterSuffix: '%', improvement: '+20.8%', improvementPositive: true },
-    { metric: 'Regression Cycle Time', before: '3 days', afterValue: 4, afterSuffix: ' hours', improvement: '-94%', improvementPositive: true },
-    { metric: 'Team Productivity', before: '60%', afterValue: 91, afterSuffix: '%', improvement: '+52%', improvementPositive: true },
-    { metric: 'QA Coverage', before: '43%', afterValue: 92, afterSuffix: '%', improvement: '+114%', improvementPositive: true },
+    { metric: 'Regression Ownership', before: 'QA Team (manual)', after: 'AI Agent (autonomous)' },
+    { metric: 'Script Maintenance', before: '70% of QA time', after: '<10% of QA time' },
+    { metric: 'Test Automation Engineers', before: 'Fixing scripts', after: 'Actual feature testing' },
+    { metric: 'UI Change Impact', before: 'Days of rework', after: 'Zero rework' },
+    { metric: 'Bug Leakage', before: 'Frequent', after: 'Rare' },
+    { metric: 'QA Focus', before: 'Regression + Sprint', after: 'Sprint testing only' },
   ],
   techlead: [
-    { metric: 'Manual Test Scripts', before: '2,400+', afterValue: 0, afterSuffix: '', improvement: '-100%', improvementPositive: true },
-    { metric: 'CI/CD Pipeline Time', before: '45 min', afterValue: 12, afterSuffix: ' min', improvement: '-73%', improvementPositive: true },
-    { metric: 'Test Pass Rate', before: '78%', afterValue: 94.2, afterSuffix: '%', improvement: '+20.8%', improvementPositive: true },
-    { metric: 'Regression Cycle Time', before: '3 days', afterValue: 4, afterSuffix: ' hours', improvement: '-94%', improvementPositive: true },
-    { metric: 'Flaky Test Rate', before: '12%', afterValue: 1.3, afterSuffix: '%', improvement: '-89%', improvementPositive: true },
-    { metric: 'Code Coverage', before: '58%', afterValue: 93, afterSuffix: '%', improvement: '+60%', improvementPositive: true },
+    { metric: 'Regression Ownership', before: 'QA Team (manual)', after: 'AI Agent (autonomous)' },
+    { metric: 'Script Maintenance', before: '70% of QA time', after: '<10% of QA time' },
+    { metric: 'Test Automation Engineers', before: 'Fixing scripts', after: 'Actual feature testing' },
+    { metric: 'UI Change Impact', before: 'Days of rework', after: 'Zero rework' },
+    { metric: 'Bug Leakage', before: 'Frequent', after: 'Rare' },
+    { metric: 'QA Focus', before: 'Regression + Sprint', after: 'Sprint testing only' },
   ],
 };
+
+// Customer testimonial from PRD Slide 10
+const TESTIMONIAL = '"Regression is completely handed over to this agent. QA engineers now focus on sprint testing, coordinating with tech leads, and retesting bug fixes."';
 
 export default memo(function BeforeAfterComparison({ persona }: { persona: PersonaType }) {
   const [expanded, setExpanded] = useState(true);
@@ -102,14 +101,11 @@ export default memo(function BeforeAfterComparison({ persona }: { persona: Perso
                       <th className="text-left py-2.5 pr-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                         Metric
                       </th>
-                      <th className="text-right py-2.5 px-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                        Before
+                      <th className="text-left py-2.5 px-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        Before dTQ
                       </th>
-                      <th className="text-right py-2.5 px-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                        After
-                      </th>
-                      <th className="text-right py-2.5 pl-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
-                        Impact
+                      <th className="text-left py-2.5 pl-4 font-medium text-xs uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                        After dTQ
                       </th>
                     </tr>
                   </thead>
@@ -126,40 +122,28 @@ export default memo(function BeforeAfterComparison({ persona }: { persona: Perso
                         <td className="py-3 pr-4 font-medium" style={{ color: 'var(--text-primary)' }}>
                           {row.metric}
                         </td>
-                        <td className="py-3 px-4 text-right" style={{ color: 'var(--text-muted)' }}>
+                        <td className="py-3 px-4" style={{ color: 'var(--text-muted)' }}>
                           {row.before}
                         </td>
-                        <td className="py-3 px-4 text-right font-semibold" style={{ color: 'var(--text-primary)' }}>
-                          <AnimatedCounter
-                            value={row.afterValue}
-                            suffix={row.afterSuffix}
-                            duration={0.8}
-                          />
-                        </td>
-                        <td className="py-3 pl-4 text-right">
-                          <span
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
-                            style={{
-                              background: row.improvementPositive
-                                ? 'var(--status-success-bg)'
-                                : 'var(--status-error-bg)',
-                              color: row.improvementPositive
-                                ? 'var(--status-success)'
-                                : 'var(--status-error)',
-                            }}
-                          >
-                            {row.improvementPositive ? (
-                              <TrendingDown className="w-3 h-3" />
-                            ) : (
-                              <TrendingUp className="w-3 h-3" />
-                            )}
-                            {row.improvement}
-                          </span>
+                        <td className="py-3 pl-4 font-semibold" style={{ color: 'var(--status-success)' }}>
+                          {row.after}
                         </td>
                       </motion.tr>
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Customer Testimonial — PRD Slide 10 */}
+              <div
+                className="mt-4 px-4 py-3 rounded-lg text-xs leading-relaxed italic"
+                style={{
+                  background: 'var(--bg-tertiary)',
+                  color: 'var(--text-secondary)',
+                  borderLeft: '3px solid var(--accent-primary)',
+                }}
+              >
+                {TESTIMONIAL}
               </div>
             </div>
           </motion.div>

@@ -11,29 +11,30 @@ interface FeatureItem {
 }
 
 const TECH_LEAD_FEATURES: FeatureItem[] = [
-  // CI/CD Pipeline
-  { id: 'tl-f1', name: 'Build Orchestration', category: 'CI/CD Pipeline' },
-  { id: 'tl-f2', name: 'Deploy Pipeline', category: 'CI/CD Pipeline' },
-  { id: 'tl-f3', name: 'Rollback Automation', category: 'CI/CD Pipeline' },
-  { id: 'tl-f4', name: 'Feature Flags', category: 'CI/CD Pipeline' },
-  // API Infrastructure
-  { id: 'tl-f5', name: 'REST API Gateway', category: 'API Infrastructure' },
-  { id: 'tl-f6', name: 'GraphQL Layer', category: 'API Infrastructure' },
-  { id: 'tl-f7', name: 'Rate Limiting', category: 'API Infrastructure' },
-  { id: 'tl-f8', name: 'API Versioning', category: 'API Infrastructure' },
-  // Performance Engineering
-  { id: 'tl-f9', name: 'Load Testing Framework', category: 'Performance Engineering' },
-  { id: 'tl-f10', name: 'Memory Profiler', category: 'Performance Engineering' },
-  { id: 'tl-f11', name: 'CDN Optimization', category: 'Performance Engineering' },
-  // Security Testing
-  { id: 'tl-f12', name: 'Penetration Test Suite', category: 'Security Testing' },
-  { id: 'tl-f13', name: 'Dependency Scanner', category: 'Security Testing' },
-  { id: 'tl-f14', name: 'Auth Token Validation', category: 'Security Testing' },
-  // DevOps Automation
-  { id: 'tl-f15', name: 'Container Orchestration', category: 'DevOps Automation' },
-  { id: 'tl-f16', name: 'Log Aggregation', category: 'DevOps Automation' },
-  { id: 'tl-f17', name: 'Infra-as-Code', category: 'DevOps Automation' },
-  { id: 'tl-f18', name: 'Secrets Management', category: 'DevOps Automation' },
+  // User Authentication & Access
+  { id: 'tl-f1', name: 'User Authentication', category: 'User Authentication & Access' },
+  { id: 'tl-f2', name: 'Enterprise SSO', category: 'User Authentication & Access' },
+  { id: 'tl-f3', name: 'Role-Based Access Control', category: 'User Authentication & Access' },
+  // Course Management
+  { id: 'tl-f4', name: 'Course Management', category: 'Course Management' },
+  { id: 'tl-f5', name: 'Course Catalog', category: 'Course Management' },
+  { id: 'tl-f6', name: 'SCORM Import', category: 'Course Management' },
+  { id: 'tl-f7', name: 'Content Authoring', category: 'Course Management' },
+  // Payment & Billing
+  { id: 'tl-f8', name: 'Payment Processing', category: 'Payment & Billing' },
+  { id: 'tl-f9', name: 'Subscription Billing', category: 'Payment & Billing' },
+  // Reporting & Analytics
+  { id: 'tl-f10', name: 'Reporting Module', category: 'Reporting & Analytics' },
+  { id: 'tl-f11', name: 'Learning Analytics', category: 'Reporting & Analytics' },
+  { id: 'tl-f12', name: 'Executive Dashboard', category: 'Reporting & Analytics' },
+  // Mobile & UX
+  { id: 'tl-f13', name: 'Mobile Experience', category: 'Mobile & UX' },
+  { id: 'tl-f14', name: 'Adaptive Learning Paths', category: 'Mobile & UX' },
+  // Admin & Configuration
+  { id: 'tl-f15', name: 'Admin Functions', category: 'Admin & Configuration' },
+  { id: 'tl-f16', name: 'Notification Settings', category: 'Admin & Configuration' },
+  { id: 'tl-f17', name: 'Integration Hub', category: 'Admin & Configuration' },
+  { id: 'tl-f18', name: 'Audit Logs', category: 'Admin & Configuration' },
 ];
 
 const CATEGORIES = [...new Set(TECH_LEAD_FEATURES.map((f) => f.category))];

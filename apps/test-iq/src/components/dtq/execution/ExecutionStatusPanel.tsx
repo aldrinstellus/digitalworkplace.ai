@@ -14,6 +14,13 @@ interface ExecutionStatusPanelProps {
   failCount: number;
   activeSlots: number;
   parallelInstances: number;
+  elapsedSeconds: number;
+}
+
+function formatElapsed(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
 const LOG_COLORS: Record<ConsoleLogEntry['level'], string> = {
@@ -32,6 +39,7 @@ export default memo(function ExecutionStatusPanel({
   failCount,
   activeSlots,
   parallelInstances,
+  elapsedSeconds,
 }: ExecutionStatusPanelProps) {
   const logEndRef = useRef<HTMLDivElement>(null);
 
@@ -62,9 +70,14 @@ export default memo(function ExecutionStatusPanel({
                 : `Complete: ${completedCount}/${totalCount} features`}
             </span>
           </div>
-          <span className="text-xs font-semibold" style={{ color: 'var(--chart-secondary)' }}>
-            {overallProgress}%
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
+              ⏱️ {formatElapsed(elapsedSeconds)} elapsed
+            </span>
+            <span className="text-xs font-semibold" style={{ color: 'var(--chart-secondary)' }}>
+              {overallProgress}%
+            </span>
+          </div>
         </div>
         <div className="execution-progress-bar">
           <motion.div

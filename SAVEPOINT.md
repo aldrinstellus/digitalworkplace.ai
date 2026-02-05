@@ -123,7 +123,7 @@ const isPublicRoute = createRouteMatcher([
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 2fae3eb - feat(dTQ): v2.1.0 — 100% PRD alignment (59/59 checks passing)
+- **Latest Commit**: 79bed9e - docs: update SAVEPOINT.md and CHANGELOG.md for dTQ v2.1.1 (62/62 re-audit)
 
 ### Vercel Projects
 | Project | Vercel Dashboard |

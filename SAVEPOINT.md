@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.15
-**Session Status**: Dashboard SVG Animation Fix + Guide Button + dSQ Knowledge Base Update
+**Version**: 0.9.16
+**Session Status**: DSQ Demo Guide v1.2.0 Live Use Cases + Full Spectrum Verified + PDF Middleware Fix
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: f6038f3
+**Git Commit**: 4f6b988
 
 ---
 
@@ -115,7 +115,7 @@ const isPublicRoute = createRouteMatcher([
 
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
-| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.9.15 |
+| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.9.16 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | **1.2.8** |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
@@ -123,7 +123,7 @@ const isPublicRoute = createRouteMatcher([
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: f6038f3 - fix: dashboard SVG animation errors + add Guide button to product cards
+- **Latest Commit**: 4f6b988 - fix: allow PDF files through Clerk middleware matcher
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -149,15 +149,75 @@ const isPublicRoute = createRouteMatcher([
 - **Project**: digitalworkplace-ai (fhtempgkltrazrgbedrh)
 - **Schemas**: public, diq, dsq, dcq, dtq
 - **pgvector**: v0.8.0 enabled
-- **Total Knowledge Items**: 460 with 100% embedding coverage
+- **Total Knowledge Items**: 474 with 100% embedding coverage (incl. 33 DSQ items)
 - **DCQ FAQs**: 8 with 100% embedding coverage
 - **DTQ Knowledge Base**: 130 rows with 100% embedding coverage (1536-dim)
 
 ---
 
-## Latest Changes (v0.9.15)
+## Latest Changes (v0.9.16)
 
-### Main Dashboard - SVG Animation Fix + Guide Button (2026-02-05)
+### DSQ Demo Guide v1.2.0 - Live Use Cases + PDF Middleware Fix (2026-02-05)
+
+**Updated DSQ Demo Guide with 3 live use cases, added 14 KB articles, fixed Clerk middleware for PDF serving, and verified all 3 use cases on production.**
+
+#### DSQ Demo Guide v1.2.0 Changes
+
+| Change | Detail |
+|--------|--------|
+| **3 Live Use Cases added** | Password Reset, Printer Not Responding, SCORM Import |
+| **Live Use Case Features Summary** | LiveTicketDetailWidget, DraftEditorPanel, EscalateTicketModal |
+| **Risk register widget mapping fixed** | "Show risk register" / "Critical risk" → `risk-register-dashboard` |
+| **Quick Stats updated** | 474/474 embeddings, 33 DSQ KB items, 3 live use cases, 16 workflow steps |
+| **PDF regenerated** | 533KB, copied to `apps/main/public/guides/` |
+
+#### 14 New Knowledge Base Articles (Supabase)
+
+| Category | Articles | Topics |
+|----------|----------|--------|
+| Printer | 5 | Troubleshooting, network issues, stuck jobs, escalation, HP M404dn |
+| SCORM | 4 | Import guide, troubleshooting, assistance, Auzmor Learn overview |
+| Ticket Mgmt | 3 | Viewing tickets, AI draft response, Jira escalation |
+| Password | 2 | Login issues, password reset template |
+| **Total** | **14** | Global: 460 → 474 (100% embedded) |
+
+#### Clerk Middleware Fix (`apps/main/src/proxy.ts`)
+
+| Issue | Fix |
+|-------|-----|
+| PDF files blocked by Clerk auth middleware | Added `pdf` to static file extension exclusion regex |
+| `/guides/DSQ_DEMO_GUIDE_v1.pdf` → 404 | Now returns 200 (publicly accessible) |
+
+#### Live Use Case Verification (Production)
+
+| Use Case | Zoho Tickets | Ticket Detail API | Jira | Query Detection |
+|----------|-------------|-------------------|------|-----------------|
+| Password Reset | #409, #412, #416, #419 | Full conversations | KAN-142 | `live-ticket-detail` |
+| Printer Issue | #414, #415, #418 | Full detail | KAN-141 | `live-ticket-detail` |
+| SCORM Import | #417 | Full detail | KAN-140 | `live-ticket-detail` |
+
+#### Full Spectrum Test Results
+
+| Mode | Queries | Result |
+|------|---------|--------|
+| Government | 18 | 18/18 PASS |
+| Project | 16 | 16/16 PASS |
+| ATC | 33 | 33/33 PASS |
+| **Total** | **67** | **67/67 PASS (100%)** |
+
+#### Commits
+
+| Hash | Message |
+|------|---------|
+| `4f6b988` | fix: allow PDF files through Clerk middleware matcher |
+| `60dce2e` | docs: DSQ Demo Guide v1.2.0 - live use cases, embeddings, risk register fix |
+| `ffed8a6` | test: update full spectrum test to match risk-register-dashboard semantic patterns (Support IQ) |
+
+**Deployed**: Main + Support IQ to Vercel production, all 14 URLs verified 200 OK
+
+---
+
+### Previous: Main Dashboard - SVG Animation Fix + Guide Button (2026-02-05)
 
 **Fixed 16 SVG animation errors on dashboard product cards and added Demo Guide button.**
 
@@ -1202,6 +1262,9 @@ vercel --prod
 - [x] dTQ Re-Audit — Independent verification found 3 more gaps (G8 math inverted, Slide 1 quote, Production Defect Rate label). All fixed. 62/62 checks (v0.9.13)
 - [x] dSQ Live Zoho Desk Tickets — Fixed env var newlines, API params, contact mapping. 10 real tickets showing (v0.9.14)
 - [x] dSQ TypeScript & ESLint Clean Build — Resolved all TS errors and ESLint warnings across 11 files (v0.9.14)
+- [x] Dashboard SVG Animation Fix + Guide Button — Fixed 16 SVG errors, added Guide button to product cards (v0.9.15)
+- [x] DSQ Demo Guide v1.2.0 — 3 live use cases, 14 new KB articles, 474/474 embeddings, Clerk PDF middleware fix (v0.9.16)
+- [x] Full Spectrum Test — 67/67 queries passing, all 3 live use cases verified on production with Zoho tickets (v0.9.16)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -1212,5 +1275,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.15*
+*Version: 0.9.16*
 *Machine: Mac Mini (aldrin-mac-mini)*

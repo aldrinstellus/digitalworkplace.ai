@@ -1,9 +1,9 @@
 # dTQ PRD Full-Spectrum Audit Report
 
 **Document**: Agentic Testing Framework - Product Demo.pdf (14 slides)
-**Codebase**: apps/test-iq/ (dTQ v2.1.0)
+**Codebase**: apps/test-iq/ (dTQ v2.1.1)
 **Date**: 2026-02-05
-**Auditor**: Claude Opus 4.5 (4 parallel agents)
+**Auditor**: Claude Opus 4.5 (4 parallel agents + independent re-audit)
 
 ---
 
@@ -25,13 +25,13 @@
 | Slide 12: Implementation Phases | 1 | 1 | 0 | 0 | 100% |
 | Slide 13: Competitive Differentiation | 1 | 1 | 0 | 0 | 100% |
 | Slide 14: Next Steps / CTA | 1 | 1 | 0 | 0 | 100% |
-| **TOTAL** | **59** | **59** | **0** | **0** | **100%** |
+| **TOTAL** | **62** | **62** | **0** | **0** | **100%** |
 
-**Overall Score: 100% (59/59)**
+**Overall Score: 100% (62/62)**
 
 ---
 
-## All 18 Gaps — RESOLVED
+## All 21 Gaps — RESOLVED (18 original + 3 from independent re-audit)
 
 ### CRITICAL (All Fixed)
 
@@ -49,7 +49,7 @@
 | # | Gap | Fix Applied |
 |---|-----|-------------|
 | G7 | No elapsed time in execution status | Added `elapsedSeconds` to `useExecutionSimulation` + ⏱️ timer display in `ExecutionStatusPanel` |
-| G8 | Manager automation rate is 39% not 43% | Changed 2 features (Manager-Assigned Learning, ILT Scheduling) to `fully_automated` → 20/46 = 43% |
+| G8 | Manager automation rate was wrong | **Corrected in re-audit**: Reverted f17, f39 back to `partially_automated` — original data already had 20/46 = 43%. Previous fix was inverted. |
 | G9 | No customer testimonial quote | Added to `BeforeAfterComparison.tsx`: "Regression is completely handed over to this agent..." |
 | G10 | BitBucket not shown | Changed "GitHub" to "GitHub / BitBucket" in `IntegrationBadges.tsx` |
 
@@ -70,6 +70,14 @@
 | G16 | No "self-healing" badge/mention | Added "Self-Healing" badge on Agent 3 in `AgentPipeline.tsx` + "Self-healing test execution" in capabilities |
 | G17 | Jenkins not shown | Changed Azure DevOps to "CI/CD (Jenkins)" in `IntegrationBadges.tsx` |
 | G18 | No Kubernetes branding | Added "K8s-Powered" badge on Agent 3 + "Kubernetes-Powered Orchestration" badge in `AgentPipeline.tsx` |
+
+### RE-AUDIT FINDINGS (3 Additional Gaps Fixed)
+
+| # | Gap | Fix Applied |
+|---|-----|-------------|
+| G19 | G8 automation rate math inverted (showed 48% not 43%) | Reverted f17, f39 to `partially_automated` → 20/46 = 43% correct |
+| G20 | PRD Slide 1 testimonial missing ("huge team...fixing scripts") | Added "The Problem" quote to `BeforeAfterComparison.tsx` above "The Result" quote |
+| G21 | C-Suite "Defect Escape Rate" should be "Production Defect Rate" ↓40% | Changed label and trendValue in `data.ts` |
 
 ---
 
@@ -111,6 +119,6 @@ Static pages → 13/13 generated
 
 ---
 
-*All 18 gaps resolved. PRD alignment: 100% (59/59 checks passing)*
-*Codebase version: dTQ v2.1.0*
-*Generated on 2026-02-05*
+*All 21 gaps resolved (18 original + 3 from independent re-audit). PRD alignment: 100% (62/62 checks passing)*
+*Codebase version: dTQ v2.1.1*
+*Generated on 2026-02-05 (re-audited same day)*

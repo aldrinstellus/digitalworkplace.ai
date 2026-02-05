@@ -38,7 +38,10 @@ const roiData: Record<PersonaType, ROIRow[]> = {
   ],
 };
 
-// Customer testimonial from PRD Slide 10
+// Customer testimonial from PRD Slide 1 (The Problem)
+const PROBLEM_QUOTE = '"We had a huge team of test automation engineers. All they were doing is not testing the application, but fixing the scripts."';
+
+// Customer testimonial from PRD Slide 10 (The Result)
 const TESTIMONIAL = '"Regression is completely handed over to this agent. QA engineers now focus on sprint testing, coordinating with tech leads, and retesting bug fixes."';
 
 export default memo(function BeforeAfterComparison({ persona }: { persona: PersonaType }) {
@@ -134,15 +137,29 @@ export default memo(function BeforeAfterComparison({ persona }: { persona: Perso
                 </table>
               </div>
 
-              {/* Customer Testimonial — PRD Slide 10 */}
+              {/* Customer Testimonial — PRD Slide 1 (The Problem) */}
               <div
                 className="mt-4 px-4 py-3 rounded-lg text-xs leading-relaxed italic"
+                style={{
+                  background: 'var(--bg-tertiary)',
+                  color: 'var(--text-muted)',
+                  borderLeft: '3px solid var(--risk-medium)',
+                }}
+              >
+                <span className="not-italic font-semibold" style={{ color: 'var(--text-secondary)' }}>The Problem: </span>
+                {PROBLEM_QUOTE}
+              </div>
+
+              {/* Customer Testimonial — PRD Slide 10 (The Result) */}
+              <div
+                className="mt-2 px-4 py-3 rounded-lg text-xs leading-relaxed italic"
                 style={{
                   background: 'var(--bg-tertiary)',
                   color: 'var(--text-secondary)',
                   borderLeft: '3px solid var(--accent-primary)',
                 }}
               >
+                <span className="not-italic font-semibold" style={{ color: 'var(--status-success)' }}>The Result: </span>
                 {TESTIMONIAL}
               </div>
             </div>

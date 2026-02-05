@@ -163,6 +163,14 @@ supabase/migrations/
   - **ChatWidget UX (v1.5.0)**: Floating overlay, persistent quick action pills, user-controlled scroll, reset button, cross-page persistence via ChatContext
   - **Interlinked Navigation (v1.6.0)**: Actionable link cards below AI responses with NavigationContext dispatch pattern; links navigate to features, categories, metrics, reports, and history pages; 3 link resolution strategies (bold text, RAG sources, keywords); max 5 links per response
   - **4-Tier Link Resolution (v1.7.0)**: Complete rewrite of link-resolver.ts — global entity index (80 features, 20 categories, 24 KPIs across all 3 personas), 4-tier pipeline (source-based → entity text scanning → keyword detection → context-aware fallback), guaranteed ≥1 link per response, cross-persona feature resolution, ~20 keyword pattern groups, error fallback links in ChatWidget
+- **Performance Optimization (v1.8.0)**: 16-file optimization across 7 priorities:
+  - Timer cascade fix: `useRef` for features in `useRealTimeSimulation.ts`, metric interval 10s→30s, `startTransition` wrapping
+  - Animation reduction: TrendChart 1500→500ms, PersonaCard stagger halved, spring stiffness 300→200
+  - CSS migration: ReportCard stat hover + failed glow, FeatureCoverage row animations, MetricCard hover → CSS transitions/keyframes
+  - Re-render prevention: Pre-built metric handlers via `useMemo`, conditional modal rendering, stabilized chart data refs
+  - Memoization: `MemoizedMessageContent` + `MemoizedLinkCard` components, `AnimatePresence mode="sync"`
+  - History consolidation: 8 useMemos → 2 single-pass calculations
+  - API routes: Cache-Control headers, nested selects (test-runs, personas), 30s AbortController timeout on Claude API
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints

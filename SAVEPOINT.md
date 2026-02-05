@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.9
-**Session Status**: dTQ v1.7.0 - 4-Tier Link Resolution Pipeline LIVE
+**Version**: 0.9.10
+**Session Status**: dTQ v1.8.0 - Performance Optimization LIVE
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: b2b3fee - feat(dTQ): 4-tier link resolution pipeline — every response gets actionable links
+**Git Commit**: 2f72ddb - perf(dTQ): full performance optimization — fix timer cascade, CSS animations, memoization
 
 ---
 
@@ -155,9 +155,28 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.9)
+## Latest Changes (v0.9.10)
 
-### dTQ v1.7.0 - 4-Tier Link Resolution Pipeline (2026-02-05)
+### dTQ v1.8.0 - Performance Optimization (2026-02-05)
+
+**16-file optimization across 7 priorities — eliminates timer cascade, reduces animation overhead, prevents unnecessary re-renders.**
+
+| Priority | Change | Files |
+|----------|--------|-------|
+| P1 CRITICAL | Timer cascade fix: `useRef` for features, interval 10s→30s, `startTransition` | `useRealTimeSimulation.ts` |
+| P2 HIGH | Animation reduction: TrendChart 1500→500ms, PersonaCard stagger halved | `TrendChart.tsx`, `PersonaCard.tsx` |
+| P2 HIGH | CSS migration: ReportCard glow + stat hover, FeatureCoverage rows, MetricCard | `ReportCard.tsx`, `FeatureCoverage.tsx`, `MetricCard.tsx` |
+| P3 HIGH | Dashboard re-render prevention: stable handlers, conditional modals, chart refs | `dashboard/page.tsx` |
+| P4 MED | ChatWidget memoization: `MemoizedMessageContent`, `MemoizedLinkCard`, `AnimatePresence sync` | `ChatWidget.tsx` |
+| P5 MED | History consolidation: 8 useMemos → 2 single-pass | `history/page.tsx` |
+| P6 MED | CSS animation classes: `.stat-card`, `.failed-badge-glow`, `.metric-card-interactive`, `.feature-row` | `globals.css` |
+| P7 LOW | API: Cache-Control headers, nested selects, 30s AbortController timeout | 5 API routes |
+
+**Deployed**: Vercel production at https://dtq.digitalworkplace.ai — HTTP 200
+
+---
+
+### Previous: dTQ v1.7.0 - 4-Tier Link Resolution Pipeline (2026-02-05)
 
 **Complete rewrite of link-resolver.ts — every AI response now generates actionable links.**
 
@@ -951,6 +970,7 @@ vercel --prod
 - [x] Full-spectrum verification of both documents against source code — 14 fixes applied (v0.9.7)
 - [x] dTQ Full-Spectrum Testing Audit — 200 checks, 3 additional fixes, TESTING-AUDIT-GUIDE.md created (v0.9.8)
 - [x] dTQ 4-Tier Link Resolution Pipeline — global entity index, cross-persona matching, guaranteed fallback, ~20 keyword groups (v0.9.9)
+- [x] dTQ Performance Optimization — 16-file, 7-priority optimization: timer cascade fix, CSS animations, memoization, API caching (v0.9.10)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -961,5 +981,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.9*
+*Version: 0.9.10*
 *Machine: Mac Mini (aldrin-mac-mini)*

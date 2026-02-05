@@ -149,10 +149,10 @@ export default function FeatureCoverage({
         </div>
       </div>
 
-      {/* Categories */}
-      <div className="divide-y" style={{ borderColor: 'var(--border-subtle)' }}>
-        {filteredCategories.map((category) => (
-          <div key={category.id}>
+      {/* Categories — subtle separators instead of thick dividers */}
+      <div>
+        {filteredCategories.map((category, idx) => (
+          <div key={category.id} className={idx > 0 ? 'border-t' : ''} style={idx > 0 ? { borderColor: 'var(--border-subtle)' } : undefined}>
             {/* Category Header */}
             <motion.div
               className={cn(
@@ -250,10 +250,10 @@ export default function FeatureCoverage({
                           <tr
                             key={feature.id}
                             className={cn(
-                              'feature-row border-t cursor-pointer relative',
+                              'feature-row cursor-pointer relative',
                               hoveredFeature === feature.id && 'bg-[var(--bg-tertiary)]'
                             )}
-                            style={{ borderColor: 'var(--border-subtle)' }}
+                            style={{ borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}
                             onMouseEnter={() => handleFeatureHover(feature.id)}
                             onMouseLeave={() => handleFeatureHover(null)}
                             onClick={() => onFeatureClick?.(feature)}

@@ -26,7 +26,7 @@ import {
   TestTube2,
   type LucideIcon,
 } from 'lucide-react';
-import { ChatMessage, ChatLink, ChatLinkTarget } from '@/lib/dtq/types';
+import { ChatMessage, ChatLink, ChatLinkTarget, PersonaType } from '@/lib/dtq/types';
 import { aiResponses } from '@/lib/dtq/data';
 import { TypingIndicator } from '@/lib/motion';
 import { usePersona } from '@/app/(dashboard)/layout';
@@ -45,6 +45,17 @@ const personaConfig = {
   manager: { name: 'Manager', icon: Users, color: 'var(--accent-primary)' },
   techlead: { name: 'Tech Lead', icon: Code, color: 'var(--chart-secondary)' },
 };
+
+function getFallbackLinks(persona: PersonaType): ChatLink[] {
+  return [
+    { id: 'fallback:history', target: 'history', entityId: 'performance',
+      label: 'Performance History', description: 'View 30-day metric trends',
+      page: 'history', persona },
+    { id: 'fallback:reports', target: 'report', entityId: 'test-reports',
+      label: 'Test Reports', description: 'View test execution history',
+      page: 'reports', persona },
+  ];
+}
 
 const LINK_ICONS: Record<ChatLinkTarget, LucideIcon> = {
   feature: Target,
@@ -146,6 +157,7 @@ export default function ChatWidget() {
         role: 'assistant',
         content: response,
         timestamp: new Date(),
+        relatedLinks: getFallbackLinks(persona),
       };
       addMessage(assistantMessage);
       if (!isOpen) incrementUnread();
@@ -189,6 +201,7 @@ export default function ChatWidget() {
         role: 'assistant',
         content: `I understand you're asking about "${userInput}". Based on current metrics, here are my insights:\n\n- Overall test coverage is healthy at 93.3%\n- No critical issues detected in related areas\n- Recommend reviewing the feature coverage section for detailed data\n\nWould you like me to dive deeper into any specific aspect?`,
         timestamp: new Date(),
+        relatedLinks: getFallbackLinks(persona),
       };
       addMessage(assistantMessage);
       if (!isOpen) incrementUnread();
@@ -246,7 +259,7 @@ export default function ChatWidget() {
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             className="fixed bottom-6 right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[calc(100vh-6rem)] sm:h-[550px] rounded-2xl overflow-hidden flex flex-col"
             style={{
-              background: 'rgba(20, 20, 32, 0.98)',
+              background: 'rgba(38, 20, 32, 0.98)',
               border: '1px solid var(--border-subtle)',
               boxShadow: '0 25px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 51, 102, 0.1)',
             }}

@@ -3,6 +3,7 @@ import { generateEmbedding } from '@/lib/embeddings';
 import { createClient } from '@supabase/supabase-js';
 import { resolveLinks } from '@/lib/dtq/link-resolver';
 import { PersonaType } from '@/lib/dtq/types';
+import { personas } from '@/lib/dtq/data';
 
 // Persona display names
 const PERSONA_TITLES: Record<string, string> = {
@@ -188,7 +189,11 @@ export async function POST(request: NextRequest) {
     const responseText =
       claudeData.content?.[0]?.text || "I wasn't able to generate a response. Please try again.";
 
-    const relatedLinks = resolveLinks({ responseText, sources, persona: persona as PersonaType });
+    const personaMetrics = personas.find(p => p.id === persona)?.metrics || [];
+    const relatedLinks = resolveLinks({
+      responseText, sources, persona: persona as PersonaType,
+      userMessage: message, personaMetrics,
+    });
 
     return NextResponse.json({
       response: responseText,
@@ -251,7 +256,11 @@ function handleDemoMode(message: string, persona: PersonaType = 'manager'): Next
     responseText = `Based on current testing metrics, here are my insights on "${message}":\n\n- Overall test coverage is healthy across all personas\n- No critical blockers detected in the related areas\n- Recommend reviewing the feature coverage section for detailed data\n\n*Note: Running in demo mode. Configure ANTHROPIC_API_KEY and OPENAI_API_KEY for full AI-powered responses with RAG.*`;
   }
 
-  const relatedLinks = resolveLinks({ responseText, sources: [], persona });
+  const personaMetrics = personas.find(p => p.id === persona)?.metrics || [];
+  const relatedLinks = resolveLinks({
+    responseText, sources: [], persona,
+    userMessage: message, personaMetrics,
+  });
 
   return NextResponse.json({
     response: responseText,

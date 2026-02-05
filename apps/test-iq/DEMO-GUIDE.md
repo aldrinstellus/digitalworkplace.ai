@@ -637,10 +637,12 @@ The full pipeline for each question:
 3. **Semantic search:** The vector is used to query `public.search_dtq_knowledge_semantic`, which performs cosine similarity search across 130 knowledge base items.
 4. **Context injection:** Top matching items are injected as context into the Claude prompt.
 5. **Claude response:** Claude Sonnet 4 generates a response using the RAG context, persona awareness, and conversation history.
-6. **Link resolution:** The response text is processed by `link-resolver.ts` using three strategies:
-   - **Bold text extraction:** Matches `**Feature Name**` patterns against features and categories
-   - **Source-based mapping:** Maps RAG source types (`feature`, `category_summary`, `persona_kpi`) to navigation links
-   - **Keyword detection:** Detects "test run", "trend", "history" keywords to create report/history links
+6. **Link resolution:** The response text is processed by `link-resolver.ts` using a 4-tier resolution pipeline with a global entity index (80 features, 20 categories, 24 KPIs across all 3 personas):
+   - **Tier 1 — Source-based:** Maps all 5 RAG source types (`feature`, `category_summary`, `persona_kpi`, `test_run_summary`, `daily_metrics_summary`) to navigation links
+   - **Tier 2 — Entity text scanning:** Substring matches entity names in the response text (bold text first, then full-text scan); cross-persona feature resolution enabled
+   - **Tier 3 — Keyword detection:** ~20 pattern groups covering test execution, trends, pass rate, defects, automation, risk, effectiveness, compliance, security, CI/CD, performance, API, revenue, learning, assessments, and more
+   - **Tier 4 — Context-aware fallback:** Guarantees every response has at least 1 link; uses persona-appropriate defaults when all other tiers produce no matches
+   - **Constraints:** Maximum 5 links per response; minimum entity name length of 4 characters for substring matching; features sorted by name length descending to avoid partial matches
 7. **Response rendered** with markdown formatting, source count, and related link cards.
 
 ### 7.6 Related Link Cards

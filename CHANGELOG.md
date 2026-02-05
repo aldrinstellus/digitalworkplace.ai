@@ -4,6 +4,18 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.13] - 2026-02-05
+
+### dTQ v2.1.1 - Re-Audited PRD Alignment (62/62 Checks)
+
+**Independent re-audit caught 3 gaps the original audit missed. All fixed.**
+
+- **G8 corrected**: Automation rate was 48% (22/46) not 43% — reverted f17, f39 to `partially_automated` → 20/46 = 43%
+- **G20 added**: PRD Slide 1 testimonial ("huge team...fixing scripts") added to BeforeAfterComparison
+- **G21 fixed**: "Defect Escape Rate" → "Production Defect Rate" with ↓40% trend
+
+---
+
 ## [0.9.12] - 2026-02-05
 
 ### dTQ v2.1.0 - 100% PRD Alignment (59/59 Checks Passing)

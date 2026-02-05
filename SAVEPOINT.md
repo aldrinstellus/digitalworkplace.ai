@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.12
-**Session Status**: dTQ v2.1.0 - 100% PRD Alignment (59/59 checks) LIVE
+**Version**: 0.9.13
+**Session Status**: dTQ v2.1.1 - 100% PRD Alignment (62/62 checks, re-audited) LIVE
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 2fae3eb - feat(dTQ): v2.1.0 — 100% PRD alignment (59/59 checks passing)
+**Git Commit**: 19b37de - fix(dTQ): v2.1.1 — fix 3 gaps from independent re-audit (62/62 checks)
 
 ---
 
@@ -119,7 +119,7 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.1.0** |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.1.1** |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
@@ -155,9 +155,24 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.12)
+## Latest Changes (v0.9.13)
 
-### dTQ v2.1.0 - 100% PRD Alignment (2026-02-05)
+### dTQ v2.1.1 - Re-Audited PRD Alignment (2026-02-05)
+
+**Independent re-audit found 3 additional gaps missed by the original audit. All fixed.**
+
+| # | Issue | Severity | Fix |
+|---|-------|----------|-----|
+| G8 | Automation rate was 48% not 43% (math inverted) | HIGH | Reverted f17, f39 to `partially_automated` → 20/46 = 43% |
+| G20 | PRD Slide 1 testimonial missing | LOW | Added "The Problem" quote to BeforeAfterComparison |
+| G21 | "Defect Escape Rate" should be "Production Defect Rate" ↓40% | LOW-MED | Fixed label + trend in data.ts |
+
+**Score: 100% (62/62 checks — 59 original + 3 from re-audit)**
+**Build**: 0 errors | **Deployed**: https://dtq.digitalworkplace.ai — 200 OK
+
+---
+
+### Previous: dTQ v2.1.0 - 100% PRD Alignment (2026-02-05)
 
 **Full-spectrum audit against "Agentic Testing Framework - Product Demo" PDF. Fixed all 18 gaps to achieve 100% (59/59 checks passing).**
 
@@ -1102,6 +1117,7 @@ vercel --prod
 - [x] dTQ PRD Gap Features — 6 new features: Tech Lead Execution Console, Before/After ROI, Mini-Charts in Chat, 12-Month Trends, Integration Badges, Deployment Modal (v0.9.11)
 - [x] dTQ Dashboard UX Overhaul — TrendChart rewrite, 4 charts (was 2), 14-day data, compact integrations bar, reordered layout (v0.9.11)
 - [x] dTQ 100% PRD Alignment — 18 gaps fixed, 5 new components, 11 modified files, 59/59 checks passing (v0.9.12)
+- [x] dTQ Re-Audit — Independent verification found 3 more gaps (G8 math inverted, Slide 1 quote, Production Defect Rate label). All fixed. 62/62 checks (v0.9.13)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -1112,5 +1128,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.12*
+*Version: 0.9.13*
 *Machine: Mac Mini (aldrin-mac-mini)*

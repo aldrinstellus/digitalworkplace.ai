@@ -4,6 +4,73 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.11] - 2026-02-05
+
+### dTQ v2.0.0 - PRD Gap Features + Dashboard UX Overhaul
+
+**6 new PRD features (~1,600 lines of new code) + complete dashboard UX overhaul. PRD coverage: 45.6% → ~85%+.**
+
+#### 6 New Features
+
+| # | Feature | PRD Slide | Description |
+|---|---------|-----------|-------------|
+| 1 | **Tech Lead Execution Console** | Slide 7 | Feature selection, environment config, execute/queue/schedule, live progress with console log |
+| 2 | **Before/After ROI Comparison** | Slide 10 | Collapsible ROI table with animated counters, persona-aware data |
+| 3 | **Inline Mini-Charts in Chat** | Slide 8 | Regex-detected metric sparklines (180×36px) in AI responses |
+| 4 | **12-Month Trend Data** | Slide 5 | 365-day data generation, TimeRangeSelector (7d/30d/90d/12m) on History page |
+| 5 | **Integration Badges** | Slide 4, 9 | 6 integrations (JIRA, Confluence, GitHub, ServiceNow, Slack, Azure DevOps) |
+| 6 | **Deployment Architecture Modal** | Slide 11 | Cloud/Gov Cloud/On-Premises options from sidebar footer |
+
+#### Dashboard UX Overhaul
+
+- **TrendChart**: Complete rewrite — prominent 3xl current value + change badge, tightened Y-axis domain, average reference line, pulsing SVG dot on last point, richer 3-stop gradient, mini bar visualization footer
+- **4 charts** (was 2): Test Pass Rate, Automation Coverage, Defect Detection, First Run Pass Rate
+- **14-day data** (was 7-day) with stabilized refs to prevent re-animation
+- **Integration Badges**: Redesigned as compact horizontal bar (moved right after primary metrics)
+- **Layout reorder**: Metrics → Integrations → High Risk → 4x Charts → Persona Metrics → ROI → Coverage
+
+#### New Files (12)
+
+```
+src/components/dtq/TechLeadExecutionConsole.tsx
+src/components/dtq/execution/FeatureSelectionPanel.tsx
+src/components/dtq/execution/ConfigurationBar.tsx
+src/components/dtq/execution/ActionButtons.tsx
+src/components/dtq/execution/ExecutionStatusPanel.tsx
+src/hooks/useExecutionSimulation.ts
+src/components/dtq/BeforeAfterComparison.tsx
+src/components/dtq/MiniSparkline.tsx
+src/lib/dtq/chat-chart-detector.ts
+src/components/dtq/TimeRangeSelector.tsx
+src/components/dtq/IntegrationBadges.tsx
+src/components/dtq/modals/DeploymentModal.tsx
+```
+
+#### Modified Files (9)
+
+```
+src/components/dtq/TrendChart.tsx (complete rewrite)
+src/app/(dashboard)/dashboard/page.tsx (4 charts, reordered layout)
+src/hooks/useRealTimeSimulation.ts (addTestRuns method)
+src/lib/dtq/types.ts (execution types)
+src/lib/dtq/persona-data.ts (365-day generation)
+src/app/(dashboard)/history/page.tsx (TimeRangeSelector)
+src/components/dtq/ChatWidget.tsx (inline sparklines)
+src/components/dtq/Sidebar.tsx (deployment badge)
+src/app/globals.css (execution console + ROI styles)
+```
+
+#### Verification
+
+- Build: 0 errors, 13/13 pages
+- All personas: csuite, manager, techlead — dashboard renders correctly
+- Tech Lead: Execution Console visible, feature selection, config, execute flow
+- History: TimeRangeSelector switches between 7d/30d/90d/12m
+- Chat: Mini sparklines appear for metric-related messages
+- Sidebar: Deployment badge opens modal with 3 options
+
+---
+
 ## [0.9.9] - 2026-02-05
 
 ### dTQ v1.7.0 - 4-Tier Link Resolution Pipeline

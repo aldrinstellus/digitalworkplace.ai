@@ -182,19 +182,24 @@ function rangeValue(rand: () => number, min: number, max: number): number {
 function generateDailyMetrics(persona: PersonaType, rand: () => number): DailyMetric[] {
   const ranges = METRIC_RANGES[persona];
   const metrics: DailyMetric[] = [];
-  const startDate = new Date('2026-01-05');
+  const startDate = new Date('2025-02-05'); // 1 year back
 
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 365; i++) {
     const date = new Date(startDate.getTime() + i * 86400000);
     const dateStr = date.toISOString().split('T')[0];
 
+    // 5% upward trend over the year
+    const trendFactor = 1 + (i / 365) * 0.05;
+
+    const clamp = (v: number) => Math.min(99.9, Math.max(0, v));
+
     metrics.push({
       date: dateStr,
-      passRate: rangeValue(rand, ranges.passRate[0], ranges.passRate[1]),
-      firstRunPassRate: rangeValue(rand, ranges.firstRunPassRate[0], ranges.firstRunPassRate[1]),
-      defectDetection: rangeValue(rand, ranges.defectDetection[0], ranges.defectDetection[1]),
-      effectiveness: rangeValue(rand, ranges.effectiveness[0], ranges.effectiveness[1]),
-      automationCoverage: rangeValue(rand, ranges.automationCoverage[0], ranges.automationCoverage[1]),
+      passRate: clamp(rangeValue(rand, ranges.passRate[0], ranges.passRate[1]) * trendFactor),
+      firstRunPassRate: clamp(rangeValue(rand, ranges.firstRunPassRate[0], ranges.firstRunPassRate[1]) * trendFactor),
+      defectDetection: clamp(rangeValue(rand, ranges.defectDetection[0], ranges.defectDetection[1]) * trendFactor),
+      effectiveness: clamp(rangeValue(rand, ranges.effectiveness[0], ranges.effectiveness[1]) * trendFactor),
+      automationCoverage: clamp(rangeValue(rand, ranges.automationCoverage[0], ranges.automationCoverage[1]) * trendFactor),
     });
   }
 

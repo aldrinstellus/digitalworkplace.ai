@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, memo } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,7 +14,11 @@ import {
   Code,
   ChevronDown,
   Check,
+  Cloud,
+  ChevronRight,
 } from 'lucide-react';
+
+const DeploymentModal = dynamic(() => import('./modals/DeploymentModal'), { ssr: false });
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/lib/dtq/types';
 import { TQLogo } from '@/components/brand/TQLogo';
@@ -39,6 +44,7 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
   const pathname = usePathname();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [deploymentModalOpen, setDeploymentModalOpen] = useState(false);
 
   const currentConfig = personaConfig[persona];
   const CurrentIcon = currentConfig.icon;
@@ -223,7 +229,7 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
       </nav>
 
       {/* Footer with enhanced live indicator */}
-      <div className="p-4 border-t" style={{ borderColor: 'var(--border-card)' }}>
+      <div className="p-4 border-t space-y-2" style={{ borderColor: 'var(--border-card)' }}>
         <motion.div
           className="px-3 py-2 rounded-lg text-xs"
           style={{ background: 'var(--bg-tertiary)', color: 'var(--text-muted)' }}
@@ -236,7 +242,28 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
             <span>Live Dashboard</span>
           </div>
         </motion.div>
+
+        <motion.button
+          onClick={() => setDeploymentModalOpen(true)}
+          className="w-full px-3 py-2 rounded-lg text-xs flex items-center gap-2 cursor-pointer transition-colors"
+          style={{ background: 'var(--bg-tertiary)', color: 'var(--text-muted)' }}
+          whileHover={{
+            boxShadow: '0 0 15px rgba(255, 51, 102, 0.15)',
+            color: 'var(--text-secondary)',
+          }}
+        >
+          <Cloud className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
+          <span className="flex-1 text-left">Deployed: Cloud (Vercel)</span>
+          <ChevronRight className="w-3 h-3" />
+        </motion.button>
       </div>
+
+      {deploymentModalOpen && (
+        <DeploymentModal
+          isOpen
+          onClose={() => setDeploymentModalOpen(false)}
+        />
+      )}
     </aside>
   );
 });

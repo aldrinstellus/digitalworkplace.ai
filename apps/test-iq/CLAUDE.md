@@ -171,6 +171,19 @@ supabase/migrations/
   - Memoization: `MemoizedMessageContent` + `MemoizedLinkCard` components, `AnimatePresence mode="sync"`
   - History consolidation: 8 useMemos → 2 single-pass calculations
   - API routes: Cache-Control headers, nested selects (test-runs, personas), 30s AbortController timeout on Claude API
+- **PRD Gap Features (v2.0.0)**: 6 new features closing PRD coverage from 45.6% to ~85%+:
+  - **Tech Lead Execution Console**: Feature selection (18 features in 5 categories), environment/browser/parallel config, Execute/Queue/Schedule buttons, live progress bars + console log, state machine (idle→running→complete), generates TestRun objects
+  - **Before/After ROI Comparison**: Collapsible table with 6 persona-aware metric rows, animated counters for "After" values
+  - **Inline Mini-Charts in Chat**: Regex-detected metric mentions render 180×36px Recharts sparklines below AI responses
+  - **12-Month Trend Data**: persona-data.ts generates 365 days (was 30), TimeRangeSelector on History page (7d/30d/90d/12m)
+  - **Integration Badges**: 6 badges (JIRA, Confluence, GitHub, ServiceNow, Slack, Azure DevOps) in compact horizontal bar
+  - **Deployment Architecture Modal**: Cloud/Gov Cloud/On-Premises options from sidebar footer
+- **Dashboard UX Overhaul (v2.0.0)**:
+  - TrendChart: Complete rewrite — prominent 3xl current value + change badge, tightened Y-axis, avg reference line, pulsing SVG dot, richer gradient
+  - 4 trend charts (was 2): Pass Rate, Automation Coverage, Defect Detection, First Run Pass Rate
+  - 14-day chart data (was 7-day) with stabilized refs
+  - Integration Badges moved to compact horizontal bar right after primary metrics
+  - Layout reorder: Metrics → Integrations → High Risk → 4x Charts → Persona Metrics → ROI → Coverage
 
 ### Data Flow
 1. Initial data loaded from Supabase via API endpoints
@@ -219,38 +232,58 @@ apps/test-iq/
 │   ├── app/
 │   │   ├── (dashboard)/
 │   │   │   ├── layout.tsx           # Dashboard layout + Persona + ChatProvider + ChatWidget
-│   │   │   ├── dashboard/page.tsx   # Main dashboard
-│   │   │   ├── history/page.tsx     # 30-day metrics trends
+│   │   │   ├── dashboard/page.tsx   # Main dashboard (4 charts, integrations, ROI, execution console)
+│   │   │   ├── history/page.tsx     # 365-day metrics trends with TimeRangeSelector
 │   │   │   └── reports/page.tsx     # Test execution reports
 │   │   └── api/dtq/
 │   │       ├── features/route.ts    # Features API
 │   │       ├── categories/route.ts  # Categories API
 │   │       ├── test-runs/route.ts   # Test runs API
 │   │       ├── metrics/route.ts     # Metrics API
-│   │       └── personas/route.ts    # Personas API
+│   │       ├── personas/route.ts    # Personas API
+│   │       └── chat/route.ts        # Claude chat API with RAG
 │   ├── components/dtq/
-│   │   ├── ChatWidget.tsx            # Floating AI chat (replaces AIAssistant)
+│   │   ├── BeforeAfterComparison.tsx # ROI comparison table (v2.0.0)
+│   │   ├── ChatWidget.tsx            # Floating AI chat with inline sparklines
 │   │   ├── FeatureCoverage.tsx
 │   │   ├── HighRiskBanner.tsx
+│   │   ├── IntegrationBadges.tsx     # 6 integration badges (v2.0.0)
 │   │   ├── LiveIndicator.tsx
 │   │   ├── MetricCard.tsx
+│   │   ├── MiniSparkline.tsx         # Tiny inline chat charts (v2.0.0)
 │   │   ├── PersonaCard.tsx
 │   │   ├── ReportCard.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── TrendChart.tsx
+│   │   ├── Sidebar.tsx               # + Deployment badge in footer
+│   │   ├── TechLeadExecutionConsole.tsx # Execution orchestrator (v2.0.0)
+│   │   ├── TimeRangeSelector.tsx     # 7d/30d/90d/12m pills (v2.0.0)
+│   │   ├── TrendChart.tsx            # Rich area chart with value header
+│   │   ├── execution/               # Execution console sub-components (v2.0.0)
+│   │   │   ├── FeatureSelectionPanel.tsx
+│   │   │   ├── ConfigurationBar.tsx
+│   │   │   ├── ActionButtons.tsx
+│   │   │   └── ExecutionStatusPanel.tsx
 │   │   └── modals/
+│   │       ├── BaseModal.tsx
+│   │       ├── CategoryAnalyticsModal.tsx
+│   │       ├── ChartDrillDownModal.tsx
+│   │       ├── DeploymentModal.tsx   # Cloud/Gov/On-Prem (v2.0.0)
+│   │       ├── FeatureDetailModal.tsx
+│   │       ├── MetricDrillDownModal.tsx
+│   │       └── TestRunDetailModal.tsx
 │   ├── contexts/
 │   │   ├── ChatContext.tsx            # Cross-page chat message persistence
 │   │   └── NavigationContext.tsx      # Chat link → page modal navigation dispatch
 │   ├── hooks/
-│   │   └── useRealTimeSimulation.ts # Main data hook (API + simulation)
+│   │   ├── useExecutionSimulation.ts  # Execution state machine (v2.0.0)
+│   │   └── useRealTimeSimulation.ts   # Main data hook (API + simulation)
 │   └── lib/
 │       ├── supabase.ts              # Supabase client (dtq schema)
 │       └── dtq/
+│           ├── chat-chart-detector.ts # Metric mention regex (v2.0.0)
 │           ├── data.ts              # Fallback static data
-│           ├── types.ts             # TypeScript interfaces
+│           ├── types.ts             # TypeScript interfaces (+ execution types)
 │           ├── export.ts            # CSV/PDF export functions
-│           ├── persona-data.ts      # Persona-specific data generator (csuite/techlead)
+│           ├── persona-data.ts      # 365-day data generator (csuite/techlead)
 │           └── link-resolver.ts     # Chat response → navigation link resolver
 └── CLAUDE.md                        # This file
 ```
@@ -282,9 +315,12 @@ apps/test-iq/
 - [x] Cross-page chat persistence via ChatContext
 - [x] Chatbot interlinked navigation — actionable link cards, NavigationContext, link-resolver (v1.6.0)
 - [x] 4-tier link resolution pipeline — global entity index, cross-persona matching, guaranteed fallback (v1.7.0)
+- [x] Performance optimization — 16-file, 7-priority: timer cascade, CSS animations, memoization (v1.8.0)
+- [x] PRD gap features — Tech Lead Execution Console, Before/After ROI, Mini-Charts in Chat, 12-Month Trends, Integration Badges, Deployment Modal (v2.0.0)
+- [x] Dashboard UX overhaul — TrendChart rewrite, 4 charts, 14-day data, compact integrations, reordered layout (v2.0.0)
 
 ---
 
 *Part of Digital Workplace AI Product Suite*
 *Location: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq*
-*Port: 3004 | BasePath: /dtq | Status: IMPLEMENTED*
+*Port: 3004 | BasePath: /dtq | Version: 2.0.0 | Status: IMPLEMENTED*

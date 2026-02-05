@@ -12,6 +12,7 @@ import {
 import MetricCard from '@/components/dtq/MetricCard';
 import TrendChart from '@/components/dtq/TrendChart';
 import LiveIndicator from '@/components/dtq/LiveIndicator';
+import TimeRangeSelector, { type TimeRange } from '@/components/dtq/TimeRangeSelector';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
 import { useNavigation } from '@/contexts/NavigationContext';
@@ -40,32 +41,70 @@ interface SelectedChartPoint {
   allData: ChartDataPoint[];
 }
 
+const RANGE_DAYS: Record<TimeRange, number> = {
+  '7d': 7,
+  '30d': 30,
+  '90d': 90,
+  '12m': 365,
+};
+
+const RANGE_LABELS: Record<TimeRange, string> = {
+  '7d': '7 Days',
+  '30d': '30 Days',
+  '90d': '90 Days',
+  '12m': '12 Months',
+};
+
+function subsample<T>(data: T[], maxPoints: number): T[] {
+  if (data.length <= maxPoints) return data;
+  const step = data.length / maxPoints;
+  const result: T[] = [];
+  for (let i = 0; i < maxPoints; i++) {
+    result.push(data[Math.floor(i * step)]);
+  }
+  // Always include the last point
+  if (result[result.length - 1] !== data[data.length - 1]) {
+    result[result.length - 1] = data[data.length - 1];
+  }
+  return result;
+}
+
 export default function HistoryPage() {
   const { persona } = usePersona();
   const { dailyMetrics, lastUpdate, isLive, toggleLive } = useRealTimeSimulation(true, persona);
+  const [timeRange, setTimeRange] = useState<TimeRange>('30d');
 
   // Modal state management
   const [selectedMetric, setSelectedMetric] = useState<SelectedMetric | null>(null);
   const [selectedChartPoint, setSelectedChartPoint] = useState<SelectedChartPoint | null>(null);
   const { pendingAction, clearAction } = useNavigation();
 
-  // Calculate all 30-day averages in a single pass
+  // Filter and subsample metrics based on selected time range
+  const filteredMetrics = useMemo(() => {
+    const days = RANGE_DAYS[timeRange];
+    const sliced = dailyMetrics.slice(-days);
+    // Subsample for chart performance on larger ranges
+    return days > 60 ? subsample(sliced, 60) : sliced;
+  }, [dailyMetrics, timeRange]);
+
+  // Calculate averages for the filtered range in a single pass
   const { avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness } = useMemo(() => {
+    const metrics = dailyMetrics.slice(-RANGE_DAYS[timeRange]);
     let passRate = 0, firstPass = 0, defect = 0, effectiveness = 0;
-    for (const m of dailyMetrics) {
+    for (const m of metrics) {
       passRate += m.passRate;
       firstPass += m.firstRunPassRate;
       defect += m.defectDetection;
       effectiveness += m.effectiveness;
     }
-    const len = dailyMetrics.length;
+    const len = metrics.length;
     return {
       avgPassRate: Math.round(passRate / len * 10) / 10,
       avgFirstPassRate: Math.round(firstPass / len * 10) / 10,
       avgDefectDetection: Math.round(defect / len * 10) / 10,
       avgEffectiveness: Math.round(effectiveness / len * 10) / 10,
     };
-  }, [dailyMetrics]);
+  }, [dailyMetrics, timeRange]);
 
   // Handle navigation actions from chat link cards
   useEffect(() => {
@@ -100,20 +139,20 @@ export default function HistoryPage() {
     });
   }, [pendingAction, clearAction, avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness]);
 
-  // All chart datasets in single pass
+  // All chart datasets in single pass — uses filteredMetrics for selected range
   const { passRateData, firstPassData, defectData, effectivenessData } = useMemo(() => {
     const pr: ChartDataPoint[] = [];
     const fp: ChartDataPoint[] = [];
     const dd: ChartDataPoint[] = [];
     const ef: ChartDataPoint[] = [];
-    for (const m of dailyMetrics) {
+    for (const m of filteredMetrics) {
       pr.push({ date: m.date, value: m.passRate });
       fp.push({ date: m.date, value: m.firstRunPassRate });
       dd.push({ date: m.date, value: m.defectDetection });
       ef.push({ date: m.date, value: m.effectiveness });
     }
     return { passRateData: pr, firstPassData: fp, defectData: dd, effectivenessData: ef };
-  }, [dailyMetrics]);
+  }, [filteredMetrics]);
 
   // Metric click handlers
   const handleMetricClick = useCallback((metric: SelectedMetric) => {
@@ -135,10 +174,13 @@ export default function HistoryPage() {
         >
           <h1 className="text-2xl font-bold text-white">Team Performance <span className="text-[#ff3366]">Metrics</span></h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-            Monitor team effectiveness and quality trends over the past 30 days
+            Monitor team effectiveness and quality trends
           </p>
         </motion.div>
-        <LiveIndicator lastUpdate={lastUpdate} isLive={isLive} onToggle={toggleLive} />
+        <div className="flex items-center gap-3">
+          <TimeRangeSelector value={timeRange} onChange={setTimeRange} />
+          <LiveIndicator lastUpdate={lastUpdate} isLive={isLive} onToggle={toggleLive} />
+        </div>
       </div>
 
       {/* Summary Cards - All clickable with drill-down */}
@@ -212,7 +254,7 @@ export default function HistoryPage() {
       {/* Trend Charts Grid - All with clickable data points */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <TrendChart
-          title="Test Pass Rate Trend"
+          title={`Test Pass Rate Trend (${RANGE_LABELS[timeRange]})`}
           data={passRateData}
           type="line"
           color="var(--status-success)"
@@ -220,7 +262,7 @@ export default function HistoryPage() {
           onDataPointClick={(dp) => handleChartPointClick(dp, 'Test Pass Rate', passRateData)}
         />
         <TrendChart
-          title="First Run Pass Rate"
+          title={`First Run Pass Rate (${RANGE_LABELS[timeRange]})`}
           data={firstPassData}
           type="line"
           color="var(--accent-primary)"
@@ -228,7 +270,7 @@ export default function HistoryPage() {
           onDataPointClick={(dp) => handleChartPointClick(dp, 'First Run Pass Rate', firstPassData)}
         />
         <TrendChart
-          title="Defect Detection Percentage"
+          title={`Defect Detection (${RANGE_LABELS[timeRange]})`}
           data={defectData}
           type="area"
           color="var(--risk-medium)"
@@ -236,7 +278,7 @@ export default function HistoryPage() {
           onDataPointClick={(dp) => handleChartPointClick(dp, 'Defect Detection', defectData)}
         />
         <TrendChart
-          title="Test Case Effectiveness"
+          title={`Test Case Effectiveness (${RANGE_LABELS[timeRange]})`}
           data={effectivenessData}
           type="area"
           color="var(--chart-secondary)"

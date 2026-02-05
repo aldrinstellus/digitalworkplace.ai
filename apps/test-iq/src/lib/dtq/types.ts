@@ -83,6 +83,33 @@ export interface ChatLink {
   persona?: PersonaType;
 }
 
+// ─── Execution Console Types ───────────────────────────────────────────────
+
+export interface ExecutionConfig {
+  environment: 'staging' | 'production' | 'development';
+  browser: 'chromium' | 'firefox' | 'webkit' | 'all';
+  parallelInstances: number;
+}
+
+export interface FeatureExecutionState {
+  featureId: string;
+  featureName: string;
+  status: 'queued' | 'running' | 'passed' | 'failed';
+  progress: number; // 0-100
+  totalTests: number;
+  passedTests: number;
+  failedTests: number;
+}
+
+export interface ConsoleLogEntry {
+  id: string;
+  timestamp: Date;
+  level: 'info' | 'success' | 'error' | 'warning';
+  message: string;
+}
+
+export type ExecutionPhase = 'idle' | 'running' | 'complete';
+
 export interface NavigationAction {
   id: string;
   link: ChatLink;

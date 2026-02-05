@@ -175,6 +175,14 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
     };
   }, [enabled, isLive, simulateNewTestRun, simulateMetricFluctuation]);
 
+  // Add test runs from execution console
+  const addTestRuns = useCallback((runs: TestRun[]) => {
+    startTransition(() => {
+      setTestRuns((prev) => [...runs, ...prev].slice(0, 50));
+      setLastUpdate(new Date());
+    });
+  }, []);
+
   // Manual refresh
   const refresh = useCallback(() => {
     simulateNewTestRun();
@@ -266,6 +274,7 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
     refresh,
     toggleLive,
     setIsLive,
+    addTestRuns,
   };
 }
 

@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.10
-**Session Status**: dTQ v1.8.0 - Performance Optimization LIVE
+**Version**: 0.9.11
+**Session Status**: dTQ v2.0.0 - PRD Gap Features + Dashboard UX Overhaul LIVE
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 2f72ddb - perf(dTQ): full performance optimization — fix timer cascade, CSS animations, memoization
+**Git Commit**: (pending) - feat(dTQ): PRD gap features + dashboard UX overhaul
 
 ---
 
@@ -119,7 +119,7 @@ const isPublicRoute = createRouteMatcher([
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
-| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **1.7.0** |
+| **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.0.0** |
 
 ### GitHub Repository
 - **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
@@ -155,9 +155,70 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.10)
+## Latest Changes (v0.9.11)
 
-### dTQ v1.8.0 - Performance Optimization (2026-02-05)
+### dTQ v2.0.0 - PRD Gap Features + Dashboard UX Overhaul (2026-02-05)
+
+**6 new PRD features (~1,600 lines of new code) + complete dashboard UX overhaul. Closes PRD coverage from 45.6% to ~85%+.**
+
+#### 6 New Features
+
+| # | Feature | PRD Slide | New Files | Modified Files |
+|---|---------|-----------|-----------|----------------|
+| 1 | **Tech Lead Execution Console** | Slide 7 | 6 new | 3 modified |
+| 2 | **Before/After ROI Comparison** | Slide 10 | 1 new | 1 modified |
+| 3 | **Inline Mini-Charts in Chat** | Slide 8 | 2 new | 1 modified |
+| 4 | **12-Month Trend Data** | Slide 5 | 1 new | 2 modified |
+| 5 | **Integration Badges** | Slide 4, 9 | 1 new | 1 modified |
+| 6 | **Deployment Architecture Modal** | Slide 11 | 1 new | 1 modified |
+
+#### New Files (12)
+
+| File | Feature |
+|------|---------|
+| `src/components/dtq/TechLeadExecutionConsole.tsx` | Tech Lead Execution Console |
+| `src/components/dtq/execution/FeatureSelectionPanel.tsx` | Feature checkboxes (18 in 5 categories) |
+| `src/components/dtq/execution/ConfigurationBar.tsx` | Environment/browser/parallel config |
+| `src/components/dtq/execution/ActionButtons.tsx` | Execute/Queue/Schedule buttons |
+| `src/components/dtq/execution/ExecutionStatusPanel.tsx` | Progress bars, console log |
+| `src/hooks/useExecutionSimulation.ts` | State machine: idle→running→complete |
+| `src/components/dtq/BeforeAfterComparison.tsx` | ROI table with animated numbers |
+| `src/components/dtq/MiniSparkline.tsx` | Tiny inline chat sparklines |
+| `src/lib/dtq/chat-chart-detector.ts` | Metric mention regex detection |
+| `src/components/dtq/TimeRangeSelector.tsx` | 7d/30d/90d/12m pill buttons |
+| `src/components/dtq/IntegrationBadges.tsx` | 6 integration badges (JIRA, GitHub, etc.) |
+| `src/components/dtq/modals/DeploymentModal.tsx` | Cloud/Gov/On-Prem deployment options |
+
+#### Dashboard UX Overhaul
+
+| Change | Before | After |
+|--------|--------|-------|
+| Trend Charts | 2 basic charts, 7-day data | 4 rich charts, 14-day data |
+| TrendChart design | Minimal header, h-48, 0-100 Y-axis | Prominent 3xl value + change badge, h-52, tight Y-axis, avg reference line, pulsing dot |
+| Integration Badges | Grid of 6 cards | Compact horizontal bar |
+| Layout order | Metrics → Charts → Integrations (bottom) | Metrics → Integrations → Charts → ROI → Coverage |
+| Charts available | Pass Rate, Automation Coverage | + Defect Detection, First Run Pass Rate |
+
+#### Modified Files (9)
+
+| File | Changes |
+|------|---------|
+| `src/components/dtq/TrendChart.tsx` | Complete rewrite — rich chart with value header, change badge, reference line, pulsing dot |
+| `src/app/(dashboard)/dashboard/page.tsx` | 4 charts (was 2), 14-day data, reordered layout, execution console |
+| `src/hooks/useRealTimeSimulation.ts` | Added `addTestRuns()` method |
+| `src/lib/dtq/types.ts` | Added ExecutionConfig, FeatureExecutionState, ConsoleLogEntry, ExecutionPhase types |
+| `src/lib/dtq/persona-data.ts` | 365-day data generation (was 30), upward trend factor |
+| `src/app/(dashboard)/history/page.tsx` | TimeRangeSelector, 7d/30d/90d/12m filtering |
+| `src/components/dtq/ChatWidget.tsx` | Inline mini-chart sparklines in chat |
+| `src/components/dtq/Sidebar.tsx` | Deployment badge + modal in footer |
+| `src/app/globals.css` | Execution console CSS, ROI table styles |
+
+**Build**: 0 errors, 13/13 pages
+**Deployed**: Vercel production at https://dtq.digitalworkplace.ai — HTTP 200
+
+---
+
+### Previous: dTQ v1.8.0 - Performance Optimization (2026-02-05)
 
 **16-file optimization across 7 priorities — eliminates timer cascade, reduces animation overhead, prevents unnecessary re-renders.**
 
@@ -971,6 +1032,8 @@ vercel --prod
 - [x] dTQ Full-Spectrum Testing Audit — 200 checks, 3 additional fixes, TESTING-AUDIT-GUIDE.md created (v0.9.8)
 - [x] dTQ 4-Tier Link Resolution Pipeline — global entity index, cross-persona matching, guaranteed fallback, ~20 keyword groups (v0.9.9)
 - [x] dTQ Performance Optimization — 16-file, 7-priority optimization: timer cascade fix, CSS animations, memoization, API caching (v0.9.10)
+- [x] dTQ PRD Gap Features — 6 new features: Tech Lead Execution Console, Before/After ROI, Mini-Charts in Chat, 12-Month Trends, Integration Badges, Deployment Modal (v0.9.11)
+- [x] dTQ Dashboard UX Overhaul — TrendChart rewrite, 4 charts (was 2), 14-day data, compact integrations bar, reordered layout (v0.9.11)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -981,5 +1044,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.10*
+*Version: 0.9.11*
 *Machine: Mac Mini (aldrin-mac-mini)*

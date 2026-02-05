@@ -32,6 +32,9 @@ import { TypingIndicator } from '@/lib/motion';
 import { usePersona } from '@/app/(dashboard)/layout';
 import { useChat } from '@/contexts/ChatContext';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { detectCharts } from '@/lib/dtq/chat-chart-detector';
+import { getPersonaData } from '@/lib/dtq/persona-data';
+import MiniSparkline from './MiniSparkline';
 
 const quickActions = [
   { id: 'high-risk', icon: Target, label: 'High-risk features' },
@@ -482,6 +485,24 @@ export default function ChatWidget() {
                         </span>
                       </div>
                     )}
+
+                    {/* Inline mini-charts for metric mentions */}
+                    {message.role === 'assistant' && (() => {
+                      const charts = detectCharts(message.content);
+                      if (charts.length === 0) return null;
+                      const personaData = getPersonaData(persona);
+                      return (
+                        <div className="ml-9 flex flex-wrap gap-1.5 mt-1">
+                          {charts.map((chart) => (
+                            <MiniSparkline
+                              key={chart.metricKey}
+                              chart={chart}
+                              dailyMetrics={personaData.dailyMetrics}
+                            />
+                          ))}
+                        </div>
+                      );
+                    })()}
 
                     {/* Related link cards */}
                     {message.role === 'assistant' && message.relatedLinks && message.relatedLinks.length > 0 && (

@@ -15,9 +15,12 @@ import HighRiskBanner from '@/components/dtq/HighRiskBanner';
 import TrendChart from '@/components/dtq/TrendChart';
 import FeatureCoverage from '@/components/dtq/FeatureCoverage';
 import LiveIndicator from '@/components/dtq/LiveIndicator';
+import BeforeAfterComparison from '@/components/dtq/BeforeAfterComparison';
+import IntegrationBadges from '@/components/dtq/IntegrationBadges';
+import TechLeadExecutionConsole from '@/components/dtq/TechLeadExecutionConsole';
 import { usePersona } from '../layout';
 import { useRealTimeSimulation } from '@/hooks/useRealTimeSimulation';
-import { Feature, Category } from '@/lib/dtq/types';
+import { Feature, Category, TestRun } from '@/lib/dtq/types';
 import { useNavigation } from '@/contexts/NavigationContext';
 
 // Lazy load modals - they're not needed until user interaction
@@ -58,6 +61,7 @@ export default function DashboardPage() {
     lastUpdate,
     isLive,
     toggleLive,
+    addTestRuns,
   } = useRealTimeSimulation(true, persona);
 
   // Modal state management
@@ -108,29 +112,36 @@ export default function DashboardPage() {
     });
   }, [pendingAction, clearAction, categories, currentPersona]);
 
-  // Chart data — stabilized refs to prevent re-animation on tiny metric fluctuations
+  // Chart data — 14 days, stabilized refs to prevent re-animation on tiny metric fluctuations
   const passRateRef = useRef<ChartDataPoint[]>([]);
   const coverageRef = useRef<ChartDataPoint[]>([]);
+  const defectRef = useRef<ChartDataPoint[]>([]);
+  const firstPassRef = useRef<ChartDataPoint[]>([]);
 
-  const passRateData = useMemo(() => {
-    const next = dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.passRate }));
-    const prev = passRateRef.current;
+  const stabilize = (next: ChartDataPoint[], ref: React.RefObject<ChartDataPoint[]>) => {
+    const prev = ref.current;
     if (prev.length === next.length && prev.every((p, i) => Math.abs(p.value - next[i].value) < 0.5)) {
       return prev;
     }
-    passRateRef.current = next;
+    (ref as React.MutableRefObject<ChartDataPoint[]>).current = next;
     return next;
-  }, [dailyMetrics]);
+  };
 
-  const coverageData = useMemo(() => {
-    const next = dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.automationCoverage }));
-    const prev = coverageRef.current;
-    if (prev.length === next.length && prev.every((p, i) => Math.abs(p.value - next[i].value) < 0.5)) {
-      return prev;
-    }
-    coverageRef.current = next;
-    return next;
-  }, [dailyMetrics]);
+  const passRateData = useMemo(() =>
+    stabilize(dailyMetrics.slice(-14).map(m => ({ date: m.date, value: m.passRate })), passRateRef),
+  [dailyMetrics]);
+
+  const coverageData = useMemo(() =>
+    stabilize(dailyMetrics.slice(-14).map(m => ({ date: m.date, value: m.automationCoverage })), coverageRef),
+  [dailyMetrics]);
+
+  const defectDetectionData = useMemo(() =>
+    stabilize(dailyMetrics.slice(-14).map(m => ({ date: m.date, value: m.defectDetection })), defectRef),
+  [dailyMetrics]);
+
+  const firstPassData = useMemo(() =>
+    stabilize(dailyMetrics.slice(-14).map(m => ({ date: m.date, value: m.firstRunPassRate })), firstPassRef),
+  [dailyMetrics]);
 
   // Click handlers
   const handleMetricClick = useCallback((metric: SelectedMetric) => {
@@ -191,6 +202,11 @@ export default function DashboardPage() {
     setSelectedFeature(feature); // Open feature modal
   }, []);
 
+  // Handle execution console test runs
+  const handleTestRunsGenerated = useCallback((runs: TestRun[]) => {
+    addTestRuns(runs);
+  }, [addTestRuns]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -209,6 +225,11 @@ export default function DashboardPage() {
 
       {/* Persona Card */}
       <PersonaCard persona={persona} />
+
+      {/* Tech Lead Execution Console — only for techlead persona */}
+      {persona === 'techlead' && (
+        <TechLeadExecutionConsole onTestRunsGenerated={handleTestRunsGenerated} />
+      )}
 
       {/* Primary Metrics - All clickable */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -250,6 +271,9 @@ export default function DashboardPage() {
         />
       </div>
 
+      {/* Integration Badges — right after metrics */}
+      <IntegrationBadges />
+
       {/* High Risk Banner */}
       {highRiskFeatures.length > 0 && (
         <HighRiskBanner
@@ -258,12 +282,44 @@ export default function DashboardPage() {
         />
       )}
 
+      {/* Trend Charts — 4 charts, 14-day data, 2x2 grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TrendChart
+          title="Test Pass Rate"
+          data={passRateData}
+          color="var(--status-success)"
+          delay={0.3}
+          onDataPointClick={(dp) => handleChartPointClick(dp, 'Test Pass Rate', passRateData)}
+        />
+        <TrendChart
+          title="Automation Coverage"
+          data={coverageData}
+          color="var(--chart-secondary)"
+          delay={0.35}
+          onDataPointClick={(dp) => handleChartPointClick(dp, 'Automation Coverage', coverageData)}
+        />
+        <TrendChart
+          title="Defect Detection"
+          data={defectDetectionData}
+          color="var(--risk-medium)"
+          delay={0.4}
+          onDataPointClick={(dp) => handleChartPointClick(dp, 'Defect Detection', defectDetectionData)}
+        />
+        <TrendChart
+          title="First Run Pass Rate"
+          data={firstPassData}
+          color="var(--accent-primary)"
+          delay={0.45}
+          onDataPointClick={(dp) => handleChartPointClick(dp, 'First Run Pass Rate', firstPassData)}
+        />
+      </div>
+
       {/* Persona Metrics Grid - All clickable */}
       <motion.div
         key={persona}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.5 }}
       >
         <h2 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>
           {currentPersona.title} Metrics
@@ -277,7 +333,7 @@ export default function DashboardPage() {
               subtitle={metric.description}
               trend={metric.trend}
               trendValue={metric.trendValue}
-              delay={0.3 + index * 0.05}
+              delay={0.5 + index * 0.05}
               onClick={() => handleMetricClick({
                 key: metric.key,
                 label: metric.label,
@@ -291,25 +347,8 @@ export default function DashboardPage() {
         </div>
       </motion.div>
 
-      {/* Trend Charts - Clickable data points */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TrendChart
-          title="Test Pass Rate Trend (7 Days)"
-          data={passRateData}
-          type="line"
-          color="var(--accent-primary)"
-          delay={0.4}
-          onDataPointClick={(dp) => handleChartPointClick(dp, 'Test Pass Rate', passRateData)}
-        />
-        <TrendChart
-          title="Automation Coverage (7 Days)"
-          data={coverageData}
-          type="area"
-          color="var(--chart-secondary)"
-          delay={0.45}
-          onDataPointClick={(dp) => handleChartPointClick(dp, 'Automation Coverage', coverageData)}
-        />
-      </div>
+      {/* Before/After ROI Comparison */}
+      <BeforeAfterComparison persona={persona} />
 
       {/* Feature Coverage */}
       <FeatureCoverage

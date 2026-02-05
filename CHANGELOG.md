@@ -4,6 +4,41 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.14] - 2026-02-05
+
+### dSQ v1.2.8 - Live Zoho Desk Tickets + Clean Build
+
+**Real Zoho Desk tickets now display instead of mock data. All TypeScript errors and ESLint warnings resolved.**
+
+#### Zoho Desk Integration Fix
+
+- **Root cause**: Vercel production env vars had trailing `\n` newline characters corrupting OAuth token refresh
+- **Fix**: Removed and re-added all 5 ZOHO_* env vars without newlines
+- **API improvements**: Fixed `sortBy` param, added `include=contacts,assignee`, improved contact name mapping
+- **Result**: 10 real Zoho Desk tickets now showing on production (`source: "zoho-desk"`)
+
+#### TypeScript & ESLint Cleanup (11 files)
+
+- `query-detection.ts`: Fixed `_personaId` → `personaId` (used in function body)
+- `DraftEditorPanel.tsx`: Reverted useEffect deps, fixed `contentToSave` → `content`
+- `EscalateTicketModal.tsx`: Fixed `_platform` → `platform`, type assertions for `mark.attrs` and `pmJson`
+- 8 additional files: Removed unused imports, prefixed unused vars with `_`
+
+#### Verification
+
+- Type-check: 0 errors
+- ESLint: 0 warnings, 0 errors
+- Build: Clean (47 routes)
+- Production: HTTP 200, real Zoho tickets
+
+#### Commits
+
+- `345f9e1` — fix: resolve TypeScript errors and ESLint warnings across 11 files
+- `9a285f3` — fix: show real Zoho Desk tickets instead of mock data
+- `841a5c3` — fix: improve Zoho contact name mapping for reporter field
+
+---
+
 ## [0.9.13] - 2026-02-05
 
 ### dTQ v2.1.1 - Re-Audited PRD Alignment (62/62 Checks)

@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.13
-**Session Status**: dTQ v2.1.1 - 100% PRD Alignment (62/62 checks, re-audited) LIVE
+**Version**: 0.9.14
+**Session Status**: dSQ v1.2.8 - Live Zoho Desk Tickets + TS/ESLint Clean Build
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 19b37de - fix(dTQ): v2.1.1 — fix 3 gaps from independent re-audit (62/62 checks)
+**Git Commit**: 841a5c3 - fix: improve Zoho contact name mapping for reporter field
 
 ---
 
@@ -116,7 +116,7 @@ const isPublicRoute = createRouteMatcher([
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
 | **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
-| **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | 1.2.5 |
+| **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | **1.2.8** |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
 | **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.1.1** |
@@ -155,9 +155,54 @@ const isPublicRoute = createRouteMatcher([
 
 ---
 
-## Latest Changes (v0.9.13)
+## Latest Changes (v0.9.14)
 
-### dTQ v2.1.1 - Re-Audited PRD Alignment (2026-02-05)
+### dSQ v1.2.8 - Live Zoho Desk Tickets + Clean Build (2026-02-05)
+
+**Fixed Live Zoho Desk Tickets to show real data instead of mock TICK-001 through TICK-010. Also resolved all TypeScript errors and ESLint warnings for a fully clean build.**
+
+#### Zoho Desk Integration Fix
+
+| Issue | Root Cause | Fix |
+|-------|-----------|-----|
+| **Tickets showing mock data** | Vercel env vars had trailing `\n` newline chars corrupting OAuth tokens | Removed and re-added all 5 ZOHO_* env vars cleanly |
+| **sortBy parameter** | Used `-createdTime` (invalid) | Changed to `createdTime` (valid Zoho API format) |
+| **Reporter showing "Unknown"** | Contact object had null firstName, only lastName | Used `filter(Boolean).join()` for robust name mapping |
+| **Missing contact/assignee data** | API not requesting nested objects | Added `include=contacts,assignee` param |
+| **Priority "None" not handled** | TicketListDemo only typed High/Medium/Low | Added `None` and string to priority type |
+
+#### TypeScript & ESLint Fixes (11 files)
+
+| File | Fix |
+|------|-----|
+| `query-detection.ts` | Renamed `_personaId` back to `personaId` (used in function body) |
+| `DraftEditorPanel.tsx` | Reverted useEffect deps, fixed `contentToSave` → `content` |
+| `EscalateTicketModal.tsx` | Fixed `_platform` → `platform`, added type assertions |
+| 8 other files | Removed unused imports, prefixed unused vars |
+
+#### Verification
+
+| Check | Result |
+|-------|--------|
+| `npm run type-check` | 0 errors |
+| `npx eslint src` | 0 warnings, 0 errors |
+| `npm run build` | Clean (47 routes) |
+| Production API `/api/tickets` | `source: "zoho-desk"`, 10 real tickets |
+| Production page | HTTP 200 |
+
+#### Commits
+
+| Hash | Message |
+|------|---------|
+| `345f9e1` | fix: resolve TypeScript errors and ESLint warnings across 11 files |
+| `9a285f3` | fix: show real Zoho Desk tickets instead of mock data |
+| `841a5c3` | fix: improve Zoho contact name mapping for reporter field |
+
+**Deployed**: https://dsq.digitalworkplace.ai — Vercel production, HTTP 200
+
+---
+
+### Previous: dTQ v2.1.1 - Re-Audited PRD Alignment (2026-02-05)
 
 **Independent re-audit found 3 additional gaps missed by the original audit. All fixed.**
 
@@ -1118,6 +1163,8 @@ vercel --prod
 - [x] dTQ Dashboard UX Overhaul — TrendChart rewrite, 4 charts (was 2), 14-day data, compact integrations bar, reordered layout (v0.9.11)
 - [x] dTQ 100% PRD Alignment — 18 gaps fixed, 5 new components, 11 modified files, 59/59 checks passing (v0.9.12)
 - [x] dTQ Re-Audit — Independent verification found 3 more gaps (G8 math inverted, Slide 1 quote, Production Defect Rate label). All fixed. 62/62 checks (v0.9.13)
+- [x] dSQ Live Zoho Desk Tickets — Fixed env var newlines, API params, contact mapping. 10 real tickets showing (v0.9.14)
+- [x] dSQ TypeScript & ESLint Clean Build — Resolved all TS errors and ESLint warnings across 11 files (v0.9.14)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -1128,5 +1175,5 @@ vercel --prod
 ---
 
 *Last session: 2026-02-05*
-*Version: 0.9.13*
+*Version: 0.9.14*
 *Machine: Mac Mini (aldrin-mac-mini)*

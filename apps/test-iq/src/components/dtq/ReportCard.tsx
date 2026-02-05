@@ -44,19 +44,11 @@ export default memo(function ReportCard({ report, delay = 0, onViewIssues }: Rep
               </div>
             </div>
 
-            {/* Animated status badge */}
-            <motion.div
+            {/* Status badge — CSS animation for failed glow */}
+            <div
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${
                 report.status === 'passed' ? 'badge-success' : 'badge-error'
-              }`}
-              animate={report.status === 'failed' ? {
-                boxShadow: [
-                  '0 0 5px rgba(248, 113, 113, 0.3)',
-                  '0 0 15px rgba(248, 113, 113, 0.5)',
-                  '0 0 5px rgba(248, 113, 113, 0.3)',
-                ],
-              } : {}}
-              transition={report.status === 'failed' ? { duration: 2, repeat: Infinity } : {}}
+              } ${report.status === 'failed' ? 'failed-badge-glow' : ''}`}
             >
               {report.status === 'passed' ? (
                 <>
@@ -69,42 +61,36 @@ export default memo(function ReportCard({ report, delay = 0, onViewIssues }: Rep
                   <span>Failed</span>
                 </>
               )}
-            </motion.div>
+            </div>
           </div>
 
-          {/* Stats with animated counters */}
+          {/* Stats with animated counters — CSS hover instead of Framer Motion */}
           <div className="grid grid-cols-4 gap-4">
-            <motion.div
-              className="text-center p-3 rounded-lg"
+            <div
+              className="stat-card text-center p-3 rounded-lg"
               style={{ background: 'var(--bg-tertiary)' }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <TestTube2 className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--text-muted)' }} />
               <p className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                 <AnimatedCounter value={report.totalTests} duration={0.5} />
               </p>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Total Tests</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="text-center p-3 rounded-lg"
+            <div
+              className="stat-card text-center p-3 rounded-lg"
               style={{ background: 'var(--bg-tertiary)' }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <CheckCircle2 className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--status-success)' }} />
               <p className="text-lg font-semibold" style={{ color: 'var(--status-success)' }}>
                 <AnimatedCounter value={report.passedTests} duration={0.5} />
               </p>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Passed</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="text-center p-3 rounded-lg"
+            <div
+              className="stat-card text-center p-3 rounded-lg"
               style={{ background: 'var(--bg-tertiary)' }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <XCircle
                 className="w-5 h-5 mx-auto mb-1"
@@ -117,20 +103,18 @@ export default memo(function ReportCard({ report, delay = 0, onViewIssues }: Rep
                 <AnimatedCounter value={report.failedTests} duration={0.5} />
               </p>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Failed</p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="text-center p-3 rounded-lg"
+            <div
+              className="stat-card text-center p-3 rounded-lg"
               style={{ background: 'var(--bg-tertiary)' }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 17 }}
             >
               <Clock className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--text-muted)' }} />
               <p className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                 {report.duration}s
               </p>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Duration</p>
-            </motion.div>
+            </div>
           </div>
 
           {/* View Issues button with hover scale */}

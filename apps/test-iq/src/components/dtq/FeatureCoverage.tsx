@@ -246,14 +246,11 @@ export default function FeatureCoverage({
                         </tr>
                       </thead>
                       <tbody>
-                        {category.features.map((feature, idx) => (
-                          <motion.tr
+                        {category.features.map((feature) => (
+                          <tr
                             key={feature.id}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.03 }}
                             className={cn(
-                              'border-t cursor-pointer transition-all',
+                              'feature-row border-t cursor-pointer relative',
                               hoveredFeature === feature.id && 'bg-[var(--bg-tertiary)]'
                             )}
                             style={{ borderColor: 'var(--border-subtle)' }}
@@ -261,42 +258,29 @@ export default function FeatureCoverage({
                             onMouseLeave={() => handleFeatureHover(null)}
                             onClick={() => onFeatureClick?.(feature)}
                           >
-                            {/* Left border indicator on hover */}
+                            {/* Left border indicator via CSS ::before */}
                             <td
                               className="py-3 px-3 relative"
                               style={{ color: 'var(--text-primary)' }}
                             >
-                              <motion.div
-                                className="absolute left-0 top-0 bottom-0 w-0.5 rounded-r"
-                                initial={{ opacity: 0 }}
-                                animate={{
-                                  opacity: hoveredFeature === feature.id ? 1 : 0,
-                                  background: 'var(--accent-primary)',
-                                }}
-                                transition={{ duration: 0.2 }}
-                              />
                               <div className="flex items-center gap-2">
                                 {highlightMatch(feature.name, searchQuery)}
                                 {hoveredFeature === feature.id && (
-                                  <motion.span
-                                    initial={{ opacity: 0, x: -5 }}
-                                    animate={{ opacity: 1, x: 0 }}
+                                  <span
                                     className="text-xs"
                                     style={{ color: 'var(--accent-primary)' }}
                                   >
                                     View details
-                                  </motion.span>
+                                  </span>
                                 )}
                               </div>
                             </td>
                             <td className="py-3 px-3">
                               <div className="flex items-center gap-2">
                                 <div className="progress-bar w-20 h-2">
-                                  <motion.div
+                                  <div
                                     className="progress-bar-fill"
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${feature.coverage}%` }}
-                                    transition={{ duration: 0.5, delay: idx * 0.03 }}
+                                    style={{ width: `${feature.coverage}%`, transition: 'width 0.3s ease' }}
                                   />
                                 </div>
                                 <span style={{ color: 'var(--text-secondary)' }}>
@@ -340,7 +324,7 @@ export default function FeatureCoverage({
                             <td className="py-3 px-3" style={{ color: 'var(--text-secondary)' }}>
                               {feature.impactScore}
                             </td>
-                          </motion.tr>
+                          </tr>
                         ))}
                       </tbody>
                     </table>

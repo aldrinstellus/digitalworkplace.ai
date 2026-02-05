@@ -105,12 +105,18 @@ export default memo(function TrendChart({
   // Unique gradient ID based on title
   const gradientId = `gradient-${title.replace(/\s/g, '')}`;
 
-  // Memoize stats calculations to avoid recomputing on every render
-  const stats = useMemo(() => ({
-    min: Math.min(...data.map(d => d.value)),
-    max: Math.max(...data.map(d => d.value)),
-    avg: data.reduce((sum, d) => sum + d.value, 0) / data.length,
-  }), [data]);
+  // Single-pass stats calculation (avoids 3 array iterations from spread operator)
+  const stats = useMemo(() => {
+    let min = Infinity;
+    let max = -Infinity;
+    let sum = 0;
+    for (const d of data) {
+      if (d.value < min) min = d.value;
+      if (d.value > max) max = d.value;
+      sum += d.value;
+    }
+    return { min, max, avg: sum / data.length };
+  }, [data]);
 
   return (
     <motion.div
@@ -183,8 +189,7 @@ export default memo(function TrendChart({
                 stroke={color}
                 strokeWidth={2}
                 fill={`url(#${gradientId})`}
-                animationDuration={1500}
-                animationBegin={delay * 1000}
+                animationDuration={500}
                 activeDot={(props) => <ChartActiveDot {...props} color={color} interactive={interactive} />}
               />
             </AreaChart>
@@ -229,8 +234,7 @@ export default memo(function TrendChart({
                 strokeWidth={2}
                 dot={false}
                 activeDot={(props) => <ChartActiveDot {...props} color={color} interactive={interactive} />}
-                animationDuration={1500}
-                animationBegin={delay * 1000}
+                animationDuration={500}
               />
             </LineChart>
           )}

@@ -12,10 +12,10 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '40');
 
-    // Fetch test runs
+    // Fetch test runs with nested issues in a single query
     const { data: runs, error: runsError } = await supabase
       .from('dtq_test_runs')
-      .select('*')
+      .select('*, dtq_test_issues(*)')
       .order('executed_at', { ascending: false })
       .limit(limit);
 
@@ -24,37 +24,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: runsError.message }, { status: 500 });
     }
 
-    // Fetch issues for all runs
-    const runIds = runs?.map((r) => r.id) || [];
-    const { data: issues, error: issuesError } = await supabase
-      .from('dtq_test_issues')
-      .select('*')
-      .in('test_run_id', runIds);
-
-    if (issuesError) {
-      console.error('Error fetching issues:', issuesError);
-    }
-
-    // Group issues by test run
-    const issuesByRun = (issues || []).reduce(
-      (acc, issue) => {
-        if (!acc[issue.test_run_id]) {
-          acc[issue.test_run_id] = [];
-        }
-        acc[issue.test_run_id].push({
-          id: issue.id,
-          testCaseName: issue.test_case_name,
-          severity: issue.severity,
-          errorMessage: issue.error_message,
-          stackTrace: issue.stack_trace,
-        });
-        return acc;
-      },
-      {} as Record<string, unknown[]>
-    );
-
     // Transform and combine
-    const transformedRuns = runs?.map((r) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const transformedRuns = runs?.map((r: any) => ({
       id: r.id,
       featureId: r.feature_id,
       featureName: r.feature_name,
@@ -64,7 +36,14 @@ export async function GET(request: NextRequest) {
       passedTests: r.passed_tests,
       failedTests: r.failed_tests,
       duration: r.duration,
-      issues: issuesByRun[r.id] || [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      issues: (r.dtq_test_issues || []).map((issue: any) => ({
+        id: issue.id,
+        testCaseName: issue.test_case_name,
+        severity: issue.severity,
+        errorMessage: issue.error_message,
+        stackTrace: issue.stack_trace,
+      })),
     }));
 
     return NextResponse.json(transformedRuns || []);

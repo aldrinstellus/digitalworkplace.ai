@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
@@ -108,21 +108,70 @@ export default function DashboardPage() {
     });
   }, [pendingAction, clearAction, categories, currentPersona]);
 
-  // Chart data
-  const passRateData = useMemo(() =>
-    dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.passRate })),
-    [dailyMetrics]
-  );
+  // Chart data — stabilized refs to prevent re-animation on tiny metric fluctuations
+  const passRateRef = useRef<ChartDataPoint[]>([]);
+  const coverageRef = useRef<ChartDataPoint[]>([]);
 
-  const coverageData = useMemo(() =>
-    dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.automationCoverage })),
-    [dailyMetrics]
-  );
+  const passRateData = useMemo(() => {
+    const next = dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.passRate }));
+    const prev = passRateRef.current;
+    if (prev.length === next.length && prev.every((p, i) => Math.abs(p.value - next[i].value) < 0.5)) {
+      return prev;
+    }
+    passRateRef.current = next;
+    return next;
+  }, [dailyMetrics]);
+
+  const coverageData = useMemo(() => {
+    const next = dailyMetrics.slice(-7).map(m => ({ date: m.date, value: m.automationCoverage }));
+    const prev = coverageRef.current;
+    if (prev.length === next.length && prev.every((p, i) => Math.abs(p.value - next[i].value) < 0.5)) {
+      return prev;
+    }
+    coverageRef.current = next;
+    return next;
+  }, [dailyMetrics]);
 
   // Click handlers
   const handleMetricClick = useCallback((metric: SelectedMetric) => {
     setSelectedMetric(metric);
   }, []);
+
+  // Pre-built metric click handlers to avoid new closures every render
+  const metricHandlers = useMemo(() => ({
+    totalFeatures: () => handleMetricClick({
+      key: 'totalFeatures',
+      label: 'Total Features',
+      value: summaryMetrics.totalFeatures,
+      unit: '',
+      trend: 'stable',
+      trendValue: '+2 this month',
+    }),
+    automationRate: () => handleMetricClick({
+      key: 'automationCoverage',
+      label: 'Automation Rate',
+      value: summaryMetrics.automationRate,
+      unit: '%',
+      trend: 'up',
+      trendValue: '+3.2%',
+    }),
+    riskDistribution: () => handleMetricClick({
+      key: 'riskDistribution',
+      label: 'Risk Distribution',
+      value: summaryMetrics.riskDistribution.high,
+      unit: ' high risk',
+      trend: 'down',
+      trendValue: '-2 resolved',
+    }),
+    openDefects: () => handleMetricClick({
+      key: 'openDefects',
+      label: 'Open Defects',
+      value: summaryMetrics.openDefects,
+      unit: '',
+      trend: 'down',
+      trendValue: '-5 resolved',
+    }),
+  }), [summaryMetrics, handleMetricClick]);
 
   const handleChartPointClick = useCallback((dataPoint: ChartDataPoint, metricLabel: string, allData: ChartDataPoint[]) => {
     setSelectedChartPoint({ dataPoint, metricLabel, allData });
@@ -170,14 +219,7 @@ export default function DashboardPage() {
           icon={Layers}
           delay={0.1}
           accentColor="var(--chart-tertiary)"
-          onClick={() => handleMetricClick({
-            key: 'totalFeatures',
-            label: 'Total Features',
-            value: summaryMetrics.totalFeatures,
-            unit: '',
-            trend: 'stable',
-            trendValue: '+2 this month',
-          })}
+          onClick={metricHandlers.totalFeatures}
         />
         <MetricCard
           label="Automation Rate"
@@ -186,14 +228,7 @@ export default function DashboardPage() {
           icon={Cpu}
           delay={0.15}
           accentColor="var(--accent-primary)"
-          onClick={() => handleMetricClick({
-            key: 'automationCoverage',
-            label: 'Automation Rate',
-            value: summaryMetrics.automationRate,
-            unit: '%',
-            trend: 'up',
-            trendValue: '+3.2%',
-          })}
+          onClick={metricHandlers.automationRate}
         />
         <MetricCard
           label="Risk Distribution"
@@ -202,14 +237,7 @@ export default function DashboardPage() {
           icon={AlertTriangle}
           delay={0.2}
           accentColor="var(--risk-medium)"
-          onClick={() => handleMetricClick({
-            key: 'riskDistribution',
-            label: 'Risk Distribution',
-            value: summaryMetrics.riskDistribution.high,
-            unit: ' high risk',
-            trend: 'down',
-            trendValue: '-2 resolved',
-          })}
+          onClick={metricHandlers.riskDistribution}
         />
         <MetricCard
           label="Open Defects"
@@ -218,14 +246,7 @@ export default function DashboardPage() {
           icon={Bug}
           delay={0.25}
           accentColor="var(--status-error)"
-          onClick={() => handleMetricClick({
-            key: 'openDefects',
-            label: 'Open Defects',
-            value: summaryMetrics.openDefects,
-            unit: '',
-            trend: 'down',
-            trendValue: '-5 resolved',
-          })}
+          onClick={metricHandlers.openDefects}
         />
       </div>
 
@@ -297,46 +318,50 @@ export default function DashboardPage() {
         onCategoryClick={handleCategoryClick}
       />
 
-      {/* Modals */}
+      {/* Modals — conditionally rendered to avoid initialization when closed */}
 
-      {/* Metric Drill-Down Modal */}
-      <MetricDrillDownModal
-        isOpen={!!selectedMetric}
-        onClose={() => setSelectedMetric(null)}
-        metricKey={selectedMetric?.key || ''}
-        metricLabel={selectedMetric?.label || ''}
-        currentValue={selectedMetric?.value || 0}
-        unit={selectedMetric?.unit}
-        trend={selectedMetric?.trend}
-        trendValue={selectedMetric?.trendValue}
-        dailyMetrics={dailyMetrics}
-        previousPeriodValue={selectedMetric ? selectedMetric.value * 0.95 : undefined}
-      />
+      {selectedMetric && (
+        <MetricDrillDownModal
+          isOpen
+          onClose={() => setSelectedMetric(null)}
+          metricKey={selectedMetric.key}
+          metricLabel={selectedMetric.label}
+          currentValue={selectedMetric.value}
+          unit={selectedMetric.unit}
+          trend={selectedMetric.trend}
+          trendValue={selectedMetric.trendValue}
+          dailyMetrics={dailyMetrics}
+          previousPeriodValue={selectedMetric.value * 0.95}
+        />
+      )}
 
-      {/* Chart Point Drill-Down Modal */}
-      <ChartDrillDownModal
-        isOpen={!!selectedChartPoint}
-        onClose={() => setSelectedChartPoint(null)}
-        dataPoint={selectedChartPoint?.dataPoint || null}
-        metricLabel={selectedChartPoint?.metricLabel || ''}
-        allData={selectedChartPoint?.allData || []}
-      />
+      {selectedChartPoint && (
+        <ChartDrillDownModal
+          isOpen
+          onClose={() => setSelectedChartPoint(null)}
+          dataPoint={selectedChartPoint.dataPoint}
+          metricLabel={selectedChartPoint.metricLabel}
+          allData={selectedChartPoint.allData}
+        />
+      )}
 
-      {/* Feature Detail Modal */}
-      <FeatureDetailModal
-        isOpen={!!selectedFeature}
-        onClose={() => setSelectedFeature(null)}
-        feature={selectedFeature}
-        testRuns={testRuns}
-      />
+      {selectedFeature && (
+        <FeatureDetailModal
+          isOpen
+          onClose={() => setSelectedFeature(null)}
+          feature={selectedFeature}
+          testRuns={testRuns}
+        />
+      )}
 
-      {/* Category Analytics Modal */}
-      <CategoryAnalyticsModal
-        isOpen={!!selectedCategory}
-        onClose={() => setSelectedCategory(null)}
-        category={selectedCategory}
-        onFeatureClick={handleCategoryFeatureClick}
-      />
+      {selectedCategory && (
+        <CategoryAnalyticsModal
+          isOpen
+          onClose={() => setSelectedCategory(null)}
+          category={selectedCategory}
+          onFeatureClick={handleCategoryFeatureClick}
+        />
+      )}
     </div>
   );
 }

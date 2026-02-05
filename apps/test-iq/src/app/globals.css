@@ -684,6 +684,41 @@ body {
 }
 
 /* =============================================================================
+   PERFORMANCE-OPTIMIZED CSS ANIMATIONS (replacing Framer Motion JS animations)
+   ============================================================================= */
+
+/* ReportCard stat hover — replaces motion.div whileHover={{ scale: 1.05 }} */
+.stat-card { transition: transform 0.2s ease; }
+.stat-card:hover { transform: scale(1.05); }
+
+/* ReportCard failed badge glow — replaces infinite Framer Motion boxShadow animation */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(248, 113, 113, 0.3); }
+  50% { box-shadow: 0 0 15px rgba(248, 113, 113, 0.5); }
+}
+.failed-badge-glow { animation: pulse-glow 2s infinite; }
+
+/* MetricCard hover — replaces whileHover={{ scale: 1.02 }} */
+.metric-card-interactive { transition: transform 0.15s ease; }
+.metric-card-interactive:hover { transform: scale(1.02); }
+
+/* FeatureCoverage row — replaces motion.tr + motion.div indicator */
+.feature-row { transition: background-color 0.15s ease; position: relative; }
+.feature-row:hover { background: var(--bg-tertiary); }
+.feature-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent-primary);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.feature-row:hover::before { opacity: 1; }
+
+/* =============================================================================
    CHART STYLES
    ============================================================================= */
 

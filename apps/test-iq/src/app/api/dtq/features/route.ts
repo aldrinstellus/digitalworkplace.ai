@@ -33,7 +33,9 @@ export async function GET() {
       impactScore: f.impact_score,
     }));
 
-    return NextResponse.json(transformedFeatures || []);
+    return NextResponse.json(transformedFeatures || [], {
+      headers: { 'Cache-Control': 'public, max-age=300, s-maxage=600' },
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

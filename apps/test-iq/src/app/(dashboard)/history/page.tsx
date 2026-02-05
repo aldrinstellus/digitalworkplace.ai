@@ -49,22 +49,23 @@ export default function HistoryPage() {
   const [selectedChartPoint, setSelectedChartPoint] = useState<SelectedChartPoint | null>(null);
   const { pendingAction, clearAction } = useNavigation();
 
-  // Calculate 30-day averages
-  const avgPassRate = useMemo(() => Math.round(
-    dailyMetrics.reduce((sum, m) => sum + m.passRate, 0) / dailyMetrics.length * 10
-  ) / 10, [dailyMetrics]);
-
-  const avgFirstPassRate = useMemo(() => Math.round(
-    dailyMetrics.reduce((sum, m) => sum + m.firstRunPassRate, 0) / dailyMetrics.length * 10
-  ) / 10, [dailyMetrics]);
-
-  const avgDefectDetection = useMemo(() => Math.round(
-    dailyMetrics.reduce((sum, m) => sum + m.defectDetection, 0) / dailyMetrics.length * 10
-  ) / 10, [dailyMetrics]);
-
-  const avgEffectiveness = useMemo(() => Math.round(
-    dailyMetrics.reduce((sum, m) => sum + m.effectiveness, 0) / dailyMetrics.length * 10
-  ) / 10, [dailyMetrics]);
+  // Calculate all 30-day averages in a single pass
+  const { avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness } = useMemo(() => {
+    let passRate = 0, firstPass = 0, defect = 0, effectiveness = 0;
+    for (const m of dailyMetrics) {
+      passRate += m.passRate;
+      firstPass += m.firstRunPassRate;
+      defect += m.defectDetection;
+      effectiveness += m.effectiveness;
+    }
+    const len = dailyMetrics.length;
+    return {
+      avgPassRate: Math.round(passRate / len * 10) / 10,
+      avgFirstPassRate: Math.round(firstPass / len * 10) / 10,
+      avgDefectDetection: Math.round(defect / len * 10) / 10,
+      avgEffectiveness: Math.round(effectiveness / len * 10) / 10,
+    };
+  }, [dailyMetrics]);
 
   // Handle navigation actions from chat link cards
   useEffect(() => {
@@ -99,23 +100,20 @@ export default function HistoryPage() {
     });
   }, [pendingAction, clearAction, avgPassRate, avgFirstPassRate, avgDefectDetection, avgEffectiveness]);
 
-  // Chart data
-  const passRateData = useMemo(() =>
-    dailyMetrics.map(m => ({ date: m.date, value: m.passRate })),
-    [dailyMetrics]
-  );
-  const firstPassData = useMemo(() =>
-    dailyMetrics.map(m => ({ date: m.date, value: m.firstRunPassRate })),
-    [dailyMetrics]
-  );
-  const defectData = useMemo(() =>
-    dailyMetrics.map(m => ({ date: m.date, value: m.defectDetection })),
-    [dailyMetrics]
-  );
-  const effectivenessData = useMemo(() =>
-    dailyMetrics.map(m => ({ date: m.date, value: m.effectiveness })),
-    [dailyMetrics]
-  );
+  // All chart datasets in single pass
+  const { passRateData, firstPassData, defectData, effectivenessData } = useMemo(() => {
+    const pr: ChartDataPoint[] = [];
+    const fp: ChartDataPoint[] = [];
+    const dd: ChartDataPoint[] = [];
+    const ef: ChartDataPoint[] = [];
+    for (const m of dailyMetrics) {
+      pr.push({ date: m.date, value: m.passRate });
+      fp.push({ date: m.date, value: m.firstRunPassRate });
+      dd.push({ date: m.date, value: m.defectDetection });
+      ef.push({ date: m.date, value: m.effectiveness });
+    }
+    return { passRateData: pr, firstPassData: fp, defectData: dd, effectivenessData: ef };
+  }, [dailyMetrics]);
 
   // Metric click handlers
   const handleMetricClick = useCallback((metric: SelectedMetric) => {
@@ -247,28 +245,31 @@ export default function HistoryPage() {
         />
       </div>
 
-      {/* Metric Drill-Down Modal */}
-      <MetricDrillDownModal
-        isOpen={!!selectedMetric}
-        onClose={() => setSelectedMetric(null)}
-        metricKey={selectedMetric?.key || ''}
-        metricLabel={selectedMetric?.label || ''}
-        currentValue={selectedMetric?.value || 0}
-        unit={selectedMetric?.unit}
-        trend={selectedMetric?.trend}
-        trendValue={selectedMetric?.trendValue}
-        dailyMetrics={dailyMetrics}
-        previousPeriodValue={selectedMetric ? selectedMetric.value - 2.5 : undefined}
-      />
+      {/* Modals — conditionally rendered */}
+      {selectedMetric && (
+        <MetricDrillDownModal
+          isOpen
+          onClose={() => setSelectedMetric(null)}
+          metricKey={selectedMetric.key}
+          metricLabel={selectedMetric.label}
+          currentValue={selectedMetric.value}
+          unit={selectedMetric.unit}
+          trend={selectedMetric.trend}
+          trendValue={selectedMetric.trendValue}
+          dailyMetrics={dailyMetrics}
+          previousPeriodValue={selectedMetric.value - 2.5}
+        />
+      )}
 
-      {/* Chart Point Drill-Down Modal */}
-      <ChartDrillDownModal
-        isOpen={!!selectedChartPoint}
-        onClose={() => setSelectedChartPoint(null)}
-        dataPoint={selectedChartPoint?.dataPoint || null}
-        metricLabel={selectedChartPoint?.metricLabel || ''}
-        allData={selectedChartPoint?.allData || []}
-      />
+      {selectedChartPoint && (
+        <ChartDrillDownModal
+          isOpen
+          onClose={() => setSelectedChartPoint(null)}
+          dataPoint={selectedChartPoint.dataPoint}
+          metricLabel={selectedChartPoint.metricLabel}
+          allData={selectedChartPoint.allData}
+        />
+      )}
     </div>
   );
 }

@@ -84,7 +84,9 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json(categories);
+    return NextResponse.json(categories, {
+      headers: { 'Cache-Control': 'public, max-age=300, s-maxage=600' },
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

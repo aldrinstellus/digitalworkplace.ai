@@ -46,7 +46,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
         exit={{ opacity: 0, scale: 0.95, y: -10 }}
         transition={{
           type: 'spring',
-          stiffness: 300,
+          stiffness: 200,
           damping: 25,
         }}
         className="card relative overflow-hidden rounded-xl p-5"
@@ -66,15 +66,15 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
         />
 
         <div className="relative flex items-center gap-4">
-          {/* Icon with rotate + scale animation on change */}
+          {/* Icon with scale animation on change (no rotate for perf) */}
           <motion.div
             className="w-12 h-12 rounded-xl flex items-center justify-center"
             style={{ background: data.iconBg }}
-            initial={{ rotate: -180, scale: 0 }}
-            animate={{ rotate: 0, scale: 1 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
             transition={{
               type: 'spring',
-              stiffness: 300,
+              stiffness: 200,
               damping: 20,
             }}
           >
@@ -86,7 +86,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
               className="flex items-center gap-2 mb-1"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.05 }}
             >
               <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                 Active Persona View
@@ -97,7 +97,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
               style={{ color: 'var(--text-primary)' }}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.15 }}
+              transition={{ delay: 0.08 }}
             >
               {data.name}
             </motion.h2>
@@ -106,7 +106,7 @@ export default memo(function PersonaCard({ persona }: PersonaCardProps) {
               style={{ color: 'var(--text-secondary)' }}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.1 }}
             >
               {data.description}
             </motion.p>

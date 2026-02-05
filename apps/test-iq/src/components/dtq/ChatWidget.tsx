@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   MessageCircle,
@@ -65,6 +65,75 @@ const LINK_ICONS: Record<ChatLinkTarget, LucideIcon> = {
   history: Clock,
   'test-run': TestTube2,
 };
+
+// Memoized markdown formatter
+function formatMarkdown(content: string): string {
+  return content
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/## (.*?)$/gm, '<h4 class="text-base font-semibold mt-3 mb-2">$1</h4>')
+    .replace(/### (.*?)$/gm, '<h5 class="text-sm font-semibold mt-2 mb-1">$1</h5>')
+    .replace(/^- (.*?)$/gm, '<li class="ml-4">$1</li>')
+    .replace(/\n/g, '<br />');
+}
+
+// Memoized message content — avoids re-running regex on every render
+const MemoizedMessageContent = memo(function MemoizedMessageContent({ content }: { content: string }) {
+  const html = useMemo(() => formatMarkdown(content), [content]);
+  return (
+    <div
+      className="text-[13px] leading-relaxed whitespace-pre-wrap prose prose-invert prose-sm max-w-none"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+});
+
+// Memoized link card — avoids new closures per render
+const MemoizedLinkCard = memo(function MemoizedLinkCard({
+  link,
+  onNavigate,
+}: {
+  link: ChatLink;
+  onNavigate: (link: ChatLink) => void;
+}) {
+  const LinkIcon = LINK_ICONS[link.target] || Target;
+  const handleClick = useCallback(() => onNavigate(link), [link, onNavigate]);
+  return (
+    <motion.button
+      onClick={handleClick}
+      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left cursor-pointer group transition-all"
+      style={{
+        background: 'var(--bg-elevated)',
+        border: '1px solid var(--border-subtle)',
+      }}
+      whileHover={{
+        x: 2,
+        borderColor: 'var(--accent-primary)',
+      }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div
+        className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
+        style={{ background: 'var(--bg-tertiary)' }}
+      >
+        <LinkIcon className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[12px] font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+          {link.label}
+        </p>
+        {link.description && (
+          <p className="text-[10px] truncate" style={{ color: 'var(--text-muted)' }}>
+            {link.description}
+          </p>
+        )}
+      </div>
+      <ChevronRight
+        className="w-3.5 h-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{ color: 'var(--accent-primary)' }}
+      />
+    </motion.button>
+  );
+});
 
 async function fetchChatResponse(
   message: string,
@@ -352,7 +421,7 @@ export default function ChatWidget() {
               )}
 
               {/* Messages — always rendered */}
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence mode="sync">
                 {messages.map((message) => (
                   <motion.div
                     key={message.id}
@@ -389,17 +458,7 @@ export default function ChatWidget() {
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                       >
-                        <div
-                          className="text-[13px] leading-relaxed whitespace-pre-wrap prose prose-invert prose-sm max-w-none"
-                          dangerouslySetInnerHTML={{
-                            __html: message.content
-                              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                              .replace(/## (.*?)$/gm, '<h4 class="text-base font-semibold mt-3 mb-2">$1</h4>')
-                              .replace(/### (.*?)$/gm, '<h5 class="text-sm font-semibold mt-2 mb-1">$1</h5>')
-                              .replace(/^- (.*?)$/gm, '<li class="ml-4">$1</li>')
-                              .replace(/\n/g, '<br />')
-                          }}
-                        />
+                        <MemoizedMessageContent content={message.content} />
                       </motion.div>
                       {message.role === 'user' && (
                         <motion.div
@@ -439,46 +498,13 @@ export default function ChatWidget() {
                           Related
                         </span>
                         <div className="space-y-1">
-                          {message.relatedLinks.map((link) => {
-                            const LinkIcon = LINK_ICONS[link.target] || Target;
-                            return (
-                              <motion.button
-                                key={link.id}
-                                onClick={() => navigation.dispatch(link)}
-                                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left cursor-pointer group transition-all"
-                                style={{
-                                  background: 'var(--bg-elevated)',
-                                  border: '1px solid var(--border-subtle)',
-                                }}
-                                whileHover={{
-                                  x: 2,
-                                  borderColor: 'var(--accent-primary)',
-                                }}
-                                whileTap={{ scale: 0.98 }}
-                              >
-                                <div
-                                  className="w-6 h-6 rounded-md flex items-center justify-center shrink-0"
-                                  style={{ background: 'var(--bg-tertiary)' }}
-                                >
-                                  <LinkIcon className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[12px] font-medium truncate" style={{ color: 'var(--text-primary)' }}>
-                                    {link.label}
-                                  </p>
-                                  {link.description && (
-                                    <p className="text-[10px] truncate" style={{ color: 'var(--text-muted)' }}>
-                                      {link.description}
-                                    </p>
-                                  )}
-                                </div>
-                                <ChevronRight
-                                  className="w-3.5 h-3.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                                  style={{ color: 'var(--accent-primary)' }}
-                                />
-                              </motion.button>
-                            );
-                          })}
+                          {message.relatedLinks.map((link) => (
+                            <MemoizedLinkCard
+                              key={link.id}
+                              link={link}
+                              onNavigate={navigation.dispatch}
+                            />
+                          ))}
                         </div>
                       </motion.div>
                     )}

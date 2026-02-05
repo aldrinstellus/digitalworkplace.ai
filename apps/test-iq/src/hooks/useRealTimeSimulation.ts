@@ -77,11 +77,18 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
   const [isLive, setIsLive] = useState(true);
   const [isLoading] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const featuresRef = useRef<Feature[]>(initialData.features);
+
+  // Keep featuresRef in sync with features state
+  useEffect(() => {
+    featuresRef.current = features;
+  }, [features]);
 
   // Reset state when persona changes
   useEffect(() => {
     const data = getPersonaData(persona);
     queueMicrotask(() => {
+      featuresRef.current = data.features;
       setFeatures(data.features);
       setTestRuns(data.testRuns);
       setDailyMetrics(data.dailyMetrics);
@@ -89,29 +96,31 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
     });
   }, [persona]);
 
-  // Simulate new test runs appearing
+  // Simulate new test runs appearing — uses ref to avoid dependency cascade
   const simulateNewTestRun = useCallback(() => {
-    const newRun = generateTestRun(features);
-    setTestRuns((prev) => [newRun, ...prev.slice(0, 49)]); // Keep max 50 runs
-    setLastUpdate(new Date());
+    startTransition(() => {
+      const newRun = generateTestRun(featuresRef.current);
+      setTestRuns((prev) => [newRun, ...prev.slice(0, 49)]); // Keep max 50 runs
+      setLastUpdate(new Date());
 
-    // Update feature metrics based on the new run
-    setFeatures((prev) =>
-      prev.map((f) => {
-        if (f.id === newRun.featureId) {
-          const newPassRate = Math.round(
-            f.passRate * 0.9 + (newRun.status === 'passed' ? 100 : 0) * 0.1
-          );
-          return {
-            ...f,
-            passRate: newPassRate,
-            openDefects: f.openDefects + (newRun.status === 'failed' ? 1 : 0),
-          };
-        }
-        return f;
-      })
-    );
-  }, [features]);
+      // Update feature metrics based on the new run
+      setFeatures((prev) =>
+        prev.map((f) => {
+          if (f.id === newRun.featureId) {
+            const newPassRate = Math.round(
+              f.passRate * 0.9 + (newRun.status === 'passed' ? 100 : 0) * 0.1
+            );
+            return {
+              ...f,
+              passRate: newPassRate,
+              openDefects: f.openDefects + (newRun.status === 'failed' ? 1 : 0),
+            };
+          }
+          return f;
+        })
+      );
+    });
+  }, []);
 
   // Simulate metric fluctuations
   const simulateMetricFluctuation = useCallback(() => {
@@ -151,12 +160,12 @@ export function useRealTimeSimulation(enabled: boolean = true, persona: PersonaT
       }, delay);
     };
 
-    // Simulate metric fluctuation every 10 seconds (throttled from 5s for performance)
+    // Simulate metric fluctuation every 30 seconds (throttled for performance)
     const metricInterval = setInterval(() => {
       startTransition(() => {
         simulateMetricFluctuation();
       });
-    }, 10000);
+    }, 30000);
 
     scheduleNextRun();
 

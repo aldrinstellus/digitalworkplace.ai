@@ -85,7 +85,9 @@ export async function GET(request: NextRequest) {
       automationCoverage: Number(m.automation_coverage),
     }));
 
-    return NextResponse.json(transformedMetrics || []);
+    return NextResponse.json(transformedMetrics || [], {
+      headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=3600' },
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

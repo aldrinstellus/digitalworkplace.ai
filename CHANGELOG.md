@@ -4,6 +4,32 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.16] - 2026-02-05
+
+### DSQ Demo Guide v1.2.0 - Live Use Cases + PDF Middleware Fix
+
+- **3 Live Use Cases** added to Demo Guide: Password Reset, Printer Not Responding, SCORM Import
+- **14 new Knowledge Base articles** added to Supabase (printer, SCORM, ticket mgmt, password topics)
+- **Global embeddings**: 460 → 474 (100% coverage)
+- **Risk register widget mapping** fixed: "Show risk register" / "Critical risk" → `risk-register-dashboard`
+- **Clerk middleware fix**: Added `pdf` to static file extension exclusion in `proxy.ts`
+- **PDF Guide**: Regenerated v1.2.0 (533KB), accessible at `/guides/DSQ_DEMO_GUIDE_v1.pdf`
+- **Full spectrum test**: 67/67 queries passing on production (34 Gov+Project + 33 ATC)
+- **Live use cases verified**: 11 Zoho tickets, 3 Jira tickets (KAN-140 through KAN-142)
+
+---
+
+## [0.9.15] - 2026-02-05
+
+### Main Dashboard - SVG Animation Fix + Guide Button
+
+- **Fixed 16 SVG animation errors** on dashboard product cards (undefined cx/cy/width/height/opacity)
+- **Added Guide button** to product cards — opens demo guide PDF in new tab
+- **5 missing embeddings** generated for City of Doral civic items
+- **2 KB items rewritten** for Zoho Desk ticket guidelines
+
+---
+
 ## [0.9.14] - 2026-02-05
 
 ### dSQ v1.2.8 - Live Zoho Desk Tickets + Clean Build

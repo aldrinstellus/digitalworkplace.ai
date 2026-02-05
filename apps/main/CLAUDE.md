@@ -51,7 +51,7 @@
 - Demo Guide buttons (PDF opens in separate tab)
 - User management and admin panel
 
-### Dashboard Product Cards (v0.9.15)
+### Dashboard Product Cards (v0.9.16)
 Each card has:
 - **Launch App** button — opens the product in a new tab
 - **Guide** button — opens the demo guide PDF in a new tab (disabled if no guide available)
@@ -60,10 +60,12 @@ Each card has:
 
 | Product | Guide | Status |
 |---------|-------|--------|
-| **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v1.pdf` | Active |
+| **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v1.pdf` (533KB, v1.2.0) | Active |
 | **AI Intranet** | — | Pending |
 | **AI Chat Bot** | — | Pending |
 | **AI Testing** | — | Pending |
+
+**PDF Middleware Fix (v0.9.16):** Added `pdf` to the static file extension exclusion in `src/proxy.ts` so PDFs are served without Clerk authentication.
 
 ### URLs
 | Page | Route | Local Dev | Notes |

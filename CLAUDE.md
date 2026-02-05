@@ -398,7 +398,7 @@ npm run dev:chatcore     # Start dCQ on port 3002
 
 ---
 
-### dSQ - Support IQ (v1.2.4) - PRODUCTION LIVE (Semantic Matching Enhanced)
+### dSQ - Support IQ (v1.2.8) - PRODUCTION LIVE (Live Zoho Tickets + Use Cases)
 
 | Property | Value |
 |----------|-------|
@@ -407,7 +407,8 @@ npm run dev:chatcore     # Start dCQ on port 3002
 | **Local URL** | http://localhost:3003/dsq/demo/atc-executive |
 | **Production URL** | https://dsq.digitalworkplace.ai/dsq/ |
 | **basePath** | `/dsq` |
-| **Audit Score** | 100/100 (54/54 Demo Guide questions passing) |
+| **Audit Score** | 100/100 (116/116 Demo Guide questions passing) |
+| **Demo Guide** | `demo-guide/DSQ_DEMO_GUIDE_v1.md` (v1.2.0 - Live Use Cases Edition) |
 | **Documentation** | `apps/support-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
 
 **Quick Start:**
@@ -421,16 +422,21 @@ npm run dev:support      # Start dSQ on port 3003
 - **Government Mode:** `/dsq/demo/cor`, `/dsq/demo/program-manager`, `/dsq/demo/stakeholder-lead`
 - **Project Mode:** `/dsq/demo/project-manager`, `/dsq/demo/service-team-lead`, `/dsq/demo/service-team-member`
 
-**Features (v1.2.3):**
-- Multi-persona AI Support: 10 personas, 54 unique query patterns
-- Widget System: 50+ specialized widgets for each persona
+**Features (v1.2.8):**
+- Multi-persona AI Support: 10 personas, 116 unique query patterns across 3 modes
+- Widget System: 28+ specialized widgets for each persona
 - Query Detection: Enhanced semantic matching with 50% threshold
 - Interactive Drill-Down: All widgets support click-to-expand functionality
 - Demo Mode: Pre-configured responses matching Demo Guide specification
+- Live Zoho Desk Tickets: Real tickets via OAuth API with mock fallback
+- 3 Live Use Cases: Password Reset, Printer Not Responding, SCORM Import
+- AI Draft Generation: Claude 3.5 Sonnet via N8n webhooks
+- Jira Escalation: Create Jira tickets with ADF formatting from ticket detail
+- Guide Button: PDF demo guide accessible from Main Dashboard
 
 **Database (Supabase):**
 - Schema: `dsq` with 15+ tables
-- 356 knowledge items with 100% embedding coverage
+- 474 global knowledge items with 100% embedding coverage (33 DSQ-specific)
 - pgvector for semantic search
 
 ---

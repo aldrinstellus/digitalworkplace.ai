@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-02-05
-**Version**: 0.9.14
-**Session Status**: dSQ v1.2.8 - Live Zoho Desk Tickets + TS/ESLint Clean Build
+**Version**: 0.9.15
+**Session Status**: Dashboard SVG Animation Fix + Guide Button + dSQ Knowledge Base Update
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 841a5c3 - fix: improve Zoho contact name mapping for reporter field
+**Git Commit**: (pending push)
 
 ---
 
@@ -115,7 +115,7 @@ const isPublicRoute = createRouteMatcher([
 
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
-| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.7.6 |
+| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.9.15 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | **1.2.8** |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
@@ -149,13 +149,50 @@ const isPublicRoute = createRouteMatcher([
 - **Project**: digitalworkplace-ai (fhtempgkltrazrgbedrh)
 - **Schemas**: public, diq, dsq, dcq, dtq
 - **pgvector**: v0.8.0 enabled
-- **Total Knowledge Items**: 457 with 100% embedding coverage (357 existing + 100 dTQ)
+- **Total Knowledge Items**: 460 with 100% embedding coverage
 - **DCQ FAQs**: 8 with 100% embedding coverage
 - **DTQ Knowledge Base**: 130 rows with 100% embedding coverage (1536-dim)
 
 ---
 
-## Latest Changes (v0.9.14)
+## Latest Changes (v0.9.15)
+
+### Main Dashboard - SVG Animation Fix + Guide Button (2026-02-05)
+
+**Fixed 16 SVG animation errors on dashboard product cards and added Demo Guide button.**
+
+#### SVG Animation Fixes (`apps/main/src/app/dashboard/page.tsx`)
+
+| Card | Issue | Fix |
+|------|-------|-----|
+| **AI Intranet** | 5 data packet circles had `undefined` cx/cy | Added `initial={{ cx, cy }}` |
+| **AI Chat Bot** | Robot mouth rect had `undefined` width/height | Added `initial={{ width: 40, height: 6 }}` |
+| **AI Testing** | 3 progress bars + bottom bar had `undefined` width | Added `initial={{ width }}` |
+| **AI Testing** | Bug X mark had `undefined` opacity | Added `initial={{ scale: 0, opacity: 0 }}` |
+
+**Result**: Console errors reduced from 18 to 2 (remaining are Clerk API, not animation-related).
+
+#### Guide Button Feature
+
+| Product | Guide Button | Status |
+|---------|-------------|--------|
+| **AI Support** | Opens `DSQ_DEMO_GUIDE_v1.pdf` in new tab | Active |
+| **AI Intranet** | Disabled | Pending guide |
+| **AI Chat Bot** | Disabled | Pending guide |
+| **AI Testing** | Disabled | Pending guide |
+
+**PDF Location**: `apps/main/public/guides/DSQ_DEMO_GUIDE_v1.pdf`
+
+#### dSQ Knowledge Base & Embeddings Update
+
+| Change | Detail |
+|--------|--------|
+| 5 missing embeddings generated | City of Doral civic items |
+| 2 KB items rewritten | Ticket guidelines updated for Zoho Desk |
+| Semantic patterns updated | Removed old TICK-001 mock refs, added DESK-1001 format |
+| Total embeddings | 460/460 (100%) |
+
+---
 
 ### dSQ v1.2.8 - Live Zoho Desk Tickets + Clean Build (2026-02-05)
 

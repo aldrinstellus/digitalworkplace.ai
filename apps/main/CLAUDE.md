@@ -47,8 +47,23 @@
 
 **Main Dashboard** is the central hub for Digital Workplace AI product suite. It provides:
 - Google OAuth authentication (Clerk)
-- Product card navigation to all sub-projects
+- Product card navigation to all sub-projects with animated SVG illustrations
+- Demo Guide buttons (PDF opens in separate tab)
 - User management and admin panel
+
+### Dashboard Product Cards (v0.9.15)
+Each card has:
+- **Launch App** button — opens the product in a new tab
+- **Guide** button — opens the demo guide PDF in a new tab (disabled if no guide available)
+- **Animated SVG illustrations** — continuous Framer Motion animations with hover enhancement
+- **3D tilt effect** — mouse-following perspective transform
+
+| Product | Guide | Status |
+|---------|-------|--------|
+| **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v1.pdf` | Active |
+| **AI Intranet** | — | Pending |
+| **AI Chat Bot** | — | Pending |
+| **AI Testing** | — | Pending |
 
 ### URLs
 | Page | Route | Local Dev | Notes |

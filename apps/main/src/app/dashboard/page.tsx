@@ -24,6 +24,7 @@ const products = [
     localHref: "http://localhost:3003/dsq/demo/cor",
     prodHref: "https://dsq.digitalworkplace.ai/dsq/demo/cor",
     disabled: false,
+    guideUrl: "/guides/DSQ_DEMO_GUIDE_v1.pdf",
     colors: {
       primary: "#10b981",
       secondary: "#06b6d4",
@@ -38,6 +39,7 @@ const products = [
     localHref: "http://localhost:3001/diq/dashboard",
     prodHref: "https://intranet-iq.vercel.app/diq/dashboard",
     disabled: false,
+    guideUrl: null,
     colors: {
       primary: "#3b82f6",
       secondary: "#8b5cf6",
@@ -52,6 +54,7 @@ const products = [
     localHref: "http://localhost:3002/dcq/Home/index.html",
     prodHref: "https://dcq.digitalworkplace.ai/dcq/Home/index.html",
     disabled: false,
+    guideUrl: null,
     colors: {
       primary: "#a855f7",
       secondary: "#ec4899",
@@ -66,6 +69,7 @@ const products = [
     localHref: "http://localhost:3004/dtq/dashboard",
     prodHref: "https://dtq.digitalworkplace.ai/dtq/dashboard",
     disabled: false,
+    guideUrl: null,
     colors: {
       primary: "#ff3366",
       secondary: "#ff1a53",
@@ -498,6 +502,7 @@ const ProductIllustrations = {
           key={i}
           r="3"
           fill="#8b5cf6"
+          initial={{ cx: 60 + i * 50, cy: 50 + i * 30, opacity: 0.3 }}
           animate={{
             cx: [60 + i * 50, 220, 60 + i * 50],
             cy: [50 + i * 30, 80, 50 + i * 30],
@@ -548,6 +553,7 @@ const ProductIllustrations = {
         {[[195, 55], [195, 80], [195, 105]].map(([x, y], i) => (
           <g key={i}>
             <motion.rect x={x} y={y} height="8" rx="2" fill="#ff3366"
+              initial={{ width: 35, fillOpacity: 0.15 }}
               animate={{
                 fillOpacity: isHovered ? [0.4, 0.7, 0.4] : [0.15, 0.3, 0.15],
                 width: isHovered ? [40, 50, 40] : [35, 42, 35]
@@ -603,6 +609,7 @@ const ProductIllustrations = {
 
       {/* X mark on bug - pulsing when hovered */}
       <motion.g
+        initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: isHovered ? [0.9, 1.1, 0.9] : 0,
           opacity: isHovered ? [0.8, 1, 0.8] : 0
@@ -617,6 +624,7 @@ const ProductIllustrations = {
       {/* Progress bar - always animating */}
       <rect x="40" y="180" width="100" height="8" rx="4" fill="#ff3366" fillOpacity={0.2} />
       <motion.rect x="40" y="180" rx="4" height="8" fill="#ff3366"
+        initial={{ width: 50, fillOpacity: 0.3 }}
         animate={{
           width: isHovered ? [80, 100, 80] : [50, 70, 50],
           fillOpacity: isHovered ? [0.6, 0.9, 0.6] : [0.3, 0.5, 0.3]
@@ -684,6 +692,7 @@ const ProductIllustrations = {
         />
         {/* Mouth - always talking */}
         <motion.rect x="210" y="82" rx="3" fill="#fff"
+          initial={{ width: 40, height: 6 }}
           animate={{
             width: isHovered ? [40, 25, 35, 40] : [40, 32, 38, 40],
             height: isHovered ? [6, 14, 8, 6] : [6, 10, 7, 6]
@@ -969,9 +978,9 @@ function ProductCard({
             {product.description}
           </motion.p>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <motion.div
-            className="flex items-center gap-3"
+            className="flex items-center gap-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{
               opacity: isHovered || isDisabled ? 1 : 0,
@@ -984,28 +993,61 @@ function ProductCard({
                 Coming Soon
               </div>
             ) : (
-              <motion.button
-                onClick={handleLaunchApp}
-                className="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
-                style={{
-                  background: `linear-gradient(135deg, ${product.colors.primary}, ${product.colors.secondary})`,
-                  color: '#fff',
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Launch App
-                <motion.svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ duration: 1, repeat: Infinity }}
+              <>
+                <motion.button
+                  onClick={handleLaunchApp}
+                  className="px-4 py-2 rounded-full text-sm font-semibold flex items-center gap-2"
+                  style={{
+                    background: `linear-gradient(135deg, ${product.colors.primary}, ${product.colors.secondary})`,
+                    color: '#fff',
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </motion.svg>
-              </motion.button>
+                  Launch App
+                  <motion.svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    animate={{ x: [0, 4, 0] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </motion.svg>
+                </motion.button>
+                {product.guideUrl ? (
+                  <motion.button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(product.guideUrl!, '_blank');
+                    }}
+                    className="px-3 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 border transition-colors"
+                    style={{
+                      borderColor: `${product.colors.primary}60`,
+                      color: product.colors.primary,
+                      background: `${product.colors.primary}10`,
+                    }}
+                    whileHover={{ scale: 1.05, backgroundColor: `${product.colors.primary}20` }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    Guide
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    disabled
+                    className="px-3 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 border border-white/10 text-white/25 cursor-not-allowed"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    Guide
+                  </motion.button>
+                )}
+              </>
             )}
           </motion.div>
         </div>

@@ -13,7 +13,7 @@ Digital Workplace AI is an AI-powered digital workplace solution designed to enh
 |-------|----------|------|
 | `/` (root) | **REDIRECT** → `/sign-in` (unauthenticated) or `/dashboard` (authenticated) | `apps/main/src/app/page.tsx` |
 | `/sign-in` | **DEFAULT LANDING PAGE** - Full-screen world map with Google OAuth | `apps/main/src/app/sign-in/` |
-| `/dashboard` | Protected - 4 AI product cards | `apps/main/src/app/dashboard/` |
+| `/dashboard` | Protected - 4 AI product cards with Guide buttons | `apps/main/src/app/dashboard/` |
 | `/admin` | Protected - super_admin only | `apps/main/src/app/admin/` |
 
 **There is NO separate home/landing page. The root URL always redirects.**

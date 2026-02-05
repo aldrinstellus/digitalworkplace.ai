@@ -4,7 +4,7 @@
 **Version**: 0.9.16
 **Session Status**: DSQ Demo Guide v1.2.0 Live Use Cases + Full Spectrum Verified + PDF Middleware Fix
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 4f6b988
+**Git Commit**: 8a0d05d (main repo) / c82cb97 (support-iq submodule)
 
 ---
 
@@ -115,15 +115,17 @@ const isPublicRoute = createRouteMatcher([
 
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
-| **Main Dashboard** | https://digitalworkplace-ai.vercel.app | ✅ Live | 0.9.16 |
+| **Main Dashboard** | https://www.digitalworkplace.ai | ✅ Live | 0.9.16 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | **1.2.8** |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
 | **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.1.1** |
 
-### GitHub Repository
-- **URL**: https://github.com/aldrinstellus/digitalworkplace.ai
-- **Latest Commit**: 4f6b988 - fix: allow PDF files through Clerk middleware matcher
+### GitHub Repositories
+- **Main Repo**: https://github.com/aldrinstellus/digitalworkplace.ai
+  - **Latest Commit**: `8a0d05d` - chore: update support-iq submodule pointer
+- **Support IQ** (submodule): https://github.com/aldrinstellus/support-iq
+  - **Latest Commit**: `c82cb97` - docs: update CLAUDE.md to v1.2.8
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -140,7 +142,7 @@ const isPublicRoute = createRouteMatcher([
 
 | Product | Code | Port | Local | Vercel | Embeddings | Database | Audit |
 |---------|------|------|-------|--------|------------|----------|-------|
-| **Support IQ** | dSQ | 3003 | ✅ | ✅ Live | ✅ 100% | 15 tables | - |
+| **Support IQ** | dSQ | 3003 | ✅ | ✅ Live | ✅ 100% (474) | 15 tables | 116/116 |
 | **Intranet IQ** | dIQ | 3001 | ✅ | ✅ Live | ✅ 100% | 45+ tables | 100/100 |
 | **Chat Core IQ** | dCQ | 3002 | ✅ | ✅ Live | ✅ 100% | 28 tables | **100/100** |
 | **Test Pilot IQ** | dTQ | 3004 | ✅ | ✅ Live | ✅ 100% | 7 tables | - |
@@ -152,6 +154,50 @@ const isPublicRoute = createRouteMatcher([
 - **Total Knowledge Items**: 474 with 100% embedding coverage (incl. 33 DSQ items)
 - **DCQ FAQs**: 8 with 100% embedding coverage
 - **DTQ Knowledge Base**: 130 rows with 100% embedding coverage (1536-dim)
+
+---
+
+## DSQ Live Use Cases - Quick Reference (for next session)
+
+**Support Email**: `demohelp@auzmorsupport.zohodesk.com`
+**Persona URL**: https://dsq.digitalworkplace.ai/dsq/demo/atc-support
+**Demo Guide**: `/Users/aldrin-mac-mini/digitalworkplace.ai/demo-guide/DSQ_DEMO_GUIDE_v1.md` (v1.2.0)
+**Demo Guide PDF**: https://www.digitalworkplace.ai/guides/DSQ_DEMO_GUIDE_v1.pdf
+
+### How Live Use Cases Work
+1. Customer sends email to `demohelp@auzmorsupport.zohodesk.com` → Zoho Desk creates ticket
+2. Support Agent says "Show me Ticket-XXX" → `live-ticket-detail` widget fetches from Zoho API
+3. Widget shows: ticket detail, conversation history, AI-generated draft response
+4. Agent can: Regenerate draft (with instructions), Send Response (via Zoho API), Escalate to Jira
+
+### Current Live Zoho Tickets (as of 2026-02-05)
+| Ticket | Subject | Use Case | Jira |
+|--------|---------|----------|------|
+| #409 | Account Password Reset | Password Reset | KAN-135 |
+| #412 | Account Password Reset | Password Reset | - |
+| #414 | Printer not responding | Printer Issue | - |
+| #415 | Printer Not Responding | Printer Issue | - |
+| #416 | Account Password Reset | Password Reset | - |
+| #417 | Steps to Import a course on Learn | SCORM Import | KAN-140 |
+| #418 | Printer Not Responding | Printer Issue | KAN-141 |
+| #419 | Unable to Reset Password | Password Reset | KAN-142 |
+
+### Key Integration Components
+| Component | File | Purpose |
+|-----------|------|---------|
+| Zoho Desk Client | `apps/support-iq/src/lib/integrations/zoho-desk.ts` | OAuth token refresh, ticket API |
+| Ticket List API | `apps/support-iq/src/app/api/tickets/route.ts` | Fetch all tickets from Zoho |
+| Ticket Detail API | `apps/support-iq/src/app/api/tickets/[ticketNumber]/route.ts` | Fetch single ticket + conversations |
+| Query Detection | `apps/support-iq/src/lib/query-detection.ts` | 3-layer: Universal ticket → Semantic → Keyword |
+| Semantic Patterns | `apps/support-iq/src/lib/semantic-query-patterns.ts` | 75+ compound words, 116 query patterns |
+| LiveTicketDetailWidget | `apps/support-iq/src/components/widgets/LiveTicketDetailWidget.tsx` | Ticket detail + AI draft + escalate |
+| DraftEditorPanel | `apps/support-iq/src/components/widgets/DraftEditorPanel.tsx` | AI draft generation via N8n webhook |
+| EscalateTicketModal | `apps/support-iq/src/components/widgets/EscalateTicketModal.tsx` | Create Jira ticket from Zoho ticket |
+
+### Zoho Desk Env Vars (Vercel - Support IQ)
+```
+ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ORG_ID, ZOHO_DEPARTMENT_ID
+```
 
 ---
 
@@ -1182,8 +1228,19 @@ When users login via main dashboard and access dCQ, their admin changes only aff
 ### dSQ - Support IQ (Port 3003)
 | Page | URL |
 |------|-----|
-| **ATC Executive** | http://localhost:3003/demo/atc-executive |
-| **Gov COR** | http://localhost:3003/demo/cor |
+| **ATC Executive** | http://localhost:3003/dsq/demo/atc-executive |
+| **ATC Manager** | http://localhost:3003/dsq/demo/atc-manager |
+| **ATC Support** | http://localhost:3003/dsq/demo/atc-support |
+| **ATC CSM** | http://localhost:3003/dsq/demo/atc-csm |
+| **Gov COR** | http://localhost:3003/dsq/demo/cor |
+| **Gov Program Mgr** | http://localhost:3003/dsq/demo/program-manager |
+| **Gov Stakeholder** | http://localhost:3003/dsq/demo/stakeholder-lead |
+| **Proj Manager** | http://localhost:3003/dsq/demo/project-manager |
+| **Proj Team Lead** | http://localhost:3003/dsq/demo/service-team-lead |
+| **Proj Team Member** | http://localhost:3003/dsq/demo/service-team-member |
+| **Health API** | http://localhost:3003/dsq/api/health |
+| **Tickets API** | http://localhost:3003/dsq/api/tickets |
+| **Test Query API** | http://localhost:3003/dsq/api/test-query?persona=atc-support&query=test |
 
 ---
 
@@ -1197,6 +1254,7 @@ cd /Users/aldrin-mac-mini/digitalworkplace.ai
 npm run dev              # Main (port 3000)
 npm run dev:intranet     # dIQ (port 3001)
 npm run dev:chatcore     # dCQ (port 3002)
+npm run dev:support      # dSQ (port 3003)
 
 # Build
 npm run build
@@ -1228,6 +1286,10 @@ vercel --prod
 | **dTQ SALES-GUIDE (PDF)** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/SALES-GUIDE.pdf` |
 | **dTQ TESTING-AUDIT-GUIDE** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/TESTING-AUDIT-GUIDE.md` |
 | **dTQ CLAUDE.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/test-iq/CLAUDE.md` |
+| **dSQ Demo Guide (MD)** | `/Users/aldrin-mac-mini/digitalworkplace.ai/demo-guide/DSQ_DEMO_GUIDE_v1.md` |
+| **dSQ Demo Guide (PDF)** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/main/public/guides/DSQ_DEMO_GUIDE_v1.pdf` |
+| **dSQ CLAUDE.md** | `/Users/aldrin-mac-mini/digitalworkplace.ai/apps/support-iq/CLAUDE.md` |
+| **dSQ Use Cases** | `/Users/aldrin-mac-mini/Downloads/UseCase.md` (original source) |
 
 ---
 

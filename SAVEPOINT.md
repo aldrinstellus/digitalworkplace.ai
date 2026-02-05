@@ -4,7 +4,7 @@
 **Version**: 0.9.11
 **Session Status**: dTQ v2.0.0 - PRD Gap Features + Dashboard UX Overhaul LIVE
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: (pending) - feat(dTQ): PRD gap features + dashboard UX overhaul
+**Git Commit**: 6d12eff - feat(dTQ): v2.0.0 — PRD gap features + dashboard UX overhaul
 
 ---
 

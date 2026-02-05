@@ -4,6 +4,34 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.12] - 2026-02-05
+
+### dTQ v2.1.0 - 100% PRD Alignment (59/59 Checks Passing)
+
+**Full-spectrum audit against "Agentic Testing Framework - Product Demo" sales deck. All 18 gaps fixed.**
+
+#### 5 New Components
+- `ResultsStatCards.tsx` — 6 big stat cards (100% Regression, ZERO Scripts, 94%+ Pass Rate, etc.)
+- `AgentPipeline.tsx` — 3-agent pipeline (Test Case Generation → Context Builder → Execution Engine)
+- `ImplementationPhases.tsx` — 4-phase timeline (Assessment → Setup → Deploy → Scale)
+- `CompetitiveComparison.tsx` — 7-row comparison table (Traditional vs Low-Code vs dTQ)
+- `NextStepsCTA.tsx` — 3 CTA cards (Schedule Demo, Start Pilot, Trade Winds Marketplace)
+
+#### 18 Gaps Fixed
+- Before/After rows → exact PRD Slide 10 match
+- C-Suite metrics: Risk Reduction 89% (↓67%), Automation ROI $2.3M saved
+- Tech Lead features → LMS domain (User Auth, Course Mgmt, Payment, etc.)
+- Execution Console header → "Run Regression Tests" + elapsed timer
+- Integrations: GitHub/BitBucket, CI/CD (Jenkins), 6 connected
+- Cloud deployment → AWS / Azure / GCP
+- Self-Healing + K8s-Powered badges on pipeline
+- Customer testimonial quote added
+
+#### Audit Report
+- `PRD-FULL-SPECTRUM-AUDIT.md` — 59/59 checks, 100% alignment
+
+---
+
 ## [0.9.11] - 2026-02-05
 
 ### dTQ v2.0.0 - PRD Gap Features + Dashboard UX Overhaul

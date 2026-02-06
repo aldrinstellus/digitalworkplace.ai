@@ -67,6 +67,237 @@ QA teams today lack a single pane of glass that connects test execution data, fe
 
 ---
 
+## Quick Reference — Q&A Tables
+
+This section provides quick-reference tables showing questions users can ask, actions they can take, and expected behaviors/results.
+
+---
+
+### QR-1. AI Chat Quick Actions (4 Pre-Defined)
+
+The AI Chat widget provides four quick action buttons that send pre-built queries:
+
+| # | Quick Action Button | Query Sent | Expected Response |
+|---|---------------------|------------|-------------------|
+| 1 | **High-risk features** | "High-risk features" | List of 3+ features with risk score ≥40, showing coverage %, open defects, and pass rates. Includes link cards to feature details. |
+| 2 | **Feature status** | "Feature status" | Overall stats: "80 features across 20 categories, 88% avg coverage." Breakdown of automation status (fully automated vs partially automated). |
+| 3 | **Automation gaps** | "Automation gaps" | Top 5 partially-automated features with coverage gaps. Recommendations for automation priorities. |
+| 4 | **Quality summary** | "Quality summary" | Executive KPIs: overall pass rate, automation coverage %, total open defects, trend indicators. Persona-specific metrics included. |
+
+---
+
+### QR-2. AI Chat Free-Form Queries
+
+Users can type natural-language questions. The RAG pipeline finds relevant context from 130 knowledge base items:
+
+| # | Example Query | Response Type | What You'll See |
+|---|--------------|---------------|-----------------|
+| 1 | "What features have highest risk?" | High-risk analysis | Feature list sorted by risk score (≥40), recommendations, link cards to each feature |
+| 2 | "Show me pass rate trends" | Metric trend | Inline sparkline chart (180×36px) showing 14-day trend + narrative analysis |
+| 3 | "Tell me about xAPI integration" | Feature detail | Feature coverage (92%), risk score (45), pass rate (94%) + link card to FeatureDetailModal |
+| 4 | "Test execution history" | Report link | Link cards navigating to Reports page with TestRunDetailModal |
+| 5 | "Learning Experience category" | Category summary | Category stats (4 features, avg 89% coverage) + link card to CategoryAnalyticsModal |
+| 6 | "What's our automation ROI?" | KPI analysis | "285% ROI" with cost savings breakdown (C-Suite persona), link to Automation ROI metric |
+| 7 | "Flaky test rate" | Engineering metric | "3.2% flaky rate, trending down -1.5%" (Tech Lead persona), inline sparkline |
+| 8 | "Regression execution time" | Team metric | "42 min avg, improved by 8 min" (QA Manager persona) |
+| 9 | "CI/CD pipeline status" | Multi-feature | Build Orchestration, Deploy Pipeline, Rollback Automation details with link cards |
+| 10 | "Compare coverage by category" | Category comparison | Table-style breakdown of all categories with coverage percentages |
+
+---
+
+### QR-3. Dashboard Interactions
+
+Every element on the Dashboard is interactive. Here's what you can click and what opens:
+
+| # | Click Target | What Opens | What You See |
+|---|-------------|------------|--------------|
+| 1 | **Total Features** metric card | MetricDrillDownModal | 30-day trend chart, 4-stat summary (current, avg, peak, low), category breakdown bar chart |
+| 2 | **Automation Rate** metric card | MetricDrillDownModal | Automation trends over 30 days, fully vs partially automated comparison |
+| 3 | **Risk Distribution** metric card | MetricDrillDownModal | High/Medium/Low risk counts, 30-day risk trend, features by risk level |
+| 4 | **Open Defects** metric card | MetricDrillDownModal | Defect trends, defects by category, related high-defect features |
+| 5 | **Persona KPI card** (e.g., Pass Rate) | MetricDrillDownModal | KPI-specific trends, period comparison (current vs previous), category breakdown |
+| 6 | **Chart data point** (any trend chart) | ChartDrillDownModal | Selected day's value prominently displayed, change vs previous day, percentile ranking, contributing factors |
+| 7 | **Feature row** in Feature Coverage | FeatureDetailModal | Coverage %, risk score, open/closed defects, pass rate, 14-day history chart, recent test runs |
+| 8 | **Category header** in Feature Coverage | CategoryAnalyticsModal | Avg coverage, avg pass rate, high-risk count, total defects, feature comparison bar chart, risk distribution pie |
+| 9 | **High Risk Banner** feature card | FeatureDetailModal | Same as #7 — full feature detail with history |
+
+---
+
+### QR-4. Reports Page Interactions
+
+The Reports page (`/dtq/reports`) provides test execution history with filtering and drill-down:
+
+| # | Action | How | What Happens |
+|---|--------|-----|--------------|
+| 1 | **Filter by status** | Click "All" / "Passed" / "Failed" tabs | Table shows only matching test runs; count updates in tab badge |
+| 2 | **Search by feature** | Type in "Search feature name..." box | Filters test runs by feature name (case-insensitive substring match) |
+| 3 | **Sort by column** | Click column header (Status, Feature Name, Duration, Executed, Issues) | 3-click cycle: ascending → descending → clear sort. Arrow indicator shows sort direction. |
+| 4 | **View test run detail** | Click any table row | Opens TestRunDetailModal with status badge, test counts, pass rate, issues list (if failed) |
+| 5 | **Filter issues by severity** | In TestRunDetailModal, click "All" / "High" / "Medium" / "Low" tabs | Shows only issues matching selected severity |
+| 6 | **Expand stack trace** | Click issue's error message | Stack trace expands below; click again to collapse |
+| 7 | **Copy stack trace** | Click copy button (clipboard icon) | Stack trace copied to clipboard |
+| 8 | **Navigate to feature** | Click "View Feature" in TestRunDetailModal | Closes test run modal, opens FeatureDetailModal for that feature |
+| 9 | **Export CSV** | Click "Export CSV" button | Downloads `test-reports-YYYY-MM-DD.csv` with all test runs |
+| 10 | **Export PDF** | Click "Export PDF" button | Opens browser print dialog for PDF generation |
+| 11 | **Paginate** | Click page numbers or navigation buttons (⏮ ◀ ▶ ⏭) | Shows 10 rows per page; smart ellipsis for many pages |
+
+---
+
+### QR-5. History Page Interactions
+
+The Metrics History page (`/dtq/history`) shows 30-day trends with time range selection:
+
+| # | Action | How | What Happens |
+|---|--------|-----|--------------|
+| 1 | **Change time range** | Click 7d / 30d / 90d / 12m pill buttons | All 4 charts update to show selected time range; summary cards recalculate averages |
+| 2 | **View metric detail** | Click any summary card (Avg Pass Rate, First Pass Rate, Defect Detection, Effectiveness) | Opens MetricDrillDownModal with full trend chart, statistics, period comparison |
+| 3 | **Drill into chart point** | Click any data point on the 4 trend charts | Opens ChartDrillDownModal with that day's value, change analysis, percentile ranking |
+
+**Metrics Tracked:**
+| Metric | Chart Type | Color | Description |
+|--------|------------|-------|-------------|
+| Test Pass Rate | Line | Green | Percentage of tests passing per day |
+| First Run Pass Rate | Line | Pink | Tests passing on first execution |
+| Defect Detection | Area | Orange | Defects caught during testing |
+| Test Effectiveness | Area | Blue | Overall test case effectiveness score |
+
+---
+
+### QR-6. Persona-Specific Query Guide
+
+Each persona sees different KPIs and responds to different question types:
+
+#### C-Suite (Executive) Persona
+
+| Query Focus | Example Questions | Response Style |
+|-------------|-------------------|----------------|
+| **ROI metrics** | "What's our automation ROI?" "Cost savings?" | Business impact: "$2.3M annual savings", "285% ROI", dollar amounts |
+| **Risk reduction** | "Risk assessment?" "Revenue protection?" | Strategic view: "68% risk reduction", customer impact metrics |
+| **Release velocity** | "Time to market?" "Release speed?" | "12 days mean time to market, improved by 4 days" |
+| **Defect escape** | "Defect escape rate?" "Production bugs?" | "2.1% escape rate, down 0.8%" — business quality metrics |
+| **Capacity** | "Team capacity?" "Efficiency gains?" | "42% capacity unlocked" — resource optimization |
+
+**C-Suite KPIs (7 total):**
+| KPI | Value | Trend |
+|-----|-------|-------|
+| Release Velocity | +35% | ↑ +8% |
+| Mean Time to Market | 12 days | ↓ -4 days |
+| Automation ROI | 285% | ↑ +45% |
+| Defect Escape Rate | 2.1% | ↓ -0.8% |
+| Incidents Prevented | 47 | ↑ +12 |
+| Risk Reduction | 68% | ↑ +15% |
+| Capacity Unlocked | 42% | ↑ +8% |
+
+---
+
+#### QA Manager Persona
+
+| Query Focus | Example Questions | Response Style |
+|-------------|-------------------|----------------|
+| **Team metrics** | "Pass rate trends?" "Team performance?" | "94.2% pass rate, up 2.3%" — team-level aggregates |
+| **Automation ratio** | "Automation coverage?" "Auto vs manual?" | "8.5:1 automated to manual ratio" |
+| **Defect tracking** | "Open defects?" "Blocker bugs?" | Defect counts by category, severity breakdown |
+| **Regression** | "Regression time?" "Execution speed?" | "42 min regression, improved 8 min" |
+| **Environment** | "Environment uptime?" "Stability?" | "99.2% environment uptime" |
+
+**QA Manager KPIs (9 total):**
+| KPI | Value | Trend |
+|-----|-------|-------|
+| Test Pass Rate | 94.2% | ↑ +2.3% |
+| Automated vs Manual | 8.5:1 | ↑ +0.5 |
+| Test Effectiveness | 0.87 | → stable |
+| Regression Execution | 42 min | ↓ -8 min |
+| First-Run Pass Rate | 87.5% | ↑ +4.2% |
+| Escalation Rate | 12.3% | ↓ -2.1% |
+| Test Case Reuse | 76.8% | ↑ +5.3% |
+| Blocker Defects | 3 | ↓ -2 |
+| Environment Uptime | 99.2% | → stable |
+
+---
+
+#### Tech Lead (Engineer) Persona
+
+| Query Focus | Example Questions | Response Style |
+|-------------|-------------------|----------------|
+| **Flaky tests** | "Flaky test rate?" "Unstable tests?" | "3.2% flaky rate, trending down 1.5%" — technical metrics |
+| **Execution time** | "Average execution?" "Test speed?" | "4.2 min avg execution, improved 0.8 min" |
+| **Token costs** | "Token usage?" "AI costs?" | "$0.42 per run, down $0.15" — cost efficiency |
+| **Pipeline** | "CI/CD status?" "Build health?" | Feature-by-feature pipeline status with coverage |
+| **Security** | "Security testing?" "Penetration tests?" | Coverage and pass rates for security test suites |
+
+**Tech Lead KPIs (8 total):**
+| KPI | Value | Trend |
+|-----|-------|-------|
+| Flaky Test Rate | 3.2% | ↓ -1.5% |
+| Avg Execution Time | 4.2 min | ↓ -0.8 min |
+| Token Usage Cost | $0.42 | ↓ -$0.15 |
+| Context Hit Rate | 94.5% | ↑ +2.3% |
+| Tool Call Success | 97.8% | ↑ +1.2% |
+| Parallel Efficiency | 78.5% | ↑ +5% |
+| Automation Coverage | 93.3% | ↑ +2.1% |
+| Total Test Cases | 1247 | ↑ +86 |
+
+---
+
+### QR-7. Navigation Flow Reference
+
+How chat link cards navigate to modals:
+
+```
+AI Chat Response
+    │
+    └── Link Card Click
+            │
+            ├── feature link ──────→ Dashboard ──→ FeatureDetailModal
+            │
+            ├── category link ─────→ Dashboard ──→ CategoryAnalyticsModal
+            │
+            ├── metric link ───────→ Dashboard ──→ MetricDrillDownModal
+            │                  or → History ───→ MetricDrillDownModal
+            │
+            ├── report link ───────→ Reports ───→ TestRunDetailModal
+            │
+            └── history link ──────→ History ───→ Time range + charts
+```
+
+**Cross-Modal Navigation:**
+```
+CategoryAnalyticsModal
+    │
+    └── Click feature in list
+            │
+            └── Closes CategoryAnalyticsModal
+                Opens FeatureDetailModal
+
+TestRunDetailModal
+    │
+    └── Click "View Feature"
+            │
+            └── Closes TestRunDetailModal
+                Opens FeatureDetailModal
+```
+
+---
+
+### QR-8. Simulation & Real-Time Behavior
+
+The app simulates a live CI/CD pipeline:
+
+| Behavior | Interval | What Happens |
+|----------|----------|--------------|
+| **Metric fluctuation** | Every 30 seconds | Latest day's metrics receive ±0.5–1.5% variance |
+| **New test run** | Every 8–15 seconds | Random feature gets new test run (85% pass probability) |
+| **Live indicator** | Continuous | Green pulsing dot in header; shows "Updated X seconds ago" |
+| **Row highlight** | On new run | Newest row in Reports table gets 1.5s highlight animation |
+
+**Live/Pause Toggle:**
+| State | Visual | Behavior |
+|-------|--------|----------|
+| **Live** | Green pulsing dot | Simulation active, metrics updating |
+| **Paused** | Grey dot | Simulation stopped, data static |
+
+---
+
 ## 2. Access & Navigation
 
 ### URLs

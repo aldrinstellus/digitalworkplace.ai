@@ -16,6 +16,7 @@ import {
   Check,
   Cloud,
   ChevronRight,
+  BookOpen,
 } from 'lucide-react';
 
 const DeploymentModal = dynamic(() => import('./modals/DeploymentModal'), { ssr: false });
@@ -242,6 +243,22 @@ export default memo(function Sidebar({ persona, onPersonaChange }: SidebarProps)
             <span>Live Dashboard</span>
           </div>
         </motion.div>
+
+        <motion.a
+          href="/dtq/guides/DTQ_DEMO_GUIDE_v1.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full px-3 py-2 rounded-lg text-xs flex items-center gap-2 cursor-pointer transition-colors"
+          style={{ background: 'var(--bg-tertiary)', color: 'var(--text-muted)' }}
+          whileHover={{
+            boxShadow: '0 0 15px rgba(139, 92, 246, 0.2)',
+            color: 'var(--text-secondary)',
+          }}
+        >
+          <BookOpen className="w-3.5 h-3.5" style={{ color: 'var(--chart-secondary)' }} />
+          <span className="flex-1 text-left">Demo Guide</span>
+          <ChevronRight className="w-3 h-3" />
+        </motion.a>
 
         <motion.button
           onClick={() => setDeploymentModalOpen(true)}

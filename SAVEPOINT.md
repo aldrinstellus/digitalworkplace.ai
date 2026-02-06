@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-02-05
-**Version**: 0.9.16
-**Session Status**: DSQ Demo Guide v1.2.0 Live Use Cases + Full Spectrum Verified + PDF Middleware Fix
+**Last Updated**: 2026-02-06
+**Version**: 0.9.17
+**Session Status**: DTQ Demo Guide Q&A Update + PDF Linked from App
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 8a0d05d (main repo) / c82cb97 (support-iq submodule)
+**Git Commit**: 01a6c0c (main repo) / c82cb97 (support-iq submodule)
 
 ---
 
@@ -201,7 +201,57 @@ ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ORG_ID, ZOHO_DEPART
 
 ---
 
-## Latest Changes (v0.9.16)
+## Latest Changes (v0.9.17)
+
+### DTQ Demo Guide Q&A Update + PDF Linked from App (2026-02-06)
+
+**Added comprehensive Q&A reference tables to DEMO-GUIDE.md and linked PDF from app sidebar.**
+
+#### DEMO-GUIDE.md Updates (~230 new lines)
+
+| Section | Content |
+|---------|---------|
+| **QR-1** | AI Chat Quick Actions — 4 pre-defined buttons with expected responses |
+| **QR-2** | AI Chat Free-Form Queries — 10 example queries with response types |
+| **QR-3** | Dashboard Interactions — 9 clickable elements with what opens |
+| **QR-4** | Reports Page Interactions — 11 actions with how-to and results |
+| **QR-5** | History Page Interactions — 3 actions plus metrics table |
+| **QR-6** | Persona-Specific Query Guide — 3 personas with example questions, response styles, all 24 KPIs |
+| **QR-7** | Navigation Flow Reference — ASCII diagrams showing link card → modal flows |
+| **QR-8** | Simulation & Real-Time Behavior — Live/Pause toggle states and timing |
+
+#### Sidebar Demo Guide Button
+
+| Change | Detail |
+|--------|--------|
+| Added BookOpen icon import | `lucide-react` |
+| Added Demo Guide link button | `/dtq/guides/DTQ_DEMO_GUIDE_v1.pdf` |
+| Purple highlight on hover | `rgba(139, 92, 246, 0.2)` box-shadow |
+| Position | Sidebar footer, between "Live Dashboard" and "Deployed: Cloud (AWS)" |
+
+#### Files Changed
+
+| File | Action |
+|------|--------|
+| `apps/test-iq/DEMO-GUIDE.md` | Added 8 Q&A sections (1760 → 1993 lines) |
+| `apps/test-iq/DEMO-GUIDE.pdf` | Regenerated (1.75 MB) |
+| `apps/test-iq/src/components/dtq/Sidebar.tsx` | Added Demo Guide button |
+| `apps/test-iq/public/guides/DTQ_DEMO_GUIDE_v1.pdf` | NEW - PDF for test-iq app |
+| `apps/main/public/guides/DTQ_DEMO_GUIDE_v1.pdf` | NEW - PDF for main app |
+
+#### Verification
+
+| Check | Result |
+|-------|--------|
+| Build | 0 errors, 13/13 pages |
+| GitHub | Pushed to main (01a6c0c) |
+| Vercel | Deployed to https://dtq.digitalworkplace.ai |
+| Dashboard | HTTP 200 |
+| PDF | HTTP 200 at `/dtq/guides/DTQ_DEMO_GUIDE_v1.pdf` |
+
+---
+
+## Previous Changes (v0.9.16)
 
 ### DSQ Demo Guide v1.2.0 - Live Use Cases + PDF Middleware Fix (2026-02-05)
 
@@ -1327,6 +1377,7 @@ vercel --prod
 - [x] Dashboard SVG Animation Fix + Guide Button — Fixed 16 SVG errors, added Guide button to product cards (v0.9.15)
 - [x] DSQ Demo Guide v1.2.0 — 3 live use cases, 14 new KB articles, 474/474 embeddings, Clerk PDF middleware fix (v0.9.16)
 - [x] Full Spectrum Test — 67/67 queries passing, all 3 live use cases verified on production with Zoho tickets (v0.9.16)
+- [x] DTQ Demo Guide Q&A Update — Added 8 Q&A sections (~230 lines), linked PDF from Sidebar (v0.9.17)
 
 ### Medium Term
 - [ ] Cross-project search UI
@@ -1336,6 +1387,6 @@ vercel --prod
 
 ---
 
-*Last session: 2026-02-05*
-*Version: 0.9.16*
+*Last session: 2026-02-06*
+*Version: 0.9.17*
 *Machine: Mac Mini (aldrin-mac-mini)*

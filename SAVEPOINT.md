@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-02-06
-**Version**: 0.9.17
-**Session Status**: DTQ Demo Guide Q&A Update + PDF Linked from App
+**Last Updated**: 2026-02-18
+**Version**: 0.9.18
+**Session Status**: DSQ Favicon Fix + All Dev Servers Running
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 01a6c0c (main repo) / c82cb97 (support-iq submodule)
+**Git Commit**: 8e93a66 (main repo) / 459147e (support-iq submodule)
 
 ---
 
@@ -123,9 +123,9 @@ const isPublicRoute = createRouteMatcher([
 
 ### GitHub Repositories
 - **Main Repo**: https://github.com/aldrinstellus/digitalworkplace.ai
-  - **Latest Commit**: `8a0d05d` - chore: update support-iq submodule pointer
+  - **Latest Commit**: `8e93a66` - chore: update support-iq submodule pointer (favicon fix)
 - **Support IQ** (submodule): https://github.com/aldrinstellus/support-iq
-  - **Latest Commit**: `c82cb97` - docs: update CLAUDE.md to v1.2.8
+  - **Latest Commit**: `459147e` - fix: replace broken favicon with correct d. icon
 
 ### Vercel Projects
 | Project | Vercel Dashboard |
@@ -201,7 +201,55 @@ ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, ZOHO_ORG_ID, ZOHO_DEPART
 
 ---
 
-## Latest Changes (v0.9.17)
+## Latest Changes (v0.9.18)
+
+### DSQ Favicon Fix (2026-02-18)
+
+**Fixed DSQ browser tab favicon showing old logo (globe/swoosh) instead of the correct "d." icon.**
+
+#### Root Cause
+
+Next.js `basePath: "/dsq"` was not being prepended to the dynamic `icon.tsx` route. The generated `<link rel="icon">` pointed to `/icon` (404) instead of `/dsq/icon` (200), causing the browser to fall back to the old `public/favicon.png` (a legacy CTIS brand swoosh).
+
+#### Fix Applied
+
+| Action | Detail |
+|--------|--------|
+| Removed `src/app/icon.tsx` | Dynamic icon route broken by basePath |
+| Removed `public/favicon.svg` | Old CTIS brand SVG |
+| Replaced `public/favicon.png` | Old swoosh → correct "d." with green dot (32x32 PNG) |
+| Added manual `<link>` tag | `<link rel="icon" href="/dsq/favicon.png">` in layout.tsx `<head>` |
+
+#### Files Changed (support-iq submodule)
+
+| File | Action |
+|------|--------|
+| `public/favicon.png` | Replaced with correct "d." icon |
+| `public/favicon.svg` | Deleted (old CTIS brand) |
+| `src/app/icon.tsx` | Deleted (broken with basePath) |
+| `src/app/layout.tsx` | Added manual favicon link tag |
+
+#### Verification
+
+| Check | Result |
+|-------|--------|
+| Local `/dsq/favicon.png` | HTTP 200 |
+| Production `/dsq/favicon.png` | HTTP 200 |
+| Production `/dsq/demo/cor` | HTTP 200 |
+| HTML `<link rel="icon">` | `href="/dsq/favicon.png"` (correct) |
+
+#### Commits
+
+| Repo | Hash | Message |
+|------|------|---------|
+| support-iq | `459147e` | fix: replace broken favicon with correct d. icon |
+| main | `8e93a66` | chore: update support-iq submodule pointer (favicon fix) |
+
+**Deployed**: https://dsq.digitalworkplace.ai — Vercel production, HTTP 200
+
+---
+
+## Previous Changes (v0.9.17)
 
 ### DTQ Demo Guide Q&A Update + PDF Linked from App (2026-02-06)
 
@@ -1387,6 +1435,6 @@ vercel --prod
 
 ---
 
-*Last session: 2026-02-06*
-*Version: 0.9.17*
+*Last session: 2026-02-18*
+*Version: 0.9.18*
 *Machine: Mac Mini (aldrin-mac-mini)*

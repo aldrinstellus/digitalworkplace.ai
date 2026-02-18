@@ -4,6 +4,18 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.18] - 2026-02-18
+
+### DSQ Favicon Fix
+
+- **Fixed DSQ browser tab favicon** showing old CTIS logo instead of "d." icon
+- **Root cause**: Next.js `basePath: "/dsq"` not prepending to dynamic `icon.tsx` route
+- **Fix**: Replaced with static `favicon.png` + manual `<link>` tag with correct basePath
+- **Removed**: `icon.tsx` (broken with basePath), `favicon.svg` (old branding)
+- **Deployed**: https://dsq.digitalworkplace.ai — verified HTTP 200
+
+---
+
 ## [0.9.16] - 2026-02-05
 
 ### DSQ Demo Guide v1.2.0 - Live Use Cases + PDF Middleware Fix

@@ -183,6 +183,7 @@ function SignInContent() {
               )}
             </Button>
           </motion.div>
+          <div id="clerk-captcha" />
         </motion.div>
       </div>
     </div>

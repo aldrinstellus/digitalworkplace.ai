@@ -4,6 +4,21 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.19] - 2026-03-18
+
+### Clerk Production Instance + Login Fix
+
+- **Created Clerk Production instance** — site was using development keys (`pk_test_*`) causing login to redirect to Clerk's hosted "Development mode" page
+- **Production API keys** deployed to Vercel env vars and local `.env.local` files
+- **Google OAuth credentials** configured in Clerk Production (Client ID + new Client Secret from Google Cloud Console)
+- **5 DNS CNAME records** added to Vercel DNS for Clerk production (clerk, accounts, clkmail, clk._domainkey, clk2._domainkey) — all verified
+- **SSL certificates** issued for `clerk.digitalworkplace.ai` and `accounts.digitalworkplace.ai`
+- **Added `clerk-captcha` div** to sign-in page and sso-callback page for Cloudflare Turnstile bot protection
+- **All production keys saved** in `env/PRODUCTION_KEYS.env` (gitignored) for reference
+- **DTQ Demo Guide** button linked on dashboard (`/guides/DTQ_DEMO_GUIDE_v1.pdf`)
+
+---
+
 ## [0.9.18] - 2026-02-18
 
 ### DSQ Favicon Fix

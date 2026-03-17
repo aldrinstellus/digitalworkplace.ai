@@ -1,10 +1,10 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-02-18
-**Version**: 0.9.18
-**Session Status**: DSQ Favicon Fix + All Dev Servers Running
+**Last Updated**: 2026-03-18
+**Version**: 0.9.19
+**Session Status**: Clerk Production Instance Live + Login Fix
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 8e93a66 (main repo) / 459147e (support-iq submodule)
+**Git Commit**: pending (main repo) / 459147e (support-iq submodule)
 
 ---
 
@@ -23,19 +23,26 @@ This file contains:
 
 ---
 
-## ⚠️ CRITICAL: CLERK OAUTH CONFIGURATION (FULLY FIXED)
+## ⚠️ CRITICAL: CLERK PRODUCTION INSTANCE (2026-03-18)
 
-**OAuth now works seamlessly: Sign-in → Google → Dashboard (no intermediate screens)**
+**Production instance created and deployed. Login uses production keys (`pk_live_*`).**
 
-### Root Cause & Fix (2026-01-28)
+### What Changed (2026-03-18)
+- **Created Clerk Production instance** (was using development `pk_test_*` keys on live site)
+- **Production API keys**: `pk_live_Y2xlcmsuZGlnaXRhbHdvcmtwbGFjZS5haSQ` / `sk_live_m98T...`
+- **Google OAuth**: Custom credentials configured (Client ID: `140657096730-f371...`)
+- **5 DNS CNAME records** added to Vercel DNS (clerk, accounts, clkmail, clk._domainkey, clk2._domainkey)
+- **SSL certificates** issued for clerk.digitalworkplace.ai and accounts.digitalworkplace.ai
+- **Bot sign-up protection (Cloudflare Turnstile)** active — `clerk-captcha` div added to sign-in and sso-callback pages
+- **All keys saved** in `env/PRODUCTION_KEYS.env` (gitignored)
+- **Vercel env vars** updated with production Clerk keys
 
-**Problem:** Users were getting stuck at `/sign-in/tasks` with endless spinner after Google OAuth.
-
-**Root Cause:** Clerk Dashboard had "Organizations → Membership required" enabled, forcing users to create/join an organization.
-
-**Solution:** Changed Clerk Dashboard setting:
-- **Navigate to:** dashboard.clerk.com → digitalworkplace.ai → Configure → Organizations → Settings
-- **Changed:** "Membership required" → **"Membership optional"**
+### Clerk Dashboard (Production)
+- **App ID**: app_38SMJg2G9JBu7FRjwsMfc8ehTMz
+- **Instance ID**: ins_3B5EYiqyNe41K8ZfVs7oxqv5AmP
+- **Frontend API**: https://clerk.digitalworkplace.ai
+- **Organizations**: Membership optional (correct)
+- **Google OAuth**: Enabled with custom credentials
 
 ### Required Configuration (ALL must be set)
 

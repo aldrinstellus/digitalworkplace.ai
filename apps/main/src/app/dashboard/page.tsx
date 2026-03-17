@@ -69,7 +69,7 @@ const products = [
     localHref: "http://localhost:3004/dtq/dashboard",
     prodHref: "https://dtq.digitalworkplace.ai/dtq/dashboard",
     disabled: false,
-    guideUrl: null,
+    guideUrl: "/guides/DTQ_DEMO_GUIDE_v1.pdf",
     colors: {
       primary: "#ff3366",
       secondary: "#ff1a53",

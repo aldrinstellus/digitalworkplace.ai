@@ -25,7 +25,7 @@ const products = [
     localHref: "http://localhost:3003/dsq/demo/cor",
     prodHref: "https://dsq.digitalworkplace.ai/dsq/demo/cor",
     disabled: false,
-    guideUrl: "/guides/DSQ_DEMO_GUIDE_v1.pdf",
+    guideUrl: "/guides/DSQ_DEMO_GUIDE_v2.pdf",
     colors: {
       primary: "#10b981",
       secondary: "#06b6d4",

@@ -1,10 +1,45 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-03-18
-**Version**: 0.9.19
-**Session Status**: Clerk Production Instance Live + Login Fix
+**Last Updated**: 2026-03-25
+**Version**: 0.9.21
+**Session Status**: Chrome Audit Complete + DSQ Demo Guide v2.0.0
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: pending (main repo) / 459147e (support-iq submodule)
+**Git Commit**: 611454a (main repo) / 459147e (support-iq submodule)
+
+---
+
+## Latest Session (2026-03-25) — Chrome Browser Audit + DSQ Guide v2
+
+### Chrome Compatibility Fixes (All Verified Working)
+1. **PDF guides not opening in Chrome**: Root cause was ANY JavaScript `onClick` handler on `<a>` tags inside Framer Motion's 3D-transformed card containers. Even `e.stopPropagation()` was enough for Chrome to interfere with native link navigation. **Fix**: Pure HTML `<a>` tags with zero JS handlers, `pointer-events-auto`, `pointer-events-none` on SVG children, `z-50` stacking.
+2. **Admin badge/profile navigation not working in Chrome**: `router.push()` inside `motion.button` with gesture props consumed click events. **Fix**: Replaced with Next.js `<Link>` component.
+3. **Added download icon**: Each product card with a guide now has a download arrow icon (plain `<a download>`) as PDF fallback.
+4. **Disabled cards consistency**: AI Intranet and AI Chat Bot now show matching disabled Guide + Download buttons.
+
+### Key Learning: Chrome + Framer Motion 3D Cards
+**CRITICAL**: Never use JavaScript `onClick` handlers on `<a>` tags inside Framer Motion `motion.div` containers that have `transformStyle: "preserve-3d"` and `rotateX`/`rotateY` spring animations. Chrome's event pipeline conflicts with Framer Motion's gesture system in 3D-transformed contexts. Use pure HTML `<a>` tags with zero JS and CSS-only hover/active effects instead.
+
+### DSQ Demo Guide v2.0.0
+- Updated `demo-guide/DSQ_DEMO_GUIDE_v2.md` — version 2.0.0, date March 25 2026
+- Live use cases expanded from 3 → 8 (password reset, printer, SCORM, user access, cancellation/refund, API/webhook, performance, browser compatibility)
+- Workflow steps: 16 → 40
+- PDF generated and deployed to `apps/main/public/guides/DSQ_DEMO_GUIDE_v2.pdf`
+- Dashboard updated to point to v2 PDF
+
+### Git Commits (2026-03-25)
+1. `411e497` — fix: use native links for Chrome compatibility (admin badge + profile)
+2. `bb72761` — feat: add download icon button next to Guide for PDF fallback
+3. `0fefa20` — fix: replace motion.a with plain `<a>` tags for PDF guide links
+4. `a39eb7e` — fix: add disabled download icon to cards without guides
+5. `1dd1ab9` — fix: force own compositing layer for guide links in 3D card context
+6. `680756c` — fix: strip all JS handlers from guide links (final Chrome fix)
+7. `611454a` — feat: DSQ Demo Guide v2.0.0 — 8 live use cases, updated PDF
+
+### Files Changed
+- `apps/main/src/app/dashboard/page.tsx` — all navigation uses native HTML/Next.js Link, no Framer Motion wrappers
+- `demo-guide/DSQ_DEMO_GUIDE_v2.md` — new v2.0.0 guide
+- `demo-guide/DSQ_DEMO_GUIDE_v2.pdf` — generated PDF
+- `apps/main/public/guides/DSQ_DEMO_GUIDE_v2.pdf` — deployed PDF
 
 ---
 

@@ -4,6 +4,19 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.21] - 2026-03-25
+
+### Chrome Compatibility Audit + DSQ Demo Guide v2.0.0
+
+- **Chrome PDF guide fix**: Removed all JavaScript `onClick` handlers from `<a>` tags inside Framer Motion 3D card containers — Chrome's event pipeline conflicts with Framer Motion gestures in `preserve-3d` contexts. Pure HTML `<a>` tags with CSS-only hover/active effects.
+- **Chrome admin navigation fix**: Replaced `motion.button` + `router.push("/admin")` with Next.js `<Link>` component for admin badge and profile dropdown links.
+- **Download icon added**: Each product card with a guide now shows a download arrow icon (`<a download>`) alongside the Guide button as a fallback.
+- **Disabled card consistency**: AI Intranet and AI Chat Bot cards now show matching disabled Guide + Download buttons.
+- **DSQ Demo Guide v2.0.0**: Updated version, date (March 25, 2026), expanded live use cases from 3 to 8 (password reset, printer, SCORM, user access, cancellation/refund, API/webhook, performance, browser compatibility). 40 workflow steps (was 16).
+- **PDF deployed**: `DSQ_DEMO_GUIDE_v2.pdf` (607KB) at `/guides/DSQ_DEMO_GUIDE_v2.pdf`
+
+---
+
 ## [0.9.19] - 2026-03-18
 
 ### Clerk Production Instance + Login Fix

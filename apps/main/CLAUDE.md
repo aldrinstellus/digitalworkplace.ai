@@ -60,12 +60,14 @@ Each card has:
 
 | Product | Guide | Status |
 |---------|-------|--------|
-| **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v1.pdf` (533KB, v1.2.0) | Active |
+| **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v2.pdf` (607KB, v2.0.0) | Active |
 | **AI Intranet** | — | Pending |
 | **AI Chat Bot** | — | Pending |
 | **AI Testing** | — | Pending |
 
 **PDF Middleware Fix (v0.9.16):** Added `pdf` to the static file extension exclusion in `src/proxy.ts` so PDFs are served without Clerk authentication.
+
+**Chrome Compatibility Fix (v0.9.21):** Never use JavaScript `onClick` handlers on `<a>` tags inside Framer Motion 3D card containers (`preserve-3d` + `rotateX`/`rotateY`). Chrome's event pipeline conflicts with Framer Motion gestures. Use pure HTML `<a>` tags with CSS-only hover/active effects. Admin navigation uses Next.js `<Link>` instead of `motion.button` + `router.push`.
 
 ### URLs
 | Page | Route | Local Dev | Notes |

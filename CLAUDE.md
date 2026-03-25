@@ -408,7 +408,7 @@ npm run dev:chatcore     # Start dCQ on port 3002
 | **Production URL** | https://dsq.digitalworkplace.ai/dsq/ |
 | **basePath** | `/dsq` |
 | **Audit Score** | 100/100 (116/116 Demo Guide questions passing) |
-| **Demo Guide** | `demo-guide/DSQ_DEMO_GUIDE_v1.md` (v1.2.0 - Live Use Cases Edition) |
+| **Demo Guide** | `demo-guide/DSQ_DEMO_GUIDE_v2.md` (v2.0.0 - 8 Live Use Cases Edition) |
 | **Documentation** | `apps/support-iq/CLAUDE.md`, `SAVEPOINT.md`, etc. |
 
 **Quick Start:**

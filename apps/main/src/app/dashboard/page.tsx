@@ -936,7 +936,7 @@ function ProductCard({
         />
 
         {/* Content */}
-        <div className="relative z-10 h-full p-6 flex flex-col justify-end">
+        <div className="relative z-10 h-full p-6 flex flex-col justify-end" style={{ transform: 'translateZ(0)' }}>
           {/* Brand name with animated underline */}
           <div className="relative inline-block mb-2">
             <motion.span
@@ -1021,11 +1021,12 @@ function ProductCard({
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="px-3 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 border transition-all duration-200 hover:scale-105 active:scale-95"
+                      className="relative z-20 px-3 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 border transition-all duration-200 hover:scale-105 active:scale-95"
                       style={{
                         borderColor: `${product.colors.primary}60`,
                         color: product.colors.primary,
                         background: `${product.colors.primary}10`,
+                        transform: 'translateZ(0)',
                       }}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1037,11 +1038,12 @@ function ProductCard({
                       href={product.guideUrl}
                       download
                       onClick={(e) => e.stopPropagation()}
-                      className="px-2 py-2 rounded-full flex items-center border transition-all duration-200 hover:scale-105 active:scale-95"
+                      className="relative z-20 px-2 py-2 rounded-full flex items-center border transition-all duration-200 hover:scale-105 active:scale-95"
                       style={{
                         borderColor: `${product.colors.primary}60`,
                         color: product.colors.primary,
                         background: `${product.colors.primary}10`,
+                        transform: 'translateZ(0)',
                       }}
                       title="Download Guide PDF"
                     >

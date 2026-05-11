@@ -2,9 +2,43 @@
 
 **Last Updated**: 2026-05-11
 **Version**: 0.9.22
-**Session Status**: Hygiene refresh — secrets fix, submodule registration, security patches
+**Session Summary**: Hygiene refresh — secrets fix, submodule registration, security patches, 20 `.DS_Store` files swept
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 0e9475a (main repo) / 459147e (support-iq submodule)
+**Git Branch**: main
+**Git Commit**: 9ba6142 (main repo) / 459147e (support-iq submodule)
+
+---
+
+## Resume Checklist (Next Session)
+
+- [ ] Read this SAVEPOINT.md
+- [ ] Run `git status` to check working tree
+- [ ] Check `gh run list --branch main --limit 3` (no GH Actions configured — confirm if that's intentional)
+- [ ] **Full-spectrum testing was requested 2026-05-11 right after this savepoint** — manual + smoke + auto across all 4 products (Main / dIQ / dCQ / dSQ) using Chrome browser, walking the happy-paths in each demo guide. Pick up there.
+- [ ] Triage `origin/n8n-workflow-updates` branch (10 dIQ v2.7.0 commits parked off-main) — merge or close
+- [ ] Plan a deps-major-upgrade session: Clerk 6→7 (auth API breaking), Anthropic SDK 0.65→0.95, Prisma 6→7, Elasticsearch 8→9
+- [ ] Address remaining 6 vulnerabilities (4 critical, 1 high, 1 moderate) — needs `npm audit fix --force` which pulls `next@16.2.6` + `@xenova/transformers@2.0.1`
+- [ ] Decide on `apps/test-iq/reference/sales prd/` PDF (captured in pulse commit `0e9475a` — confirm intended)
+
+---
+
+## Current State
+
+### Production URLs (all verified 200 OK 2026-05-11)
+| App | URL | Last Deploy |
+|---|---|---|
+| Main (sign-in) | https://www.digitalworkplace.ai/sign-in | 2026-05-11 (`digitalworkplace-7elg5fo2j`) |
+| dCQ — Chat Core IQ | https://dcq.digitalworkplace.ai/dcq/Home/index.html | (not investigated this session) |
+| dIQ — Intranet IQ | https://intranet-iq.vercel.app/diq/dashboard | (not investigated this session) |
+| dSQ — Support IQ | https://dsq.digitalworkplace.ai/dsq/demo/atc-executive | 82d old (`support-mm72f6aef`, Feb 18) |
+
+### Security
+- Vulnerabilities: **32 → 6** after `npm audit fix` this session
+- Remaining 6 (4 critical, 1 high, 1 moderate) need breaking-change fixes — deferred
+
+### Git
+- Branch `main` synced with `origin/main` at `9ba6142`
+- Branch `n8n-workflow-updates` (remote) has 10 unmerged dIQ v2.7.0 commits — parked
 
 ---
 

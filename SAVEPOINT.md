@@ -1,11 +1,11 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-05-11
-**Version**: 0.9.22
-**Session Summary**: Hygiene refresh — secrets fix, submodule registration, security patches, 20 `.DS_Store` files swept
+**Version**: 0.9.23
+**Session Summary**: Bullet-proofing pass — 11 of 13 production issues fully fixed across dIQ, dCQ, dSQ (React #418, Clerk dev keys, Doral counters cascade, stale fixture dates, response-time rounding)
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: 9ba6142 (main repo) / 459147e (support-iq submodule)
+**Git Commit**: 430569a (main repo) / b19f441 (support-iq submodule)
 
 ---
 
@@ -14,7 +14,8 @@
 - [ ] Read this SAVEPOINT.md
 - [ ] Run `git status` to check working tree
 - [ ] Check `gh run list --branch main --limit 3` (no GH Actions configured — confirm if that's intentional)
-- [ ] **Full-spectrum testing was requested 2026-05-11 right after this savepoint** — manual + smoke + auto across all 4 products (Main / dIQ / dCQ / dSQ) using Chrome browser, walking the happy-paths in each demo guide. Pick up there.
+- [ ] **Full-spectrum verification of bullet-proof pass DONE** — see `test-screenshots/2026-05-11-bulletproof-verification.md` for the 11-of-13 status table. Two deferred items only: F10 (CSS preload hint, cosmetic) and F13 (RSC 404s for dynamic news/events routes, systemic).
+- [ ] **Use `diq.digitalworkplace.ai` as the canonical dIQ demo URL** (NOT `intranet-iq.vercel.app`) — Clerk production keys are domain-scoped to digitalworkplace.ai. The vercel.app URL fails Clerk validation.
 - [ ] Triage `origin/n8n-workflow-updates` branch (10 dIQ v2.7.0 commits parked off-main) — merge or close
 - [ ] Plan a deps-major-upgrade session: Clerk 6→7 (auth API breaking), Anthropic SDK 0.65→0.95, Prisma 6→7, Elasticsearch 8→9
 - [ ] Address remaining 6 vulnerabilities (4 critical, 1 high, 1 moderate) — needs `npm audit fix --force` which pulls `next@16.2.6` + `@xenova/transformers@2.0.1`
@@ -42,7 +43,60 @@
 
 ---
 
-## Latest Session (2026-05-11) — Hygiene refresh after 47-day gap
+## Latest Session (2026-05-11) — POC Bullet-Proofing Pass
+
+After the full-spectrum production test surfaced 13 findings (3 critical, 5 medium, 5 low), this session resolved 11 of them with a coordinated code + Vercel-env change pass. Every fix verified live in Playwright/Chrome per Aldo's Axiom.
+
+### 🔴 Critical (all 3 resolved)
+- **F1 dIQ Clerk dev keys in prod** — swapped `pk_test_*`/`sk_test_*` for `pk_live_*`/`sk_live_*` on intranet-iq Vercel project. Verified that `diq.digitalworkplace.ai` (subdomain of `digitalworkplace.ai`) is accepted by Clerk production instance. The `intranet-iq.vercel.app` URL is NOT accepted — use canonical subdomain.
+- **F2 dIQ React hydration #418** — three sources fixed: `useState<Date>(new Date())` initialized to null on SSR + populated in useEffect; `Date.now()` calls in MeetingCard module scope moved into a `makeDemoMeetings()` factory called from useEffect; `suppressHydrationWarning` added on two `toLocaleDateString`/`toLocaleTimeString` paragraphs that legitimately differ between server-UTC and client-TZ output.
+- **F3 dCQ `Application undefined` cascade + frozen "Doral By The Numbers" counters** — created stub `apps/chat-core-iq/public/ocapi/.../websitesettings.js` that defines all 15 `OpenCities.Settings.*` properties referenced by the Granicus bundle (AddressPickerVariables, LanguageSettings, GroupSettings, SiteConfig, ApiBaseUrl, SiteId, CultureName, MapSettings, FormSettings, SearchSettings, FeatureFlags, getValue, isFeatureEnabled, plus top-level `Application` and `GroupName`). Added a fallback `paintCounters()` function that reads `[data-number]` attributes on DOMContentLoaded + at +1.5s, guaranteeing the stat counters render real values (2003, 150,000, 11, #2) regardless of the Granicus animation script's state.
+
+### 🟡 Medium (all 5 resolved)
+- **F4 dCQ footer** © 2025 → © 2026.
+- **F5 dIQ stale fixture dates** in `mockData.ts` — 69 date strings shifted forward: `2026-01-*` → `2026-04-*` (past news now recent), `2026-02-*` → `2026-06-*` (upcoming events now actually future), `2026-03-*` → `2026-05-*`. Text refs Q4 2025→Q1 2026, "February 1st"→"June 1st", "Feb 15"→"Jun 15", "February Cohort"→"June Cohort", "Q1 2026 All-Hands"→"Q2 2026 All-Hands".
+- **F6 dSQ COR Contract Performance dates** in `cor-data.ts` — 11 string dates + 6 `new Date()` constructor dates shifted forward to 2026-Q2/Q3. "Quarterly Security Audit Report Q4" → "Q2". `reportingPeriod: 'Q4 2025'` → `'Q1 2026'`. dSQ submodule `aldrinstellus/support-iq` HEAD bumped 459147e → b19f441.
+- **F7 dIQ Clerk deprecated `afterSignInUrl`** — code change `afterSignInUrl` → `signInForceRedirectUrl` in `layout.tsx`. Vercel env vars on intranet-iq AND digitalworkplace-ai projects: removed `NEXT_PUBLIC_CLERK_AFTER_SIGN_*_URL`, added `NEXT_PUBLIC_CLERK_SIGN_*_FORCE_REDIRECT_URL`. Both projects redeployed.
+- **F8 dCQ admin Response Time 107% rounding** — bucket math rewritten so `over5min = 100 - under1min - oneToFive` always. Verified live: 72% + 21% + 7% = exactly 100%.
+
+### 🟢 Low (3 of 5 resolved)
+- **F9 dCQ Maps API** — `loading=async` query param + `async` script attr added.
+- **F11 dIQ `useOrganization` unguarded** — wrapped: `isSignedIn ? orgResult.organization : null`.
+- **F12 dCQ apple-meta deprecation** — added `<meta name="mobile-web-app-capable">` alongside the deprecated apple one.
+- ⚠️ **F10 dIQ CSS preload hint** — cosmetic console warning from Webpack bundle; not a code change. Deferred.
+- ⚠️ **F13 dIQ RSC 404s** for `/diq/news/[id]` + `/diq/events/[id]` prefetches — systemic interaction between dynamic routes lacking `generateStaticParams` and the `Cache-Control: no-store` config in `next.config.ts`. Direct GET of these routes returns 200 (pages work fine). Only RSC prefetch payloads 404. Deferred — fix requires either generating static params for those routes or relaxing cache-control for `_rsc` URLs.
+
+### Final live state (verified 2026-05-11 ~19:48)
+| Surface | Errors | Warnings | Status |
+|---|---|---|---|
+| Main `/sign-in` | 0 | 0 (post-redeploy) | ✅ |
+| dIQ `/diq/dashboard` | 7 (all F13) | 1 (F10) | ✅ React #418 + Clerk all GONE |
+| dIQ `/diq/chat` | 0 | 0 | ✅ CLEAN |
+| dCQ `/dcq/Home/index.html` | 5 (Granicus internals) | 1 | ✅ Counters render real values, cascade resolved |
+| dCQ `/dcq/admin` | 0 | 0 | ✅ Response Time = 100% |
+| dCQ `/dcq/demo/ivr` | 0 | 0 | ✅ |
+| dSQ `/dsq/demo/cor` | 0 | 0 | ✅ All dates 2026-Q2/Q3 |
+
+### Git commits (2026-05-11 bullet-proofing pass)
+Parent monorepo:
+- `adfe02b` pulse — six code fixes captured (dIQ layout, dashboard, MeetingCard; dCQ Home, admin, websitesettings stub)
+- `959baae` fix — dIQ mockData 69-date refresh + submodule pointer bump
+- `812856d` fix(diq) — suppressHydrationWarning on timezone-sensitive paragraphs
+- `430569a` fix(dcq) — extended stub with all referenced OpenCities settings + counter fallback
+
+Submodule:
+- `b19f441` fix(cor) — refresh stale 2025-Q4 dates to 2026-Q2/Q3
+
+### Vercel env var changes
+- `intranet-iq` project: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY + CLERK_SECRET_KEY swapped dev→prod. Replaced NEXT_PUBLIC_CLERK_AFTER_SIGN_*_URL with NEXT_PUBLIC_CLERK_SIGN_*_FORCE_REDIRECT_URL.
+- `digitalworkplace-ai` project: replaced NEXT_PUBLIC_CLERK_AFTER_SIGN_*_URL with NEXT_PUBLIC_CLERK_SIGN_*_FORCE_REDIRECT_URL.
+
+### Production smoke 2026-05-11 (verification file: test-screenshots/2026-05-11-bulletproof-verification.md)
+All 6 demo-critical surfaces verified live in Playwright. 6 screenshots saved.
+
+---
+
+## Historical Session (2026-05-11) — Hygiene refresh after 47-day gap
 
 After ~6 weeks dormant (last touched 2026-03-25), brought the repo back to a current, healthy state:
 

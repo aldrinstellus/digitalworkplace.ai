@@ -4,6 +4,48 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.23] - 2026-05-11
+
+### POC bullet-proofing pass — 11 of 13 production findings fixed
+
+After the same-day full-spectrum production test surfaced 13 console-level issues, this release resolves the entire critical + medium tier:
+
+**🔴 Critical (3/3)**
+- **dIQ Clerk production keys** — swapped `pk_test_*`/`sk_test_*` to `pk_live_*`/`sk_live_*` on Vercel `intranet-iq` project. Demo URL is now `diq.digitalworkplace.ai/diq/dashboard` (NOT `intranet-iq.vercel.app` — Clerk production keys reject non-subdomains of digitalworkplace.ai).
+- **dIQ React hydration #418** — three root causes fixed: `useState<Date>(new Date())` initialized null + populated in useEffect (`apps/intranet-iq/src/app/dashboard/page.tsx`); module-scope `Date.now()` calls moved into a `makeDemoMeetings()` factory (`apps/intranet-iq/src/components/dashboard/MeetingCard.tsx`); `suppressHydrationWarning` added on `toLocaleDateString`/`toLocaleTimeString` paragraphs (server UTC vs client TZ are intentional).
+- **dCQ `Application undefined` cascade + frozen counters** — created stub `apps/chat-core-iq/public/ocapi/9a439b8d-bef9-4c87-b5bb-cf40e6ee6a75/en-US/websitesettings.js` defining all 15 referenced `OpenCities.Settings.*` properties + top-level `Application` and `GroupName`. Added `paintCounters()` fallback that writes `[data-number]` values into the DOM on DOMContentLoaded + at +1.5s, guaranteeing the "Doral By The Numbers" stats (2003, 150000, 11, #2) render real numbers regardless of the Granicus animation script's state.
+
+**🟡 Medium (5/5)**
+- **dCQ footer**: © 2025 → © 2026.
+- **dIQ stale fixture dates** in `mockData.ts`: 69 date strings shifted forward (`2026-01-*` → `2026-04-*`, `2026-02-*` → `2026-06-*`, `2026-03-*` → `2026-05-*`). Text refs: Q4 2025→Q1 2026, "February 1st"→"June 1st", "Feb 15"→"Jun 15", "February Cohort"→"June Cohort", "Q1 2026 All-Hands"→"Q2 2026 All-Hands".
+- **dSQ COR Contract Performance** in `apps/support-iq/src/data/persona-data/cor-data.ts`: 11 string dates + 6 `new Date()` constructor dates shifted forward to 2026-Q2/Q3 (`new Date('2025-11-30')` → `new Date('2026-04-25')` etc). "Quarterly Security Audit Report Q4" → "Q2". `reportingPeriod: 'Q4 2025'` → `'Q1 2026'`. Submodule `aldrinstellus/support-iq` HEAD bumped 459147e → b19f441.
+- **dIQ Clerk deprecated `afterSignInUrl`**: code change `afterSignInUrl` → `signInForceRedirectUrl` in `layout.tsx`. Vercel env vars on BOTH `intranet-iq` AND `digitalworkplace-ai` projects: removed `NEXT_PUBLIC_CLERK_AFTER_SIGN_*_URL`, added `NEXT_PUBLIC_CLERK_SIGN_*_FORCE_REDIRECT_URL`. Both projects redeployed.
+- **dCQ admin Response Time 107% rounding**: math rewritten so `over5min = max(0, 100 - under1min - oneToFive)`. Live-verified: 72% + 21% + 7% = exactly 100%.
+
+**🟢 Low (3/5)**
+- **dCQ Maps API**: `loading=async` query param + `async` script attr added.
+- **dIQ `useOrganization` unguarded**: wrapped `isSignedIn ? orgResult.organization : null`.
+- **dCQ apple-meta deprecation**: added `<meta name="mobile-web-app-capable">` alongside the deprecated apple-specific one.
+
+**Deferred (2/13)**
+- ⚠️ **F10 dIQ CSS preload hint** — cosmetic Webpack/Next bundle warning. Not a code change.
+- ⚠️ **F13 dIQ RSC 404s** for `/diq/news/[id]` + `/diq/events/[id]` prefetches — systemic: dynamic routes without `generateStaticParams` combined with `Cache-Control: no-store` config returns 404 on RSC payload prefetches. Direct GET returns 200, pages work fine. Console-noise only. Fix would require adding `generateStaticParams` to those routes or relaxing cache-control for `_rsc` URLs.
+
+**Final production console state**:
+| Surface | Errors | Warnings |
+|---|---|---|
+| Main `/sign-in` | 0 | 0 |
+| dIQ `/diq/dashboard` (via diq.digitalworkplace.ai) | 7 (F13 deferred) | 1 (F10 deferred) |
+| dIQ `/diq/chat` | 0 | 0 |
+| dCQ `/dcq/Home/index.html` | 5 (Granicus scrape internals) | 1 |
+| dCQ `/dcq/admin` | 0 | 0 |
+| dCQ `/dcq/demo/ivr` | 0 | 0 |
+| dSQ `/dsq/demo/cor` | 0 | 0 |
+
+Full verification matrix + screenshots: `test-screenshots/2026-05-11-bulletproof-verification.md`.
+
+---
+
 ## [0.9.22] - 2026-05-11
 
 ### Hygiene refresh after 47-day gap

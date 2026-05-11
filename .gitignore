@@ -37,6 +37,15 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# secrets — env/ directory (not caught by .env* pattern above)
+env/*.env
+!env/*.env.example
+!env/*.env.template
+
+# binary demo artifacts not for git
+Shared/
+dtq-test-screenshots/
+
 # vercel
 .vercel
 
@@ -44,3 +53,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+.claude/worktrees/

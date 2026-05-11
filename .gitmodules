@@ -1,0 +1,4 @@
+[submodule "apps/support-iq"]
+	path = apps/support-iq
+	url = https://github.com/aldrinstellus/support-iq.git
+	branch = main

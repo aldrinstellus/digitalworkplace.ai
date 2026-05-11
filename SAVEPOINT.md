@@ -5,7 +5,7 @@
 **Session Summary**: CI gate live + green. Today's arc: hygiene → bullet-proofing → 100%-functional → Naveen/Karishma dev-request fix → CI green. POC demo-ready and gated.
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: ddfa195 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: 55f1913 (main repo) / cf4c8f9 (support-iq submodule)
 
 ---
 

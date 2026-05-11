@@ -20,6 +20,29 @@
 (function (root, doc) {
     "use strict";
 
+    // ---------------------------------------------------------------
+    // Defensive Proxy — Granicus's minified bundle reads OpenCities
+    // settings via paths we can't fully enumerate without source maps.
+    // This Proxy returns a permissive default for any property access,
+    // any method call, and any nested chain, so the bundle never trips
+    // on "Cannot read properties of undefined (reading X)".
+    // ---------------------------------------------------------------
+    function makeSafeDefault() {
+        var fn = function () { return makeSafeDefault(); };
+        return new Proxy(fn, {
+            get: function (target, prop) {
+                if (prop === Symbol.toPrimitive) return function () { return ""; };
+                if (prop === "toString" || prop === "valueOf") return function () { return ""; };
+                if (prop === Symbol.iterator) return undefined;
+                if (prop === "length") return 0;
+                if (prop === "then") return undefined; // not a thenable
+                return makeSafeDefault();
+            },
+            apply: function () { return makeSafeDefault(); },
+            has: function () { return true; },
+        });
+    }
+
     var OpenCities = root.OpenCities = root.OpenCities || {};
 
     // The Granicus bundled JS doesn't have source maps, so we don't know the
@@ -58,6 +81,30 @@
     root.LanguageSettings = root.LanguageSettings || emptyLang;
     root.GroupSettings    = root.GroupSettings    || emptyGroup;
     root.GroupName        = root.GroupName        || "";
+
+    // Belt-and-suspenders: trap remaining undefined-property accesses on
+    // OpenCities and Application via a Proxy that lazily returns safe
+    // defaults. Stops the lingering "Cannot read properties of undefined"
+    // errors emitted by megabundled Granicus modules whose lookup paths
+    // we can't trace without source maps.
+    try {
+        var rawOC = OpenCities;
+        root.OpenCities = new Proxy(rawOC, {
+            get: function (t, p) {
+                if (p in t) return t[p];
+                return makeSafeDefault();
+            },
+        });
+        var rawApp = OpenCities.Application;
+        OpenCities.Application = root.Application = new Proxy(rawApp, {
+            get: function (t, p) {
+                if (p in t) return t[p];
+                return makeSafeDefault();
+            },
+        });
+    } catch (_) {
+        // Old browsers without Proxy support — fallback to plain objects.
+    }
 
     // No-op helper hooks the original config may have exposed.
     S.getValue = S.getValue || function () { return null; };

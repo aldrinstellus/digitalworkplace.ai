@@ -154,11 +154,14 @@ function generateDashboardData(): DashboardData {
       instagram: Math.floor(Math.random() * 3),
       whatsapp: Math.floor(Math.random() * 12) + 10,
     },
-    responseDistribution: {
-      under1min: Math.floor(Math.random() * 10) + 68,
-      oneToFive: Math.floor(Math.random() * 8) + 20,
-      over5min: Math.floor(Math.random() * 5) + 5,
-    },
+    responseDistribution: (() => {
+      // Pick under1min in 68-77, oneToFive in 18-25, then derive over5min so
+      // the three buckets always sum to exactly 100 (no 107% rounding bug).
+      const under1min = Math.floor(Math.random() * 10) + 68;
+      const oneToFive = Math.floor(Math.random() * 8) + 18;
+      const over5min = Math.max(0, 100 - under1min - oneToFive);
+      return { under1min, oneToFive, over5min };
+    })(),
     recentActivity: activities,
   };
 }

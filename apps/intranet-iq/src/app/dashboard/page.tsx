@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser, useOrganization } from "@clerk/nextjs";
+import { useUser, useOrganization, useAuth } from "@clerk/nextjs";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import {
@@ -56,7 +56,11 @@ const mockAISuggestions = [
 
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
-  const { organization } = useOrganization();
+  const { isSignedIn } = useAuth();
+  // Only consume org data when signed in — avoids Clerk "active user session" warning
+  // for unauthenticated visitors who land on the dashboard before the auth redirect fires.
+  const orgResult = useOrganization();
+  const organization = isSignedIn ? orgResult.organization : null;
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [draggedWidgetId, setDraggedWidgetId] = useState<string | null>(null);
@@ -70,7 +74,8 @@ export default function Dashboard() {
 
   // Real-time connection status
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("connected");
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  // null until client mounts — prevents SSR/client Date mismatch (React #418)
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isPulsing, setIsPulsing] = useState(false);
 
   const { visibleWidgets, reorderWidgets, applyPreset } = useDashboardWidgets();
@@ -90,6 +95,7 @@ export default function Dashboard() {
   // Simulate real-time data updates and connection status
   useEffect(() => {
     setConnectionStatus("connected");
+    setLastUpdated(new Date()); // initialize on client mount only
     const updateInterval = setInterval(() => {
       setLastUpdated(new Date());
       setIsPulsing(true);
@@ -99,7 +105,7 @@ export default function Dashboard() {
     const checkConnection = () => {
       if (!navigator.onLine) {
         setConnectionStatus("disconnected");
-      } else {
+      } else if (lastUpdated) {
         const now = new Date();
         const timeDiff = now.getTime() - lastUpdated.getTime();
         if (timeDiff > 60000) {
@@ -125,6 +131,8 @@ export default function Dashboard() {
   }, [lastUpdated]);
 
   const getTimeSinceUpdate = () => {
+    // SSR + initial client render: return stable placeholder so HTML matches
+    if (!lastUpdated) return "Just now";
     const now = new Date();
     const diffSeconds = Math.floor((now.getTime() - lastUpdated.getTime()) / 1000);
     if (diffSeconds < 5) return "Just now";

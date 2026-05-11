@@ -29,8 +29,8 @@ export default function RootLayout({
     <ClerkProvider
       signInUrl={`${mainAppUrl}/sign-in`}
       signUpUrl={`${mainAppUrl}/sign-up`}
-      afterSignInUrl="/diq/dashboard"
-      afterSignUpUrl="/diq/dashboard"
+      signInForceRedirectUrl="/diq/dashboard"
+      signUpForceRedirectUrl="/diq/dashboard"
     >
       <html lang="en" className="dark">
         <body className="antialiased min-h-screen bg-[var(--bg-obsidian)]">

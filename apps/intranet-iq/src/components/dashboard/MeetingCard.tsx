@@ -13,22 +13,26 @@ interface Meeting {
   attendees?: { name: string; avatar?: string }[];
 }
 
-// Demo meeting data - in production, this would come from calendar integration
-const demoMeetings: Meeting[] = [
-  {
-    id: "1",
-    title: "Weekly Team Standup",
-    start_time: new Date(Date.now() + 15 * 60000).toISOString(), // 15 min from now
-    end_time: new Date(Date.now() + 45 * 60000).toISOString(),
-    meeting_url: "https://zoom.us/j/123456789",
-    provider: "zoom",
-    attendees: [
-      { name: "Sarah Chen" },
-      { name: "Alex Kim" },
-      { name: "Jordan Lee" },
-    ],
-  },
-];
+// Demo meeting factory — computed on client mount, not at module load.
+// Module-scope Date.now() runs once at SSR import and again on client hydration,
+// producing different ISO strings → React hydration mismatch (error #418).
+function makeDemoMeetings(): Meeting[] {
+  return [
+    {
+      id: "1",
+      title: "Weekly Team Standup",
+      start_time: new Date(Date.now() + 15 * 60000).toISOString(), // 15 min from now
+      end_time: new Date(Date.now() + 45 * 60000).toISOString(),
+      meeting_url: "https://zoom.us/j/123456789",
+      provider: "zoom",
+      attendees: [
+        { name: "Sarah Chen" },
+        { name: "Alex Kim" },
+        { name: "Jordan Lee" },
+      ],
+    },
+  ];
+}
 
 const providerConfig = {
   zoom: { name: "Zoom", color: "bg-blue-500", icon: "🎥" },
@@ -43,9 +47,11 @@ export function MeetingCard() {
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Find next upcoming meeting
+    // Build demo data on client mount so meeting timestamps don't differ
+    // between SSR render and client hydration.
+    const meetings = makeDemoMeetings();
     const now = new Date();
-    const upcoming = demoMeetings.find(
+    const upcoming = meetings.find(
       (m) => new Date(m.start_time) > now && new Date(m.start_time) < new Date(now.getTime() + 30 * 60000)
     );
     setMeeting(upcoming || null);

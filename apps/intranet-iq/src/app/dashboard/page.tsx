@@ -629,7 +629,7 @@ export default function Dashboard() {
                             whileHover={{ x: 4 }}
                           >
                             <h4 className="text-[var(--text-primary)] font-medium text-sm">{event.title}</h4>
-                            <p className="text-xs text-[var(--text-muted)] mt-1">
+                            <p className="text-xs text-[var(--text-muted)] mt-1" suppressHydrationWarning>
                               {new Date(event.start_time).toLocaleDateString("en-US", {
                                 weekday: "short",
                                 month: "short",

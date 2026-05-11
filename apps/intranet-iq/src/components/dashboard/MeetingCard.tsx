@@ -107,7 +107,7 @@ export function MeetingCard() {
           </div>
           <h3 className="text-white font-medium truncate">{meeting.title}</h3>
           <div className="flex items-center gap-3 mt-1 text-xs text-white/50">
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1" suppressHydrationWarning>
               <Clock className="w-3 h-3" />
               {new Date(meeting.start_time).toLocaleTimeString([], {
                 hour: "2-digit",

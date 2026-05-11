@@ -36,8 +36,8 @@ export interface MockNewsPost {
 export const mockNewsPosts: MockNewsPost[] = [
   {
     id: "1",
-    title: "Q4 2025 Company Results: Record-Breaking Performance",
-    content: `We are thrilled to announce that Digital Workplace AI has achieved record-breaking results in Q4 2025, exceeding all expectations and setting new benchmarks for our industry.
+    title: "Q1 2026 Company Results: Record-Breaking Performance",
+    content: `We are thrilled to announce that Digital Workplace AI has achieved record-breaking results in Q1 2026, exceeding all expectations and setting new benchmarks for our industry.
 
 ## Key Metrics
 
@@ -83,9 +83,9 @@ Thank you all for your incredible work. Let's continue this momentum into 2026!`
     likes_count: 234,
     comments_count: 47,
     views_count: 1892,
-    published_at: "2026-01-28T09:00:00Z",
-    created_at: "2026-01-28T08:30:00Z",
-    updated_at: "2026-01-28T09:00:00Z",
+    published_at: "2026-04-28T09:00:00Z",
+    created_at: "2026-04-28T08:30:00Z",
+    updated_at: "2026-04-28T09:00:00Z",
     tags: ["Q4 Results", "Company News", "Financials", "Growth"],
     attachments: [
       { id: "att-001", type: "file", name: "Q4-2025-Financial-Summary.pdf", url: "#", size: 2400000 },
@@ -147,16 +147,16 @@ Please join us in welcoming our new colleagues:
     likes_count: 156,
     comments_count: 34,
     views_count: 1245,
-    published_at: "2026-01-27T14:00:00Z",
-    created_at: "2026-01-27T13:30:00Z",
-    updated_at: "2026-01-27T14:00:00Z",
+    published_at: "2026-04-27T14:00:00Z",
+    created_at: "2026-04-27T13:30:00Z",
+    updated_at: "2026-04-27T14:00:00Z",
     tags: ["New Hires", "Engineering", "Team", "Welcome"],
     attachments: [],
   },
   {
     id: "3",
-    title: "Updated Remote Work Policy - Effective February 1st",
-    content: `After extensive feedback from our team and careful analysis of productivity data, we're excited to announce our updated remote work policy, effective February 1st, 2026.
+    title: "Updated Remote Work Policy - Effective June 1st",
+    content: `After extensive feedback from our team and careful analysis of productivity data, we're excited to announce our updated remote work policy, effective June 1st, 2026.
 
 ## Work Arrangement Options
 
@@ -205,9 +205,9 @@ Questions? Reach out to your HR Business Partner or post in #remote-work Slack c
     likes_count: 312,
     comments_count: 89,
     views_count: 2456,
-    published_at: "2026-01-25T11:00:00Z",
-    created_at: "2026-01-25T10:00:00Z",
-    updated_at: "2026-01-25T11:00:00Z",
+    published_at: "2026-04-25T11:00:00Z",
+    created_at: "2026-04-25T10:00:00Z",
+    updated_at: "2026-04-25T11:00:00Z",
     tags: ["Policy", "Remote Work", "HR", "Benefits"],
     attachments: [
       { id: "att-003", type: "file", name: "Remote-Work-Policy-2026.pdf", url: "#", size: 890000 },
@@ -268,9 +268,9 @@ We want to hear from you! Share your experience:
     likes_count: 445,
     comments_count: 112,
     views_count: 3567,
-    published_at: "2026-01-24T08:00:00Z",
-    created_at: "2026-01-24T07:00:00Z",
-    updated_at: "2026-01-24T08:00:00Z",
+    published_at: "2026-04-24T08:00:00Z",
+    created_at: "2026-04-24T07:00:00Z",
+    updated_at: "2026-04-24T08:00:00Z",
     tags: ["Product", "AI", "Launch", "Features"],
     attachments: [
       { id: "att-004", type: "file", name: "AI-Assistant-3.0-Release-Notes.pdf", url: "#", size: 1500000 },
@@ -338,16 +338,16 @@ Our renovation prioritized sustainability:
     likes_count: 287,
     comments_count: 65,
     views_count: 1890,
-    published_at: "2026-01-23T10:00:00Z",
-    created_at: "2026-01-23T09:00:00Z",
-    updated_at: "2026-01-23T10:00:00Z",
+    published_at: "2026-04-23T10:00:00Z",
+    created_at: "2026-04-23T09:00:00Z",
+    updated_at: "2026-04-23T10:00:00Z",
     tags: ["Office", "Facilities", "Renovation", "Wellness"],
     attachments: [],
   },
   {
     id: "6",
-    title: "Annual Benefits Enrollment Open - Action Required by Feb 15",
-    content: `It's that time of year! Annual benefits enrollment is now open and will close on **February 15th, 2026**.
+    title: "Annual Benefits Enrollment Open - Action Required by Jun 15",
+    content: `It's that time of year! Annual benefits enrollment is now open and will close on **June 15th, 2026**.
 
 ## What's New for 2026
 
@@ -372,7 +372,7 @@ Our renovation prioritized sustainability:
 
 1. **Review current elections** in Benefits Portal
 2. **Update dependents** if family situation changed
-3. **Select 2026 plans** by February 15th
+3. **Select 2026 plans** by June 15th
 4. **Submit FSA/HSA elections** if applicable
 
 ## Important Dates
@@ -381,12 +381,12 @@ Our renovation prioritized sustainability:
 |------|-------|
 | Jan 20 | Enrollment opens |
 | Jan 25 | Benefits Fair (virtual) |
-| Feb 1 | Deadline for benefit questions |
-| Feb 15 | **Enrollment closes (5 PM PT)** |
+| Jun 1 | Deadline for benefit questions |
+| Jun 15 | **Enrollment closes (5 PM PT)** |
 | Mar 1 | New benefits effective |
 
 Don't miss the deadline!`,
-    excerpt: "2026 benefits enrollment open with new mental health coverage, 6% 401k match, and student loan assistance. Deadline Feb 15.",
+    excerpt: "2026 benefits enrollment open with new mental health coverage, 6% 401k match, and student loan assistance. Deadline Jun 15.",
     author_id: "6",
     author_name: "Amanda Foster",
     author_role: "Benefits Manager",
@@ -399,9 +399,9 @@ Don't miss the deadline!`,
     likes_count: 198,
     comments_count: 56,
     views_count: 2134,
-    published_at: "2026-01-20T09:00:00Z",
-    created_at: "2026-01-20T08:00:00Z",
-    updated_at: "2026-01-20T09:00:00Z",
+    published_at: "2026-04-20T09:00:00Z",
+    created_at: "2026-04-20T08:00:00Z",
+    updated_at: "2026-04-20T09:00:00Z",
     tags: ["Benefits", "HR", "Enrollment", "Healthcare"],
     attachments: [
       { id: "att-005", type: "file", name: "2026-Benefits-Guide.pdf", url: "#", size: 3200000 },
@@ -418,7 +418,7 @@ Net Revenue Retention (NRR) measures how much revenue we retain and grow from ex
 
 ### Key Achievements
 
-- **0 Enterprise Churns** in Q4 2025
+- **0 Enterprise Churns** in Q1 2026
 - **47 Expansion Deals** closed
 - **89% of Customers** upgraded plans
 - **4.8/5.0** Customer Satisfaction Score
@@ -453,9 +453,9 @@ Thank you to every team member who made this possible!`,
     likes_count: 178,
     comments_count: 42,
     views_count: 1456,
-    published_at: "2026-01-22T15:00:00Z",
-    created_at: "2026-01-22T14:00:00Z",
-    updated_at: "2026-01-22T15:00:00Z",
+    published_at: "2026-04-22T15:00:00Z",
+    created_at: "2026-04-22T14:00:00Z",
+    updated_at: "2026-04-22T15:00:00Z",
     tags: ["Customer Success", "NRR", "Achievement", "Team"],
     attachments: [],
   },
@@ -515,9 +515,9 @@ Full technical deep-dive on our engineering blog: engineering.digitalworkplace.a
     likes_count: 234,
     comments_count: 67,
     views_count: 1823,
-    published_at: "2026-01-21T10:00:00Z",
-    created_at: "2026-01-21T09:00:00Z",
-    updated_at: "2026-01-21T10:00:00Z",
+    published_at: "2026-04-21T10:00:00Z",
+    created_at: "2026-04-21T09:00:00Z",
+    updated_at: "2026-04-21T10:00:00Z",
     tags: ["Engineering", "Architecture", "Scaling", "Technical"],
     attachments: [],
   },
@@ -569,9 +569,9 @@ See you there! 🍿`,
     likes_count: 89,
     comments_count: 34,
     views_count: 567,
-    published_at: "2026-01-29T16:30:00Z",
-    created_at: "2026-01-29T16:00:00Z",
-    updated_at: "2026-01-29T16:30:00Z",
+    published_at: "2026-04-29T16:30:00Z",
+    created_at: "2026-04-29T16:00:00Z",
+    updated_at: "2026-04-29T16:30:00Z",
     tags: ["Social", "Trivia", "Team Building", "Fun"],
     attachments: [],
   },
@@ -627,9 +627,9 @@ Our IT Security team is actively blocking these attempts. Thank you for staying 
     likes_count: 156,
     comments_count: 23,
     views_count: 2345,
-    published_at: "2026-01-30T08:00:00Z",
-    created_at: "2026-01-30T07:30:00Z",
-    updated_at: "2026-01-30T08:00:00Z",
+    published_at: "2026-04-30T08:00:00Z",
+    created_at: "2026-04-30T07:30:00Z",
+    updated_at: "2026-04-30T08:00:00Z",
     tags: ["Security", "Alert", "Phishing", "Important"],
     attachments: [],
   },
@@ -664,8 +664,8 @@ export interface MockEvent {
 export const mockEvents: MockEvent[] = [
   {
     id: "1",
-    title: "Q1 2026 All-Hands Meeting",
-    description: "Join us for our quarterly all-hands meeting where leadership will share company updates, celebrate wins, and outline our vision for Q1 2026.",
+    title: "Q2 2026 All-Hands Meeting",
+    description: "Join us for our quarterly all-hands meeting where leadership will share company updates, celebrate wins, and outline our vision for Q2 2026.",
     organizer_id: "1",
     organizer_name: "Sarah Chen",
     organizer_role: "CEO",
@@ -675,8 +675,8 @@ export const mockEvents: MockEvent[] = [
     location: "Main Auditorium (Floor 1) + Virtual",
     location_type: "hybrid",
     meeting_url: "https://zoom.us/j/123456789",
-    start_time: "2026-02-03T10:00:00-08:00",
-    end_time: "2026-02-03T12:00:00-08:00",
+    start_time: "2026-06-03T10:00:00-08:00",
+    end_time: "2026-06-03T12:00:00-08:00",
     all_day: false,
     visibility: "all",
     max_attendees: 500,
@@ -696,8 +696,8 @@ export const mockEvents: MockEvent[] = [
     location: "Bay View Conference Center, San Francisco",
     location_type: "in_person",
     meeting_url: null,
-    start_time: "2026-02-10T09:00:00-08:00",
-    end_time: "2026-02-11T14:00:00-08:00",
+    start_time: "2026-06-10T09:00:00-08:00",
+    end_time: "2026-06-11T14:00:00-08:00",
     all_day: false,
     visibility: "department",
     max_attendees: 80,
@@ -706,7 +706,7 @@ export const mockEvents: MockEvent[] = [
   },
   {
     id: "3",
-    title: "New Employee Orientation - February Cohort",
+    title: "New Employee Orientation - June Cohort",
     description: "Comprehensive 4-hour session covering company overview, tools & systems, culture & expectations, and buddy introductions.",
     organizer_id: "3",
     organizer_name: "Lisa Park",
@@ -717,8 +717,8 @@ export const mockEvents: MockEvent[] = [
     location: "Training Room 2A + Zoom",
     location_type: "hybrid",
     meeting_url: "https://zoom.us/j/987654321",
-    start_time: "2026-02-05T09:00:00-08:00",
-    end_time: "2026-02-05T13:00:00-08:00",
+    start_time: "2026-06-05T09:00:00-08:00",
+    end_time: "2026-06-05T13:00:00-08:00",
     all_day: false,
     visibility: "private",
     max_attendees: 20,
@@ -738,8 +738,8 @@ export const mockEvents: MockEvent[] = [
     location: "Demo Theater (Floor 2)",
     location_type: "hybrid",
     meeting_url: "https://zoom.us/j/456789123",
-    start_time: "2026-02-07T14:00:00-08:00",
-    end_time: "2026-02-07T16:00:00-08:00",
+    start_time: "2026-06-07T14:00:00-08:00",
+    end_time: "2026-06-07T16:00:00-08:00",
     all_day: false,
     visibility: "all",
     max_attendees: 100,
@@ -759,8 +759,8 @@ export const mockEvents: MockEvent[] = [
     location: "Virtual Only",
     location_type: "virtual",
     meeting_url: "https://zoom.us/j/wellness2026",
-    start_time: "2026-02-05T12:00:00-08:00",
-    end_time: "2026-02-05T12:30:00-08:00",
+    start_time: "2026-06-05T12:00:00-08:00",
+    end_time: "2026-06-05T12:30:00-08:00",
     all_day: false,
     visibility: "all",
     max_attendees: null,
@@ -780,8 +780,8 @@ export const mockEvents: MockEvent[] = [
     location: "Executive Boardroom",
     location_type: "in_person",
     meeting_url: null,
-    start_time: "2026-02-14T09:00:00-08:00",
-    end_time: "2026-02-14T12:30:00-08:00",
+    start_time: "2026-06-14T09:00:00-08:00",
+    end_time: "2026-06-14T12:30:00-08:00",
     all_day: false,
     visibility: "private",
     max_attendees: 15,
@@ -801,8 +801,8 @@ export const mockEvents: MockEvent[] = [
     location: "Conference Room 3A + Virtual",
     location_type: "hybrid",
     meeting_url: "https://zoom.us/j/techtalk001",
-    start_time: "2026-02-06T15:00:00-08:00",
-    end_time: "2026-02-06T16:30:00-08:00",
+    start_time: "2026-06-06T15:00:00-08:00",
+    end_time: "2026-06-06T16:30:00-08:00",
     all_day: false,
     visibility: "all",
     max_attendees: 50,
@@ -822,8 +822,8 @@ export const mockEvents: MockEvent[] = [
     location: "Grand Ballroom, Marriott Downtown",
     location_type: "in_person",
     meeting_url: null,
-    start_time: "2026-02-12T08:00:00-08:00",
-    end_time: "2026-02-12T17:00:00-08:00",
+    start_time: "2026-06-12T08:00:00-08:00",
+    end_time: "2026-06-12T17:00:00-08:00",
     all_day: true,
     visibility: "department",
     max_attendees: 60,
@@ -1117,8 +1117,8 @@ If you need assistance:
     author_name: "Sarah Chen",
     author_avatar: "SC",
     status: "published",
-    published_at: "2026-01-15T10:00:00Z",
-    updated_at: "2026-01-28T14:30:00Z",
+    published_at: "2026-04-15T10:00:00Z",
+    updated_at: "2026-04-28T14:30:00Z",
     tags: ["Getting Started", "Onboarding", "Guide"],
     view_count: 4523,
     helpful_count: 892,
@@ -1158,7 +1158,7 @@ If you suspect a security incident:
     author_avatar: "MJ2",
     status: "published",
     published_at: "2025-11-15T09:00:00Z",
-    updated_at: "2026-01-25T11:00:00Z",
+    updated_at: "2026-04-25T11:00:00Z",
     tags: ["Security", "IT", "Compliance", "Best Practices"],
     view_count: 3891,
     helpful_count: 756,
@@ -1202,8 +1202,8 @@ We offer three medical plan options:
     author_name: "Amanda Foster",
     author_avatar: "AF",
     status: "published",
-    published_at: "2026-01-01T00:00:00Z",
-    updated_at: "2026-01-20T10:00:00Z",
+    published_at: "2026-04-01T00:00:00Z",
+    updated_at: "2026-04-20T10:00:00Z",
     tags: ["Benefits", "HR", "Health Insurance", "401k"],
     view_count: 5672,
     helpful_count: 1234,
@@ -1250,8 +1250,8 @@ Access the AI Assistant in three ways:
     author_name: "James Wilson",
     author_avatar: "JW",
     status: "published",
-    published_at: "2026-01-24T12:00:00Z",
-    updated_at: "2026-01-29T09:00:00Z",
+    published_at: "2026-04-24T12:00:00Z",
+    updated_at: "2026-04-29T09:00:00Z",
     tags: ["AI", "Assistant", "Guide", "Productivity"],
     view_count: 2891,
     helpful_count: 567,
@@ -1289,8 +1289,8 @@ Access the AI Assistant in three ways:
     author_name: "Lisa Park",
     author_avatar: "LP",
     status: "published",
-    published_at: "2026-01-18T10:00:00Z",
-    updated_at: "2026-01-26T15:00:00Z",
+    published_at: "2026-04-18T10:00:00Z",
+    updated_at: "2026-04-26T15:00:00Z",
     tags: ["Remote Work", "Productivity", "Work From Home"],
     view_count: 3456,
     helpful_count: 678,
@@ -1520,8 +1520,8 @@ export interface MockSearchResult {
 export const mockSearchResults: MockSearchResult[] = [
   { id: "sr-1", title: "Getting Started with Digital Workplace AI", excerpt: "Complete guide to getting started with the platform...", type: "article", source: "Knowledge Base", url: "/diq/content/1", relevance: 0.95, author: "Sarah Chen", tags: ["onboarding", "guide"] },
   { id: "sr-2", title: "IT Security Guidelines", excerpt: "Security best practices and policies for all employees...", type: "article", source: "Knowledge Base", url: "/diq/content/2", relevance: 0.88, author: "Marcus Johnson", tags: ["security", "IT"] },
-  { id: "sr-3", title: "Q4 2025 Results Announcement", excerpt: "Record-breaking quarterly results with 35% YoY growth...", type: "news", source: "News", url: "/diq/news/1", relevance: 0.82, author: "Sarah Chen", date: "2026-01-28" },
-  { id: "sr-4", title: "Annual Company Retreat 2026", excerpt: "Join us for the annual company retreat in Lake Tahoe...", type: "event", source: "Events", url: "/diq/events/1", relevance: 0.75, date: "2026-03-15" },
+  { id: "sr-3", title: "Q1 2026 Results Announcement", excerpt: "Record-breaking quarterly results with 35% YoY growth...", type: "news", source: "News", url: "/diq/news/1", relevance: 0.82, author: "Sarah Chen", date: "2026-04-28" },
+  { id: "sr-4", title: "Annual Company Retreat 2026", excerpt: "Join us for the annual company retreat in Lake Tahoe...", type: "event", source: "Events", url: "/diq/events/1", relevance: 0.75, date: "2026-05-15" },
   { id: "sr-5", title: "Marcus Johnson", excerpt: "VP of Engineering, leading the platform development team...", type: "employee", source: "People", url: "/diq/people/2", relevance: 0.70 },
 ];
 
@@ -1551,16 +1551,16 @@ export interface MockChatMessage {
 }
 
 export const mockChatThreads: MockChatThread[] = [
-  { id: "thread-1", title: "Help with onboarding process", created_at: "2026-01-30T10:00:00Z", updated_at: "2026-01-30T10:15:00Z", message_count: 4, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "How do I complete my onboarding checklist?" },
-  { id: "thread-2", title: "PTO policy questions", created_at: "2026-01-29T14:30:00Z", updated_at: "2026-01-29T14:45:00Z", message_count: 6, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What is our PTO policy?" },
-  { id: "thread-3", title: "IT security requirements", created_at: "2026-01-28T09:00:00Z", updated_at: "2026-01-28T09:30:00Z", message_count: 8, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What are the security requirements for remote access?" },
+  { id: "thread-1", title: "Help with onboarding process", created_at: "2026-04-30T10:00:00Z", updated_at: "2026-04-30T10:15:00Z", message_count: 4, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "How do I complete my onboarding checklist?" },
+  { id: "thread-2", title: "PTO policy questions", created_at: "2026-04-29T14:30:00Z", updated_at: "2026-04-29T14:45:00Z", message_count: 6, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What is our PTO policy?" },
+  { id: "thread-3", title: "IT security requirements", created_at: "2026-04-28T09:00:00Z", updated_at: "2026-04-28T09:30:00Z", message_count: 8, model: "claude-sonnet-4-20250514", parent_thread_id: null, branch_point_message_id: null, preview: "What are the security requirements for remote access?" },
 ];
 
 export const mockChatMessages: MockChatMessage[] = [
-  { id: "msg-1", thread_id: "thread-1", role: "user", content: "How do I complete my onboarding checklist?", created_at: "2026-01-30T10:00:00Z" },
-  { id: "msg-2", thread_id: "thread-1", role: "assistant", content: "I can help you with that! Your onboarding checklist includes several key steps:\n\n1. **Complete your profile** - Add your photo, bio, and contact information\n2. **Set up 2FA** - Enable two-factor authentication for security\n3. **Join team channels** - Connect with your team on Slack\n4. **Review policies** - Read through the employee handbook\n\nWould you like me to guide you through any of these steps?", created_at: "2026-01-30T10:01:00Z", sources: [{ id: "1", title: "Getting Started Guide", type: "article", url: "/diq/content/1" }] },
-  { id: "msg-3", thread_id: "thread-2", role: "user", content: "What is our PTO policy?", created_at: "2026-01-29T14:30:00Z" },
-  { id: "msg-4", thread_id: "thread-2", role: "assistant", content: "Our PTO policy provides generous time off benefits:\n\n- **Vacation**: 20 days per year for all full-time employees\n- **Sick Leave**: 10 days per year\n- **Personal Days**: 3 days per year\n- **Holidays**: 12 company-observed holidays\n\nPTO accrues monthly and can be carried over up to 5 days. For detailed information, please refer to the HR Policies section.", created_at: "2026-01-29T14:31:00Z", sources: [{ id: "3", title: "PTO Policy", type: "article", url: "/diq/content/3" }] },
+  { id: "msg-1", thread_id: "thread-1", role: "user", content: "How do I complete my onboarding checklist?", created_at: "2026-04-30T10:00:00Z" },
+  { id: "msg-2", thread_id: "thread-1", role: "assistant", content: "I can help you with that! Your onboarding checklist includes several key steps:\n\n1. **Complete your profile** - Add your photo, bio, and contact information\n2. **Set up 2FA** - Enable two-factor authentication for security\n3. **Join team channels** - Connect with your team on Slack\n4. **Review policies** - Read through the employee handbook\n\nWould you like me to guide you through any of these steps?", created_at: "2026-04-30T10:01:00Z", sources: [{ id: "1", title: "Getting Started Guide", type: "article", url: "/diq/content/1" }] },
+  { id: "msg-3", thread_id: "thread-2", role: "user", content: "What is our PTO policy?", created_at: "2026-04-29T14:30:00Z" },
+  { id: "msg-4", thread_id: "thread-2", role: "assistant", content: "Our PTO policy provides generous time off benefits:\n\n- **Vacation**: 20 days per year for all full-time employees\n- **Sick Leave**: 10 days per year\n- **Personal Days**: 3 days per year\n- **Holidays**: 12 company-observed holidays\n\nPTO accrues monthly and can be carried over up to 5 days. For detailed information, please refer to the HR Policies section.", created_at: "2026-04-29T14:31:00Z", sources: [{ id: "3", title: "PTO Policy", type: "article", url: "/diq/content/3" }] },
 ];
 
 export function getChatThreadById(id: string): MockChatThread | undefined {
@@ -1587,9 +1587,9 @@ export interface MockRecentActivity {
 }
 
 export const mockRecentActivity: MockRecentActivity[] = [
-  { id: "act-1", type: "article_published", title: "New article published", description: "Getting Started with AI Workflows", user_name: "Sarah Chen", user_avatar: "SC", timestamp: "2026-01-30T15:30:00Z", url: "/diq/content/5" },
-  { id: "act-2", type: "news_posted", title: "Company announcement", description: "Q4 2025 Results Released", user_name: "Marketing Team", user_avatar: "MT", timestamp: "2026-01-28T09:00:00Z", url: "/diq/news/1" },
-  { id: "act-3", type: "event_created", title: "New event scheduled", description: "Team Retrospective - Q1 Planning", user_name: "Emily Rodriguez", user_avatar: "ER", timestamp: "2026-01-27T14:00:00Z", url: "/diq/events/3" },
-  { id: "act-4", type: "employee_joined", title: "New team member", description: "Alex Thompson joined Engineering", user_name: "HR Team", user_avatar: "HR", timestamp: "2026-01-26T10:00:00Z", url: "/diq/people/42" },
-  { id: "act-5", type: "comment_added", title: "New comment", description: "Discussion on IT Security Guidelines", user_name: "Marcus Johnson", user_avatar: "MJ", timestamp: "2026-01-25T16:45:00Z", url: "/diq/content/2" },
+  { id: "act-1", type: "article_published", title: "New article published", description: "Getting Started with AI Workflows", user_name: "Sarah Chen", user_avatar: "SC", timestamp: "2026-04-30T15:30:00Z", url: "/diq/content/5" },
+  { id: "act-2", type: "news_posted", title: "Company announcement", description: "Q1 2026 Results Released", user_name: "Marketing Team", user_avatar: "MT", timestamp: "2026-04-28T09:00:00Z", url: "/diq/news/1" },
+  { id: "act-3", type: "event_created", title: "New event scheduled", description: "Team Retrospective - Q1 Planning", user_name: "Emily Rodriguez", user_avatar: "ER", timestamp: "2026-04-27T14:00:00Z", url: "/diq/events/3" },
+  { id: "act-4", type: "employee_joined", title: "New team member", description: "Alex Thompson joined Engineering", user_name: "HR Team", user_avatar: "HR", timestamp: "2026-04-26T10:00:00Z", url: "/diq/people/42" },
+  { id: "act-5", type: "comment_added", title: "New comment", description: "Discussion on IT Security Guidelines", user_name: "Marcus Johnson", user_avatar: "MJ", timestamp: "2026-04-25T16:45:00Z", url: "/diq/content/2" },
 ];

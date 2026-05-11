@@ -1,11 +1,11 @@
 # Digital Workplace AI - Session Savepoint
 
 **Last Updated**: 2026-05-11
-**Version**: 0.9.24
-**Session Summary**: 100%-functional pass — dCQ broken-link rewrites, dIQ SSG details (F13), useOrganization lift, Proxy-based dCQ stub, CI gate added. POC is demo-ready.
+**Version**: 0.9.25
+**Session Summary**: Dev-request fix — Naveen + Karishma flagged tickets dashboard not showing new entries. Two root causes: wrong sort direction + missing pagination. Both fixed + verified live.
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: 4135627 (main repo) / b19f441 (support-iq submodule)
+**Git Commit**: 5eafc5c (main repo) / cf4c8f9 (support-iq submodule)
 
 ---
 
@@ -43,7 +43,44 @@
 
 ---
 
-## Latest Session (2026-05-11 evening) — 100%-Functional Pass
+## Latest Session (2026-05-11 late evening) — Dev-Request Fix (Naveen + Karishma)
+
+After the 100%-functional pass declared demo-ready, two questions came in from ATC dev team that required investigation:
+
+### Q1: Which repo has the latest Support App code?
+Naveen saw `enterprise-ai-support-v4` + `v6` on GitHub. **Answer**: NEITHER. The canonical repo is **`https://github.com/aldrinstellus/support-iq`** — registered as the `apps/support-iq` submodule in this monorepo, deployed to `dsq.digitalworkplace.ai`. v4 + v6 are October 2025 experiments (7 months stale, last push 2025-10-06). The lineage per dSQ CLAUDE.md: v4 → V14 → V20-OP3 → support-iq.
+
+### Q2: Pagination missing on tickets dashboard widget
+Karishma reported: cannot view new Zoho tickets without deleting existing ones; blocking her demos. **Found TWO bugs**:
+
+1. **Sort direction was reversed**. `apps/support-iq/src/app/api/tickets/route.ts` called `sortBy=createdTime` (Zoho default: ASCENDING). Returned oldest 20 tickets — newest hidden behind the limit. Fix: `sortBy=-createdTime`.
+2. **No pagination**. Widget hardcoded `limit=20` with no offset/cursor. Added: `from` query param (0-based, mapped to Zoho's 1-based offset), `pagination` response metadata (`from`, `limit`, `returned`, `hasMore`), Previous/Next buttons + page indicator in `TicketListDemo.tsx`, mock fallback also paginates.
+
+### Live verification (Aldo's Axiom — 2026-05-11 ~20:14)
+```
+GET /api/tickets?limit=5&from=0  → tickets [#440, #439, #438, #437, #436]
+                                    pagination: {from: 0, limit: 5, returned: 5, hasMore: true}
+GET /api/tickets?limit=5&from=5  → tickets [#435, #434, #433, #432, #431]
+                                    pagination: {from: 5, limit: 5, returned: 5, hasMore: true}
+source: zoho-desk (real Zoho data, not mock fallback)
+```
+Playwright UI test on `dsq.digitalworkplace.ai/dsq/demo/atc-executive` → click "Live Tickets Dashboard":
+- Page 1: 20 tickets newest-first (#440 → #421), "Showing tickets 1–20 (newest first)", Prev disabled, Next enabled
+- Click Next → Page 2: ticket #415, "Page 2", Prev enabled, Next disabled (hit end correctly)
+- Total Zoho tickets = 21; both pages combined match exactly with no overlap
+
+### Commits
+- `support-iq` cf4c8f9 — fix(tickets): sort newest-first + add pagination
+- Parent `5eafc5c` (pulse) — submodule pointer bump + screenshot capture
+
+Screenshot: `test-screenshots/2026-05-11-dsq-tickets-pagination-page2.png`
+
+### Outcome
+Karishma can now demo without deleting tickets. New entries appear at the top automatically. All 21 tickets reachable via Previous/Next. Naveen's team should clone `aldrinstellus/support-iq` for all future Support App work.
+
+---
+
+## Historical Session (2026-05-11 evening) — 100%-Functional Pass
 
 After the bullet-proofing pass left 2 cosmetic items deferred, this pass closed the gap to full demo functionality + caught a NEW broken-UX bug.
 

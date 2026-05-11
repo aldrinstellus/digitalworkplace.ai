@@ -4,6 +4,23 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.25] - 2026-05-11
+
+### Dev-request fix: tickets dashboard sort + pagination
+
+Naveen + Karishma (ATC dev team) flagged: cannot view new Zoho tickets without deleting existing ones. Root cause was actually TWO bugs:
+
+- **Sort direction reversed** in `apps/support-iq/src/app/api/tickets/route.ts` — `sortBy=createdTime` returned oldest 20 tickets. Fix: `sortBy=-createdTime` → newest first.
+- **No pagination** in `apps/support-iq/src/components/tickets/TicketListDemo.tsx`. Added `from` query param + `pagination` response metadata + Previous/Next buttons with proper boundary handling. Mock fallback also paginates.
+
+Live-verified: API page 1 returns #440 first (was #415), page 2 returns the next batch with no overlap. UI Playwright test confirms `Showing tickets 1–20 (newest first)` header, Prev/Next buttons render correctly, clicking Next loads page 2.
+
+Also resolved a dev-team question: **the canonical Support App repo is `https://github.com/aldrinstellus/support-iq`**, not `enterprise-ai-support-v4`/`v6` (both 7 months stale).
+
+Commits: support-iq `cf4c8f9` (tickets fix), monorepo `5eafc5c` (submodule pointer bump via pulse).
+
+---
+
 ## [0.9.24] - 2026-05-11
 
 ### 100%-functional pass — broken-link rewrites, SSG details, CI gate

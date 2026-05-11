@@ -22,15 +22,23 @@
 
     var OpenCities = root.OpenCities = root.OpenCities || {};
 
-    // Core settings bag — Granicus templates dereference deep keys, so we
-    // pre-allocate them as empty objects rather than leaving them undefined.
+    // The Granicus bundled JS doesn't have source maps, so we don't know the
+    // exact lookup paths it tries. The defensive strategy: scaffold the same
+    // empty-object placeholders at every reasonable parent location. Cheap
+    // (a few KB of `{}` literals) and totally robust to whichever path the
+    // minified code happens to walk.
+    var emptyLang = { DefaultCulture: "en-US", Languages: [], LanguageSettings: { DefaultCulture: "en-US" } };
+    var emptyGroup = { GroupName: "", GroupId: "", Groups: [] };
+
+    // Path: OpenCities.Settings.*
     var S = OpenCities.Settings = OpenCities.Settings || {};
     S.AddressPickerVariables = S.AddressPickerVariables || {};
-    S.WebsiteSettings        = S.WebsiteSettings        || {};
-    S.SiteConfig             = S.SiteConfig             || {};
-    S.Localization           = S.Localization           || { Culture: "en-US" };
-    S.LanguageSettings       = S.LanguageSettings       || { DefaultCulture: "en-US", Languages: [] };
-    S.GroupSettings          = S.GroupSettings          || { GroupName: "" };
+    S.WebsiteSettings        = S.WebsiteSettings        || { LanguageSettings: emptyLang, GroupName: "", GroupSettings: emptyGroup };
+    S.SiteConfig             = S.SiteConfig             || { LanguageSettings: emptyLang };
+    S.Localization           = S.Localization           || { Culture: "en-US", LanguageSettings: emptyLang };
+    S.LanguageSettings       = S.LanguageSettings       || emptyLang;
+    S.GroupSettings          = S.GroupSettings          || emptyGroup;
+    S.GroupName              = S.GroupName              || "";
     S.ApiBaseUrl             = S.ApiBaseUrl             || "";
     S.SiteId                 = S.SiteId                 || "";
     S.CultureName            = S.CultureName            || "en-US";
@@ -39,10 +47,17 @@
     S.SearchSettings         = S.SearchSettings         || {};
     S.FeatureFlags           = S.FeatureFlags           || {};
 
-    // Some templates reference top-level Application + helpers.
-    OpenCities.Application = OpenCities.Application || {};
-    root.Application       = root.Application       || OpenCities.Application;
-    root.GroupName         = root.GroupName         || "";
+    // Path: OpenCities.*
+    OpenCities.Application      = OpenCities.Application      || { LanguageSettings: emptyLang, GroupName: "" };
+    OpenCities.LanguageSettings = OpenCities.LanguageSettings || emptyLang;
+    OpenCities.GroupSettings    = OpenCities.GroupSettings    || emptyGroup;
+    OpenCities.GroupName        = OpenCities.GroupName        || "";
+
+    // Path: window.* (top-level globals)
+    root.Application      = root.Application      || OpenCities.Application;
+    root.LanguageSettings = root.LanguageSettings || emptyLang;
+    root.GroupSettings    = root.GroupSettings    || emptyGroup;
+    root.GroupName        = root.GroupName        || "";
 
     // No-op helper hooks the original config may have exposed.
     S.getValue = S.getValue || function () { return null; };

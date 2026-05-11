@@ -1,0 +1,100 @@
+name: CI
+
+# Lint + typecheck + build every push to main and every pull request.
+# Catches regressions before Vercel auto-deploys them. Per the global
+# CI Watch rule, every push must reach a terminal status before assuming
+# the deploy is healthy.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  monorepo:
+    name: monorepo (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [main, intranet-iq, chat-core-iq, test-iq]
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install (root, hoists workspaces)
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint ${{ matrix.app }}
+        working-directory: apps/${{ matrix.app }}
+        run: npm run lint --if-present
+
+      - name: Typecheck ${{ matrix.app }}
+        working-directory: apps/${{ matrix.app }}
+        run: |
+          if npm run | grep -q "type-check"; then
+            npm run type-check
+          else
+            npx tsc --noEmit
+          fi
+
+      - name: Build ${{ matrix.app }}
+        working-directory: apps/${{ matrix.app }}
+        run: npm run build
+        env:
+          # build-time env stubs so Next.js doesn't fail on missing values.
+          # Vercel injects real values at deploy time.
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-stub
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_ci-stub
+          CLERK_SECRET_KEY: sk_test_ci-stub
+          NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
+          NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
+          NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL: /dashboard
+          NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL: /dashboard
+
+  submodule:
+    name: support-iq submodule
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install support-iq
+        working-directory: apps/support-iq
+        run: npm ci --no-audit --no-fund
+
+      - name: Lint support-iq
+        working-directory: apps/support-iq
+        run: npm run lint --if-present
+
+      - name: Typecheck support-iq
+        working-directory: apps/support-iq
+        run: npm run type-check
+
+      - name: Build support-iq
+        working-directory: apps/support-iq
+        run: npm run build
+        env:
+          ANTHROPIC_API_KEY: sk-ant-ci-stub
+          ZOHO_CLIENT_ID: ci-stub
+          ZOHO_CLIENT_SECRET: ci-stub
+          ZOHO_REFRESH_TOKEN: ci-stub
+          ZOHO_ORG_ID: ci-stub
+          ZOHO_DEPARTMENT_ID: ci-stub

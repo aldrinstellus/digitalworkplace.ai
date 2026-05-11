@@ -1,6 +1,7 @@
 "use client";
 
-import { useUser, useOrganization, useAuth } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { OrgNameInline } from "@/components/dashboard/OrgNameInline";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
 import {
@@ -57,10 +58,10 @@ const mockAISuggestions = [
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const { isSignedIn } = useAuth();
-  // Only consume org data when signed in — avoids Clerk "active user session" warning
-  // for unauthenticated visitors who land on the dashboard before the auth redirect fires.
-  const orgResult = useOrganization();
-  const organization = isSignedIn ? orgResult.organization : null;
+  // Organization name is consumed by <OrgNameInline /> below — it conditionally
+  // calls useOrganization() ONLY when a session is active, avoiding the Clerk
+  // "active user session" console warning for the brief moment unauthenticated
+  // visitors land on the dashboard before the auth redirect fires.
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [draggedWidgetId, setDraggedWidgetId] = useState<string | null>(null);
@@ -147,8 +148,6 @@ export default function Dashboard() {
     setIsPresetDropdownOpen(false);
     setHoveredPreset(null);
   };
-
-  const organizationName = organization?.name || "Your Organization";
 
   const getDisplayName = (): string | null => {
     if (!isLoaded) return null;
@@ -252,7 +251,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                   <span className="text-[var(--accent-ember)]">For you</span>
                   <span>|</span>
-                  <span>{organizationName}</span>
+                  <span><OrgNameInline isSignedIn={!!isSignedIn} /></span>
                 </div>
               </div>
               <div className="flex items-center gap-2">

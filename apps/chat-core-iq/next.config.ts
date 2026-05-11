@@ -32,6 +32,22 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // Fallback rewrites — the Doral home page links to many internal city
+  // pages (About, Departments, Elected-officials, Departments/<X>, etc.)
+  // that were not part of the scrape. Without this fallback those links
+  // 404. Send any unmapped /dcq/* URL to the home page so demo viewers
+  // never hit a dead end — the chat widget is the real demo focus and it
+  // remains accessible from the home page.
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [],
+      fallback: [
+        { source: "/:path*", destination: "/Home/index.html" },
+      ],
+    };
+  },
+
   // Security + Cache control headers
   async headers() {
     return [

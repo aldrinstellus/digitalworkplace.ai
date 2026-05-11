@@ -1,14 +1,75 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-03-25
-**Version**: 0.9.21
-**Session Status**: Chrome Audit Complete + DSQ Demo Guide v2.0.0
+**Last Updated**: 2026-05-11
+**Version**: 0.9.22
+**Session Status**: Hygiene refresh — secrets fix, submodule registration, security patches
 **Machine**: Mac Mini (aldrin-mac-mini)
-**Git Commit**: 611454a (main repo) / 459147e (support-iq submodule)
+**Git Commit**: 0e9475a (main repo) / 459147e (support-iq submodule)
 
 ---
 
-## Latest Session (2026-03-25) — Chrome Browser Audit + DSQ Guide v2
+## Latest Session (2026-05-11) — Hygiene refresh after 47-day gap
+
+After ~6 weeks dormant (last touched 2026-03-25), brought the repo back to a current, healthy state:
+
+### 🔴 Secrets leak averted
+- **Unpushed commit `1354a11` (pulse auto-save Mar 29) contained `env/PRODUCTION_KEYS.env`** — Clerk production keys + Google OAuth secrets. `.gitignore` had `.env*` but that pattern doesn't catch files inside an `env/` directory.
+- **Caught before push.** No leak to GitHub.
+- **Fix**: soft-reset the commit, added `env/*.env` (with `!*.example`/`!*.template` exceptions) + `Shared/` + `dtq-test-screenshots/` to `.gitignore`, recommitted clean as `7528c16`.
+
+### 🟢 Submodule registration completed
+- `apps/support-iq` was already a gitlink in HEAD (mode 160000 → 459147e) but `.gitmodules` was missing — the SAVEPOINT had been calling it a submodule even though git couldn't fully recognize it.
+- Added `.gitmodules` registering `apps/support-iq` → `https://github.com/aldrinstellus/support-iq.git` on branch `main`. Submodule is now a first-class citizen.
+
+### 🛡️ Security: 32 vulns → 6 vulns
+- `npm audit fix` (no breaking changes) — reduced from 32 vulnerabilities (7 critical, 16 high, 8 moderate, 1 low) down to 6 (4 critical, 1 high, 1 moderate). All fixed were transitive sub-deps (undici CRLF + DoS, yaml stack overflow, others).
+- Lockfile updated; no package.json changes. Captured in pulse commit `0e9475a`.
+- **Remaining 6 vulns** require breaking changes (`npm audit fix --force`):
+  - **postcss <8.5.10** (moderate XSS) — would install `next@16.2.6` (outside current range)
+  - **protobufjs <7.5.5 → onnx-proto → onnxruntime-web → @xenova/transformers** (4 critical chain) — would install `@xenova/transformers@2.0.1` (breaking)
+  - **Action**: Not applied. Major version bumps need a dev-server smoke test plan first.
+
+### 📦 Deps drift surfaced (NOT actioned this session)
+- **Major bumps available** across workspaces — left for a planned upgrade session:
+  - `@clerk/nextjs` 6.36.8 → 7.3.3 (auth API breaking changes)
+  - `@anthropic-ai/sdk` 0.65.0 → 0.95.1 (across 4 workspaces)
+  - `@prisma/client` 6.16.3 → 7.8.0 (support-iq)
+  - `@elastic/elasticsearch` 8.15.0 → 9.4.0 (intranet-iq)
+  - `lucide-react` 0.544 → 0.562 (main)
+  - `recharts` 3.2 → latest (multiple)
+- **Minor/patch bumps** sit waiting on a dedicated dep-refresh pass.
+
+### 🌿 Off-main work parked
+- **Remote branch `n8n-workflow-updates`** has ~10 commits NOT on main: `feat(dIQ): v2.7.0 Full Ecosystem Integration 100% Complete`, P1/P2 PRD gap fixes, professional SVG icons replacing emojis, etc.
+- **Per user direction**: left alone as intentional WIP. Should be reviewed before merging.
+
+### 📊 Production smoke test (2026-05-11)
+| Surface | URL | Status |
+|---|---|---|
+| Main sign-in | https://www.digitalworkplace.ai/sign-in | ✅ 200 |
+| dCQ homepage | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ 200 |
+| dIQ dashboard | https://intranet-iq.vercel.app/diq/dashboard | ✅ 200 |
+| dSQ demo persona | https://dsq.digitalworkplace.ai/dsq/demo/atc-executive | ✅ 200 |
+
+### Vercel alias state
+- `www.digitalworkplace.ai` → was serving Mar 25 deploy (`digitalworkplace-pget9k9o8`). New deploy triggered by today's push — Vercel will auto-alias.
+- `dsq.digitalworkplace.ai` → serving 82-day-old support-iq deploy (Feb 18, `support-mm72f6aef`). No new push to support-iq submodule means this won't update.
+- `intranet-iq.vercel.app` and `dcq.digitalworkplace.ai` → not investigated this session; assumed current.
+
+### Git commits (2026-05-11)
+1. `7528c16` — chore: gitignore env secrets + binaries, register support-iq submodule
+2. `0e9475a` — pulse: auto-save 18:55 May 11 (audit-fix lockfile + product demo PDF)
+
+### Notes / open items for next session
+- `apps/test-iq/reference/sales prd/` had a 377KB product demo PDF untracked; pulse captured it cleanly in `0e9475a`. Confirm with user this is intended.
+- `n8n-workflow-updates` branch needs triage — merge to main, keep parked, or close.
+- Plan a deps-major-upgrade session: Clerk v7 (test login first), Anthropic SDK 0.95, Prisma v7 (db schema verify), Elasticsearch v9.
+- Run `npm audit fix --force` only as part of that planned upgrade session — Next.js bump + transformers bump need a full app smoke test.
+- support-iq submodule has untracked working-tree state inside it (screenshots, `_env.colleague.local`); that's the submodule repo's concern, not the parent.
+
+---
+
+## Historical Session (2026-03-25) — Chrome Browser Audit + DSQ Guide v2
 
 ### Chrome Compatibility Fixes (All Verified Working)
 1. **PDF guides not opening in Chrome**: Root cause was ANY JavaScript `onClick` handler on `<a>` tags inside Framer Motion's 3D-transformed card containers. Even `e.stopPropagation()` was enough for Chrome to interfere with native link navigation. **Fix**: Pure HTML `<a>` tags with zero JS handlers, `pointer-events-auto`, `pointer-events-none` on SVG children, `z-50` stacking.

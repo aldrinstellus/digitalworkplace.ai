@@ -4,6 +4,20 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.22] - 2026-05-11
+
+### Hygiene refresh after 47-day gap
+
+- **🔴 Secrets leak averted**: Unpushed Mar 29 pulse auto-save (`1354a11`) staged `env/PRODUCTION_KEYS.env` (Clerk prod keys + Google OAuth). Caught before push. Soft-reset and replaced with clean commit `7528c16` that adds `env/*.env` (with `!*.example`/`!*.template` exceptions) + `Shared/` + `dtq-test-screenshots/` to `.gitignore`.
+- **Submodule registration**: `apps/support-iq` was already a gitlink in HEAD but `.gitmodules` was missing. Added `.gitmodules` registering it to `https://github.com/aldrinstellus/support-iq.git` on `main` branch.
+- **Security patches**: `npm audit fix` (no breaking changes) reduced vulnerabilities from 32 → 6 (lockfile only, no package.json changes). Captured in pulse commit `0e9475a`.
+- **Remaining 6 vulns** (4 critical, 1 high, 1 moderate) require breaking changes — deferred to a planned upgrade session: `postcss <8.5.10` (XSS, would bump to `next@16.2.6`) and `protobufjs <7.5.5` chain through `@xenova/transformers` (would bump to `2.0.1`).
+- **Drift documented**: Major version bumps available across workspaces (Clerk 6→7, Anthropic SDK 0.65→0.95, Prisma 6→7, Elasticsearch 8→9, lucide-react, recharts) — not applied; need test plan.
+- **Production smoke**: All 4 critical surfaces verified 200 OK (`www.digitalworkplace.ai/sign-in`, `dcq.digitalworkplace.ai`, `intranet-iq.vercel.app`, `dsq.digitalworkplace.ai`).
+- **Off-main work surfaced**: Remote branch `n8n-workflow-updates` has ~10 unmerged dIQ v2.7.0 commits — left parked per user direction.
+
+---
+
 ## [0.9.21] - 2026-03-25
 
 ### Chrome Compatibility Audit + DSQ Demo Guide v2.0.0

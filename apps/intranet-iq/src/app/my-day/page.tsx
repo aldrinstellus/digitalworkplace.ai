@@ -96,7 +96,11 @@ export default function MyDayPage() {
   const [showCalendar, setShowCalendar] = useState(true);
   // null on SSR/first client render — avoid hydration mismatch
   const [calendarMonth, setCalendarMonth] = useState<Date | null>(null);
-  useEffect(() => { setCalendarMonth(new Date()); }, []);
+  const todayIsoRef = useRef<string>('');
+  useEffect(() => {
+    setCalendarMonth(new Date());
+    todayIsoRef.current = new Date().toISOString().split('T')[0];
+  }, []);
   const [calendarConnected, setCalendarConnected] = useState(false);
   const quickAddRef = useRef<HTMLInputElement>(null);
   const commandInputRef = useRef<HTMLInputElement>(null);

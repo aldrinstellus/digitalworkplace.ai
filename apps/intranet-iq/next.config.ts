@@ -32,6 +32,21 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  // Redirect the auto-generated *.vercel.app alias to the canonical domain.
+  // Clerk production keys are domain-scoped to digitalworkplace.ai — any other
+  // origin trips "Production Keys are only allowed for domain ..." and bricks auth.
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'intranet-iq.vercel.app' }],
+        destination: 'https://diq.digitalworkplace.ai/:path*',
+        permanent: true,
+        basePath: false,
+      },
+    ];
+  },
+
   // Security + Cache control headers
   async headers() {
     return [

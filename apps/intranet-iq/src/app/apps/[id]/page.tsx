@@ -3,7 +3,6 @@
 import { useParams } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useState } from "react";
 import {
   ArrowLeft, MessageSquare, Hash, Lock, Users, Search, Send, Paperclip, Smile, AtSign, Phone,
@@ -48,9 +47,9 @@ export default function AppDetailPage() {
         <main className="ml-16 mr-20 p-6">
           <div className="max-w-4xl mx-auto text-center py-20">
             <h1 className="text-2xl text-[var(--text-primary)]">App not found</h1>
-            <Link href="/dashboard" className="text-[var(--accent-ember)] mt-4 inline-block">
+            <a href="/diq/dashboard" className="text-[var(--accent-ember)] mt-4 inline-block">
               Return to Dashboard
-            </Link>
+            </a>
           </div>
         </main>
       </div>
@@ -81,12 +80,12 @@ export default function AppDetailPage() {
       <Sidebar />
       <main className="ml-16 mr-20 h-screen overflow-hidden">
         {/* Back button overlay */}
-        <Link
-          href="/dashboard"
+        <a
+          href="/diq/dashboard"
           className="fixed top-4 left-20 z-50 p-2 rounded-lg bg-black/50 backdrop-blur text-white/70 hover:text-white hover:bg-black/70 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
+        </a>
         <FadeIn className="h-full">
           {renderApp()}
         </FadeIn>

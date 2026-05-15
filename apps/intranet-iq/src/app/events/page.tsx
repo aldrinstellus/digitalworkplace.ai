@@ -24,7 +24,6 @@ import {
   X,
   Plus,
 } from "lucide-react";
-import Link from "next/link";
 
 type ViewMode = "list" | "calendar";
 type RSVPStatus = "going" | "maybe" | "not-going" | null;
@@ -303,14 +302,14 @@ export default function EventsPage() {
                       </div>
                       <div className="space-y-1">
                         {dayEvents.slice(0, 3).map((event: MockEvent) => (
-                          <Link
+                          <a
                             key={event.id}
-                            href={`/events/${event.id}`}
+                            href={`/diq/events/${event.id}`}
                             className="block text-xs p-1 rounded bg-[var(--accent-ember)]/20 text-[var(--accent-ember)] truncate cursor-pointer hover:bg-[var(--accent-ember)]/30 transition-colors"
                             title={event.title}
                           >
                             {event.title}
-                          </Link>
+                          </a>
                         ))}
                         {dayEvents.length > 3 && (
                           <div className="text-xs text-[var(--text-muted)]">
@@ -336,7 +335,7 @@ export default function EventsPage() {
             <StaggerContainer className="space-y-4">
               {filteredEvents.map((event: MockEvent) => (
                 <StaggerItem key={event.id}>
-                  <Link href={`/events/${event.id}`}>
+                  <a href={`/diq/events/${event.id}`}>
                     <motion.div
                       whileHover={{ scale: 1.01, borderColor: "rgba(16,185,129,0.3)" }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -474,7 +473,7 @@ export default function EventsPage() {
                       </div>
                     </div>
                   </motion.div>
-                </Link>
+                </a>
                 </StaggerItem>
               ))}
             </StaggerContainer>

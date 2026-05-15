@@ -30,7 +30,6 @@ import {
   ExternalLink,
   Zap,
 } from "lucide-react";
-import Link from "next/link";
 import { getAppPresenceForEmployee } from "@/lib/crossReferences";
 import { getAllActivity, getAllTasks } from "@/lib/integratedData";
 import { SOURCE_DISPLAY, type UnifiedActivity, type UnifiedTask, type UnifiedEvent } from "@/lib/unifiedTypes";
@@ -501,9 +500,9 @@ export default function EmployeeProfilePage() {
                 <AlertCircle className="w-16 h-16 text-[var(--text-muted)] mx-auto mb-4" />
                 <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Employee Not Found</h1>
                 <p className="text-[var(--text-secondary)] mb-6">The employee profile you&apos;re looking for doesn&apos;t exist.</p>
-                <Link href="/people" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
+                <a href="/diq/people" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
                   <ArrowLeft className="w-4 h-4" /> Back to Directory
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </div>
@@ -519,9 +518,9 @@ export default function EmployeeProfilePage() {
         <div className="max-w-4xl mx-auto px-6 py-8">
           {/* Back Button */}
           <FadeIn>
-            <Link href="/people" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-ember)] transition-colors mb-6">
+            <a href="/diq/people" className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-ember)] transition-colors mb-6">
               <ArrowLeft className="w-4 h-4" /> Back to Directory
-            </Link>
+            </a>
           </FadeIn>
 
           {/* Profile Header */}
@@ -729,7 +728,7 @@ export default function EmployeeProfilePage() {
                 <FadeIn delay={0.2}>
                   <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl p-6 mb-6">
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">Reports To</h3>
-                    <Link href={`/people/${employee.manager.id}`} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
+                    <a href={`/diq/people/${employee.manager.id}`} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
                       <div className="w-12 h-12 rounded-full bg-[var(--accent-ember)]/20 flex items-center justify-center text-[var(--accent-ember)] font-medium">
                         {employee.manager.avatar}
                       </div>
@@ -738,7 +737,7 @@ export default function EmployeeProfilePage() {
                         <p className="text-[var(--text-muted)] text-sm">{employee.manager.title}</p>
                       </div>
                       <ChevronRight className="w-5 h-5 text-[var(--text-muted)] ml-auto" />
-                    </Link>
+                    </a>
                   </div>
                 </FadeIn>
               )}
@@ -752,7 +751,7 @@ export default function EmployeeProfilePage() {
                     </h3>
                     <div className="space-y-2">
                       {employee.direct_reports.map((report) => (
-                        <Link key={report.id} href={`/people/${report.id}`} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
+                        <a key={report.id} href={`/diq/people/${report.id}`} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
                           <div className="w-10 h-10 rounded-full bg-[var(--accent-gold)]/20 flex items-center justify-center text-[var(--accent-gold)] font-medium text-sm">
                             {report.avatar}
                           </div>
@@ -761,7 +760,7 @@ export default function EmployeeProfilePage() {
                             <p className="text-[var(--text-muted)] text-sm">{report.title}</p>
                           </div>
                           <ChevronRight className="w-5 h-5 text-[var(--text-muted)] ml-auto" />
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -781,7 +780,7 @@ export default function EmployeeProfilePage() {
                   {employee.recent_activity.length > 0 ? (
                     <div className="space-y-3">
                       {employee.recent_activity.map((activity, index) => (
-                        <Link key={index} href={activity.link} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
+                        <a key={index} href={activity.link} className="flex items-center gap-4 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                             activity.type === "post" ? "bg-blue-500/20 text-blue-400" :
                             activity.type === "event" ? "bg-purple-500/20 text-purple-400" :
@@ -796,7 +795,7 @@ export default function EmployeeProfilePage() {
                             <p className="text-[var(--text-muted)] text-sm capitalize">{activity.type} • {formatDate(activity.date)}</p>
                           </div>
                           <ChevronRight className="w-5 h-5 text-[var(--text-muted)]" />
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   ) : (

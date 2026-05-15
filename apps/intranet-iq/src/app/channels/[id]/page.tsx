@@ -32,7 +32,6 @@ import {
   X,
   Check,
 } from "lucide-react";
-import Link from "next/link";
 
 // Comprehensive mock channels data
 const mockChannelsData: Record<string, ChannelDetail> = {
@@ -434,9 +433,9 @@ export default function ChannelDetailPage() {
                 <AlertCircle className="w-16 h-16 text-[var(--text-muted)] mx-auto mb-4" />
                 <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Channel Not Found</h1>
                 <p className="text-[var(--text-secondary)] mb-6">The channel you&apos;re looking for doesn&apos;t exist or you don&apos;t have access.</p>
-                <Link href="/channels" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
+                <a href="/diq/channels" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
                   <ArrowLeft className="w-4 h-4" /> Back to Channels
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </div>
@@ -454,9 +453,9 @@ export default function ChannelDetailPage() {
           <div className="flex-shrink-0 px-6 py-4 bg-[var(--bg-charcoal)] border-b border-[var(--border-subtle)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Link href="/channels" className="p-2 hover:bg-[var(--bg-slate)] rounded-lg transition-colors">
+                <a href="/diq/channels" className="p-2 hover:bg-[var(--bg-slate)] rounded-lg transition-colors">
                   <ArrowLeft className="w-5 h-5 text-[var(--text-secondary)]" />
-                </Link>
+                </a>
                 <div className="flex items-center gap-2">
                   {channel.type === "private" ? (
                     <Lock className="w-5 h-5 text-[var(--text-muted)]" />
@@ -664,7 +663,7 @@ export default function ChannelDetailPage() {
                     </h4>
                     <div className="space-y-1">
                       {channel.members.filter(m => m.status === "online").map((member) => (
-                        <Link key={member.id} href={`/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
+                        <a key={member.id} href={`/diq/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
                           <div className="relative">
                             <div className="w-8 h-8 rounded-full bg-[var(--accent-ember)]/20 flex items-center justify-center text-[var(--accent-ember)] text-sm font-medium">
                               {member.avatar}
@@ -675,7 +674,7 @@ export default function ChannelDetailPage() {
                             <p className="text-sm text-[var(--text-primary)] truncate">{member.name}</p>
                             <p className="text-xs text-[var(--text-muted)] truncate">{member.role}</p>
                           </div>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -688,7 +687,7 @@ export default function ChannelDetailPage() {
                       </h4>
                       <div className="space-y-1">
                         {channel.members.filter(m => m.status === "away").map((member) => (
-                          <Link key={member.id} href={`/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
+                          <a key={member.id} href={`/diq/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors">
                             <div className="relative">
                               <div className="w-8 h-8 rounded-full bg-[var(--bg-slate)] flex items-center justify-center text-[var(--text-muted)] text-sm font-medium">
                                 {member.avatar}
@@ -699,7 +698,7 @@ export default function ChannelDetailPage() {
                               <p className="text-sm text-[var(--text-secondary)] truncate">{member.name}</p>
                               <p className="text-xs text-[var(--text-muted)] truncate">{member.role}</p>
                             </div>
-                          </Link>
+                          </a>
                         ))}
                       </div>
                     </div>
@@ -713,7 +712,7 @@ export default function ChannelDetailPage() {
                       </h4>
                       <div className="space-y-1">
                         {channel.members.filter(m => m.status === "offline").map((member) => (
-                          <Link key={member.id} href={`/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors opacity-60">
+                          <a key={member.id} href={`/diq/people/${member.id}`} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[var(--bg-slate)] transition-colors opacity-60">
                             <div className="relative">
                               <div className="w-8 h-8 rounded-full bg-[var(--bg-slate)] flex items-center justify-center text-[var(--text-muted)] text-sm font-medium">
                                 {member.avatar}
@@ -724,7 +723,7 @@ export default function ChannelDetailPage() {
                               <p className="text-sm text-[var(--text-muted)] truncate">{member.name}</p>
                               <p className="text-xs text-[var(--text-muted)] truncate">{member.role}</p>
                             </div>
-                          </Link>
+                          </a>
                         ))}
                       </div>
                     </div>

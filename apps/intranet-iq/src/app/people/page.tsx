@@ -29,7 +29,6 @@ import {
 import { mockEmployees, type MockEmployee } from "@/lib/mockData";
 import { getAppPresenceForEmployee } from "@/lib/crossReferences";
 import type { UnifiedEmployee } from "@/lib/unifiedTypes";
-import Link from "next/link";
 
 // Inline mock departments - IDs must match mockEmployees.department_id values
 const mockDepartments = [
@@ -442,7 +441,7 @@ export default function PeoplePage() {
                   <StaggerContainer className="grid grid-cols-3 gap-4">
                     {filteredPeople.map((person: any, index: number) => (
                       <StaggerItem key={person.id}>
-                        <Link href={`/people/${person.id}`}>
+                        <a href={`/diq/people/${person.id}`}>
                           <motion.div
                             className={`bg-[var(--bg-charcoal)] border rounded-xl p-4 cursor-pointer transition-all ${
                               selectedPerson?.id === person.id
@@ -539,14 +538,14 @@ export default function PeoplePage() {
                               Message
                             </button>
                           </motion.div>
-                        </Link>
+                        </a>
                       </StaggerItem>
                     ))}
                   </StaggerContainer>
                 ) : (
                   <div className="bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl divide-y divide-[var(--border-subtle)]">
                     {filteredPeople.map((person: any, index: number) => (
-                      <Link key={person.id} href={`/people/${person.id}`}>
+                      <a key={person.id} href={`/diq/people/${person.id}`}>
                         <motion.div
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
@@ -603,7 +602,7 @@ export default function PeoplePage() {
                           )}
                         </div>
                       </motion.div>
-                    </Link>
+                    </a>
                     ))}
                   </div>
                 )}

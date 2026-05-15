@@ -13,7 +13,6 @@ import {
 import { useRecentActivity } from "@/lib/hooks/useSupabase";
 import { useDashboardWidgets, DashboardWidget, LAYOUT_PRESETS, LayoutPresetKey } from "@/lib/hooks/useDashboardWidgets";
 import { mockNewsPosts, mockEvents, type MockNewsPost, type MockEvent } from "@/lib/mockData";
-import Link from "next/link";
 import { MeetingCard } from "@/components/dashboard/MeetingCard";
 import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
 import { DashboardCustomizer, DashboardCustomizeButton } from "@/components/dashboard/DashboardCustomizer";
@@ -314,7 +313,7 @@ export default function Dashboard() {
 
           {/* Search Bar - Full Width */}
           <FadeIn delay={0.1}>
-            <Link href="/search">
+            <a href="/diq/search">
               <motion.div
                 className="relative mb-6"
                 whileHover={{ scale: 1.005 }}
@@ -333,7 +332,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </a>
           </FadeIn>
 
           {/* Meeting Card - Full Width */}
@@ -355,7 +354,7 @@ export default function Dashboard() {
                   title="My Tasks"
                   subtitle="6 due today"
                   color="ember"
-                  href="/my-day"
+                  href="/diq/my-day"
                   isExpanded={expandedCard === "tasks"}
                   onToggle={() => setExpandedCard(expandedCard === "tasks" ? null : "tasks")}
                   expandedContent={
@@ -380,9 +379,9 @@ export default function Dashboard() {
                           </span>
                         </div>
                       ))}
-                      <Link href="/my-day" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <a href="/diq/my-day" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all tasks <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </div>
                   }
                 />
@@ -395,7 +394,7 @@ export default function Dashboard() {
                   title="Recent Documents"
                   subtitle="5 accessed today"
                   color="gold"
-                  href="/content?view=recent"
+                  href="/diq/content?view=recent"
                   isExpanded={expandedCard === "docs"}
                   onToggle={() => setExpandedCard(expandedCard === "docs" ? null : "docs")}
                   expandedContent={
@@ -415,9 +414,9 @@ export default function Dashboard() {
                           </div>
                         </div>
                       ))}
-                      <Link href="/content?view=recent" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <a href="/diq/content?view=recent" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all documents <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </div>
                   }
                 />
@@ -430,13 +429,13 @@ export default function Dashboard() {
                   title="AI Assistant"
                   subtitle="3 suggestions"
                   color="ember"
-                  href="/chat"
+                  href="/diq/chat"
                   isExpanded={expandedCard === "ai"}
                   onToggle={() => setExpandedCard(expandedCard === "ai" ? null : "ai")}
                   expandedContent={
                     <div className="space-y-3 mt-4">
                       {mockAISuggestions.map((suggestion) => (
-                        <Link key={suggestion.id} href="/chat">
+                        <a key={suggestion.id} href="/diq/chat">
                           <div className="flex items-start gap-3 p-3 rounded-lg bg-[var(--accent-ember)]/5 border border-[var(--accent-ember)]/20 hover:border-[var(--accent-ember)]/40 transition-colors cursor-pointer">
                             <Zap className="w-4 h-4 text-[var(--accent-ember)] mt-0.5" />
                             <div className="flex-1 min-w-0">
@@ -444,11 +443,11 @@ export default function Dashboard() {
                               <p className="text-xs text-[var(--text-muted)] mt-0.5">{suggestion.description}</p>
                             </div>
                           </div>
-                        </Link>
+                        </a>
                       ))}
-                      <Link href="/chat" className="flex items-center justify-center gap-2 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <a href="/diq/chat" className="flex items-center justify-center gap-2 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         Open AI Assistant <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </div>
                   }
                 />
@@ -464,7 +463,7 @@ export default function Dashboard() {
                   title="Team Updates"
                   subtitle="4 new updates"
                   color="copper"
-                  href="/news"
+                  href="/diq/news"
                   isExpanded={expandedCard === "updates"}
                   onToggle={() => setExpandedCard(expandedCard === "updates" ? null : "updates")}
                   expandedContent={
@@ -490,9 +489,9 @@ export default function Dashboard() {
                           </div>
                         </div>
                       ))}
-                      <Link href="/news" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <a href="/diq/news" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
                         View all updates <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </a>
                     </div>
                   }
                 />
@@ -510,9 +509,9 @@ export default function Dashboard() {
                       <Newspaper className="w-5 h-5 text-[var(--accent-ember)]" />
                       Company News
                     </h2>
-                    <Link href="/news" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                    <a href="/diq/news" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
                       View all <ChevronRight className="w-3 h-3" />
-                    </Link>
+                    </a>
                   </div>
 
                   {postsLoading ? (
@@ -524,7 +523,7 @@ export default function Dashboard() {
                   ) : newsPosts.length > 0 ? (
                     <div className="space-y-3">
                       {newsPosts.slice(0, 4).map((post: MockNewsPost) => (
-                        <Link key={post.id} href={`/news/${post.id}`}>
+                        <a key={post.id} href={`/diq/news/${post.id}`}>
                           <motion.div
                             className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer"
                             whileHover={{ x: 4 }}
@@ -547,7 +546,7 @@ export default function Dashboard() {
                               </div>
                             </div>
                           </motion.div>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   ) : (
@@ -572,7 +571,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-2">
                     {trendingTopics.map((topic, index) => (
-                      <Link key={topic.name} href={`/search?q=${encodeURIComponent(topic.name)}`}>
+                      <a key={topic.name} href={`/diq/search?q=${encodeURIComponent(topic.name)}`}>
                         <motion.div
                           className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group"
                           initial={{ opacity: 0, x: -10 }}
@@ -590,7 +589,7 @@ export default function Dashboard() {
                           </div>
                           <span className="text-xs text-[var(--text-muted)]">{topic.count} mentions</span>
                         </motion.div>
-                      </Link>
+                      </a>
                     ))}
                   </div>
                 </motion.div>
@@ -608,9 +607,9 @@ export default function Dashboard() {
                       <Calendar className="w-5 h-5 text-[var(--success)]" />
                       Upcoming Events
                     </h2>
-                    <Link href="/events" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                    <a href="/diq/events" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
                       View all <ChevronRight className="w-3 h-3" />
-                    </Link>
+                    </a>
                   </div>
 
                   {eventsLoading ? (
@@ -622,7 +621,7 @@ export default function Dashboard() {
                   ) : events.length > 0 ? (
                     <div className="space-y-3">
                       {events.slice(0, 3).map((event: MockEvent) => (
-                        <Link key={event.id} href={`/events/${event.id}`}>
+                        <a key={event.id} href={`/diq/events/${event.id}`}>
                           <motion.div
                             className="p-3 rounded-lg hover:bg-[var(--bg-slate)] transition-colors cursor-pointer border-l-2 border-[var(--success)]"
                             whileHover={{ x: 4 }}
@@ -649,7 +648,7 @@ export default function Dashboard() {
                               </span>
                             </div>
                           </motion.div>
-                        </Link>
+                        </a>
                       ))}
                     </div>
                   ) : (
@@ -670,9 +669,9 @@ export default function Dashboard() {
                       <Clock className="w-5 h-5 text-[var(--accent-ember)]" />
                       Recent Activity
                     </h2>
-                    <Link href="/settings?tab=activity" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
+                    <a href="/diq/settings?tab=activity" className="text-xs text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] flex items-center gap-1 transition-colors">
                       View all <ChevronRight className="w-3 h-3" />
-                    </Link>
+                    </a>
                   </div>
 
                   <div className="space-y-2">
@@ -748,9 +747,9 @@ function ExpandableQuickCard({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Link href={href} onClick={(e) => e.stopPropagation()}>
+            <a href={href} onClick={(e) => e.stopPropagation()}>
               <ExternalLink className="w-4 h-4 text-[var(--text-muted)] hover:text-[var(--accent-ember)] transition-colors" />
-            </Link>
+            </a>
             <ChevronDown className={`w-4 h-4 text-[var(--text-muted)] transition-transform ${isExpanded ? "rotate-180" : ""}`} />
           </div>
         </div>

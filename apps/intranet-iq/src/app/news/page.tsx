@@ -25,7 +25,6 @@ import {
   Link2,
   Check,
 } from "lucide-react";
-import Link from "next/link";
 
 // Mock categories and authors for following
 const categories = [
@@ -281,7 +280,7 @@ export default function NewsPage() {
             <StaggerContainer className="space-y-4">
               {filteredPosts.map((post: MockNewsPost) => (
                 <StaggerItem key={post.id}>
-                  <Link href={`/news/${post.id}`}>
+                  <a href={`/diq/news/${post.id}`}>
                     <motion.div
                       whileHover={{ scale: 1.01, borderColor: "rgba(16,185,129,0.3)" }}
                       transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -359,7 +358,7 @@ export default function NewsPage() {
                         </div>
                       </div>
                     </motion.div>
-                  </Link>
+                  </a>
                 </StaggerItem>
               ))}
             </StaggerContainer>

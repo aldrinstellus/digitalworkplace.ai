@@ -27,7 +27,6 @@ import {
   CheckCircle2,
   MessageSquare,
 } from "lucide-react";
-import Link from "next/link";
 
 // Comprehensive mock articles data
 const mockArticlesData: Record<string, ArticleDetail> = {
@@ -816,9 +815,9 @@ export default function ArticleDetailPage() {
                 <AlertCircle className="w-16 h-16 text-[var(--text-muted)] mx-auto mb-4" />
                 <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Article Not Found</h1>
                 <p className="text-[var(--text-secondary)] mb-6">The article you&apos;re looking for doesn&apos;t exist.</p>
-                <Link href="/content" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
+                <a href="/diq/content" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg">
                   <ArrowLeft className="w-4 h-4" /> Back to Knowledge Base
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </div>
@@ -841,9 +840,9 @@ export default function ArticleDetailPage() {
                   {article.breadcrumb.map((crumb, index) => (
                     <span key={crumb.id} className="flex items-center gap-2">
                       {index > 0 && <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />}
-                      <Link href={crumb.href} className="text-[var(--text-secondary)] hover:text-[var(--accent-ember)]">
+                      <a href={crumb.href} className="text-[var(--text-secondary)] hover:text-[var(--accent-ember)]">
                         {crumb.name}
-                      </Link>
+                      </a>
                     </span>
                   ))}
                   <ChevronRight className="w-4 h-4 text-[var(--text-muted)]" />
@@ -963,14 +962,14 @@ export default function ArticleDetailPage() {
               <FadeIn delay={0.25}>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {article.tags.map((tag) => (
-                    <Link
+                    <a
                       key={tag}
-                      href={`/content?tag=${encodeURIComponent(tag)}`}
+                      href={`/diq/content?tag=${encodeURIComponent(tag)}`}
                       className="flex items-center gap-1 px-3 py-1 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-full text-xs text-[var(--text-secondary)] hover:border-[var(--accent-ember)]/50"
                     >
                       <Tag className="w-3 h-3" />
                       {tag}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </FadeIn>
@@ -1021,9 +1020,9 @@ export default function ArticleDetailPage() {
                         const related = mockArticlesData[relatedId];
                         if (!related) return null;
                         return (
-                          <Link
+                          <a
                             key={relatedId}
-                            href={`/content/${relatedId}`}
+                            href={`/diq/content/${relatedId}`}
                             className="block p-4 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl hover:border-[var(--accent-ember)]/50 transition-colors"
                           >
                             <div
@@ -1033,7 +1032,7 @@ export default function ArticleDetailPage() {
                               {related.category.name}
                             </div>
                             <h4 className="text-[var(--text-primary)] font-medium line-clamp-2">{related.title}</h4>
-                          </Link>
+                          </a>
                         );
                       })}
                     </div>

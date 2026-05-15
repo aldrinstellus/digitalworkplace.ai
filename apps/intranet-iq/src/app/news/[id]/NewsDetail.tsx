@@ -21,7 +21,6 @@ import {
   Loader2,
   FileText,
 } from "lucide-react";
-import Link from "next/link";
 
 // Mock comments data for news posts
 const mockComments: Record<string, Array<{
@@ -223,13 +222,13 @@ export default function NewsDetailPage() {
                 <p className="text-[var(--text-secondary)] mb-6">
                   The news post you&apos;re looking for doesn&apos;t exist or has been removed.
                 </p>
-                <Link
-                  href="/news"
+                <a
+                  href="/diq/news"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg hover:bg-[var(--accent-ember-soft)] transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to News
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </div>
@@ -245,13 +244,13 @@ export default function NewsDetailPage() {
         <div className="max-w-4xl mx-auto px-6 py-8">
           {/* Back Button */}
           <FadeIn>
-            <Link
-              href="/news"
+            <a
+              href="/diq/news"
               className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-ember)] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to News
-            </Link>
+            </a>
           </FadeIn>
 
           {/* Article Header */}
@@ -272,9 +271,9 @@ export default function NewsDetailPage() {
                     {post.author_avatar}
                   </div>
                   <div>
-                    <Link href={`/people/${post.author_id.replace('user-', 'emp-')}`} className="text-[var(--text-primary)] font-medium hover:text-[var(--accent-ember)] transition-colors">
+                    <a href={`/diq/people/${post.author_id.replace('user-', 'emp-')}`} className="text-[var(--text-primary)] font-medium hover:text-[var(--accent-ember)] transition-colors">
                       {post.author_name}
-                    </Link>
+                    </a>
                     <p className="text-xs text-[var(--text-muted)]">{post.author_role}</p>
                   </div>
                 </div>
@@ -523,9 +522,9 @@ export default function NewsDetailPage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {relatedPosts.map((relatedPost) => (
-                    <Link
+                    <a
                       key={relatedPost.id}
-                      href={`/news/${relatedPost.id}`}
+                      href={`/diq/news/${relatedPost.id}`}
                       className="block p-4 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl hover:border-[var(--accent-ember)]/50 transition-colors"
                     >
                       <h4 className="text-[var(--text-primary)] font-medium line-clamp-2 mb-2">
@@ -534,7 +533,7 @@ export default function NewsDetailPage() {
                       <p className="text-xs text-[var(--text-muted)]">
                         {formatRelativeTime(relatedPost.published_at)}
                       </p>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>

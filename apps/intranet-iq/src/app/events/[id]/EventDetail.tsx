@@ -24,7 +24,6 @@ import {
   Plus,
   FileText,
 } from "lucide-react";
-import Link from "next/link";
 
 // Extended event data for detail view
 interface EventDetailData extends MockEvent {
@@ -278,13 +277,13 @@ export default function EventDetailPage() {
                 <p className="text-[var(--text-secondary)] mb-6">
                   The event you&apos;re looking for doesn&apos;t exist or has been cancelled.
                 </p>
-                <Link
-                  href="/events"
+                <a
+                  href="/diq/events"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-ember)] text-white rounded-lg hover:bg-[var(--accent-ember-soft)] transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Back to Events
-                </Link>
+                </a>
               </div>
             </FadeIn>
           </div>
@@ -309,13 +308,13 @@ export default function EventDetailPage() {
         <div className="max-w-4xl mx-auto px-6 py-8">
           {/* Back Button */}
           <FadeIn>
-            <Link
-              href="/events"
+            <a
+              href="/diq/events"
               className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--accent-ember)] transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Events
-            </Link>
+            </a>
           </FadeIn>
 
           {/* Event Header */}
@@ -387,9 +386,9 @@ export default function EventDetailPage() {
                   {event.organizer_avatar}
                 </div>
                 <div>
-                  <Link href={`/people/${event.organizer_id.replace('user-', 'emp-')}`} className="text-[var(--text-primary)] font-medium hover:text-[var(--accent-ember)] transition-colors">
+                  <a href={`/diq/people/${event.organizer_id.replace('user-', 'emp-')}`} className="text-[var(--text-primary)] font-medium hover:text-[var(--accent-ember)] transition-colors">
                     Organized by {event.organizer_name}
-                  </Link>
+                  </a>
                   <p className="text-xs text-[var(--text-muted)]">{event.organizer_role} • {event.department_name}</p>
                 </div>
               </div>
@@ -536,9 +535,9 @@ export default function EventDetailPage() {
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {event.attendees.map((attendee) => (
-                    <Link
+                    <a
                       key={attendee.id}
-                      href={`/people/${attendee.id}`}
+                      href={`/diq/people/${attendee.id}`}
                       className="flex items-center gap-3 p-3 bg-[var(--bg-slate)] rounded-lg hover:bg-[var(--bg-obsidian)] transition-colors"
                     >
                       <div className="w-10 h-10 rounded-full bg-[var(--accent-ember)]/20 flex items-center justify-center text-[var(--accent-ember)] font-medium">
@@ -554,7 +553,7 @@ export default function EventDetailPage() {
                       {attendee.status === "maybe" && (
                         <HelpCircle className="w-4 h-4 text-yellow-400" />
                       )}
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -584,9 +583,9 @@ export default function EventDetailPage() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {relatedEvents.map((relatedEvent) => (
-                    <Link
+                    <a
                       key={relatedEvent.id}
-                      href={`/events/${relatedEvent.id}`}
+                      href={`/diq/events/${relatedEvent.id}`}
                       className="block p-4 bg-[var(--bg-charcoal)] border border-[var(--border-subtle)] rounded-xl hover:border-[var(--accent-ember)]/50 transition-colors"
                     >
                       <h4 className="text-[var(--text-primary)] font-medium line-clamp-2 mb-2">
@@ -598,7 +597,7 @@ export default function EventDetailPage() {
                           day: "numeric",
                         })}
                       </p>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>

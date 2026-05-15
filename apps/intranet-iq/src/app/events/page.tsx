@@ -355,11 +355,11 @@ export default function EventsPage() {
                       <div className="flex gap-6">
                         {/* Date Column */}
                         <div className="flex-shrink-0 w-20 text-center">
-                          <div className="bg-[var(--accent-ember)]/20 rounded-xl p-3">
-                            <div className="text-2xl font-bold text-[var(--accent-ember)]">
+                          <div className="bg-[var(--accent-ember)]/20 rounded-xl p-3" suppressHydrationWarning>
+                            <div className="text-2xl font-bold text-[var(--accent-ember)]" suppressHydrationWarning>
                               {new Date(event.start_time).getDate()}
                             </div>
-                            <div className="text-xs text-[var(--accent-ember)]/70 uppercase">
+                            <div className="text-xs text-[var(--accent-ember)]/70 uppercase" suppressHydrationWarning>
                               {new Date(event.start_time).toLocaleDateString("en-US", { month: "short" })}
                             </div>
                           </div>
@@ -382,7 +382,7 @@ export default function EventsPage() {
                           )}
 
                           <div className="flex items-center gap-6 text-sm text-[var(--text-muted)]">
-                            <span className="flex items-center gap-1.5">
+                            <span className="flex items-center gap-1.5" suppressHydrationWarning>
                               <Clock className="w-4 h-4" />
                               {new Date(event.start_time).toLocaleTimeString("en-US", {
                                 hour: "numeric",

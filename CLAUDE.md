@@ -698,3 +698,14 @@ export const playChatBubbleSound = (): void => {
   osc.stop(now + 0.1);
 };
 ```
+
+---
+
+## Claude Code conventions *(added 2026-05-15)*
+
+- **Project:** digitalworkplace.ai  ·  Location: `/Users/aldrin-mac-mini/digitalworkplace.ai`
+- **Savepoint:** writes to `./SAVEPOINT.md` (this directory)
+- **Save to KB:** writes to this project's `knowledge.md` in the Claude memory dir (create on first trigger if absent); enumerate in next savepoint
+- **Save to global KB:** writes to `~/.claude/projects/-Users-aldrin-mac-mini/memory/10-global/knowledge.md`
+- **Resume:** read `./SAVEPOINT.md` first, then any project-specific reference docs
+- See the global pattern: `~/.claude/projects/-Users-aldrin-mac-mini/memory/10-global/rules/global-project-claude-md-pattern.md`

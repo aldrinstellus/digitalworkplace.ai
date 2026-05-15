@@ -96,10 +96,10 @@ export default function MyDayPage() {
   const [showCalendar, setShowCalendar] = useState(true);
   // null on SSR/first client render — avoid hydration mismatch
   const [calendarMonth, setCalendarMonth] = useState<Date | null>(null);
-  const todayIsoRef = useRef<string>('');
+  const [todayIso, setTodayIso] = useState<string>('');
   useEffect(() => {
     setCalendarMonth(new Date());
-    todayIsoRef.current = new Date().toISOString().split('T')[0];
+    setTodayIso(new Date().toISOString().split('T')[0]);
   }, []);
   const [calendarConnected, setCalendarConnected] = useState(false);
   const quickAddRef = useRef<HTMLInputElement>(null);
@@ -715,7 +715,7 @@ export default function MyDayPage() {
 
   const navigateMonth = (direction: 'prev' | 'next') => {
     setCalendarMonth(prev => {
-      const newDate = new Date(prev);
+      const newDate = new Date(prev ?? new Date());
       if (direction === 'prev') {
         newDate.setMonth(newDate.getMonth() - 1);
       } else {
@@ -974,9 +974,8 @@ export default function MyDayPage() {
                         day
                       ) : '';
                       const dayTasks = getTasksForDate(dateStr);
-                      const _todayIso = todayIsoRef.current;
-                      const isToday = !!_todayIso && dateStr === _todayIso;
-                      const isPast = !!_todayIso && dateStr < _todayIso;
+                      const isToday = !!todayIso && dateStr === todayIso;
+                      const isPast = !!todayIso && dateStr < todayIso;
                       const taskCount = dayTasks.length;
                       const hasUrgent = dayTasks.some(t => t.priority === 'urgent' || isOverdue(t));
                       const hasHigh = dayTasks.some(t => t.priority === 'high');

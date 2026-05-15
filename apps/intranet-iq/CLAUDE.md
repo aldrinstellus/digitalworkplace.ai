@@ -82,7 +82,8 @@ body { h-dvh overflow-hidden; }     /* ⛔ BREAKS */
 **Audit Score:** 100/100
 **Integration Status:** 100% (11 Apps Connected - Chat AI, Content, People, Search all enhanced)
 **Design System:** Midnight Green (emerald/teal accents)
-**Production:** https://intranet-iq.vercel.app/diq/dashboard
+**Production:** https://diq.digitalworkplace.ai/diq/dashboard
+**Note:** `intranet-iq.vercel.app` 308-redirects to the canonical domain (Clerk prod keys are domain-locked to digitalworkplace.ai — see `next.config.ts` `redirects()`).
 **Cache Prevention:** ✅ Configured
 **Session Management:** Full Spectrum (SAVEPOINT.md is master reference)
 

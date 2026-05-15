@@ -111,6 +111,7 @@ export default function EventsPage() {
   };
 
   const getEventsForDay = (day: number) => {
+    if (!currentMonth) return [];
     return events.filter((event: MockEvent) => {
       const eventDate = new Date(event.start_time);
       return (
@@ -126,8 +127,8 @@ export default function EventsPage() {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
   };
 
-  const daysInMonth = getDaysInMonth(currentMonth);
-  const firstDayOfMonth = getFirstDayOfMonth(currentMonth);
+  const daysInMonth = currentMonth ? getDaysInMonth(currentMonth) : 0;
+  const firstDayOfMonth = currentMonth ? getFirstDayOfMonth(currentMonth) : 0;
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   const filteredEvents = events.filter((event: MockEvent) => {

@@ -94,7 +94,9 @@ export default function MyDayPage() {
   const [loadingBriefing, setLoadingBriefing] = useState(false);
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
   const [showCalendar, setShowCalendar] = useState(true);
-  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  // null on SSR/first client render — avoid hydration mismatch
+  const [calendarMonth, setCalendarMonth] = useState<Date | null>(null);
+  useEffect(() => { setCalendarMonth(new Date()); }, []);
   const [calendarConnected, setCalendarConnected] = useState(false);
   const quickAddRef = useRef<HTMLInputElement>(null);
   const commandInputRef = useRef<HTMLInputElement>(null);
@@ -719,7 +721,9 @@ export default function MyDayPage() {
     });
   };
 
-  const { daysInMonth, startingDay } = getDaysInMonth(calendarMonth);
+  const { daysInMonth, startingDay } = calendarMonth
+    ? getDaysInMonth(calendarMonth)
+    : { daysInMonth: 0, startingDay: 0 };
   const calendarDays = Array.from({ length: 42 }, (_, i) => {
     const day = i - startingDay + 1;
     if (day < 1 || day > daysInMonth) return null;
@@ -741,7 +745,7 @@ export default function MyDayPage() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-semibold">My Day</h1>
-                  <p className="text-sm text-white/60">
+                  <p className="text-sm text-white/60" suppressHydrationWarning>
                     {new Date().toLocaleDateString('en-US', {
                       weekday: 'long',
                       month: 'long',
@@ -932,7 +936,7 @@ export default function MyDayPage() {
                     onClick={() => setCalendarMonth(new Date())}
                     className="text-sm font-medium text-white/90 hover:text-emerald-400 transition-colors"
                   >
-                    {calendarMonth.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    <span suppressHydrationWarning>{calendarMonth ? calendarMonth.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}</span>
                   </button>
                   <button
                     onClick={() => navigateMonth('next')}
@@ -960,14 +964,15 @@ export default function MyDayPage() {
                         return <div key={i} className="aspect-square" />;
                       }
 
-                      const dateStr = formatCalendarDate(
+                      const dateStr = calendarMonth ? formatCalendarDate(
                         calendarMonth.getFullYear(),
                         calendarMonth.getMonth(),
                         day
-                      );
+                      ) : '';
                       const dayTasks = getTasksForDate(dateStr);
-                      const isToday = dateStr === new Date().toISOString().split('T')[0];
-                      const isPast = dateStr < new Date().toISOString().split('T')[0];
+                      const _todayIso = todayIsoRef.current;
+                      const isToday = !!_todayIso && dateStr === _todayIso;
+                      const isPast = !!_todayIso && dateStr < _todayIso;
                       const taskCount = dayTasks.length;
                       const hasUrgent = dayTasks.some(t => t.priority === 'urgent' || isOverdue(t));
                       const hasHigh = dayTasks.some(t => t.priority === 'high');

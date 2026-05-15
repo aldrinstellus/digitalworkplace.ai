@@ -1,11 +1,70 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-15
-**Version**: 0.9.27
-**Session Summary**: Fixed dIQ vercel.app alias bricked-state. `intranet-iq.vercel.app` now 308-redirects to canonical `diq.digitalworkplace.ai` (Clerk prod keys domain-locked).
+**Last Updated**: 2026-05-15 (night)
+**Version**: 0.9.28
+**Session Summary**: dIQ entire-app navigation was DEAD (every <Link> click silently no-op'd). Root cause = Next/Link + Framer Motion whileTap interaction in this production build. Sledgehammer fix: replaced every <Link> with native <a> across 11 files (incl. Sidebar). All 38 routes verified 200 + click-tested. App is now fully usable.
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: d8c903f (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: a807cd7 (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-15 night) — Entire-app nav failure
+
+### Problem reported
+Aldrin: *"https://intranet-iq.vercel.app/diq/dashboard — entire app is not usable"* → after the redirect fix, the canonical URL loaded but *"im not able to navigate to chat or other functionality"*.
+
+### Diagnosis chain (full)
+1. **Vercel.app URL** had Clerk error (`Production Keys are only allowed for domain "digitalworkplace.ai"`) → fixed with 308 redirect (`d8c903f`).
+2. **Canonical URL** loaded the dashboard fine (0 errors, full content rendered) but **every sidebar click did nothing**. Aldrin retested: still dead.
+3. Chrome MCP confirmed: `link.click()` registered, React `onClick` fired (`wasDefaultPrevented=true`), but **no URL change, no network request, no console error**. Router.push silently bailed.
+4. Disambiguated: native `<a>` route fetches via `fetch('/diq/chat', {method:'HEAD'})` returned 200. So the *route* worked — only Next.js Link's client-side soft-nav was broken.
+5. Apps Bar `<Link>` (without Framer Motion wrappers) worked. Sidebar `<Link>` (wrapping `<motion.div whileTap>`) did not. Pattern matched CLAUDE.md's *"Chrome event pipeline conflicts with Framer Motion gesture system"* warning.
+
+### Fix 1 (`52aea7e`) — Sidebar
+Replaced `<Link>` with native `<a href="/diq/...">` in `apps/intranet-iq/src/components/layout/Sidebar.tsx`. Sidebar navigation immediately worked.
+
+### Fix 2 (`a807cd7`, pulse-bundled) — bulk rewrite across all pages
+Scanned for the same broken pattern: `<Link>` wrapping `<motion.* whileTap>` or `<motion.*>` with any pointer-event-using prop. Found instances in 10 more files. Sledgehammer: bulk-rewrote every `<Link>` to native `<a>` with absolute `/diq/`-prefixed hrefs.
+
+Files changed (10):
+- `app/dashboard/page.tsx` — Search bar, Quick Action links, news/events cards, topic links, AI Assistant suggestions, EditableProfile Link
+- `app/people/page.tsx` — Person grid + list cards
+- `app/people/[id]/page.tsx`
+- `app/events/page.tsx` — Event cards
+- `app/events/[id]/EventDetail.tsx`
+- `app/news/page.tsx` — News article cards
+- `app/news/[id]/NewsDetail.tsx`
+- `app/channels/[id]/page.tsx`
+- `app/content/[id]/page.tsx`
+- `app/apps/[id]/page.tsx`
+
+Plus Sidebar from Fix 1.
+
+Trade-off: lose SPA soft-nav (clicks now do full page reload). Acceptable for now; root cause (Next 16 + Framer Motion in this build) is parked for a future deep-dive. Removed all `import Link from "next/link"` lines.
+
+### Verified (Aldo's Axiom)
+- Deploy `intranet-m5oq6xacm` Ready, aliased to both `intranet-iq.vercel.app` (308's to canonical) and `diq.digitalworkplace.ai`
+- 38-route HEAD audit: **all 200** — every sidebar route, news/1-4, events/1-3, people/1-3, all 11 Apps Bar destinations, admin routes
+- Click-tested in Chrome MCP:
+  - Sidebar → Chat (URL → /diq/chat, "AI Assistant" page rendered) ✅
+  - Dashboard news card → /diq/news/1 ("Q1 2026 Company Results" full article) ✅
+  - News-detail author link "Sarah Chen" → /diq/people/1 (full person profile) ✅
+  - Dashboard Apps Bar → Slack → /diq/apps/slack ✅
+  - Settings page → Notifications tab → tab state switched ("Notification Settings" heading shown) ✅
+  - Search page → input accepts typed text, renders "No results found" for unmatched queries (search pipeline live) ✅
+- Console: 0 errors, 1 cosmetic warning (F10 CSS preload, pre-existing)
+
+### Open / deferred
+- ⚠️ **Search results** showed "No results found" for queries like "onboarding", "policy". Could be Elasticsearch index empty, data fixture mismatch, or wrong index. Needs investigation — not a code bug, possibly a config issue.
+- ⚠️ **SPA soft-nav lost** — every Link is now a full page reload. Acceptable trade-off. Future deep-dive: figure out the Next 16 + Framer Motion + basePath interaction that breaks router.push silently.
+- ⚠️ **Sidebar lost layout-id active-indicator transition** (since Link is gone). Cosmetic only.
+
+### Why this was hard to catch
+- Earlier "100%-functional pass" verified **page loads** (0 console errors after F1-F13 fixes). It did NOT click-test inter-page navigation. Build-error-free + page-load-error-free ≠ feature-functional.
+- Aldo's Axiom violation if you only check renders without clicks: the demo would have appeared "ready" while every nav was dead.
+
+---
 
 ---
 

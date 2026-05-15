@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -23,22 +22,24 @@ import {
 import { cn } from "@/lib/utils";
 import { IQLogo } from "@/components/brand/IQLogo";
 
+// Hrefs include the /diq basePath because we render native <a> tags below.
+// Native <a> doesn't auto-prepend basePath the way next/link does.
 const navigation = [
-  { name: "Home", href: "/dashboard", icon: Home },
-  { name: "Chat", href: "/chat", icon: MessageSquare },
-  { name: "My Day", href: "/my-day", icon: ListTodo },
-  { name: "News", href: "/news", icon: Newspaper },
-  { name: "Events", href: "/events", icon: Calendar },
-  { name: "Channels", href: "/channels", icon: Hash },
-  { name: "People", href: "/people", icon: Users },
-  { name: "Content", href: "/content", icon: FolderOpen },
-  { name: "Agents", href: "/agents", icon: Bot },
+  { name: "Home", href: "/diq/dashboard", icon: Home },
+  { name: "Chat", href: "/diq/chat", icon: MessageSquare },
+  { name: "My Day", href: "/diq/my-day", icon: ListTodo },
+  { name: "News", href: "/diq/news", icon: Newspaper },
+  { name: "Events", href: "/diq/events", icon: Calendar },
+  { name: "Channels", href: "/diq/channels", icon: Hash },
+  { name: "People", href: "/diq/people", icon: Users },
+  { name: "Content", href: "/diq/content", icon: FolderOpen },
+  { name: "Agents", href: "/diq/agents", icon: Bot },
 ];
 
 const adminNavigation = [
-  { name: "Elasticsearch", href: "/admin/elasticsearch", icon: Database },
-  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { name: "Permissions", href: "/admin/permissions", icon: Shield },
+  { name: "Elasticsearch", href: "/diq/admin/elasticsearch", icon: Database },
+  { name: "Analytics", href: "/diq/admin/analytics", icon: BarChart3 },
+  { name: "Permissions", href: "/diq/admin/permissions", icon: Shield },
 ];
 
 export function Sidebar() {
@@ -47,8 +48,8 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-16 bg-[var(--bg-charcoal)] border-r border-[var(--border-subtle)] flex flex-col items-center py-4">
       {/* Logo */}
-      <Link
-        href="/dashboard"
+      <a
+        href="/diq/dashboard"
         className="mb-6 group"
         title="Intranet IQ"
       >
@@ -59,7 +60,7 @@ export function Sidebar() {
         >
           <IQLogo size="md" />
         </motion.div>
-      </Link>
+      </a>
 
       {/* Navigation */}
       <nav className="flex-1 flex flex-col items-center gap-1">
@@ -85,16 +86,16 @@ export function Sidebar() {
       {/* Bottom actions */}
       <div className="flex flex-col items-center gap-1">
         <NavItem
-          item={{ name: "Search", href: "/search", icon: Search }}
-          isActive={pathname === "/search"}
+          item={{ name: "Search", href: "/diq/search", icon: Search }}
+          isActive={pathname === "/diq/search"}
         />
         <NavItem
-          item={{ name: "Notifications", href: "/notifications", icon: Bell }}
-          isActive={pathname === "/notifications"}
+          item={{ name: "Notifications", href: "/diq/notifications", icon: Bell }}
+          isActive={pathname === "/diq/notifications"}
         />
         <NavItem
-          item={{ name: "Settings", href: "/settings", icon: Settings }}
-          isActive={pathname === "/settings" || pathname.startsWith("/settings/")}
+          item={{ name: "Settings", href: "/diq/settings", icon: Settings }}
+          isActive={pathname === "/diq/settings" || pathname.startsWith("/diq/settings/")}
         />
       </div>
     </aside>
@@ -109,7 +110,7 @@ interface NavItemProps {
 
 function NavItem({ item, isActive, isAdmin }: NavItemProps) {
   return (
-    <Link
+    <a
       href={item.href}
       className="relative group"
       title={item.name}

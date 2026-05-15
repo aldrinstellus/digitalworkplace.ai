@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
@@ -38,7 +38,15 @@ export default function EventsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "virtual" | "in_person" | "hybrid">("all");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  // null on SSR + first client render to avoid hydration mismatch (Date is non-deterministic across SSR/client)
+  const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
+  // Today's date components — captured client-side after hydration
+  const [today, setToday] = useState<{ date: number; month: number; year: number } | null>(null);
+  useEffect(() => {
+    const now = new Date();
+    setCurrentMonth(now);
+    setToday({ date: now.getDate(), month: now.getMonth(), year: now.getFullYear() });
+  }, []);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newEvent, setNewEvent] = useState({
     title: "",
@@ -114,6 +122,7 @@ export default function EventsPage() {
   };
 
   const navigateMonth = (direction: number) => {
+    if (!currentMonth) return;
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direction, 1));
   };
 
@@ -248,8 +257,8 @@ export default function EventsPage() {
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </motion.button>
-                <h3 className="text-lg font-medium text-[var(--text-primary)]">
-                  {currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                <h3 className="text-lg font-medium text-[var(--text-primary)]" suppressHydrationWarning>
+                  {currentMonth ? currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" }) : ""}
                 </h3>
                 <motion.button
                   onClick={() => navigateMonth(1)}
@@ -282,9 +291,10 @@ export default function EventsPage() {
                   const day = index + 1;
                   const dayEvents = getEventsForDay(day);
                   const isToday =
-                    day === new Date().getDate() &&
-                    currentMonth.getMonth() === new Date().getMonth() &&
-                    currentMonth.getFullYear() === new Date().getFullYear();
+                    !!today && !!currentMonth &&
+                    day === today.date &&
+                    currentMonth.getMonth() === today.month &&
+                    currentMonth.getFullYear() === today.year;
 
                   return (
                     <div

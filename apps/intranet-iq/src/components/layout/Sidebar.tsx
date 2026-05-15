@@ -171,6 +171,6 @@ function NavItem({ item, isActive, isAdmin }: NavItemProps) {
         {/* Tooltip arrow */}
         <span className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-[var(--bg-slate)] rotate-45 border-l border-b border-[var(--border-subtle)]" />
       </motion.span>
-    </Link>
+    </a>
   );
 }

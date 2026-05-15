@@ -1,11 +1,53 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-11
-**Version**: 0.9.26
-**Session Summary**: CI gate live + green. Today's arc: hygiene → bullet-proofing → 100%-functional → Naveen/Karishma dev-request fix → CI green. POC demo-ready and gated.
+**Last Updated**: 2026-05-15
+**Version**: 0.9.27
+**Session Summary**: Fixed dIQ vercel.app alias bricked-state. `intranet-iq.vercel.app` now 308-redirects to canonical `diq.digitalworkplace.ai` (Clerk prod keys domain-locked).
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: 55f1913 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: d8c903f (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-15) — dIQ vercel.app alias redirect
+
+### Problem reported
+Aldrin: *"https://intranet-iq.vercel.app/diq/dashboard — entire app is not usable"*.
+
+### Diagnosis
+Both `intranet-iq.vercel.app` and `diq.digitalworkplace.ai` serve the same Vercel deploy (identical etag at edge). But Clerk's production instance is domain-locked to `digitalworkplace.ai`. On the vercel.app origin, Clerk SDK refuses to initialize:
+```
+e: Clerk: Production Keys are only allowed for domain "digitalworkplace.ai".
++ 2× HTTP 400 from Clerk endpoints
+```
+Result: app boots blank, no auth context, entire surface unusable. By design from Clerk — prevents stolen keys from working on attacker-controlled origins.
+
+### Fix (`d8c903f`)
+Added host-based 308 redirect in `apps/intranet-iq/next.config.ts`:
+```ts
+async redirects() {
+  return [{
+    source: '/:path*',
+    has: [{ type: 'host', value: 'intranet-iq.vercel.app' }],
+    destination: 'https://diq.digitalworkplace.ai/:path*',
+    permanent: true,
+    basePath: false,
+  }];
+}
+```
+`basePath: false` so the rule applies at host level before `/diq` mapping.
+
+### Verified (Aldo's Axiom)
+- CI run `25936015061` for `d8c903f` → completed success
+- `vercel --prod --yes` from `apps/intranet-iq/` → deploy `intranet-jppcwhud0` Ready, auto-aliased to `intranet-iq.vercel.app`
+- `curl -sI https://intranet-iq.vercel.app/diq/dashboard` → `HTTP/2 308 · location: https://diq.digitalworkplace.ai/diq/dashboard`
+- Chrome DevTools navigation: requested vercel.app URL → browser landed on canonical, `window.location.host === "diq.digitalworkplace.ai"`, console 0 errors / 0 warnings, title "dIQ - Intranet IQ"
+- Updated `apps/intranet-iq/CLAUDE.md` to drop the stale `intranet-iq.vercel.app` Production reference
+
+### Why this matters
+Anyone (testers, stakeholders, stale links, search results) hitting the auto-generated vercel.app URL was seeing a bricked app and could reasonably conclude "the product is broken." Now they bounce to the working domain instead.
+
+---
 
 ---
 

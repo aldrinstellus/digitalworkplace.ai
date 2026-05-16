@@ -314,3 +314,42 @@ For follow-up, this audit can be re-run on any commit by:
 
 **Owner:** Aldrin · ATC
 **Next checkpoint:** Re-audit before any federal production launch.
+
+---
+
+## Remediation log (2026-05-16, same session)
+
+After the audit, the same session shipped fixes for every finding except the 2 deferred items (dIQ POC API auth-gate would break the live demo; npm audit deps-majors planned separately).
+
+### Commits
+
+- `e5b9932` `fix(security): workflow auth handles missing Clerk middleware gracefully`
+- `5be1f13` `fix(security): escape HTML before formatBold + drop redundant analytics matcher`
+- (preceded by pulse auto-commits for the larger CSP + CORS edits)
+
+### Fix → finding map
+
+| # | Finding | Fix |
+|---|---|---|
+| 🟠 High | Workflow API allowed unauth INSERT + `new Function()` executor | Added Clerk `auth()` check (try/catch — dIQ has no middleware so throw == not-authed) on POST/PUT/DELETE in `apps/intranet-iq/src/app/api/workflows/route.ts` + POST in `execute/route.ts`. Verified live: `POST /diq/api/workflows` now returns `401 {"error":"Unauthorized"}`. |
+| 🟠 High | `/api/sms` Twilio webhook lacked signature verification | Added `verifyTwilioSignature()` using Node `crypto` (HMAC-SHA1, timing-safe compare). Honors `x-forwarded-proto/host` for Vercel. Skips check when `TWILIO_AUTH_TOKEN` unset (dev) with WARN log. Invalid sig → 403. |
+| 🟠 High | `Access-Control-Allow-Origin: *` on 7 dCQ API routes + 1 settings route | Replaced with `https://dcq.digitalworkplace.ai` + `Vary: Origin`. New shared helper `apps/chat-core-iq/src/lib/cors.ts` available for future routes (allowlist-reflect pattern). Files touched: `crm`, `sharepoint`, `session`, `settings`, `admin/scrape`, `announcements`, `feedback`, `faqs`, `log`, `banner-settings`, `analytics`. |
+| 🟡 Medium | Main / dIQ / dCQ missing Content-Security-Policy | Added CSP + HSTS-preload to `next.config.ts` for all 3 apps. Per-app `connect-src` whitelists: main = Clerk + Supabase. dIQ = + Anthropic. dCQ = Anthropic + OpenAI + ElevenLabs + Supabase + n8n. Verified live with `curl -sI`. |
+| 🟡 Medium | `dangerouslySetInnerHTML` with unsanitized regex in dCQ IVR demo | Added `escapeHtml()` helper that html-escapes `& < > " '` before the `**bold**` → `<strong>` conversion in `apps/chat-core-iq/src/app/demo/ivr/page.tsx`. |
+| 🔵 Low | `/api/analytics(.*)` redundantly public in main middleware | Removed from public matcher. Handlers still enforce Clerk auth + super_admin check (defense in depth). |
+
+### Verified live (post-deploy)
+
+- ✅ `https://www.digitalworkplace.ai/sign-in` → CSP + HSTS preload headers present
+- ✅ `https://diq.digitalworkplace.ai/diq/dashboard` → CSP + HSTS preload headers present, includes Anthropic in connect-src
+- ✅ `https://dcq.digitalworkplace.ai/dcq/Home/index.html` → CSP + HSTS preload headers present, includes OpenAI + ElevenLabs + n8n in connect-src
+- ✅ `POST https://diq.digitalworkplace.ai/diq/api/workflows` unauthenticated → `401 {"error":"Unauthorized"}`
+- ✅ `POST https://diq.digitalworkplace.ai/diq/api/workflows/execute` unauthenticated → `401 {"error":"Unauthorized"}`
+
+### Still deferred (intentional)
+
+- 🟡 dIQ demo API auth-gate (`/api/dashboard`, `/api/people`, `/api/embeddings`, `/api/search`) — locking these would break the live POC demo. Re-evaluate before federal production launch.
+- 🟠 Next/protobufjs/transformers deps majors — already on SAVEPOINT deferred list. Plan a deps-major-upgrade session.
+- 🟡 Supabase RLS audit on `diq.workflows*` tables — needs DB admin access; flag for owner to check that anon role can't INSERT.
+
+**All in-session-fixable findings are now closed.**

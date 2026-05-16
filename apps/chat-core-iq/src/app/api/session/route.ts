@@ -10,11 +10,13 @@ import {
 } from '@/lib/channels/session-manager';
 import { ChannelType } from '@/lib/channels/types';
 
-// CORS headers for cross-origin requests from chat widget
+// CORS headers — restricted to known production origins (see docs/security-audit-2026-05-16.md).
+// '*' was previously used here, allowing cross-origin reads from any site.
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://dcq.digitalworkplace.ai',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
+  Vary: 'Origin',
 };
 
 // Handle CORS preflight requests

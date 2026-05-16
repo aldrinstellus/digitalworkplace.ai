@@ -5,7 +5,7 @@ import { readFileSync, existsSync } from 'fs';
 
 // CORS headers for admin requests
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://dcq.digitalworkplace.ai',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };

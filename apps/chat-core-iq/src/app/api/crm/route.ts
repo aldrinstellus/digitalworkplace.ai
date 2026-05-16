@@ -4,11 +4,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCRMAdapter, CRMConversation } from '@/lib/integrations/crm-adapter';
 
-// CORS headers
+// CORS headers — restricted to known production origins (see docs/security-audit-2026-05-16.md).
+// '*' was previously used here, which let any site read responses cross-origin.
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://dcq.digitalworkplace.ai',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  Vary: 'Origin',
 };
 
 export async function OPTIONS() {

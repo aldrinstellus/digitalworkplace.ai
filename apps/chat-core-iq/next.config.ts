@@ -50,6 +50,23 @@ const nextConfig: NextConfig = {
 
   // Security + Cache control headers
   async headers() {
+    // Content-Security-Policy — see docs/security-audit-2026-05-16.md.
+    // dCQ embeds chat widget on third-party sites (cityofdoral.com), so frame-ancestors stays 'self' only.
+    // connect-src allows Anthropic + OpenAI + Supabase + ElevenLabs + n8n webhook.
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "img-src 'self' data: https: blob:",
+      "font-src 'self' data: https://fonts.gstatic.com",
+      "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://*.supabase.co wss://*.supabase.co https://vercel.live wss://*.pusher.com https://auzmor.app.n8n.cloud",
+      "frame-src 'self' https://vercel.live",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "upgrade-insecure-requests",
+    ].join('; ');
+
     return [
       // Security headers for all routes
       {
@@ -60,6 +77,8 @@ const nextConfig: NextConfig = {
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Content-Security-Policy', value: csp },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
         ],
       },
       // Prevent caching of HTML pages - users always get fresh content

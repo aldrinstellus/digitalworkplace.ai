@@ -5,11 +5,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSharePointAdapter } from '@/lib/integrations/sharepoint-adapter';
 import { parseDocument } from '@/lib/document-parser';
 
-// CORS headers
+// CORS headers — restricted to known production origins (see docs/security-audit-2026-05-16.md).
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://dcq.digitalworkplace.ai',
   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  Vary: 'Origin',
 };
 
 export async function OPTIONS() {

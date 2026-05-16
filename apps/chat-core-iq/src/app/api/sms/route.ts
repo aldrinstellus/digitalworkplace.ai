@@ -1,6 +1,7 @@
 // SMS API endpoint - Twilio webhook for text message conversations
 
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 import {
   parseSMSRequest,
   generateSMSResponse,
@@ -19,6 +20,34 @@ const twimlHeaders = {
   'Content-Type': 'text/xml',
 };
 
+// Verify Twilio webhook signature per https://www.twilio.com/docs/usage/webhooks/webhooks-security
+// Signature is HMAC-SHA1 of (full URL + sorted body params concatenated) with the auth token.
+// Returns true if signature is valid, false otherwise. If TWILIO_AUTH_TOKEN is unset (dev/demo),
+// returns true and logs a warning — this preserves the local demo flow while flagging the gap.
+function verifyTwilioSignature(
+  signature: string | null,
+  url: string,
+  body: Record<string, string>,
+): boolean {
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  if (!authToken) {
+    console.warn('[SMS] TWILIO_AUTH_TOKEN not set — skipping signature verification (DEV ONLY).');
+    return true;
+  }
+  if (!signature) return false;
+
+  // Twilio canonical: URL + concatenated (sorted-key, value) pairs
+  const sortedKeys = Object.keys(body).sort();
+  const data = sortedKeys.reduce((acc, key) => acc + key + body[key], url);
+  const expected = crypto.createHmac('sha1', authToken).update(data).digest('base64');
+
+  // Constant-time compare to prevent timing oracle
+  const a = Buffer.from(signature, 'utf-8');
+  const b = Buffer.from(expected, 'utf-8');
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Parse form-urlencoded body from Twilio
@@ -27,6 +56,19 @@ export async function POST(request: NextRequest) {
     formData.forEach((value, key) => {
       body[key] = value.toString();
     });
+
+    // Reconstruct the URL Twilio used to sign. Honor x-forwarded-proto/host if present
+    // (Vercel + similar reverse proxies). Falls back to request.url.
+    const fwdProto = request.headers.get('x-forwarded-proto');
+    const fwdHost = request.headers.get('x-forwarded-host') ?? request.headers.get('host');
+    const reqUrl = new URL(request.url);
+    const signedUrl =
+      fwdProto && fwdHost ? `${fwdProto}://${fwdHost}${reqUrl.pathname}${reqUrl.search}` : request.url;
+
+    if (!verifyTwilioSignature(request.headers.get('x-twilio-signature'), signedUrl, body)) {
+      console.warn('[SMS] Rejected: invalid X-Twilio-Signature for URL', signedUrl);
+      return NextResponse.json({ error: 'Invalid Twilio signature' }, { status: 403 });
+    }
 
     const smsRequest = parseSMSRequest(body);
     const { From: senderPhone, Body: messageBody, MessageSid: messageSid } = smsRequest;

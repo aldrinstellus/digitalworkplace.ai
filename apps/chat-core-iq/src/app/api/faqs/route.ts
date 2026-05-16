@@ -3,7 +3,7 @@ import { getFAQs, saveFAQs, addAuditLog, FAQ } from "@/lib/data-store";
 
 // CORS headers for widget access
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://dcq.digitalworkplace.ai",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };

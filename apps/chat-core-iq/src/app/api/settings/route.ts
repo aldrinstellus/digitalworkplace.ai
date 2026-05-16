@@ -1,20 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSettings, saveSettings, addAuditLog, Settings } from "@/lib/data-store";
-
-// CORS headers for cross-origin widget access
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+import { buildCorsHeaders } from "@/lib/cors";
 
 // OPTIONS - Handle preflight requests
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: buildCorsHeaders(request, { methods: ['GET', 'OPTIONS'] }) });
 }
 
 // GET - Retrieve current settings
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const corsHeaders = buildCorsHeaders(request, { methods: ['GET', 'OPTIONS'] });
   try {
     const settings = await getSettings();
     return NextResponse.json(settings, { headers: corsHeaders });

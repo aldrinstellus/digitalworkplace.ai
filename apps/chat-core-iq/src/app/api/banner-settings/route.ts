@@ -3,7 +3,7 @@ import { getBannerSettings, saveBannerSettings, addAuditLog, BannerSettings } fr
 
 // CORS headers for cross-origin requests from static site
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": "https://dcq.digitalworkplace.ai",
   "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };

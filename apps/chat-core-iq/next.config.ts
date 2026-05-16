@@ -58,13 +58,19 @@ const nextConfig: NextConfig = {
       // dCQ embeds a scraped Granicus/Doral homepage that loads scripts from
       // several CDN origins (jQuery via Google CDN, MicrosoftAjax via aspnetcdn,
       // Google Maps/Tag Manager, Monsido accessibility script, Boomerang RUM).
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://ajax.googleapis.com https://ajax.aspnetcdn.com https://maps.googleapis.com https://maps.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com https://app-script.monsido.com https://s.go-mpulse.net https://c.go-mpulse.net",
+      // dCQ embeds a scraped Granicus/Doral homepage that loads scripts from
+      // several CDN origins (jQuery via Google CDN, MicrosoftAjax via aspnetcdn,
+      // Google Maps/Tag Manager, Monsido accessibility script — both app-script
+      // and cdn hosts, Boomerang RUM).
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://ajax.googleapis.com https://ajax.aspnetcdn.com https://maps.googleapis.com https://maps.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com https://app-script.monsido.com https://cdn.monsido.com https://s.go-mpulse.net https://c.go-mpulse.net",
       // dCQ uses Transformers.js + Supabase Web Workers (blob:) for local embeddings.
       "worker-src 'self' blob:",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ajax.aspnetcdn.com",
       "img-src 'self' data: https: blob:",
       "font-src 'self' data: https://fonts.gstatic.com",
-      "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://*.supabase.co wss://*.supabase.co https://vercel.live wss://*.pusher.com https://auzmor.app.n8n.cloud https://www.google-analytics.com https://maps.googleapis.com https://c.go-mpulse.net",
+      // connect-src needs every host the page makes XHR/fetch/beacon calls to.
+      // GA4 hits analytics.google.com + stats.g.doubleclick.net + www.google.com/g/collect.
+      "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://*.supabase.co wss://*.supabase.co https://vercel.live wss://*.pusher.com https://auzmor.app.n8n.cloud https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://maps.googleapis.com https://c.go-mpulse.net",
       "frame-src 'self' https://vercel.live https://www.google.com",
       "object-src 'none'",
       "base-uri 'self'",

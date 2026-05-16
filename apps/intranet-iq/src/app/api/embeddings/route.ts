@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { generateEmbedding, getEmbeddingDimensions } from '@/lib/embeddings';
+import { requireAuthOrDemo } from '@/lib/api-auth';
 
 /**
  * POST /api/embeddings
- * Generate and store embeddings for content using local model
+ * Generate and store embeddings for content using local model.
+ * Demo-mode-aware — open during POC demo, 401 in production.
  */
 export async function POST(request: NextRequest) {
+  const denied = await requireAuthOrDemo();
+  if (denied) return denied;
   try {
     const { action, articleId, text } = await request.json();
 
@@ -188,9 +192,11 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/embeddings
- * Get embedding coverage statistics
+ * Get embedding coverage statistics. Demo-mode-aware — open during POC demo, 401 in production.
  */
 export async function GET() {
+  const denied = await requireAuthOrDemo();
+  if (denied) return denied;
   try {
     const { data, error } = await supabase.from('embedding_stats').select('*');
 

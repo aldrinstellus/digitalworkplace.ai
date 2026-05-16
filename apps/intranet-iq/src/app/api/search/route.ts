@@ -9,6 +9,7 @@ import {
   SearchableDocument,
 } from '@/lib/elasticsearch';
 import type { SemanticSearchResult, HybridSearchResult } from '@/lib/database.types';
+import { requireAuthOrDemo } from '@/lib/api-auth';
 
 /**
  * Generate embedding for search query using OpenAI
@@ -30,9 +31,12 @@ async function generateQueryEmbedding(text: string): Promise<number[] | null> {
 
 /**
  * POST /api/search
- * Enterprise search endpoint - uses Elasticsearch (primary) or Supabase (fallback)
+ * Enterprise search endpoint - uses Elasticsearch (primary) or Supabase (fallback).
+ * Demo-mode-aware — open during POC demo, 401 in production.
  */
 export async function POST(request: NextRequest) {
+  const denied = await requireAuthOrDemo();
+  if (denied) return denied;
   try {
     const {
       query,
@@ -284,9 +288,12 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET /api/search/suggestions
- * Get search suggestions based on popular queries
+ * Get search suggestions based on popular queries.
+ * Demo-mode-aware — open during POC demo, 401 in production.
  */
 export async function GET(request: NextRequest) {
+  const denied = await requireAuthOrDemo();
+  if (denied) return denied;
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';

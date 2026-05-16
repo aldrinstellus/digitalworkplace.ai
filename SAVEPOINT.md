@@ -1,11 +1,70 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-16 (late morning)
-**Version**: 0.9.31
-**Session Summary**: Inside-out audit complete — zero regressions found across 5 phases (15/15 pages 0 errors, 40/40 routes 200, every tested interaction works, 0 API bugs). Audit baseline committed at `apps/intranet-iq/tests/audit-2026-05-16.md` for future regression checks.
+**Last Updated**: 2026-05-16 (afternoon)
+**Version**: 0.9.32
+**Session Summary**: Rich-content pass across all dIQ Apps Bar mocks. Auzmor Office posts (empty gray boxes), EmailApp bodies (Lorem ipsum), and Notion kanban ("Task item N for sprint") were placeholder-thin — all rewritten with enterprise-grade realistic content. Other 9 apps already rich (verified by screenshot audit).
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: 9cd50b1 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: 9a12eb7 (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-16 afternoon) — Rich-content pass across all Apps Bar mocks
+
+### Trigger
+Aldrin sent a screenshot of `/diq/apps/auzmor-office` showing empty gray placeholder rectangles where shared-post content should be. Asked: *"yes empty, i need all to be super rich and realistic."*
+
+### Fix 1 — `6aef268` — Auzmor Office
+The 4 mock posts had `content: ""` and the JSX hardcoded `<div className="h-32 bg-neutral-100 rounded-lg" />` as a body placeholder. Replaced with real post bodies:
+- Lily Wright (VP Product) — v2.4 ship announcement + gradient banner "Analytics 2.4 — Live · NPS +6 in 24h", 142 likes, 23 comments
+- Addison Green (Director, People) — DEI Spotlight Series event card + gradient banner "Tue · 2:00 PM PT · Virtual", 89 likes
+- Logan Martinez (EM) — shoutout with #shoutout #teamwins tags, 234 likes
+- Sebastian Sanchez (CTO) — 4-option poll (Engineering capacity 38%, Cross-team alignment 27%, Customer feedback 19%, Tooling 16%) with animated bars + "152 votes · Closes in 3 days"
+
+Added author role lines, hashtag tags, like+comment counts shown inline.
+
+Replaced "Upcoming birthdays will show here" empty state with 3 real birthdays: Maya Patel (Today 🎂), Jordan Kim (Tomorrow), Riley Thompson (Mon May 19). Same treatment for Work Anniversaries: Carlos Rivera 5yr Today, Wei Zhang 3yr Tomorrow, Olivia Brown 2yr Sun.
+
+### Fix 2 — `4df03da` — EmailApp (Gmail-style)
+`apps/intranet-iq/src/app/apps/[id]/page.tsx` rendered `Lorem ipsum dolor sit amet...` as the email body regardless of which email was selected. Replaced with 8 fully-written email bodies matching each subject:
+- Sarah Chen Q1 Budget Review — concrete flags (contractor 23% over, $48k uncommitted travel)
+- Mike Johnson Sprint Planning — 142 story points, capacity, dependencies
+- HR Team Benefits Enrollment — May 22 close, new benefits list
+- Alex Kim DevOps Weekly — build times -40%, MTTR 12m, autoscaling experiment
+- Emily Rodriguez Q2 Roadmap — 3 themes, deferrals, risks
+- James Wilson Design Review — agenda with 4 items + speaker durations
+- Lisa Park QA Results — 4217 tests, 28m runtime, RC tag
+- Tech Newsletter — GPT-5 rumors, Claude 4.7 GA, Next.js 16.2
+
+Switched render from generic `<p>{preview}</p><p>Lorem ipsum...</p>` template to `<p className="whitespace-pre-line">{body}</p>` with per-email rich content.
+
+### Fix 3 — `9a12eb7` — Notion kanban
+3-column kanban hardcoded "Task item {i+1} for sprint" with generic High badges. Replaced with 9 real engineering sprint tasks:
+- To Do (4): ENG-2341 API gateway rate-limiting (High, 21pts), ENG-2402 Customer onboarding redesign (Medium, 13pts), Tech debt query optimizer (Low, 8pts), ENG-2418 Slack notifications v2 (Medium, 5pts)
+- In Progress (2): ENG-2347 Real-time event stream MVP (High, 34pts), ENG-2389 Auth service refactor (High, 21pts)
+- Done (3, strikethrough+dimmed): WebSocket cutover, Auth token rotation, Q1 retro write-up
+
+Colored priority badges (High red `#eb5757`, Medium amber `#ffa629`, Low blue `#2eaadc`). Story points + 4 different assignee colors. Done items styled with strikethrough.
+
+### Other 9 apps verified rich (screenshot audit)
+- Slack — real engineering channel chat (Sarah Chen, Mike Johnson, Alex Kim threads)
+- Zoom — Today's Meetings + Recent Recordings with sizes/durations
+- Jira — Sprint 14 kanban with realistic tickets
+- GitHub — PR #2846 with diffs, 12 changed files, reviewers, all checks green
+- Drive — 8 folders + 10+ files with metadata
+- Confluence — API Documentation v3.0 page with auth + endpoints table
+- Salesforce — Opportunity Pipeline with $4M+ across 4 stages
+- Figma — Dashboard v3.0 wireframe with layers + design panel
+- LinkedIn — feed with rich posts (Sarah Chen 1M-queries milestone, 1234 likes)
+
+### Verification
+Auzmor + Email + Notion all confirmed live on canonical (`diq.digitalworkplace.ai/diq/apps/{auzmor-office,notion}`) with full screenshots captured. Deploy chain: `intranet-k1y9a2fkn` (Auzmor) → `intranet-q7y...` (Email) → final Notion deploy.
+
+### Active trade-offs (carried from v0.9.30)
+- SPA soft-nav still lost across dIQ (Next.js Link build-system bug)
+- SSR skip on /diq/channels + /diq/my-day (hasMounted gate)
+
+---
 
 ---
 

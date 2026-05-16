@@ -9,12 +9,18 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Gate state-changing workflow operations behind a signed-in Clerk session.
 // The workflow executor runs user-supplied JS via `new Function()`, so unauth'd
 // INSERTs would be a path to arbitrary code execution. See docs/security-audit-2026-05-16.md.
+// dIQ has no Clerk middleware, so `auth()` throws when called outside a Clerk-wrapped
+// request — that throw is itself a strong negative signal, so we return 401 on either path.
 async function requireAuth(): Promise<NextResponse | null> {
-  const { userId } = await auth();
-  if (!userId) {
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return null;
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  return null;
 }
 
 // Types for workflow data

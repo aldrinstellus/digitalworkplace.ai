@@ -10,9 +10,15 @@ import { auth } from '@clerk/nextjs/server';
 // POST - Execute a workflow
 // Gated behind Clerk auth — the executor runs user-supplied JS via `new Function()`,
 // so unauthenticated invocation would be a path to RCE. See docs/security-audit-2026-05-16.md.
+// dIQ has no Clerk middleware, so `auth()` throws on unsigned-in requests; the catch
+// treats that as a 401 (defense-in-depth: throw == not authenticated either way).
 export async function POST(request: NextRequest) {
-  const { userId: clerkUserId } = await auth();
-  if (!clerkUserId) {
+  try {
+    const { userId: clerkUserId } = await auth();
+    if (!clerkUserId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+  } catch {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   try {

@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { auth } from '@clerk/nextjs/server';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Gate state-changing workflow operations behind a signed-in Clerk session.
+// The workflow executor runs user-supplied JS via `new Function()`, so unauth'd
+// INSERTs would be a path to arbitrary code execution. See docs/security-audit-2026-05-16.md.
+async function requireAuth(): Promise<NextResponse | null> {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return null;
+}
 
 // Types for workflow data
 // Note: Database columns are 'name' and 'type', but API accepts both formats
@@ -209,6 +221,8 @@ async function getWorkflowById(workflowId: string) {
 
 // POST - Create new workflow
 export async function POST(request: NextRequest) {
+  const authError = await requireAuth();
+  if (authError) return authError;
   try {
     const body: CreateWorkflowRequest = await request.json();
     const { steps, edges, ...workflowData } = body;
@@ -317,6 +331,8 @@ export async function POST(request: NextRequest) {
 
 // PUT - Update existing workflow
 export async function PUT(request: NextRequest) {
+  const authError = await requireAuth();
+  if (authError) return authError;
   try {
     const body: UpdateWorkflowRequest = await request.json();
     const { id, steps, edges, ...workflowData } = body;
@@ -476,6 +492,8 @@ export async function PUT(request: NextRequest) {
 
 // DELETE - Delete workflow
 export async function DELETE(request: NextRequest) {
+  const authError = await requireAuth();
+  if (authError) return authError;
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

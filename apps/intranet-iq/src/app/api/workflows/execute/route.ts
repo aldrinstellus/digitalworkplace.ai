@@ -5,9 +5,16 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getWorkflowExecutor } from '@/lib/workflow/executor';
+import { auth } from '@clerk/nextjs/server';
 
 // POST - Execute a workflow
+// Gated behind Clerk auth — the executor runs user-supplied JS via `new Function()`,
+// so unauthenticated invocation would be a path to RCE. See docs/security-audit-2026-05-16.md.
 export async function POST(request: NextRequest) {
+  const { userId: clerkUserId } = await auth();
+  if (!clerkUserId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
     const body = await request.json();
     const { workflowId, input = {}, userId, organizationId } = body;

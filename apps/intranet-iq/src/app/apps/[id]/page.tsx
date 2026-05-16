@@ -2384,14 +2384,78 @@ function EmailApp() {
   ];
 
   const emails = [
-    { id: 1, from: "Sarah Chen", email: "sarah@company.com", subject: "Re: Q1 Budget Review - Final approval needed", preview: "Hi team, I've reviewed the budget proposal and have a few comments...", time: "2h ago", starred: true, important: true, unread: true },
-    { id: 2, from: "Mike Johnson", email: "mike@company.com", subject: "Sprint Planning Notes - Attached", preview: "Here are the notes from today's sprint planning session. Please review and add any items I might have missed.", time: "4h ago", starred: false, important: false, unread: true },
-    { id: 3, from: "HR Team", email: "hr@company.com", subject: "Benefits Enrollment Reminder - Action Required", preview: "This is a reminder that open enrollment closes on Friday. Please make sure to review and confirm your selections.", time: "Yesterday", starred: false, important: true, unread: false },
-    { id: 4, from: "Alex Kim", email: "alex@company.com", subject: "DevOps Weekly Update", preview: "Quick update on our CI/CD improvements this week. We've reduced build times by 40% and...", time: "Yesterday", starred: false, important: false, unread: false },
-    { id: 5, from: "Emily Rodriguez", email: "emily@company.com", subject: "Product Roadmap Q2 2026", preview: "Attached is the draft roadmap for Q2. Would love your feedback before we present to leadership.", time: "2 days ago", starred: true, important: true, unread: false },
-    { id: 6, from: "James Wilson", email: "james@company.com", subject: "Design Review Meeting", preview: "Reminder: We have our design review meeting tomorrow at 2 PM. Please bring your latest mockups.", time: "2 days ago", starred: false, important: false, unread: false },
-    { id: 7, from: "Lisa Park", email: "lisa@company.com", subject: "QA Test Results - All Passed", preview: "Great news! All regression tests have passed. We're ready for the release candidate.", time: "3 days ago", starred: false, important: false, unread: false },
-    { id: 8, from: "Tech Newsletter", email: "news@tech.com", subject: "This Week in AI: GPT-5 Rumors and More", preview: "Your weekly roundup of the latest in technology, AI, and software development...", time: "3 days ago", starred: false, important: false, unread: false },
+    {
+      id: 1,
+      from: "Sarah Chen",
+      email: "sarah@company.com",
+      subject: "Re: Q1 Budget Review - Final approval needed",
+      preview: "Hi team, I've reviewed the budget proposal and have a few comments...",
+      body: "I've reviewed the Q1 proposal and have a few comments before we sign off.\n\nOverall the numbers look healthy — headcount additions in Engineering tracking to plan, S&M efficiency is up 11% QoQ, and gross margin held at 78%. Two flags:\n\n1. The contractor budget is 23% over forecast. Most of it is the Doral migration, which is justified, but I'd like to see a breakdown before approval.\n\n2. The travel line shows $48k for an off-site we haven't actually scheduled yet. Can we either commit a date or move that to OPEX-flex?\n\nWe present to the board on Thursday — would love your responses by Wednesday EOD.\n\nThanks for moving so fast on this.",
+      time: "2h ago", starred: true, important: true, unread: true
+    },
+    {
+      id: 2,
+      from: "Mike Johnson",
+      email: "mike@company.com",
+      subject: "Sprint Planning Notes - Attached",
+      preview: "Here are the notes from today's sprint planning session. Please review and add any items I might have missed.",
+      body: "Here are the notes from today's sprint planning. Please review and add anything I missed.\n\nSprint 28 (May 19 – June 2):\n• Goal: Ship the customer-facing analytics dashboard to GA\n• Capacity: 142 story points across 8 engineers\n• Committed: 134 points (94% utilization)\n\nNotable items:\n- API gateway rate-limiting (ENG-2341, 21 points)\n- Real-time event stream MVP (ENG-2347, 34 points)\n- Customer onboarding redesign (ENG-2402, 13 points)\n- Tech debt: query optimizer overhaul (ENG-2188, 8 points)\n\nDependencies:\n- Design hand-off for onboarding by Tuesday\n- Platform team's auth refactor needs to land by Wednesday\n\nLet me know if anything looks off.",
+      time: "4h ago", starred: false, important: false, unread: true
+    },
+    {
+      id: 3,
+      from: "HR Team",
+      email: "hr@company.com",
+      subject: "Benefits Enrollment Reminder - Action Required",
+      preview: "This is a reminder that open enrollment closes on Friday. Please make sure to review and confirm your selections.",
+      body: "Open enrollment closes this Friday, May 22 at 11:59 PM PT.\n\nIf you have NOT yet confirmed your benefit selections, please log into the benefits portal and review the following:\n\n• Medical, dental, and vision plan selections\n• HSA / FSA contribution amounts\n• Life and disability insurance\n• Dependent coverage updates\n\nNew this year:\n- Mental health benefit increased to $5,000/year (up from $3,000)\n- Family-building benefit now covers adoption + surrogacy\n- Wellness stipend bumped to $1,200/year\n\nIf you take no action, your current selections roll over for 2026-2027. But you'll miss the chance to update HSA/FSA contributions, which can only be changed during open enrollment.\n\nQuestions? Reply to this email or join Friday's drop-in office hours at 1 PM PT.",
+      time: "Yesterday", starred: false, important: true, unread: false
+    },
+    {
+      id: 4,
+      from: "Alex Kim",
+      email: "alex@company.com",
+      subject: "DevOps Weekly Update",
+      preview: "Quick update on our CI/CD improvements this week. We've reduced build times by 40% and...",
+      body: "Quick update on our CI/CD improvements this week.\n\nWins:\n• Build times: P50 dropped from 8m 40s → 5m 12s (-40%) after switching to layer-cached Docker builds\n• Deploy success rate: 99.4% over the last 30 days (up from 97.1%)\n• MTTR: 12 minutes for the rollback on Tuesday's regression — under our 15-minute SLO\n\nIn progress:\n• Migrating the monorepo's E2E suite to Playwright (40% complete)\n• New synthetic monitoring for the checkout flow (rolling out next week)\n• Buildkite agent autoscaling experiment\n\nBlockers:\n- Still waiting on Datadog to enable distributed tracing for the Node 22 build. Filed support ticket; will escalate Friday if no response.\n\nMore detail in the #devops channel and the weekly dashboard.",
+      time: "Yesterday", starred: false, important: false, unread: false
+    },
+    {
+      id: 5,
+      from: "Emily Rodriguez",
+      email: "emily@company.com",
+      subject: "Product Roadmap Q2 2026",
+      preview: "Attached is the draft roadmap for Q2. Would love your feedback before we present to leadership.",
+      body: "Attached is the draft Q2 roadmap. Would love your feedback before we present to leadership on Wednesday.\n\nThree big themes:\n\n1. Enterprise readiness\n• SOC 2 Type II audit (scheduled June)\n• SSO/SAML for all paid tiers\n• Audit log API + customer-managed retention\n\n2. Analytics dashboard GA\n• Real-time KPIs (rolled in from Sprint 28)\n• Custom report builder\n• Scheduled email digests\n\n3. AI assistant v2\n• RAG over customer's own data\n• Memory across sessions\n• 4 net-new tools (calendar, CRM, support tickets, KB)\n\nDeferred to Q3: native mobile, white-label theming, Zapier integration.\n\nRisks: dependency on the platform team's auth work; if that slips, SSO slips with it. We've flagged.",
+      time: "2 days ago", starred: true, important: true, unread: false
+    },
+    {
+      id: 6,
+      from: "James Wilson",
+      email: "james@company.com",
+      subject: "Design Review Meeting",
+      preview: "Reminder: We have our design review meeting tomorrow at 2 PM. Please bring your latest mockups.",
+      body: "Reminder — design review meeting tomorrow at 2 PM PT in the Daedalus room (or via Zoom).\n\nAgenda:\n• Onboarding redesign v3 (Priya, 20m)\n• Mobile nav restructure (Tom, 15m)\n• Empty-state illustrations sweep (Sophia, 10m)\n• Accessibility audit findings + remediation plan (Jordan, 15m)\n\nPlease bring your latest Figma files and any open questions. We'll dedicate the last 20 minutes to open discussion.\n\nIf you can't make it, drop a Loom or comment thread in the Figma file by 10 AM.\n\nSee you there.",
+      time: "2 days ago", starred: false, important: false, unread: false
+    },
+    {
+      id: 7,
+      from: "Lisa Park",
+      email: "lisa@company.com",
+      subject: "QA Test Results - All Passed",
+      preview: "Great news! All regression tests have passed. We're ready for the release candidate.",
+      body: "Great news — full regression suite passed clean.\n\nRun summary:\n• 4,217 tests executed\n• 4,217 passed\n• 0 failed, 0 flaky\n• Total runtime: 28m 14s\n\nCovered surfaces: web app (Chrome, Firefox, Safari), API contract tests, mobile responsive, accessibility (axe-core), performance (Lighthouse). Lighthouse perf score held at 94 across the changed routes.\n\nWe're clear to tag the release candidate. I'll cut RC-2.4.0 this afternoon and post to #releases for sign-off.\n\nNice work everyone on landing this clean. The new test parallelization shaved 12 minutes off the runtime — worth the investment.",
+      time: "3 days ago", starred: false, important: false, unread: false
+    },
+    {
+      id: 8,
+      from: "Tech Newsletter",
+      email: "news@tech.com",
+      subject: "This Week in AI: GPT-5 Rumors and More",
+      preview: "Your weekly roundup of the latest in technology, AI, and software development...",
+      body: "Your weekly roundup of the latest in technology, AI, and software development.\n\nTop stories:\n\n→ GPT-5 rumors heat up — OpenAI denies imminent release, but several credible sources point to a Q3 ship. Expected to land with native multi-modal training and a 2M-token context window.\n\n→ Anthropic Claude 4.7 (1M context) shipped to general availability. Independent benchmarks show it's now the SoTA on long-context retrieval and code editing.\n\n→ Next.js 16.2 released with experimental React Compiler full-pass integration. Early benchmarks show 20-30% render-time improvements without code changes.\n\n→ Bun 1.5 launches with built-in SQLite, hot module reload across server + client, and a new test runner that's faster than Vitest.\n\nDeep dive: \"The hidden cost of vibe coding\" — a thoughtful piece on how LLM-assisted development is changing review workflows. Worth 10 minutes.\n\nForwarded to a friend? Subscribe here.",
+      time: "3 days ago", starred: false, important: false, unread: false
+    },
   ];
 
   const selectedEmailData = emails.find(e => e.id === selectedEmail);
@@ -2517,11 +2581,9 @@ function EmailApp() {
                   <Star className={`w-5 h-5 ${selectedEmailData.starred ? "text-yellow-400 fill-yellow-400" : "text-gray-300"}`} />
                 </button>
               </div>
-              <div className="prose max-w-none text-gray-700">
+              <div className="prose max-w-none text-gray-700 whitespace-pre-line">
                 <p>Hi,</p>
-                <p className="mt-4">{selectedEmailData.preview}</p>
-                <p className="mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p className="mt-4">Please let me know if you have any questions or concerns.</p>
+                <p className="mt-4 whitespace-pre-line">{selectedEmailData.body}</p>
                 <p className="mt-4">Best regards,<br />{selectedEmailData.from}</p>
               </div>
             </div>

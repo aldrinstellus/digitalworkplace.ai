@@ -84,8 +84,22 @@ function formatMessageText(text: string): React.ReactNode {
     }
   };
 
+  // HTML-escape input before applying any markup, so user-controlled text can't
+  // inject scripts. Then convert `**bold**` markdown to <strong>. See
+  // docs/security-audit-2026-05-16.md.
+  const escapeHtml = (str: string): string =>
+    str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
   const formatBold = (str: string): string => {
-    return str.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-white">$1</strong>');
+    return escapeHtml(str).replace(
+      /\*\*([^*]+)\*\*/g,
+      '<strong class="font-semibold text-white">$1</strong>',
+    );
   };
 
   for (const line of lines) {

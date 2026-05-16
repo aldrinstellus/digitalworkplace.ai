@@ -1,6 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-// Define public routes that don't require authentication
+// Define public routes that don't require authentication.
+// Note: `/api/analytics(.*)` was previously listed here but removed — those routes
+// already enforce Clerk auth + super_admin role at the handler level (see
+// `src/app/api/analytics/overview/route.ts`). The public-matcher entry was
+// redundant + confusing. See docs/security-audit-2026-05-16.md.
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
@@ -13,7 +17,6 @@ const isPublicRoute = createRouteMatcher([
   // Allow cross-origin tracking from sub-apps
   '/api/tracking/pageview',
   '/api/tracking/navigation',
-  '/api/analytics(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

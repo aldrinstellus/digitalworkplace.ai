@@ -736,6 +736,15 @@ export default function MyDayPage() {
     return day;
   });
 
+  // SSR + first-client render: bare shell only. Real content renders after mount.
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-obsidian)] text-white flex">
+        <Sidebar />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[var(--bg-obsidian)] text-white flex">
       <Sidebar />

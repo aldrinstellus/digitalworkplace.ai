@@ -2120,28 +2120,62 @@ function NotionApp() {
 
             {/* Kanban View */}
             <div className="flex gap-3 overflow-x-auto pb-4">
-              {["To Do", "In Progress", "Done"].map((col) => (
-                <div key={col} className="w-64 flex-shrink-0">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[#9b9b9b] text-sm font-medium">{col}</span>
-                    <span className="text-[#5c5c5c] text-xs">{col === "To Do" ? 4 : col === "In Progress" ? 2 : 3}</span>
-                  </div>
-                  <div className="space-y-2">
-                    {[1, 2, col === "Done" ? 3 : null].filter(Boolean).map((_, i) => (
-                      <div key={i} className="p-3 bg-[#252525] rounded-lg hover:bg-[#2f2f2f] cursor-pointer">
-                        <p className="text-[#ebebeb] text-sm mb-2">Task item {i + 1} for sprint</p>
-                        <div className="flex items-center gap-2">
-                          <span className="px-1.5 py-0.5 bg-[#eb5757]/20 text-[#eb5757] text-[10px] rounded">High</span>
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 ml-auto" />
+              {([
+                {
+                  name: "To Do",
+                  tasks: [
+                    { title: "API gateway rate-limiting (ENG-2341)", priority: "High", points: 21, assignee: "from-blue-500 to-cyan-500" },
+                    { title: "Customer onboarding redesign (ENG-2402)", priority: "Medium", points: 13, assignee: "from-purple-500 to-pink-500" },
+                    { title: "Tech debt: query optimizer overhaul", priority: "Low", points: 8, assignee: "from-emerald-500 to-teal-500" },
+                    { title: "Slack notifications v2 (ENG-2418)", priority: "Medium", points: 5, assignee: "from-amber-500 to-orange-500" },
+                  ],
+                },
+                {
+                  name: "In Progress",
+                  tasks: [
+                    { title: "Real-time event stream MVP (ENG-2347)", priority: "High", points: 34, assignee: "from-rose-500 to-red-500" },
+                    { title: "Auth service refactor (ENG-2389)", priority: "High", points: 21, assignee: "from-violet-500 to-fuchsia-500" },
+                  ],
+                },
+                {
+                  name: "Done",
+                  tasks: [
+                    { title: "WebSocket cutover to production", priority: "High", points: 13, assignee: "from-blue-500 to-cyan-500" },
+                    { title: "Rotate auth tokens monthly", priority: "Medium", points: 5, assignee: "from-emerald-500 to-teal-500" },
+                    { title: "Q1 sprint retro write-up", priority: "Low", points: 2, assignee: "from-amber-500 to-orange-500" },
+                  ],
+                },
+              ] as const).map((col) => {
+                const priorityColor = (p: string) =>
+                  p === "High" ? "bg-[#eb5757]/20 text-[#eb5757]" :
+                  p === "Medium" ? "bg-[#ffa629]/20 text-[#ffa629]" :
+                  "bg-[#2eaadc]/20 text-[#2eaadc]";
+                return (
+                  <div key={col.name} className="w-72 flex-shrink-0">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[#9b9b9b] text-sm font-medium">{col.name}</span>
+                      <span className="text-[#5c5c5c] text-xs">{col.tasks.length}</span>
+                    </div>
+                    <div className="space-y-2">
+                      {col.tasks.map((task) => (
+                        <div key={task.title} className="p-3 bg-[#252525] rounded-lg hover:bg-[#2f2f2f] cursor-pointer">
+                          <p className={`text-sm mb-2 leading-snug ${col.name === "Done" ? "text-[#9b9b9b] line-through" : "text-[#ebebeb]"}`}>
+                            {task.title}
+                          </p>
+                          <div className="flex items-center gap-2">
+                            <span className={`px-1.5 py-0.5 ${priorityColor(task.priority)} text-[10px] rounded font-medium`}>{task.priority}</span>
+                            <span className="text-[10px] text-[#5c5c5c]">{task.points} pts</span>
+                            <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${task.assignee} ml-auto`} />
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    <button className="w-full p-2 text-[#5c5c5c] hover:bg-[#252525] rounded text-sm flex items-center gap-1">
-                      <Plus className="w-4 h-4" /> New
-                    </button>
+                      ))}
+                      <button className="w-full p-2 text-[#5c5c5c] hover:bg-[#252525] rounded text-sm flex items-center gap-1">
+                        <Plus className="w-4 h-4" /> New
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

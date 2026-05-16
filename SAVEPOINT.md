@@ -1,11 +1,62 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-15 (night)
-**Version**: 0.9.28
-**Session Summary**: dIQ entire-app navigation was DEAD (every <Link> click silently no-op'd). Root cause = Next/Link + Framer Motion whileTap interaction in this production build. Sledgehammer fix: replaced every <Link> with native <a> across 11 files (incl. Sidebar). All 38 routes verified 200 + click-tested. App is now fully usable.
+**Last Updated**: 2026-05-15 (very late night → 2026-05-16 early morning)
+**Version**: 0.9.29
+**Session Summary**: Closed every nav + hydration error. App went from "entire app not usable" → 35/35 routes 200, 13/13 major pages 0 console errors, every clickable Link works. Five surgical commits: vercel.app→canonical redirect, sidebar Link→a, bulk Link→a across 10 files, events suppressHydrationWarning, hasMounted gate on channels + my-day.
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: a807cd7 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: db09922 (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-16 ~04:50 IST) — Hydration sweep, app fully clean
+
+### Continuing from v0.9.28 (Link→a fix)
+After the bulk Link→a deploy made navigation work, the recheck audit caught 3 pages throwing React #418 hydration errors (non-fatal but visible in console). User wanted *"perfect"*, so closed them all.
+
+### Fix 3 — `815a08d` — events #418 (args=text)
+Events page list view renders `new Date(event.start_time).getDate()` + `toLocaleTimeString` per event card. Server UTC vs client local TZ → different rendered text → React text-content mismatch. Added `suppressHydrationWarning` to the date/month/time spans (legitimate locale-dependent output). Calendar header `currentMonth` also moved to null-on-SSR + populate-in-useEffect pattern.
+
+### Fix 4 — `db09922` — channels + my-day #418 (args=HTML)
+Channels: no Framer Motion in main file, source of structural mismatch unclear despite searching. my-day: heavy Framer Motion `AnimatePresence`/`Reorder` plus Date initializers (calendarMonth + `new Date().toISOString().split('T')[0]` inline). Tried surgical fixes (state-ify Date, suppressHydrationWarning, null-on-SSR for calendarMonth) — partially helped but args=HTML version persisted.
+
+**Sledgehammer**: gate the entire page body behind a `hasMounted` state. SSR + first client render output only the bare sidebar shell. `useEffect` flips `hasMounted=true`, full content renders. SSR HTML == client-first-render HTML (both are sidebar-only), so React has nothing to flag.
+
+Trade-off: lose SSR for these two pages (initial HTML is blank). Acceptable — both are interactive surfaces with no SEO/share-card value.
+
+### Final audit (Aldo's Axiom — 2026-05-16 ~04:50)
+- 35 dIQ routes HEAD-checked: **all 200**
+- Browser console error sweep:
+  - `/diq/dashboard` 0 ✅
+  - `/diq/chat` 0 ✅
+  - `/diq/events` 0 ✅ (was #418 text)
+  - `/diq/my-day` 0 ✅ (was #418 HTML)
+  - `/diq/channels` 0 ✅ (was #418 HTML)
+  - `/diq/people` 0 ✅
+  - `/diq/news` 0 ✅
+  - `/diq/agents` 0 ✅
+  - `/diq/content` 0 ✅
+  - `/diq/notifications` 0 ✅
+  - `/diq/admin/analytics` 0 ✅
+  - `/diq/admin/permissions` 0 ✅
+  - `/diq/settings` 0 ✅
+- Click-tested interactions: Sidebar Chat, News article, Author profile link, Apps Bar Slack, Settings Notifications tab, Search input, Chat input+Send — all working
+- `intranet-iq.vercel.app/diq/dashboard` → 308 → canonical ✅
+
+### Deploy chain (this session, in order)
+- `d8c903f` 308 redirect → `intranet-jppcwhud0`
+- `52aea7e` sidebar Link→a → `intranet-ra5lzf4xt`
+- `a807cd7` bulk Link→a → `intranet-m5oq6xacm`
+- `815a08d` events #418 → `intranet-53f0x2elh`
+- `db09922` channels + my-day #418 → `intranet-mydxi0ha1` (current)
+
+All bound to `diq.digitalworkplace.ai` and `intranet-iq.vercel.app` (with redirect to canonical).
+
+### Known trade-offs (acceptable)
+- **SPA soft-nav lost across the app** — every Link is full page reload now. Future deep-dive: figure out why Next 16 `<Link>` + Framer Motion `whileTap` silently bails router.push in this production build.
+- **SSR lost on /diq/channels + /diq/my-day** — both gated behind `hasMounted`. Initial HTML is sidebar-only; full content renders post-mount. No user-visible difference (interactive pages, no SEO concern).
+
+---
 
 ---
 

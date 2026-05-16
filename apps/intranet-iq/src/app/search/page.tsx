@@ -353,10 +353,16 @@ function SearchPageInner() {
     await new Promise(resolve => setTimeout(resolve, 300));
 
     const queryLower = query.toLowerCase();
+    // Filter matches title, excerpt (the actual content field), tags, plus the optional
+    // description/highlights. Previously this only checked title + missing-on-data
+    // description/highlights fields, so most queries returned no results.
     const filtered = mockSearchResults.filter(result =>
       result.title.toLowerCase().includes(queryLower) ||
+      result.excerpt.toLowerCase().includes(queryLower) ||
       (result.description?.toLowerCase().includes(queryLower) ?? false) ||
-      (result.highlights?.some((h: string) => h.toLowerCase().includes(queryLower)) ?? false)
+      (result.highlights?.some((h: string) => h.toLowerCase().includes(queryLower)) ?? false) ||
+      (result.tags?.some((t: string) => t.toLowerCase().includes(queryLower)) ?? false) ||
+      (result.author?.toLowerCase().includes(queryLower) ?? false)
     );
     setResults(filtered);
 

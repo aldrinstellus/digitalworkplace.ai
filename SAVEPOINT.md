@@ -1,11 +1,52 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-15 (very late night → 2026-05-16 early morning)
-**Version**: 0.9.29
-**Session Summary**: Closed every nav + hydration error. App went from "entire app not usable" → 35/35 routes 200, 13/13 major pages 0 console errors, every clickable Link works. Five surgical commits: vercel.app→canonical redirect, sidebar Link→a, bulk Link→a across 10 files, events suppressHydrationWarning, hasMounted gate on channels + my-day.
+**Last Updated**: 2026-05-16 (early morning)
+**Version**: 0.9.30
+**Session Summary**: Closed every nav + hydration error + search bug. App went from "entire app not usable" → 35/35 routes 200, 13/13 major pages 0 console errors, search works, every clickable link navigates. Seven commits: vercel.app→canonical redirect, sidebar Link→a, bulk Link→a across 10 files, events suppressHydrationWarning, hasMounted gate on channels + my-day, search filter fix, Link-root-cause experiment+revert. Root cause of Link-breakage confirmed at Next 16 build-system level (not Framer Motion).
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: db09922 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: f5c4d43 (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-16 ~05:30 IST) — Search fix + Link root-cause confirmed
+
+### Fix 6 — `7bc4070` — Search returning no results
+Search filter at `apps/intranet-iq/src/app/search/page.tsx:355-360` checked `result.title`, `result.description`, `result.highlights` — but the actual data shape uses `result.excerpt` (required) with `description`/`highlights` optional and missing. So every query returned `[]`.
+
+Fix: filter now also matches `excerpt`, `tags`, `author`. Verified live:
+- `?q=security` → 9 results (incl. "IT Security Guidelines", "Marcus Johnson")
+- `?q=policy` → 3 results (incl. "Updated Remote Work Policy - Effective June 1st")
+
+### Link root cause (closed)
+Last session's sledgehammer (Link→`<a>` across 10 files) was driven by the working theory that Framer Motion `whileTap` inside `<Link>` was swallowing clicks. To verify, this session ran a controlled experiment:
+1. Added a single `<Link href="/my-day">` to dashboard with **no Framer Motion wrapper**
+2. Deployed + clicked via Chrome MCP
+3. Result: `navigated: false`. Click registered, `preventDefault` fired, but no URL change, no network request
+
+**Confirmed: Next.js `<Link>` is fundamentally broken in this production build, irrespective of Framer Motion.** The `<a>` sledgehammer was correct. Reverted the test (`f5c4d43`).
+
+Suspect: Next 16 + React 19 + Turbopack production minification interaction. The minified click handler in the browser has the right structure (`onClick(e){...preventDefault...router.push}`) but `router.push` silently bails. Requires deeper toolchain investigation, parked.
+
+### Final state — 2026-05-16 ~05:30 IST
+- 20/20 routes audited (incl. all detail pages + Apps Bar) → 200 (after retry on 2 transient curl blips)
+- Dashboard console: 0 errors / 0 warnings
+- All 13 major page surfaces: 0 console errors
+- Search: working
+- `intranet-iq.vercel.app` → 308 → canonical
+- Latest deploy: `intranet-566v30d1x` aliased to both vercel.app + canonical domain
+
+### Trade-offs accepted
+- **SPA soft-nav permanently lost across the app** — every link is a full page reload. Build-system bug, not fixable without toolchain investigation.
+- **SSR lost on /diq/channels + /diq/my-day** — gated behind `hasMounted` to dodge structural #418 mismatch.
+
+### Deferred (out of scope this session)
+- 6 vulnerabilities (4 critical) — needs `npm audit fix --force` + breaking-change validation
+- Deps majors: Clerk 6→7, Anthropic SDK 0.65→0.95, Prisma 6→7, Elasticsearch 8→9
+- F10 CSS preload hint (Webpack manifest quirk, cosmetic)
+- `origin/n8n-workflow-updates` branch triage decision
+
+---
 
 ---
 

@@ -109,43 +109,84 @@ function AuzmorOfficeApp() {
   const [channelRequestsOpen, setChannelRequestsOpen] = useState(true);
 
   // Mock data - Posts for feed (matching original Auzmor Office)
-  const posts = [
+  const posts: Array<{
+    id: string;
+    author: { name: string; avatar: string; initials: string; role?: string };
+    content: string;
+    timestamp: string;
+    likes: number;
+    comments: number;
+    isPublic: boolean;
+    kind?: "text" | "image" | "shoutout" | "poll" | "event";
+    media?: { type: "gradient"; from: string; to: string; label: string; sub?: string };
+    tags?: string[];
+    pollOptions?: Array<{ label: string; pct: number }>;
+  }> = [
     {
       id: "p1",
-      author: { name: "Lily Wright", avatar: "/avatars/lily.jpg", initials: "LW" },
-      content: "",
-      timestamp: "16 days ago",
-      likes: 0,
-      comments: 0,
+      author: { name: "Lily Wright", avatar: "/avatars/lily.jpg", initials: "LW", role: "VP, Product" },
+      content: "🎉 Just shipped v2.4! Huge thanks to the Core Data Science team for crushing the migration in record time — the new analytics dashboard is live for all customers as of this morning. Customer NPS already moved +6 in the first wave. Onward.",
+      timestamp: "2 hours ago",
+      likes: 142,
+      comments: 23,
       isPublic: true,
+      kind: "image",
+      media: { type: "gradient", from: "#0d9488", to: "#10b981", label: "Analytics 2.4 — Live", sub: "Customer NPS +6 in first 24h" },
+      tags: ["#product", "#shipping"],
     },
     {
       id: "p2",
-      author: { name: "Addison Green", avatar: "/avatars/addison.jpg", initials: "AG" },
-      content: "",
-      timestamp: "16 days ago",
-      likes: 0,
-      comments: 0,
+      author: { name: "Addison Green", avatar: "/avatars/addison.jpg", initials: "AG", role: "Director, People" },
+      content: "Our June DEI Spotlight Series kicks off next week. Join us Tuesday at 2pm PT for a panel with the DEI Employee Resource Group on building inclusive remote teams. Q&A open the whole hour — register through the Learning Hub.",
+      timestamp: "5 hours ago",
+      likes: 89,
+      comments: 17,
       isPublic: true,
+      kind: "event",
+      media: { type: "gradient", from: "#7c3aed", to: "#ec4899", label: "DEI Spotlight Series", sub: "Tue · 2:00 PM PT · Virtual" },
+      tags: ["#dei", "#learning"],
     },
     {
       id: "p3",
-      author: { name: "Logan Martinez", avatar: "/avatars/logan.jpg", initials: "LM" },
-      content: "",
-      timestamp: "16 days ago",
-      likes: 0,
-      comments: 0,
+      author: { name: "Logan Martinez", avatar: "/avatars/logan.jpg", initials: "LM", role: "Engineering Manager" },
+      content: "Massive shoutout to Maya, Diego, and the platform team for the zero-downtime cutover this weekend ❤️ This is the kind of cross-functional excellence that makes us proud. Plates were spinning across three time zones and they nailed it.",
+      timestamp: "Yesterday",
+      likes: 234,
+      comments: 41,
       isPublic: true,
+      kind: "shoutout",
+      tags: ["#shoutout", "#teamwins"],
     },
     {
       id: "p4",
-      author: { name: "Sebastian Sanchez", avatar: "/avatars/sebastian.jpg", initials: "SS" },
-      content: "",
-      timestamp: "16 days ago",
-      likes: 0,
-      comments: 1,
+      author: { name: "Sebastian Sanchez", avatar: "/avatars/sebastian.jpg", initials: "SS", role: "CTO" },
+      content: "📊 Quick pulse check — what's the biggest blocker for your team this quarter? Anonymous, just trying to triage what we can unblock from the top.",
+      timestamp: "2 days ago",
+      likes: 67,
+      comments: 28,
       isPublic: true,
+      kind: "poll",
+      pollOptions: [
+        { label: "Engineering capacity", pct: 38 },
+        { label: "Cross-team alignment", pct: 27 },
+        { label: "Customer feedback loop", pct: 19 },
+        { label: "Tooling / infrastructure", pct: 16 },
+      ],
     },
+  ];
+
+  // Mock data - Upcoming birthdays
+  const birthdays = [
+    { name: "Maya Patel", role: "Senior Engineer", initials: "MP", when: "Today", color: "#ec4899" },
+    { name: "Jordan Kim", role: "Product Designer", initials: "JK", when: "Tomorrow", color: "#8b5cf6" },
+    { name: "Riley Thompson", role: "Account Executive", initials: "RT", when: "Mon, May 19", color: "#10b981" },
+  ];
+
+  // Mock data - Work anniversaries
+  const anniversaries = [
+    { name: "Carlos Rivera", role: "Staff Engineer", initials: "CR", years: 5, when: "Today" },
+    { name: "Wei Zhang", role: "Data Scientist", initials: "WZ", years: 3, when: "Tomorrow" },
+    { name: "Olivia Brown", role: "Customer Success Lead", initials: "OB", years: 2, when: "Sun, May 18" },
   ];
 
   // Mock data - Channels (matching original)
@@ -417,18 +458,64 @@ function AuzmorOfficeApp() {
                         </button>
                       </div>
                     </div>
-                    {/* Post content placeholder */}
-                    <div className="mt-4 h-32 bg-neutral-100 rounded-lg" />
+                    {/* Author role line */}
+                    {post.author.role && (
+                      <p className="text-xs text-neutral-400 ml-13 -mt-0.5">{post.author.role}</p>
+                    )}
+
+                    {/* Post body */}
+                    <p className="mt-3 text-[15px] text-neutral-700 leading-relaxed whitespace-pre-line">
+                      {post.content}
+                    </p>
+
+                    {/* Tags */}
+                    {post.tags && post.tags.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {post.tags.map(t => (
+                          <span key={t} className="text-xs text-[#0d9488] font-medium hover:underline cursor-pointer">{t}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Media (gradient banner with overlaid label) */}
+                    {post.media && (
+                      <div
+                        className="mt-4 rounded-lg overflow-hidden h-40 flex flex-col items-center justify-center text-white relative"
+                        style={{ background: `linear-gradient(135deg, ${post.media.from}, ${post.media.to})` }}
+                      >
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.18),transparent_50%)]" />
+                        <p className="text-lg font-semibold relative">{post.media.label}</p>
+                        {post.media.sub && <p className="text-xs opacity-80 mt-1 relative">{post.media.sub}</p>}
+                      </div>
+                    )}
+
+                    {/* Poll */}
+                    {post.kind === "poll" && post.pollOptions && (
+                      <div className="mt-4 space-y-2">
+                        {post.pollOptions.map(opt => (
+                          <div key={opt.label} className="relative">
+                            <div className="flex items-center justify-between text-sm text-neutral-700 mb-1">
+                              <span>{opt.label}</span>
+                              <span className="text-neutral-500 font-medium">{opt.pct}%</span>
+                            </div>
+                            <div className="h-2 bg-neutral-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-[#0d9488] rounded-full transition-all" style={{ width: `${opt.pct}%` }} />
+                            </div>
+                          </div>
+                        ))}
+                        <p className="text-xs text-neutral-400 mt-2">152 votes · Closes in 3 days</p>
+                      </div>
+                    )}
                   </div>
-                  <div className="px-4 py-3 border-t border-neutral-100 flex items-center gap-4">
-                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981]">
+                  <div className="px-4 py-3 border-t border-neutral-100 flex items-center gap-4 bg-neutral-50/40">
+                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981] transition-colors">
                       <ThumbsUp className="w-4 h-4" />
-                      Like
+                      Like {post.likes > 0 && <span className="text-neutral-500">({post.likes})</span>}
                     </button>
-                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981]">
+                    <button className="flex items-center gap-2 text-sm text-neutral-600 hover:text-[#10b981] transition-colors">
                       <MessageCircle className="w-4 h-4" />
                       Comment
-                      {post.comments > 0 && <span className="text-neutral-500">({post.comments} comment{post.comments !== 1 ? 's' : ''})</span>}
+                      {post.comments > 0 && <span className="text-neutral-500">({post.comments})</span>}
                     </button>
                   </div>
                 </motion.div>
@@ -449,28 +536,25 @@ function AuzmorOfficeApp() {
               {birthdayOpen ? <ChevronDown className="w-4 h-4 text-neutral-400" /> : <ChevronRight className="w-4 h-4 text-neutral-400" />}
             </button>
             {birthdayOpen && (
-              <div className="flex flex-col items-center py-6 border border-neutral-200 rounded-xl mt-2">
-                {/* Birthday illustration */}
-                <svg width="100" height="80" viewBox="0 0 100 80" fill="none" className="mb-3">
-                  {/* Cake */}
-                  <rect x="30" y="45" width="40" height="25" rx="4" fill="#fcd34d"/>
-                  <rect x="25" y="65" width="50" height="10" rx="2" fill="#f59e0b"/>
-                  {/* Candle */}
-                  <rect x="48" y="30" width="4" height="15" fill="#60a5fa"/>
-                  <ellipse cx="50" cy="28" rx="4" ry="6" fill="#fbbf24"/>
-                  {/* Decorations */}
-                  <circle cx="35" cy="52" r="3" fill="#ec4899"/>
-                  <circle cx="50" cy="55" r="3" fill="#8b5cf6"/>
-                  <circle cx="65" cy="52" r="3" fill="#10b981"/>
-                  {/* Confetti */}
-                  <rect x="20" y="20" width="3" height="6" rx="1" fill="#ec4899" transform="rotate(15 20 20)"/>
-                  <rect x="75" y="15" width="3" height="6" rx="1" fill="#10b981" transform="rotate(-20 75 15)"/>
-                  <rect x="80" y="35" width="3" height="6" rx="1" fill="#fbbf24" transform="rotate(10 80 35)"/>
-                  <rect x="15" y="40" width="3" height="6" rx="1" fill="#60a5fa" transform="rotate(-15 15 40)"/>
-                </svg>
-                <p className="text-neutral-500 text-sm text-center">
-                  Upcoming birthdays will show here.
-                </p>
+              <div className="space-y-2 mt-2">
+                {birthdays.map((b) => (
+                  <div key={b.name} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-neutral-50 border border-neutral-200">
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium shrink-0"
+                      style={{ background: `linear-gradient(135deg, ${b.color}, ${b.color}cc)` }}
+                    >
+                      {b.initials}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-neutral-800 truncate">{b.name} 🎂</p>
+                      <p className="text-xs text-neutral-500 truncate">{b.role}</p>
+                    </div>
+                    <span className="text-xs text-neutral-400 font-medium shrink-0">{b.when}</span>
+                  </div>
+                ))}
+                <button className="w-full text-xs text-[#0d9488] font-medium py-1 hover:underline">
+                  View all birthdays
+                </button>
               </div>
             )}
           </div>
@@ -485,27 +569,22 @@ function AuzmorOfficeApp() {
               {anniversaryOpen ? <ChevronDown className="w-4 h-4 text-neutral-400" /> : <ChevronRight className="w-4 h-4 text-neutral-400" />}
             </button>
             {anniversaryOpen && (
-              <div className="flex flex-col items-center py-6 border border-neutral-200 rounded-xl mt-2">
-                {/* Anniversary illustration */}
-                <svg width="100" height="80" viewBox="0 0 100 80" fill="none" className="mb-3">
-                  {/* Trophy */}
-                  <path d="M35 25 L35 45 L45 55 L55 55 L65 45 L65 25 Z" fill="#fbbf24"/>
-                  <rect x="43" y="55" width="14" height="8" fill="#d97706"/>
-                  <rect x="38" y="63" width="24" height="6" rx="1" fill="#92400e"/>
-                  {/* Handles */}
-                  <path d="M35 28 C25 28, 25 42, 35 42" stroke="#fbbf24" strokeWidth="4" fill="none"/>
-                  <path d="M65 28 C75 28, 75 42, 65 42" stroke="#fbbf24" strokeWidth="4" fill="none"/>
-                  {/* Star */}
-                  <path d="M50 30 L52 36 L58 36 L53 40 L55 46 L50 42 L45 46 L47 40 L42 36 L48 36 Z" fill="#ffffff"/>
-                  {/* Confetti */}
-                  <circle cx="25" cy="20" r="3" fill="#ec4899"/>
-                  <circle cx="75" cy="25" r="3" fill="#10b981"/>
-                  <rect x="80" cy="45" width="4" height="4" fill="#60a5fa" transform="rotate(45 80 45)"/>
-                  <rect x="15" cy="35" width="4" height="4" fill="#8b5cf6" transform="rotate(45 15 35)"/>
-                </svg>
-                <p className="text-neutral-500 text-sm text-center">
-                  Upcoming work anniversaries will show here.
-                </p>
+              <div className="space-y-2 mt-2">
+                {anniversaries.map((a) => (
+                  <div key={a.name} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-neutral-50 border border-neutral-200">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-300 to-amber-500 flex items-center justify-center text-white text-xs font-medium shrink-0">
+                      {a.initials}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-neutral-800 truncate">{a.name} 🏆</p>
+                      <p className="text-xs text-neutral-500 truncate">{a.years} year{a.years !== 1 ? 's' : ''} · {a.role}</p>
+                    </div>
+                    <span className="text-xs text-neutral-400 font-medium shrink-0">{a.when}</span>
+                  </div>
+                ))}
+                <button className="w-full text-xs text-[#0d9488] font-medium py-1 hover:underline">
+                  View all anniversaries
+                </button>
               </div>
             )}
           </div>

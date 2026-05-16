@@ -17,6 +17,7 @@ import { MeetingCard } from "@/components/dashboard/MeetingCard";
 import { AppShortcutsBar } from "@/components/dashboard/AppShortcutsBar";
 import { DashboardCustomizer, DashboardCustomizeButton } from "@/components/dashboard/DashboardCustomizer";
 import { EditLayoutButton } from "@/components/dashboard/DraggableWidget";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/lib/motion";
 import { ListItemSkeleton } from "@/components/ui/Skeleton";
@@ -379,9 +380,9 @@ export default function Dashboard() {
                           </span>
                         </div>
                       ))}
-                      <a href="/diq/my-day" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors">
+                      <Link href="/my-day" className="flex items-center justify-center gap-2 mt-3 py-2 text-sm text-[var(--accent-ember)] hover:text-[var(--accent-ember-soft)] transition-colors" data-test="view-all-tasks">
                         View all tasks <ArrowRight className="w-4 h-4" />
-                      </a>
+                      </Link>
                     </div>
                   }
                 />

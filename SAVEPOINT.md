@@ -1,11 +1,62 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-16 (early morning)
-**Version**: 0.9.30
-**Session Summary**: Closed every nav + hydration error + search bug. App went from "entire app not usable" → 35/35 routes 200, 13/13 major pages 0 console errors, search works, every clickable link navigates. Seven commits: vercel.app→canonical redirect, sidebar Link→a, bulk Link→a across 10 files, events suppressHydrationWarning, hasMounted gate on channels + my-day, search filter fix, Link-root-cause experiment+revert. Root cause of Link-breakage confirmed at Next 16 build-system level (not Framer Motion).
+**Last Updated**: 2026-05-16 (late morning)
+**Version**: 0.9.31
+**Session Summary**: Inside-out audit complete — zero regressions found across 5 phases (15/15 pages 0 errors, 40/40 routes 200, every tested interaction works, 0 API bugs). Audit baseline committed at `apps/intranet-iq/tests/audit-2026-05-16.md` for future regression checks.
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: f5c4d43 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: 9cd50b1 (main repo) / cf4c8f9 (support-iq submodule)
+
+---
+
+## Latest Session (2026-05-16 ~11:50 IST) — Inside-out audit
+
+Aldrin: *"i need to retest diq inside out, every feature, complete audit, to make sure things don't break ever again."*
+
+### What was tested
+Built a 5-phase audit and executed every step via Chrome DevTools MCP + curl. Audit doc committed at `apps/intranet-iq/tests/audit-2026-05-16.md` (`9cd50b1`) as the regression baseline.
+
+**Phase 1 — Console-error sweep (15 pages):** Hit every dIQ surface, recorded console errors. **All 15 pages clean (0 errors each).**
+
+**Phase 2 — Nav surface check:** Enumerated every `/diq/*` href on a fully-rendered dashboard (40 unique), HEAD-checked each. **40/40 return 200.** Covers sidebar (15), Apps Bar destinations (11), detail pages (4 news + 3 events + 1 person), search topic URLs (5), content + settings deep links (2).
+
+**Phase 3 — Per-page interactions:** Click/fill-tested every major interactive feature:
+- My Day: filter tabs · command palette (typed `add task: Audit smoke test` → task created + toast) · search
+- Events: list/calendar toggle · RSVP `Going` button (state updated) · search "orientation" → 1 result
+- Channels: channel switch (placeholder updates to `Message #design`) · Q&A tab · message textarea
+- People: 3 view toggles (Grid/List/Org chart) · search "Marcus" → 1 result · dept filter · sort dropdown
+- News (`/diq/news/1`): like 234→235 · comment input enables Post Comment · author link · back nav
+- Settings: **all 9 tabs** (Profile · Notifications · Appearance · Privacy & Security · Integrations · User Management · Roles & Permissions · Audit Logs · System Settings) — every tab switches `<main>` heading correctly
+- Search: `?q=security` → 9 results · `?q=policy` → 3 results · autocomplete live
+- Chat: input · Send button · message threading
+
+**Phase 4 — API endpoint health:** Hit every `/diq/api/*` route. **0 actual bugs.**
+- 12 endpoints return data: dashboard, content, people, workflows, search, search/autocomplete, celebrations, connectors, kb-spaces, channels, polls, elasticsearch/search
+- 4 endpoints correctly 400 on missing required params: notifications, tasks, reactions, recognitions
+- 3 endpoints correctly require auth: access-requests, admin/stats, messages
+
+**Phase 5 — Issues found:** Zero regressions. Nothing to fix.
+
+### Audit doc structure
+`apps/intranet-iq/tests/audit-2026-05-16.md` has:
+- Per-phase tables showing every test point + result
+- "Recommended regression watchpoints" section: quick 4-step re-run checklist for future changes
+- Bound to deploy `intranet-566v30d1x`, commit `8040018` (the savepoint before this audit)
+
+### No code changes this iteration
+This was a verification-only session. The fixes from earlier in the day (Link sledgehammer, hydration sweep, search filter, vercel.app redirect) are all holding.
+
+### Active trade-offs (carried over from v0.9.30)
+- SPA soft-nav lost across dIQ. Full-page reload on every click. Build-system level Next.js Link issue.
+- SSR lost on `/diq/channels` + `/diq/my-day` (gated behind `hasMounted`).
+
+### Deferred (still out of scope)
+- 6 vulnerabilities (`npm audit fix --force` requires breaking-change validation)
+- Deps majors: Clerk 6→7, Anthropic SDK 0.65→0.95, Prisma 6→7, Elasticsearch 8→9
+- F10 CSS preload (Webpack manifest quirk)
+- `origin/n8n-workflow-updates` branch triage
+
+---
 
 ---
 

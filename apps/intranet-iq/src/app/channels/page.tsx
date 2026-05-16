@@ -242,6 +242,11 @@ type ActiveTab = "channels" | "qa";
 type QASortBy = "recent" | "votes" | "unanswered";
 
 export default function ChannelsPage() {
+  // Gate: render nothing during SSR + first client render. Triggers re-render after mount.
+  // Skips hydration mismatches in this page's complex tree.
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+
   const [channelList, setChannelList] = useState(channels);
   const [activeChannel, setActiveChannel] = useState(channels[1]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -407,6 +412,15 @@ export default function ChannelsPage() {
           return 0; // recent - keep original order
       }
     });
+
+  // SSR + first-client render: bare shell only. Real content renders after mount.
+  if (!hasMounted) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-obsidian)]">
+        <Sidebar />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--bg-obsidian)]">

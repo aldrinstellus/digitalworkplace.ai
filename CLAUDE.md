@@ -709,3 +709,9 @@ export const playChatBubbleSound = (): void => {
 - **Save to global KB:** writes to `~/.claude/projects/-Users-aldrin-mac-mini/memory/10-global/knowledge.md`
 - **Resume:** read `./SAVEPOINT.md` first, then any project-specific reference docs
 - See the global pattern: `~/.claude/projects/-Users-aldrin-mac-mini/memory/10-global/rules/global-project-claude-md-pattern.md`
+
+## Env file locations *(added 2026-05-26)*
+
+- **Live:** each app's `apps/<app>/.env.local` is authoritative — Claude reads it automatically when working in that app dir
+- **support-iq archived snapshot:** `~/.config/dwp-support-iq/env-backup-from-downloads-2026-02-05.local` (chmod 600). Older draft, do NOT use at runtime. See `apps/support-iq/CLAUDE.md` → "Environment Variables" for full context
+- **Pattern reference:** global `~/.claude/CLAUDE.md` → "Project env backups (non-key, archived)"

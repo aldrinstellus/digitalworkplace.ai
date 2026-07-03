@@ -82,6 +82,11 @@
    curl -s -o /dev/null -w "%{http_code}" https://dcq.digitalworkplace.ai/dcq/Home/index.html
    curl -s -o /dev/null -w "%{http_code}" https://intranet-iq.vercel.app/diq/dashboard
    curl -s -o /dev/null -w "%{http_code}" https://dsq.digitalworkplace.ai/dsq/demo/atc-executive
+   # GRC IQ card targets (external Auctor GRC — expect 307; a 404/000 means the Auctor
+   # alias went stale after an Auctor deploy → rebind in the auctor repo, not here)
+   curl -s -o /dev/null -w "%{http_code}" https://auctorgrc.vercel.app
+   # GRC guide PDF (expect 200 application/pdf)
+   curl -s -o /dev/null -w "%{http_code}" https://www.digitalworkplace.ai/guides/DGQ_DEMO_GUIDE_v1.pdf
    ```
 
 5. **Report Summary** to user with table showing all statuses

@@ -77,6 +77,22 @@ const products = [
       glow: "rgba(255, 51, 102, 0.4)",
     },
   },
+  {
+    id: 5,
+    name: "GRC IQ",
+    title: "AI Compliance",
+    description: "AI-native governance, risk & compliance",
+    // External product (Auctor GRC) — no localhost port; same target in both envs
+    localHref: "https://auctorgrc.vercel.app",
+    prodHref: "https://auctorgrc.vercel.app",
+    disabled: false,
+    guideUrl: "/guides/DGQ_DEMO_GUIDE_v1.pdf",
+    colors: {
+      primary: "#14b8a6",
+      secondary: "#06b6d4",
+      glow: "rgba(20, 184, 166, 0.4)",
+    },
+  },
 ];
 
 export default function DashboardPage() {
@@ -272,12 +288,12 @@ export default function DashboardPage() {
           </p>
         </motion.div>
 
-        {/* Products Grid - 4 cards */}
+        {/* Products Grid - 5 cards */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5"
         >
           {products.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} userId={user?.id} userEmail={user?.primaryEmailAddress?.emailAddress} userName={user?.fullName || undefined} />
@@ -763,6 +779,123 @@ const ProductIllustrations = {
       ))}
     </svg>
   ),
+
+  // AI Compliance - Shield with checkmark, scanning crosshair ring and audit checklist
+  compliance: ({ isHovered }: { isHovered: boolean }) => (
+    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 250" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="grc-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.4" />
+        </linearGradient>
+        <linearGradient id="grc-grad-2" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#2dd4bf" stopOpacity="0.1" />
+        </linearGradient>
+        <filter id="grc-glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {/* Background circles - always pulsing */}
+      <motion.circle cx="240" cy="60" r="80" fill="url(#grc-grad-2)"
+        animate={{
+          scale: isHovered ? [1, 1.1, 1] : [1, 1.05, 1],
+          opacity: isHovered ? [0.4, 0.6, 0.4] : [0.2, 0.35, 0.2]
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.circle cx="60" cy="200" r="50" fill="url(#grc-grad-2)"
+        animate={{ scale: isHovered ? [1, 1.15, 1] : [1, 1.08, 1] }}
+        transition={{ duration: 2.5, repeat: Infinity, delay: 0.5, ease: "easeInOut" }}
+      />
+
+      {/* Scanning ring - dashed orbit around the shield (crosshair motif) */}
+      <motion.circle cx="220" cy="85" r="58" fill="none" stroke="#14b8a6" strokeWidth="1.5"
+        strokeDasharray="5 9" strokeLinecap="round"
+        animate={{
+          strokeDashoffset: [0, -112],
+          strokeOpacity: isHovered ? [0.5, 0.8, 0.5] : [0.2, 0.35, 0.2]
+        }}
+        transition={{
+          strokeDashoffset: { duration: isHovered ? 6 : 14, repeat: Infinity, ease: "linear" },
+          strokeOpacity: { duration: 2.5, repeat: Infinity, ease: "easeInOut" }
+        }}
+      />
+      {/* Crosshair ticks at the ring's cardinal points */}
+      {["M220 19 L220 31", "M220 139 L220 151", "M154 85 L166 85", "M274 85 L286 85"].map((d, i) => (
+        <motion.path key={i} d={d} stroke="#06b6d4" strokeWidth="2" strokeLinecap="round"
+          animate={{ opacity: isHovered ? [0.4, 0.9, 0.4] : [0.15, 0.35, 0.15] }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: "easeInOut" }}
+        />
+      ))}
+
+      {/* Shield with checkmark */}
+      <g filter={isHovered ? "url(#grc-glow)" : undefined}>
+        <motion.path
+          d="M220 42 L252 54 L252 88 C252 112 238 127 220 135 C202 127 188 112 188 88 L188 54 Z"
+          fill="url(#grc-grad-1)" stroke="#14b8a6" strokeWidth="2.5" strokeLinejoin="round"
+          animate={{
+            fillOpacity: isHovered ? [0.25, 0.4, 0.25] : [0.1, 0.2, 0.1],
+            strokeOpacity: isHovered ? 1 : [0.5, 0.75, 0.5],
+            scale: isHovered ? [1, 1.04, 1] : 1,
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.path
+          d="M206 86 L216 97 L235 70"
+          fill="none" stroke="#06b6d4" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"
+          animate={{
+            pathLength: isHovered ? [0, 1] : [0, 0.9],
+            opacity: isHovered ? [0.4, 1] : [0.3, 0.7]
+          }}
+          transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1, ease: "easeInOut" }}
+        />
+        {/* Signature dot */}
+        <motion.circle cx="220" cy="115" r="3.5" fill="#ff3366"
+          animate={{
+            opacity: isHovered ? [0.7, 1, 0.7] : [0.35, 0.6, 0.35],
+            scale: isHovered ? [1, 1.3, 1] : [1, 1.15, 1]
+          }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </g>
+
+      {/* Audit checklist - rows lighting up sequentially */}
+      {[0, 1, 2].map((i) => (
+        <motion.g key={i}
+          animate={{ opacity: isHovered ? [0.35, 1, 0.35] : [0.15, 0.5, 0.15] }}
+          transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.6, ease: "easeInOut" }}
+        >
+          <rect x="42" y={62 + i * 26} width="58" height="15" rx="4" fill="#14b8a6" fillOpacity={0.3} />
+          <line x1="50" y1={69.5 + i * 26} x2="92" y2={69.5 + i * 26} stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeOpacity={0.5} />
+          <motion.path
+            d={`M108 ${69 + i * 26} L112 ${73 + i * 26} L119 ${63 + i * 26}`}
+            fill="none" stroke="#2dd4bf" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            animate={{ pathLength: [0, 1], opacity: [0.3, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 1.2, delay: i * 0.6, ease: "easeInOut" }}
+          />
+        </motion.g>
+      ))}
+
+      {/* Floating dots - always animating */}
+      {[...Array(8)].map((_, i) => (
+        <motion.circle
+          key={i}
+          cx={50 + i * 30}
+          cy={175 + (i % 3) * 20}
+          r={isHovered ? 3 : 2}
+          fill="#14b8a6"
+          animate={{
+            y: isHovered ? [0, -15, 0] : [0, -8, 0],
+            opacity: isHovered ? [0.3, 1, 0.3] : [0.15, 0.4, 0.15],
+          }}
+          transition={{ duration: 2 + i * 0.2, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+        />
+      ))}
+    </svg>
+  ),
 };
 
 // Ultra Premium Product Card
@@ -847,6 +980,7 @@ function ProductCard({
     2: ProductIllustrations.intranet,
     3: ProductIllustrations.chatbot,
     4: ProductIllustrations.testing,
+    5: ProductIllustrations.compliance,
   }[product.id] || ProductIllustrations.support;
 
   return (

@@ -197,7 +197,7 @@ src/
 
 ### Dashboard
 - `src/app/dashboard/page.tsx` - Main dashboard with:
-  - 4 product cards (Support IQ, Intranet IQ, Test Pilot IQ, Chat Core IQ)
+  - 5 product cards (Support IQ, Intranet IQ, Test Pilot IQ, Chat Core IQ, GRC IQ → external Auctor GRC at auctorgrc.vercel.app)
   - Animated SVG illustrations for each product
   - 3D tilt effects with Framer Motion
   - Colored borders matching product themes

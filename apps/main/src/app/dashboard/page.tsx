@@ -15,7 +15,7 @@ const getProductUrl = (localUrl: string, prodUrl: string) => {
   return prodUrl;
 };
 
-// Product data - 4 core products with rich theming
+// Product data - 5 products with rich theming
 const products = [
   {
     id: 1,

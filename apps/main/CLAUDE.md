@@ -63,7 +63,8 @@ Each card has:
 | **AI Support** | `public/guides/DSQ_DEMO_GUIDE_v2.pdf` (607KB, v2.0.0) | Active |
 | **AI Intranet** | — | Pending |
 | **AI Chat Bot** | — | Pending |
-| **AI Testing** | — | Pending |
+| **AI Testing** | `public/guides/DTQ_DEMO_GUIDE_v1.pdf` (1.7MB) | Active |
+| **AI Compliance (GRC IQ)** | `public/guides/DGQ_DEMO_GUIDE_v1.pdf` (7.2MB, Auctor v3.0.9) | Active — external app https://auctorgrc.vercel.app |
 
 **PDF Middleware Fix (v0.9.16):** Added `pdf` to the static file extension exclusion in `src/proxy.ts` so PDFs are served without Clerk authentication.
 

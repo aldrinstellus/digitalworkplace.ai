@@ -344,7 +344,7 @@ Rotating messages covering:
 ## Dashboard (v0.4.0)
 
 ### Overview
-Protected dashboard page accessible after authentication featuring 4 AI product cards.
+Protected dashboard page accessible after authentication featuring 5 AI product cards.
 
 ### Products
 | Product | Theme Color | Description | Status |
@@ -353,6 +353,7 @@ Protected dashboard page accessible after authentication featuring 4 AI product 
 | Intranet IQ | Blue (#3b82f6) | Smart internal knowledge network | ✅ Active |
 | Test Pilot IQ | Pink (#ff3366) | Automated QA & testing intelligence | ✅ Live: https://dtq.digitalworkplace.ai |
 | Chat Core IQ | Purple (#a855f7) | Conversational AI for your business | ✅ Live: https://dcq.digitalworkplace.ai |
+| GRC IQ (AI Compliance) | Teal (#14b8a6 → #06b6d4) | AI-native governance, risk & compliance | ✅ Live (external Auctor GRC): https://auctorgrc.vercel.app |
 
 ### dCQ - Chat Core IQ (v1.2.1) - PRODUCTION LIVE (Full Spectrum + Workflows)
 - **Port**: 3002

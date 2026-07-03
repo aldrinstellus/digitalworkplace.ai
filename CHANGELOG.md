@@ -4,6 +4,23 @@ All notable changes to Digital Workplace AI are documented in this file.
 
 ---
 
+## [0.9.33] - 2026-07-03
+
+### GRC IQ — 5th product card (Auctor GRC)
+
+New dashboard card **"GRC IQ / AI Compliance"** launching the external Auctor.GRC product (`https://auctorgrc.vercel.app` — ATC's AI-native GRC + ATO POC, lives in `~/auctor`, Vercel project `dacpif`). Shipped in `867022d` + docs in `9c2e4a8`/`9271baa`.
+
+- **Card**: badge GRC IQ · title AI Compliance · tagline "AI-native governance, risk & compliance" · teal/cyan theme (`#14b8a6` → `#06b6d4`) — Auctor's brand red `#ff3366` was already Test Pilot IQ's, so red survives only as the illustration's signature dot.
+- **Illustration**: new `ProductIllustrations.compliance` inline framer-motion SVG — shield + draw-on checkmark, rotating dashed crosshair ring (Auctor logo motif), sequentially lighting audit-checklist rows, floating particles. Same idle/hover animation grammar as the 4 siblings.
+- **Grid**: `lg:grid-cols-4` → `lg:grid-cols-3 xl:grid-cols-5` (5 across at ≥1280px; 3+2 at 1024–1280).
+- **Guide**: `public/guides/DGQ_DEMO_GUIDE_v1.pdf` (7.2 MB, frozen copy of Auctor v3.0.9 demo guide) wired to Guide + download buttons.
+- **Maintenance protocol**: root CLAUDE.md "Verify Live" now curls the Auctor alias (expect 307) + the DGQ PDF (expect 200) so a stale Auctor alias can't silently strand the card. Cross-dependency also recorded in `~/auctor/app/SAVEPOINT.md`.
+- **Live-verified on prod**: 5-card render, Launch App → Auctor dashboard, PDF 200/application/pdf, responsive rules confirmed in the shipped CSS.
+
+*Note: changelog entries 0.9.27–0.9.32 were never written (sessions 2026-05-11→05-16 recorded in SAVEPOINT.md only); this entry resumes the ledger at the SAVEPOINT version lineage.*
+
+---
+
 ## [0.9.26] - 2026-05-11
 
 ### CI gate live + green

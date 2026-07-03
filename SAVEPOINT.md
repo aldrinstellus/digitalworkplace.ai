@@ -1,15 +1,41 @@
 # Digital Workplace AI - Session Savepoint
 
-**Last Updated**: 2026-05-16 (afternoon)
-**Version**: 0.9.32
-**Session Summary**: Rich-content pass across all dIQ Apps Bar mocks. Auzmor Office posts (empty gray boxes), EmailApp bodies (Lorem ipsum), and Notion kanban ("Task item N for sprint") were placeholder-thin — all rewritten with enterprise-grade realistic content. Other 9 apps already rich (verified by screenshot audit).
+**Last Updated**: 2026-07-03
+**Version**: 0.9.33
+**Session Summary**: 5th product card shipped — "GRC IQ / AI Compliance" linking to the external Auctor GRC app (auctorgrc.vercel.app). New teal/cyan animated shield illustration, grid now lg:3/xl:5 columns, Auctor demo-guide PDF bundled. Deployed + live-verified on www.digitalworkplace.ai (card renders, Launch App opens Auctor dashboard, Guide PDF serves 200).
 **Machine**: Mac Mini (aldrin-mac-mini)
 **Git Branch**: main
-**Git Commit**: 9a12eb7 (main repo) / cf4c8f9 (support-iq submodule)
+**Git Commit**: 9271baa — docs: add GRC IQ card liveness checks (+ 867022d feat commit)
 
 ---
 
-## Latest Session (2026-05-16 afternoon) — Rich-content pass across all Apps Bar mocks
+## Latest Session (2026-07-03) — GRC IQ (Auctor GRC) 5th product card
+
+### What Was Done
+1. **Verified all 4 existing products live** (browser drive: each card's Launch App opened its app — dSQ/dIQ/dCQ/dTQ all loaded).
+2. **Added the 5th product card** in `apps/main/src/app/dashboard/page.tsx` (commit `867022d`):
+   - Product entry id 5: badge **GRC IQ**, title **AI Compliance**, tagline "AI-native governance, risk & compliance", colors teal `#14b8a6` → cyan `#06b6d4`.
+   - Launch URL **https://auctorgrc.vercel.app** (external Auctor.GRC product, ~/auctor repo, Vercel project `dacpif`; no auth needed — it auto-mints a demo session). Same URL for local + prod (no localhost port).
+   - New `ProductIllustrations.compliance` inline framer-motion SVG: shield + draw-on checkmark, rotating dashed crosshair ring (Auctor logo nod), sequential audit-checklist rows, floating particles, `#ff3366` signature dot.
+   - Grid `lg:grid-cols-4` → `lg:grid-cols-3 xl:grid-cols-5` (5 in one row at ≥1280px, 3+2 at 1024–1280).
+   - Guide + download wired to `public/guides/DGQ_DEMO_GUIDE_v1.pdf` (7.2 MB copy of Auctor v3.0.9 demo guide).
+3. **Deployed + live-verified** (Aldo's Axiom): Vercel build Ready, canonical domain serves new deploy, 5-card grid screenshot, Launch App live-clicked → Auctor.GRC dashboard loaded, PDF curl 200/application/pdf, responsive CSS rules (`sm:2/lg:3/xl:5`) confirmed present in shipped stylesheet.
+4. **Future-proofing baked in** (commit `9271baa`): root CLAUDE.md maintenance protocol now curls `auctorgrc.vercel.app` (expect 307) + the DGQ PDF (expect 200) on every maintenance run; Auctor's SAVEPOINT (~/auctor/app, local commit `5ad9885`) records the downstream dependency + alias-rebind obligation.
+5. **Doc sync** (commit `9c2e4a8`): root CLAUDE.md + apps/main/CLAUDE.md guide table (also fixed stale row — AI Testing HAS a guide) + page comment.
+
+### Key Decisions (Aldrin)
+- Naming: launcher-only IQ-family alias "GRC IQ / AI Compliance" — the Auctor app keeps its own Auctor.GRC branding after launch.
+- Color: teal/cyan (Auctor's brand red #ff3366 already taken by Test Pilot IQ; red survives as the illustration's signature dot).
+- Guide: full 7.5 MB demo guide over the lighter overview PDF.
+
+### Learnings / Gotchas
+- Cookieless `curl` of `/dashboard` returns 404 (Clerk-protected route behavior) — use `/sign-in` (200) or an authenticated browser for liveness checks.
+- `claude-in-chrome` resize_window reports success but silently no-ops on a macOS fullscreen window — verify `window.innerWidth` after resizing; stylesheet-grep of the shipped CSS is the stronger responsive proof anyway.
+- Chat Core IQ passes `clerk_id`/`session_id`/`user_email` as URL query params on launch — PII in URLs; parked as backlog **B8** (~/.claude/BACKLOG.md).
+
+---
+
+## Previous Session (2026-05-16 afternoon) — Rich-content pass across all Apps Bar mocks
 
 ### Trigger
 Aldrin sent a screenshot of `/diq/apps/auzmor-office` showing empty gray placeholder rectangles where shared-post content should be. Asked: *"yes empty, i need all to be super rich and realistic."*
@@ -729,15 +755,16 @@ const isPublicRoute = createRouteMatcher([
 
 | Product | Production URL | Status | Version |
 |---------|----------------|--------|---------|
-| **Main Dashboard** | https://www.digitalworkplace.ai | ✅ Live | 0.9.16 |
+| **Main Dashboard** | https://www.digitalworkplace.ai | ✅ Live | 0.9.33 |
 | **Support IQ (dSQ)** | https://dsq.digitalworkplace.ai | ✅ Live | **1.2.8** |
 | **Intranet IQ (dIQ)** | https://intranet-iq.vercel.app | ✅ Live | **2.0.0** |
 | **Chat Core IQ (dCQ)** | https://dcq.digitalworkplace.ai/dcq/Home/index.html | ✅ Live | 1.2.1 |
 | **Test Pilot IQ (dTQ)** | https://dtq.digitalworkplace.ai/dtq/dashboard | ✅ Live | **2.1.1** |
+| **GRC IQ (Auctor GRC · external)** | https://auctorgrc.vercel.app | ✅ Live (verified 2026-07-03) | Auctor v3.0.10 |
 
 ### GitHub Repositories
 - **Main Repo**: https://github.com/aldrinstellus/digitalworkplace.ai
-  - **Latest Commit**: `8e93a66` - chore: update support-iq submodule pointer (favicon fix)
+  - **Latest Commit**: `9271baa` - docs: add GRC IQ card liveness checks (auctor alias + guide PDF)
 - **Support IQ** (submodule): https://github.com/aldrinstellus/support-iq
   - **Latest Commit**: `459147e` - fix: replace broken favicon with correct d. icon
 
@@ -760,6 +787,7 @@ const isPublicRoute = createRouteMatcher([
 | **Intranet IQ** | dIQ | 3001 | ✅ | ✅ Live | ✅ 100% | 45+ tables | 100/100 |
 | **Chat Core IQ** | dCQ | 3002 | ✅ | ✅ Live | ✅ 100% | 28 tables | **100/100** |
 | **Test Pilot IQ** | dTQ | 3004 | ✅ | ✅ Live | ✅ 100% | 7 tables | - |
+| **GRC IQ (Auctor)** | dGQ | — (external, ~/auctor) | ✅ | ✅ Live | — | — (own stack) | Auctor 9-audit chain |
 
 ### Database Stats (Supabase)
 - **Project**: digitalworkplace-ai (fhtempgkltrazrgbedrh)

@@ -19,7 +19,7 @@ READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 **SAVEPOINT.md is the MASTER REFERENCE containing:**
 - Current state (version, status, pending tasks)
 - Key info from CLAUDE.md (commands, structure)
-- Key info from context.md (design system, colors)
+- Key info from CONTEXT.md (design system, colors)
 - Key info from CHANGELOG.md (version history)
 - Key info from docs/QUERY_DETECTION_STANDARDS.md (search config)
 - Key info from docs/MAINTENANCE.md (health checks)
@@ -34,7 +34,7 @@ READ: /Users/aldrin-mac-mini/digitalworkplace.ai/apps/intranet-iq/SAVEPOINT.md
 **SESSION END - "do a save point":**
 - Update SAVEPOINT.md with accomplishments
 - Update CHANGELOG.md if version changed
-- Update context.md if design changed
+- Update CONTEXT.md if design changed
 - Remind user to commit git changes
 
 ---
@@ -278,7 +278,7 @@ apps/intranet-iq/
 │   ├── PERFORMANCE_AUDIT.md    # Performance checklist
 │   └── DATABASE_ARCHITECTURE.md
 ├── CLAUDE.md                   # This file
-├── context.md                  # Design specs
+├── CONTEXT.md                  # Design specs
 ├── SAVEPOINT.md                # Session state
 └── CHANGELOG.md                # Version history
 ```
@@ -456,7 +456,7 @@ docker compose -f docker-compose.elasticsearch.yml up -d
 **Before ending session:**
 1. Update SAVEPOINT.md with current state
 2. Update CHANGELOG.md if version changed
-3. Update context.md if design specs changed
+3. Update CONTEXT.md if design specs changed
 4. Commit and push changes to git
 
 **User Checklist:**

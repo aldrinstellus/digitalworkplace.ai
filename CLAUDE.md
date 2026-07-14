@@ -33,7 +33,7 @@
 ```
 1. /Users/aldrin-mac-mini/digitalworkplace.ai/SAVEPOINT.md  (CURRENT STATE - most important)
 2. /Users/aldrin-mac-mini/digitalworkplace.ai/.claude/learning.md (CRITICAL LEARNINGS - auth fixes, troubleshooting)
-3. /Users/aldrin-mac-mini/digitalworkplace.ai/context.md    (Design specs)
+3. /Users/aldrin-mac-mini/digitalworkplace.ai/CONTEXT.md    (Design specs)
 4. /Users/aldrin-mac-mini/digitalworkplace.ai/CHANGELOG.md  (Version history)
 5. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/SUPABASE_DATABASE_REFERENCE.md (MASTER DB - all projects)
 6. /Users/aldrin-mac-mini/digitalworkplace.ai/docs/PGVECTOR_BEST_PRACTICES.md (Semantic search standards)
@@ -106,7 +106,7 @@
    - Current git status/commit
    - Update timestamp
 2. Update CHANGELOG.md if version changed
-3. Update context.md if design specs changed
+3. Update CONTEXT.md if design specs changed
 4. Remind user: "Session docs updated. Ready to close."
 
 **USER CHECKLIST (copy this to user):**
